@@ -1,0 +1,19 @@
+out/*
+!out/IWorld.sol/
+out/IWorld.sol/*
+!out/IWorld.sol/IWorld.abi.json
+!out/IWorld.sol/IWorld.abi.json.d.ts
+# ignores all files in out/ERC20System.sol/ except for ERC20System.abi.json
+
+cache/
+node_modules/
+bindings/
+artifacts/
+abi/
+broadcast/
+src/codegen/
+.DS_Store
+
+# Ignore MUD deploy artifacts
+deploys/**/*.json
+.env
