@@ -1,51 +1,51 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Keys_FactionTilesSet, Meta_FactionTilesSet } from "codegen/index.sol";
+import { Keys_FactionPlanetsSet, Meta_FactionPlanetsSet } from "codegen/index.sol";
 
-library FactionTilesSet {
+library FactionPlanetsSet {
   function has(bytes32 factionId, bytes32 planetId) internal view returns (bool) {
-    return Meta_FactionTilesSet.get(factionId, planetId).stored;
+    return Meta_FactionPlanetsSet.get(factionId, planetId).stored;
   }
 
   function add(bytes32 factionId, bytes32 planetId) internal {
     if (has(factionId, planetId)) return;
-    Keys_FactionTilesSet.push(factionId, planetId);
-    Meta_FactionTilesSet.set(factionId, planetId, true, Keys_FactionTilesSet.length(factionId) - 1);
+    Keys_FactionPlanetsSet.push(factionId, planetId);
+    Meta_FactionPlanetsSet.set(factionId, planetId, true, Keys_FactionPlanetsSet.length(factionId) - 1);
   }
 
-  function getFactionTilesIds(bytes32 factionId) internal view returns (bytes32[] memory asteroidEntities) {
-    return Keys_FactionTilesSet.get(factionId);
+  function getFactionPlanetsIds(bytes32 factionId) internal view returns (bytes32[] memory asteroidEntities) {
+    return Keys_FactionPlanetsSet.get(factionId);
   }
 
   function remove(bytes32 factionId, bytes32 planetId) internal {
     if (!has(factionId, planetId)) return;
 
-    if (Keys_FactionTilesSet.length(factionId) == 1) {
+    if (Keys_FactionPlanetsSet.length(factionId) == 1) {
       clear(factionId);
       return;
     }
-    uint256 index = Meta_FactionTilesSet.getIndex(factionId, planetId);
-    bytes32 replacement = Keys_FactionTilesSet.getItem(factionId, Keys_FactionTilesSet.length(factionId) - 1);
+    uint256 index = Meta_FactionPlanetsSet.getIndex(factionId, planetId);
+    bytes32 replacement = Keys_FactionPlanetsSet.getItem(factionId, Keys_FactionPlanetsSet.length(factionId) - 1);
 
     // update replacement data
-    Keys_FactionTilesSet.update(factionId, index, replacement);
-    Meta_FactionTilesSet.set(factionId, replacement, true, index);
+    Keys_FactionPlanetsSet.update(factionId, index, replacement);
+    Meta_FactionPlanetsSet.set(factionId, replacement, true, index);
 
     // remove associated asteroid
-    Keys_FactionTilesSet.pop(factionId);
-    Meta_FactionTilesSet.deleteRecord(factionId, planetId);
+    Keys_FactionPlanetsSet.pop(factionId);
+    Meta_FactionPlanetsSet.deleteRecord(factionId, planetId);
   }
 
   function size(bytes32 factionId) internal view returns (uint256) {
-    return Keys_FactionTilesSet.length(factionId);
+    return Keys_FactionPlanetsSet.length(factionId);
   }
 
   function clear(bytes32 factionId) internal {
-    for (uint256 i = 0; i < Keys_FactionTilesSet.length(factionId); i++) {
-      bytes32 planetId = Keys_FactionTilesSet.getItem(factionId, i);
-      Meta_FactionTilesSet.deleteRecord(factionId, planetId);
+    for (uint256 i = 0; i < Keys_FactionPlanetsSet.length(factionId); i++) {
+      bytes32 planetId = Keys_FactionPlanetsSet.getItem(factionId, i);
+      Meta_FactionPlanetsSet.deleteRecord(factionId, planetId);
     }
-    Keys_FactionTilesSet.deleteRecord(factionId);
+    Keys_FactionPlanetsSet.deleteRecord(factionId);
   }
 }
