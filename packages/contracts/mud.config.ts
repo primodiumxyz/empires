@@ -19,12 +19,46 @@ export const worldInput = {
   enums: MUDEnums,
   tables: {
     /* ----------------------------------- Dev ---------------------------------- */
+
     Counter: {
       key: [],
       schema: { value: "uint256" },
     },
-  }
 
+    /* ---------------------------------- Game ---------------------------------- */
+    Player: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        points: "bytes32",
+      },
+    },
+
+    // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
+    Tile: {
+      key: ["q", "r"],
+      schema: {
+        q: "int256",
+        r: "int256",
+        isTile: "bool",
+        destroyerCount: "uint256",
+        factionId: "uint256",
+      },
+    },
+
+    // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
+
+    /* ---------------------------- Faction Ownership --------------------------- */
+    Keys_FactionTilesSet: {
+      key: ["factionId"],
+      schema: { factionId: "bytes32", itemKeys: "bytes32[]" },
+    },
+
+    Meta_FactionTilesSet: {
+      key: ["factionId", "planetId"],
+      schema: { factionId: "bytes32", planetId: "bytes32", stored: "bool", index: "uint256" },
+    },
+  },
 } as const;
 
 const getConfig = async () => {
@@ -37,8 +71,7 @@ const getConfig = async () => {
 
   const world = defineWorld({
     ...worldInput,
-    modules: [
-    ],
+    modules: [],
     excludeSystems: exclude,
   });
 
