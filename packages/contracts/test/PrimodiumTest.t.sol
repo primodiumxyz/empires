@@ -24,7 +24,7 @@ contract PrimodiumTest is MudTest {
   function setUp() public virtual override {
     super.setUp();
     world = IWorld(worldAddress);
-    address namespaceOwner = NamespaceOwner.get(WorldResourceIdLib.encodeNamespace(bytes14("Pri_11")));
+    address namespaceOwner = NamespaceOwner.get(WorldResourceIdLib.encodeNamespace(bytes14("Empires")));
     creator = namespaceOwner;
 
     alice = getUser();
