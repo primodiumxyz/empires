@@ -35,28 +35,47 @@ export const worldInput = {
     },
 
     // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
-    Tile: {
-      key: ["q", "r"],
+    Planet: {
+      key: ["id"],
       schema: {
-        q: "int256",
-        r: "int256",
-        isTile: "bool",
+        id: "bytes32",
+        q: "int128",
+        r: "int128",
+        isPlanet: "bool",
         destroyerCount: "uint256",
-        factionId: "uint256",
+        factionId: "bytes32",
       },
     },
 
-    // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
+    Faction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        homePlanetQ: "bytes32",
+        homePlanetR: "bytes32",
+      },
+    },
 
     /* ---------------------------- Faction Ownership --------------------------- */
-    Keys_FactionTilesSet: {
+    Keys_FactionPlanetsSet: {
       key: ["factionId"],
       schema: { factionId: "bytes32", itemKeys: "bytes32[]" },
     },
 
-    Meta_FactionTilesSet: {
+    Meta_FactionPlanetsSet: {
       key: ["factionId", "planetId"],
       schema: { factionId: "bytes32", planetId: "bytes32", stored: "bool", index: "uint256" },
+    },
+
+    /* --------------------------------- Planets -------------------------------- */
+    Keys_PlanetsSet: {
+      key: [],
+      schema: { itemKeys: "bytes32[]" },
+    },
+
+    Meta_PlanetsSet: {
+      key: ["id"],
+      schema: { id: "bytes32", stored: "bool", index: "uint256" },
     },
   },
 } as const;

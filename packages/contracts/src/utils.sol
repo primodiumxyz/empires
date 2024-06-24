@@ -16,3 +16,7 @@ function bytes32ToString(bytes32 data) pure returns (string memory) {
   }
   return string(bytesString);
 }
+
+function coordToId(int128 q, int128 r) pure returns (bytes32) {
+  return bytes32((uint256(uint128(q)) << 128) | uint128(r));
+}
