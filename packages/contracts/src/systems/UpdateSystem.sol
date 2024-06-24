@@ -18,7 +18,7 @@ contract UpdateSystem is System {
 
   function updateWorld() public returns (bool) {
     bool canUpdate = _updateTurn();
-    if (!canUpdate) return false;
+    if (!canUpdate) revert("UpdateSystem: cannot update yet");
 
     // todo: run planet update
 
