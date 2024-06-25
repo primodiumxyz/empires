@@ -5,4 +5,4 @@ bytes32 constant RED = bytes32("red");
 bytes32 constant GREEN = bytes32("green");
 bytes32 constant BLUE = bytes32("blue");
 
-bytes14 constant namespaceId = bytes14("Empires");
+bytes14 constant EMPIRES_NAMESPACE_ID = bytes14("Empires");
