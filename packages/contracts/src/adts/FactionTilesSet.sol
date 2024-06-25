@@ -14,7 +14,7 @@ library FactionPlanetsSet {
     Meta_FactionPlanetsSet.set(factionId, planetId, true, Keys_FactionPlanetsSet.length(factionId) - 1);
   }
 
-  function getFactionPlanetsIds(bytes32 factionId) internal view returns (bytes32[] memory asteroidEntities) {
+  function getFactionPlanetIds(bytes32 factionId) internal view returns (bytes32[] memory asteroidEntities) {
     return Keys_FactionPlanetsSet.get(factionId);
   }
 
