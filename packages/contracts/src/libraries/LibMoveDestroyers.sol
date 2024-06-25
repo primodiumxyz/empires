@@ -5,7 +5,7 @@ import { Faction, Planet, PlanetData, P_MoveConfig, P_MoveConfigData, Arrivals }
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, coordToId } from "src/utils.sol";
 
-library LibUpdateWorld {
+library LibMoveDestroyers {
   function moveDestroyers(bytes32 planetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
     if (planetData.factionId == EEmpire.NULL || planetData.destroyerCount == 0) return false;
@@ -27,7 +27,7 @@ library LibUpdateWorld {
     return true;
   }
 
-  function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal returns (bytes32 target) {
+  function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal view returns (bytes32 target) {
     EMovement movement = getMovement(randomValue);
     EDirection direction = getDirection(movement, randomValue % 2 == 0, Faction.get(planetData.factionId));
 
@@ -39,7 +39,7 @@ library LibUpdateWorld {
   // Southeast Away: Northwest, West, Toward: Southeast, East, Lateral: Northeast, Southwest
   // Southwest Away: Northeast, East, Toward: Southwest, West, Lateral: Northwest, Southeast
 
-  function getDirection(EMovement movement, bool left, EOrigin origin) internal returns (EDirection) {
+  function getDirection(EMovement movement, bool left, EOrigin origin) internal pure returns (EDirection) {
     if (movement == EMovement.None) {
       return EDirection.None;
     }

@@ -29,13 +29,7 @@ declare const abi: [
     "type": "function",
     "name": "Empires__updateWorld",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "nonpayable"
   },
   {
