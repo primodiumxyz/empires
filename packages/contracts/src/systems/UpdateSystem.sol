@@ -5,6 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { LibUpdateWorld } from "libraries/LibUpdateWorld.sol";
 import { Turn, TurnData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
+import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 
 contract UpdateSystem is System {
@@ -21,9 +22,15 @@ contract UpdateSystem is System {
   function updateWorld() public returns (bool) {
     EEmpire empire = _updateTurn();
 
-    bytes32[] memory planets = PlanetsSet.getPlanetIds();
-    for (uint i = 0; i < planets.length; i++) {
-      // LibUpdateWorld.updatePlanet(planets[i]);
+    bytes32[] memory factionPlanets = FactionPlanetsSet.getFactionPlanetIds(empire);
+    for (uint i = 0; i < factionPlanets.length; i++) {
+      LibUpdateWorld.moveDestroyers(factionPlanets[i]);
+    }
+
+    bytes32[] memory allPlanets = PlanetsSet.getPlanetIds();
+
+    for (uint i = 0; i < allPlanets.length; i++) {
+      LibUpdateWorld.resolveBattle(allPlanets[i]);
     }
 
     return true;

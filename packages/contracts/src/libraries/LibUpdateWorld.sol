@@ -12,7 +12,7 @@ library LibUpdateWorld {
     // move destroyers
   }
 
-  function resolveBattles(bytes32 planetId) internal {
+  function resolveBattle(bytes32 planetId) internal {
     moveDestroyers(planetId);
   }
 }

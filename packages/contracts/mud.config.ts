@@ -82,6 +82,28 @@ export const worldInput = {
       key: ["id"],
       schema: { id: "bytes32", stored: "bool", index: "uint256" },
     },
+
+    /* -------------------------------- Movement -------------------------------- */
+
+    // each value denotes a threshold for the likelihood of a move in that direction
+    // the total is out of 10000
+    P_MoveConfig: {
+      key: [],
+      schema: {
+        none: "uint256",
+        away: "uint256",
+        lateral: "uint256",
+        toward: "uint256",
+      },
+    },
+
+    Arrivals: {
+      key: ["planetId"],
+      schema: {
+        planetId: "bytes32",
+        destroyerCount: "uint256",
+      },
+    },
   },
 } as const;
 
