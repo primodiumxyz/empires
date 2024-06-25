@@ -6,36 +6,34 @@ import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, coordToId } from "src/utils.sol";
 
 library LibUpdateWorld {
-  function moveDestroyers(bytes32 planetId) internal {
+  function moveDestroyers(bytes32 planetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
-    if (planetData.factionId == EEmpire.NULL || planetData.destroyerCount == 0) return;
+    if (planetData.factionId == EEmpire.NULL || planetData.destroyerCount == 0) return false;
 
     // move destroyers
-    uint i = 0;
-
     bytes32 target;
-
+    uint i = 0;
     do {
-      uint256 randomValue = pseudorandom(uint256(planetId), 10_000);
-      EMovement movement = getMovement(randomValue);
-      EDirection direction = getDirection(movement, randomValue % 2 == 0, Faction.get(planetData.factionId));
-
-      if (direction == EDirection.None) return;
-
-      (int128 q, int128 r) = getNeighbor(planetData.q, planetData.r, direction);
-      target = coordToId(q, r);
+      uint256 randomValue = pseudorandom(uint256(planetId) + i, 10_000);
+      target = getPlanetTarget(planetData, randomValue);
+      i++;
     } while (!Planet.getIsPlanet(target));
+    if (target == planetId) return false;
 
     uint256 destroyersToMove = planetData.destroyerCount;
 
     Arrivals.set(target, Arrivals.get(target) + destroyersToMove);
     Planet.setDestroyerCount(planetId, planetData.destroyerCount - destroyersToMove);
+    return true;
   }
 
-  function resolveBattle(bytes32 planetId) internal {
-    moveDestroyers(planetId);
-  }
+  function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal returns (bytes32 target) {
+    EMovement movement = getMovement(randomValue);
+    EDirection direction = getDirection(movement, randomValue % 2 == 0, Faction.get(planetData.factionId));
 
+    (int128 q, int128 r) = getNeighbor(planetData.q, planetData.r, direction);
+    target = coordToId(q, r);
+  }
   // origins: North, Southwest, Southeast
   // North: Away: Southeast, Southwest, Toward: Northwest, Northeast, Lateral: East, West
   // Southeast Away: Northwest, West, Toward: Southeast, East, Lateral: Northeast, Southwest
@@ -74,6 +72,7 @@ library LibUpdateWorld {
       return EDirection.None;
     }
   }
+
   function getMovement(uint256 value) private view returns (EMovement) {
     P_MoveConfigData memory moveConfig = P_MoveConfig.get();
     if (value < moveConfig.none) {

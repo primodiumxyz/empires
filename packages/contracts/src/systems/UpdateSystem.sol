@@ -29,10 +29,6 @@ contract UpdateSystem is System {
 
     bytes32[] memory allPlanets = PlanetsSet.getPlanetIds();
 
-    for (uint i = 0; i < allPlanets.length; i++) {
-      LibUpdateWorld.resolveBattle(allPlanets[i]);
-    }
-
     return true;
   }
 }
