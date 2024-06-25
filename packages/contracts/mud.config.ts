@@ -56,8 +56,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "EEmpire",
-        homePlanetQ: "int128",
-        homePlanetR: "int128",
+        origin: "EOrigin",
       },
     },
 
