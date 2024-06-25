@@ -26,9 +26,9 @@ export const worldInput = {
       },
     },
 
-    NextTurnBlock: {
+    Turn: {
       key: [],
-      schema: { value: "uint256" },
+      schema: { nextTurnBlock: "uint256", empire: "EEmpire" },
     },
 
     Player: {
@@ -48,7 +48,7 @@ export const worldInput = {
         r: "int128",
         isPlanet: "bool",
         destroyerCount: "uint256",
-        factionId: "bytes32",
+        factionId: "EEmpire",
       },
     },
 
@@ -64,12 +64,12 @@ export const worldInput = {
     /* ---------------------------- Faction Ownership --------------------------- */
     Keys_FactionPlanetsSet: {
       key: ["factionId"],
-      schema: { factionId: "bytes32", itemKeys: "bytes32[]" },
+      schema: { factionId: "EEmpire", itemKeys: "bytes32[]" },
     },
 
     Meta_FactionPlanetsSet: {
       key: ["factionId", "planetId"],
-      schema: { factionId: "bytes32", planetId: "bytes32", stored: "bool", index: "uint256" },
+      schema: { factionId: "EEmpire", planetId: "bytes32", stored: "bool", index: "uint256" },
     },
 
     /* --------------------------------- Planets -------------------------------- */

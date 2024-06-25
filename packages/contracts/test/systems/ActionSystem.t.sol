@@ -4,6 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { Planet } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
+import { EEmpire } from "codegen/common.sol";
 
 contract ActionSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -13,7 +14,7 @@ contract ActionSystemTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(planetId) == bytes32(""));
+    } while (Planet.getFactionId(planetId) == EEmpire.NULL);
   }
 
   function testCreateDestroyer() public {
@@ -39,7 +40,7 @@ contract ActionSystemTest is PrimodiumTest {
     do {
       nonOwnedPlanetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(nonOwnedPlanetId) != bytes32(""));
+    } while (Planet.getFactionId(nonOwnedPlanetId) != EEmpire.NULL);
 
     vm.expectRevert("[ActionSystem] Planet is not owned");
     world.Empires__createDestroyer(nonOwnedPlanetId);

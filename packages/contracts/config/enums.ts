@@ -1,14 +1,13 @@
-export enum EExample {
-  Null,
-  Nabs,
-  Hank
-} 
+export enum EEmpire {
+  Red,
+  Blue,
+  Green,
+}
 
 export const MUDEnums = {
-  EExample: enumToArray(EExample),
-
+  EEmpire: enumToArray(EEmpire),
 };
 
-function enumToArray(enumObj: object): [string ] {
+function enumToArray(enumObj: object): [string] {
   return ["NULL", ...Object.keys(enumObj).filter((key) => isNaN(Number(key)))] as [string];
 }

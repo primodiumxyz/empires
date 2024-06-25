@@ -2,23 +2,24 @@
 pragma solidity >=0.8.24;
 
 import { Keys_FactionPlanetsSet, Meta_FactionPlanetsSet } from "codegen/index.sol";
+import { EEmpire } from "codegen/common.sol";
 
 library FactionPlanetsSet {
-  function has(bytes32 factionId, bytes32 planetId) internal view returns (bool) {
+  function has(EEmpire factionId, bytes32 planetId) internal view returns (bool) {
     return Meta_FactionPlanetsSet.get(factionId, planetId).stored;
   }
 
-  function add(bytes32 factionId, bytes32 planetId) internal {
+  function add(EEmpire factionId, bytes32 planetId) internal {
     if (has(factionId, planetId)) return;
     Keys_FactionPlanetsSet.push(factionId, planetId);
     Meta_FactionPlanetsSet.set(factionId, planetId, true, Keys_FactionPlanetsSet.length(factionId) - 1);
   }
 
-  function getFactionPlanetIds(bytes32 factionId) internal view returns (bytes32[] memory asteroidEntities) {
+  function getFactionPlanetIds(EEmpire factionId) internal view returns (bytes32[] memory asteroidEntities) {
     return Keys_FactionPlanetsSet.get(factionId);
   }
 
-  function remove(bytes32 factionId, bytes32 planetId) internal {
+  function remove(EEmpire factionId, bytes32 planetId) internal {
     if (!has(factionId, planetId)) return;
 
     if (Keys_FactionPlanetsSet.length(factionId) == 1) {
@@ -37,11 +38,11 @@ library FactionPlanetsSet {
     Meta_FactionPlanetsSet.deleteRecord(factionId, planetId);
   }
 
-  function size(bytes32 factionId) internal view returns (uint256) {
+  function size(EEmpire factionId) internal view returns (uint256) {
     return Keys_FactionPlanetsSet.length(factionId);
   }
 
-  function clear(bytes32 factionId) internal {
+  function clear(EEmpire factionId) internal {
     for (uint256 i = 0; i < Keys_FactionPlanetsSet.length(factionId); i++) {
       bytes32 planetId = Keys_FactionPlanetsSet.getItem(factionId, i);
       Meta_FactionPlanetsSet.deleteRecord(factionId, planetId);

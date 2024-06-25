@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { NextTurnBlock, P_GameConfig } from "codegen/index.sol";
+import { Turn, P_GameConfig } from "codegen/index.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
   uint256 turnLength = 100;
@@ -30,6 +30,6 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function testUpdateNextTurnBlock() public {
     world.Empires__updateWorld();
-    assertEq(NextTurnBlock.get(), block.number + turnLength);
+    assertEq(Turn.getNextTurnBlock(), block.number + turnLength);
   }
 }
