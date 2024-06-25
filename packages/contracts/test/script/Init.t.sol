@@ -2,7 +2,6 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Counter } from "codegen/index.sol";
 import { coordToId } from "src/utils.sol";
 import { RED } from "src/constants.sol";
 import { Planet, PlanetData } from "codegen/index.sol";

@@ -1,13 +1,13 @@
 declare const abi: [
   {
     "type": "function",
-    "name": "Primodium_Base__increment",
+    "name": "Empires__updateWorld",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
     "stateMutability": "nonpayable"

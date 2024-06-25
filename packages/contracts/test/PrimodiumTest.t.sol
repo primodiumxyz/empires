@@ -3,6 +3,7 @@ pragma solidity >=0.8.24;
 
 import "forge-std/Test.sol";
 import { idToAddress, addressToId } from "src/utils.sol";
+import { namespaceId } from "src/constants.sol";
 import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { NamespaceOwner } from "@latticexyz/world/src/codegen/index.sol";
@@ -24,7 +25,7 @@ contract PrimodiumTest is MudTest {
   function setUp() public virtual override {
     super.setUp();
     world = IWorld(worldAddress);
-    address namespaceOwner = NamespaceOwner.get(WorldResourceIdLib.encodeNamespace(bytes14("Empires")));
+    address namespaceOwner = NamespaceOwner.get(WorldResourceIdLib.encodeNamespace(namespaceId));
     creator = namespaceOwner;
 
     alice = getUser();

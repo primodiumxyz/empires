@@ -1,19 +1,6 @@
 [
   {
     "type": "function",
-    "name": "Empires__increment",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "Empires__updateWorld",
     "inputs": [],
     "outputs": [
