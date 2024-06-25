@@ -24,8 +24,7 @@ contract UpdateSystemTest is PrimodiumTest {
 
     vm.roll(block.number + turnLength - 1);
 
-    executed = world.Empires__updateWorld();
-    assertTrue(executed);
+    world.Empires__updateWorld();
   }
 
   function testUpdateNextTurnBlock() public {

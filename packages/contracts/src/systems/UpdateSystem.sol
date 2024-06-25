@@ -19,16 +19,12 @@ contract UpdateSystem is System {
     return newEmpire;
   }
 
-  function updateWorld() public returns (bool) {
+  function updateWorld() public {
     EEmpire empire = _updateTurn();
 
     bytes32[] memory factionPlanets = FactionPlanetsSet.getFactionPlanetIds(empire);
     for (uint i = 0; i < factionPlanets.length; i++) {
       LibUpdateWorld.moveDestroyers(factionPlanets[i]);
     }
-
-    bytes32[] memory allPlanets = PlanetsSet.getPlanetIds();
-
-    return true;
   }
 }
