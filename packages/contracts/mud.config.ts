@@ -10,7 +10,7 @@ import { ConfigWithPrototypes } from "./ts/prototypes/types";
 /* -------------------------------------------------------------------------- */
 
 export const worldInput = {
-  namespace: "Primodium_Base",
+  namespace: "Empires",
 
   // add all subsystems here
   // systems: {},
@@ -18,14 +18,19 @@ export const worldInput = {
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
   enums: MUDEnums,
   tables: {
-    /* ----------------------------------- Dev ---------------------------------- */
+    /* ---------------------------------- Game ---------------------------------- */
+    P_GameConfig: {
+      key: [],
+      schema: {
+        turnLengthBlocks: "uint256",
+      },
+    },
 
-    Counter: {
+    NextTurnBlock: {
       key: [],
       schema: { value: "uint256" },
     },
 
-    /* ---------------------------------- Game ---------------------------------- */
     Player: {
       key: ["id"],
       schema: {

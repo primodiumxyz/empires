@@ -6,8 +6,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
   World: {
     keys: [],
     tables: {
-      Counter: {
-        value: 1n,
+      P_GameConfig: {
+        turnLengthBlocks: 60n * 2n,
       },
     },
   },
