@@ -3,6 +3,7 @@ pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { LibMoveDestroyers } from "libraries/LibMoveDestroyers.sol";
+import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
 import { Turn, TurnData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
@@ -29,8 +30,8 @@ contract UpdateSystem is System {
 
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
 
-    for (uint i = 0; i < factionPlanets.length; i++) {
-      LibMoveDestroyers.moveDestroyers(factionPlanets[i]);
+    for (uint i = 0; i < planets.length; i++) {
+      LibResolveCombat.resolveCombat(empire, planets[i]);
     }
   }
 }

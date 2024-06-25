@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Arrivals } from "codegen/index.sol";
+import { Arrivals, Planet, PlanetData } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 
 library LibResolveCombat {
