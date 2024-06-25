@@ -55,9 +55,9 @@ export const worldInput = {
     Faction: {
       key: ["id"],
       schema: {
-        id: "bytes32",
-        homePlanetQ: "bytes32",
-        homePlanetR: "bytes32",
+        id: "EEmpire",
+        homePlanetQ: "int128",
+        homePlanetR: "int128",
       },
     },
 
