@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.24;
+
 import { Planet, PlanetData } from "codegen/index.sol";
 
 library LibUpdateWorld {

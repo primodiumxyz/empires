@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { console } from "forge-std/console.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
-import { PlanetsSet } from "src/adts/PlanetsSet.sol";
+import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { Planet, PlanetData } from "codegen/index.sol";
 import { RED, GREEN, BLUE } from "src/constants.sol";
 import { coordToId } from "src/utils.sol";
