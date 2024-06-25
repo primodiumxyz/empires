@@ -22,11 +22,11 @@ export const worldInput = {
     P_GameConfig: {
       key: [],
       schema: {
-        turnLengthSecs: "uint256",
+        turnLengthBlocks: "uint256",
       },
     },
 
-    NextTurnTimestamp: {
+    NextTurnBlock: {
       key: [],
       schema: { value: "uint256" },
     },
