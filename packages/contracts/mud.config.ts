@@ -90,9 +90,9 @@ export const worldInput = {
       key: [],
       schema: {
         none: "uint256",
-        away: "uint256",
+        expand: "uint256",
         lateral: "uint256",
-        toward: "uint256",
+        retreat: "uint256",
       },
     },
 

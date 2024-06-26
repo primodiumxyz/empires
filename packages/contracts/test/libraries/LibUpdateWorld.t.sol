@@ -43,12 +43,12 @@ contract LibUpdateWorldTest is PrimodiumTest {
     assertEq(target, planetId);
   }
 
-  function testGetPlanetTargetAway() public {
+  function testGetPlanetTargetRetreat() public {
     PlanetData memory planetData = Planet.get(planetId);
     // north
     Planet.setFactionId(planetId, EEmpire.Red);
     // set the move direction to none
-    uint256 value = P_MoveConfig.getAway() - 1;
+    uint256 value = P_MoveConfig.getRetreat() - 1;
     bytes32 target = LibUpdateWorld.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
     // direction should be southeast if left and southwest if right
@@ -60,14 +60,14 @@ contract LibUpdateWorldTest is PrimodiumTest {
     }
   }
 
-  function testGetPlanetTargetToward() public {
+  function testGetPlanetTargetExpand() public {
     bytes32 planet = coordToId(0, 0);
     // southwest
     Planet.setDestroyerCount(planet, 1);
     Planet.setFactionId(planet, EEmpire.Blue);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
-    uint256 value = P_MoveConfig.getToward() - 1;
+    uint256 value = P_MoveConfig.getExpand() - 1;
     bytes32 target = LibUpdateWorld.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
 

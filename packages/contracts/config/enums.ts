@@ -21,9 +21,9 @@ export enum EDirection {
 
 export enum EMovement {
   None,
-  Away,
+  Expand,
   Lateral,
-  Toward,
+  Retreat,
 }
 
 export const MUDEnums = {

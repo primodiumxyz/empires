@@ -35,9 +35,9 @@ library LibUpdateWorld {
     target = coordToId(q, r);
   }
   // origins: North, Southwest, Southeast
-  // North: Away: Southeast, Southwest, Toward: Northwest, Northeast, Lateral: East, West
-  // Southeast Away: Northwest, West, Toward: Southeast, East, Lateral: Northeast, Southwest
-  // Southwest Away: Northeast, East, Toward: Southwest, West, Lateral: Northwest, Southeast
+  // North: Retreat: Southeast, Southwest, Expand: Northwest, Northeast, Lateral: East, West
+  // Southeast Retreat: Northwest, West, Expand: Southeast, East, Lateral: Northeast, Southwest
+  // Southwest Retreat: Northeast, East, Expand: Southwest, West, Lateral: Northwest, Southeast
 
   function getDirection(EMovement movement, bool left, EOrigin origin) internal returns (EDirection) {
     if (movement == EMovement.None) {
@@ -45,7 +45,7 @@ library LibUpdateWorld {
     }
 
     if (origin == EOrigin.North) {
-      if (movement == EMovement.Away) {
+      if (movement == EMovement.Retreat) {
         return left ? EDirection.Southeast : EDirection.Southwest;
       } else if (movement == EMovement.Lateral) {
         return left ? EDirection.East : EDirection.West;
@@ -53,7 +53,7 @@ library LibUpdateWorld {
         return left ? EDirection.Northeast : EDirection.Northwest;
       }
     } else if (origin == EOrigin.Southeast) {
-      if (movement == EMovement.Away) {
+      if (movement == EMovement.Retreat) {
         return left ? EDirection.Northwest : EDirection.West;
       } else if (movement == EMovement.Lateral) {
         return left ? EDirection.Northeast : EDirection.Southwest;
@@ -61,7 +61,7 @@ library LibUpdateWorld {
         return left ? EDirection.Southeast : EDirection.East;
       }
     } else if (origin == EOrigin.Southwest) {
-      if (movement == EMovement.Away) {
+      if (movement == EMovement.Retreat) {
         return left ? EDirection.Northeast : EDirection.East;
       } else if (movement == EMovement.Lateral) {
         return left ? EDirection.Southeast : EDirection.Northwest;
@@ -77,12 +77,12 @@ library LibUpdateWorld {
     P_MoveConfigData memory moveConfig = P_MoveConfig.get();
     if (value < moveConfig.none) {
       return EMovement.None;
-    } else if (value < moveConfig.away) {
-      return EMovement.Away;
+    } else if (value < moveConfig.retreat) {
+      return EMovement.Retreat;
     } else if (value < moveConfig.lateral) {
       return EMovement.Lateral;
-    } else if (value < moveConfig.toward) {
-      return EMovement.Toward;
+    } else if (value < moveConfig.expand) {
+      return EMovement.Expand;
     } else {
       return EMovement.None;
     }

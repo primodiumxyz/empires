@@ -21,7 +21,7 @@ contract UpdateSystemTest is PrimodiumTest {
     vm.expectRevert("[UpdateSystem] Cannot update yet");
     world.Empires__updateWorld();
 
-    vm.roll(block.number + turnLength - 1);
+    vm.roll(block.number + 1);
 
     world.Empires__updateWorld();
   }
