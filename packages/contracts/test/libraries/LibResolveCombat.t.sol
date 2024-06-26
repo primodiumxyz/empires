@@ -26,6 +26,7 @@ contract LibResolveCombatTest is PrimodiumTest {
     PlanetData memory planetData = Planet.get(planetId);
     LibResolveCombat.resolveCombat(planetData.factionId, planetId);
     assertEq(Planet.getDestroyerCount(planetId), planetData.destroyerCount + 1);
+    assertEq(Planet.getFactionId(planetId), planetData.factionId);
   }
 
   function testAttack() public {
