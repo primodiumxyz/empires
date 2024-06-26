@@ -5,7 +5,7 @@ import { Faction, Planet, PlanetData, P_MoveConfig, P_MoveConfigData, Arrivals }
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, coordToId } from "src/utils.sol";
 
-library LibUpdateWorld {
+library LibMoveDestroyers {
   function moveDestroyers(bytes32 planetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
     if (planetData.factionId == EEmpire.NULL || planetData.destroyerCount == 0) return false;
@@ -14,7 +14,7 @@ library LibUpdateWorld {
     bytes32 target;
     uint i = 0;
     do {
-      uint256 randomValue = pseudorandom(uint256(planetId) + i*256, 10_000);
+      uint256 randomValue = pseudorandom(uint256(planetId) + i * 256, 10_000);
       target = getPlanetTarget(planetData, randomValue);
       i++;
     } while (!Planet.getIsPlanet(target));
@@ -27,7 +27,7 @@ library LibUpdateWorld {
     return true;
   }
 
-  function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal returns (bytes32 target) {
+  function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal view returns (bytes32 target) {
     EMovement movement = getMovement(randomValue);
     EDirection direction = getDirection(movement, randomValue % 2 == 0, Faction.get(planetData.factionId));
 
@@ -35,17 +35,17 @@ library LibUpdateWorld {
     target = coordToId(q, r);
   }
   // origins: North, Southwest, Southeast
-  // North: Retreat: Southeast, Southwest, Expand: Northwest, Northeast, Lateral: East, West
-  // Southeast Retreat: Northwest, West, Expand: Southeast, East, Lateral: Northeast, Southwest
-  // Southwest Retreat: Northeast, East, Expand: Southwest, West, Lateral: Northwest, Southeast
+  // North: Expand: Southeast, Southwest, Retreat: Northwest, Northeast, Lateral: East, West
+  // Southeast Expand: Northwest, West, Retreat: Southeast, East, Lateral: Northeast, Southwest
+  // Southwest Expand: Northeast, East, Retreat: Southwest, West, Lateral: Northwest, Southeast
 
-  function getDirection(EMovement movement, bool left, EOrigin origin) internal returns (EDirection) {
+  function getDirection(EMovement movement, bool left, EOrigin origin) internal pure returns (EDirection) {
     if (movement == EMovement.None) {
       return EDirection.None;
     }
 
     if (origin == EOrigin.North) {
-      if (movement == EMovement.Retreat) {
+      if (movement == EMovement.Expand) {
         return left ? EDirection.Southeast : EDirection.Southwest;
       } else if (movement == EMovement.Lateral) {
         return left ? EDirection.East : EDirection.West;
@@ -53,7 +53,7 @@ library LibUpdateWorld {
         return left ? EDirection.Northeast : EDirection.Northwest;
       }
     } else if (origin == EOrigin.Southeast) {
-      if (movement == EMovement.Retreat) {
+      if (movement == EMovement.Expand) {
         return left ? EDirection.Northwest : EDirection.West;
       } else if (movement == EMovement.Lateral) {
         return left ? EDirection.Northeast : EDirection.Southwest;
@@ -61,7 +61,7 @@ library LibUpdateWorld {
         return left ? EDirection.Southeast : EDirection.East;
       }
     } else if (origin == EOrigin.Southwest) {
-      if (movement == EMovement.Retreat) {
+      if (movement == EMovement.Expand) {
         return left ? EDirection.Northeast : EDirection.East;
       } else if (movement == EMovement.Lateral) {
         return left ? EDirection.Southeast : EDirection.Northwest;
@@ -77,12 +77,12 @@ library LibUpdateWorld {
     P_MoveConfigData memory moveConfig = P_MoveConfig.get();
     if (value < moveConfig.none) {
       return EMovement.None;
-    } else if (value < moveConfig.retreat) {
-      return EMovement.Retreat;
-    } else if (value < moveConfig.lateral) {
-      return EMovement.Lateral;
     } else if (value < moveConfig.expand) {
       return EMovement.Expand;
+    } else if (value < moveConfig.lateral) {
+      return EMovement.Lateral;
+    } else if (value < moveConfig.retreat) {
+      return EMovement.Retreat;
     } else {
       return EMovement.None;
     }

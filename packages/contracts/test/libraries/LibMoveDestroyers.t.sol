@@ -5,10 +5,10 @@ import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { Planet, PlanetData, P_MoveConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
-import { LibUpdateWorld } from "libraries/LibUpdateWorld.sol";
+import { LibMoveDestroyers } from "libraries/LibMoveDestroyers.sol";
 import { coordToId } from "src/utils.sol";
 
-contract LibUpdateWorldTest is PrimodiumTest {
+contract LibMoveDestroyersTest is PrimodiumTest {
   bytes32 planetId;
   function setUp() public override {
     super.setUp();
@@ -25,13 +25,14 @@ contract LibUpdateWorldTest is PrimodiumTest {
 
   function testEarlyExit() public {
     Planet.setFactionId(planetId, EEmpire.NULL);
-    bool moved = LibUpdateWorld.moveDestroyers(planetId);
+    bool moved = LibMoveDestroyers.moveDestroyers(planetId);
     assertFalse(moved);
+    moved = LibMoveDestroyers.moveDestroyers(planetId);
     Planet.setFactionId(planetId, EEmpire.Red);
-    moved = LibUpdateWorld.moveDestroyers(planetId);
+    moved = LibMoveDestroyers.moveDestroyers(planetId);
     assertFalse(moved);
     Planet.setDestroyerCount(planetId, 1);
-    moved = LibUpdateWorld.moveDestroyers(planetId);
+    moved = LibMoveDestroyers.moveDestroyers(planetId);
     assertTrue(moved);
   }
 
@@ -39,17 +40,17 @@ contract LibUpdateWorldTest is PrimodiumTest {
     PlanetData memory planetData = Planet.get(planetId);
     // set the move direction to none
     uint256 value = P_MoveConfig.getNone() - 1;
-    bytes32 target = LibUpdateWorld.getPlanetTarget(planetData, value);
+    bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     assertEq(target, planetId);
   }
 
-  function testGetPlanetTargetRetreat() public {
+  function testGetPlanetTargetExpand() public {
     PlanetData memory planetData = Planet.get(planetId);
     // north
     Planet.setFactionId(planetId, EEmpire.Red);
     // set the move direction to none
-    uint256 value = P_MoveConfig.getRetreat() - 1;
-    bytes32 target = LibUpdateWorld.getPlanetTarget(planetData, value);
+    uint256 value = P_MoveConfig.getExpand() - 1;
+    bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
     // direction should be southeast if left and southwest if right
 
@@ -60,15 +61,15 @@ contract LibUpdateWorldTest is PrimodiumTest {
     }
   }
 
-  function testGetPlanetTargetExpand() public {
+  function testGetPlanetTargetRetreat() public {
     bytes32 planet = coordToId(0, 0);
     // southwest
     Planet.setDestroyerCount(planet, 1);
     Planet.setFactionId(planet, EEmpire.Blue);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
-    uint256 value = P_MoveConfig.getExpand() - 1;
-    bytes32 target = LibUpdateWorld.getPlanetTarget(planetData, value);
+    uint256 value = P_MoveConfig.getRetreat() - 1;
+    bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
 
     if (left) {
@@ -86,7 +87,7 @@ contract LibUpdateWorldTest is PrimodiumTest {
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
     uint256 value = P_MoveConfig.getLateral() - 1;
-    bytes32 target = LibUpdateWorld.getPlanetTarget(planetData, value);
+    bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
 
     if (left) {
