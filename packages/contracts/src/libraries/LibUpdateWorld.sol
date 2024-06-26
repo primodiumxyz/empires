@@ -14,7 +14,7 @@ library LibUpdateWorld {
     bytes32 target;
     uint i = 0;
     do {
-      uint256 randomValue = pseudorandom(uint256(planetId) + i, 10_000);
+      uint256 randomValue = pseudorandom(uint256(planetId) + i*256, 10_000);
       target = getPlanetTarget(planetData, randomValue);
       i++;
     } while (!Planet.getIsPlanet(target));
