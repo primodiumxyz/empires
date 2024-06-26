@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Landing from "@/screens/Landing";
+import { PrivyProvider } from "@privy-io/react-auth";
+import { useMemo, useRef } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { getCoreConfig } from "@/config/getCoreConfig";
+import { Core as CoreType, createCore } from "@primodiumxyz/core";
+import { CoreProvider } from "@primodiumxyz/core/react";
+import { defineChain } from "viem";
 
+const App = () => {
+  const coreRef = useRef<CoreType | null>(null);
+  const core = useMemo(() => {
+    if (coreRef.current) coreRef.current.network.world.dispose();
+    const config = getCoreConfig();
+    const core = createCore(config);
+    coreRef.current = core;
+    return core;
+  }, []);
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <PrivyProvider
+      appId="clxvzvzrw063qh5c30om9h9x5"
+      config={{
+        // Customize Privy's appearance in your app
+        appearance: {
+          theme: "dark",
+          accentColor: "#ef4444",
+          logo: "vite.svg",
+        },
+        // Create embedded wallets for users who don't have a wallet
+        loginMethods: ["wallet", "google", "twitter", "discord"],
+        embeddedWallets: {
+          createOnLogin: "users-without-wallets",
+        },
+        supportedChains: [defineChain(core.config.chain)],
+      }}
+    >
+      <CoreProvider {...core}>
+        <div className="bg-neutral w-screen h-screen flex justify-center items-center">
+          <Landing />
+        </div>
+      </CoreProvider>
+    </PrivyProvider>
+  );
+};
 
-export default App
+export default App;

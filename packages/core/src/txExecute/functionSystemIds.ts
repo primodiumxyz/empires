@@ -9,4 +9,6 @@ export const functionSystemIds: {
   // callWithSignature: getSystemId("Registration", "CORE"),
   registerDelegation: getSystemId("Registration", "CORE"),
   unregisterDelegation: getSystemId("Registration", "CORE"),
+
+  Primodium_Base__increment: getSystemId("IncrementSystem", "Primodium_Base"),
 };

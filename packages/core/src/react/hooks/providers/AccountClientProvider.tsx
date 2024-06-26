@@ -11,6 +11,7 @@ import {
   Address,
   createWalletClient,
   fallback,
+  EIP1193Provider,
   formatEther,
   Hex,
   http,
@@ -22,6 +23,7 @@ type AccountClientOptions = {
   playerAddress?: Address;
   playerPrivateKey?: Hex;
   sessionPrivateKey?: Hex;
+  provider?: EIP1193Provider;
 };
 
 type AccountProviderProps = AccountClientOptions & { children: ReactNode };
@@ -44,6 +46,7 @@ export function AccountClientProvider({
 }: AccountProviderProps) {
   if (!options.playerAddress && !options.playerPrivateKey)
     throw new Error("Must provide address or private key");
+  const provider = options.provider;
   const core = useCore();
   const {
     config,
@@ -133,9 +136,12 @@ export function AccountClientProvider({
         "Private key provided for local account creation, ignoring address"
       );
 
+    console.log({ useLocal });
     const account = useLocal
       ? createLocalAccount(config, options.playerPrivateKey, false)
-      : createExternalAccount(config, options.playerAddress!);
+      : createExternalAccount(config, options.playerAddress!, {
+          provider: provider,
+        });
 
     if (useLocal)
       storage.setItem("primodiumPlayerAccount", account.privateKey ?? "");

@@ -8,6 +8,7 @@ import { Subject } from "rxjs";
 import {
   Account,
   Address,
+  EIP1193Provider,
   Hex,
   createPublicClient,
   createWalletClient,
@@ -26,7 +27,8 @@ import { toAccount } from "viem/accounts";
  */
 export function createExternalAccount(
   coreConfig: CoreConfig,
-  address: Address
+  address: Address,
+  options?: { provider?: EIP1193Provider }
 ): ExternalAccount {
   if (typeof window === "undefined") {
     throw new Error(
@@ -40,6 +42,8 @@ export function createExternalAccount(
     account: toAccount(address) as Account,
   };
 
+  console.log({ clientOptions });
+
   const publicClient = createPublicClient({
     ...clientOptions,
     transport: transportObserver(fallback([http()])),
@@ -47,7 +51,9 @@ export function createExternalAccount(
   const walletClient = createWalletClient({
     ...clientOptions,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    transport: custom((window as unknown as { ethereum: any }).ethereum),
+    transport: options?.provider
+      ? custom(options.provider)
+      : custom((window as unknown as { ethereum: any }).ethereum),
   });
 
   const write$ = new Subject<ContractWrite>();
