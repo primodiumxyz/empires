@@ -15,6 +15,7 @@ type BurnerAccount = {
 export const BurnerAccountContext = createContext<BurnerAccount | undefined>(undefined);
 
 const localKey = "primodium_local_pkey";
+const DEV = import.meta.env.PRI_DEV === "true";
 
 export const BurnerAccountProvider = ({ children }: AccountProviderProps) => {
   const localPKey = (storage.getItem(localKey) ?? undefined) as Hex | undefined;
@@ -25,7 +26,7 @@ export const BurnerAccountProvider = ({ children }: AccountProviderProps) => {
   useEffect(() => {
     const burnerAccount = storage.getItem("burnerAccount");
     const localPKey = storage.getItem(localKey) as Hex;
-    if (burnerAccount && localPKey) {
+    if (DEV && burnerAccount && localPKey) {
       setUseBurnerAccount(true);
       setValue(localPKey);
     }
