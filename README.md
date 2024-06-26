@@ -1,3 +1,3 @@
-# primodium-empires v0.1
+# primodium-empires v0.2
 
-Implements v0.1 of Primodium Empires
+Implements v0.2 of Primodium Empires
