@@ -6,6 +6,7 @@ import { getCoreConfig } from "@/config/getCoreConfig";
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider } from "@primodiumxyz/core/react";
 import { defineChain } from "viem";
+import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
 
 const App = () => {
   const coreRef = useRef<CoreType | null>(null);
@@ -34,11 +35,13 @@ const App = () => {
         supportedChains: [defineChain(core.config.chain)],
       }}
     >
-      <CoreProvider {...core}>
-        <div className="bg-neutral w-screen h-screen flex justify-center items-center">
-          <Landing />
-        </div>
-      </CoreProvider>
+      <BurnerAccountProvider>
+        <CoreProvider {...core}>
+          <div className="bg-neutral w-screen h-screen flex justify-center items-center">
+            <Landing />
+          </div>
+        </CoreProvider>
+      </BurnerAccountProvider>
     </PrivyProvider>
   );
 };

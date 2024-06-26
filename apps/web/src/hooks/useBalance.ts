@@ -9,9 +9,14 @@ export const useBalance = (address: Address, refreshMs: number = 2000) => {
   const [balance, setBalance] = useState<bigint | undefined>();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
+    const fetchBalance = async () => {
       const bal = await publicClient.getBalance({ address });
       setBalance(bal);
+    };
+
+    fetchBalance();
+    const interval = setInterval(async () => {
+      fetchBalance();
     }, refreshMs);
 
     return () => clearInterval(interval);

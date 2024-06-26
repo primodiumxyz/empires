@@ -1,10 +1,11 @@
-import { createBurnerAccount as createMudBurnerAccount, transportObserver } from "@latticexyz/common";
+import { transportObserver } from "@latticexyz/common";
 import { createClient as createFaucetClient } from "@latticexyz/faucet";
 import { minEth } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { useCallback, useMemo } from "react";
 import { useBalance } from "@/hooks/useBalance";
 import { createWalletClient, fallback, formatEther, Hex, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 
 export const DEV_CHAIN = import.meta.env.PRI_CHAIN_ID === "dev";
 
@@ -21,7 +22,7 @@ export const useDripAccount = (): ((address: Hex) => void) => {
           chain: config.chain,
           transport: transportObserver(fallback([http()])),
           pollingInterval: 1000,
-          account: createMudBurnerAccount(externalPKey as Hex),
+          account: privateKeyToAccount(externalPKey as Hex),
         })
       : undefined;
     return { faucet, externalWalletClient };

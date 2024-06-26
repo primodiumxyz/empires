@@ -135,7 +135,6 @@ export function AccountClientProvider({
         "Private key provided for local account creation, ignoring address"
       );
 
-    console.log({ useLocal });
     const account = useLocal
       ? createLocalAccount(config, options.playerPrivateKey, false)
       : createExternalAccount(config, options.playerAddress!, {

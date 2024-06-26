@@ -1,4 +1,4 @@
-import { Account } from "@/components/Account";
+import { Logout } from "@/components/Logout";
 import { useTxExecute } from "@/hooks/useTxExecute";
 import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
@@ -23,7 +23,7 @@ const Game = () => {
 
   return (
     <div className="w-full h-full flex flex-col gap-4 justify-center items-center relative">
-      <Account />
+      <Logout />
 
       <h1 className="text-lg font-bold">Primodium Template</h1>
       <img src={"primodium.jpg"} className="logo w-32" alt="Vite logo" />
