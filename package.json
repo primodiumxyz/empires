@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "build": "turbo build"
   },
   "keywords": [],
   "author": "",
@@ -11,9 +12,9 @@
   "devDependencies": {
     "turbo": "^2.0.4"
   },
-  "packageManager": "pnpm@9.4.0",
+  "packageManager": "pnpm@8.15.8",
   "engines": {
-    "node": "20.x",
-    "pnpm": "9.x"
+    "node": "18.x",
+    "pnpm": "8.x"
   }
 }
