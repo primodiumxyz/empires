@@ -29,6 +29,7 @@ contract LibMoveDestroyersTest is PrimodiumTest {
     assertFalse(moved);
     moved = LibMoveDestroyers.moveDestroyers(planetId);
     Planet.setFactionId(planetId, EEmpire.Red);
+    moved = LibMoveDestroyers.moveDestroyers(planetId);
     assertFalse(moved);
     Planet.setDestroyerCount(planetId, 1);
     moved = LibMoveDestroyers.moveDestroyers(planetId);
@@ -43,12 +44,12 @@ contract LibMoveDestroyersTest is PrimodiumTest {
     assertEq(target, planetId);
   }
 
-  function testGetPlanetTargetAway() public {
+  function testGetPlanetTargetExpand() public {
     PlanetData memory planetData = Planet.get(planetId);
     // north
     Planet.setFactionId(planetId, EEmpire.Red);
     // set the move direction to none
-    uint256 value = P_MoveConfig.getAway() - 1;
+    uint256 value = P_MoveConfig.getExpand() - 1;
     bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
     // direction should be southeast if left and southwest if right
@@ -60,14 +61,14 @@ contract LibMoveDestroyersTest is PrimodiumTest {
     }
   }
 
-  function testGetPlanetTargetToward() public {
+  function testGetPlanetTargetRetreat() public {
     bytes32 planet = coordToId(0, 0);
     // southwest
     Planet.setDestroyerCount(planet, 1);
     Planet.setFactionId(planet, EEmpire.Blue);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
-    uint256 value = P_MoveConfig.getToward() - 1;
+    uint256 value = P_MoveConfig.getRetreat() - 1;
     bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
 
