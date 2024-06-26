@@ -27,8 +27,8 @@ contract LibUpdateWorldTest is PrimodiumTest {
     Planet.setFactionId(planetId, EEmpire.NULL);
     bool moved = LibUpdateWorld.moveDestroyers(planetId);
     assertFalse(moved);
-    moved = LibUpdateWorld.moveDestroyers(planetId);
     Planet.setFactionId(planetId, EEmpire.Red);
+    moved = LibUpdateWorld.moveDestroyers(planetId);
     assertFalse(moved);
     Planet.setDestroyerCount(planetId, 1);
     moved = LibUpdateWorld.moveDestroyers(planetId);
