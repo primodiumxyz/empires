@@ -1,6 +1,6 @@
 import { ContractFunctionName, TransactionReceipt } from "viem";
 
-import { SystemCallFrom } from "@/txExecute/encodeSystemCall";
+import { SystemCall } from "@/txExecute/encodeSystemCall";
 import { TxQueueOptions } from "@/tables/types";
 import { AccountClient, Core, WorldAbiType } from "@/lib/types";
 
@@ -14,33 +14,51 @@ export type ExecuteFunctions = {
   execute: <functionName extends ContractFunctionName<WorldAbiType>>(
     options: ExecuteCallOptions<WorldAbiType, functionName>
   ) => Promise<void>;
-  executeBatch: <functionName extends ContractFunctionName<WorldAbiType>>(options: {
-    systemCalls: readonly Omit<SystemCallFrom<WorldAbiType, functionName>, "abi" | "from" | "systemId">[];
-    withSession?: boolean;
+  executeBatch: <
+    functionName extends ContractFunctionName<WorldAbiType>
+  >(options: {
+    systemCalls: readonly Omit<
+      SystemCall<WorldAbiType, functionName>,
+      "abi" | "systemId"
+    >[];
+
     txQueueOptions?: TxQueueOptions;
     onComplete?: (receipt: TransactionReceipt | undefined) => void;
   }) => Promise<void>;
 };
 
-export function createExecute(core: Core, account: AccountClient): ExecuteFunctions {
-  async function execute<functionName extends ContractFunctionName<WorldAbiType>>(
-    callOptions: ExecuteCallOptions<WorldAbiType, functionName>
-  ) {
+export function createExecute(
+  core: Core,
+  account: AccountClient
+): ExecuteFunctions {
+  async function execute<
+    functionName extends ContractFunctionName<WorldAbiType>
+  >(callOptions: ExecuteCallOptions<WorldAbiType, functionName>) {
     return rawExecute({ core, accountClient: account, ...callOptions });
   }
 
-  async function executeBatch<functionName extends ContractFunctionName<WorldAbiType>>({
+  async function executeBatch<
+    functionName extends ContractFunctionName<WorldAbiType>
+  >({
     systemCalls,
-    withSession,
     txQueueOptions,
     onComplete,
   }: {
-    systemCalls: readonly Omit<SystemCallFrom<WorldAbiType, functionName>, "abi" | "from" | "systemId">[];
+    systemCalls: readonly Omit<
+      SystemCall<WorldAbiType, functionName>,
+      "abi" | "systemId"
+    >[];
     withSession?: boolean;
     txQueueOptions?: TxQueueOptions;
     onComplete?: (receipt: TransactionReceipt | undefined) => void;
   }) {
-    return rawExecuteBatch({ core, accountClient: account, systemCalls, withSession, txQueueOptions, onComplete });
+    return rawExecuteBatch({
+      core,
+      accountClient: account,
+      systemCalls,
+      txQueueOptions,
+      onComplete,
+    });
   }
   return { executeBatch, execute };
 }

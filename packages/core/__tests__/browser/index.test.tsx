@@ -3,7 +3,11 @@ import { commonTests, createTestConfig } from "../lib/common";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
-import { AccountClientProvider, CoreProvider, useCore } from "../../src/react/hooks";
+import {
+  AccountClientProvider,
+  CoreProvider,
+  useCore,
+} from "../../src/react/hooks";
 import { createCore } from "../../src/createCore";
 import { useAccountClient } from "../../src/react/hooks/useAccountClient";
 
@@ -50,7 +54,7 @@ describe("browser", () => {
 
       render(
         <CoreProvider {...core}>
-          <AccountClientProvider playerPrivateKey={privateKey} sessionPrivateKey={privateKey}>
+          <AccountClientProvider playerPrivateKey={privateKey}>
             <TestCoreComponent />
           </AccountClientProvider>
         </CoreProvider>

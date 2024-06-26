@@ -170,14 +170,11 @@ export type ExternalAccount = _Account<false>;
 export type LocalAccount = _Account<true>;
 
 export interface AccountClient {
-  sessionAccount: LocalAccount | null;
   playerAccount: ExternalAccount | LocalAccount;
   setPlayerAccount: (options: {
     playerAddress?: Address;
     playerPrivateKey?: Hex;
   }) => void;
-  setSessionAccount: (privateKey: Hex) => void;
-  removeSessionAccount: () => void;
   requestDrip: (address: Address) => void;
 }
 

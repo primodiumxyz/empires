@@ -60,7 +60,7 @@ const App = () => {
   // AccountClientProvider must be defined within the core context
   return (
     <CoreProvider {...core}>
-      <AccountClientProvider playerPrivateKey={privateKey} sessionPrivateKey={privateKey}>
+      <AccountClientProvider playerPrivateKey={privateKey}>
         <Content />
       </AccountClientProvider>
     </CoreProvider>

@@ -22,7 +22,6 @@ import { createContext, ReactNode } from "react";
 type AccountClientOptions = {
   playerAddress?: Address;
   playerPrivateKey?: Hex;
-  sessionPrivateKey?: Hex;
   provider?: EIP1193Provider;
 };
 
@@ -175,58 +174,10 @@ export function AccountClientProvider({
     requestDrip,
   ]);
 
-  /* ----------------------------- Session Account ---------------------------- */
-
-  const sessionAccountInterval = useRef<NodeJS.Timeout | null>(null);
-  const _updateSessionAccount = useCallback(
-    (privateKey: Hex): LocalAccount | null => {
-      const account = createLocalAccount(config, privateKey);
-
-      if (account.address === playerAccount?.address) return null;
-      if (sessionAccountInterval.current) {
-        clearInterval(sessionAccountInterval.current);
-      }
-
-      requestDrip(account.address);
-      sessionAccountInterval.current = setInterval(
-        () => requestDrip(account.address),
-        4000
-      );
-      return account;
-    },
-    [playerAccount?.address, requestDrip, sessionAccountInterval]
-  );
-
-  const [sessionAccount, setSessionAccount] = useState<LocalAccount | null>(
-    options.sessionPrivateKey
-      ? _updateSessionAccount(options.sessionPrivateKey)
-      : null
-  );
-
-  const updateSessionAccount = useCallback(
-    async (privateKey: Hex) => {
-      const account = _updateSessionAccount(privateKey);
-      if (!account) return sessionAccount;
-      setSessionAccount(account);
-      return account;
-    },
-    [_updateSessionAccount]
-  );
-
-  const removeSessionAccount = useCallback(() => {
-    if (sessionAccountInterval.current) {
-      clearInterval(sessionAccountInterval.current);
-    }
-    setSessionAccount(null);
-  }, [config]);
-
   const accountClient: AccountClient = {
-    sessionAccount,
     playerAccount,
     requestDrip,
     setPlayerAccount: memoizedUpdatePlayerAccount,
-    setSessionAccount: updateSessionAccount,
-    removeSessionAccount,
   };
 
   return (

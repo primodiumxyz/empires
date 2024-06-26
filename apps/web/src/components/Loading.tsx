@@ -7,10 +7,9 @@ import { useEffect, useMemo } from "react";
 
 export default function DripScreen() {
   const dripAccount = useDripAccount();
-  const { playerAccount, sessionAccount } = useAccountClient();
+  const { playerAccount } = useAccountClient();
 
   const playerBalance = useBalance(playerAccount.address, 2000);
-  const sessionBalance = useBalance(sessionAccount?.address ?? "0x0", 2000);
 
   useEffect(() => {
     if (playerBalance.loading || (playerBalance.value ?? 0n) >= minEth) return;
@@ -18,12 +17,11 @@ export default function DripScreen() {
   }, [playerAccount.address, playerBalance.value, dripAccount]);
 
   useEffect(() => {
-    if (!sessionAccount || playerBalance.loading || (playerBalance.value ?? 0n) >= minEth) return;
+    if (playerBalance.loading || (playerBalance.value ?? 0n) >= minEth) return;
     dripAccount(playerAccount.address);
   }, [playerAccount.address, playerBalance.value, dripAccount]);
 
-  const balanceReady =
-    (playerBalance.value ?? 0n) >= minEth && (!sessionAccount || (sessionBalance.value ?? 0n) >= minEth);
+  const balanceReady = (playerBalance.value ?? 0n) >= minEth;
 
   return (
     <>
