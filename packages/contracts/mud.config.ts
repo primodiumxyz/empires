@@ -26,9 +26,9 @@ export const worldInput = {
       },
     },
 
-    NextTurnBlock: {
+    Turn: {
       key: [],
-      schema: { value: "uint256" },
+      schema: { nextTurnBlock: "uint256", empire: "EEmpire" },
     },
 
     Player: {
@@ -48,28 +48,27 @@ export const worldInput = {
         r: "int128",
         isPlanet: "bool",
         destroyerCount: "uint256",
-        factionId: "bytes32",
+        factionId: "EEmpire",
       },
     },
 
     Faction: {
       key: ["id"],
       schema: {
-        id: "bytes32",
-        homePlanetQ: "bytes32",
-        homePlanetR: "bytes32",
+        id: "EEmpire",
+        origin: "EOrigin",
       },
     },
 
     /* ---------------------------- Faction Ownership --------------------------- */
     Keys_FactionPlanetsSet: {
       key: ["factionId"],
-      schema: { factionId: "bytes32", itemKeys: "bytes32[]" },
+      schema: { factionId: "EEmpire", itemKeys: "bytes32[]" },
     },
 
     Meta_FactionPlanetsSet: {
       key: ["factionId", "planetId"],
-      schema: { factionId: "bytes32", planetId: "bytes32", stored: "bool", index: "uint256" },
+      schema: { factionId: "EEmpire", planetId: "bytes32", stored: "bool", index: "uint256" },
     },
 
     /* --------------------------------- Planets -------------------------------- */
@@ -81,6 +80,28 @@ export const worldInput = {
     Meta_PlanetsSet: {
       key: ["id"],
       schema: { id: "bytes32", stored: "bool", index: "uint256" },
+    },
+
+    /* -------------------------------- Movement -------------------------------- */
+
+    // each value denotes a threshold for the likelihood of a move in that direction
+    // the total is out of 10000
+    P_MoveConfig: {
+      key: [],
+      schema: {
+        none: "uint256",
+        expand: "uint256",
+        lateral: "uint256",
+        retreat: "uint256",
+      },
+    },
+
+    Arrivals: {
+      key: ["planetId"],
+      schema: {
+        planetId: "bytes32",
+        destroyerCount: "uint256",
+      },
     },
   },
 } as const;

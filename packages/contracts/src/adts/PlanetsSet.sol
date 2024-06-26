@@ -14,7 +14,7 @@ library PlanetsSet {
     Meta_PlanetsSet.set(id, true, Keys_PlanetsSet.length() - 1);
   }
 
-  function getPlanetsIds() internal view returns (bytes32[] memory asteroidEntities) {
+  function getPlanetIds() internal view returns (bytes32[] memory asteroidEntities) {
     return Keys_PlanetsSet.get();
   }
 
