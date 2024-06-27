@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { AccountClientProvider, useCore } from "@primodiumxyz/core/react";
 
 import Loading from "@/components/Loading";
-import { usePrivy, useWallets, EIP1193Provider } from "@privy-io/react-auth";
-import { Address } from "viem";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { Address, EIP1193Provider } from "viem";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 
 function Core() {
@@ -25,7 +25,8 @@ function Core() {
 
       await wallet.switchChain(core.config.chain.id);
       const provider = await wallet.getEthereumProvider();
-      setPrivyProvider(provider);
+      // this typecast is neessary because privy provider is slightly different from viem provider
+      setPrivyProvider(provider as EIP1193Provider);
     };
 
     getTransport();
