@@ -42,18 +42,16 @@ export function createExternalAccount(
     account: toAccount(address) as Account,
   };
 
-  console.log({ clientOptions });
-
   const publicClient = createPublicClient({
     ...clientOptions,
     transport: transportObserver(fallback([http()])),
   });
   const walletClient = createWalletClient({
     ...clientOptions,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     transport: options?.provider
       ? custom(options.provider)
-      : custom((window as unknown as { ethereum: any }).ethereum),
+      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        custom((window as unknown as { ethereum: any }).ethereum),
   });
 
   const write$ = new Subject<ContractWrite>();
