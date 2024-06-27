@@ -29,7 +29,7 @@ library LibMoveDestroyers {
 
   function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal view returns (bytes32 target) {
     EMovement movement = getMovement(randomValue);
-    EDirection direction = getDirection(movement, randomValue % 2 == 0, Faction.get(planetData.factionId));
+    EDirection direction = getDirection(movement, randomValue % 2 == 0, Faction.getOrigin(planetData.factionId));
 
     (int128 q, int128 r) = getNeighbor(planetData.q, planetData.r, direction);
     target = coordToId(q, r);
