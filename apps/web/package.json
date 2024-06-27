@@ -17,9 +17,11 @@
     "@primodiumxyz/core": "workspace:*",
     "@primodiumxyz/reactive-tables": "^3.2.0",
     "@privy-io/react-auth": "^1.72.0",
+    "clsx": "^2.1.1",
     "contracts": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.3.0",
     "viem": "2.9.20"
   },
   "devDependencies": {
