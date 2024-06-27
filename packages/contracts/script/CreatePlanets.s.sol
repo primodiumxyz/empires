@@ -8,25 +8,26 @@ import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
 import { Planet, PlanetData, Faction } from "codegen/index.sol";
 import { EEmpire, EOrigin } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
+import { ACTION_COUNT } from "src/constants.sol";
 
 function createPlanets() {
   bytes32 redPlanetId = coordToId(1, -2);
   Planet.set(redPlanetId, PlanetData({ q: 1, r: -2, isPlanet: true, destroyerCount: 0, factionId: EEmpire.Red }));
   PlanetsSet.add(redPlanetId);
   FactionPlanetsSet.add(EEmpire.Red, redPlanetId);
-  Faction.set(EEmpire.Red, EOrigin.North);
+  Faction.set(EEmpire.Red, EOrigin.North, 0, 0, new uint256[](ACTION_COUNT));
 
   bytes32 bluePlanetId = coordToId(-2, 1);
   Planet.set(bluePlanetId, PlanetData({ q: -2, r: 1, isPlanet: true, destroyerCount: 0, factionId: EEmpire.Blue }));
   PlanetsSet.add(bluePlanetId);
   FactionPlanetsSet.add(EEmpire.Blue, bluePlanetId);
-  Faction.set(EEmpire.Blue, EOrigin.Southwest);
+  Faction.set(EEmpire.Blue, EOrigin.Southwest, 0, 0, new uint256[](ACTION_COUNT));
 
   bytes32 greenPlanetId = coordToId(1, 1);
   Planet.set(greenPlanetId, PlanetData({ q: 1, r: 1, isPlanet: true, destroyerCount: 0, factionId: EEmpire.Green }));
   PlanetsSet.add(greenPlanetId);
   FactionPlanetsSet.add(EEmpire.Green, greenPlanetId);
-  Faction.set(EEmpire.Green, EOrigin.Southeast);
+  Faction.set(EEmpire.Green, EOrigin.Southeast, 0, 0, new uint256[](ACTION_COUNT));
 
   bytes32 planet4 = coordToId(0, -1);
   Planet.set(planet4, PlanetData({ q: 0, r: -1, isPlanet: true, destroyerCount: 0, factionId: EEmpire.NULL }));
