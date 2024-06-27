@@ -26,11 +26,17 @@ export enum EMovement {
   Expand,
 }
 
+export enum EAction {
+  CreateDestroyer,
+  KillDestroyer,
+}
+
 export const MUDEnums = {
   EEmpire: enumToArray(EEmpire),
   EOrigin: enumToArray(EOrigin),
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
+  EAction: enumToArray(EAction),
 };
 
 function enumToArray(enumObj: object): [string] {
