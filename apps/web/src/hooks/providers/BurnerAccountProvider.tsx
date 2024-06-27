@@ -48,7 +48,6 @@ export const BurnerAccountProvider = ({ children }: AccountProviderProps) => {
     setValue(undefined);
     storage.removeItem("burnerAccount");
   }, [storage, setUseBurnerAccount]);
-  console.log("useBurnerAccount", useBurnerAccount, value, createBurner, cancelBurner);
 
   return (
     <BurnerAccountContext.Provider value={{ usingBurner: useBurnerAccount, createBurner, cancelBurner, value }}>
