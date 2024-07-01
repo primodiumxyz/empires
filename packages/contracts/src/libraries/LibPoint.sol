@@ -16,6 +16,20 @@ library LibPoint {
     Player.setPoints(playerId, playerPoints);
   }
 
+  function removePoints(EEmpire empire, bytes32 playerId, uint256 points) internal {
+    require(empire != EEmpire.NULL, "[LibPoint] Invalid empire");
+    uint256[] memory playerPoints = getPlayerPoints(playerId);
+
+    require(playerPoints[uint256(empire)] >= points, "[LibPoint] Player does not own enough empire points");
+    playerPoints[uint256(empire)] = playerPoints[uint256(empire)] - points;
+
+    Player.setPoints(playerId, playerPoints);
+
+    // Ordered in reverse of issuePoints() for clearer error message paths
+    require(points <= Faction.getPointsIssued(empire), "[LibPoint] Empire has not issued enough points to remove");
+    Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) - points);
+  }
+
   function getPlayerPoints(bytes32 playerId) internal view returns (uint256[] memory) {
     uint256[] memory playerPoints = Player.getPoints(playerId);
 
