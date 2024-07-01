@@ -7,7 +7,7 @@ import { EMPIRE_COUNT } from "src/constants.sol";
 
 library LibPoint {
   function issuePoints(EEmpire empire, bytes32 playerId, uint256 points) internal {
-    require(empire != EEmpire.NULL, "LibPoint: Invalid empire");
+    require(empire != EEmpire.NULL, "[LibPoint] Invalid empire");
     Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) + points);
     uint256[] memory playerPoints = getPlayerPoints(playerId);
     

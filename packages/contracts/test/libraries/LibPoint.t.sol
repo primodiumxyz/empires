@@ -27,7 +27,7 @@ contract LibPointTest is PrimodiumTest {
 
   function testIssuePointsNullEmpireFail() public {
     vm.startPrank(creator);
-    vm.expectRevert("LibPoint: Invalid empire");
+    vm.expectRevert("[LibPoint] Invalid empire");
     LibPoint.issuePoints(EEmpire.NULL, aliceId, 100);
   }
 
