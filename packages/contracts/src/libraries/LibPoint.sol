@@ -16,7 +16,7 @@ library LibPoint {
     Player.setPoints(playerId, playerPoints);
   }
 
-  function getPlayerPoints(bytes32 playerId) internal returns (uint256[] memory) {
+  function getPlayerPoints(bytes32 playerId) internal view returns (uint256[] memory) {
     uint256[] memory playerPoints = Player.getPoints(playerId);
 
     if (playerPoints.length <= EMPIRE_COUNT) {
