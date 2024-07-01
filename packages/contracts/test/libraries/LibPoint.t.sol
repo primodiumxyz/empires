@@ -34,8 +34,8 @@ contract LibPointTest is PrimodiumTest {
   function testIssuePoints() public {
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Red, aliceId, 100);
-    uint256[] memory alicePoints = Player.getPoints(aliceId);
-    uint256[] memory bobPoints = Player.getPoints(bobId);
+    uint256[] memory alicePoints = LibPoint.getPlayerPoints(aliceId);
+    uint256[] memory bobPoints = LibPoint.getPlayerPoints(bobId);
     assertEq(Faction.getPointsIssued(EEmpire.Red), 100, "Empire points issued should be 100");
     assertEq(alicePoints[uint256(EEmpire.Red)], 100, "Alice's Red Empire points should be 100");
     assertEq(alicePoints[uint256(EEmpire.Blue)], 0, "Alice's Blue Empire points should be 0");
@@ -48,8 +48,8 @@ contract LibPointTest is PrimodiumTest {
     
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Red, aliceId, 1);
-    uint256[] memory alicePoints = Player.getPoints(aliceId);
-    uint256[] memory bobPoints = Player.getPoints(bobId);
+    uint256[] memory alicePoints = LibPoint.getPlayerPoints(aliceId);
+    uint256[] memory bobPoints = LibPoint.getPlayerPoints(bobId);
     assertEq(Faction.getPointsIssued(EEmpire.Red), 101, "Empire points issued should be 101");
     assertEq(alicePoints[uint256(EEmpire.Red)], 101, "Alice's Red Empire points should be 101");
     assertEq(alicePoints[uint256(EEmpire.Blue)], 0, "Alice's Blue Empire points should be 0");
@@ -62,8 +62,8 @@ contract LibPointTest is PrimodiumTest {
 
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Green, aliceId, 5);
-    uint256[] memory alicePoints = Player.getPoints(aliceId);
-    uint256[] memory bobPoints = Player.getPoints(bobId);
+    uint256[] memory alicePoints = LibPoint.getPlayerPoints(aliceId);
+    uint256[] memory bobPoints = LibPoint.getPlayerPoints(bobId);
     assertEq(Faction.getPointsIssued(EEmpire.Red), 101, "Red Empire points issued should be 101");
     assertEq(Faction.getPointsIssued(EEmpire.Green), 5, "Green Empire points issued should be 5");
     assertEq(alicePoints[uint256(EEmpire.Red)], 101, "Alice's Red Empire points should be 101");
@@ -77,8 +77,8 @@ contract LibPointTest is PrimodiumTest {
     
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Green, bobId, 7);
-    uint256[] memory alicePoints = Player.getPoints(aliceId);
-    uint256[] memory bobPoints = Player.getPoints(bobId);
+    uint256[] memory alicePoints = LibPoint.getPlayerPoints(aliceId);
+    uint256[] memory bobPoints = LibPoint.getPlayerPoints(bobId);
     assertEq(Faction.getPointsIssued(EEmpire.Red), 101, "Red Empire points issued should be 101");
     assertEq(Faction.getPointsIssued(EEmpire.Green), 12, "Green Empire points issued should be 12");
     assertEq(alicePoints[uint256(EEmpire.Red)], 101, "Alice's Red Empire points should be 101");
