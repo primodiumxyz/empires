@@ -5,7 +5,17 @@ import { Faction, Player } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 
+/**
+ * @title LibPoint
+ * @dev A library for managing points issuance and removal in the Primodium Empires game.
+ */
 library LibPoint {
+  /**
+   * @dev Issues points to a player for a specific empire. Does not manage prices.
+   * @param empire The empire to issue points for.
+   * @param playerId The ID of the player.
+   * @param points The number of points to issue.
+   */
   function issuePoints(EEmpire empire, bytes32 playerId, uint256 points) internal {
     require(empire != EEmpire.NULL, "[LibPoint] Invalid empire");
     Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) + points);
@@ -16,6 +26,12 @@ library LibPoint {
     Player.setPoints(playerId, playerPoints);
   }
 
+  /**
+   * @dev Removes points from a player for a specific empire. Does not manage prices.
+   * @param empire The empire to remove points from.
+   * @param playerId The ID of the player.
+   * @param points The number of points to remove.
+   */
   function removePoints(EEmpire empire, bytes32 playerId, uint256 points) internal {
     require(empire != EEmpire.NULL, "[LibPoint] Invalid empire");
     uint256[] memory playerPoints = getPlayerPoints(playerId);
@@ -30,6 +46,11 @@ library LibPoint {
     Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) - points);
   }
 
+  /**
+   * @dev A utility for retrieving the points of a player for all empires.
+   * @param playerId The ID of the player.
+   * @return playerPoints An array of uint256 values representing the points of the player for each empire.
+   */
   function getPlayerPoints(bytes32 playerId) internal view returns (uint256[] memory) {
     uint256[] memory playerPoints = Player.getPoints(playerId);
 
