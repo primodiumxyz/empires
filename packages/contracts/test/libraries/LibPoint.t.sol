@@ -88,4 +88,35 @@ contract LibPointTest is PrimodiumTest {
     assertEq(bobPoints[uint256(EEmpire.Blue)], 0, "Bob's Blue Empire points should be 0");
     assertEq(bobPoints[uint256(EEmpire.Green)], 7, "Bob's Green Empire points should be 7");
   }
+
+  function testRemovePointsNullEmpireFail() public {
+    vm.startPrank(creator);
+    vm.expectRevert("[LibPoint] Invalid empire");
+    LibPoint.removePoints(EEmpire.NULL, aliceId, 100);
+  }
+
+  function testRemovePoints() public {
+    vm.startPrank(creator);
+    LibPoint.issuePoints(EEmpire.Red, aliceId, 100);
+    LibPoint.removePoints(EEmpire.Red, aliceId, 99);
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 1, "Empire points issued should be 1");
+    assertEq(LibPoint.getPlayerPoints(aliceId)[uint256(EEmpire.Red)], 1, "Alice's Red Empire points should be 1");
+    LibPoint.removePoints(EEmpire.Red, aliceId, 1);
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 0, "Empire points issued should be 0");
+    assertEq(LibPoint.getPlayerPoints(aliceId)[uint256(EEmpire.Red)], 0, "Alice's Red Empire points should be 0");
+
+    LibPoint.issuePoints(EEmpire.Red, aliceId, 10);
+    LibPoint.issuePoints(EEmpire.Green, aliceId, 30);
+    LibPoint.issuePoints(EEmpire.Red, bobId, 1);
+    LibPoint.issuePoints(EEmpire.Green, bobId, 3);
+    LibPoint.removePoints(EEmpire.Green, aliceId, 2);
+
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 11, "Red Empire points issued should be 11");
+    assertEq(Faction.getPointsIssued(EEmpire.Green), 31, "Green Empire points issued should be 31");
+    assertEq(LibPoint.getPlayerPoints(aliceId)[uint256(EEmpire.Red)], 10, "Alice's Red Empire points should be 10");
+    assertEq(LibPoint.getPlayerPoints(aliceId)[uint256(EEmpire.Green)], 28, "Alice's Green Empire points should be 28");
+    assertEq(LibPoint.getPlayerPoints(bobId)[uint256(EEmpire.Red)], 1, "Bob's Red Empire points should be 1");
+    assertEq(LibPoint.getPlayerPoints(bobId)[uint256(EEmpire.Green)], 3, "Bob's Green Empire points should be 3");
+  }
+
 }

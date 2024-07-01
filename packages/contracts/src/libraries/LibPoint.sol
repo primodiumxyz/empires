@@ -36,7 +36,7 @@ library LibPoint {
     require(empire != EEmpire.NULL, "[LibPoint] Invalid empire");
     uint256[] memory playerPoints = getPlayerPoints(playerId);
 
-    require(playerPoints[uint256(empire)] >= points, "[LibPoint] Player does not own enough empire points");
+    require(playerPoints[uint256(empire)] >= points, "[LibPoint] Player does not have enough points to remove");
     playerPoints[uint256(empire)] = playerPoints[uint256(empire)] - points;
 
     Player.setPoints(playerId, playerPoints);
