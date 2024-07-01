@@ -10,7 +10,7 @@ contract UpdateSystemTest is PrimodiumTest {
     super.setUp();
     console.log(creator);
     vm.startPrank(creator);
-    P_GameConfig.set(turnLength);
+    P_GameConfig.setTurnLengthBlocks(turnLength);
   }
 
   function testUpdateExecuted() public {

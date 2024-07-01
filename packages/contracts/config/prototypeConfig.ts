@@ -1,6 +1,7 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
 import { EEmpire } from "./enums";
+import { POINTS_UNIT } from "./constants";
 
 const percentsToThresholds = (percents: { none: number; expand: number; lateral: number; retreat: number }) => {
   if (percents.none + percents.expand + percents.lateral + percents.retreat > 1)
@@ -24,6 +25,13 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_GameConfig: {
         turnLengthBlocks: 60n * 2n,
+        minPointCost: 1*POINTS_UNIT,
+        startPointCost: 2*POINTS_UNIT,
+        pointGenRate: 2*POINTS_UNIT,
+        pointCostIncrease: 1*POINTS_UNIT,
+        actionGenRate: POINTS_UNIT/2,
+        actionCostIncrease: [POINTS_UNIT/2,POINTS_UNIT/2],
+        startActionCost: [POINTS_UNIT/2,POINTS_UNIT/2],
       },
       P_MoveConfig: percentsToThresholds({
         none: 0.25,

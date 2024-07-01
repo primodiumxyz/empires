@@ -23,6 +23,13 @@ export const worldInput = {
       key: [],
       schema: {
         turnLengthBlocks: "uint256",
+        minPointCost: "uint256",
+        startPointCost: "uint256",
+        pointGenRate: "uint256",
+        pointCostIncrease: "uint256",
+        actionGenRate: "uint256",
+        actionCostIncrease: "uint256[]",
+        startActionCost: "uint256[]",
       },
     },
 

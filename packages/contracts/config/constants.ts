@@ -1,0 +1,1 @@
+export const POINTS_UNIT = 100;
