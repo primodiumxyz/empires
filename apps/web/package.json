@@ -15,7 +15,7 @@
     "@latticexyz/common": "2.0.9",
     "@latticexyz/faucet": "2.0.9",
     "@primodiumxyz/core": "workspace:*",
-    "@primodiumxyz/reactive-tables": "^3.2.0",
+    "@primodiumxyz/reactive-tables": "^3.3.0",
     "@privy-io/react-auth": "^1.72.0",
     "clsx": "^2.1.1",
     "contracts": "workspace:*",
@@ -25,6 +25,7 @@
     "viem": "2.9.20"
   },
   "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
@@ -36,7 +37,8 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "postcss": "^8.4.38",
-    "prettier": "^2.6.2",
+    "prettier": "^3.3.2",
+    "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.4",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.2",
