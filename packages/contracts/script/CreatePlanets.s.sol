@@ -6,7 +6,7 @@ import { IWorld } from "codegen/world/IWorld.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
 import { Planet, PlanetData, Faction } from "codegen/index.sol";
-import { EEmpire, EOrigin, EAction } from "codegen/common.sol";
+import { EEmpire, EOrigin, EPlayerAction } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
 
 function createPlanets() {
@@ -17,7 +17,7 @@ function createPlanets() {
   );
   PlanetsSet.add(redPlanetId);
   FactionPlanetsSet.add(EEmpire.Red, redPlanetId);
-  Faction.set(EEmpire.Red, EOrigin.North, 0, 0, new uint256[](uint256(EAction.LENGTH)));
+  Faction.set(EEmpire.Red, EOrigin.North, 0, 0, new uint256[](uint256(EPlayerAction.LENGTH)));
 
   bytes32 bluePlanetId = coordToId(-2, 1);
   Planet.set(
@@ -26,7 +26,7 @@ function createPlanets() {
   );
   PlanetsSet.add(bluePlanetId);
   FactionPlanetsSet.add(EEmpire.Blue, bluePlanetId);
-  Faction.set(EEmpire.Blue, EOrigin.Southwest, 0, 0, new uint256[](uint256(EAction.LENGTH)));
+  Faction.set(EEmpire.Blue, EOrigin.Southwest, 0, 0, new uint256[](uint256(EPlayerAction.LENGTH)));
 
   bytes32 greenPlanetId = coordToId(1, 1);
   Planet.set(
@@ -35,7 +35,7 @@ function createPlanets() {
   );
   PlanetsSet.add(greenPlanetId);
   FactionPlanetsSet.add(EEmpire.Green, greenPlanetId);
-  Faction.set(EEmpire.Green, EOrigin.Southeast, 0, 0, new uint256[](uint256(EAction.LENGTH)));
+  Faction.set(EEmpire.Green, EOrigin.Southeast, 0, 0, new uint256[](uint256(EPlayerAction.LENGTH)));
 
   bytes32 planet4 = coordToId(0, -1);
   Planet.set(

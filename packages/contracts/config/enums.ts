@@ -28,7 +28,7 @@ export enum EMovement {
   LENGTH,
 }
 
-export enum EAction {
+export enum EPlayerAction {
   CreateDestroyer,
   KillDestroyer,
   LENGTH,
@@ -44,7 +44,7 @@ export const MUDEnums = {
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
   ENPCAction: enumToArray(ENPCAction),
-  EAction: enumToArray(EAction),
+  EPlayerAction: enumToArray(EPlayerAction),
 };
 
 function enumToArray(enumObj: object): [string] {

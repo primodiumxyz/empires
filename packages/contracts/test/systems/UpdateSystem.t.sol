@@ -53,10 +53,10 @@ contract UpdateSystemTest is PrimodiumTest {
     }
   }
 
-  function testSpendGoldNoneAction() public {
-    uint256 noneAction = P_NPCActionThresholds.getNone() - 1;
+  function testSpendGoldNonEPlayerAction() public {
+    uint256 nonEPlayerAction = P_NPCActionThresholds.getNone() - 1;
     Planet.setGoldCount(planetId, 100);
-    LibGold._spendGold(planetId, noneAction);
+    LibGold._spendGold(planetId, nonEPlayerAction);
 
     assertEq(Planet.getGoldCount(planetId), 100);
   }
