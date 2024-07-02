@@ -30,8 +30,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointGenRate: 2*POINTS_UNIT,
         pointCostIncrease: 1*POINTS_UNIT,
         actionGenRate: POINTS_UNIT/2,
-        actionCostIncrease: [POINTS_UNIT/2,POINTS_UNIT/2],
-        startActionCost: [POINTS_UNIT/2,POINTS_UNIT/2],
+        actionCostIncrease: POINTS_UNIT/2,
+        startActionCost: POINTS_UNIT/2,
       },
       P_MoveConfig: percentsToThresholds({
         none: 0.25,

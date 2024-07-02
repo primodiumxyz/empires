@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Player, P_GameConfig } from "codegen/index.sol";
+import { Faction, Player, P_GameConfig, ActionCost } from "codegen/index.sol";
 import { EEmpire, EAction } from "codegen/common.sol";
 
 library LibPrice {
@@ -15,7 +15,7 @@ library LibPrice {
             totalCost = getRegressPointCost(_empireImpacted);
         }
 
-        totalCost += getActionMarginalCost(_actionType, _empireImpacted);
+        totalCost += ActionCost.get(_empireImpacted, _actionType);
         return totalCost;
     }
 
@@ -49,8 +49,14 @@ library LibPrice {
         return pointCost;
     }
 
-    // Gets the cost of an action that impacts a specific empire
-    function getActionMarginalCost(EAction _actionType, EEmpire _empireImpacted) internal view returns (uint256) {
-        return Faction.getActionCost(_empireImpacted)[uint256(_actionType)];
+    function pointCostUp(EEmpire _empire, uint256 _pointUnits) internal {
+        uint256 newPointCost = Faction.getPointCost(_empire) + P_GameConfig.getPointCostIncrease() * _pointUnits;
+        Faction.setPointCost(_empire, newPointCost);
     }
+
+    function actionCostUp(EEmpire _empire, EAction _actionType) internal {
+        uint256 newActionCost = ActionCost.get(_empire, _actionType) + P_GameConfig.getActionCostIncrease();
+        ActionCost.set(_empire, _actionType, newActionCost);
+    }
+
 }

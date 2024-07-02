@@ -28,8 +28,8 @@ export const worldInput = {
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
         actionGenRate: "uint256",
-        actionCostIncrease: "uint256[]",
-        startActionCost: "uint256[]",
+        actionCostIncrease: "uint256",
+        startActionCost: "uint256",
       },
     },
 
@@ -75,7 +75,15 @@ export const worldInput = {
         origin: "EOrigin",
         pointsIssued: "uint256",
         pointCost: "uint256",
-        actionCost: "uint256[]",
+      },
+    },
+
+    ActionCost: {
+      key: ["factionId", "action"],
+      schema: {
+        factionId: "EEmpire",
+        action: "EAction",
+        value: "uint256",
       },
     },
 
