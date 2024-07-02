@@ -152,7 +152,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
       reader: Read.fromDecodedIndexer.query({
         indexerUrl,
         query: getInitialQuery({
-          tables: tables,
+          tables: tableDefs,
           worldAddress: config.worldAddress as Hex,
         }),
       }),

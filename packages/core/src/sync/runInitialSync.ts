@@ -90,11 +90,11 @@ export const runInitialSync = async (core: Core) => {
       });
 
       // initialize secondary state
-      syncSecondaryGameState(
-        // on complete
-        onSyncComplete,
-        onError,
-      );
+      // syncSecondaryGameState(
+      //   // on complete
+      //   onSyncComplete,
+      //   onError,
+      // );
     },
     onError,
   );
