@@ -35,7 +35,16 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
-        points: "bytes32",
+        spent: "uint256",
+      },
+    },
+
+    Points: {
+      key: ["playerId", "factionId"],
+      schema: {
+        playerId: "bytes32",
+        factionId: "EEmpire",
+        value: "uint256",
       },
     },
 
@@ -57,6 +66,9 @@ export const worldInput = {
       schema: {
         id: "EEmpire",
         origin: "EOrigin",
+        pointsIssued: "uint256",
+        pointCost: "uint256",
+        actionCost: "uint256[]",
       },
     },
 
