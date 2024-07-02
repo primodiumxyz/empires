@@ -207,7 +207,7 @@ importers:
         version: 2.0.9(typescript@5.5.2)
       '@primodiumxyz/reactive-tables':
         specifier: ^3.3.0
-        version: 3.3.0(prettier@3.2.5)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        version: 3.3.0(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@primodiumxyz/sync-stack':
         specifier: ^0.6.9
         version: 0.6.9(typescript@5.5.2)
@@ -236,6 +236,9 @@ importers:
         specifier: ^3.2.3
         version: 3.2.10(@types/node@18.19.39)
     devDependencies:
+      '@ianvs/prettier-plugin-sort-imports':
+        specifier: ^4.3.0
+        version: 4.3.0(prettier@3.3.2)
       '@testing-library/jest-dom':
         specifier: ^6.4.5
         version: 6.4.6(vitest@0.32.4)
@@ -260,6 +263,9 @@ importers:
       jsdom:
         specifier: ^24.1.0
         version: 24.1.0
+      prettier:
+        specifier: ^3.3.2
+        version: 3.3.2
       tsup:
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.5.2)
@@ -2934,44 +2940,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /@primodiumxyz/reactive-tables@3.3.0(prettier@3.2.5)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
-    resolution: {integrity: sha512-T+dgwVvFcceu1GQ9PxqgznYDUcSCJTR6JkYBF+QUoni2QQUsQ3RdP37Yq2sraA71ynM5+QB/3R+8xo40qgLNcA==}
-    engines: {node: 20.x, pnpm: 8.x}
-    dependencies:
-      '@latticexyz/protocol-parser': 2.0.9(typescript@5.5.2)(zod@3.23.8)
-      '@latticexyz/schema-type': 2.0.9(typescript@5.5.2)(zod@3.23.8)
-      '@latticexyz/store': 2.0.9(typescript@5.5.2)
-      '@primodiumxyz/sync-stack': 0.6.9(typescript@5.5.2)
-      debug: 4.3.5(supports-color@5.5.0)
-      fast-deep-equal: 3.1.3
-      mobx: 6.12.5
-      rxjs: 7.5.5
-      tinybase: 4.8.15(prettier@3.2.5)(react-dom@18.3.1)(react@18.3.1)
-      viem: 2.9.20(typescript@5.5.2)(zod@3.23.8)
-    transitivePeerDependencies:
-      - '@automerge/automerge-repo'
-      - '@aws-sdk/client-kms'
-      - '@journeyapps/powersync-sdk-common'
-      - '@libsql/client'
-      - '@sqlite.org/sqlite-wasm'
-      - '@vlcn.io/crsqlite-wasm'
-      - asn1.js
-      - bufferutil
-      - electric-sql
-      - expo-sqlite
-      - partykit
-      - partysocket
-      - prettier
-      - react
-      - react-dom
-      - sqlite3
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - yjs
-      - zod
-    dev: false
 
   /@primodiumxyz/reactive-tables@3.3.0(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
     resolution: {integrity: sha512-T+dgwVvFcceu1GQ9PxqgznYDUcSCJTR6JkYBF+QUoni2QQUsQ3RdP37Yq2sraA71ynM5+QB/3R+8xo40qgLNcA==}
@@ -9115,59 +9083,6 @@ packages:
     dependencies:
       readable-stream: 2.3.8
       xtend: 4.0.2
-    dev: false
-
-  /tinybase@4.8.15(prettier@3.2.5)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-mw0+R+IbMDGvxpH2G6/QPDzJATkPQc6NY6qW5RX6xqZiES57SX0ubpF9QGeAtuYwSjMN67rE1aNCRdqRkmc4XA==}
-    hasBin: true
-    peerDependencies:
-      '@automerge/automerge-repo': ^1.1.12
-      '@journeyapps/powersync-sdk-common': ^1.6.0
-      '@libsql/client': ^0.6.2
-      '@sqlite.org/sqlite-wasm': ^3.46.0-build2
-      '@vlcn.io/crsqlite-wasm': ^0.16.0
-      electric-sql: ^0.12.1
-      expo-sqlite: 13.2.1
-      partykit: ^0.0.107
-      partysocket: ^1.0.1
-      prettier: ^3.3.2
-      react: ^18.2.0
-      react-dom: ^18.2.0
-      sqlite3: ^5.1.7
-      yjs: ^13.6.18
-    peerDependenciesMeta:
-      '@automerge/automerge-repo':
-        optional: true
-      '@journeyapps/powersync-sdk-common':
-        optional: true
-      '@libsql/client':
-        optional: true
-      '@sqlite.org/sqlite-wasm':
-        optional: true
-      '@vlcn.io/crsqlite-wasm':
-        optional: true
-      electric-sql:
-        optional: true
-      expo-sqlite:
-        optional: true
-      partykit:
-        optional: true
-      partysocket:
-        optional: true
-      prettier:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      sqlite3:
-        optional: true
-      yjs:
-        optional: true
-    dependencies:
-      prettier: 3.2.5
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /tinybase@4.8.15(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1):
