@@ -1,14 +1,14 @@
-import { createSync } from "@/sync";
-import { createUtils } from "@/utils";
-import { ContractWrite } from "@latticexyz/common";
+import { createSync } from '@/sync';
+import { createUtils } from '@/utils';
+import { ContractWrite } from '@latticexyz/common';
 import {
   AllTableDefs,
   ContractTables,
   Entity,
   World,
   WrapperResult,
-} from "@primodiumxyz/reactive-tables";
-import { ReplaySubject, Subject } from "rxjs";
+} from '@primodiumxyz/reactive-tables';
+import { ReplaySubject, Subject } from 'rxjs';
 import {
   Account,
   Address,
@@ -18,16 +18,16 @@ import {
   Hex,
   PublicClient,
   WalletClient,
-} from "viem";
+} from 'viem';
 
-import { ChainConfig } from "@/network/config/chainConfigs";
-import { otherTableDefs } from "@/network/otherTableDefs";
-import { Recs } from "@/recs/setupRecs";
-import setupCoreTables from "@/tables/coreTables";
-import { SyncTables } from "@/tables/syncTables";
-import CallWithSignatureAbi from "@latticexyz/world-modules/out/Unstable_CallWithSignatureSystem.sol/Unstable_CallWithSignatureSystem.abi.json";
-import mudConfig from "contracts/mud.config";
-import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
+import { ChainConfig } from '@/network/config/chainConfigs';
+import { otherTableDefs } from '@/network/otherTableDefs';
+import { Recs } from '@/recs/setupRecs';
+import setupCoreTables from '@/tables/coreTables';
+import { SyncTables } from '@/tables/syncTables';
+import CallWithSignatureAbi from '@latticexyz/world-modules/out/Unstable_CallWithSignatureSystem.sol/Unstable_CallWithSignatureSystem.abi.json';
+import mudConfig from 'contracts/mud.config';
+import IWorldAbi from 'contracts/out/IWorld.sol/IWorld.abi.json';
 
 /**
  * Core configuration
@@ -64,6 +64,13 @@ export type CoreConfig = {
    * Setups up systems to keep core tables and simplified tables in sync with contract tables
    */
   runSystems?: boolean;
+  /**
+   * Enable dev tools (default: false)
+   *
+   * If enabled, this will mount dev tools from Reactive Tables into the app, effectively showing a button
+   * in the bottom right corner of the screen that opens the dev tools UI.
+   */
+  devTools?: boolean;
 };
 
 type MudConfig = typeof mudConfig;
@@ -83,7 +90,7 @@ type MudConfig = typeof mudConfig;
 
 export type CreateNetworkResult = Omit<
   Recs<MudConfig, typeof otherTableDefs>,
-  "tables"
+  'tables'
 > & {
   /** @property {World} world - The world instance. */
   world: World;
@@ -95,10 +102,10 @@ export type CreateNetworkResult = Omit<
       tables: ContractTables<AllTableDefs<MudConfig, typeof otherTableDefs>> &
         SyncTables;
     },
-    "triggerUpdateStream"
+    'triggerUpdateStream'
   >;
 
-export type Tables = CreateNetworkResult["tables"] &
+export type Tables = CreateNetworkResult['tables'] &
   ReturnType<typeof setupCoreTables>;
 export type Utils = ReturnType<typeof createUtils>;
 export type Sync = ReturnType<typeof createSync>;

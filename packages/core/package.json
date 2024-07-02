@@ -34,7 +34,7 @@
     "@latticexyz/faucet": "2.0.9",
     "@latticexyz/store": "2.0.9",
     "@latticexyz/world-modules": "2.0.9",
-    "@primodiumxyz/reactive-tables": "^3.2.0",
+    "@primodiumxyz/reactive-tables": "^3.3.0",
     "@primodiumxyz/sync-stack": "^0.6.9",
     "abitype": "^1.0.2",
     "contracts": "workspace:*",
@@ -60,5 +60,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "overrides": {
+    "@primodiumxyz/reactive-tables": "file/../../../tiny-base-integration/"
   }
 }
