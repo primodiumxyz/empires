@@ -1,6 +1,6 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
-import { EEmpire } from "./enums";
+import { EEmpire, ENPCAction } from "./enums";
 
 const percentsToThresholds = <T extends Record<string, number>>(percents: T): Record<keyof T, bigint> => {
   const total = Object.values(percents).reduce((acc, val) => acc + val, 0);
@@ -40,6 +40,15 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       Turn: {
         nextTurnBlock: 0n,
         empire: EEmpire.Red,
+      },
+    },
+  },
+
+  BuyDestroyers: {
+    keys: [{ [ENPCAction.BuyDestroyers]: "uint8" }],
+    tables: {
+      P_NPCActionCosts: {
+        goldCost: 2n,
       },
     },
   },
