@@ -25,13 +25,14 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_GameConfig: {
         turnLengthBlocks: 60n * 2n,
-        minPointCost: 1*POINTS_UNIT,
-        startPointCost: 2*POINTS_UNIT,
-        pointGenRate: 2*POINTS_UNIT,
-        pointCostIncrease: 1*POINTS_UNIT,
-        actionGenRate: POINTS_UNIT/2,
-        actionCostIncrease: POINTS_UNIT/2,
-        startActionCost: POINTS_UNIT/2,
+        minPointCost: 1n*BigInt(POINTS_UNIT),
+        startPointCost: 2n*BigInt(POINTS_UNIT),
+        pointGenRate: 2n*BigInt(POINTS_UNIT),
+        pointCostIncrease: 1n*BigInt(POINTS_UNIT),
+        actionGenRate: BigInt(POINTS_UNIT)/2n,
+        actionCostIncrease: BigInt(POINTS_UNIT)/2n,
+        startActionCost: BigInt(POINTS_UNIT)/2n,
+        minActionCost: 0n,
       },
       P_MoveConfig: percentsToThresholds({
         none: 0.25,

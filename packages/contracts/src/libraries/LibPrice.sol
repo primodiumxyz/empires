@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Player, P_GameConfig, ActionCost } from "codegen/index.sol";
+import { Faction, Player, P_GameConfig, P_GameConfigData, ActionCost } from "codegen/index.sol";
 import { EEmpire, EAction } from "codegen/common.sol";
 
 library LibPrice {
@@ -57,6 +57,30 @@ library LibPrice {
     function actionCostUp(EEmpire _empire, EAction _actionType) internal {
         uint256 newActionCost = ActionCost.get(_empire, _actionType) + P_GameConfig.getActionCostIncrease();
         ActionCost.set(_empire, _actionType, newActionCost);
+    }
+
+    function pointCostDown(EEmpire _empire) internal {
+        P_GameConfigData memory config = P_GameConfig.get();
+        uint256 newPointCost = Faction.getPointCost(_empire);
+        if (newPointCost > config.minPointCost + config.pointGenRate) {
+            newPointCost -= config.pointGenRate;
+        } else {
+            newPointCost = config.minPointCost;
+        }
+        Faction.setPointCost(_empire, newPointCost);
+    }
+
+    function actionCostDown(EEmpire _empireImpacted) internal {
+        P_GameConfigData memory config = P_GameConfig.get();
+        for(uint256 i = 0; i < uint256(EAction.LENGTH); i++) {
+            uint256 newActionCost = ActionCost.get(_empireImpacted, EAction(i));
+            if (newActionCost > config.minActionCost + config.actionGenRate) {
+                newActionCost -= config.actionGenRate;
+            } else {
+                newActionCost = config.minActionCost;
+            }
+            ActionCost.set(_empireImpacted, EAction(i), newActionCost);
+        }
     }
 
 }

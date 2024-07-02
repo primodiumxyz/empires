@@ -30,6 +30,7 @@ export const worldInput = {
         actionGenRate: "uint256",
         actionCostIncrease: "uint256",
         startActionCost: "uint256",
+        minActionCost: "uint256",
       },
     },
 
