@@ -9,7 +9,16 @@
   "useTabs": false,
   "quoteProps": "as-needed",
   "requirePragma": false,
-  "importOrder": ["^@latticexyz/(.*)$", "<THIRD_PARTY_MODULES>", "", "^@primodiumxyz/(.*)$", "^@/(.*)$", "", "^[./]"],
+  "importOrder": [
+    "^@latticexyz/(.*)$",
+    "<THIRD_PARTY_MODULES>",
+    "contracts/(.*)$",
+    "",
+    "^@primodiumxyz/(.*)$",
+    "^@/(.*)$",
+    "",
+    "^[./]"
+  ],
   "importOrderSeparation": false,
   "importOrderSortSpecifiers": true,
   "importOrderBuiltinModulesToTop": true,
