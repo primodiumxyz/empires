@@ -18,11 +18,11 @@
   }
 
   .scrollbar::-webkit-scrollbar-track {
-    @apply bg-slate-700 rounded-box;
+    @apply rounded-box bg-slate-700;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-500 rounded-box;
+    @apply rounded-box bg-slate-500;
   }
 
   .scrollbar::-webkit-scrollbar-thumb:hover {

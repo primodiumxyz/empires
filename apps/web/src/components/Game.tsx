@@ -1,9 +1,9 @@
-import { Logout } from "@/components/Logout";
-import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
-import { useTxExecute } from "@/hooks/useTxExecute";
 import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { defaultEntity } from "@primodiumxyz/reactive-tables";
+import { Logout } from "@/components/Logout";
+import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { useTxExecute } from "@/hooks/useTxExecute";
 
 const Game = () => {
   const { tables } = useCore();
@@ -23,7 +23,7 @@ const Game = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col gap-4 justify-center items-center relative">
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4">
       <Logout />
 
       <h1 className="text-lg font-bold">Primodium Template</h1>

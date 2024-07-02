@@ -1,7 +1,8 @@
+import { usePrivy } from "@privy-io/react-auth";
+
 import Core from "@/components/Core";
 import Login from "@/components/Login";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
-import { usePrivy } from "@privy-io/react-auth";
 
 const Landing = () => {
   const { ready, authenticated } = usePrivy();

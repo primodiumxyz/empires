@@ -10,10 +10,10 @@
   "quoteProps": "as-needed",
   "requirePragma": false,
   "importOrder": [
-    "^@primodiumxyz/(.*)$",
     "^(react/(.*)$)|^(react$)",
     "<THIRD_PARTY_MODULES>",
     "",
+    "^@primodiumxyz/(.*)$",
     "^@/(.*)$",
     "",
     "^[./]"
