@@ -1,15 +1,8 @@
 import { resourceToHex } from "@latticexyz/common";
+import { encodeAbiParameters, Hex, isHex, keccak256, size, sliceHex, toHex } from "viem";
+
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { encodeEntity } from "@primodiumxyz/reactive-tables/utils";
-import {
-  Hex,
-  encodeAbiParameters,
-  isHex,
-  keccak256,
-  size,
-  sliceHex,
-  toHex,
-} from "viem";
 
 /**
  * Generates a system ID based on name and namespace.
@@ -50,10 +43,7 @@ export const toHex32 = (input: string | number | bigint | boolean): Hex => {
  * @returns The encoded entity.
  */
 export function encodeNumberEntity(key: number, entity: string): Entity {
-  return encodeEntity(
-    { key: "uint16", entity: "bytes32" },
-    { key, entity: toHex32(entity) }
-  );
+  return encodeEntity({ key: "uint16", entity: "bytes32" }, { key, entity: toHex32(entity) });
 }
 
 /**
@@ -63,10 +53,7 @@ export function encodeNumberEntity(key: number, entity: string): Entity {
  * @returns The encoded entity.
  */
 export function encodeKeyEntity(key: string, entity: string): Entity {
-  return encodeEntity(
-    { key: "bytes32", entity: "bytes32" },
-    { key: toHex32(key), entity: toHex32(entity) }
-  );
+  return encodeEntity({ key: "bytes32", entity: "bytes32" }, { key: toHex32(key), entity: toHex32(entity) });
 }
 
 /**
@@ -92,8 +79,8 @@ export function hashKeyEntity(key: Hex, entity: Entity): Entity {
         { name: "key", type: "bytes32" },
         { name: "entity", type: "bytes32" },
       ],
-      [key, entity as Hex]
-    )
+      [key, entity as Hex],
+    ),
   ) as Entity;
 }
 
@@ -110,7 +97,5 @@ export function entityToHexKeyTuple(entity: Entity): readonly Hex[] {
   if (length % 32 !== 0) {
     throw new Error(`entity length ${length} is not a multiple of 32 bytes`);
   }
-  return new Array(length / 32)
-    .fill(0)
-    .map((_, index) => sliceHex(entity, index * 32, (index + 1) * 32));
+  return new Array(length / 32).fill(0).map((_, index) => sliceHex(entity, index * 32, (index + 1) * 32));
 }

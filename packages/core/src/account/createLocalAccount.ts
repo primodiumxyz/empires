@@ -1,21 +1,11 @@
-import {
-  ContractWrite,
-  createBurnerAccount,
-  transportObserver,
-} from "@latticexyz/common";
+import { ContractWrite, createBurnerAccount, transportObserver } from "@latticexyz/common";
 import { transactionQueue, writeObserver } from "@latticexyz/common/actions";
 import { Subject } from "rxjs";
-import {
-  Hex,
-  createPublicClient,
-  createWalletClient,
-  fallback,
-  getContract,
-  http,
-} from "viem";
+import { createPublicClient, createWalletClient, fallback, getContract, Hex, http } from "viem";
 import { generatePrivateKey } from "viem/accounts";
-import { CoreConfig, LocalAccount } from "@/lib/types";
+
 import { STORAGE_PREFIX } from "@/lib/constants";
+import { CoreConfig, LocalAccount } from "@/lib/types";
 import { WorldAbi } from "@/lib/WorldAbi";
 import { normalizeAddress } from "@/utils/global/common";
 import { addressToEntity } from "@/utils/global/encode";
@@ -28,15 +18,10 @@ import { storage } from "@/utils/global/storage";
  * @param saveToStorage (browser only) whether to save the private key to local storage (default: true)
  * @returns: {@link LocalAccount}
  */
-export function createLocalAccount(
-  coreConfig: CoreConfig,
-  privateKey?: Hex,
-  saveToStorage = true
-): LocalAccount {
+export function createLocalAccount(coreConfig: CoreConfig, privateKey?: Hex, saveToStorage = true): LocalAccount {
   const key = privateKey ?? generatePrivateKey();
   const localAccount = createBurnerAccount(key);
-  if (saveToStorage)
-    storage.setItem(STORAGE_PREFIX + localAccount.address, key);
+  if (saveToStorage) storage.setItem(STORAGE_PREFIX + localAccount.address, key);
   const clientOptions = {
     chain: coreConfig.chain,
     transport: transportObserver(fallback([http()])),
@@ -51,9 +36,7 @@ export function createLocalAccount(
   });
 
   const write$ = new Subject<ContractWrite>();
-  localWalletClient
-    .extend(transactionQueue())
-    .extend(writeObserver({ onWrite: (write) => write$.next(write) }));
+  localWalletClient.extend(transactionQueue()).extend(writeObserver({ onWrite: (write) => write$.next(write) }));
 
   const localWorldContract = getContract({
     address: coreConfig.worldAddress as Hex,

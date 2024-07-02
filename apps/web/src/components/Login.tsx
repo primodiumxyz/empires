@@ -1,5 +1,6 @@
-import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { usePrivy } from "@privy-io/react-auth";
+
+import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 
 function Login() {
   const { ready, authenticated, login } = usePrivy();
@@ -14,20 +15,20 @@ function Login() {
       <button
         disabled={disableLogin}
         onClick={login}
-        className="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-blue-700"
       >
         Log in with Privy
       </button>
       {DEV && (
         <button
           onClick={() => createBurner()}
-          className="bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="rounded bg-secondary px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
           (Dev only) Play with Burner Account
         </button>
       )}
       {usingBurner && (
-        <button onClick={cancelBurner} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <button onClick={cancelBurner} className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
           Cancel Burner Account
         </button>
       )}

@@ -1,5 +1,6 @@
+import { getAddress, Hex, isAddress, pad, size, trim } from "viem";
+
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Hex, getAddress, isAddress, pad, size, trim } from "viem";
 
 /**
  * Check if two sets have common elements
@@ -66,12 +67,8 @@ export const shortenAddress = (address: Hex): Hex => {
   return `0x${address.slice(2, 6)}...${address.slice(-4)}`;
 };
 
-export function reverseRecord<T extends PropertyKey, U extends PropertyKey>(
-  input: Record<T, U>
-) {
-  return Object.fromEntries(
-    Object.entries(input).map(([key, value]) => [value, key])
-  ) as Record<U, T>;
+export function reverseRecord<T extends PropertyKey, U extends PropertyKey>(input: Record<T, U>) {
+  return Object.fromEntries(Object.entries(input).map(([key, value]) => [value, key])) as Record<U, T>;
 }
 
 export const normalizeAddress = (address: Hex): Hex => {
@@ -79,10 +76,7 @@ export const normalizeAddress = (address: Hex): Hex => {
   return pad(trim(address), { size: 20 });
 };
 
-export const entityToAddress = (
-  entity: Entity | string,
-  shorten = false
-): Hex => {
+export const entityToAddress = (entity: Entity | string, shorten = false): Hex => {
   // Cannot use trim() directly because a valid address might start with 0x0000...
   // After trimming the address, we need to pad it back to 20 bytes using viem pad()
   const normalizedAddress = normalizeAddress(entity as Hex);
@@ -97,26 +91,15 @@ export const isPlayer = (entity: Entity) => {
   const trimmedAddress = trim(entity as Hex);
   const addressSize = size(trimmedAddress);
 
-  const address =
-    addressSize <= 20 ? pad(trimmedAddress, { size: 20 }) : trimmedAddress;
+  const address = addressSize <= 20 ? pad(trimmedAddress, { size: 20 }) : trimmedAddress;
 
   return isAddress(address);
 };
 
 export function clampBigInt(value: bigint, min: bigint, max: bigint) {
-  return value < BigInt(min)
-    ? BigInt(min)
-    : value > BigInt(max)
-    ? BigInt(max)
-    : value;
+  return value < BigInt(min) ? BigInt(min) : value > BigInt(max) ? BigInt(max) : value;
 }
 
-export const lerp = (
-  value: number,
-  inMin: number,
-  inMax: number,
-  outMin: number,
-  outMax: number
-) => {
+export const lerp = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
   return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 };

@@ -1,23 +1,14 @@
+import { createBurnerAccount, transportObserver } from "@latticexyz/common";
+import { createClient as createFaucetClient } from "@latticexyz/faucet";
+import { createContext, ReactNode, useCallback, useMemo, useRef, useState } from "react";
+import { Address, createWalletClient, EIP1193Provider, fallback, formatEther, Hex, http } from "viem";
+
 import { createExternalAccount } from "@/account/createExternalAccount";
 import { createLocalAccount } from "@/account/createLocalAccount";
 import { minEth } from "@/lib/constants";
 import { AccountClient, ExternalAccount, LocalAccount } from "@/lib/types";
 import { useCore } from "@/react/hooks/useCore";
 import { storage } from "@/utils/global/storage";
-import { createBurnerAccount, transportObserver } from "@latticexyz/common";
-import { createClient as createFaucetClient } from "@latticexyz/faucet";
-import { useCallback, useMemo, useRef, useState } from "react";
-import {
-  Address,
-  createWalletClient,
-  fallback,
-  EIP1193Provider,
-  formatEther,
-  Hex,
-  http,
-} from "viem";
-
-import { createContext, ReactNode } from "react";
 
 type AccountClientOptions = {
   playerAddress?: Address;
@@ -27,9 +18,7 @@ type AccountClientOptions = {
 
 type AccountProviderProps = AccountClientOptions & { children: ReactNode };
 
-export const AccountClientContext = createContext<AccountClient | undefined>(
-  undefined
-);
+export const AccountClientContext = createContext<AccountClient | undefined>(undefined);
 
 /**
  * Provides the account client context to its children components.
@@ -39,12 +28,8 @@ export const AccountClientContext = createContext<AccountClient | undefined>(
  * @throws Will throw an error if neither playerAddress nor playerPrivateKey is provided.
  * @returns The account client provider.
  */
-export function AccountClientProvider({
-  children,
-  ...options
-}: AccountProviderProps) {
-  if (!options.playerAddress && !options.playerPrivateKey)
-    throw new Error("Must provide address or private key");
+export function AccountClientProvider({ children, ...options }: AccountProviderProps) {
+  if (!options.playerAddress && !options.playerPrivateKey) throw new Error("Must provide address or private key");
   const provider = options.provider;
   const core = useCore();
   const {
@@ -54,11 +39,8 @@ export function AccountClientProvider({
   } = core;
 
   const { externalWalletClient, faucet } = useMemo(() => {
-    const externalPKey =
-      config.chain.name === "Foundry" ? config.devPrivateKey : undefined;
-    const faucet = config.chain.faucetUrl
-      ? createFaucetClient({ url: config.chain.faucetUrl })
-      : undefined;
+    const externalPKey = config.chain.name === "Foundry" ? config.devPrivateKey : undefined;
+    const faucet = config.chain.faucetUrl ? createFaucetClient({ url: config.chain.faucetUrl }) : undefined;
 
     const externalWalletClient = externalPKey
       ? createWalletClient({
@@ -78,11 +60,7 @@ export function AccountClientProvider({
         const lowBalance = balance < minEth;
         if (lowBalance) {
           console.log("[Faucet] balance:", formatEther(balance));
-          console.info(
-            `[Faucet] Balance is less than ${formatEther(
-              minEth
-            )}, dripping funds`
-          );
+          console.info(`[Faucet] Balance is less than ${formatEther(minEth)}, dripping funds`);
           await faucet.drip.mutate({ address: address });
           balance = await publicClient.getBalance({ address });
           console.info(`[Faucet] New balance: ${formatEther(balance)} ETH`);
@@ -97,43 +75,29 @@ export function AccountClientProvider({
           to: address,
           value: amountToDrip,
         });
-        console.info(
-          `[Dev Drip] Dripped ${formatEther(amountToDrip)} to ${address}`
-        );
+        console.info(`[Dev Drip] Dripped ${formatEther(amountToDrip)} to ${address}`);
       }
     },
-    [externalWalletClient, faucet, publicClient]
+    [externalWalletClient, faucet, publicClient],
   );
 
   /* ----------------------------- Player Account ----------------------------- */
 
   const playerAccountInterval = useRef<NodeJS.Timeout | null>(null);
 
-  const [playerAccount, setPlayerAccount] = useState<
-    LocalAccount | ExternalAccount
-  >(
+  const [playerAccount, setPlayerAccount] = useState<LocalAccount | ExternalAccount>(
     // this is a hack to make typescript happy with overloaded function params
-    _updatePlayerAccount(options as { playerAddress: Address })
+    _updatePlayerAccount(options as { playerAddress: Address }),
   );
 
-  function _updatePlayerAccount(options: {
-    playerAddress: Address;
-  }): ExternalAccount;
-  function _updatePlayerAccount(options: {
-    playerPrivateKey: Hex;
-  }): LocalAccount;
-  function _updatePlayerAccount(options: {
-    playerAddress?: Address;
-    playerPrivateKey?: Hex;
-  }) {
+  function _updatePlayerAccount(options: { playerAddress: Address }): ExternalAccount;
+  function _updatePlayerAccount(options: { playerPrivateKey: Hex }): LocalAccount;
+  function _updatePlayerAccount(options: { playerAddress?: Address; playerPrivateKey?: Hex }) {
     const useLocal = !!options.playerPrivateKey;
-    if (!useLocal && !options.playerAddress)
-      throw new Error("Must provide address or private key");
+    if (!useLocal && !options.playerAddress) throw new Error("Must provide address or private key");
 
     if (useLocal && options.playerPrivateKey)
-      console.warn(
-        "Private key provided for local account creation, ignoring address"
-      );
+      console.warn("Private key provided for local account creation, ignoring address");
 
     const account = useLocal
       ? createLocalAccount(config, options.playerPrivateKey, false)
@@ -141,37 +105,27 @@ export function AccountClientProvider({
           provider: provider,
         });
 
-    if (useLocal)
-      storage.setItem("primodiumPlayerAccount", account.privateKey ?? "");
+    if (useLocal) storage.setItem("primodiumPlayerAccount", account.privateKey ?? "");
 
     if (playerAccountInterval.current) {
       clearInterval(playerAccountInterval.current);
     }
 
     requestDrip(account.address);
-    playerAccountInterval.current = setInterval(
-      () => requestDrip(account.address),
-      4000
-    );
+    playerAccountInterval.current = setInterval(() => requestDrip(account.address), 4000);
     tables.Account.set({ value: account.entity });
     return account;
   }
 
-  function updatePlayerAccount(options: {
-    playerAddress?: Address;
-    playerPrivateKey?: Hex;
-  }) {
-    if (!options.playerAddress && !options.playerAddress)
-      throw new Error("Must provide address or private key");
+  function updatePlayerAccount(options: { playerAddress?: Address; playerPrivateKey?: Hex }) {
+    if (!options.playerAddress && !options.playerAddress) throw new Error("Must provide address or private key");
     // this is a hack to make typescript happy with overloaded function params
     const account = _updatePlayerAccount(options as { playerAddress: Address });
     setPlayerAccount(account);
     return account;
   }
 
-  const memoizedUpdatePlayerAccount = useCallback(updatePlayerAccount, [
-    requestDrip,
-  ]);
+  const memoizedUpdatePlayerAccount = useCallback(updatePlayerAccount, [requestDrip]);
 
   const accountClient: AccountClient = {
     playerAccount,
@@ -179,9 +133,5 @@ export function AccountClientProvider({
     setPlayerAccount: memoizedUpdatePlayerAccount,
   };
 
-  return (
-    <AccountClientContext.Provider value={accountClient}>
-      {children}
-    </AccountClientContext.Provider>
-  );
+  return <AccountClientContext.Provider value={accountClient}>{children}</AccountClientContext.Provider>;
 }

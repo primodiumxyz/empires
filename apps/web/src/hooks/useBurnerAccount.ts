@@ -1,5 +1,6 @@
-import { BurnerAccountContext } from "@/hooks/providers/BurnerAccountProvider";
 import { useContext } from "react";
+
+import { BurnerAccountContext } from "@/hooks/providers/BurnerAccountProvider";
 
 export const useBurnerAccount = () => {
   const context = useContext(BurnerAccountContext);

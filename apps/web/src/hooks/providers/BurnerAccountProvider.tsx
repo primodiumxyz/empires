@@ -1,7 +1,8 @@
-import { storage } from "@primodiumxyz/core";
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import { Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
+
+import { storage } from "@primodiumxyz/core";
 
 type AccountProviderProps = { children: ReactNode };
 
@@ -40,7 +41,7 @@ export const BurnerAccountProvider = ({ children }: AccountProviderProps) => {
       storage.setItem(localKey, localPKey);
       setValue(localPKey);
     },
-    [storage, setValue]
+    [storage, setValue],
   );
 
   const cancelBurner = useCallback(() => {

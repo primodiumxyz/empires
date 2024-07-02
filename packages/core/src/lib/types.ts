@@ -1,13 +1,5 @@
-import { createSync } from "@/sync";
-import { createUtils } from "@/utils";
 import { ContractWrite } from "@latticexyz/common";
-import {
-  AllTableDefs,
-  ContractTables,
-  Entity,
-  World,
-  WrapperResult,
-} from "@primodiumxyz/reactive-tables";
+import CallWithSignatureAbi from "@latticexyz/world-modules/out/Unstable_CallWithSignatureSystem.sol/Unstable_CallWithSignatureSystem.abi.json";
 import { ReplaySubject, Subject } from "rxjs";
 import {
   Account,
@@ -19,15 +11,17 @@ import {
   PublicClient,
   WalletClient,
 } from "viem";
+import mudConfig from "contracts/mud.config";
+import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
 
+import { AllTableDefs, ContractTables, Entity, World, WrapperResult } from "@primodiumxyz/reactive-tables";
 import { ChainConfig } from "@/network/config/chainConfigs";
 import { otherTableDefs } from "@/network/otherTableDefs";
 import { Recs } from "@/recs/setupRecs";
+import { createSync } from "@/sync";
 import setupCoreTables from "@/tables/coreTables";
 import { SyncTables } from "@/tables/syncTables";
-import CallWithSignatureAbi from "@latticexyz/world-modules/out/Unstable_CallWithSignatureSystem.sol/Unstable_CallWithSignatureSystem.abi.json";
-import mudConfig from "contracts/mud.config";
-import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
+import { createUtils } from "@/utils";
 
 /**
  * Core configuration
@@ -81,10 +75,7 @@ type MudConfig = typeof mudConfig;
  * See [mud.config.ts](https://github.com/primodiumxyz/contracts/blob/main/mud.config.ts#L85-L97) for more details.
  */
 
-export type CreateNetworkResult = Omit<
-  Recs<MudConfig, typeof otherTableDefs>,
-  "tables"
-> & {
+export type CreateNetworkResult = Omit<Recs<MudConfig, typeof otherTableDefs>, "tables"> & {
   /** @property {World} world - The world instance. */
   world: World;
   mudConfig: MudConfig;
@@ -92,14 +83,12 @@ export type CreateNetworkResult = Omit<
   clock: Clock;
 } & Omit<
     WrapperResult<MudConfig, typeof otherTableDefs> & {
-      tables: ContractTables<AllTableDefs<MudConfig, typeof otherTableDefs>> &
-        SyncTables;
+      tables: ContractTables<AllTableDefs<MudConfig, typeof otherTableDefs>> & SyncTables;
     },
     "triggerUpdateStream"
   >;
 
-export type Tables = CreateNetworkResult["tables"] &
-  ReturnType<typeof setupCoreTables>;
+export type Tables = CreateNetworkResult["tables"] & ReturnType<typeof setupCoreTables>;
 export type Utils = ReturnType<typeof createUtils>;
 export type Sync = ReturnType<typeof createSync>;
 
@@ -141,13 +130,10 @@ export type WorldAbiType = typeof IWorldAbi & typeof CallWithSignatureAbi;
 
 type _Account<
   IsLocalAccount extends boolean = false,
-  TPublicClient extends PublicClient = PublicClient<
-    FallbackTransport,
-    ChainConfig
-  >,
+  TPublicClient extends PublicClient = PublicClient<FallbackTransport, ChainConfig>,
   TWalletClient extends WalletClient = IsLocalAccount extends true
     ? WalletClient<FallbackTransport, ChainConfig, Account>
-    : WalletClient<CustomTransport, ChainConfig, Account>
+    : WalletClient<CustomTransport, ChainConfig, Account>,
 > = {
   worldContract: GetContractReturnType<
     WorldAbiType,
@@ -171,10 +157,7 @@ export type LocalAccount = _Account<true>;
 
 export interface AccountClient {
   playerAccount: ExternalAccount | LocalAccount;
-  setPlayerAccount: (options: {
-    playerAddress?: Address;
-    playerPrivateKey?: Hex;
-  }) => void;
+  setPlayerAccount: (options: { playerAddress?: Address; playerPrivateKey?: Hex }) => void;
   requestDrip: (address: Address) => void;
 }
 

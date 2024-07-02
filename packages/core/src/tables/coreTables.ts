@@ -1,4 +1,3 @@
-import { CreateNetworkResult } from "@/lib/types";
 import {
   createLocalBigIntTable,
   createLocalBoolTable,
@@ -6,6 +5,8 @@ import {
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
+import { CreateNetworkResult } from "@/lib/types";
+
 import { createTransactionQueueTable } from "./customTables/TransactionQueueTable";
 
 export default function setupCoreTables(network: CreateNetworkResult) {
@@ -21,7 +22,7 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     },
     {
       id: "BlockNumber",
-    }
+    },
   );
 
   const Time = createLocalBigIntTable(world, { id: "Time" });

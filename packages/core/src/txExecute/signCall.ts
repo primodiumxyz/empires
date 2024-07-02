@@ -1,7 +1,8 @@
-import { Core } from "@/lib";
 import { hexToResource } from "@latticexyz/common";
 import { Account, Address, Chain, Hex, toHex, Transport, WalletClient } from "viem";
 import { signTypedData } from "viem/actions";
+
+import { Core } from "@/lib";
 
 type SignCallOptions = {
   core: Core;

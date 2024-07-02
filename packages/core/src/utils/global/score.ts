@@ -1,6 +1,6 @@
 const rankToScoreMap = new Map(
   // define the top ten ranks
-  [1000, 800, 666, 540, 430, 330, 250, 190, 140, 100].map((score, index) => [index + 1, score])
+  [1000, 800, 666, 540, 430, 330, 250, 190, 140, 100].map((score, index) => [index + 1, score]),
 );
 
 const log20 = (x: number) => Math.log(x) / Math.log(20);

@@ -1,20 +1,20 @@
-import { Tables } from "@/lib/types";
 import { formatAbiItem, type Abi } from "abitype";
-
 import {
+  concatHex,
   ContractFunctionName,
+  encodeAbiParameters,
   EncodeFunctionDataParameters,
   EncodeFunctionDataReturnType,
-  Hex,
-  concatHex,
-  encodeAbiParameters,
   getAbiItem,
+  Hex,
   toFunctionSelector,
 } from "viem";
 
+import { Tables } from "@/lib/types";
+
 export function encodeFunctionData<
   abi extends Abi | readonly unknown[] = Abi | readonly unknown[],
-  functionName extends ContractFunctionName<abi> | undefined = undefined
+  functionName extends ContractFunctionName<abi> | undefined = undefined,
 >(tables: Tables, parameters: EncodeFunctionDataParameters<abi, functionName>): EncodeFunctionDataReturnType {
   const { abi, args, functionName } = parameters as EncodeFunctionDataParameters;
 

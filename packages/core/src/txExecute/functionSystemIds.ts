@@ -1,6 +1,7 @@
+import { ContractFunctionName, Hex } from "viem";
+
 import { WorldAbiType } from "@/lib";
 import { getSystemId } from "@/utils";
-import { ContractFunctionName, Hex } from "viem";
 
 export const functionSystemIds: {
   [functionName in ContractFunctionName<WorldAbiType>]?: Hex;

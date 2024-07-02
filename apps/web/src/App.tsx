@@ -1,12 +1,12 @@
-import Landing from "@/screens/Landing";
-import { PrivyProvider } from "@privy-io/react-auth";
 import { useMemo, useRef } from "react";
+import { PrivyProvider } from "@privy-io/react-auth";
+import { defineChain } from "viem";
 
-import { getCoreConfig } from "@/config/getCoreConfig";
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider } from "@primodiumxyz/core/react";
-import { defineChain } from "viem";
+import { getCoreConfig } from "@/config/getCoreConfig";
 import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
+import Landing from "@/screens/Landing";
 
 const App = () => {
   const coreRef = useRef<CoreType | null>(null);
@@ -37,7 +37,7 @@ const App = () => {
     >
       <BurnerAccountProvider>
         <CoreProvider {...core}>
-          <div className="bg-neutral w-screen h-screen flex justify-center items-center">
+          <div className="flex h-screen w-screen items-center justify-center bg-neutral">
             <Landing />
           </div>
         </CoreProvider>

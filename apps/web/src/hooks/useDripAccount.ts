@@ -1,11 +1,12 @@
+import { useCallback, useMemo } from "react";
 import { transportObserver } from "@latticexyz/common";
 import { createClient as createFaucetClient } from "@latticexyz/faucet";
-import { minEth } from "@primodiumxyz/core";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
-import { useCallback, useMemo } from "react";
-import { useBalance } from "@/hooks/useBalance";
 import { createWalletClient, fallback, formatEther, Hex, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+
+import { minEth } from "@primodiumxyz/core";
+import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useBalance } from "@/hooks/useBalance";
 
 export const DEV_CHAIN = import.meta.env.PRI_CHAIN_ID === "dev";
 
@@ -43,7 +44,7 @@ export const useDripAccount = (): ((address: Hex) => void) => {
         console.info(`[Dev Drip] Dripped ${formatEther(amountToDrip)} to ${address.slice(0, 7)}`);
       }
     },
-    [externalWalletClient, faucet, network?.publicClient, config.chain]
+    [externalWalletClient, faucet, network?.publicClient, config.chain],
   );
 
   return dripAccount;

@@ -1,16 +1,12 @@
-import { Keys } from "@/lib";
-import {
-  CoreConfig,
-  CreateNetworkResult,
-  SyncSourceType,
-  SyncStep,
-  Tables,
-} from "@/lib/types";
-import { getSecondaryQuery } from "@/sync/queries/secondaryQueries";
+import { Hex } from "viem";
+
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { StorageAdapterLog } from "@primodiumxyz/reactive-tables/utils";
 import { Read, Sync } from "@primodiumxyz/sync-stack";
-import { Hex } from "viem";
+import { Keys } from "@/lib";
+import { CoreConfig, CreateNetworkResult, SyncSourceType, SyncStep, Tables } from "@/lib/types";
+import { getSecondaryQuery } from "@/sync/queries/secondaryQueries";
+
 import { getInitialQuery } from "./queries/initialQueries";
 
 /**
@@ -21,11 +17,7 @@ import { getInitialQuery } from "./queries/initialQueries";
  * @param tables tables generated for core object
  * @returns {@link SyncType Sync}
  */
-export function createSync(
-  config: CoreConfig,
-  network: CreateNetworkResult,
-  tables: Tables
-) {
+export function createSync(config: CoreConfig, network: CreateNetworkResult, tables: Tables) {
   const { tableDefs, world, publicClient, storageAdapter } = network;
   const indexerUrl = config.chain.indexerUrl;
   let fromBlock = config.initialBlockNumber ?? 0n;
@@ -35,7 +27,7 @@ export function createSync(
     toBlock: bigint,
     onComplete?: () => void,
     onError?: (err: unknown) => void,
-    syncId?: Entity
+    syncId?: Entity,
   ) => {
     const sync = Sync.withCustom({
       reader: Read.fromRPC.filter({
@@ -54,7 +46,7 @@ export function createSync(
           progress,
           message: `Hydrating from RPC`,
         },
-        syncId
+        syncId,
       );
 
       if (progress === 1) {
@@ -64,7 +56,7 @@ export function createSync(
             progress: 1,
             message: `DONE`,
           },
-          syncId
+          syncId,
         );
 
         onComplete?.();
@@ -94,9 +86,7 @@ export function createSync(
         publicClient,
       }),
       writer: (logs) =>
-        tables.SyncStatus.get()?.step === SyncStep.Live
-          ? storageAdapter(logs)
-          : storePendingLogs(logs),
+        tables.SyncStatus.get()?.step === SyncStep.Live ? storageAdapter(logs) : storePendingLogs(logs),
     });
 
     sync.start((_, blockNumber) => {
@@ -113,7 +103,7 @@ export function createSync(
       progress: string;
       complete: string;
       error: string;
-    }
+    },
   ) {
     return [
       (_: number, ___: bigint, progress: number) => {
@@ -123,7 +113,7 @@ export function createSync(
             progress,
             message: message.progress,
           },
-          syncId
+          syncId,
         );
 
         if (progress === 1) {
@@ -133,7 +123,7 @@ export function createSync(
               progress,
               message: message.complete,
             },
-            syncId
+            syncId,
           );
         }
       },
@@ -146,16 +136,13 @@ export function createSync(
             progress: 0,
             message: message.error,
           },
-          syncId
+          syncId,
         );
       },
     ];
   }
 
-  const syncInitialGameState = (
-    onComplete: () => void,
-    onError: (err: unknown) => void
-  ) => {
+  const syncInitialGameState = (onComplete: () => void, onError: (err: unknown) => void) => {
     // if we're already syncing from RPC, don't sync from indexer
     if (tables.SyncSource.get()?.value === SyncSourceType.RPC) return;
 
@@ -188,10 +175,7 @@ export function createSync(
     world.registerDisposer(sync.unsubscribe);
   };
 
-  const syncSecondaryGameState = (
-    onComplete: () => void,
-    onError: (err: unknown) => void
-  ) => {
+  const syncSecondaryGameState = (onComplete: () => void, onError: (err: unknown) => void) => {
     // if we're already syncing from RPC, don't sync from indexer
     if (tables.SyncSource.get()?.value === SyncSourceType.RPC) return;
 
@@ -216,7 +200,7 @@ export function createSync(
           progress,
           message: `Hydrating from Indexer`,
         },
-        syncId
+        syncId,
       );
 
       // sync remaining blocks from RPC
@@ -231,11 +215,9 @@ export function createSync(
             onComplete();
           },
           () => {
-            console.warn(
-              "Failed to sync remaining blocks. Client may be out of sync!"
-            );
+            console.warn("Failed to sync remaining blocks. Client may be out of sync!");
           },
-          syncId
+          syncId,
         );
       }
     }, onError);

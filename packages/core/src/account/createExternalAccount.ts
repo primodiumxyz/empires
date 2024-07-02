@@ -1,23 +1,24 @@
-import { CoreConfig, ExternalAccount } from "@/lib/types";
-import { WorldAbi } from "@/lib/WorldAbi";
-import { normalizeAddress } from "@/utils/global/common";
-import { addressToEntity } from "@/utils/global/encode";
 import { ContractWrite, transportObserver } from "@latticexyz/common";
 import { transactionQueue, writeObserver } from "@latticexyz/common/actions";
 import { Subject } from "rxjs";
 import {
   Account,
   Address,
-  EIP1193Provider,
-  Hex,
   createPublicClient,
   createWalletClient,
   custom,
+  EIP1193Provider,
   fallback,
   getContract,
+  Hex,
   http,
 } from "viem";
 import { toAccount } from "viem/accounts";
+
+import { CoreConfig, ExternalAccount } from "@/lib/types";
+import { WorldAbi } from "@/lib/WorldAbi";
+import { normalizeAddress } from "@/utils/global/common";
+import { addressToEntity } from "@/utils/global/encode";
 
 /**
  *
@@ -28,12 +29,10 @@ import { toAccount } from "viem/accounts";
 export function createExternalAccount(
   coreConfig: CoreConfig,
   address: Address,
-  options?: { provider?: EIP1193Provider }
+  options?: { provider?: EIP1193Provider },
 ): ExternalAccount {
   if (typeof window === "undefined") {
-    throw new Error(
-      "createExternalAccount must be called in a browser environment"
-    );
+    throw new Error("createExternalAccount must be called in a browser environment");
   }
 
   const clientOptions = {
@@ -55,9 +54,7 @@ export function createExternalAccount(
   });
 
   const write$ = new Subject<ContractWrite>();
-  walletClient
-    .extend(transactionQueue())
-    .extend(writeObserver({ onWrite: (write) => write$.next(write) }));
+  walletClient.extend(transactionQueue()).extend(writeObserver({ onWrite: (write) => write$.next(write) }));
 
   const worldContract = getContract({
     address: coreConfig.worldAddress as Hex,

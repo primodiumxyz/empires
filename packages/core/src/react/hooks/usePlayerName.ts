@@ -1,7 +1,8 @@
+import { useEffect, useMemo, useState } from "react";
+
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { useCore } from "@/react/hooks/useCore";
 import { getEnsName, LinkedAddressResult } from "@/utils/global/ens";
-import { Entity } from "@primodiumxyz/reactive-tables";
-import { useEffect, useMemo, useState } from "react";
 
 /**
  * Retrieves the player name and related information.
@@ -24,9 +25,7 @@ export function usePlayerName(playerEntity: Entity, address?: boolean) {
   useEffect(() => {
     const getAddressObj = async () => {
       const addressObj =
-        !playerEntity || !config.accountLinkUrl
-          ? undefined
-          : await getEnsName(config.accountLinkUrl, playerEntity);
+        !playerEntity || !config.accountLinkUrl ? undefined : await getEnsName(config.accountLinkUrl, playerEntity);
       setLinkedAddress(addressObj);
       setLoading(false);
     };

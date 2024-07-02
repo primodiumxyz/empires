@@ -1,9 +1,10 @@
+import { useEffect, useMemo } from "react";
+
+import { minEth } from "@primodiumxyz/core";
+import { useAccountClient, useSyncStatus } from "@primodiumxyz/core/react";
 import Game from "@/components/Game";
 import { useBalance } from "@/hooks/useBalance";
 import { useDripAccount } from "@/hooks/useDripAccount";
-import { minEth } from "@primodiumxyz/core";
-import { useAccountClient, useSyncStatus } from "@primodiumxyz/core/react";
-import { useEffect, useMemo } from "react";
 
 export default function DripScreen() {
   const dripAccount = useDripAccount();
@@ -26,7 +27,7 @@ export default function DripScreen() {
   return (
     <>
       {!balanceReady && (
-        <div className="flex flex-col items-center justify-center h-screen text-white gap-4">
+        <div className="flex h-screen flex-col items-center justify-center gap-4 text-white">
           <p className="text-lg text-white">
             <span className="animate-pulse">Dripping Eth </span>
           </p>

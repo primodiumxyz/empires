@@ -1,5 +1,6 @@
-import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { usePrivy } from "@privy-io/react-auth";
+
+import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 
 export const Logout = () => {
   const { logout } = usePrivy();
@@ -9,7 +10,7 @@ export const Logout = () => {
     else await logout();
   };
   return (
-    <button onClick={handleLogout} className="absolute top-4 left-4 rounded-sm btn btn-primary">
+    <button onClick={handleLogout} className="btn btn-primary absolute left-4 top-4 rounded-sm">
       Logout
     </button>
   );

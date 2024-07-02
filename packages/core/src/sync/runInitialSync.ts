@@ -1,4 +1,5 @@
 import { SyncSourceType, SyncStep } from "@/lib/types";
+
 import { Core } from "../lib/types";
 
 /**
@@ -49,7 +50,7 @@ export const runInitialSync = async (core: Core) => {
 
         console.warn("Failed to sync from RPC");
         console.log(err);
-      }
+      },
     );
 
     return;
@@ -73,7 +74,7 @@ export const runInitialSync = async (core: Core) => {
           message: `Failed to sync from RPC. Please try again.`,
         });
         console.warn("Failed to sync from RPC ");
-      }
+      },
     );
   };
 
@@ -92,10 +93,10 @@ export const runInitialSync = async (core: Core) => {
       syncSecondaryGameState(
         // on complete
         onSyncComplete,
-        onError
+        onError,
       );
     },
-    onError
+    onError,
   );
 
   // resolve when sync is live
