@@ -9,6 +9,7 @@ export enum EOrigin {
   North,
   Southeast,
   Southwest,
+  LENGTH,
 }
 export enum EDirection {
   None,
@@ -18,6 +19,7 @@ export enum EDirection {
   West,
   Northwest,
   Northeast,
+  LENGTH,
 }
 
 export enum EMovement {
@@ -25,6 +27,7 @@ export enum EMovement {
   Retreat,
   Lateral,
   Expand,
+  LENGTH,
 }
 
 export enum EAction {
