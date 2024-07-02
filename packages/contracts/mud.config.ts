@@ -86,7 +86,7 @@ export const worldInput = {
 
     /* -------------------------------- Movement -------------------------------- */
 
-    P_NPCActionConfig: {
+    P_NPCActionThresholds: {
       key: [],
       schema: {
         none: "uint256",
@@ -94,9 +94,16 @@ export const worldInput = {
       },
     },
 
+    P_NPCActionCosts: {
+      key: ["action"],
+      schema: {
+        action: "ENPCAction",
+        goldCost: "uint256",
+      },
+    },
     // each value denotes a threshold for the likelihood of a move in that direction
     // the total is out of 10000
-    P_NPCMoveConfig: {
+    P_NPCMoveThresholds: {
       key: [],
       schema: {
         none: "uint256",

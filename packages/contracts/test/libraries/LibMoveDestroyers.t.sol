@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, PlanetData, P_NPCMoveConfig } from "codegen/index.sol";
+import { Planet, PlanetData, P_NPCMoveThresholds } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
 import { LibMoveDestroyers } from "libraries/LibMoveDestroyers.sol";
@@ -39,7 +39,7 @@ contract LibMoveDestroyersTest is PrimodiumTest {
   function testGetPlanetTargetNoMovement() public {
     PlanetData memory planetData = Planet.get(planetId);
     // set the move direction to none
-    uint256 value = P_NPCMoveConfig.getNone() - 1;
+    uint256 value = P_NPCMoveThresholds.getNone() - 1;
     bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     assertEq(target, planetId);
   }
@@ -49,7 +49,7 @@ contract LibMoveDestroyersTest is PrimodiumTest {
     // north
     Planet.setFactionId(planetId, EEmpire.Red);
     // set the move direction to none
-    uint256 value = P_NPCMoveConfig.getExpand() - 1;
+    uint256 value = P_NPCMoveThresholds.getExpand() - 1;
     bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
     // direction should be southeast if left and southwest if right
@@ -68,7 +68,7 @@ contract LibMoveDestroyersTest is PrimodiumTest {
     Planet.setFactionId(planet, EEmpire.Blue);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
-    uint256 value = P_NPCMoveConfig.getRetreat() - 1;
+    uint256 value = P_NPCMoveThresholds.getRetreat() - 1;
     bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
 
@@ -86,7 +86,7 @@ contract LibMoveDestroyersTest is PrimodiumTest {
     Planet.setFactionId(planet, EEmpire.Green);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
-    uint256 value = P_NPCMoveConfig.getLateral() - 1;
+    uint256 value = P_NPCMoveThresholds.getLateral() - 1;
     bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
 

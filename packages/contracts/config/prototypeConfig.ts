@@ -26,13 +26,13 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         turnLengthBlocks: 60n * 2n,
         goldGenRate: 1n,
       },
-      P_NPCMoveConfig: percentsToThresholds({
+      P_NPCMoveThresholds: percentsToThresholds({
         none: 0.25,
         expand: 0.75 * 0.7,
         lateral: 0.75 * 0.2,
         retreat: 0.75 * 0.1,
       }),
-      P_NPCActionConfig: percentsToThresholds({
+      P_NPCActionThresholds: percentsToThresholds({
         none: 0.9,
         buyDestroyers: 0.1,
       }),
