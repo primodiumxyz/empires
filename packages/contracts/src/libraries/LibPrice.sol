@@ -63,7 +63,7 @@ library LibPrice {
      */
     function getPointCost(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
         require(_pointUnits > 0, "[LibPrice] Point units must be greater than 0");
-        uint256 initPointCost = Faction.getPointCost(_empireImpacted);
+        uint256 initPointCost = Faction.getPointCost(_empire);
         uint256 pointCostIncrease = P_GameConfig.getPointCostIncrease();
         uint256 pointCost = 0;
         for(uint256 i = 0; i < _pointUnits; i++) {
