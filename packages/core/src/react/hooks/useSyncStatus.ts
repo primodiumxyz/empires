@@ -1,7 +1,9 @@
-import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
-import { useCore } from "./useCore";
-import { SyncSourceType, SyncStep } from "@/lib/types";
 import { useEffect, useState } from "react";
+
+import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
+import { SyncSourceType, SyncStep } from "@/lib/types";
+
+import { useCore } from "./useCore";
 
 /**
  * Provides the sync status of a given sync id.
@@ -18,7 +20,7 @@ export const useSyncStatus = (syncId?: Entity) => {
   const syncMessage = tables.SyncStatus.use(syncEntity)?.message;
 
   const [loading, setLoading] = useState(
-    syncStatus ? syncStatus !== SyncStep.Complete && syncStatus !== SyncStep.Live : true
+    syncStatus ? syncStatus !== SyncStep.Complete && syncStatus !== SyncStep.Live : true,
   );
   const [error, setError] = useState(syncStatus === SyncStep.Error);
 

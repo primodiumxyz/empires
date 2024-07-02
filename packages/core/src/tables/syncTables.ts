@@ -1,4 +1,4 @@
-import { createLocalTable, createLocalNumberTable, Type, World } from "@primodiumxyz/reactive-tables";
+import { createLocalNumberTable, createLocalTable, Type, World } from "@primodiumxyz/reactive-tables";
 
 export type SyncTables = ReturnType<typeof setupSyncTables>;
 export function setupSyncTables(world: World) {
@@ -12,7 +12,7 @@ export function setupSyncTables(world: World) {
     },
     {
       id: "SyncStatus",
-    }
+    },
   );
 
   return {

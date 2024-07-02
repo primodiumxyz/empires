@@ -80,24 +80,17 @@ const shorten = (n: number, digits: number): string => {
  * @returns The formatted number.
  */
 
-export function formatNumber(
-  num: number | bigint,
-  options?: FormatOptions
-): string {
-  const digits =
-    options?.fractionDigits === undefined ? 0 : options.fractionDigits;
+export function formatNumber(num: number | bigint, options?: FormatOptions): string {
+  const digits = options?.fractionDigits === undefined ? 0 : options.fractionDigits;
   if (num === 0 || num === 0n) return options?.showZero ? "0" : "--";
 
   if (typeof num === "number") {
     if (options?.short) return shorten(num, digits);
-    const fixedNum =
-      digits == 0 ? String(Math.floor(num)) : num.toFixed(digits);
+    const fixedNum = digits == 0 ? String(Math.floor(num)) : num.toFixed(digits);
     if (num < 1) {
       return fixedNum.replace(/(\.\d*?[1-9])0+$|\.0*$/, "$1");
     }
-    return options?.notLocale
-      ? parseFloat(fixedNum).toString()
-      : parseFloat(fixedNum).toLocaleString();
+    return options?.notLocale ? parseFloat(fixedNum).toString() : parseFloat(fixedNum).toLocaleString();
   }
 
   if (typeof num === "bigint") {
@@ -112,10 +105,7 @@ export function formatNumber(
  * @param rawSeconds - The raw time in seconds.
  * @returns The formatted time.
  */
-export function formatTime(
-  rawSeconds: number | bigint,
-  short?: boolean
-): string {
+export function formatTime(rawSeconds: number | bigint, short?: boolean): string {
   if (short) return formatTimeShort(rawSeconds);
   const seconds = Number(rawSeconds);
   if (seconds < 0) return "00:00:00";

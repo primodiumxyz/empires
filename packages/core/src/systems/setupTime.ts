@@ -1,6 +1,7 @@
 import { namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { systems } from "@primodiumxyz/reactive-tables/utils";
 import { Core } from "@/lib/types";
+
 const { defineRxSystem } = systems;
 
 export function setupTime({

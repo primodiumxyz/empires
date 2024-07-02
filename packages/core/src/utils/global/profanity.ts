@@ -1,4 +1,4 @@
-import { RegExpMatcher, TextCensor, englishDataset, englishRecommendedTransformers } from "obscenity";
+import { englishDataset, englishRecommendedTransformers, RegExpMatcher, TextCensor } from "obscenity";
 
 const censor = new TextCensor();
 const matcher = new RegExpMatcher({

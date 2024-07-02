@@ -1,4 +1,4 @@
-import { MUDChain, mudFoundry, garnet, redstone } from "@latticexyz/common/chains";
+import { garnet, MUDChain, mudFoundry, redstone } from "@latticexyz/common/chains";
 
 const dev: ChainConfig = {
   ...mudFoundry,

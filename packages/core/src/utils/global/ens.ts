@@ -1,5 +1,6 @@
-import { Entity } from "@primodiumxyz/reactive-tables";
 import { Hex } from "viem";
+
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { entityToAddress } from "@/utils/global/common";
 
 export type LinkedAddressResult = {
@@ -18,7 +19,7 @@ const addressMap = new Map<string, LinkedAddressResult>();
 export const getEnsName = async (
   accountLinkUrl: string,
   playerEntity: Entity,
-  hard?: boolean
+  hard?: boolean,
 ): Promise<LinkedAddressResult> => {
   const address = entityToAddress(playerEntity);
   const retrievedData = addressMap.get(address);

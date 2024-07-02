@@ -1,20 +1,11 @@
 import { createBlockStream } from "@latticexyz/block-logs-stream";
-import { Read } from "@primodiumxyz/sync-stack";
 import {
-  createWrapper,
-  ContractTableDefs,
-  StoreConfig,
-  World as RecsWorld,
-  WrapperResult,
-} from "@primodiumxyz/reactive-tables";
-import { StorageAdapterBlock } from "@primodiumxyz/reactive-tables/utils";
-import {
-  Observable,
   concatMap,
   filter,
   firstValueFrom,
   identity,
   map,
+  Observable,
   scan,
   share,
   shareReplay,
@@ -22,8 +13,18 @@ import {
   timeout,
 } from "rxjs";
 import { Block, Hex, PublicClient, TransactionReceiptNotFoundError } from "viem";
-import { SyncTables } from "@/tables/syncTables";
+
+import {
+  ContractTableDefs,
+  createWrapper,
+  World as RecsWorld,
+  StoreConfig,
+  WrapperResult,
+} from "@primodiumxyz/reactive-tables";
+import { StorageAdapterBlock } from "@primodiumxyz/reactive-tables/utils";
+import { Read } from "@primodiumxyz/sync-stack";
 import { SyncStep } from "@/lib";
+import { SyncTables } from "@/tables/syncTables";
 
 export type Recs<config extends StoreConfig, extraTables extends ContractTableDefs> = Omit<
   WrapperResult<config, extraTables>,
@@ -57,7 +58,7 @@ export const setupRecs = <config extends StoreConfig, extraTables extends Contra
 
   const latestBlockNumber$ = latestBlock$.pipe(
     map((block) => block.number),
-    shareReplay(1)
+    shareReplay(1),
   );
 
   const storedBlockLogs$ = new Observable<StorageAdapterBlock>((subscriber) => {
@@ -85,10 +86,10 @@ export const setupRecs = <config extends StoreConfig, extraTables extends Contra
   const recentBlocks$ = storedBlockLogs$.pipe(
     scan<StorageAdapterBlock, StorageAdapterBlock[]>(
       (recentBlocks, block) => [block, ...recentBlocks].slice(0, recentBlocksWindow),
-      []
+      [],
     ),
     filter((recentBlocks) => recentBlocks.length > 0),
-    shareReplay(1)
+    shareReplay(1),
   );
 
   // TODO: move to its own file so we can test it, have its own debug instance, etc.
@@ -114,14 +115,14 @@ export const setupRecs = <config extends StoreConfig, extraTables extends Contra
           console.log(error);
           return false;
         }
-      })
+      }),
     );
 
     await firstValueFrom(
       hasTransaction$.pipe(
         filter(identity),
-        timeout({ each: 10_000, with: () => throwError(() => new Error("Transaction failed.")) })
-      )
+        timeout({ each: 10_000, with: () => throwError(() => new Error("Transaction failed.")) }),
+      ),
     );
   }
 

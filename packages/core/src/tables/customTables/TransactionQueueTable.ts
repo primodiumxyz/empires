@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+
 import { BaseTableMetadata, createLocalTable, Entity, TableOptions, Type } from "@primodiumxyz/reactive-tables";
 import { CreateNetworkResult } from "@/lib/types";
 import { TxQueueOptions } from "@/tables/types";
 
 export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTableMetadata>(
   { world }: CreateNetworkResult,
-  options?: TableOptions<M>
+  options?: TableOptions<M>,
 ) {
   const queue: { id: string; fn: () => Promise<void> }[] = [];
   let isRunning = false;
@@ -16,7 +17,7 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
       metadata: Type.OptionalString,
       type: Type.OptionalString,
     },
-    options
+    options,
   );
 
   // Add a function to the queue
@@ -34,7 +35,7 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
         metadata: JSON.stringify(options?.metadata),
         type: options.type,
       },
-      options.id as Entity
+      options.id as Entity,
     );
 
     await run();

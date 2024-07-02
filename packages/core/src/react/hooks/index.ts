@@ -1,7 +1,4 @@
-export {
-  AccountClientContext,
-  AccountClientProvider,
-} from "./providers/AccountClientProvider";
+export { AccountClientContext, AccountClientProvider } from "./providers/AccountClientProvider";
 export { CoreContext, CoreProvider } from "./providers/CoreProvider";
 
 export { useAccountClient } from "./useAccountClient";
