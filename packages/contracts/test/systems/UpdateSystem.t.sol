@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig } from "codegen/index.sol";
+import { Turn, P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibGold } from "libraries/LibGold.sol";
 import { EEmpire, ENPCAction } from "codegen/common.sol";
@@ -53,6 +53,28 @@ contract UpdateSystemTest is PrimodiumTest {
     }
   }
 
+  function testAddGoldToPlanetSecondRound() public {
+    uint256 goldIncrease = P_GameConfig.getGoldGenRate();
+
+    bytes32[] memory planets = PlanetsSet.getPlanetIds();
+    bytes32 planetNotMovingUntilThirdRound;
+    EEmpire firstRoundEmpire = EEmpire(((uint256(Turn.getEmpire()) + 1) % 3) + 1);
+    EEmpire secondRoundEmpire = EEmpire(((uint256(firstRoundEmpire) + 1) % 3) + 1);
+
+    for (uint i = 0; i < planets.length; i++) {
+      EEmpire empire = Planet.getFactionId(planets[i]);
+      if (empire != firstRoundEmpire && empire != secondRoundEmpire) {
+        planetNotMovingUntilThirdRound = planets[i];
+        break;
+      }
+    }
+    world.Empires__updateWorld();
+    vm.roll(block.number + turnLength + 1);
+
+    world.Empires__updateWorld();
+
+    assertEq(Planet.getGoldCount(planetNotMovingUntilThirdRound), goldIncrease * 2);
+  }
   function testSpendGoldNonEPlayerAction() public {
     uint256 nonEPlayerAction = P_NPCActionThresholds.getNone() - 1;
     Planet.setGoldCount(planetId, 100);
