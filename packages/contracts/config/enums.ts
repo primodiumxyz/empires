@@ -1,17 +1,16 @@
 export enum EEmpire {
-  Red,
+  Red = 1,
   Blue,
   Green,
 }
 
 export enum EOrigin {
-  North,
+  North = 1,
   Southeast,
   Southwest,
 }
 export enum EDirection {
-  None,
-  East,
+  East = 1,
   Southeast,
   Southwest,
   West,
@@ -20,15 +19,13 @@ export enum EDirection {
 }
 
 export enum EMovement {
-  None,
-  Retreat,
+  Retreat = 1,
   Lateral,
   Expand,
 }
 
 export enum ENPCAction {
-  None,
-  BuyDestroyers,
+  BuyDestroyers = 1,
 }
 
 export const MUDEnums = {
