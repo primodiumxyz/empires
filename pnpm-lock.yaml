@@ -20,6 +20,9 @@ importers:
       '@amplitude/analytics-browser':
         specifier: ^2.9.2
         version: 2.9.3
+      '@heroicons/react':
+        specifier: ^2.1.4
+        version: 2.1.4(react@18.3.1)
       '@latticexyz/common':
         specifier: 2.0.9
         version: 2.0.9(typescript@5.5.2)(zod@3.23.8)
@@ -2181,7 +2184,7 @@ packages:
     resolution: {integrity: sha512-ribfPYfHb+Uw3b27Eiw6NPqjhIhTpVFzEWLwyc/1Xp+DCdwRRyIlAUODX+9bPARF6aQtUu1+/PHzdNvRzcs/+Q==}
     engines: {node: '>= 12'}
     dependencies:
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@5.5.0)
       http-errors: 2.0.0
       koa-compose: 4.1.0
       methods: 1.1.2
@@ -2225,10 +2228,10 @@ packages:
     resolution: {integrity: sha512-KCdrgrQ3Vsuwx1VHMHQO1JS/5UmtWxTWVw6LsKS6y6Oqy02v3Z2dZOfacZ9ZE4D59audWFz8BNZL1SW5j1PtPQ==}
     dependencies:
       '@latticexyz/common': 2.0.9(zod@3.23.8)
-      abitype: 1.0.0(zod@3.23.8)
-      debug: 4.3.5
+      abitype: 1.0.0(typescript@5.4.2)(zod@3.23.8)
+      debug: 4.3.5(supports-color@5.5.0)
       rxjs: 7.5.5
-      viem: 2.9.20(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
       - asn1.js
@@ -2358,15 +2361,15 @@ packages:
       asn1.js:
         optional: true
     dependencies:
-      '@latticexyz/schema-type': 2.0.9(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
       '@solidity-parser/parser': 0.16.2
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@5.5.0)
       execa: 7.2.0
       p-queue: 7.4.1
       p-retry: 5.1.2
       prettier: 3.2.5
       prettier-plugin-solidity: 1.3.1(prettier@3.2.5)
-      viem: 2.9.20(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -2379,10 +2382,10 @@ packages:
     resolution: {integrity: sha512-iKvGHmI5Fk8J/C6tffJx1vMWhfIy03+7dk1kr1aGBsTC4BDajDoWNjmlXFxPgYtq8BxreuHVaR0W089+4nrKlQ==}
     dependencies:
       '@latticexyz/common': 2.0.9(zod@3.23.8)
-      '@latticexyz/schema-type': 2.0.9(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
       esbuild: 0.17.19
       find-up: 6.3.0
-      viem: 2.9.20(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
       zod: 3.23.8
       zod-validation-error: 1.5.0(zod@3.23.8)
     transitivePeerDependencies:
@@ -2509,9 +2512,9 @@ packages:
     dependencies:
       '@latticexyz/common': 2.0.9(zod@3.23.8)
       '@latticexyz/config': 2.0.9
-      '@latticexyz/schema-type': 2.0.9(zod@3.23.8)
-      abitype: 1.0.0(zod@3.23.8)
-      viem: 2.9.20(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
+      abitype: 1.0.0(typescript@5.4.2)(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
       - asn1.js
@@ -2527,9 +2530,9 @@ packages:
     dependencies:
       '@latticexyz/common': 2.0.9(zod@3.23.8)
       '@latticexyz/config': 2.0.9
-      '@latticexyz/schema-type': 2.0.9(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
       '@latticexyz/store': 2.0.9
-      viem: 2.9.20(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
       - asn1.js
@@ -2557,7 +2560,7 @@ packages:
   /@latticexyz/recs@2.0.9(zod@3.23.8):
     resolution: {integrity: sha512-gBL7Akx9DtEaCTr/24GWwp3NE41uJf+gD4WU+cVkXKiy31nnyOkwon2EaXN3qPv+B0Qv7WRQAxZOW2mv7dnFtw==}
     dependencies:
-      '@latticexyz/schema-type': 2.0.9(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
       '@latticexyz/utils': 2.0.9
       mobx: 6.12.5
       rxjs: 7.5.5
@@ -2578,7 +2581,6 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: false
 
   /@latticexyz/schema-type@2.0.9(typescript@5.5.2)(zod@3.23.8):
     resolution: {integrity: sha512-iynRKq5qgKJO9hCyIJn57sklLSmkjtxPKhcdx0uvGeaWh/SK9d+Yz383+NyLq85vaIRNcbkp3oE8YQjK0Exx3g==}
@@ -2591,18 +2593,6 @@ packages:
       - utf-8-validate
       - zod
     dev: false
-
-  /@latticexyz/schema-type@2.0.9(zod@3.23.8):
-    resolution: {integrity: sha512-iynRKq5qgKJO9hCyIJn57sklLSmkjtxPKhcdx0uvGeaWh/SK9d+Yz383+NyLq85vaIRNcbkp3oE8YQjK0Exx3g==}
-    dependencies:
-      abitype: 1.0.0(zod@3.23.8)
-      viem: 2.9.20(zod@3.23.8)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: true
 
   /@latticexyz/services@2.0.9(google-protobuf@3.21.2):
     resolution: {integrity: sha512-Uq3bm+Onwc0qY3OC2yhbAZ3SC5X1qPS+28g6/1grtFJlWZPsxRk1KWNwD0EZmF2ONy1c1Grss/NT/F1k7hNKlQ==}
@@ -2624,13 +2614,13 @@ packages:
       '@latticexyz/protocol-parser': 2.0.9(zod@3.23.8)
       '@latticexyz/query': 2.0.9(zod@3.23.8)
       '@latticexyz/recs': 2.0.9(zod@3.23.8)
-      '@latticexyz/schema-type': 2.0.9(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
       '@latticexyz/store': 2.0.9
       '@latticexyz/world': 2.0.9
       '@trpc/client': 10.34.0(@trpc/server@10.34.0)
       '@trpc/server': 10.34.0
       change-case: 5.4.4
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@5.5.0)
       drizzle-orm: 0.28.6(kysely@0.26.3)(postgres@3.3.5)(sql.js@1.10.3)
       fast-deep-equal: 3.1.3
       kysely: 0.26.3
@@ -2638,7 +2628,7 @@ packages:
       rxjs: 7.5.5
       sql.js: 1.10.3
       superjson: 1.13.3
-      viem: 2.9.20(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
       zod: 3.23.8
       zustand: 4.5.4(react@18.3.1)
     transitivePeerDependencies:
@@ -2676,10 +2666,10 @@ packages:
       '@latticexyz/common': 2.0.9(zod@3.23.8)
       '@latticexyz/config': 2.0.9
       '@latticexyz/protocol-parser': 2.0.9(zod@3.23.8)
-      '@latticexyz/schema-type': 2.0.9(zod@3.23.8)
-      abitype: 1.0.0(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
+      abitype: 1.0.0(typescript@5.4.2)(zod@3.23.8)
       arktype: 1.0.29-alpha
-      viem: 2.9.20(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -2782,11 +2772,11 @@ packages:
       '@latticexyz/common': 2.0.9(zod@3.23.8)
       '@latticexyz/config': 2.0.9
       '@latticexyz/protocol-parser': 2.0.9(zod@3.23.8)
-      '@latticexyz/schema-type': 2.0.9(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
       '@latticexyz/store': 2.0.9
-      abitype: 1.0.0(zod@3.23.8)
+      abitype: 1.0.0(typescript@5.4.2)(zod@3.23.8)
       arktype: 1.0.29-alpha
-      viem: 2.9.20(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -3174,13 +3164,13 @@ packages:
       '@latticexyz/store-sync': 2.0.9(react@18.3.1)
       accepts: 1.3.8
       change-case: 5.4.4
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@5.5.0)
       dotenv: 16.4.5
       koa: 2.15.3
       koa-compose: 4.1.0
       postgres: 3.3.5
       superjson: 1.13.3
-      viem: 2.9.20(zod@3.23.8)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -5012,7 +5002,6 @@ packages:
     dependencies:
       typescript: 5.4.2
       zod: 3.23.8
-    dev: false
 
   /abitype@1.0.0(typescript@5.5.2)(zod@3.23.8):
     resolution: {integrity: sha512-NMeMah//6bJ56H5XRj8QCV4AwuW6hB6zqz2LnhhLdcWVQOsXki6/Pn3APeqxCma62nXIcmZWdu1DlHWS74umVQ==}
@@ -5028,20 +5017,6 @@ packages:
       typescript: 5.5.2
       zod: 3.23.8
     dev: false
-
-  /abitype@1.0.0(zod@3.23.8):
-    resolution: {integrity: sha512-NMeMah//6bJ56H5XRj8QCV4AwuW6hB6zqz2LnhhLdcWVQOsXki6/Pn3APeqxCma62nXIcmZWdu1DlHWS74umVQ==}
-    peerDependencies:
-      typescript: '>=5.0.4'
-      zod: ^3 >=3.22.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-      zod:
-        optional: true
-    dependencies:
-      zod: 3.23.8
-    dev: true
 
   /abitype@1.0.5(typescript@5.5.2)(zod@3.23.8):
     resolution: {integrity: sha512-YzDhti7cjlfaBhHutMaboYB21Ha3rXR9QTkNJFzYC4kC8YclaiwPBBBJY8ejFdu2wnJeZCVZSMlQJ7fi8S6hsw==}
@@ -5843,18 +5818,6 @@ packages:
     dependencies:
       ms: 2.0.0
     dev: false
-
-  /debug@4.3.5:
-    resolution: {integrity: sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==}
-    engines: {node: '>=6.0'}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-    dependencies:
-      ms: 2.1.2
-    dev: true
 
   /debug@4.3.5(supports-color@5.5.0):
     resolution: {integrity: sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==}
@@ -7733,7 +7696,7 @@ packages:
       content-disposition: 0.5.4
       content-type: 1.0.5
       cookies: 0.9.1
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@5.5.0)
       delegates: 1.0.0
       depd: 2.0.0
       destroy: 1.2.0
@@ -10023,7 +9986,6 @@ packages:
     resolution: {integrity: sha512-+2/g0Fds1ERlP6JsakQQDXjZdZMM+rqpamFZJEKh4kwTIn3iDkgKtby0CeNd5ATNZ4Ry1ax15TMx0W2V+miizQ==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: false
 
   /typescript@5.5.2:
     resolution: {integrity: sha512-NcRtPEOsPFFWjobJEtfihkLCZCXZt/os3zf8nTxjVH3RvTSxjrCamJpbExGvYOF+tFHc3pA65qpdwPbzjohhew==}
@@ -10265,7 +10227,6 @@ packages:
       - bufferutil
       - utf-8-validate
       - zod
-    dev: false
 
   /viem@2.9.20(typescript@5.5.2)(zod@3.23.8):
     resolution: {integrity: sha512-PHb1MrBHMrSZ8Ayuk3Y/6wUTcMbzlACQaM6AJBSv9kRKX3xYSZ/kehi+gvS0swQJeAlTQ4eZM7jsHQJNAOarmg==}
@@ -10289,28 +10250,6 @@ packages:
       - utf-8-validate
       - zod
     dev: false
-
-  /viem@2.9.20(zod@3.23.8):
-    resolution: {integrity: sha512-PHb1MrBHMrSZ8Ayuk3Y/6wUTcMbzlACQaM6AJBSv9kRKX3xYSZ/kehi+gvS0swQJeAlTQ4eZM7jsHQJNAOarmg==}
-    peerDependencies:
-      typescript: '>=5.0.4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@adraffy/ens-normalize': 1.10.0
-      '@noble/curves': 1.2.0
-      '@noble/hashes': 1.3.2
-      '@scure/bip32': 1.3.2
-      '@scure/bip39': 1.2.1
-      abitype: 1.0.0(zod@3.23.8)
-      isows: 1.0.3(ws@8.13.0)
-      ws: 8.13.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-      - zod
-    dev: true
 
   /vite-node@0.32.4(@types/node@18.19.39):
     resolution: {integrity: sha512-L2gIw+dCxO0LK14QnUMoqSYpa9XRGnTTTDjW2h19Mr+GR0EFj4vx52W41gFXfMLqpA00eK4ZjOVYo1Xk//LFEw==}
