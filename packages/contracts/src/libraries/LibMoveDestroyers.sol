@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Planet, PlanetData, P_MoveConfig, P_MoveConfigData, Arrivals } from "codegen/index.sol";
+import { Faction, Planet, PlanetData, P_NPCMoveConfig, P_NPCMoveConfigData, Arrivals } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, coordToId } from "src/utils.sol";
 
@@ -74,7 +74,7 @@ library LibMoveDestroyers {
   }
 
   function getMovement(uint256 value) private view returns (EMovement) {
-    P_MoveConfigData memory moveConfig = P_MoveConfig.get();
+    P_NPCMoveConfigData memory moveConfig = P_NPCMoveConfig.get();
     if (value < moveConfig.none) {
       return EMovement.None;
     } else if (value < moveConfig.expand) {

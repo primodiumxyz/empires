@@ -23,6 +23,7 @@ export const worldInput = {
       key: [],
       schema: {
         turnLengthBlocks: "uint256",
+        goldGenRate: "uint256",
       },
     },
 
@@ -48,6 +49,7 @@ export const worldInput = {
         r: "int128",
         isPlanet: "bool",
         destroyerCount: "uint256",
+        goldCount: "uint256",
         factionId: "EEmpire",
       },
     },
@@ -84,9 +86,17 @@ export const worldInput = {
 
     /* -------------------------------- Movement -------------------------------- */
 
+    P_NPCActionConfig: {
+      key: [],
+      schema: {
+        none: "uint256",
+        buyDestroyers: "uint256",
+      },
+    },
+
     // each value denotes a threshold for the likelihood of a move in that direction
     // the total is out of 10000
-    P_MoveConfig: {
+    P_NPCMoveConfig: {
       key: [],
       schema: {
         none: "uint256",
