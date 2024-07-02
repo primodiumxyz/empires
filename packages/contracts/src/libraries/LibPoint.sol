@@ -53,8 +53,8 @@ library LibPoint {
   function getPlayerPoints(bytes32 playerId) internal view returns (uint256[] memory) {
     uint256[] memory playerPoints = Player.getPoints(playerId);
 
-    if (playerPoints.length <= EEmpire.LENGTH) {
-      uint256[] memory tempPoints = new uint256[](EEmpire.LENGTH + 1);
+    if (playerPoints.length <= uint256(EEmpire.LENGTH)) {
+      uint256[] memory tempPoints = new uint256[](uint256(EEmpire.LENGTH) + 1);
       for (uint i = 0; i < playerPoints.length; i++) {
           tempPoints[i] = playerPoints[i];
       }
