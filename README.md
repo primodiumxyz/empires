@@ -1,2 +1,3 @@
-# primodium-base
-Base Monorepo scaffolding following best practices
+# Primodium: Empires v0.1
+
+A fully on-chain game
