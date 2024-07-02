@@ -1,14 +1,15 @@
-import { createCore } from "@/createCore";
-import { chainConfigs } from "@/network/config/chainConfigs";
-import { beforeAll, describe, expect, test } from "vitest";
-import worldsJson from "contracts/worlds.json";
-import { worldInput } from "contracts/mud.config";
+import { createLocalAccount } from "@core/account/createLocalAccount";
+import { createCore } from "@core/createCore";
+import { Core, CoreConfig, SyncStep } from "@core/index";
+import { chainConfigs } from "@core/network/config/chainConfigs";
+import { otherTableDefs } from "@core/network/otherTableDefs";
 import { Address, Hex, TransactionReceipt } from "viem";
-import { otherTableDefs } from "@/network/otherTableDefs";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { beforeAll, describe, expect, test } from "vitest";
+import { worldInput } from "contracts/mud.config";
+import worldsJson from "contracts/worlds.json";
+
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Core, CoreConfig, SyncStep } from "@/index";
-import { createLocalAccount } from "@/account/createLocalAccount";
 
 export const createTestConfig = () => {
   const isAnvilRunning = false;

@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "//#dev:indexer": {},
     "build": {
       "outputs": ["dist/**"]
     },
@@ -11,5 +12,6 @@
       "persistent": true,
       "cache": false
     }
-  }
+  },
+  "ui": "tui"
 }

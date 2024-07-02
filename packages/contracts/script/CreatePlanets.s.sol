@@ -32,8 +32,8 @@ function createPlanets() {
   Planet.set(planet4, PlanetData({ q: 0, r: -1, isPlanet: true, destroyerCount: 0, factionId: EEmpire.NULL }));
   PlanetsSet.add(planet4);
 
-  bytes32 planet5 = coordToId(-1, -1);
-  Planet.set(planet5, PlanetData({ q: 1, r: -1, isPlanet: true, destroyerCount: 0, factionId: EEmpire.NULL }));
+  bytes32 planet5 = coordToId(0, 1);
+  Planet.set(planet5, PlanetData({ q: 0, r: 1, isPlanet: true, destroyerCount: 0, factionId: EEmpire.NULL }));
   PlanetsSet.add(planet5);
 
   bytes32 planet6 = coordToId(-1, 0);
