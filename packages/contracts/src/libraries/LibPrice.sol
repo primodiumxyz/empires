@@ -3,7 +3,6 @@ pragma solidity >=0.8.24;
 
 import { Faction, Player, P_GameConfig } from "codegen/index.sol";
 import { EEmpire, EAction } from "codegen/common.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 library LibPrice {
     function getTotalCost(EAction _actionType, EEmpire _empireImpacted, bool _progressAction) internal view returns (uint256) {
@@ -20,16 +19,16 @@ library LibPrice {
         return totalCost;
     }
 
-    // Gets the cost of the impacted empires points, iterated by EMPIRE_COUNT-1
+    // Gets the cost of the impacted empires points, iterated by EEmpire.LENGTH - 1
     function getProgressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
-        return getPointCost(_empireImpacted, EMPIRE_COUNT - 1);
+        return getPointCost(_empireImpacted, uint256(EEmpire.LENGTH) - 1);
     }
 
     // Gets the cost of a single point of each unimpacted empire
     // Iterates through each empire except the impacted one.
     function getRegressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
         uint256 pointCost;
-        for(uint256 i = 0; i < EMPIRE_COUNT; i++) {
+        for(uint256 i = 0; i < uint256(EEmpire.LENGTH); i++) {
             if (i == uint256(_empireImpacted)) {
                 continue;
             }
