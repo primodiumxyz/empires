@@ -3,7 +3,6 @@ pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 import { Faction, Player } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
@@ -20,7 +19,7 @@ contract LibPointTest is PrimodiumTest {
   }
 
   function testInitEmptyEmpireIssuedPoints() public {
-    for (uint i = 0; i < EMPIRE_COUNT; i++) {
+    for (uint i = 0; i < EEmpire.LENGTH; i++) {
       assertEq(Faction.getPointsIssued(EEmpire(i)), 0, "Empire points at game start should be 0");
     }
   }

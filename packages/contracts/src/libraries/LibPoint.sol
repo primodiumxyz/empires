@@ -3,7 +3,6 @@ pragma solidity >=0.8.24;
 
 import { Faction, Player } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 /**
  * @title LibPoint
@@ -54,8 +53,8 @@ library LibPoint {
   function getPlayerPoints(bytes32 playerId) internal view returns (uint256[] memory) {
     uint256[] memory playerPoints = Player.getPoints(playerId);
 
-    if (playerPoints.length <= EMPIRE_COUNT) {
-      uint256[] memory tempPoints = new uint256[](EMPIRE_COUNT + 1);
+    if (playerPoints.length <= EEmpire.LENGTH) {
+      uint256[] memory tempPoints = new uint256[](EEmpire.LENGTH + 1);
       for (uint i = 0; i < playerPoints.length; i++) {
           tempPoints[i] = playerPoints[i];
       }

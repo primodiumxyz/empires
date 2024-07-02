@@ -2,6 +2,7 @@ export enum EEmpire {
   Red,
   Blue,
   Green,
+  LENGTH,
 }
 
 export enum EOrigin {
@@ -29,6 +30,7 @@ export enum EMovement {
 export enum EAction {
   CreateDestroyer,
   KillDestroyer,
+  LENGTH,
 }
 
 export const MUDEnums = {
