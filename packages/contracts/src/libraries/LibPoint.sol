@@ -29,7 +29,7 @@ library LibPoint {
    */
   function removePoints(EEmpire empire, bytes32 playerId, uint256 points) internal {
     require(empire != EEmpire.NULL && empire != EEmpire.LENGTH, "[LibPoint] Invalid empire");
-    require(Points.get(playerId, empire) >= points, "[LibPoint] Player does not have enough points to remove");
+    require(points <= Points.get(playerId, empire), "[LibPoint] Player does not have enough points to remove");
     // Requires ordered in reverse of issuePoints() for clearer error message paths
     require(points <= Faction.getPointsIssued(empire), "[LibPoint] Empire has not issued enough points to remove");
     Points.set(playerId, empire, Points.get(playerId, empire) - points);
