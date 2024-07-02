@@ -75,7 +75,8 @@ contract UpdateSystemTest is PrimodiumTest {
 
     assertEq(Planet.getGoldCount(planetNotMovingUntilThirdRound), goldIncrease * 2);
   }
-  function testSpendGoldNonEPlayerAction() public {
+
+  function testSpendGoldNoAction() public {
     uint256 nonEPlayerAction = P_NPCActionThresholds.getNone() - 1;
     Planet.setGoldCount(planetId, 100);
     LibGold._spendGold(planetId, nonEPlayerAction);
