@@ -27,6 +27,7 @@ export const worldInput = {
         startPointCost: "uint256",
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
+        pointRake: "uint256",
         actionGenRate: "uint256",
         actionCostIncrease: "uint256",
         startActionCost: "uint256",
