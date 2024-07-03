@@ -1,13 +1,13 @@
 import { transportObserver } from "@latticexyz/common";
+import { createPublicClient, fallback, Hex, http } from "viem";
+
+import { mudConfig } from "@primodiumxyz/contracts";
+import { createWorld } from "@primodiumxyz/reactive-tables";
 import { CoreConfig, CreateNetworkResult } from "@core/lib/types";
 import { createClock } from "@core/network/createClock";
 import { otherTableDefs } from "@core/network/otherTableDefs";
 import { setupRecs } from "@core/recs/setupRecs";
 import { setupSyncTables } from "@core/tables/syncTables";
-import { createPublicClient, fallback, Hex, http } from "viem";
-import mudConfig from "contracts/mud.config";
-
-import { createWorld } from "@primodiumxyz/reactive-tables";
 
 /**
  * Creates network object

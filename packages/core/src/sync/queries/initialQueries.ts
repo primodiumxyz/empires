@@ -18,6 +18,6 @@ export const getInitialQuery = ({
 
   return {
     address: worldAddress,
-    queries: [...configTableQueries, { tableId: tables.Planet?.tableId }, { tableId: tables.Turn.tableId }],
+    queries: [...configTableQueries, { tableId: tables.Planet.tableId }, { tableId: tables.Turn.tableId }],
   };
 };

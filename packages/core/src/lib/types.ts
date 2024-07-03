@@ -11,9 +11,8 @@ import {
   PublicClient,
   WalletClient,
 } from "viem";
-import mudConfig from "contracts/mud.config";
-import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
 
+import { IWorldAbi, mudConfig } from "@primodiumxyz/contracts";
 import { AllTableDefs, ContractTables, Entity, World, WrapperResult } from "@primodiumxyz/reactive-tables";
 import { ChainConfig } from "@core/network/config/chainConfigs";
 import { otherTableDefs } from "@core/network/otherTableDefs";
