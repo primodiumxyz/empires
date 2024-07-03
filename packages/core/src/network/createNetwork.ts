@@ -35,6 +35,7 @@ export function createNetwork(config: CoreConfig): CreateNetworkResult {
       address: config.worldAddress as Hex,
       otherTableDefs,
       syncTables,
+      devTools: config.devTools,
     });
 
   const clock = createClock(world, latestBlock$, {
