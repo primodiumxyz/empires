@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "",
   "scripts": {
-    "dev": "turbo dev dev:indexer",
+    "dev": "turbo dev dev:indexer --continue",
     "build": "turbo build",
     "clean:indexer": "pnpm clean-local-docker-indexer",
     "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
