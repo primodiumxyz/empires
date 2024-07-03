@@ -26,6 +26,8 @@ contract PostDeploy is Script {
     createPrototypes(world);
     console.log("Prototypes created");
 
+    P_GameConfig.setGameOverBlock(block.number + 1000);
+
     createPlanets();
 
     vm.stopBroadcast();

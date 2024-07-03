@@ -32,6 +32,7 @@ export const worldInput = {
         startActionCost: "uint256",
         minActionCost: "uint256",
         goldGenRate: "uint256",
+        gameOverBlock: "uint256",
       },
     },
 
