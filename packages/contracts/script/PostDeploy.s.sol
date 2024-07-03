@@ -7,6 +7,7 @@ import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { createPrototypes } from "codegen/Prototypes.sol";
 import { createPlanets } from "./CreatePlanets.s.sol";
+import { P_GameConfig } from "codegen/index.sol";
 
 import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";

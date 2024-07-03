@@ -34,6 +34,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         startActionCost: BigInt(POINTS_UNIT) / 2n,
         minActionCost: 0n,
         goldGenRate: 1n,
+        gameOverBlock: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
         none: 0.25,
