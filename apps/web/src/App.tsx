@@ -4,6 +4,7 @@ import { defineChain } from "viem";
 
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider } from "@primodiumxyz/core/react";
+import CheatcodesButton from "@/components/CheatcodesButton";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
 import Landing from "@/screens/Landing";
@@ -39,6 +40,7 @@ const App = () => {
         <CoreProvider {...core}>
           <div className="flex h-screen w-screen items-center justify-center bg-neutral">
             <Landing />
+            <CheatcodesButton />
           </div>
         </CoreProvider>
       </BurnerAccountProvider>
