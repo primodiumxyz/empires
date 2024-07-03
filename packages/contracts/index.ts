@@ -1,5 +1,6 @@
 import mudConfig, { worldInput } from "./mud.config";
 import IWorldAbi from "./out/IWorld.sol/IWorld.abi.json";
 import worldsJson from "./worlds.json";
+import { EDirection, EEmpire, EMovement, EOrigin } from "./config/enums";
 
-export { mudConfig, IWorldAbi, worldsJson, worldInput };
+export { mudConfig, IWorldAbi, worldsJson, worldInput, EDirection, EEmpire, EMovement, EOrigin };

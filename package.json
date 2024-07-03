@@ -7,7 +7,7 @@
     "build": "turbo build",
     "clean:indexer": "pnpm clean-local-docker-indexer",
     "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
-    "build:contracts": "turbo --filter contracts build"
+    "build:contracts": "turbo --filter @primodiumxyz/contracts build"
   },
   "keywords": [],
   "author": "",

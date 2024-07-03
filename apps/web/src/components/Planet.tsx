@@ -1,10 +1,17 @@
 import { useMemo } from "react";
 import { RocketLaunchIcon } from "@heroicons/react/24/solid";
 
+import { EEmpire } from "@primodiumxyz/contracts";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Hexagon } from "@/components/core/Hexagon/Hexagon";
+
+export const EmpireEnumToColor = {
+  [EEmpire.Blue]: "blue",
+  [EEmpire.Green]: "green",
+  [EEmpire.Red]: "red",
+};
 
 export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number }> = ({
   entity,
@@ -28,7 +35,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   return (
     <Hexagon
       key={entity}
-      fill={planet?.factionId !== 0 ? "darkred" : "grey"}
+      fill={planet?.factionId !== 0 ? EmpireEnumToColor[planet.factionId as EEmpire] : "grey"}
       size={tileSize}
       className="absolute -translate-x-1/2 -translate-y-1/2"
       style={{

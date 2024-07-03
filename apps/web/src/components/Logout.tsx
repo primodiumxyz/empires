@@ -10,7 +10,7 @@ export const Logout = () => {
     else await logout();
   };
   return (
-    <button onClick={handleLogout} className="btn btn-primary absolute left-4 top-4 rounded-sm">
+    <button onClick={handleLogout} className="btn btn-primary absolute left-4 top-4">
       Logout
     </button>
   );

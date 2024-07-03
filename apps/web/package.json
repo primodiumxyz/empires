@@ -17,6 +17,7 @@
     "@latticexyz/faucet": "2.0.9",
     "@primodiumxyz/core": "workspace:*",
     "@primodiumxyz/reactive-tables": "^3.3.0",
+    "@primodiumxyz/contracts": "workspace:*",
     "@privy-io/react-auth": "^1.72.0",
     "clsx": "^2.1.1",
     "react": "^18.3.1",

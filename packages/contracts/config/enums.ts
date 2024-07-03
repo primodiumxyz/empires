@@ -1,16 +1,16 @@
 export enum EEmpire {
-  Red,
+  Red = 1,
   Blue,
   Green,
 }
 
 export enum EOrigin {
-  North,
+  North = 1,
   Southeast,
   Southwest,
 }
 export enum EDirection {
-  None,
+  None = 1,
   East,
   Southeast,
   Southwest,
@@ -20,7 +20,7 @@ export enum EDirection {
 }
 
 export enum EMovement {
-  None,
+  None = 1,
   Retreat,
   Lateral,
   Expand,
