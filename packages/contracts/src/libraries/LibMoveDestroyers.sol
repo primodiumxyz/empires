@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Planet, PlanetData, P_MoveConfig, P_MoveConfigData, Arrivals } from "codegen/index.sol";
+import { Faction, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, Arrivals } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, coordToId } from "src/utils.sol";
 
@@ -40,8 +40,8 @@ library LibMoveDestroyers {
   // Southwest Expand: Northeast, East, Retreat: Southwest, West, Lateral: Northwest, Southeast
 
   function getDirection(EMovement movement, bool left, EOrigin origin) internal pure returns (EDirection) {
-    if (movement == EMovement.None) {
-      return EDirection.None;
+    if (movement == EMovement.NULL) {
+      return EDirection.NULL;
     }
 
     if (origin == EOrigin.North) {
@@ -69,14 +69,14 @@ library LibMoveDestroyers {
         return left ? EDirection.Southwest : EDirection.West;
       }
     } else {
-      return EDirection.None;
+      return EDirection.NULL;
     }
   }
 
   function getMovement(uint256 value) private view returns (EMovement) {
-    P_MoveConfigData memory moveConfig = P_MoveConfig.get();
+    P_NPCMoveThresholdsData memory moveConfig = P_NPCMoveThresholds.get();
     if (value < moveConfig.none) {
-      return EMovement.None;
+      return EMovement.NULL;
     } else if (value < moveConfig.expand) {
       return EMovement.Expand;
     } else if (value < moveConfig.lateral) {
@@ -84,7 +84,7 @@ library LibMoveDestroyers {
     } else if (value < moveConfig.retreat) {
       return EMovement.Retreat;
     } else {
-      return EMovement.None;
+      return EMovement.NULL;
     }
   }
 
