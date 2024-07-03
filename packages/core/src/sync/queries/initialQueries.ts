@@ -17,7 +17,7 @@ export const getInitialQuery = ({
     .map((tableName) => ({ tableId: tables[tableName].tableId }));
 
   return {
-    address: worldAddress as Hex,
-    queries: [...configTableQueries, { tableId: tables.Planet?.tableId as Hex }],
+    address: worldAddress,
+    queries: [...configTableQueries, { tableId: tables.Planet?.tableId }, { tableId: tables.Turn.tableId }],
   };
 };
