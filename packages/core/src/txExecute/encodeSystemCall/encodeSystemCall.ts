@@ -1,8 +1,7 @@
+import { Tables } from "@core/lib/types";
+import { WorldAbi } from "@core/lib/WorldAbi";
 import { AbiParametersToPrimitiveTypes, ExtractAbiFunction } from "abitype";
 import { Abi, EncodeFunctionDataParameters, Hex, type ContractFunctionName } from "viem";
-
-import { Tables } from "@/lib/types";
-import { WorldAbi } from "@/lib/WorldAbi";
 
 import { encodeFunctionData } from "./encodeFunctionData";
 

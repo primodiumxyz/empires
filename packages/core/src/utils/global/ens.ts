@@ -1,7 +1,7 @@
+import { entityToAddress } from "@core/utils/global/common";
 import { Hex } from "viem";
 
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { entityToAddress } from "@/utils/global/common";
 
 export type LinkedAddressResult = {
   address: Hex | null;
