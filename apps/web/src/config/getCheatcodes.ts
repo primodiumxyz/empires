@@ -1,35 +1,36 @@
 import { createCheatcode } from "@/util/cheatcodes";
 
 const testCheatcode = createCheatcode({
-  title: "Test cheatcode",
-  caption: "This is a test cheatcode",
+  title: "Set counter",
+  caption: "Set the counter to an arbitrary value.",
   inputs: {
-    stringArg: {
-      label: "arg string",
-      inputType: "text",
-      defaultValue: "test",
-    },
-    numberArg: {
-      label: "arg number",
+    value: {
+      label: "value",
       inputType: "number",
-      defaultValue: 4,
-    },
-    bigintArg: {
-      label: "arg bigint",
-      inputType: "number",
-      defaultValue: BigInt(4),
-    },
-    booleanArg: {
-      label: "arg boolean",
-      inputType: "text",
-      defaultValue: true as boolean,
+      defaultValue: 0,
     },
   },
   execute: async (args) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return true;
   },
-  category: "Test",
 });
 
-export const getCheatcodes = () => [testCheatcode];
+export const getCheatcodes = () => [
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+  testCheatcode,
+];
