@@ -1,11 +1,14 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
+import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import CheatcodesButton, { CheatcodesCloseButton } from "@/components/CheatcodesButton";
-import { getCheatcodes } from "@/config/getCheatcodes";
+import { setupCheatcodes } from "@/config/setupCheatcodes";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, createCheatcode } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 
 import "@/index.css";
+
+import { useContractCalls } from "@/hooks/useContractCalls";
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
@@ -16,6 +19,11 @@ const Cheatcodes = () => {
   const [activeTab, setActiveTab] = useState<number | undefined>(undefined);
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const core = useCore();
+  const accountClient = useAccountClient();
+  const contractCalls = useContractCalls();
+  const cheatcodes = setupCheatcodes(core, accountClient, contractCalls);
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
@@ -53,7 +61,7 @@ const Cheatcodes = () => {
         {/* cheatcodes */}
         <h1 className="font-semibold uppercase text-gray-300">Cheatcodes</h1>
         <div className="flex flex-col gap-4 overflow-auto pr-2">
-          {getCheatcodes().map((cheatcode, i) => (
+          {cheatcodes.map((cheatcode, i) => (
             <Cheatcode key={i} cheatcode={cheatcode} index={i} activeTab={activeTab} setActiveTab={setActiveTab} />
           ))}
         </div>

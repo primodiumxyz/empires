@@ -10,6 +10,8 @@ import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
 import Landing from "@/screens/Landing";
 
 const App = () => {
+  const DEV = import.meta.env.PRI_DEV === "true";
+
   const coreRef = useRef<CoreType | null>(null);
   const core = useMemo(() => {
     if (coreRef.current) coreRef.current.network.world.dispose();
@@ -18,6 +20,7 @@ const App = () => {
     coreRef.current = core;
     return core;
   }, []);
+
   return (
     <PrivyProvider
       appId="clxvzvzrw063qh5c30om9h9x5"
@@ -40,7 +43,7 @@ const App = () => {
         <CoreProvider {...core}>
           <div className="flex h-screen w-screen items-center justify-center bg-neutral">
             <Landing />
-            <Cheatcodes />
+            {DEV && <Cheatcodes />}
           </div>
         </CoreProvider>
       </BurnerAccountProvider>
