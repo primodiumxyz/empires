@@ -11,3 +11,5 @@ export const Keys = {
 export const STORAGE_PREFIX = "primodiumSessionKey:";
 
 export const minEth = parseEther("0.0049");
+
+export const TX_TIMEOUT = 30000;

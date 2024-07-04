@@ -15,7 +15,9 @@ export type ExecuteCallOptions<abi extends Abi, functionName extends ContractFun
   txQueueOptions?: TxQueueOptions;
   onComplete?: (receipt: TransactionReceipt | undefined) => void | undefined;
 };
-export function execute<functionName extends ContractFunctionName<WorldAbiType>>({
+// TODO: maybe find a way to return a promise that resolves with the receipt
+// (e.g. either return run or a watcher on `TransactionQueue` that resolves when that tx entity is processed with its receipt)
+export async function execute<functionName extends ContractFunctionName<WorldAbiType>>({
   core,
   accountClient: { playerAccount },
   functionName,
@@ -26,10 +28,10 @@ export function execute<functionName extends ContractFunctionName<WorldAbiType>>
 }: ExecuteCallOptions<WorldAbiType, functionName> & {
   core: Core;
   accountClient: AccountClient;
-}) {
+}): Promise<boolean> {
   console.info(`[Tx] Executing ${functionName} with address ${playerAccount.address.slice(0, 6)}`);
 
-  const run = async () => {
+  const run = async (): Promise<TransactionReceipt | undefined> => {
     const systemId = functionSystemIds[functionName as ContractFunctionName<WorldAbiType>];
     if (!systemId || !args) throw new Error(`System ID not found for function ${functionName}`);
     const params = encodeSystemCall(core.tables, {
@@ -42,10 +44,13 @@ export function execute<functionName extends ContractFunctionName<WorldAbiType>>
     const tx = playerAccount.worldContract.write.call(params, callOptions);
     const receipt = await _execute(core, tx);
     onComplete?.(receipt);
+    return receipt;
   };
 
-  if (txQueueOptions) core.tables.TransactionQueue.enqueue(run, txQueueOptions);
-  else {
-    run();
+  if (txQueueOptions) {
+    return core.tables.TransactionQueue.enqueue(run, txQueueOptions);
+  } else {
+    const receipt = await run();
+    return receipt?.status === "success";
   }
 }
