@@ -18,7 +18,9 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
         },
       },
       execute: async ({ counter: { value } }) => {
-        await setTableValue(tables.Counter, [], { value: BigInt(value) }, () => console.log("Counter set to", value));
+        await setTableValue(tables.Counter, [], { value: BigInt(value) }, (receipt) =>
+          receipt?.status === "success" ? console.log("Counter set to", value) : console.error("Failed to set counter"),
+        );
       },
     }),
   ];

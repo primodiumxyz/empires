@@ -1,5 +1,5 @@
 import { worldInput } from "contracts/mud.config";
-import { encodeAbiParameters, Hex } from "viem";
+import { encodeAbiParameters, Hex, TransactionReceipt } from "viem";
 
 import { ExecuteFunctions } from "@primodiumxyz/core";
 import {
@@ -29,7 +29,7 @@ export function createDevCalls({ execute }: ExecuteFunctions) {
   async function removeTable<tableDef extends ContractTableDef = ContractTableDef>(
     table: ContractTable<tableDef>,
     entity: Entity,
-    onComplete?: () => void,
+    onComplete?: (receipt: TransactionReceipt | undefined) => void,
   ) {
     const tableId = table.id as Hex;
     const key = entityToHexKeyTuple(entity);
@@ -48,7 +48,7 @@ export function createDevCalls({ execute }: ExecuteFunctions) {
     table: ContractTable<tableDef>,
     keys: SchemaToPrimitives<ContractTable<tableDef>["metadata"]["abiKeySchema"]>,
     newValues: Partial<Properties<ContractTable<tableDef>["propertiesSchema"]>>,
-    onComplete?: () => void,
+    onComplete?: (receipt: TransactionReceipt | undefined) => void,
   ) {
     const tableId = table.id as Hex;
     const schema = Object.keys(table.metadata.abiPropertiesSchema);
