@@ -12,4 +12,5 @@ export const functionSystemIds: {
   unregisterDelegation: getSystemId("Registration", "CORE"),
 
   Primodium_Base__increment: getSystemId("IncrementSystem", "Primodium_Base"),
+  Primodium_Base__devSetField: getSystemId("DevSystem", "Primodium_Base"),
 };

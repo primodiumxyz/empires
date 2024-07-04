@@ -13,7 +13,7 @@ const CheatcodesButton = forwardRef<HTMLButtonElement, CheatcodesButtonProps>(({
       ref={ref}
       id="cheatcodes-button"
       className={cn(
-        "absolute bottom-10 right-2 flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-sm bg-white opacity-70 transition-opacity hover:opacity-100",
+        "absolute bottom-10 right-2 flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-btn bg-white opacity-70 transition-opacity hover:opacity-100",
         className,
       )}
       onClick={() => setOpen(true)}
@@ -28,7 +28,7 @@ const CheatcodesButton = forwardRef<HTMLButtonElement, CheatcodesButtonProps>(({
 
 export const CheatcodesCloseButton = ({ setOpen, className }: CheatcodesButtonProps) => (
   <button
-    className={cn("absolute right-2 top-2 rounded-md bg-neutral p-2 transition-colors hover:bg-primary", className)}
+    className={cn("absolute right-2 top-2 rounded-btn bg-neutral p-2 transition-colors hover:bg-primary", className)}
     onClick={() => setOpen(false)}
   >
     <svg xmlns="http://www.w3.org/2000/svg" width={12} height={12} viewBox="0 0 24 24" className="fill-gray-300">

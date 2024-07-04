@@ -9,6 +9,7 @@ import { cn } from "@/util/client";
 import "@/index.css";
 
 import { useContractCalls } from "@/hooks/useContractCalls";
+import { useTxExecute } from "@/hooks/useTxExecute";
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
@@ -44,7 +45,7 @@ const Cheatcodes = () => {
       {/* overlay */}
       <div
         className={cn(
-          "cheatcodes-modal absolute h-[95%] w-[95%] rounded-md bg-gray-950 bg-opacity-90 md:h-[90%] md:w-[90%]",
+          "cheatcodes-modal absolute h-[95%] w-[95%] rounded-btn bg-gray-950 bg-opacity-90 md:h-[90%] md:w-[90%]",
           !open && "hidden",
         )}
       />
@@ -101,7 +102,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
     <div className="flex flex-col">
       <div
         className={cn(
-          "cursor-pointer rounded-md bg-neutral px-4 py-2 transition-colors hover:bg-primary",
+          "cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
           activeTab === index && "bg-primary",
         )}
         onClick={() => setActiveTab(activeTab === index ? undefined : index)}
