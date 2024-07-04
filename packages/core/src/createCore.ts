@@ -1,10 +1,10 @@
-import { Core, CoreConfig } from "@/lib/types";
-import { createNetwork } from "@/network/createNetwork";
-import { createSync } from "@/sync";
-import { runInitialSync } from "@/sync/runInitialSync";
-import { runCoreSystems } from "@/systems";
-import { createTables } from "@/tables/createTables";
-import { createUtils } from "@/utils/core/createUtils";
+import { Core, CoreConfig } from "@core/lib/types";
+import { createNetwork } from "@core/network/createNetwork";
+import { createSync } from "@core/sync";
+import { runInitialSync } from "@core/sync/runInitialSync";
+import { runCoreSystems } from "@core/systems";
+import { createTables } from "@core/tables/createTables";
+import { createUtils } from "@core/utils/core/createUtils";
 
 /**
  *

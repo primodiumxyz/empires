@@ -1,4 +1,4 @@
-import { SyncSourceType, SyncStep } from "@/lib/types";
+import { SyncSourceType, SyncStep } from "@core/lib/types";
 
 import { Core } from "../lib/types";
 

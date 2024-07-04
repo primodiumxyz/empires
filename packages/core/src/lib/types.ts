@@ -1,5 +1,12 @@
 import { ContractWrite } from "@latticexyz/common";
 import CallWithSignatureAbi from "@latticexyz/world-modules/out/Unstable_CallWithSignatureSystem.sol/Unstable_CallWithSignatureSystem.abi.json";
+import { ChainConfig } from "@core/network/config/chainConfigs";
+import { otherTableDefs } from "@core/network/otherTableDefs";
+import { Recs } from "@core/recs/setupRecs";
+import { createSync } from "@core/sync";
+import setupCoreTables from "@core/tables/coreTables";
+import { SyncTables } from "@core/tables/syncTables";
+import { createUtils } from "@core/utils";
 import { ReplaySubject, Subject } from "rxjs";
 import {
   Account,
@@ -15,13 +22,6 @@ import mudConfig from "contracts/mud.config";
 import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
 
 import { AllTableDefs, ContractTables, Entity, World, WrapperResult } from "@primodiumxyz/reactive-tables";
-import { ChainConfig } from "@/network/config/chainConfigs";
-import { otherTableDefs } from "@/network/otherTableDefs";
-import { Recs } from "@/recs/setupRecs";
-import { createSync } from "@/sync";
-import setupCoreTables from "@/tables/coreTables";
-import { SyncTables } from "@/tables/syncTables";
-import { createUtils } from "@/utils";
 
 /**
  * Core configuration

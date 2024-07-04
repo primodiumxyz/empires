@@ -1,6 +1,5 @@
+import { Core } from "@core/lib/types";
 import { CallExecutionError, ContractFunctionExecutionError, Hex, PublicClient, TransactionReceipt } from "viem";
-
-import { Core } from "@/lib/types";
 
 export async function _execute({ network: { waitForTransaction, publicClient } }: Core, txPromise: Promise<Hex>) {
   let receipt: TransactionReceipt | undefined = undefined;
