@@ -2,8 +2,8 @@ import { useMemo, useRef } from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { defineChain } from "viem";
 
-import { Core as CoreType, createCore } from "@primodiumxyz/core";
-import { CoreProvider } from "@primodiumxyz/core/react";
+import { Core as CoreType, createCore } from "@core";
+import { CoreProvider } from "@core/react";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
 import Landing from "@/screens/Landing";

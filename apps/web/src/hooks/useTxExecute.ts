@@ -1,5 +1,5 @@
-import { createExecute } from "@primodiumxyz/core";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { createExecute } from "@core";
+import { useAccountClient, useCore } from "@core/react";
 
 export const useTxExecute = () => {
   const core = useCore();

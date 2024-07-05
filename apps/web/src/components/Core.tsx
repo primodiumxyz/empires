@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import { AccountClientProvider, useCore } from "@core/react";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { Address, EIP1193Provider } from "viem";
 
-import { AccountClientProvider, useCore } from "@primodiumxyz/core/react";
 import Loading from "@/components/Loading";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 

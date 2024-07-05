@@ -1,7 +1,7 @@
-import worldsJson from "contracts/worlds.json";
+import { chainConfigs, CoreConfig } from "@core";
 import { Address, Hex } from "viem";
 
-import { chainConfigs, CoreConfig } from "@primodiumxyz/core";
+import worldsJson from "@primodiumxyz/contracts/worlds.json";
 
 const worlds = worldsJson as Partial<Record<string, { address: string; blockNumber?: number }>>;
 
