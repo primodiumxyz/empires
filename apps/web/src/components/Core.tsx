@@ -34,7 +34,8 @@ function Core() {
   if (usingBurner && !privateKey) {
     return "Error. Using Burner but no private key. Please refresh.";
   }
-  if (!usingBurner && (privyProvider == null || !playerAddress)) {
+
+  if (!usingBurner && (!privyProvider || !playerAddress)) {
     return "loading...";
   }
 
