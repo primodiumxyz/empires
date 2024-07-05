@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useCore } from "@core/react";
 import { Address } from "viem";
+
+import { useCore } from "@primodiumxyz/core/react";
 
 export const useBalance = (address: Address, refreshMs: number = 2000) => {
   const {

@@ -1,7 +1,8 @@
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
-import { storage } from "@core";
 import { Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
+
+import { storage } from "@primodiumxyz/core";
 
 type AccountProviderProps = { children: ReactNode };
 

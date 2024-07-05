@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from "react";
-import { minEth } from "@core";
-import { useAccountClient, useCore } from "@core/react";
 import { transportObserver } from "@latticexyz/common";
 import { createClient as createFaucetClient } from "@latticexyz/faucet";
 import { createWalletClient, fallback, formatEther, Hex, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
+import { minEth } from "@primodiumxyz/core";
+import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { useBalance } from "@/hooks/useBalance";
 
 export const DEV_CHAIN = import.meta.env.PRI_CHAIN_ID === "dev";

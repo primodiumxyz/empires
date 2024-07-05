@@ -1,5 +1,4 @@
-import { useCore } from "@core/react";
-
+import { useCore } from "@primodiumxyz/core/react";
 import { Loader } from "@/components/shared/Loader";
 
 export const TransactionQueueMask: React.FC<{
