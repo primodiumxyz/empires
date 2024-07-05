@@ -16,7 +16,7 @@ export type Cheatcode<T extends CheatcodeInputsBase = CheatcodeInputsBase> = {
   title: string;
   caption: string;
   inputs: T;
-  execute: (args: CheatcodeInputs<T>) => Promise<void>; // TODO: return success to notify, when execute will return status
+  execute: (args: CheatcodeInputs<T>) => Promise<boolean>;
 };
 
 export const createCheatcode = <T extends CheatcodeInputsBase>(cheatcode: Cheatcode<T>): Cheatcode<T> => cheatcode;

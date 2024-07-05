@@ -85,12 +85,15 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   const { title, caption, inputs, execute: _execute } = cheatcode;
   const [inputValues, setInputValues] = useState<CheatcodeInputs<T>>({} as CheatcodeInputs<T>);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"success" | "error" | undefined>(undefined);
 
   const execute = async (args: CheatcodeInputs<T>) => {
     setLoading(true);
 
     try {
-      await _execute(args);
+      const success = await _execute(args);
+      setStatus(success ? "success" : "error");
+      setTimeout(() => setStatus(undefined), 2000);
     } catch (err) {
       console.error("Error executing cheatcode", err);
     }
@@ -147,10 +150,13 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
 
             execute(argsWithValues);
           }}
-          className="col-span-full mt-2 bg-gray-800 p-2 text-gray-300 hover:bg-primary disabled:bg-gray-800"
+          className={cn(
+            "col-span-full mt-2 bg-gray-800 p-2 text-gray-300 hover:bg-primary disabled:bg-gray-800",
+            status === "success" ? "bg-green-500" : status === "error" ? "bg-red-500" : "",
+          )}
           disabled={loading}
         >
-          {loading ? "..." : "Execute"}
+          {loading ? "..." : status === "success" ? "Executed" : status === "error" ? "Error executing" : "Execute"}
         </button>
       </div>
     </div>
