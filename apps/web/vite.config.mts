@@ -10,7 +10,7 @@ import postcss from "./postcss.config";
 export default defineConfig({
   plugins: [
     tsconfigPaths({
-      parseNative: true,
+      parseNative: false,
     }),
     react(),
     comlink(),
