@@ -4,7 +4,7 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 export const createUpdatecalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
   const updateWorld = async (options?: Partial<TxQueueOptions>) => {
     await execute({
-      functionName: "Pri_updateWorld",
+      functionName: "Empires__updateWorld",
       args: [],
       txQueueOptions: {
         id: `update-world`,

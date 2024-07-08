@@ -59,13 +59,13 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         </p>
 
         <div className="items-cetner flex gap-2">
-          <TransactionQueueMask id={`${entity}-remove-destroyer`}>
+          <TransactionQueueMask id={`${entity}-kill-destroyer`}>
             <button onClick={() => calls.removeDestroyer(entity)} className="btn btn-square btn-xs">
               <MinusIcon className="size-6" />
             </button>
           </TransactionQueueMask>
-          50
-          <TransactionQueueMask id={`${entity}-add-destroyer`}>
+
+          <TransactionQueueMask id={`${entity}-create-destroyer`}>
             <button onClick={() => calls.createDestroyer(entity)} className="btn btn-square btn-xs">
               <PlusIcon className="size-6" />
             </button>

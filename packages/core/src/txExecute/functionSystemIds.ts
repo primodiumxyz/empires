@@ -1,6 +1,7 @@
+import { ContractFunctionName, Hex } from "viem";
+
 import { WorldAbiType } from "@core/lib";
 import { getSystemId } from "@core/utils";
-import { ContractFunctionName, Hex } from "viem";
 
 export const functionSystemIds: {
   [functionName in ContractFunctionName<WorldAbiType>]?: Hex;
@@ -10,5 +11,7 @@ export const functionSystemIds: {
   registerDelegation: getSystemId("Registration", "CORE"),
   unregisterDelegation: getSystemId("Registration", "CORE"),
 
-  Primodium_Base__increment: getSystemId("IncrementSystem", "Primodium_Base"),
+  Empires__createDestroyer: getSystemId("ActionSystem"),
+  Empires__killDestroyer: getSystemId("ActionSystem"),
+  Empires__updateWorld: getSystemId("UpdateSystem"),
 };

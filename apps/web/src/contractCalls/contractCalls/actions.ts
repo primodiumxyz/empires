@@ -4,27 +4,27 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 export const createActionCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
   const createDestroyer = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
     await execute({
-      functionName: "Pri_createDestroyer",
+      functionName: "Empires__createDestroyer",
       args: [planetId],
       txQueueOptions: {
-        id: `${planetId}-remove-destroyer`,
+        id: `${planetId}-create-destroyer`,
         ...options,
       },
       onComplete: (receipt) => {},
     });
   };
 
-  const removeDestroyer = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
+  const killDestroyer = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
     await execute({
-      functionName: "Pri_removeDestroyer",
+      functionName: "Empires__killDestroyer",
       args: [planetId],
       txQueueOptions: {
-        id: `${planetId}-remove-destroyer`,
+        id: `${planetId}-kill-destroyer`,
         ...options,
       },
       onComplete: (receipt) => {},
     });
   };
 
-  return { createDestroyer, removeDestroyer };
+  return { createDestroyer, removeDestroyer: killDestroyer };
 };
