@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, PlanetData, P_MoveConfig, Arrivals } from "codegen/index.sol";
+import { Planet, PlanetData, Arrivals } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
 import { LibMoveDestroyers } from "libraries/LibMoveDestroyers.sol";
