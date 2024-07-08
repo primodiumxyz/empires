@@ -50,10 +50,27 @@ export const worldInput = {
       },
     },
 
-    Points: {
-      key: ["playerId", "factionId"],
+    /* ------------------------------- Points Map ------------------------------- */
+
+    // Used in the mbuilding utilities Map data structure
+    Value_PointsMap: {
+      key: ["factionId", "playerId"],
+      schema: { playerId: "bytes32", factionId: "EEmpire", value: "uint256" },
+    },
+
+    Meta_PointsMap: {
+      key: ["factionId", "playerId"],
+      schema: { playerId: "bytes32", factionId: "EEmpire", stored: "bool", index: "uint256" },
+    },
+
+    Keys_PointsMap: {
+      key: ["factionId"],
+      schema: { factionId: "EEmpire", players: "bytes32[]" },
+    },
+
+    FactionPoints: {
+      key: ["factionId"],
       schema: {
-        playerId: "bytes32",
         factionId: "EEmpire",
         value: "uint256",
       },
@@ -78,7 +95,6 @@ export const worldInput = {
       schema: {
         id: "EEmpire",
         origin: "EOrigin",
-        pointsIssued: "uint256",
         pointCost: "uint256",
       },
     },
