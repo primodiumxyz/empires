@@ -3,6 +3,7 @@ pragma solidity >=0.8.24;
 
 import { Faction, Player, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
+import { OTHER_EMPIRE_COUNT } from "src/constants.sol";
 
 /**
  * @title LibPrice
@@ -40,7 +41,7 @@ library LibPrice {
    * @return pointCost The cost of all points related to the action.
    */
   function getProgressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
-    return getPointCost(_empireImpacted, uint256(EEmpire.LENGTH) - 2);
+    return getPointCost(_empireImpacted, OTHER_EMPIRE_COUNT);
   }
 
   /**

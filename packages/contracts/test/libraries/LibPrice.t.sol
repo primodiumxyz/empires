@@ -7,6 +7,8 @@ import { addressToId } from "src/utils.sol";
 import { Faction, Player, Points, P_PointConfig, P_PointConfigData, P_ActionConfig } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
+import { OTHER_EMPIRE_COUNT } from "src/constants.sol";
+
 
 contract LibPriceTest is PrimodiumTest {
   P_PointConfigData config;
@@ -29,9 +31,6 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetRegressPointCost() public {
     uint256 initPointCost = config.startPointCost;
-    uint256 initActionCost = P_ActionConfig.getStartActionCost();
-    uint256 otherEmpireCount = uint256(EEmpire.LENGTH) - 2;
-    assertEq(LibPrice.getRegressPointCost(EEmpire.Red), initPointCost * otherEmpireCount, "Red Empire point cost for 2 points incorrect");
-    
+    assertEq(LibPrice.getRegressPointCost(EEmpire.Red), initPointCost * OTHER_EMPIRE_COUNT, "Red Empire point cost for 2 points incorrect");
   }
 }
