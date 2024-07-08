@@ -1,10 +1,10 @@
-import { TX_TIMEOUT } from "@core/lib";
-import { CreateNetworkResult } from "@core/lib/types";
-import { TxQueueOptions } from "@core/tables/types";
 import { useEffect, useState } from "react";
 import { TransactionReceipt } from "viem";
 
 import { BaseTableMetadata, createLocalTable, Entity, TableOptions, Type } from "@primodiumxyz/reactive-tables";
+import { TX_TIMEOUT } from "@core/lib";
+import { CreateNetworkResult } from "@core/lib/types";
+import { TxQueueOptions } from "@core/tables/types";
 
 export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTableMetadata>(
   { world }: CreateNetworkResult,
@@ -24,8 +24,7 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
   );
 
   // Add a function to the queue
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function enqueue(fn: () => Promise<any>, options: TxQueueOptions): Promise<boolean> {
+  async function enqueue(fn: () => Promise<TransactionReceipt | undefined>, options: TxQueueOptions): Promise<boolean> {
     if (!options.force && table.has(options.id as Entity)) return waitForTx(options);
 
     queue.push({
