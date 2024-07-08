@@ -17,6 +17,7 @@ const App = () => {
     coreRef.current = core;
     return core;
   }, []);
+
   return (
     <PrivyProvider
       appId="clxvzvzrw063qh5c30om9h9x5"

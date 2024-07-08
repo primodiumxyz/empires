@@ -1,7 +1,7 @@
 import { parseEther } from "viem";
 
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { toHex32 } from "@/utils";
+import { toHex32 } from "@core/utils";
 
 /** Encoded keys. Used in prototype tables to prevent collisions  */
 export const Keys = {

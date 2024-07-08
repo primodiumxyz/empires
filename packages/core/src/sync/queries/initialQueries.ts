@@ -1,22 +1,29 @@
 import { Hex } from "viem";
 
-import { ContractTableDefs } from "@primodiumxyz/reactive-tables";
 import { DecodedIndexerQuery } from "@primodiumxyz/sync-stack/types";
+import { Core } from "@core/lib";
 
 export const getInitialQuery = ({
   tables,
   worldAddress,
 }: {
-  tables: ContractTableDefs;
+  tables: Core["network"]["tableDefs"];
   worldAddress: Hex;
 }): DecodedIndexerQuery => {
   //get all the tables that start with P_
-  const configTableQueries = [...Object.keys(tables)]
+  const configTableQueries = Object.keys(tables)
     .filter((key) => key.startsWith("P_"))
+    //@ts-expect-error - tableName does exist in tables
     .map((tableName) => ({ tableId: tables[tableName].tableId }));
 
   return {
-    address: worldAddress as Hex,
-    queries: [...configTableQueries],
+    address: worldAddress,
+    queries: [
+      ...configTableQueries,
+      { tableId: tables.Planet.tableId },
+      { tableId: tables.Turn.tableId },
+      { tableId: tables.FunctionSelectors.tableId },
+      { tableId: tables.FunctionSignatures.tableId },
+    ],
   };
 };

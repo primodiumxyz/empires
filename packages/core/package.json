@@ -7,25 +7,13 @@
   "author": "",
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
-    "./react": "./dist/react/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "index": [
-        "./dist/index.d.ts"
-      ],
-      "react": [
-        "./dist/react/index.d.ts"
-      ]
-    }
+    ".": "./src/index.js",
+    "./react": "./src/react/index.js"
   },
   "files": [
-    "dist"
+    "src"
   ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
     "test": "vitest"
   },
   "dependencies": {
@@ -37,7 +25,7 @@
     "@primodiumxyz/reactive-tables": "^3.3.0",
     "@primodiumxyz/sync-stack": "^0.6.9",
     "abitype": "^1.0.2",
-    "contracts": "workspace:*",
+    "@primodiumxyz/contracts": "workspace:*",
     "dayjs": "^1.11.10",
     "obscenity": "^0.2.1",
     "react": "^18.3.1",

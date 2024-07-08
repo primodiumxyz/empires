@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { cn } from "@/util/client";
 
 export const Loader = ({
