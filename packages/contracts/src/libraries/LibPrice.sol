@@ -3,6 +3,7 @@ pragma solidity >=0.8.24;
 
 import { Faction, Player, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
+import { OTHER_EMPIRE_COUNT } from "src/constants.sol";
 
 /**
  * @title LibPrice
@@ -40,7 +41,7 @@ library LibPrice {
    * @return pointCost The cost of all points related to the action.
    */
   function getProgressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
-    return getPointCost(_empireImpacted, uint256(EEmpire.LENGTH) - 1);
+    return getPointCost(_empireImpacted, OTHER_EMPIRE_COUNT);
   }
 
   /**
@@ -50,7 +51,7 @@ library LibPrice {
    */
   function getRegressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
     uint256 pointCost;
-    for (uint256 i = 0; i < uint256(EEmpire.LENGTH); i++) {
+    for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
       if (i == uint256(_empireImpacted)) {
         continue;
       }
@@ -117,7 +118,7 @@ library LibPrice {
    */
   function empirePlayerActionsCostDown(EEmpire _empireImpacted) internal {
     P_ActionConfigData memory config = P_ActionConfig.get();
-    for (uint256 i = 0; i < uint256(EPlayerAction.LENGTH); i++) {
+    for (uint256 i = 1; i < uint256(EPlayerAction.LENGTH); i++) {
       uint256 newActionCost = ActionCost.get(_empireImpacted, EPlayerAction(i));
       if (newActionCost > config.minActionCost + config.actionGenRate) {
         newActionCost -= config.actionGenRate;
