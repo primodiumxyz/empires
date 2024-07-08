@@ -50,6 +50,10 @@ export const worldInput = {
       },
     },
 
+    WinningEmpire: {
+      key: [],
+      schema: { empire: "EEmpire" },
+    },
     /* ------------------------------- Points Map ------------------------------- */
 
     // Used in the mbuilding utilities Map data structure
