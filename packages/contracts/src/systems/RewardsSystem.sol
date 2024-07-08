@@ -2,8 +2,9 @@
 pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { EmpiresSystem, WinningEmpire } from "systems/EmpiresSystem.sol";
-import { P_GameConfig } from "codegen/index.sol";
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
+import { P_GameConfig, WinningEmpire } from "codegen/index.sol";
+import { EEmpire } from "codegen/common.sol";
 
 contract RewardsSystem is EmpiresSystem {
   modifier _onlyGameOver() {
@@ -19,7 +20,7 @@ contract RewardsSystem is EmpiresSystem {
   }
 
   function withdrawEarnings() public _onlyGameOver {
-    require(WinningEmpire.get() !== EEmpire.NULL, "[RewardsSystem] No empire has won the game");
+    require(WinningEmpire.get() != EEmpire.NULL, "[RewardsSystem] No empire has won the game");
 
     // todo: distribute rewards
   }

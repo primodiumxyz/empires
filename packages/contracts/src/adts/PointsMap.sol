@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Keys_PointsMap, Value_PointsMap, Meta_PointsMap, FactionPoints } from "codegen/index.sol";
+import { Keys_PointsMap, Value_PointsMap, Meta_PointsMap, Faction } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 
 /**
@@ -30,15 +30,15 @@ library PointsMap {
     if (has(empire, playerId)) {
       uint256 prevValue = get(empire, playerId);
 
-      if (value < prevValue) FactionPoints.set(empire, FactionPoints.get(empire) - (prevValue - value));
-      else FactionPoints.set(empire, FactionPoints.get(empire) + (value - prevValue));
+      if (value < prevValue) Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) - (prevValue - value));
+      else Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) + (value - prevValue));
 
       Value_PointsMap.set(empire, playerId, value);
     } else {
       Keys_PointsMap.push(empire, playerId);
       Value_PointsMap.set(empire, playerId, value);
       Meta_PointsMap.set(empire, playerId, true, Keys_PointsMap.length(empire) - 1);
-      FactionPoints.set(empire, FactionPoints.get(empire) + value);
+      Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) + value);
     }
   }
 
@@ -93,7 +93,7 @@ library PointsMap {
     Meta_PointsMap.set(empire, replacement, true, index);
 
     // remove empire
-    FactionPoints.set(empire, FactionPoints.get(empire) - Value_PointsMap.get(empire, playerId));
+    Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) - Value_PointsMap.get(empire, playerId));
 
     Keys_PointsMap.pop(empire);
     Value_PointsMap.deleteRecord(empire, playerId);
@@ -121,6 +121,6 @@ library PointsMap {
       Meta_PointsMap.deleteRecord(empire, players[i]);
     }
     Keys_PointsMap.deleteRecord(empire);
-    FactionPoints.set(empire, 0);
+    Faction.setPointsIssued(empire, 0);
   }
 }

@@ -72,14 +72,6 @@ export const worldInput = {
       schema: { factionId: "EEmpire", players: "bytes32[]" },
     },
 
-    FactionPoints: {
-      key: ["factionId"],
-      schema: {
-        factionId: "EEmpire",
-        value: "uint256",
-      },
-    },
-
     // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
     Planet: {
       key: ["id"],
@@ -99,6 +91,7 @@ export const worldInput = {
       schema: {
         id: "EEmpire",
         origin: "EOrigin",
+        pointsIssued: "uint256",
         pointCost: "uint256",
       },
     },
