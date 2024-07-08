@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Faction, Player, Points, P_PointConfig, P_PointConfigData } from "codegen/index.sol";
+import { Faction, Player, Points, P_PointConfig, P_PointConfigData, P_ActionConfig } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 
@@ -28,10 +28,10 @@ contract LibPriceTest is PrimodiumTest {
   }
 
   function testGetRegressPointCost() public {
-    uint256 initCost = config.startPointCost;
-    uint256 incCost = config.pointCostIncrease;
-    uint256 otherEmpireCount = uint256(EEmpire.LENGTH) - 1;
-    assertEq(LibPrice.getRegressPointCost(EEmpire.Red), initCost * otherEmpireCount, "Red Empire point cost for 2 points incorrect");
+    uint256 initPointCost = config.startPointCost;
+    uint256 initActionCost = P_ActionConfig.getStartActionCost();
+    uint256 otherEmpireCount = uint256(EEmpire.LENGTH) - 2;
+    assertEq(LibPrice.getRegressPointCost(EEmpire.Red), initPointCost * otherEmpireCount, "Red Empire point cost for 2 points incorrect");
     
   }
 }

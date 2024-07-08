@@ -4,7 +4,8 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { Planet } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-import { EEmpire } from "codegen/common.sol";
+import { LibPrice } from "libraries/LibPrice.sol";
+import { EEmpire, EPlayerAction } from "codegen/common.sol";
 
 contract ActionSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -18,14 +19,18 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testCreateDestroyer() public {
-    world.Empires__createDestroyer(planetId);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
+    world.Empires__createDestroyer{value: cost}(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 1);
   }
 
   function testKillDestroyer() public {
-    world.Empires__createDestroyer(planetId);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
+    world.Empires__createDestroyer{value: cost}(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 1);
-    world.Empires__killDestroyer(planetId);
+
+    cost = LibPrice.getTotalCost(EPlayerAction.KillDestroyer, Planet.getFactionId(planetId), false);
+    world.Empires__killDestroyer{value: cost}(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 0);
   }
 
