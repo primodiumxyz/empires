@@ -17,20 +17,24 @@ import { PointsMap } from "adts/PointsMap.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
 
+/**
+ * @title RewardsSystem
+ * @dev A contract that manages the rewards system for the Empires game.
+ */
 contract RewardsSystem is EmpiresSystem {
+  /**
+   * @dev Modifier that restricts the execution of a function to when the game is over.
+   */
   modifier _onlyGameOver() {
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     require(endBlock > 0 && block.number > endBlock, "[RewardsSystem] Game is not over");
     _;
   }
 
-  function claimVictory(EEmpire empire) public _onlyGameOver {
-    require(WinningEmpire.get() == EEmpire.NULL, "[RewardsSystem] Victory has already been claimed");
-    // todo: victory condition
-
-    WinningEmpire.set(empire);
-  }
-
+  /**
+   * @dev Internal function to take the rake from the rewards system.
+   * This function is private and can only be called within the contract.
+   */
   function _takeRake() private {
     if (RakeTaken.get()) return;
 
@@ -41,6 +45,22 @@ contract RewardsSystem is EmpiresSystem {
     RakeTaken.set(true);
   }
 
+  /**
+   * @dev Allows an EEmpire to claim victory.
+   * @param empire The EEmpire that wants to claim victory.
+   * @notice This function can only be called when the game is over.
+   */
+  function claimVictory(EEmpire empire) public _onlyGameOver {
+    require(WinningEmpire.get() == EEmpire.NULL, "[RewardsSystem] Victory has already been claimed");
+    // todo: victory condition
+
+    WinningEmpire.set(empire);
+  }
+
+  /**
+   * @dev Allows a player to withdraw their earnings.
+   * This function can only be called when the game is over.
+   */
   function withdrawEarnings() public _onlyGameOver {
     EEmpire empire = WinningEmpire.get();
     require(empire != EEmpire.NULL, "[RewardsSystem] No empire has won the game");

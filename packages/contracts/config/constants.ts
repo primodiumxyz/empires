@@ -1,1 +1,1 @@
-export const POINTS_UNIT = 1e17;
+export const POINTS_UNIT = 1e18;
