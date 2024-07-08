@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+import { console } from "forge-std/console.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
-import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
 import { P_PointConfig, P_GameConfig, WinningEmpire, Player, RakeTaken, Faction } from "codegen/index.sol";
@@ -25,22 +25,19 @@ contract RewardsSystem is EmpiresSystem {
   }
 
   function claimVictory(EEmpire empire) public _onlyGameOver {
+    require(WinningEmpire.get() == EEmpire.NULL, "[RewardsSystem] Victory has already been claimed");
     // todo: victory condition
 
     WinningEmpire.set(empire);
   }
 
-  function _takeRake(ResourceId namespace) private {
+  function _takeRake() private {
     if (RakeTaken.get()) return;
 
-    uint256 pot = Balances.get(namespace);
+    uint256 pot = Balances.get(EMPIRES_NAMESPACE_ID);
     uint256 rake = (pot * P_PointConfig.getPointRake()) / 10_000;
 
-    IWorld(_world()).transferBalanceToNamespace(
-      namespace,
-      WorldResourceIdLib.encodeNamespace(ADMIN_NAMESPACE_ID),
-      rake
-    );
+    IWorld(_world()).transferBalanceToNamespace(EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, rake);
     RakeTaken.set(true);
   }
 
@@ -55,19 +52,15 @@ contract RewardsSystem is EmpiresSystem {
       return;
     }
 
-    ResourceId empiresNamespaceId = WorldResourceIdLib.encodeNamespace(EMPIRES_NAMESPACE_ID);
-
-    _takeRake(empiresNamespaceId);
+    _takeRake();
 
     uint256 playerFactionPoints = PointsMap.get(empire, playerId);
+    if (playerFactionPoints == 0) return;
 
-    uint256 playerPotPctTimes10000 = (playerFactionPoints * 10_000) / factionPoints;
+    uint256 pot = (Balances.get(EMPIRES_NAMESPACE_ID));
+    uint256 playerPot = (pot * playerFactionPoints) / factionPoints;
 
-    uint256 pot = (Balances.get(empiresNamespaceId));
-
-    uint256 playerPot = (pot * playerPotPctTimes10000) / (10_000);
-
-    IWorld(_world()).transferBalanceToAddress(empiresNamespaceId, _msgSender(), playerPot);
+    IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), playerPot);
 
     PointsMap.remove(empire, playerId);
   }

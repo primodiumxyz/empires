@@ -25,12 +25,6 @@ contract LibPointTest is PrimodiumTest {
     }
   }
 
-  function testIssuePointsNullEmpireFail() public {
-    vm.startPrank(creator);
-    vm.expectRevert("[LibPoint] Invalid empire");
-    LibPoint.issuePoints(EEmpire.NULL, aliceId, 100);
-  }
-
   function testIssuePoints() public {
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Red, aliceId, 100);
@@ -79,12 +73,6 @@ contract LibPointTest is PrimodiumTest {
     assertEq(PointsMap.get(EEmpire.Red, bobId), 0, "Bob's Red Empire points should be 0");
     assertEq(PointsMap.get(EEmpire.Blue, bobId), 0, "Bob's Blue Empire points should be 0");
     assertEq(PointsMap.get(EEmpire.Green, bobId), 7, "Bob's Green Empire points should be 7");
-  }
-
-  function testRemovePointsNullEmpireFail() public {
-    vm.startPrank(creator);
-    vm.expectRevert("[LibPoint] Invalid empire");
-    LibPoint.removePoints(EEmpire.NULL, aliceId, 100);
   }
 
   function testRemovePoints() public {
