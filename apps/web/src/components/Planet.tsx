@@ -50,7 +50,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         <div className="text-center">
           <p className="font-bold">{entityToPlanetName(entity)}</p>
           <p>
-            ({Number(planet.q ?? 0n)},{Number(planet.r ?? 0n)})
+            ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
           </p>
         </div>
 

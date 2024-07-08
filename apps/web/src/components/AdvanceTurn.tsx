@@ -38,7 +38,7 @@ export const AdvanceTurn = () => {
               </p>
             )}
             {turn.nextTurnBlock > blockNumber && (
-              <p className="text-sm">{Number(turn.nextTurnBlock - blockNumber)} blocks remaining</p>
+              <p className="text-sm">{(turn.nextTurnBlock - blockNumber).toLocaleString()} blocks remaining</p>
             )}
           </div>
         </button>
