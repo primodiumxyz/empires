@@ -35,7 +35,7 @@ export const worldInput = {
         startPointCost: "uint256",
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
-        pointRake: "uint256",
+        pointRake: "uint256", // times 10_000
       },
     },
 
@@ -47,6 +47,11 @@ export const worldInput = {
         startActionCost: "uint256",
         minActionCost: "uint256",
       },
+    },
+
+    RakeTaken: {
+      key: [],
+      schema: { value: "bool" },
     },
 
     Turn: {

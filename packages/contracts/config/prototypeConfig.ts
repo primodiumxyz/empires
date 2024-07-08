@@ -18,7 +18,10 @@ const percentsToThresholds = <T extends Record<string, number>>(percents: T): Re
   return thresholds;
 };
 
-const scaleRake = (rakePct: number) => BigInt(Math.round(rakePct * 10000));
+const scaleRake = (rakePct: number) => {
+  if (rakePct < 0 || rakePct > 1) throw new Error("rakePct must be between 0 and 100");
+  return BigInt(Math.round(rakePct * 10000));
+};
 
 export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = {
   /* ---------------------------------- World --------------------------------- */
@@ -35,7 +38,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         startPointCost: 2n * BigInt(POINTS_UNIT),
         pointGenRate: 2n * BigInt(POINTS_UNIT),
         pointCostIncrease: 1n * BigInt(POINTS_UNIT),
-        pointRake: scaleRake(0.1), // out of 100
+        pointRake: scaleRake(0.001), // out of 1, scales to out of 10000
       },
       P_ActionConfig: {
         actionGenRate: BigInt(POINTS_UNIT) / 2n,

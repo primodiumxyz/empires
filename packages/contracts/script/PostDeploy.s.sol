@@ -33,6 +33,11 @@ contract PostDeploy is Script {
     createPlanets();
     initPrice();
 
+    // register the admin namespace that stores raked eth
+    bytes14 namespace = "Admin";
+    ResourceId namespaceId = WorldResourceIdLib.encodeNamespace(namespace);
+    world.registerNamespace(namespaceId);
+
     vm.stopBroadcast();
   }
 }
