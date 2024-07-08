@@ -11,7 +11,7 @@ export const getCoreConfig = (): CoreConfig => {
     ? new URLSearchParams()
     : new URLSearchParams(window.location.search);
 
-  const chainId = (params.get("chainid") || import.meta.env.PRI_CHAIN_ID || "dev") as keyof typeof chainConfigs;
+  const chainId = (params.get("chainId") || import.meta.env.PRI_CHAIN_ID || "dev") as keyof typeof chainConfigs;
 
   const chain = chainConfigs[chainId];
 
