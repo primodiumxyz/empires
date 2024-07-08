@@ -1,11 +1,13 @@
 import { useMemo } from "react";
-import { RocketLaunchIcon } from "@heroicons/react/24/solid";
+import { MinusIcon, PlusIcon, RocketLaunchIcon } from "@heroicons/react/24/solid";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Hexagon } from "@/components/core/Hexagon/Hexagon";
+import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { useContractCalls } from "@/hooks/useContractCalls";
 
 export const EmpireEnumToColor = {
   [EEmpire.Blue]: "blue",
@@ -20,6 +22,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 }) => {
   const { tables } = useCore();
   const planet = tables.Planet.use(entity);
+  const calls = useContractCalls();
 
   const [left, top] = useMemo(() => {
     const cartesianCoord = convertAxialToCartesian(
@@ -54,6 +57,20 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         <p className="flex gap-2">
           <RocketLaunchIcon className="size-6" /> {planet.destroyerCount.toLocaleString()}
         </p>
+
+        <div className="items-cetner flex gap-2">
+          <TransactionQueueMask id={`${entity}-remove-destroyer`}>
+            <button onClick={() => calls.removeDestroyer(entity)} className="btn btn-square btn-xs">
+              <MinusIcon className="size-6" />
+            </button>
+          </TransactionQueueMask>
+          50
+          <TransactionQueueMask id={`${entity}-add-destroyer`}>
+            <button onClick={() => calls.createDestroyer(entity)} className="btn btn-square btn-xs">
+              <PlusIcon className="size-6" />
+            </button>
+          </TransactionQueueMask>
+        </div>
       </div>
     </Hexagon>
   );
