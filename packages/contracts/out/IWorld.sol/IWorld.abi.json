@@ -322,7 +322,7 @@
   },
   {
     "type": "function",
-    "name": "Empires__resetWorld",
+    "name": "Empires__resetGame",
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"

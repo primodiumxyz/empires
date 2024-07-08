@@ -322,6 +322,13 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__resetGame",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__updateWorld",
     "inputs": [],
     "outputs": [],
