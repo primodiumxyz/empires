@@ -97,7 +97,7 @@ export const worldInput = {
       key: ["factionId", "action"],
       schema: {
         factionId: "EEmpire",
-        action: "EAction",
+        action: "EPlayerAction",
         value: "uint256",
       },
     },

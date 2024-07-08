@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { Faction, Player, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
-import { EEmpire, EAction } from "codegen/common.sol";
+import { EEmpire, EPlayerAction } from "codegen/common.sol";
 
 /**
  * @title LibPrice
@@ -17,16 +17,16 @@ library LibPrice {
    * @return totalCost The total cost of the action.
    */
   function getTotalCost(
-    EAction _actionType,
+    EPlayerAction _actionType,
     EEmpire _empireImpacted,
     bool _progressAction
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
     if (_progressAction) {
-      require(_actionType == EAction.CreateDestroyer, "[LibPrice] Action type is not a progressive action");
+      require(_actionType == EPlayerAction.CreateDestroyer, "[LibPrice] Action type is not a progressive action");
       totalCost = getProgressPointCost(_empireImpacted);
     } else {
-      require(_actionType == EAction.KillDestroyer, "[LibPrice] Action type is not a regressive action");
+      require(_actionType == EPlayerAction.KillDestroyer, "[LibPrice] Action type is not a regressive action");
       totalCost = getRegressPointCost(_empireImpacted);
     }
 
@@ -91,7 +91,7 @@ library LibPrice {
    * @param _empire The empire to increase the action cost for.
    * @param _actionType The type of action to increase the cost for.
    */
-  function actionCostUp(EEmpire _empire, EAction _actionType) internal {
+  function actionCostUp(EEmpire _empire, EPlayerAction _actionType) internal {
     uint256 newActionCost = ActionCost.get(_empire, _actionType) + P_ActionConfig.getActionCostIncrease();
     ActionCost.set(_empire, _actionType, newActionCost);
   }
@@ -115,16 +115,16 @@ library LibPrice {
    * @dev Decreases the cost of all actions that impact a specific empire.
    * @param _empireImpacted The empire to decrease the action costs for.
    */
-  function empireActionsCostDown(EEmpire _empireImpacted) internal {
+  function empirePlayerActionsCostDown(EEmpire _empireImpacted) internal {
     P_ActionConfigData memory config = P_ActionConfig.get();
-    for (uint256 i = 0; i < uint256(EAction.LENGTH); i++) {
-      uint256 newActionCost = ActionCost.get(_empireImpacted, EAction(i));
+    for (uint256 i = 0; i < uint256(EPlayerAction.LENGTH); i++) {
+      uint256 newActionCost = ActionCost.get(_empireImpacted, EPlayerAction(i));
       if (newActionCost > config.minActionCost + config.actionGenRate) {
         newActionCost -= config.actionGenRate;
       } else {
         newActionCost = config.minActionCost;
       }
-      ActionCost.set(_empireImpacted, EAction(i), newActionCost);
+      ActionCost.set(_empireImpacted, EPlayerAction(i), newActionCost);
     }
   }
 }

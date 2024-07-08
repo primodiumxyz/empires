@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { Planet, PlanetData, Player } from "codegen/index.sol";
-import { EEmpire, EAction } from "codegen/common.sol";
+import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { POINTS_UNIT } from "src/constants.sol";
@@ -23,11 +23,11 @@ contract ActionSystem is System {
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
     require(
-      _msgValue() == LibPrice.getTotalCost(EAction.CreateDestroyer, planetData.factionId, true),
+      _msgValue() == LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, planetData.factionId, true),
       "[ActionSystem] Incorrect payment"
     );
 
-    _purchaseAction(EAction.CreateDestroyer, planetData.factionId, true, _msgValue());
+    _purchaseAction(EPlayerAction.CreateDestroyer, planetData.factionId, true, _msgValue());
 
     Planet.setDestroyerCount(_planetId, planetData.destroyerCount + 1);
   }
@@ -42,11 +42,11 @@ contract ActionSystem is System {
     require(planetData.destroyerCount > 0, "[ActionSystem] No destroyers to kill");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
     require(
-      _msgValue() == LibPrice.getTotalCost(EAction.KillDestroyer, planetData.factionId, false),
+      _msgValue() == LibPrice.getTotalCost(EPlayerAction.KillDestroyer, planetData.factionId, false),
       "[ActionSystem] Incorrect payment"
     );
 
-    _purchaseAction(EAction.KillDestroyer, planetData.factionId, false, _msgValue());
+    _purchaseAction(EPlayerAction.KillDestroyer, planetData.factionId, false, _msgValue());
 
     Planet.setDestroyerCount(_planetId, planetData.destroyerCount - 1);
   }
@@ -58,7 +58,7 @@ contract ActionSystem is System {
    * @param _progressAction Flag indicating if the action progressively or regressively impacts the empire.
    * @param _spend The amount spent on the action.
    */
-  function _purchaseAction(EAction _actionType, EEmpire _empireImpacted, bool _progressAction, uint256 _spend) private {
+  function _purchaseAction(EPlayerAction _actionType, EEmpire _empireImpacted, bool _progressAction, uint256 _spend) private {
     bytes32 playerId = addressToId(_msgSender());
     Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
 
