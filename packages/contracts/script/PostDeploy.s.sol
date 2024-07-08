@@ -8,6 +8,7 @@ import { IWorld } from "codegen/world/IWorld.sol";
 import { createPrototypes } from "codegen/Prototypes.sol";
 import { createPlanets } from "./CreatePlanets.s.sol";
 import { P_GameConfig } from "codegen/index.sol";
+import { initPrice } from "./InitPrice.s.sol";
 
 import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
@@ -30,6 +31,7 @@ contract PostDeploy is Script {
     P_GameConfig.setGameOverBlock(block.number + 1000);
 
     createPlanets();
+    initPrice();
 
     vm.stopBroadcast();
   }

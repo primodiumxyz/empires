@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Player, P_GameConfig, P_GameConfigData, ActionCost } from "codegen/index.sol";
+import { Faction, Player, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 
 /**
@@ -68,7 +68,7 @@ library LibPrice {
   function getPointCost(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
     require(_pointUnits > 0, "[LibPrice] Point units must be greater than 0");
     uint256 initPointCost = Faction.getPointCost(_empire);
-    uint256 pointCostIncrease = P_GameConfig.getPointCostIncrease();
+    uint256 pointCostIncrease = P_PointConfig.getPointCostIncrease();
     uint256 pointCost = 0;
     for (uint256 i = 0; i < _pointUnits; i++) {
       pointCost += initPointCost + i * pointCostIncrease;
@@ -82,7 +82,7 @@ library LibPrice {
    * @param _pointUnits The number of point units to increase the cost by.
    */
   function pointCostUp(EEmpire _empire, uint256 _pointUnits) internal {
-    uint256 newPointCost = Faction.getPointCost(_empire) + P_GameConfig.getPointCostIncrease() * _pointUnits;
+    uint256 newPointCost = Faction.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * _pointUnits;
     Faction.setPointCost(_empire, newPointCost);
   }
 
@@ -92,7 +92,7 @@ library LibPrice {
    * @param _actionType The type of action to increase the cost for.
    */
   function actionCostUp(EEmpire _empire, EPlayerAction _actionType) internal {
-    uint256 newActionCost = ActionCost.get(_empire, _actionType) + P_GameConfig.getActionCostIncrease();
+    uint256 newActionCost = ActionCost.get(_empire, _actionType) + P_ActionConfig.getActionCostIncrease();
     ActionCost.set(_empire, _actionType, newActionCost);
   }
 
@@ -101,7 +101,7 @@ library LibPrice {
    * @param _empire The empire to decrease the point cost for.
    */
   function empirePointCostDown(EEmpire _empire) internal {
-    P_GameConfigData memory config = P_GameConfig.get();
+    P_PointConfigData memory config = P_PointConfig.get();
     uint256 newPointCost = Faction.getPointCost(_empire);
     if (newPointCost > config.minPointCost + config.pointGenRate) {
       newPointCost -= config.pointGenRate;
@@ -115,8 +115,8 @@ library LibPrice {
    * @dev Decreases the cost of all actions that impact a specific empire.
    * @param _empireImpacted The empire to decrease the action costs for.
    */
-  function empirEPlayerActionsCostDown(EEmpire _empireImpacted) internal {
-    P_GameConfigData memory config = P_GameConfig.get();
+  function empirePlayerActionsCostDown(EEmpire _empireImpacted) internal {
+    P_ActionConfigData memory config = P_ActionConfig.get();
     for (uint256 i = 0; i < uint256(EPlayerAction.LENGTH); i++) {
       uint256 newActionCost = ActionCost.get(_empireImpacted, EPlayerAction(i));
       if (newActionCost > config.minActionCost + config.actionGenRate) {

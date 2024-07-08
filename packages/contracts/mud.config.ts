@@ -23,17 +23,29 @@ export const worldInput = {
       key: [],
       schema: {
         turnLengthBlocks: "uint256",
+        goldGenRate: "uint256",
+        gameOverBlock: "uint256",
+      },
+    },
+
+    P_PointConfig: {
+      key: [],
+      schema: {
         minPointCost: "uint256",
         startPointCost: "uint256",
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
         pointRake: "uint256",
+      },
+    },
+
+    P_ActionConfig: {
+      key: [],
+      schema: {
         actionGenRate: "uint256",
         actionCostIncrease: "uint256",
         startActionCost: "uint256",
         minActionCost: "uint256",
-        goldGenRate: "uint256",
-        gameOverBlock: "uint256",
       },
     },
 

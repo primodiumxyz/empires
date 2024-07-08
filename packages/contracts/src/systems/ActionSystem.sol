@@ -27,7 +27,7 @@ contract ActionSystem is EmpiresSystem {
       "[ActionSystem] Incorrect payment"
     );
 
-    _purchasEPlayerAction(EPlayerAction.CreateDestroyer, planetData.factionId, true, _msgValue());
+    _purchaseAction(EPlayerAction.CreateDestroyer, planetData.factionId, true, _msgValue());
 
     Planet.setDestroyerCount(_planetId, planetData.destroyerCount + 1);
   }
@@ -46,7 +46,7 @@ contract ActionSystem is EmpiresSystem {
       "[ActionSystem] Incorrect payment"
     );
 
-    _purchasEPlayerAction(EPlayerAction.KillDestroyer, planetData.factionId, false, _msgValue());
+    _purchaseAction(EPlayerAction.KillDestroyer, planetData.factionId, false, _msgValue());
 
     Planet.setDestroyerCount(_planetId, planetData.destroyerCount - 1);
   }
@@ -58,7 +58,7 @@ contract ActionSystem is EmpiresSystem {
    * @param _progressAction Flag indicating if the action progressively or regressively impacts the empire.
    * @param _spend The amount spent on the action.
    */
-  function _purchasEPlayerAction(
+  function _purchaseAction(
     EPlayerAction _actionType,
     EEmpire _empireImpacted,
     bool _progressAction,
