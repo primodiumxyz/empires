@@ -22,7 +22,10 @@ contract ActionSystem is System {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    require(_msgValue() == LibPrice.getTotalCost(EAction.CreateDestroyer, planetData.factionId, true), "[ActionSystem] Incorrect payment");
+    require(
+      _msgValue() == LibPrice.getTotalCost(EAction.CreateDestroyer, planetData.factionId, true),
+      "[ActionSystem] Incorrect payment"
+    );
 
     _purchaseAction(EAction.CreateDestroyer, planetData.factionId, true, _msgValue());
 
@@ -38,7 +41,10 @@ contract ActionSystem is System {
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.destroyerCount > 0, "[ActionSystem] No destroyers to kill");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    require(_msgValue() == LibPrice.getTotalCost(EAction.KillDestroyer, planetData.factionId, false), "[ActionSystem] Incorrect payment");
+    require(
+      _msgValue() == LibPrice.getTotalCost(EAction.KillDestroyer, planetData.factionId, false),
+      "[ActionSystem] Incorrect payment"
+    );
 
     _purchaseAction(EAction.KillDestroyer, planetData.factionId, false, _msgValue());
 
@@ -56,13 +62,13 @@ contract ActionSystem is System {
     bytes32 playerId = addressToId(_msgSender());
     Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
 
-    if(_progressAction) {
-      LibPoint.issuePoints(_empireImpacted, playerId, POINTS_UNIT*(uint256(EEmpire.LENGTH)-1));
-      LibPrice.pointCostUp(_empireImpacted, uint256(EEmpire.LENGTH)-1);
+    if (_progressAction) {
+      LibPoint.issuePoints(_empireImpacted, playerId, POINTS_UNIT * (uint256(EEmpire.LENGTH) - 1));
+      LibPrice.pointCostUp(_empireImpacted, uint256(EEmpire.LENGTH) - 1);
     } else {
       // Iterate through each empire except the impacted one
-      for(uint256 i = 0; i < uint256(EEmpire.LENGTH); i++) {
-        if(i == uint256(_empireImpacted)) {
+      for (uint256 i = 0; i < uint256(EEmpire.LENGTH); i++) {
+        if (i == uint256(_empireImpacted)) {
           continue;
         }
         LibPoint.issuePoints(EEmpire(i), playerId, POINTS_UNIT);

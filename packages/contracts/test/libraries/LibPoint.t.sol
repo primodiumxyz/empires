@@ -7,11 +7,11 @@ import { addressToId } from "src/utils.sol";
 import { Faction, Player, Points } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
- 
+
 contract LibPointTest is PrimodiumTest {
-    bytes32 planetId;
-    bytes32 aliceId;
-    bytes32 bobId;
+  bytes32 planetId;
+  bytes32 aliceId;
+  bytes32 bobId;
   function setUp() public override {
     super.setUp();
     aliceId = addressToId(alice);
@@ -42,7 +42,7 @@ contract LibPointTest is PrimodiumTest {
 
   function testSequentialIssuePoints() public {
     testIssuePoints(); // Run previous test to set state. Alice has 100 Red Empire points.
-    
+
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Red, aliceId, 1);
     assertEq(Faction.getPointsIssued(EEmpire.Red), 101, "Empire points issued should be 101");
@@ -67,7 +67,7 @@ contract LibPointTest is PrimodiumTest {
 
   function testIndependentPlayerPoints() public {
     testIssueUniqueEmpirePoints(); // Run previous tests to set state. Alice has 101 Red Empire points and 5 Green Empire points.
-    
+
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Green, bobId, 7);
     assertEq(Faction.getPointsIssued(EEmpire.Red), 101, "Red Empire points issued should be 101");
@@ -122,5 +122,4 @@ contract LibPointTest is PrimodiumTest {
     Faction.setPointsIssued(EEmpire.Red, 99);
     LibPoint.removePoints(EEmpire.Red, aliceId, 100);
   }
-
 }
