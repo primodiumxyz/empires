@@ -21,7 +21,7 @@ const Landing = () => {
     return <Login />;
   }
 
-  if (authenticated || (usingBurner && value) || !loading) {
+  if (authenticated || (usingBurner && value)) {
     // Replace this code with however you'd like to handle an authenticated user
     return <Core />;
   }
