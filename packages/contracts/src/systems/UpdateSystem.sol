@@ -14,12 +14,13 @@ import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 contract UpdateSystem is EmpiresSystem {
   function _updateTurn() private returns (EEmpire) {
     TurnData memory turn = Turn.get();
+
     bool canUpdate = block.number >= turn.nextTurnBlock;
     if (!canUpdate) revert("[UpdateSystem] Cannot update yet");
     uint256 newNextTurnBlock = block.number + P_GameConfig.getTurnLengthBlocks();
     EEmpire newEmpire = EEmpire(((uint256(turn.empire) + 1) % 3) + 1);
     Turn.set(newNextTurnBlock, newEmpire);
-    return newEmpire;
+    return turn.empire;
   }
 
   function updateWorld() public _onlyNotGameOver {
@@ -36,7 +37,7 @@ contract UpdateSystem is EmpiresSystem {
     // spend gold and move destroyers for each faction planet
     bytes32[] memory factionPlanets = FactionPlanetsSet.getFactionPlanetIds(empire);
     for (uint i = 0; i < factionPlanets.length; i++) {
-      LibGold.spendGold(planets[i]);
+      LibGold.spendGold(factionPlanets[i]);
       LibMoveDestroyers.moveDestroyers(factionPlanets[i]);
     }
 
