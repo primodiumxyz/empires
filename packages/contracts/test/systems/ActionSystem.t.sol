@@ -9,7 +9,7 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
-import { EMPIRES_NAMESPACE_ID, OTHER_EMPIRE_COUNT } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, EMPIRE_COUNT } from "src/constants.sol";
 
 contract ActionSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -77,7 +77,7 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.get(EEmpire.Red, aliceId),
-      OTHER_EMPIRE_COUNT * P_PointConfig.getPointUnit(),
+      (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit(),
       "Player should have received points"
     );
   }

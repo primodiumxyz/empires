@@ -6,7 +6,7 @@ import { Planet, PlanetData, Player, P_PointConfig } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
-import { OTHER_EMPIRE_COUNT } from "src/constants.sol";
+import { EMPIRE_COUNT } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
 
 /**
@@ -69,8 +69,8 @@ contract ActionSystem is EmpiresSystem {
     uint256 pointUnit = P_PointConfig.getPointUnit();
 
     if (_progressAction) {
-      LibPoint.issuePoints(_empireImpacted, playerId, pointUnit * OTHER_EMPIRE_COUNT);
-      LibPrice.pointCostUp(_empireImpacted, OTHER_EMPIRE_COUNT);
+      LibPoint.issuePoints(_empireImpacted, playerId, pointUnit * (EMPIRE_COUNT - 1));
+      LibPrice.pointCostUp(_empireImpacted, EMPIRE_COUNT - 1);
     } else {
       // Iterate through each empire except the impacted one
       for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
