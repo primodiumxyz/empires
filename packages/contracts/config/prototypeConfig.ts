@@ -34,6 +34,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         gameOverBlock: 0n, // currently handled in PostDeploy
       },
       P_PointConfig: {
+        pointUnit: BigInt(POINTS_UNIT),
         minPointCost: 1n * BigInt(POINTS_UNIT),
         startPointCost: 2n * BigInt(POINTS_UNIT),
         pointGenRate: 2n * BigInt(POINTS_UNIT),

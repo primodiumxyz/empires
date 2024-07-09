@@ -2,14 +2,14 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, ActionCost, Player } from "codegen/index.sol";
+import { Planet, ActionCost, Player, P_PointConfig } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
-import { EMPIRES_NAMESPACE_ID, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, OTHER_EMPIRE_COUNT } from "src/constants.sol";
 
 contract ActionSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -77,7 +77,7 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.get(EEmpire.Red, aliceId),
-      OTHER_EMPIRE_COUNT * POINTS_UNIT,
+      OTHER_EMPIRE_COUNT * P_PointConfig.getPointUnit(),
       "Player should have received points"
     );
   }
@@ -100,7 +100,7 @@ contract ActionSystemTest is PrimodiumTest {
     assertGt(ActionCost.get(empire, EPlayerAction.KillDestroyer), actionCost, "Action Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), POINTS_UNIT, "Player should have received blue points");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), POINTS_UNIT, "Player should have received green points");
+    assertEq(PointsMap.get(EEmpire.Blue, bobId), P_PointConfig.getPointUnit(), "Player should have received blue points");
+    assertEq(PointsMap.get(EEmpire.Green, bobId), P_PointConfig.getPointUnit(), "Player should have received green points");
   }
 }

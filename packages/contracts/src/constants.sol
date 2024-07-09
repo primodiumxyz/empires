@@ -14,5 +14,4 @@ ResourceId constant ADMIN_NAMESPACE_ID = ResourceId.wrap(
   bytes32(RESOURCE_NAMESPACE) | (bytes32("Admin") >> (TYPE_BITS))
 );
 
-uint256 constant POINTS_UNIT = 100e15;
 uint256 constant OTHER_EMPIRE_COUNT = uint256(EEmpire.LENGTH) - 2;
