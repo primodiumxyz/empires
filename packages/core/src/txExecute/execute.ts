@@ -1,10 +1,11 @@
+import { Abi, ContractFunctionName, TransactionReceipt } from "viem";
+
 import { AccountClient, Core, WorldAbiType } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { TxQueueOptions } from "@core/tables/types";
 import { _execute } from "@core/txExecute/_execute";
 import { encodeSystemCall, SystemCall } from "@core/txExecute/encodeSystemCall";
 import { functionSystemIds } from "@core/txExecute/functionSystemIds";
-import { Abi, ContractFunctionName, TransactionReceipt } from "viem";
 
 export type ExecuteCallOptions<abi extends Abi, functionName extends ContractFunctionName<abi>> = Omit<
   SystemCall<abi, functionName>,
@@ -15,8 +16,7 @@ export type ExecuteCallOptions<abi extends Abi, functionName extends ContractFun
   txQueueOptions?: TxQueueOptions;
   onComplete?: (receipt: TransactionReceipt | undefined) => void | undefined;
 };
-// TODO: maybe find a way to return a promise that resolves with the receipt
-// (e.g. either return run or a watcher on `TransactionQueue` that resolves when that tx entity is processed with its receipt)
+
 export async function execute<functionName extends ContractFunctionName<WorldAbiType>>({
   core,
   accountClient: { playerAccount },
