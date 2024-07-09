@@ -6,7 +6,7 @@ import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { createPrototypes } from "codegen/Prototypes.sol";
-import { createPlanets } from "./CreatePlanets.s.sol";
+import { createPlanets } from "libraries/CreatePlanets.sol";
 
 import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";

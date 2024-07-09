@@ -23,7 +23,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 60n * 2n,
+        turnLengthBlocks: 10n,
         goldGenRate: 1n,
       },
       P_NPCMoveThresholds: percentsToThresholds({

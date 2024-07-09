@@ -1,0 +1,12 @@
+{
+  "extends": "../../.tsconfigs/bundler/dom/library-monorepo.json",
+  "compilerOptions": {
+    "paths": {
+      "@core/*": ["./src/*"],
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "exclude": ["node_modules", "dist"],
+  "include": ["./src/**/*", "./__tests__/**/*"],
+}

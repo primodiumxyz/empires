@@ -12,7 +12,8 @@ export enum EOrigin {
   LENGTH,
 }
 export enum EDirection {
-  East = 1,
+  None = 1,
+  East,
   Southeast,
   Southwest,
   West,
@@ -22,7 +23,8 @@ export enum EDirection {
 }
 
 export enum EMovement {
-  Retreat = 1,
+  None = 1,
+  Retreat,
   Lateral,
   Expand,
   LENGTH,
