@@ -1,29 +1,16 @@
-import { encodeAbiParameters, Hex, TransactionReceipt } from "viem";
+import { Hex } from "viem";
 
 import { worldInput } from "@primodiumxyz/contracts/mud.config";
 import { ExecuteFunctions } from "@primodiumxyz/core";
-import {
-  AbiKeySchema,
-  AbiToSchema,
-  ContractTable,
-  ContractTableDef,
-  Entity,
-  Properties,
-} from "@primodiumxyz/reactive-tables";
+import { ContractTable, ContractTableDef, Entity, Properties } from "@primodiumxyz/reactive-tables";
 import {
   encodeField,
-  // encodeKeys,
+  encodeKeys,
   entityToHexKeyTuple,
   SchemaToPrimitives,
   StaticAbiType,
   uuid,
 } from "@primodiumxyz/reactive-tables/utils";
-
-// TODO(TEMP): remove when RETA updated (import from utils)
-export const encodeKeys = (abiKeySchema: AbiKeySchema, keys: Properties<AbiToSchema<AbiKeySchema>>): Hex[] => {
-  const staticFields = Object.values(abiKeySchema);
-  return Object.values(keys).map((key, index) => encodeAbiParameters([{ type: staticFields[index] }], [key]));
-};
 
 export function createDevCalls({ execute }: ExecuteFunctions) {
   async function removeTable<tableDef extends ContractTableDef = ContractTableDef>(
