@@ -31,7 +31,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_GameConfig: {
         turnLengthBlocks: 60n * 2n,
         goldGenRate: 1n,
-        gameOverBlock: 0n,
+        gameOverBlock: 0n, // currently handled in PostDeploy
       },
       P_PointConfig: {
         minPointCost: 1n * BigInt(POINTS_UNIT),
