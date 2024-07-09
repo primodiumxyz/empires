@@ -23,8 +23,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const { tables } = useCore();
   const planet = tables.Planet.use(entity);
   const calls = useContractCalls();
-  const value = tables.Value.use(entity)?.value;
-  if (value) console.log({ [entityToPlanetName(entity)]: value });
 
   const [left, top] = useMemo(() => {
     const cartesianCoord = convertAxialToCartesian(

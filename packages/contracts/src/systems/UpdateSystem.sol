@@ -36,7 +36,7 @@ contract UpdateSystem is System {
     // spend gold and move destroyers for each faction planet
     bytes32[] memory factionPlanets = FactionPlanetsSet.getFactionPlanetIds(empire);
     for (uint i = 0; i < factionPlanets.length; i++) {
-      LibGold.spendGold(planets[i]);
+      LibGold.spendGold(factionPlanets[i]);
       LibMoveDestroyers.moveDestroyers(factionPlanets[i]);
     }
 
