@@ -1,8 +1,8 @@
+import { useCore } from "@core/react/hooks/useCore";
+import { getEnsName, LinkedAddressResult } from "@core/utils/global/ens";
 import { useEffect, useMemo, useState } from "react";
 
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { useCore } from "@/react/hooks/useCore";
-import { getEnsName, LinkedAddressResult } from "@/utils/global/ens";
 
 /**
  * Retrieves the player name and related information.

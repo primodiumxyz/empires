@@ -1,6 +1,6 @@
-import worldsJson from "contracts/worlds.json";
 import { Address, Hex } from "viem";
 
+import { worldsJson } from "@primodiumxyz/contracts";
 import { chainConfigs, CoreConfig } from "@primodiumxyz/core";
 
 const worlds = worldsJson as Partial<Record<string, { address: string; blockNumber?: number }>>;
@@ -11,7 +11,7 @@ export const getCoreConfig = (): CoreConfig => {
     ? new URLSearchParams()
     : new URLSearchParams(window.location.search);
 
-  const chainId = (params.get("chainid") || import.meta.env.PRI_CHAIN_ID || "dev") as keyof typeof chainConfigs;
+  const chainId = (params.get("chainId") || import.meta.env.PRI_CHAIN_ID || "dev") as keyof typeof chainConfigs;
 
   const chain = chainConfigs[chainId];
 
@@ -32,6 +32,7 @@ export const getCoreConfig = (): CoreConfig => {
     runSystems: true,
     devPrivateKey: import.meta.env.PRI_DEV_PKEY as Hex,
     accountLinkUrl: import.meta.env.PRI_ACCOUNT_LINK_VERCEL_URL as string,
+    devTools: import.meta.env.PRI_DEV === "true",
   };
   return config;
 };

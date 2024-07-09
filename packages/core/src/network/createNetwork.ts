@@ -1,13 +1,13 @@
 import { transportObserver } from "@latticexyz/common";
 import { createPublicClient, fallback, Hex, http } from "viem";
-import mudConfig from "contracts/mud.config";
 
+import { mudConfig } from "@primodiumxyz/contracts";
 import { createWorld } from "@primodiumxyz/reactive-tables";
-import { CoreConfig, CreateNetworkResult } from "@/lib/types";
-import { createClock } from "@/network/createClock";
-import { otherTableDefs } from "@/network/otherTableDefs";
-import { setupRecs } from "@/recs/setupRecs";
-import { setupSyncTables } from "@/tables/syncTables";
+import { CoreConfig, CreateNetworkResult } from "@core/lib/types";
+import { createClock } from "@core/network/createClock";
+import { otherTableDefs } from "@core/network/otherTableDefs";
+import { setupRecs } from "@core/recs/setupRecs";
+import { setupSyncTables } from "@core/tables/syncTables";
 
 /**
  * Creates network object
@@ -35,6 +35,7 @@ export function createNetwork(config: CoreConfig): CreateNetworkResult {
       address: config.worldAddress as Hex,
       otherTableDefs,
       syncTables,
+      devTools: config.devTools,
     });
 
   const clock = createClock(world, latestBlock$, {

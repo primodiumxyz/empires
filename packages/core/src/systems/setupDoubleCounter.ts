@@ -1,5 +1,5 @@
 import { namespaceWorld } from "@primodiumxyz/reactive-tables";
-import { Core } from "@/lib/types";
+import { Core } from "@core/lib/types";
 
 export const setupDoubleCounter = (core: Core) => {
   const {
@@ -9,7 +9,7 @@ export const setupDoubleCounter = (core: Core) => {
 
   const systemWorld = namespaceWorld(world, "coreSystems");
 
-  tables.Counter.watch({
+  tables.DoubleCounter.watch({
     world: systemWorld,
     onChange: (update) => {
       const value = update?.properties.current?.value ?? 0;

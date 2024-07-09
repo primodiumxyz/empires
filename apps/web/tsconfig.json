@@ -20,6 +20,11 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["**/*.tsx", "**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["**/*.tsx", "**/*.ts", "vite.config.mts"],
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    {
+      "path": "../../packages/core"
+    }
+  ]
 }

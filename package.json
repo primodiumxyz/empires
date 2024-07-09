@@ -1,15 +1,20 @@
 {
-  "name": "primodium-base",
-  "version": "1.0.0",
+  "name": "primodium-empires",
+  "version": "1.0.1",
   "description": "",
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build"
+    "dev": "turbo dev dev:indexer --continue",
+    "build": "turbo build",
+    "clean:indexer": "pnpm clean-local-docker-indexer",
+    "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
+    "build:contracts": "turbo --filter @primodiumxyz/contracts build",
+    "build:webapp": "turbo --filter @primodiumxyz/webapp build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@primodiumxyz/pg-indexer-reader": "^0.6.9",
     "turbo": "^2.0.4"
   },
   "packageManager": "pnpm@8.15.8",

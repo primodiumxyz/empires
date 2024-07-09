@@ -1,4 +1,4 @@
-import { SyncSourceType, SyncStep } from "@/lib/types";
+import { SyncSourceType, SyncStep } from "@core/lib/types";
 
 import { Core } from "../lib/types";
 
@@ -13,7 +13,7 @@ export const runInitialSync = async (core: Core) => {
     network,
     tables,
     config,
-    sync: { syncFromRPC, subscribeToRPC, syncInitialGameState, syncSecondaryGameState },
+    sync: { syncFromRPC, subscribeToRPC, syncInitialGameState },
   } = core;
   const { publicClient } = network;
   const fromBlock = config.initialBlockNumber ?? 0n;
@@ -32,6 +32,7 @@ export const runInitialSync = async (core: Core) => {
     tables.SyncSource.set({ value: SyncSourceType.RPC });
 
     const toBlock = await publicClient.getBlockNumber();
+
     // Start live sync right away (it will store logs until `SyncStatus` is `SyncStep.Live`)
     const processPendingLogs = subscribeToRPC();
 
@@ -57,7 +58,7 @@ export const runInitialSync = async (core: Core) => {
   }
 
   const onError = async (err: unknown) => {
-    console.warn("Failed to fetch from indexer, hydrating from RPC");
+    console.warn("Failed to fetch from indexer, hydrating from RPC", err);
     const toBlock = await publicClient.getBlockNumber();
     const processPendingLogs = subscribeToRPC();
 
@@ -73,7 +74,7 @@ export const runInitialSync = async (core: Core) => {
           progress: 0,
           message: `Failed to sync from RPC. Please try again.`,
         });
-        console.warn("Failed to sync from RPC ");
+        console.warn("Failed to sync from RPC ", err);
       },
     );
   };
@@ -88,13 +89,6 @@ export const runInitialSync = async (core: Core) => {
         progress: 1,
         message: `DONE`,
       });
-
-      // initialize secondary state
-      syncSecondaryGameState(
-        // on complete
-        onSyncComplete,
-        onError,
-      );
     },
     onError,
   );

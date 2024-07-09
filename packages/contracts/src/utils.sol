@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-function addressToEntity(address a) pure returns (bytes32) {
+function addressToId(address a) pure returns (bytes32) {
   return bytes32(uint256(uint160((a))));
 }
 
-function entityToAddress(bytes32 a) pure returns (address) {
+function idToAddress(bytes32 a) pure returns (address) {
   return address(uint160(uint256((a))));
 }
 
@@ -15,4 +15,12 @@ function bytes32ToString(bytes32 data) pure returns (string memory) {
     bytesString[i] = data[i];
   }
   return string(bytesString);
+}
+
+function coordToId(int128 q, int128 r) pure returns (bytes32) {
+  return bytes32((uint256(uint128(q)) << 128) | uint128(r));
+}
+
+function pseudorandom(uint256 seed, uint256 max) view returns (uint256) {
+  return uint256(keccak256(abi.encodePacked(seed, block.timestamp, block.prevrandao, block.number))) % max;
 }

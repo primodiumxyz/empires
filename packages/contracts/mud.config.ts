@@ -10,7 +10,7 @@ import { ConfigWithPrototypes } from "./ts/prototypes/types";
 /* -------------------------------------------------------------------------- */
 
 export const worldInput = {
-  namespace: "Primodium_Base",
+  namespace: "Empires",
 
   // add all subsystems here
   // systems: {},
@@ -18,13 +18,92 @@ export const worldInput = {
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
   enums: MUDEnums,
   tables: {
-    /* ----------------------------------- Dev ---------------------------------- */
-    Counter: {
+    /* ---------------------------------- Game ---------------------------------- */
+    P_GameConfig: {
       key: [],
-      schema: { value: "uint256" },
+      schema: {
+        turnLengthBlocks: "uint256",
+      },
     },
-  }
 
+    Turn: {
+      key: [],
+      schema: { nextTurnBlock: "uint256", empire: "EEmpire" },
+    },
+
+    Player: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        points: "bytes32",
+      },
+    },
+
+    // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
+    Planet: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        q: "int128",
+        r: "int128",
+        isPlanet: "bool",
+        destroyerCount: "uint256",
+        factionId: "EEmpire",
+      },
+    },
+
+    Faction: {
+      key: ["id"],
+      schema: {
+        id: "EEmpire",
+        origin: "EOrigin",
+      },
+    },
+
+    /* ---------------------------- Faction Ownership --------------------------- */
+    Keys_FactionPlanetsSet: {
+      key: ["factionId"],
+      schema: { factionId: "EEmpire", itemKeys: "bytes32[]" },
+    },
+
+    Meta_FactionPlanetsSet: {
+      key: ["factionId", "planetId"],
+      schema: { factionId: "EEmpire", planetId: "bytes32", stored: "bool", index: "uint256" },
+    },
+
+    /* --------------------------------- Planets -------------------------------- */
+    Keys_PlanetsSet: {
+      key: [],
+      schema: { itemKeys: "bytes32[]" },
+    },
+
+    Meta_PlanetsSet: {
+      key: ["id"],
+      schema: { id: "bytes32", stored: "bool", index: "uint256" },
+    },
+
+    /* -------------------------------- Movement -------------------------------- */
+
+    // each value denotes a threshold for the likelihood of a move in that direction
+    // the total is out of 10000
+    P_MoveConfig: {
+      key: [],
+      schema: {
+        none: "uint256",
+        retreat: "uint256",
+        lateral: "uint256",
+        expand: "uint256",
+      },
+    },
+
+    Arrivals: {
+      key: ["planetId"],
+      schema: {
+        planetId: "bytes32",
+        destroyerCount: "uint256",
+      },
+    },
+  },
 } as const;
 
 const getConfig = async () => {
@@ -37,8 +116,7 @@ const getConfig = async () => {
 
   const world = defineWorld({
     ...worldInput,
-    modules: [
-    ],
+    modules: [],
     excludeSystems: exclude,
   });
 

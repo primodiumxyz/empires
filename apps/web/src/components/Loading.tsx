@@ -1,7 +1,7 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 import { minEth } from "@primodiumxyz/core";
-import { useAccountClient, useSyncStatus } from "@primodiumxyz/core/react";
+import { useAccountClient } from "@primodiumxyz/core/react";
 import Game from "@/components/Game";
 import { useBalance } from "@/hooks/useBalance";
 import { useDripAccount } from "@/hooks/useDripAccount";

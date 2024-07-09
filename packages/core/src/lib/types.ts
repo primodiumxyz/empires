@@ -11,17 +11,16 @@ import {
   PublicClient,
   WalletClient,
 } from "viem";
-import mudConfig from "contracts/mud.config";
-import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
 
+import { IWorldAbi, mudConfig } from "@primodiumxyz/contracts";
 import { AllTableDefs, ContractTables, Entity, World, WrapperResult } from "@primodiumxyz/reactive-tables";
-import { ChainConfig } from "@/network/config/chainConfigs";
-import { otherTableDefs } from "@/network/otherTableDefs";
-import { Recs } from "@/recs/setupRecs";
-import { createSync } from "@/sync";
-import setupCoreTables from "@/tables/coreTables";
-import { SyncTables } from "@/tables/syncTables";
-import { createUtils } from "@/utils";
+import { ChainConfig } from "@core/network/config/chainConfigs";
+import { otherTableDefs } from "@core/network/otherTableDefs";
+import { Recs } from "@core/recs/setupRecs";
+import { createSync } from "@core/sync";
+import setupCoreTables from "@core/tables/coreTables";
+import { SyncTables } from "@core/tables/syncTables";
+import { createUtils } from "@core/utils";
 
 /**
  * Core configuration
@@ -58,6 +57,13 @@ export type CoreConfig = {
    * Setups up systems to keep core tables and simplified tables in sync with contract tables
    */
   runSystems?: boolean;
+  /**
+   * Enable dev tools (default: false)
+   *
+   * If enabled, this will mount dev tools from Reactive Tables into the app, effectively showing a button
+   * in the bottom right corner of the screen that opens the dev tools UI.
+   */
+  devTools?: boolean;
 };
 
 type MudConfig = typeof mudConfig;
@@ -172,3 +178,13 @@ export enum SyncStep {
   Complete,
   Live,
 }
+
+export type CartesionCoord = {
+  x: number;
+  y: number;
+};
+
+export type AxialCoord = {
+  q: number;
+  r: number;
+};

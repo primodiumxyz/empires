@@ -3,9 +3,9 @@ import { Hex } from "viem";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { StorageAdapterLog } from "@primodiumxyz/reactive-tables/utils";
 import { Read, Sync } from "@primodiumxyz/sync-stack";
-import { Keys } from "@/lib";
-import { CoreConfig, CreateNetworkResult, SyncSourceType, SyncStep, Tables } from "@/lib/types";
-import { getSecondaryQuery } from "@/sync/queries/secondaryQueries";
+import { Keys } from "@core/lib";
+import { CoreConfig, CreateNetworkResult, SyncSourceType, SyncStep, Tables } from "@core/lib/types";
+import { getSecondaryQuery } from "@core/sync/queries/secondaryQueries";
 
 import { getInitialQuery } from "./queries/initialQueries";
 

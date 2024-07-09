@@ -5,8 +5,8 @@ import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
-import { setupHooks } from "script/SetupHooks.sol";
 import { createPrototypes } from "codegen/Prototypes.sol";
+import { createPlanets } from "libraries/CreatePlanets.sol";
 
 import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
@@ -25,8 +25,8 @@ contract PostDeploy is Script {
 
     createPrototypes(world);
     console.log("Prototypes created");
-    setupHooks(world);
-    console.log("Hooks setup");
+
+    createPlanets();
 
     vm.stopBroadcast();
   }

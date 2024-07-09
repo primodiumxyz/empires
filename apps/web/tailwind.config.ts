@@ -22,9 +22,9 @@ export default {
           warning: colors.yellow[600],
           error: "#A8375D",
 
-          "--rounded-box": "0rem", // border radius rounded-box utility class, used in card and other large boxes
-          "--rounded-btn": "0rem", // border radius rounded-btn utility class, used in buttons and similar element
-          "--rounded-badge": "0rem", // border radius rounded-badge utility class, used in badges and similar
+          "--rounded-box": ".5rem", // border radius rounded-box utility class, used in card and other large boxes
+          "--rounded-btn": ".5rem", // border radius rounded-btn utility class, used in buttons and similar element
+          "--rounded-badge": ".25rem", // border radius rounded-badge utility class, used in badges and similar
           "--animation-btn": "0s", // duration of animation when you click on button
           "--animation-input": "0.2s", // duration of animation for inputs like checkbox, toggle, radio, etc
           "--btn-text-case": "uppercase", // set default text transform for buttons

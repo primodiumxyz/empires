@@ -1,4 +1,6 @@
 import { createBlockStream } from "@latticexyz/block-logs-stream";
+import { SyncStep } from "@core/lib";
+import { SyncTables } from "@core/tables/syncTables";
 import {
   concatMap,
   filter,
@@ -23,8 +25,6 @@ import {
 } from "@primodiumxyz/reactive-tables";
 import { StorageAdapterBlock } from "@primodiumxyz/reactive-tables/utils";
 import { Read } from "@primodiumxyz/sync-stack";
-import { SyncStep } from "@/lib";
-import { SyncTables } from "@/tables/syncTables";
 
 export type Recs<config extends StoreConfig, extraTables extends ContractTableDefs> = Omit<
   WrapperResult<config, extraTables>,
@@ -44,17 +44,26 @@ export const setupRecs = <config extends StoreConfig, extraTables extends Contra
   address: Hex;
   otherTableDefs?: extraTables;
   syncTables?: SyncTables;
+  devTools?: boolean;
 }): Recs<config, extraTables> => {
-  const { mudConfig, publicClient, world, address, otherTableDefs, syncTables } = args;
+  const { mudConfig, publicClient, world, address, otherTableDefs, syncTables, devTools } = args;
 
   const { tables, tableDefs, storageAdapter } = createWrapper({
     mudConfig,
     world,
     otherTableDefs,
     shouldSkipUpdateStream: () => syncTables?.SyncStatus.get()?.step !== SyncStep.Live,
+    devTools: {
+      enabled: devTools,
+      publicClient,
+      worldAddress: address,
+    },
   });
 
-  const latestBlock$ = createBlockStream({ publicClient, blockTag: "latest" }).pipe(shareReplay(1));
+  const latestBlock$ = createBlockStream({
+    publicClient,
+    blockTag: "latest",
+  }).pipe(shareReplay(1));
 
   const latestBlockNumber$ = latestBlock$.pipe(
     map((block) => block.number),
@@ -106,7 +115,9 @@ export const setupRecs = <config extends StoreConfig, extraTables extends Contra
         try {
           const lastBlock = blocks[0];
           // debug("fetching tx receipt for block", lastBlock.blockNumber);
-          const receipt = await publicClient.getTransactionReceipt({ hash: tx });
+          const receipt = await publicClient.getTransactionReceipt({
+            hash: tx,
+          });
           return lastBlock.blockNumber >= receipt.blockNumber;
         } catch (error) {
           if (error instanceof TransactionReceiptNotFoundError) {

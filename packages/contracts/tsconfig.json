@@ -1,20 +1,6 @@
 {
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-
-    "target": "ESNext",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-    "verbatimModuleSyntax": false,
-
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-
-    "module": "preserve",
-    "noEmit": false,
-  }
+  "extends": "../../.tsconfigs/bundler/dom/library-monorepo.json",
+  "compilerOptions": { },
+  "exclude": ["node_modules", "dist"],
+  "include": ["./src/**/*", "./out/**/*"],
 }
