@@ -1,0 +1,68 @@
+import { EEmpire, EPlayerAction } from "@primodiumxyz/contracts/config/enums";
+
+import { Tables } from "@core/lib";
+
+const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
+
+export function createPriceUtils(tables: Tables) {
+  function getTotalCost(_actionType: EPlayerAction, _empireImpacted: EEmpire): bigint {
+    const progressAction = _actionType == EPlayerAction.CreateDestroyer;
+    let totalCost = 0n;
+    if (progressAction) {
+      totalCost = getProgressPointCost(_empireImpacted);
+    } else {
+      totalCost = getRegressPointCost(_empireImpacted);
+    }
+
+    totalCost += tables.ActionCost.getWithKeys({ factionId: _empireImpacted, action: _actionType })?.value ?? 0n;
+    return totalCost;
+  }
+
+  /**
+   * @dev Calculates the cost of purchasing multiple points related to a progressive action that aids an empire.
+   * @param _empireImpacted The empire impacted by the action.
+   * @return pointCost The cost of all points related to the action.
+   */
+  function getProgressPointCost(_empireImpacted: EEmpire): bigint {
+    return getPointCost(_empireImpacted, OTHER_EMPIRE_COUNT);
+  }
+
+  /**
+   * @dev Calculates the cost of purchasing points related to a regressive action. Points are purchased for all empires except the impacted empire.
+   * @param _empireImpacted The empire impacted by the action.
+   * @return pointCost The cost of all points related to the action.
+   */
+  function getRegressPointCost(_empireImpacted: EEmpire): bigint {
+    let pointCost = 0n;
+    for (let i = 1; i < EEmpire.LENGTH; i++) {
+      if (i == _empireImpacted) {
+        continue;
+      }
+      pointCost += getPointCost(i, 1);
+    }
+    return pointCost;
+  }
+
+  /**
+   * @dev Calculates the cost of a specific number of points for a specific empire.
+   * @param _empire The empire to purchase points from.
+   * @param _pointUnits The number of points.
+   * @return pointCost The cost of the points from the specific empire.
+   */
+  function getPointCost(_empire: EEmpire, _pointUnits: number): bigint {
+    const initPointCost = tables.Faction.getWithKeys({ id: _empire })?.pointCost ?? 0n;
+    const pointCostIncrease = tables.P_PointConfig.get()?.pointCostIncrease ?? 0n;
+    let pointCost = 0n;
+    for (let i = 0; i < _pointUnits; i++) {
+      pointCost += initPointCost + BigInt(i) * pointCostIncrease;
+    }
+    return pointCost;
+  }
+
+  return {
+    getTotalCost,
+    getProgressPointCost,
+    getRegressPointCost,
+    getPointCost,
+  };
+}

@@ -33,7 +33,7 @@ export const Account = () => {
   const balance = useBalance(address).value ?? 0n;
 
   return (
-    <div className="absolute left-4 top-4 flex flex-col gap-1 rounded bg-secondary p-2">
+    <div className="absolute left-4 top-4 flex flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
       <p className="flex items-center gap-2">
         {address.slice(0, 7)}
         <button onClick={handleLogout} className="btn btn-primary btn-sm">
@@ -41,10 +41,9 @@ export const Account = () => {
         </button>
       </p>
       <hr />
-      <div className="flex items-center justify-center">
-        {loading && <p>Loading...</p>}
-        {!loading && price ? <p>{ethToUSD(balance, price)}</p> : <p>{formatEther(balance)}ETH</p>}
-      </div>
+      {loading && <p>Loading...</p>}
+      {!loading && price && <p>{ethToUSD(balance, price)}</p>}
+      <p className="text-xs">{formatEther(balance)}ETH</p>
       <hr />
       <Points playerId={entity} />
     </div>
