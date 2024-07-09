@@ -8,18 +8,15 @@ import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
-import { useEthToUsd } from "@/hooks/useEthToUsd";
+import { useEthPrice } from "@/hooks/useEthPrice";
 
-function ethToUSD(wei: bigint, ETHtoUSD: number) {
-  const balance = Number(formatEther(wei));
-  if (isNaN(balance)) return null;
-  const balanceInUsd = balance * ETHtoUSD;
-  return balanceInUsd.toLocaleString("en-US", { style: "currency", currency: "USD" });
-}
 export const Account = () => {
   const { logout } = usePrivy();
   const { cancelBurner, usingBurner } = useBurnerAccount();
-  const { price, loading } = useEthToUsd();
+  const {
+    utils: { ethToUSD },
+  } = useCore();
+  const { price, loading } = useEthPrice();
 
   const {
     playerAccount: { address, entity },

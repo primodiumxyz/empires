@@ -2,17 +2,22 @@ import { useMemo } from "react";
 import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon } from "@heroicons/react/24/solid";
 
 import { EEmpire } from "@primodiumxyz/contracts";
+import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Hexagon } from "@/components/core/Hexagon/Hexagon";
+import { Tooltip } from "@/components/core/Tooltip";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
+import { useEthPrice } from "@/hooks/useEthPrice";
 
-export const EmpireEnumToColor = {
+export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "blue",
   [EEmpire.Green]: "green",
   [EEmpire.Red]: "red",
+  [EEmpire.LENGTH]: "",
 };
 
 export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number }> = ({
@@ -20,9 +25,12 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   tileSize,
   margin,
 }) => {
-  const { tables } = useCore();
+  const { tables, utils } = useCore();
   const planet = tables.Planet.use(entity);
   const calls = useContractCalls();
+  const planetFaction = (planet?.factionId ?? 0) as EEmpire;
+
+  const { price, loading } = useEthPrice();
 
   const [left, top] = useMemo(() => {
     const cartesianCoord = convertAxialToCartesian(
@@ -33,12 +41,18 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     return [cartesianCoord.x, cartesianCoord.y];
   }, [planet, tileSize, margin]);
 
+  const createDestroyerPriceWei = useActionCost(EPlayerAction.CreateDestroyer, planetFaction);
+  const killDestroyerPriceWei = useActionCost(EPlayerAction.KillDestroyer, planetFaction);
+
+  const createDestroyerPriceUsd = utils.ethToUSD(createDestroyerPriceWei, price ?? 0);
+  const killDestroyerPriceUsd = utils.ethToUSD(killDestroyerPriceWei, price ?? 0);
+
   if (!planet) return null;
 
   return (
     <Hexagon
       key={entity}
-      fill={planet?.factionId !== 0 ? EmpireEnumToColor[planet.factionId as EEmpire] : "grey"}
+      fill={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "grey"}
       size={tileSize}
       className="absolute -translate-x-1/2 -translate-y-1/2"
       style={{
@@ -59,25 +73,29 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           </p>
 
           <div className="items-cetner flex gap-2">
-            <TransactionQueueMask id={`${entity}-kill-destroyer`}>
-              <button
-                onClick={() => calls.removeDestroyer(entity)}
-                className="btn btn-square btn-xs"
-                disabled={planet.factionId == 0}
-              >
-                <MinusIcon className="size-4" />
-              </button>
-            </TransactionQueueMask>
+            <Tooltip tooltipContent={`Cost: ${createDestroyerPriceUsd}`}>
+              <TransactionQueueMask id={`${entity}-kill-destroyer`}>
+                <button
+                  onClick={() => calls.removeDestroyer(entity)}
+                  className="btn btn-square btn-xs"
+                  disabled={planet.factionId == 0}
+                >
+                  <MinusIcon className="size-4" />
+                </button>
+              </TransactionQueueMask>
+            </Tooltip>
 
-            <TransactionQueueMask id={`${entity}-create-destroyer`}>
-              <button
-                onClick={() => calls.createDestroyer(entity)}
-                className="btn btn-square btn-xs"
-                disabled={planet.factionId == 0}
-              >
-                <PlusIcon className="size-4" />
-              </button>
-            </TransactionQueueMask>
+            <Tooltip tooltipContent={`Cost: ${killDestroyerPriceUsd}`}>
+              <TransactionQueueMask id={`${entity}-create-destroyer`}>
+                <button
+                  onClick={() => calls.createDestroyer(entity)}
+                  className="btn btn-square btn-xs"
+                  disabled={planet.factionId == 0}
+                >
+                  <PlusIcon className="size-4" />
+                </button>
+              </TransactionQueueMask>
+            </Tooltip>
           </div>
         </div>
         <div className="flex">

@@ -1,3 +1,4 @@
+import { formatEther } from "viem";
 import { EEmpire, EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 
 import { Tables } from "@core/lib";
@@ -59,10 +60,17 @@ export function createPriceUtils(tables: Tables) {
     return pointCost;
   }
 
+  function ethToUSD(wei: bigint, ETHtoUSD: number) {
+    const balance = Number(formatEther(wei));
+    if (isNaN(balance)) return null;
+    const balanceInUsd = balance * ETHtoUSD;
+    return balanceInUsd.toLocaleString("en-US", { style: "currency", currency: "USD" });
+  }
   return {
     getTotalCost,
     getProgressPointCost,
     getRegressPointCost,
     getPointCost,
+    ethToUSD,
   };
 }

@@ -1,6 +1,17 @@
-import { useEffect, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 
-export const useEthToUsd = () => {
+export interface EthPriceContextType {
+  price: number | null;
+  loading: boolean;
+}
+
+export const EthPriceContext = createContext<EthPriceContextType | undefined>(undefined);
+
+interface EthPriceProviderProps {
+  children: ReactNode;
+}
+
+export const EthPriceProvider: React.FC<EthPriceProviderProps> = ({ children }) => {
   const [price, setPrice] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,5 +34,6 @@ export const useEthToUsd = () => {
 
     fetchPrice();
   }, []);
-  return { price, loading };
+
+  return <EthPriceContext.Provider value={{ price, loading }}>{children}</EthPriceContext.Provider>;
 };
