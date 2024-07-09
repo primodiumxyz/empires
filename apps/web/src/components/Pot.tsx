@@ -1,21 +1,16 @@
-import { resourceToHex } from "@latticexyz/common";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
 
 export const Pot = () => {
-  const { tables, utils } = useCore();
+  const { utils } = useCore();
   const { price, loading } = useEthPrice();
 
-  const hex = resourceToHex({
-    type: "namespace",
-    namespace: tables.P_GameConfig.metadata.globalName.split("__")[0],
-    name: "",
-  });
-  const pot = tables.Balances.useWithKeys({ namespaceId: hex })?.balance ?? 0n;
+  const pot = usePot();
 
   return (
     <div className="absolute right-4 top-4 flex flex-col justify-center gap-1">

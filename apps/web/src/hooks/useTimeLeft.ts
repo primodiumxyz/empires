@@ -7,6 +7,7 @@ export const useTimeLeft = (): { gameOver: boolean; timeLeft: number; blocksLeft
   const endBlock = tables.P_GameConfig.use()?.gameOverBlock ?? 0n;
 
   const block = tables.BlockNumber.use();
+  const time = tables.Time.use();
 
   return useMemo(() => {
     if (!block) return { gameOver: false, timeLeft: 0, blocksLeft: 0n };
@@ -14,5 +15,5 @@ export const useTimeLeft = (): { gameOver: boolean; timeLeft: number; blocksLeft
     const gameOver = blocksLeft <= 0n;
     const timeLeft = Number(blocksLeft) * block.avgBlockTime;
     return { gameOver, timeLeft, blocksLeft };
-  }, [block, endBlock]);
+  }, [time, block, endBlock]);
 };
