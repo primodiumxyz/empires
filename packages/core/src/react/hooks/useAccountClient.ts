@@ -1,6 +1,7 @@
+import { useContext } from "react";
+
 import { AccountClient } from "@core/lib/types";
 import { AccountClientContext } from "@core/react/hooks/providers/AccountClientProvider";
-import { useContext } from "react";
 
 /**
  * Teturns the account client from the AccountClientContext.

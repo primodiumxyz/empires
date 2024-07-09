@@ -1,8 +1,8 @@
-import { Clock } from "@core/lib";
 import { filter, map, Observable, ReplaySubject } from "rxjs";
 import { Block } from "viem";
 
 import { World } from "@primodiumxyz/reactive-tables";
+import { Clock } from "@core/lib";
 
 /**
  * Create a clock optimistically keeping track of the current chain time.

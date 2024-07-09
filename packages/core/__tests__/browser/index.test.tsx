@@ -1,15 +1,11 @@
-import { describe, it, expect } from "vitest";
-import { commonTests, createTestConfig } from "../lib/common";
 import { render, screen } from "@testing-library/react";
 import React from "react";
+import { describe, expect, it } from "vitest";
 
-import {
-  AccountClientProvider,
-  CoreProvider,
-  useCore,
-} from "../../src/react/hooks";
 import { createCore } from "../../src/createCore";
+import { AccountClientProvider, CoreProvider, useCore } from "../../src/react/hooks";
 import { useAccountClient } from "../../src/react/hooks/useAccountClient";
+import { commonTests, createTestConfig } from "../lib/common";
 
 describe("browser", () => {
   const { coreConfig, address, privateKey } = createTestConfig();
@@ -34,7 +30,7 @@ describe("browser", () => {
       render(
         <CoreProvider {...core}>
           <TestCoreComponent />
-        </CoreProvider>
+        </CoreProvider>,
       );
 
       expect(screen.getAllByText(address)[0]).toBeInTheDocument();
@@ -57,7 +53,7 @@ describe("browser", () => {
           <AccountClientProvider playerPrivateKey={privateKey}>
             <TestCoreComponent />
           </AccountClientProvider>
-        </CoreProvider>
+        </CoreProvider>,
       );
       expect(screen.getAllByText(address)[0]).toBeInTheDocument();
     });
