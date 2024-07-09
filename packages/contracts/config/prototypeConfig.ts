@@ -27,10 +27,10 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         goldGenRate: 1n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
-        none: 1,
-        expand: 0.0,
-        lateral: 0,
-        retreat: 0,
+        none: 0.25,
+        expand: 0.75 * 0.7,
+        lateral: 0.75 * 0.2,
+        retreat: 0.75 * 0.1,
       }),
       P_NPCActionThresholds: percentsToThresholds({
         none: 0.2,
