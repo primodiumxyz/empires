@@ -23,7 +23,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 10n,
+        turnLengthBlocks: 1n,
         goldGenRate: 1n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
@@ -33,8 +33,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         retreat: 0.75 * 0.1,
       }),
       P_NPCActionThresholds: percentsToThresholds({
-        none: 0.9,
-        buyDestroyers: 0.1,
+        none: 0.2,
+        buyDestroyers: 0.8,
       }),
 
       Turn: {

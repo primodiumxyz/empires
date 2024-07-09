@@ -20,7 +20,7 @@
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write './**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
-    "test": "forge build && mud test --skipBuild --forgeOptions='-vvv'"
+    "test": "forge build && mud test --skipBuild"
   },
   "dependencies": {
     "@latticexyz/cli": "2.0.9",
