@@ -32,6 +32,7 @@ export const runInitialSync = async (core: Core) => {
     tables.SyncSource.set({ value: SyncSourceType.RPC });
 
     const toBlock = await publicClient.getBlockNumber();
+
     // Start live sync right away (it will store logs until `SyncStatus` is `SyncStep.Live`)
     const processPendingLogs = subscribeToRPC();
 

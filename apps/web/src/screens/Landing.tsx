@@ -1,5 +1,6 @@
 import { usePrivy } from "@privy-io/react-auth";
 
+import { useSyncStatus } from "@primodiumxyz/core/react";
 import Core from "@/components/Core";
 import Login from "@/components/Login";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
@@ -7,10 +8,11 @@ import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 const Landing = () => {
   const { ready, authenticated } = usePrivy();
   const { value, usingBurner } = useBurnerAccount();
+  const { loading, progress } = useSyncStatus();
 
-  if (!ready) {
+  if (!ready || loading) {
     // Do nothing while the PrivyProvider initializes with updated user state
-    return <></>;
+    return <>Syncing {Math.floor(progress * 100)}%</>;
   }
 
   if ((!usingBurner && !authenticated) || (usingBurner && value === null)) {
@@ -19,7 +21,7 @@ const Landing = () => {
     return <Login />;
   }
 
-  if (authenticated || (usingBurner && value)) {
+  if (authenticated || (usingBurner && value) || !loading) {
     // Replace this code with however you'd like to handle an authenticated user
     return <Core />;
   }
