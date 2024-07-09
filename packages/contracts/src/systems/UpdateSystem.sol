@@ -9,8 +9,9 @@ import { Planet, Turn, TurnData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 
-contract UpdateSystem is System {
+contract UpdateSystem is EmpiresSystem {
   function _updateTurn() private returns (EEmpire) {
     TurnData memory turn = Turn.get();
     bool canUpdate = block.number >= turn.nextTurnBlock;
@@ -21,7 +22,7 @@ contract UpdateSystem is System {
     return newEmpire;
   }
 
-  function updateWorld() public {
+  function updateWorld() public _onlyNotGameOver {
     EEmpire empire = _updateTurn();
 
     bytes32[] memory planets = PlanetsSet.getPlanetIds();

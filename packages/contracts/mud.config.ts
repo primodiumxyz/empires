@@ -24,6 +24,7 @@ export const worldInput = {
       schema: {
         turnLengthBlocks: "uint256",
         goldGenRate: "uint256",
+        gameOverBlock: "uint256",
       },
     },
 
@@ -34,6 +35,7 @@ export const worldInput = {
         startPointCost: "uint256",
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
+        pointRake: "uint256", // times 10_000
       },
     },
 
@@ -45,6 +47,11 @@ export const worldInput = {
         startActionCost: "uint256",
         minActionCost: "uint256",
       },
+    },
+
+    RakeTaken: {
+      key: [],
+      schema: { value: "bool" },
     },
 
     Turn: {
@@ -60,13 +67,26 @@ export const worldInput = {
       },
     },
 
-    Points: {
-      key: ["playerId", "factionId"],
-      schema: {
-        playerId: "bytes32",
-        factionId: "EEmpire",
-        value: "uint256",
-      },
+    WinningEmpire: {
+      key: [],
+      schema: { empire: "EEmpire" },
+    },
+    /* ------------------------------- Points Map ------------------------------- */
+
+    // Used in the mbuilding utilities Map data structure
+    Value_PointsMap: {
+      key: ["factionId", "playerId"],
+      schema: { playerId: "bytes32", factionId: "EEmpire", value: "uint256" },
+    },
+
+    Meta_PointsMap: {
+      key: ["factionId", "playerId"],
+      schema: { playerId: "bytes32", factionId: "EEmpire", stored: "bool", index: "uint256" },
+    },
+
+    Keys_PointsMap: {
+      key: ["factionId"],
+      schema: { factionId: "EEmpire", players: "bytes32[]" },
     },
 
     // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
