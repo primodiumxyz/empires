@@ -1,0 +1,70 @@
+import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid";
+import { usePrivy } from "@privy-io/react-auth";
+import { formatEther } from "viem";
+
+import { EEmpire } from "@primodiumxyz/contracts";
+import { formatNumber } from "@primodiumxyz/core";
+import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { Entity } from "@primodiumxyz/reactive-tables";
+import { useBalance } from "@/hooks/useBalance";
+import { useBurnerAccount } from "@/hooks/useBurnerAccount";
+import { useEthToUsd } from "@/hooks/useEthToUsd";
+
+function ethToUSD(wei: bigint, ETHtoUSD: number) {
+  const balance = Number(formatEther(wei));
+  if (isNaN(balance)) return null;
+  const balanceInUsd = balance * ETHtoUSD;
+  return balanceInUsd.toLocaleString("en-US", { style: "currency", currency: "USD" });
+}
+export const Account = () => {
+  const { logout } = usePrivy();
+  const { cancelBurner, usingBurner } = useBurnerAccount();
+  const { price, loading } = useEthToUsd();
+
+  const {
+    playerAccount: { address, entity },
+  } = useAccountClient();
+
+  const handleLogout = async () => {
+    if (usingBurner) cancelBurner();
+    else await logout();
+  };
+
+  const balance = useBalance(address).value ?? 0n;
+
+  return (
+    <div className="absolute left-4 top-4 flex flex-col gap-1 rounded bg-secondary p-2">
+      <p className="flex items-center gap-2">
+        {address.slice(0, 7)}
+        <button onClick={handleLogout} className="btn btn-primary btn-sm">
+          <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
+        </button>
+      </p>
+      <hr />
+      <div className="flex items-center justify-center">
+        {loading && <p>Loading...</p>}
+        {!loading && price ? <p>{ethToUSD(balance, price)}</p> : <p>{formatEther(balance)}ETH</p>}
+      </div>
+      <hr />
+      <Points playerId={entity} />
+    </div>
+  );
+};
+
+const Points = ({ playerId }: { playerId: Entity }) => {
+  const { tables } = useCore();
+  const greenPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Green, playerId })?.value ?? 0n;
+  const redPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Red, playerId })?.value ?? 0n;
+  const bluePoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Blue, playerId })?.value ?? 0n;
+
+  return (
+    <div className="grid w-full grid-cols-[2rem_1fr] items-center">
+      <div className="h-4 w-4 rounded-full bg-green-500" />
+      <p>{formatNumber(greenPoints)}</p>
+      <div className="h-4 w-4 rounded-full bg-red-500" />
+      <p>{formatNumber(redPoints)}</p>
+      <div className="h-4 w-4 rounded-full bg-blue-500" />
+      <p>{formatNumber(bluePoints)}</p>
+    </div>
+  );
+};
