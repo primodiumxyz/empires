@@ -64,17 +64,17 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     >
       <div className="flex flex-col items-center gap-2 text-white">
         <div className="text-center">
-          <p className="absolute top-4 translate-x-1/2">
+          <p className="absolute left-1/2 top-4 -translate-x-1/2 transform font-mono text-xs opacity-70">
             ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
           </p>
           <p className="font-bold">{entityToPlanetName(entity)}</p>
         </div>
-        <div className="rounded-lg bg-white/20 p-2">
-          <p className="flex gap-2">
-            <RocketLaunchIcon className="size-6" /> {planet.destroyerCount.toLocaleString()}
+        <div className="rounded-lg bg-white/20 p-1">
+          <p className="flex items-center justify-center gap-2">
+            <RocketLaunchIcon className="size-4" /> {planet.destroyerCount.toLocaleString()}
           </p>
 
-          <div className="items-cetner flex gap-2">
+          <div className="flex items-center gap-2">
             <Tooltip tooltipContent={`Cost: ${createDestroyerPriceUsd}`}>
               <TransactionQueueMask id={`${entity}-kill-destroyer`}>
                 <button
