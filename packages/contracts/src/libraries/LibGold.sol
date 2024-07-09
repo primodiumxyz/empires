@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { pseudorandom } from "src/utils.sol";
-import { Planet, P_NPCActionThresholdsData, P_NPCActionThresholds, P_NPCActionCosts } from "codegen/index.sol";
+import { Value, Planet, P_NPCActionThresholdsData, P_NPCActionThresholds, P_NPCActionCosts } from "codegen/index.sol";
 import { ENPCAction } from "codegen/common.sol";
 
 library LibGold {
@@ -11,6 +11,7 @@ library LibGold {
     if (goldCount == 0) return;
 
     uint256 randomValue = pseudorandom(uint256(planetId) + 128, 10_000);
+    Value.set(planetId, randomValue);
     _spendGold(planetId, randomValue);
   }
 
@@ -25,6 +26,7 @@ library LibGold {
       uint256 destroyerPrice = P_NPCActionCosts.get(ENPCAction.BuyDestroyers);
       if (destroyerPrice == 0) return;
       uint256 destroyersToBuy = goldCount / destroyerPrice;
+      if (destroyersToBuy == 0) return;
       uint256 newGoldCount = goldCount - (destroyersToBuy * destroyerPrice);
       Planet.setDestroyerCount(planetId, Planet.getDestroyerCount(planetId) + destroyersToBuy);
       Planet.setGoldCount(planetId, newGoldCount);

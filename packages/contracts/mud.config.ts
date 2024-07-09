@@ -49,6 +49,12 @@ export const worldInput = {
       },
     },
 
+    Value: {
+      key: ["planetId"],
+      schema: { planetId: "bytes32", value: "uint256" },
+      type: "offchainTable",
+    },
+
     // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
     Planet: {
       key: ["id"],
