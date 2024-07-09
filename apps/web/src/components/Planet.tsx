@@ -12,6 +12,7 @@ import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { useTimeLeft } from "@/hooks/useTimeLeft";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "blue",
@@ -30,7 +31,8 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const calls = useContractCalls();
   const planetFaction = (planet?.factionId ?? 0) as EEmpire;
 
-  const { price, loading } = useEthPrice();
+  const { price } = useEthPrice();
+  const { gameOver } = useTimeLeft();
 
   const [left, top] = useMemo(() => {
     const cartesianCoord = convertAxialToCartesian(
@@ -56,7 +58,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       size={tileSize}
       className="absolute -translate-x-1/2 -translate-y-1/2"
       style={{
-        top: `${top}px`,
+        top: `${top + 50}px`,
         left: `${left}px`,
       }}
     >
@@ -76,9 +78,9 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
             <Tooltip tooltipContent={`Cost: ${createDestroyerPriceUsd}`}>
               <TransactionQueueMask id={`${entity}-kill-destroyer`}>
                 <button
-                  onClick={() => calls.removeDestroyer(entity)}
+                  onClick={() => calls.removeDestroyer(entity, killDestroyerPriceWei)}
                   className="btn btn-square btn-xs"
-                  disabled={planet.factionId == 0}
+                  disabled={gameOver || planet.factionId == 0}
                 >
                   <MinusIcon className="size-4" />
                 </button>
@@ -88,9 +90,9 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
             <Tooltip tooltipContent={`Cost: ${killDestroyerPriceUsd}`}>
               <TransactionQueueMask id={`${entity}-create-destroyer`}>
                 <button
-                  onClick={() => calls.createDestroyer(entity)}
+                  onClick={() => calls.createDestroyer(entity, createDestroyerPriceWei)}
                   className="btn btn-square btn-xs"
-                  disabled={planet.factionId == 0}
+                  disabled={gameOver || planet.factionId == 0}
                 >
                   <PlusIcon className="size-4" />
                 </button>
