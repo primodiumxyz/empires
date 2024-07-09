@@ -31,36 +31,60 @@ export const Account = () => {
 
   return (
     <div className="absolute left-4 top-4 flex flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
-      <p className="flex items-center gap-2">
-        {address.slice(0, 7)}
-        <button onClick={handleLogout} className="btn btn-primary btn-sm">
-          <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
-        </button>
-      </p>
-      <hr />
-      {loading && <p>Loading...</p>}
-      {!loading && price && <p>{ethToUSD(balance, price)}</p>}
-      <p className="text-xs">{formatEther(balance)}ETH</p>
-      <hr />
-      <Points playerId={entity} />
+      <p className="text-left text-xs font-bold uppercase">Account</p>
+      <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
+        <p className="flex items-center gap-2">
+          {address.slice(0, 7)}
+          <button onClick={handleLogout} className="btn btn-primary btn-sm">
+            <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
+          </button>
+        </p>
+        <hr />
+        {loading && <p>Loading...</p>}
+        {!loading && price && <p>{ethToUSD(balance, price)}</p>}
+        <p className="text-xs">{formatEther(balance)}ETH</p>
+        <hr />
+        <Points playerId={entity} />
+      </div>
     </div>
   );
 };
 
 const Points = ({ playerId }: { playerId: Entity }) => {
   const { tables } = useCore();
-  const greenPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Green, playerId })?.value ?? 0n;
-  const redPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Red, playerId })?.value ?? 0n;
-  const bluePoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Blue, playerId })?.value ?? 0n;
+  const greenPlayerPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Green, playerId })?.value ?? 0n;
+  const redPlayerPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Red, playerId })?.value ?? 0n;
+  const bluePlayerPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Blue, playerId })?.value ?? 0n;
+
+  const greenEmpirePoints = tables.Faction.useWithKeys({ id: EEmpire.Green })?.pointsIssued ?? 0n;
+  const redEmpirePoints = tables.Faction.useWithKeys({ id: EEmpire.Red })?.pointsIssued ?? 0n;
+  const blueEmpirePoints = tables.Faction.useWithKeys({ id: EEmpire.Blue })?.pointsIssued ?? 0n;
+
+  const greenPctTimes10000 = greenEmpirePoints > 0 ? (greenPlayerPoints * 10000n) / greenEmpirePoints : 0n;
+  const redPctTimes10000 = redEmpirePoints > 0 ? (redPlayerPoints * 10000n) / redEmpirePoints : 0n;
+  const bluePctTimes10000 = blueEmpirePoints > 0 ? (bluePlayerPoints * 10000n) / blueEmpirePoints : 0n;
+
+  const greenPct = Number(greenPctTimes10000) / 100;
+  const redPct = Number(redPctTimes10000) / 100;
+  const bluePct = Number(bluePctTimes10000) / 100;
 
   return (
     <div className="grid w-full grid-cols-[2rem_1fr] items-center">
       <div className="h-4 w-4 rounded-full bg-green-500" />
-      <p>{formatNumber(greenPoints)}</p>
+      <p>
+        {formatEther(greenPlayerPoints)}{" "}
+        {greenPct > 0 && <span className="text-xs opacity-70">({formatNumber(greenPct)}%)</span>}
+      </p>
       <div className="h-4 w-4 rounded-full bg-red-500" />
-      <p>{formatNumber(redPoints)}</p>
+      <p>
+        {formatEther(redPlayerPoints)}
+        {redPct > 0 && <span className="text-xs opacity-70">({formatNumber(redPct)}%)</span>}
+      </p>
       <div className="h-4 w-4 rounded-full bg-blue-500" />
-      <p>{formatNumber(bluePoints)}</p>
+      <p>
+        {formatEther(bluePlayerPoints)}
+        {bluePct > 0 && <span className="text-xs opacity-70">({formatNumber(bluePct)}%)</span>}
+      </p>
     </div>
   );
 };
