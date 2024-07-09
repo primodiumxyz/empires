@@ -57,6 +57,13 @@ export type CoreConfig = {
    * Setups up systems to keep core tables and simplified tables in sync with contract tables
    */
   runSystems?: boolean;
+  /**
+   * Enable dev tools (default: false)
+   *
+   * If enabled, this will mount dev tools from Reactive Tables into the app, effectively showing a button
+   * in the bottom right corner of the screen that opens the dev tools UI.
+   */
+  devTools?: boolean;
 };
 
 type MudConfig = typeof mudConfig;
