@@ -9,7 +9,6 @@ import { LibPoint } from "libraries/LibPoint.sol";
 import { POINTS_UNIT, OTHER_EMPIRE_COUNT } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
 
-
 /**
  * @title ActionSystem
  * @dev A contract that handles actions related to creating and killing destroyers on a planet.

@@ -11,7 +11,6 @@ import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
 import { EMPIRES_NAMESPACE_ID, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "src/constants.sol";
 
-
 contract ActionSystemTest is PrimodiumTest {
   bytes32 planetId;
   bytes32 aliceId;
@@ -30,17 +29,17 @@ contract ActionSystemTest is PrimodiumTest {
 
   function testCreateDestroyer() public {
     uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
-    world.Empires__createDestroyer{value: cost}(planetId);
+    world.Empires__createDestroyer{ value: cost }(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 1);
   }
 
   function testKillDestroyer() public {
     uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
-    world.Empires__createDestroyer{value: cost}(planetId);
+    world.Empires__createDestroyer{ value: cost }(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 1);
 
     cost = LibPrice.getTotalCost(EPlayerAction.KillDestroyer, Planet.getFactionId(planetId), false);
-    world.Empires__killDestroyer{value: cost}(planetId);
+    world.Empires__killDestroyer{ value: cost }(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 0);
   }
 
@@ -67,12 +66,20 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateDestroyer);
 
     vm.startPrank(alice);
-    world.Empires__createDestroyer{value: totalCost}(planetId);
-    assertGt(LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, empire, true), totalCost, "Total Cost should have increased");
+    world.Empires__createDestroyer{ value: totalCost }(planetId);
+    assertGt(
+      LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, empire, true),
+      totalCost,
+      "Total Cost should have increased"
+    );
     assertGt(ActionCost.get(empire, EPlayerAction.CreateDestroyer), actionCost, "Action Cost should have increased");
     assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), OTHER_EMPIRE_COUNT * POINTS_UNIT, "Player should have received points");
+    assertEq(
+      PointsMap.get(EEmpire.Red, aliceId),
+      OTHER_EMPIRE_COUNT * POINTS_UNIT,
+      "Player should have received points"
+    );
   }
 
   function testPurchaseActionRegress() public {
@@ -84,8 +91,12 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
 
     vm.startPrank(bob);
-    world.Empires__killDestroyer{value: totalCost}(planetId);
-    assertGt(LibPrice.getTotalCost(EPlayerAction.KillDestroyer, empire, false), totalCost, "Total Cost should have increased");
+    world.Empires__killDestroyer{ value: totalCost }(planetId);
+    assertGt(
+      LibPrice.getTotalCost(EPlayerAction.KillDestroyer, empire, false),
+      totalCost,
+      "Total Cost should have increased"
+    );
     assertGt(ActionCost.get(empire, EPlayerAction.KillDestroyer), actionCost, "Action Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
