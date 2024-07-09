@@ -3,7 +3,7 @@ import { Dispatch, forwardRef, SetStateAction } from "react";
 import { cn } from "@/util/client";
 
 type CheatcodesButtonProps = {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   className?: string;
 };
 
