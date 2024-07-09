@@ -1,9 +1,8 @@
+import { createLocalTable, Entity, Type } from "@primodiumxyz/reactive-tables";
 import { CreateNetworkResult } from "@core/lib/types";
 import { Notification, NotificationType } from "@core/tables/types";
 
-import { createLocalTable, Entity, Type } from "@primodiumxyz/reactive-tables";
-
-export const NotificationQueueTable = ({ world }: CreateNetworkResult) => {
+export const createNotificationQueueTable = ({ world }: CreateNetworkResult) => {
   const table = createLocalTable(
     world,
     {
