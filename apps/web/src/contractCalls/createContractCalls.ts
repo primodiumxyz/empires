@@ -26,5 +26,6 @@ export const createContractCalls = (
     ...actionCalls,
     ...updateCalls,
     ...resetCalls,
+    requestDrip,
   };
 };

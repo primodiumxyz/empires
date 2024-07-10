@@ -4,9 +4,32 @@ import { createCheatcode } from "@/util/cheatcodes";
 
 export const setupCheatcodes = (core: Core, accountClient: AccountClient, contractCalls: ContractCalls) => {
   const { tables } = core;
-  const { setTableValue } = contractCalls;
+  const { createDestroyer, removeDestroyer, requestDrip, setTableValue } = contractCalls;
 
   const cheatcodes = [
+    /* ------------------------------- DESTROYERS ------------------------------- */
+    // create destroyers on a planet
+    // ...
+    // remove destroyers from a planet
+    // ...
+    // send destroyers from a planet to another
+    // ...
+    /* ---------------------------------- TIME ---------------------------------- */
+    // advance turns
+    // ...
+    // fast forward to end of game
+    // ...
+    /* ---------------------------------- GOLD ---------------------------------- */
+    // generate gold on selected planets (or all planets)
+    // ...
+    // spend gold on destroyers for a planet
+    // ...
+    /* --------------------------------- SHARES --------------------------------- */
+    // mint shares from an empire
+    // ...
+    // increase pot
+    // ...
+    //
     // createCheatcode({
     //   title: "Set counter",
     //   caption: "Set the counter to an arbitrary value.",
