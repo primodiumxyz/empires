@@ -101,8 +101,6 @@ contract RewardsSystemTest is PrimodiumTest {
     world.Empires__claimVictory(EEmpire.Red);
 
     Faction.setPointsIssued(EEmpire.Red, 100 ether);
-    console.log("bob balance", bob.balance);
-    console.log("alice balance", alice.balance);
 
     PointsMap.set(EEmpire.Red, addressToId(alice), playerPoints);
     PointsMap.set(EEmpire.Red, addressToId(bob), playerPoints);
@@ -112,7 +110,6 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.prank(alice);
     world.Empires__withdrawEarnings();
     uint256 bobPoints = PointsMap.get(EEmpire.Red, addressToId(bob));
-    console.log("bobPoints", bobPoints);
     vm.prank(bob);
     world.Empires__withdrawEarnings();
     // 0.1% difference
