@@ -2,6 +2,7 @@ import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
+import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
@@ -9,6 +10,7 @@ import { cn } from "@/util/client";
 export const Pot = () => {
   const { utils } = useCore();
   const { price, loading } = useEthPrice();
+  const calls = useContractCalls();
 
   const { pot, rake } = usePot();
 
@@ -28,6 +30,9 @@ export const Pot = () => {
           {loading && <p>Loading...</p>}
           {!loading && price && <p>{utils.ethToUSD(rake, price)}</p>}
           <p className="text-xs">{formatEther(rake)}ETH</p>
+          <button className="btn btn-xs" onClick={calls.withdrawRake}>
+            Withdraw
+          </button>
         </div>
       </div>
       <div className="flex flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
