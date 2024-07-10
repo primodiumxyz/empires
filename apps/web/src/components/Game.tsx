@@ -1,7 +1,7 @@
 import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { defaultEntity } from "@primodiumxyz/reactive-tables";
-import Cheatcodes from "@/components/Cheatcodes";
+import { Cheatcodes } from "@/components/Cheatcodes";
 import { Logout } from "@/components/Logout";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useTxExecute } from "@/hooks/useTxExecute";
