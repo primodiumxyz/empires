@@ -8,7 +8,7 @@ import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 import { createPlanets } from "libraries/CreatePlanets.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { RakeTaken, WinningEmpire, P_GameConfig } from "codegen/index.sol";
+import { WinningEmpire, P_GameConfig } from "codegen/index.sol";
 
 contract ResetSystem is System {
   function resetGame() public {
@@ -22,7 +22,6 @@ contract ResetSystem is System {
     // Does not reset Player table, that's fine. it only contains id and spent
     // by not clearing Player.spent, we can keep track of how much each player has spent over multiple matches
 
-    RakeTaken.set(false);
     WinningEmpire.set(EEmpire.NULL);
 
     P_GameConfig.setGameOverBlock(block.number + 1_000);
