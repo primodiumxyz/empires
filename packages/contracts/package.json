@@ -1,9 +1,10 @@
 {
-  "name": "contracts",
+  "name": "@primodiumxyz/contracts",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "type": "module",
+  "main": "index.ts",
   "scripts": {
     "build": "pnpm run build:lib && pnpm run build:mud && pnpm run build:abi-ts",
     "build:abi-ts": "mud abi-ts",

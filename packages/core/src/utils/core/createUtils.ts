@@ -1,4 +1,4 @@
-import { Tables } from "@/lib/types";
+import { Tables } from "@core/lib/types";
 
 export const createUtils = (tables: Tables) => {
   return {};

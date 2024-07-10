@@ -1,5 +1,6 @@
+import { Core } from "@core/lib/types";
+
 import { namespaceWorld } from "@primodiumxyz/reactive-tables";
-import { Core } from "@/lib/types";
 
 export const setupDoubleCounter = (core: Core) => {
   const {
