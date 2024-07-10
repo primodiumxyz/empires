@@ -3,7 +3,7 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 
 export const createActionCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
   const createDestroyer = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
-    await execute({
+    return await execute({
       functionName: "Empires__createDestroyer",
       args: [planetId],
       options: { value: payment },
@@ -16,7 +16,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
   };
 
   const killDestroyer = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
-    await execute({
+    return await execute({
       functionName: "Empires__killDestroyer",
       args: [planetId],
       options: { value: payment },
