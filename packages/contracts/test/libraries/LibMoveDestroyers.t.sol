@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, PlanetData, P_NPCMoveThresholds } from "codegen/index.sol";
+import { Planet, PlanetData, P_NPCMoveThresholds, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
 import { LibMoveDestroyers } from "libraries/LibMoveDestroyers.sol";
@@ -18,6 +18,7 @@ contract LibMoveDestroyersTest is PrimodiumTest {
       i++;
     } while (Planet.getFactionId(planetId) == EEmpire.NULL);
     vm.startPrank(creator);
+    P_GameConfig.setGameOverBlock(block.number + 100000);
     vm.roll(1);
     vm.warp(1);
     vm.prevrandao(bytes32("1"));
@@ -26,14 +27,14 @@ contract LibMoveDestroyersTest is PrimodiumTest {
   function testEarlyExit() public {
     Planet.setFactionId(planetId, EEmpire.NULL);
     bool moved = LibMoveDestroyers.moveDestroyers(planetId);
-    assertFalse(moved);
+    assertFalse(moved, "shouldnt have moved");
     moved = LibMoveDestroyers.moveDestroyers(planetId);
     Planet.setFactionId(planetId, EEmpire.Red);
     moved = LibMoveDestroyers.moveDestroyers(planetId);
-    assertFalse(moved);
+    assertFalse(moved, "shouldnt have moved again");
     Planet.setDestroyerCount(planetId, 1);
     moved = LibMoveDestroyers.moveDestroyers(planetId);
-    assertTrue(moved);
+    assertTrue(moved, "should have moved");
   }
 
   function testGetPlanetTargetNoMovement() public {
