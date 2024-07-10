@@ -49,11 +49,6 @@ export const worldInput = {
       },
     },
 
-    RakeTaken: {
-      key: [],
-      schema: { value: "bool" },
-    },
-
     Turn: {
       key: [],
       schema: { nextTurnBlock: "uint256", empire: "EEmpire" },

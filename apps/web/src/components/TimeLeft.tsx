@@ -3,6 +3,7 @@ import { formatEther } from "viem";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatTime } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePot } from "@/hooks/usePot";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 
@@ -43,26 +44,27 @@ const ClaimVictoryButtons = () => {
 };
 
 const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
-  const { tables } = useCore();
+  const { tables, utils } = useCore();
   const {
     playerAccount: { entity },
   } = useAccountClient();
-  const _pot = usePot();
-  const rakeTaken = tables.RakeTaken.use()?.value ?? false;
-  const rake = tables.P_PointConfig.use()?.pointRake ?? 0n;
+  const { pot } = usePot();
+  const { price } = useEthPrice();
 
-  const pot = rakeTaken ? _pot : (_pot * (10_000n - rake)) / 10_000n;
   const factionPoints = tables.Faction.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const playerFactionPoints = tables.Value_PointsMap.useWithKeys({ factionId: empire, playerId: entity })?.value ?? 0n;
 
   const playerPot = factionPoints ? (pot * playerFactionPoints) / factionPoints : 0n;
+  const playerPotUSD = price ? utils.ethToUSD(playerPot, price) : "loading...";
 
   return (
     <>
       {playerPot > 0n && (
         <div className="flex flex-col">
-          <p>You earned ({formatEther(playerPot)}ETH)!</p>
-          <button>Withdraw</button>
+          <p>
+            You earned {playerPotUSD} ({formatEther(playerPot)}ETH)!
+          </p>
+          <button className="btn btn-primary btn-sm">Withdraw</button>
         </div>
       )}
       {playerPot == 0n && <p>Sorry, you earned nothing. Better luck next time!</p>}
