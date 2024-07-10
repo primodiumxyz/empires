@@ -77,12 +77,12 @@ const Points = ({ playerId }: { playerId: Entity }) => {
       </p>
       <div className="h-4 w-4 rounded-full bg-red-500" />
       <p>
-        {formatEther(redPlayerPoints)}
+        {formatEther(redPlayerPoints)}{" "}
         {redPct > 0 && <span className="text-xs opacity-70">({formatNumber(redPct)}%)</span>}
       </p>
       <div className="h-4 w-4 rounded-full bg-blue-500" />
       <p>
-        {formatEther(bluePlayerPoints)}
+        {formatEther(bluePlayerPoints)}{" "}
         {bluePct > 0 && <span className="text-xs opacity-70">({formatNumber(bluePct)}%)</span>}
       </p>
     </div>
