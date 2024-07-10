@@ -1,17 +1,18 @@
+import { Abi, ContractFunctionName, TransactionReceipt } from "viem";
+
 import { AccountClient, Core, WorldAbiType } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { TxQueueOptions } from "@core/tables/types";
 import { _execute } from "@core/txExecute/_execute";
 import { encodeSystemCall, SystemCall } from "@core/txExecute/encodeSystemCall";
 import { functionSystemIds } from "@core/txExecute/functionSystemIds";
-import { Abi, ContractFunctionName, TransactionReceipt } from "viem";
 
 export type ExecuteCallOptions<abi extends Abi, functionName extends ContractFunctionName<abi>> = Omit<
   SystemCall<abi, functionName>,
   "abi" | "systemId"
 > & {
   abi?: abi;
-  options?: { gas?: bigint };
+  options?: { gas?: bigint; value?: bigint };
   txQueueOptions?: TxQueueOptions;
   onComplete?: (receipt: TransactionReceipt | undefined) => void | undefined;
 };
