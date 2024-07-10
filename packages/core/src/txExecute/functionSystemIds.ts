@@ -18,4 +18,6 @@ export const functionSystemIds: {
 
   Empires__claimVictory: getSystemId("RewardsSystem"),
   Empires__withdrawEarnings: getSystemId("RewardsSystem"),
+
+  Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
 };

@@ -24,5 +24,16 @@ export const createEndGameCalls = (core: Core, { playerAccount }: AccountClient,
     });
   };
 
-  return { claimVictory, withdrawEarnings };
+  const withdrawRake = async (options?: Partial<TxQueueOptions>) => {
+    await execute({
+      functionName: "Admin__withdrawRake",
+      args: [],
+      txQueueOptions: {
+        id: `withdraw-rake`,
+        ...options,
+      },
+    });
+  };
+
+  return { claimVictory, withdrawEarnings, withdrawRake };
 };
