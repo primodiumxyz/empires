@@ -15,4 +15,7 @@ export const functionSystemIds: {
   Empires__killDestroyer: getSystemId("ActionSystem"),
   Empires__updateWorld: getSystemId("UpdateSystem"),
   Empires__resetGame: getSystemId("ResetSystem"),
+
+  Empires__claimVictory: getSystemId("RewardsSystem"),
+  Empires__withdrawEarnings: getSystemId("RewardsSystem"),
 };
