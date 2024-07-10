@@ -12,7 +12,7 @@ export const TimeLeft = () => {
   const { timeLeftMs, gameOver } = useTimeLeft();
   return (
     <div className="absolute top-4 flex w-72 flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
-      {!gameOver && <p>Round ends in {formatTime(timeLeftMs ?? 0 / 1000)} </p>}
+      {!gameOver && <p>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)} </p>}
       {gameOver && <GameOver />}
     </div>
   );
