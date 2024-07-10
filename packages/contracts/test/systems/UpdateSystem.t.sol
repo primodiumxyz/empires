@@ -15,6 +15,7 @@ contract UpdateSystemTest is PrimodiumTest {
 
     vm.startPrank(creator);
     P_GameConfig.setTurnLengthBlocks(turnLength);
+    P_GameConfig.setGameOverBlock(block.number + 100000);
     uint256 i = 0;
     do {
       planetId = PlanetsSet.getPlanetIds()[i];

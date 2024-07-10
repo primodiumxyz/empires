@@ -28,7 +28,7 @@ contract PostDeploy is Script {
     createPrototypes(world);
     console.log("Prototypes created");
 
-    P_GameConfig.setGameOverBlock(block.number + 100_000);
+    P_GameConfig.setGameOverBlock(block.number + 100);
 
     createPlanets();
     initPrice();

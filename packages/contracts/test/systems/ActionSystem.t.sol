@@ -2,10 +2,12 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet } from "codegen/index.sol";
+import { Planet, P_PointConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 
 contract ActionSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -20,17 +22,17 @@ contract ActionSystemTest is PrimodiumTest {
 
   function testCreateDestroyer() public {
     uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
-    world.Empires__createDestroyer{value: cost}(planetId);
+    world.Empires__createDestroyer{ value: cost }(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 1);
   }
 
   function testKillDestroyer() public {
     uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
-    world.Empires__createDestroyer{value: cost}(planetId);
+    world.Empires__createDestroyer{ value: cost }(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 1);
 
     cost = LibPrice.getTotalCost(EPlayerAction.KillDestroyer, Planet.getFactionId(planetId), false);
-    world.Empires__killDestroyer{value: cost}(planetId);
+    world.Empires__killDestroyer{ value: cost }(planetId);
     assertEq(Planet.get(planetId).destroyerCount, 0);
   }
 
@@ -49,5 +51,15 @@ contract ActionSystemTest is PrimodiumTest {
 
     vm.expectRevert("[ActionSystem] Planet is not owned");
     world.Empires__createDestroyer(nonOwnedPlanetId);
+  }
+
+  function testTakeRake() public {
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
+    vm.prank(creator);
+    P_PointConfig.setPointRake(5_000); // out of 10_000 so 50%
+    world.Empires__createDestroyer{ value: cost }(planetId);
+
+    assertEq(Balances.get(EMPIRES_NAMESPACE_ID), cost / 2);
+    assertEq(Balances.get(ADMIN_NAMESPACE_ID), cost / 2);
   }
 }
