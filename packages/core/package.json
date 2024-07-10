@@ -23,7 +23,7 @@
     "@latticexyz/store": "2.0.9",
     "@latticexyz/world-modules": "2.0.9",
     "@primodiumxyz/contracts": "workspace:*",
-    "@primodiumxyz/reactive-tables": "^3.3.1",
+    "@primodiumxyz/reactive-tables": "^3.5.0",
     "@primodiumxyz/sync-stack": "^0.6.9",
     "abitype": "^1.0.2",
     "dayjs": "^1.11.10",
