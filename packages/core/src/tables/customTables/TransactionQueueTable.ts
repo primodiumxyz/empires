@@ -80,20 +80,11 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
       }, options.timeout ?? TX_TIMEOUT);
       run();
 
-      // TODO(TEMP): replace when reactive-tables merged & updated
-      // table.once({
-      //   filter: ({entity}) => entity === options.id,
-      //   do: () => {
-      //     clearTimeout(timeoutId);
-      //     resolve(txSuccess.get(options.id) ?? false);
-      //   }
-      // });
-      table.watch({
-        onExit: ({ entity }) => {
-          if (entity === options.id) {
-            clearTimeout(timeoutId);
-            resolve(txSuccess.get(options.id) ?? false);
-          }
+      table.once({
+        filter: ({ entity }) => entity === options.id,
+        do: () => {
+          clearTimeout(timeoutId);
+          resolve(txSuccess.get(options.id) ?? false);
         },
       });
     });
