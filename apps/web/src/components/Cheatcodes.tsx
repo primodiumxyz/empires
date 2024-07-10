@@ -59,7 +59,7 @@ export const Cheatcodes = () => {
         <CheatcodesCloseButton setOpen={setOpen} />
         {/* cheatcodes */}
         <h1 className="font-semibold uppercase text-gray-300">Cheatcodes</h1>
-        <div className="flex flex-col gap-4 overflow-auto pr-2">
+        <div className="grid gap-4 overflow-auto pr-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {cheatcodes.map((cheatcode, i) => (
             <Cheatcode key={i} cheatcode={cheatcode} index={i} activeTab={activeTab} setActiveTab={setActiveTab} />
           ))}
@@ -100,7 +100,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className={cn("flex flex-col", activeTab === index && "col-span-full")}>
       <div
         className={cn(
           "cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
