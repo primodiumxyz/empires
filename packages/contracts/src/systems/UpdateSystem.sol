@@ -5,12 +5,14 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { LibMoveDestroyers } from "libraries/LibMoveDestroyers.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
 import { LibGold } from "libraries/LibGold.sol";
+import { LibPrice } from "libraries/LibPrice.sol";
 import { Planet, Turn, TurnData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 
-contract UpdateSystem is System {
+contract UpdateSystem is EmpiresSystem {
   function _updateTurn() private returns (EEmpire) {
     TurnData memory turn = Turn.get();
 
@@ -22,7 +24,7 @@ contract UpdateSystem is System {
     return turn.empire;
   }
 
-  function updateWorld() public {
+  function updateWorld() public _onlyNotGameOver {
     EEmpire empire = _updateTurn();
 
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
@@ -43,6 +45,12 @@ contract UpdateSystem is System {
     // resolve combat for each planet
     for (uint i = 0; i < planets.length; i++) {
       LibResolveCombat.resolveCombat(empire, planets[i]);
+    }
+    
+    // generate new actions and points for each empire and action
+    for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {
+      LibPrice.empirePointCostDown(EEmpire(i));
+      LibPrice.empirePlayerActionsCostDown(EEmpire(i));
     }
   }
 }

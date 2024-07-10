@@ -17,7 +17,7 @@ function createPlanets() {
   );
   PlanetsSet.add(redPlanetId);
   FactionPlanetsSet.add(EEmpire.Red, redPlanetId);
-  Faction.set(EEmpire.Red, EOrigin.North, 0, 0, new uint256[](uint256(EPlayerAction.LENGTH)));
+  Faction.set(EEmpire.Red, EOrigin.North, 0, 0);
 
   bytes32 bluePlanetId = coordToId(-2, 1);
   Planet.set(
@@ -26,7 +26,7 @@ function createPlanets() {
   );
   PlanetsSet.add(bluePlanetId);
   FactionPlanetsSet.add(EEmpire.Blue, bluePlanetId);
-  Faction.set(EEmpire.Blue, EOrigin.Southwest, 0, 0, new uint256[](uint256(EPlayerAction.LENGTH)));
+  Faction.set(EEmpire.Blue, EOrigin.Southwest, 0, 0);
 
   bytes32 greenPlanetId = coordToId(1, 1);
   Planet.set(
@@ -35,7 +35,7 @@ function createPlanets() {
   );
   PlanetsSet.add(greenPlanetId);
   FactionPlanetsSet.add(EEmpire.Green, greenPlanetId);
-  Faction.set(EEmpire.Green, EOrigin.Southeast, 0, 0, new uint256[](uint256(EPlayerAction.LENGTH)));
+  Faction.set(EEmpire.Green, EOrigin.Southeast, 0, 0);
 
   bytes32 planet4 = coordToId(0, -1);
   Planet.set(

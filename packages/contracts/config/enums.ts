@@ -31,7 +31,7 @@ export enum EMovement {
 }
 
 export enum EPlayerAction {
-  CreateDestroyer,
+  CreateDestroyer = 1,
   KillDestroyer,
   LENGTH,
 }

@@ -1,5 +1,6 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
+import { POINTS_UNIT } from "./constants";
 import { EEmpire, ENPCAction } from "./enums";
 
 const percentsToThresholds = <T extends Record<string, number>>(percents: T): Record<keyof T, bigint> => {
@@ -17,6 +18,11 @@ const percentsToThresholds = <T extends Record<string, number>>(percents: T): Re
   return thresholds;
 };
 
+const scaleRake = (rakePct: number) => {
+  if (rakePct < 0 || rakePct > 1) throw new Error("rakePct must be between 0 and 100");
+  return BigInt(Math.round(rakePct * 10000));
+};
+
 export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = {
   /* ---------------------------------- World --------------------------------- */
   World: {
@@ -25,6 +31,21 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_GameConfig: {
         turnLengthBlocks: 1n,
         goldGenRate: 1n,
+        gameOverBlock: 0n, // currently handled in PostDeploy
+      },
+      P_PointConfig: {
+        pointUnit: BigInt(POINTS_UNIT),
+        minPointCost: BigInt(POINTS_UNIT * 0.1),
+        startPointCost: BigInt(POINTS_UNIT * 0.2),
+        pointGenRate: BigInt(POINTS_UNIT * 0.2),
+        pointCostIncrease: BigInt(POINTS_UNIT * 0.1),
+        pointRake: scaleRake(0.001), // out of 1, scales to out of 10000
+      },
+      P_ActionConfig: {
+        actionGenRate: BigInt(POINTS_UNIT/2),
+        actionCostIncrease: BigInt(POINTS_UNIT/2),
+        startActionCost: BigInt(POINTS_UNIT/2),
+        minActionCost: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
         none: 0.25,

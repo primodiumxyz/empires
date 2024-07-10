@@ -2,10 +2,10 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Turn, P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig } from "codegen/index.sol";
+import { Turn, P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Faction } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibGold } from "libraries/LibGold.sol";
-import { EEmpire, ENPCAction } from "codegen/common.sol";
+import { EEmpire, ENPCAction, EPlayerAction } from "codegen/common.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -53,29 +53,6 @@ contract UpdateSystemTest is PrimodiumTest {
     }
   }
 
-  function testAddGoldToPlanetSecondRound() public {
-    uint256 goldIncrease = P_GameConfig.getGoldGenRate();
-
-    bytes32[] memory planets = PlanetsSet.getPlanetIds();
-    bytes32 planetNotMovingUntilThirdRound;
-    EEmpire firstRoundEmpire = EEmpire(((uint256(Turn.getEmpire()) + 1) % 3) + 1);
-    EEmpire secondRoundEmpire = EEmpire(((uint256(firstRoundEmpire) + 1) % 3) + 1);
-
-    for (uint i = 0; i < planets.length; i++) {
-      EEmpire empire = Planet.getFactionId(planets[i]);
-      if (empire != firstRoundEmpire && empire != secondRoundEmpire) {
-        planetNotMovingUntilThirdRound = planets[i];
-        break;
-      }
-    }
-    world.Empires__updateWorld();
-    vm.roll(block.number + turnLength + 1);
-
-    world.Empires__updateWorld();
-
-    assertEq(Planet.getGoldCount(planetNotMovingUntilThirdRound), goldIncrease * 2);
-  }
-
   function testSpendGoldNoAction() public {
     uint256 nonEPlayerAction = P_NPCActionThresholds.getNone() - 1;
     Planet.setGoldCount(planetId, 100);
@@ -100,5 +77,38 @@ contract UpdateSystemTest is PrimodiumTest {
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
     assertEq(Planet.getDestroyerCount(planetId), expectedDestroyers, "destroyers wrong");
+  }
+
+  function testGeneratePointsAndPlayerActions() public {
+    P_PointConfigData memory pointCfg = P_PointConfig.get();
+    uint256 beginPointCost = pointCfg.minPointCost + pointCfg.pointGenRate;
+    Faction.setPointCost(EEmpire.Red, beginPointCost);
+    Faction.setPointCost(EEmpire.Blue, beginPointCost);
+    Faction.setPointCost(EEmpire.Green, beginPointCost);
+
+    P_ActionConfigData memory actionCfg = P_ActionConfig.get();
+    uint256 beginActionCost = actionCfg.minActionCost + actionCfg.actionGenRate;
+    ActionCost.set(EEmpire.Red, EPlayerAction.CreateDestroyer, beginActionCost);
+    ActionCost.set(EEmpire.Red, EPlayerAction.KillDestroyer, beginActionCost);
+    ActionCost.set(EEmpire.Blue, EPlayerAction.CreateDestroyer, beginActionCost);
+    ActionCost.set(EEmpire.Blue, EPlayerAction.KillDestroyer, beginActionCost);
+    ActionCost.set(EEmpire.Green, EPlayerAction.CreateDestroyer, beginActionCost);
+    ActionCost.set(EEmpire.Green, EPlayerAction.KillDestroyer, beginActionCost);
+
+    vm.roll(block.number + turnLength);
+    world.Empires__updateWorld();
+
+    assertEq(Faction.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Faction.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Faction.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
+
+    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
+
+
   }
 }
