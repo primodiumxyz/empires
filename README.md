@@ -1,3 +1,3 @@
-# Primodium: Empires v0.1
+# primodium-empires v0.2
 
-A fully on-chain game
+Implements v0.2 of Primodium Empires

@@ -15,7 +15,7 @@ import { useTxExecute } from "@/hooks/useTxExecute";
 /*                                 CHEATCODES                                 */
 /* -------------------------------------------------------------------------- */
 
-const Cheatcodes = () => {
+export const Cheatcodes = () => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<number | undefined>(undefined);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -162,5 +162,3 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
     </div>
   );
 };
-
-export default Cheatcodes;

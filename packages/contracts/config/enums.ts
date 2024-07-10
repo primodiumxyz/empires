@@ -2,12 +2,14 @@ export enum EEmpire {
   Red = 1,
   Blue,
   Green,
+  LENGTH,
 }
 
 export enum EOrigin {
   North = 1,
   Southeast,
   Southwest,
+  LENGTH,
 }
 export enum EDirection {
   None = 1,
@@ -17,6 +19,7 @@ export enum EDirection {
   West,
   Northwest,
   Northeast,
+  LENGTH,
 }
 
 export enum EMovement {
@@ -24,6 +27,17 @@ export enum EMovement {
   Retreat,
   Lateral,
   Expand,
+  LENGTH,
+}
+
+export enum EPlayerAction {
+  CreateDestroyer = 1,
+  KillDestroyer,
+  LENGTH,
+}
+
+export enum ENPCAction {
+  BuyDestroyers = 1,
 }
 
 export const MUDEnums = {
@@ -31,6 +45,8 @@ export const MUDEnums = {
   EOrigin: enumToArray(EOrigin),
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
+  ENPCAction: enumToArray(ENPCAction),
+  EPlayerAction: enumToArray(EPlayerAction),
 };
 
 function enumToArray(enumObj: object): [string] {

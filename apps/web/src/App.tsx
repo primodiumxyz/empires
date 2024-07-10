@@ -6,6 +6,7 @@ import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider } from "@primodiumxyz/core/react";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
+import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
 import Landing from "@/screens/Landing";
 
 const App = () => {
@@ -37,11 +38,13 @@ const App = () => {
       }}
     >
       <BurnerAccountProvider>
-        <CoreProvider {...core}>
-          <div className="flex h-screen w-screen items-center justify-center bg-neutral">
-            <Landing />
-          </div>
-        </CoreProvider>
+        <EthPriceProvider>
+          <CoreProvider {...core}>
+            <div className="flex h-screen w-screen items-center justify-center bg-neutral">
+              <Landing />
+            </div>
+          </CoreProvider>
+        </EthPriceProvider>
       </BurnerAccountProvider>
     </PrivyProvider>
   );

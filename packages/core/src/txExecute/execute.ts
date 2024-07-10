@@ -12,7 +12,7 @@ export type ExecuteCallOptions<abi extends Abi, functionName extends ContractFun
   "abi" | "systemId"
 > & {
   abi?: abi;
-  options?: { gas?: bigint };
+  options?: { gas?: bigint; value?: bigint };
   txQueueOptions?: TxQueueOptions;
   onComplete?: (receipt: TransactionReceipt | undefined) => void | undefined;
 };
