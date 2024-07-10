@@ -1,15 +1,31 @@
 import { useEffect, useState } from "react";
 import { TransactionReceipt } from "viem";
 
-import { BaseTableMetadata, createLocalTable, Entity, TableOptions, Type } from "@primodiumxyz/reactive-tables";
+import { BaseTableMetadata, createLocalTable, Entity, Table, TableOptions, Type } from "@primodiumxyz/reactive-tables";
 import { TX_TIMEOUT } from "@core/lib";
 import { CreateNetworkResult } from "@core/lib/types";
 import { TxQueueOptions } from "@core/tables/types";
 
+type TransactionQueueTable<M extends BaseTableMetadata = BaseTableMetadata> = Table<
+  {
+    metadata: Type.OptionalString;
+    type: Type.OptionalString;
+  },
+  M
+> & {
+  enqueue: (fn: () => Promise<TransactionReceipt | undefined>, options: TxQueueOptions) => Promise<boolean>;
+  run: () => Promise<void>;
+  getIndex: (id: string) => number;
+  useIndex: (id: string) => number;
+  useSize: () => number;
+  getSize: () => number;
+  getMetadata: (id: string) => object | undefined;
+};
+
 export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTableMetadata>(
   { world }: CreateNetworkResult,
   options?: TableOptions<M>,
-) {
+): TransactionQueueTable<M> {
   const queue: { id: string; fn: () => Promise<TransactionReceipt | undefined> }[] = [];
   const txSuccess = new Map<string, boolean>();
   let isRunning = false;
