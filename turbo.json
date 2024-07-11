@@ -6,7 +6,8 @@
       "persistent": true
     },
     "build": {
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "inputs": ["$TURBO_DEFAULT$", "packages/**/worlds.json"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
