@@ -1,4 +1,4 @@
-import { EEmpire, OTHER_EMPIRE_COUNT } from "@primodiumxyz/contracts";
+import { EEmpire, ENPCAction, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { Entity, Properties } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
@@ -11,6 +11,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const { playerAccount } = accountClient;
   const { updateWorld, requestDrip, setTableValue } = contractCalls;
 
+  // game
   const factions = tables.Faction.getAll();
   const planets = tables.Planet.getAll();
   const planetsData = planets
@@ -23,6 +24,14 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     })
     .filter(Boolean) as Entity[];
 
+  // config
+  const gameConfig = tables.P_GameConfig.get();
+  const pointConfig = tables.P_PointConfig.get();
+  const actionConfig = tables.P_ActionConfig.get();
+  const npcActionThresholds = tables.P_NPCActionThresholds.get();
+  const npcMoveThresholds = tables.P_NPCMoveThresholds.get();
+
+  // utils
   const getNearbyPlanetEntities = (planet: Properties<typeof tables.Planet.propertiesSchema>) => {
     const { q, r } = { q: Number(planet.q), r: Number(planet.r) };
     return [
@@ -272,7 +281,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       const factionId = empire.id as EEmpire;
       const currentPoints = tables.Value_PointsMap.getWithKeys({ factionId, playerId })?.value ?? BigInt(0);
       const currentCost = tables.Faction.getWithKeys({ id: factionId })?.pointCost ?? BigInt(0);
-      const increaseCost = tables.P_PointConfig.get()?.pointCostIncrease ?? BigInt(1);
+      const increaseCost = pointConfig?.pointCostIncrease ?? BigInt(1);
 
       const pointsToIssue = BigInt(amount.value) * BigInt(OTHER_EMPIRE_COUNT);
       const newPoints = currentPoints + pointsToIssue;
@@ -354,30 +363,6 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     },
   });
 
-  // set end game block number
-  const setEndGameBlock = createCheatcode({
-    title: "Set end game",
-    caption: "Set the end game to a specified block number",
-    inputs: {
-      blockNumber: {
-        label: "Block number",
-        inputType: "number",
-        defaultValue: BigInt(0),
-      },
-    },
-    execute: async ({ blockNumber }) => {
-      const success = await setTableValue(tables.P_GameConfig, {}, { gameOverBlock: BigInt(blockNumber.value) });
-
-      if (success) {
-        notify("success", `End game set to block ${blockNumber.value}`);
-        return true;
-      } else {
-        notify("error", `Failed to set end game block`);
-        return false;
-      }
-    },
-  });
-
   // end game
   const endGame = createCheatcode({
     title: "End game",
@@ -410,6 +395,253 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     },
   });
 
+  /* --------------------------------- CONFIG --------------------------------- */
+  const updateGameConfig = {
+    P_GameConfig: createCheatcode({
+      title: "Update game config",
+      caption: "P_GameConfig",
+      inputs: {
+        turnLengthBlocks: {
+          label: "Turn length blocks",
+          inputType: "number",
+          defaultValue: gameConfig?.turnLengthBlocks ?? BigInt(1),
+        },
+        goldGenRate: {
+          label: "Gold generation rate",
+          inputType: "number",
+          defaultValue: gameConfig?.goldGenRate ?? BigInt(1),
+        },
+        gameOverBlock: {
+          label: "Game over block",
+          inputType: "number",
+          defaultValue: gameConfig?.gameOverBlock ?? BigInt(0),
+        },
+      },
+      execute: async (properties) => {
+        const success = await setTableValue(
+          tables.P_GameConfig,
+          {},
+          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
+        );
+
+        if (success) {
+          notify("success", "Game config updated");
+          return true;
+        } else {
+          notify("error", "Failed to update game config");
+          return false;
+        }
+      },
+    }),
+
+    P_PointConfig: createCheatcode({
+      title: "Update point config",
+      caption: "P_PointConfig",
+      inputs: {
+        pointUnit: {
+          label: "Point unit",
+          inputType: "number",
+          defaultValue: pointConfig?.pointUnit ?? BigInt(POINTS_UNIT),
+        },
+        minPointCost: {
+          label: "Min point cost",
+          inputType: "number",
+          defaultValue: pointConfig?.minPointCost ?? BigInt(POINTS_UNIT * 0.1),
+        },
+        startPointCost: {
+          label: "Start point cost",
+          inputType: "number",
+          defaultValue: pointConfig?.startPointCost ?? BigInt(POINTS_UNIT * 0.2),
+        },
+        pointGenRate: {
+          label: "Point generation rate",
+          inputType: "number",
+          defaultValue: pointConfig?.pointGenRate ?? BigInt(POINTS_UNIT * 0.2),
+        },
+        pointCostIncrease: {
+          label: "Point cost increase",
+          inputType: "number",
+          defaultValue: pointConfig?.pointCostIncrease ?? BigInt(POINTS_UNIT * 0.1),
+        },
+        pointRake: {
+          label: "Point rake",
+          inputType: "number",
+          defaultValue: pointConfig?.pointRake ?? BigInt(10),
+        },
+      },
+      execute: async (properties) => {
+        const success = await setTableValue(
+          tables.P_PointConfig,
+          {},
+          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
+        );
+
+        if (success) {
+          notify("success", "Point config updated");
+          return true;
+        } else {
+          notify("error", "Failed to update point config");
+          return false;
+        }
+      },
+    }),
+
+    P_ActionConfig: createCheatcode({
+      title: "Update action config",
+      caption: "P_ActionConfig",
+      inputs: {
+        actionGenRate: {
+          label: "Action generation rate",
+          inputType: "number",
+          defaultValue: actionConfig?.actionGenRate ?? BigInt(POINTS_UNIT / 2),
+        },
+        actionCostIncrease: {
+          label: "Action cost increase",
+          inputType: "number",
+          defaultValue: actionConfig?.actionCostIncrease ?? BigInt(POINTS_UNIT / 2),
+        },
+        startActionCost: {
+          label: "Start action cost",
+          inputType: "number",
+          defaultValue: actionConfig?.startActionCost ?? BigInt(POINTS_UNIT / 2),
+        },
+        minActionCost: {
+          label: "Min action cost",
+          inputType: "number",
+          defaultValue: actionConfig?.minActionCost ?? BigInt(0),
+        },
+      },
+      execute: async (properties) => {
+        const success = await setTableValue(
+          tables.P_ActionConfig,
+          {},
+          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
+        );
+
+        if (success) {
+          notify("success", "Action config updated");
+          return true;
+        } else {
+          notify("error", "Failed to update action config");
+          return false;
+        }
+      },
+    }),
+
+    P_NPCActionCosts: createCheatcode({
+      title: "Update NPC action costs",
+      caption: "P_NPCActionCosts",
+      inputs: {
+        buyDestroyers: {
+          label: "Buy destroyers (in gold)",
+          inputType: "number",
+          defaultValue:
+            tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction["BuyDestroyers"] })?.goldCost ?? BigInt(2),
+        },
+      },
+      execute: async ({ buyDestroyers }) => {
+        const success = await setTableValue(
+          tables.P_NPCActionCosts,
+          { action: ENPCAction["BuyDestroyers"] },
+          { goldCost: BigInt(buyDestroyers.value) },
+        );
+
+        if (success) {
+          notify("success", "NPC action costs updated");
+          return true;
+        } else {
+          notify("error", "Failed to update NPC action costs");
+          return false;
+        }
+      },
+    }),
+
+    // TODO: thresholds percentage
+    P_NPCActionThresholds: createCheatcode({
+      title: "Update NPC action thresholds",
+      caption: "P_NPCActionThresholds",
+      inputs: {
+        none: {
+          label: "None (0-100%)",
+          inputType: "number",
+          defaultValue: Number(npcActionThresholds?.none ?? BigInt(2000)) / 100,
+        },
+        buyDestroyers: {
+          label: "Buy destroyers (0-100%)",
+          inputType: "number",
+          defaultValue: Number(npcActionThresholds?.buyDestroyers ?? BigInt(8000)) / 100,
+        },
+      },
+      execute: async (properties) => {
+        if (Object.values(properties).reduce((acc, value) => acc + value.value, 0) !== 100) {
+          notify("error", "Thresholds must add up to 100% ");
+          return false;
+        }
+
+        const success = await setTableValue(
+          tables.P_NPCActionThresholds,
+          {},
+          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value * 100)])),
+        );
+
+        if (success) {
+          notify("success", "NPC action thresholds updated");
+          return true;
+        } else {
+          notify("error", "Failed to update NPC action thresholds");
+          return false;
+        }
+      },
+    }),
+
+    P_NPCMoveThresholds: createCheatcode({
+      title: "Update NPC move thresholds",
+      caption: "P_NPCMoveThresholds",
+      inputs: {
+        none: {
+          label: "None (0-100%)",
+          inputType: "number",
+          defaultValue: Number(npcMoveThresholds?.none ?? BigInt(2500)) / 100,
+        },
+        expand: {
+          label: "Expand (0-100%)",
+          inputType: "number",
+          defaultValue: Number(npcMoveThresholds?.expand ?? BigInt(5250)) / 100,
+        },
+        lateral: {
+          label: "Lateral (0-100%)",
+          inputType: "number",
+          defaultValue: Number(npcMoveThresholds?.lateral ?? BigInt(1500)) / 100,
+        },
+        retreat: {
+          label: "Retreat (0-100%)",
+          inputType: "number",
+          defaultValue: Number(npcMoveThresholds?.retreat ?? BigInt(750)) / 100,
+        },
+      },
+      execute: async (properties) => {
+        if (Object.values(properties).reduce((acc, value) => acc + value.value, 0) !== 100) {
+          notify("error", "Thresholds must add up to 100% ");
+          return false;
+        }
+
+        const success = await setTableValue(
+          tables.P_NPCMoveThresholds,
+          {},
+          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value * 100)])),
+        );
+
+        if (success) {
+          notify("success", "NPC move thresholds updated");
+          return true;
+        } else {
+          notify("error", "Failed to update NPC move thresholds");
+          return false;
+        }
+      },
+    }),
+  };
+
   return [
     setDestroyers,
     // sendDestroyers,
@@ -417,8 +649,8 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     generateGold,
     // givePoints,
     advanceTurns,
-    setEndGameBlock,
     endGame,
     dripEth,
+    ...Object.values(updateGameConfig),
   ];
 };
