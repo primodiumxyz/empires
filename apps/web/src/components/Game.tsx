@@ -1,11 +1,14 @@
 import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { defaultEntity } from "@primodiumxyz/reactive-tables";
+import { Cheatcodes } from "@/components/Cheatcodes";
 import { Logout } from "@/components/Logout";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useTxExecute } from "@/hooks/useTxExecute";
 
 const Game = () => {
+  const DEV = import.meta.env.PRI_DEV === "true";
+
   const { tables } = useCore();
   const count = tables.Counter.use()?.value;
   const doubleCount = tables.DoubleCounter.use()?.value;
@@ -23,18 +26,21 @@ const Game = () => {
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4">
-      <Logout />
+    <>
+      <div className="relative flex h-full w-full flex-col items-center justify-center gap-4">
+        <Logout />
 
-      <h1 className="text-lg font-bold">Primodium Template</h1>
-      <img src={"primodium.jpg"} className="logo w-32" alt="Vite logo" />
-      <TransactionQueueMask id={defaultEntity} className="card">
-        <button className="btn btn-primary flex flex-col" onClick={handleIncrement}>
-          <p>count is {count ? formatNumber(count) : "N/A"}</p>
-          <p>doubled count is {doubleCount ? formatNumber(doubleCount) : "N/A"}</p>
-        </button>
-      </TransactionQueueMask>
-    </div>
+        <h1 className="text-lg font-bold">Primodium Template</h1>
+        <img src={"primodium.jpg"} className="logo w-32" alt="Vite logo" />
+        <TransactionQueueMask id={defaultEntity} className="card">
+          <button className="btn btn-primary flex flex-col" onClick={handleIncrement}>
+            <p>count is {count ? formatNumber(count) : "N/A"}</p>
+            <p>doubled count is {doubleCount ? formatNumber(doubleCount) : "N/A"}</p>
+          </button>
+        </TransactionQueueMask>
+      </div>
+      {DEV && <Cheatcodes />}
+    </>
   );
 };
 

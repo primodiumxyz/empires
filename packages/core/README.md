@@ -32,7 +32,7 @@ pnpm install @primodiumxyz/core
 ### Node
 
 ```js
-import { createCore, chainConfigs } from "@primodiumxyz/core";
+import { chainConfigs, createCore } from "@primodiumxyz/core";
 
 const coreConfig = {
   chain: chainConfigs.dev,

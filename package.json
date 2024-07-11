@@ -2,15 +2,31 @@
   "name": "primodium-base",
   "version": "1.0.0",
   "description": "",
-  "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build"
-  },
   "keywords": [],
-  "author": "",
   "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "pnpm eslint --cache --fix .",
+    "prepare": "husky && husky install",
+    "sort-package-json": "npx sort-package-json package.json 'packages/*/package.json' 'apps/*/package.json'"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,css,md,mdx,sol}": "prettier --write",
+    "package.json": "pnpm sort-package-json"
+  },
   "devDependencies": {
-    "turbo": "^2.0.4"
+    "@eslint/js": "^9.6.0",
+    "@types/eslint__js": "^8.42.3",
+    "eslint": "^9.6.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "prettier": "^3.3.2",
+    "turbo": "^2.0.4",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^7.16.0"
   },
   "packageManager": "pnpm@8.15.8",
   "engines": {
