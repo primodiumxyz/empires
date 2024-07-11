@@ -13,8 +13,8 @@ import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules
 
 contract PostDeploy is Script {
   function run(address worldAddress) external {
-    // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    // Load the private key from the `PRI_DEV_PKEY` environment variable (in .env)
+    uint256 deployerPrivateKey = vm.envUint("PRI_DEV_PKEY");
 
     IWorld world = IWorld(worldAddress);
     console.log("world address:", worldAddress);

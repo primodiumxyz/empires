@@ -1,9 +1,5 @@
 import { ContractWrite, transportObserver } from "@latticexyz/common";
 import { transactionQueue, writeObserver } from "@latticexyz/common/actions";
-import { CoreConfig, ExternalAccount } from "@core/lib/types";
-import { WorldAbi } from "@core/lib/WorldAbi";
-import { normalizeAddress } from "@core/utils/global/common";
-import { addressToEntity } from "@core/utils/global/encode";
 import { Subject } from "rxjs";
 import {
   Account,
@@ -18,6 +14,11 @@ import {
   http,
 } from "viem";
 import { toAccount } from "viem/accounts";
+
+import { CoreConfig, ExternalAccount } from "@core/lib/types";
+import { WorldAbi } from "@core/lib/WorldAbi";
+import { normalizeAddress } from "@core/utils/global/common";
+import { addressToEntity } from "@core/utils/global/encode";
 
 /**
  *
@@ -56,7 +57,7 @@ export function createExternalAccount(
   walletClient.extend(transactionQueue()).extend(writeObserver({ onWrite: (write) => write$.next(write) }));
 
   const worldContract = getContract({
-    address: coreConfig.worldAddress as Hex,
+    address: coreConfig.worldAddress,
     abi: WorldAbi,
     client: {
       public: publicClient,

@@ -1,13 +1,14 @@
 import { createBurnerAccount, transportObserver } from "@latticexyz/common";
 import { createClient as createFaucetClient } from "@latticexyz/faucet";
+import { createContext, ReactNode, useCallback, useMemo, useRef, useState } from "react";
+import { Address, createWalletClient, EIP1193Provider, fallback, formatEther, Hex, http } from "viem";
+
 import { createExternalAccount } from "@core/account/createExternalAccount";
 import { createLocalAccount } from "@core/account/createLocalAccount";
 import { minEth } from "@core/lib/constants";
 import { AccountClient, ExternalAccount, LocalAccount } from "@core/lib/types";
 import { useCore } from "@core/react/hooks/useCore";
 import { storage } from "@core/utils/global/storage";
-import { createContext, ReactNode, useCallback, useMemo, useRef, useState } from "react";
-import { Address, createWalletClient, EIP1193Provider, fallback, formatEther, Hex, http } from "viem";
 
 type AccountClientOptions = {
   playerAddress?: Address;
@@ -46,7 +47,7 @@ export function AccountClientProvider({ children, ...options }: AccountProviderP
           chain: config.chain,
           transport: transportObserver(fallback([http()])),
           pollingInterval: 1000,
-          account: createBurnerAccount(externalPKey as Hex),
+          account: createBurnerAccount(externalPKey),
         })
       : undefined;
     return { faucet, externalWalletClient };

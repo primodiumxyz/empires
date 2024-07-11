@@ -13,10 +13,10 @@ export const getInitialQuery = ({
   //get all the tables that start with P_
   const configTableQueries = [...Object.keys(tables)]
     .filter((key) => key.startsWith("P_"))
-    .map((tableName) => ({ tableId: tables[tableName].tableId }));
+    .map((tableName) => ({ tableId: tables[tableName]?.tableId }));
 
   return {
-    address: worldAddress as Hex,
+    address: worldAddress,
     queries: [...configTableQueries],
   };
 };

@@ -8,7 +8,7 @@ import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 
 function Core() {
   const core = useCore();
-  const { user } = usePrivy();
+  const { user, logout } = usePrivy();
   const { usingBurner, value: pKey } = useBurnerAccount();
   const { wallets } = useWallets();
   const [privyProvider, setPrivyProvider] = useState<EIP1193Provider>();
@@ -19,7 +19,13 @@ function Core() {
   useEffect(() => {
     if (usingBurner) return;
     const getTransport = async () => {
-      if (wallets.length == 0) return null;
+      if (wallets.length == 0) {
+        // privy doesn't handle auto logout if the user disconnects from the website via their wallet
+        // so we need this workaround
+        // https://privy-developers.slack.com/archives/C059ABLSB47/p1718368113160019?thread_ts=1718288582.864939&cid=C059ABLSB47
+        logout();
+        return;
+      }
       const wallet = wallets[0];
 
       await wallet.switchChain(core.config.chain.id);
@@ -34,7 +40,8 @@ function Core() {
   if (usingBurner && !privateKey) {
     return "Error. Using Burner but no private key. Please refresh.";
   }
-  if (!usingBurner && (privyProvider == null || !playerAddress)) {
+
+  if (!usingBurner && (!privyProvider || !playerAddress)) {
     return "loading...";
   }
 

@@ -1,14 +1,33 @@
+import { useEffect, useState } from "react";
+import { TransactionReceipt } from "viem";
+
+import { BaseTableMetadata, createLocalTable, Entity, Table, TableOptions, Type } from "@primodiumxyz/reactive-tables";
+import { TX_TIMEOUT } from "@core/lib";
 import { CreateNetworkResult } from "@core/lib/types";
 import { TxQueueOptions } from "@core/tables/types";
-import { useEffect, useState } from "react";
 
-import { BaseTableMetadata, createLocalTable, Entity, TableOptions, Type } from "@primodiumxyz/reactive-tables";
+type TransactionQueueTable<M extends BaseTableMetadata = BaseTableMetadata> = Table<
+  {
+    metadata: Type.OptionalString;
+    type: Type.OptionalString;
+  },
+  M
+> & {
+  enqueue: (fn: () => Promise<TransactionReceipt | undefined>, options: TxQueueOptions) => Promise<boolean>;
+  run: () => Promise<void>;
+  getIndex: (id: string) => number;
+  useIndex: (id: string) => number;
+  useSize: () => number;
+  getSize: () => number;
+  getMetadata: (id: string) => object | undefined;
+};
 
 export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTableMetadata>(
   { world }: CreateNetworkResult,
   options?: TableOptions<M>,
-) {
-  const queue: { id: string; fn: () => Promise<void> }[] = [];
+): TransactionQueueTable<M> {
+  const queue: { id: string; fn: () => Promise<TransactionReceipt | undefined> }[] = [];
+  const txSuccess = new Map<string, boolean>();
   let isRunning = false;
 
   const table = createLocalTable(
@@ -21,9 +40,8 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
   );
 
   // Add a function to the queue
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function enqueue(fn: () => Promise<any>, options: TxQueueOptions) {
-    if (!options.force && table.has(options.id as Entity)) return;
+  async function enqueue(fn: () => Promise<TransactionReceipt | undefined>, options: TxQueueOptions): Promise<boolean> {
+    if (!options.force && table.has(options.id as Entity)) return waitForTx(options);
 
     queue.push({
       id: options.id,
@@ -38,7 +56,7 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
       options.id as Entity,
     );
 
-    await run();
+    return waitForTx(options);
   }
 
   async function run() {
@@ -54,7 +72,10 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
 
       if (fn) {
         try {
-          await fn();
+          const receipt = await fn();
+          if (receipt) {
+            txSuccess.set(id, receipt.status === "success");
+          }
         } catch (error) {
           console.error("Error executing function:", error);
         } finally {
@@ -65,6 +86,24 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
     }
 
     isRunning = false;
+  }
+
+  async function waitForTx(options: TxQueueOptions): Promise<boolean> {
+    // listen to the table and resolve when it changes
+    return new Promise<boolean>((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        reject(new Error("Timed out"));
+      }, options.timeout ?? TX_TIMEOUT);
+      run();
+
+      table.once({
+        filter: ({ entity }) => entity === options.id,
+        do: () => {
+          clearTimeout(timeoutId);
+          resolve(txSuccess.get(options.id) ?? false);
+        },
+      });
+    });
   }
 
   function getIndex(id: string) {

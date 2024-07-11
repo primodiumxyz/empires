@@ -12,7 +12,7 @@ export const getSecondaryQuery = ({
 }): DecodedIndexerQuery => {
   tables;
   return {
-    address: worldAddress as Hex,
+    address: worldAddress,
     queries: [],
   };
 };

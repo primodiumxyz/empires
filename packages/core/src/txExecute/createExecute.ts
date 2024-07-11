@@ -12,13 +12,13 @@ import { ContractFunctionName, TransactionReceipt } from "viem";
 export type ExecuteFunctions = {
   execute: <functionName extends ContractFunctionName<WorldAbiType>>(
     options: ExecuteCallOptions<WorldAbiType, functionName>,
-  ) => Promise<void>;
+  ) => Promise<boolean>;
   executeBatch: <functionName extends ContractFunctionName<WorldAbiType>>(options: {
     systemCalls: readonly Omit<SystemCall<WorldAbiType, functionName>, "abi" | "systemId">[];
 
     txQueueOptions?: TxQueueOptions;
     onComplete?: (receipt: TransactionReceipt | undefined) => void;
-  }) => Promise<void>;
+  }) => Promise<boolean>;
 };
 
 export function createExecute(core: Core, account: AccountClient): ExecuteFunctions {
