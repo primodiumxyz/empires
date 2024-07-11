@@ -7,7 +7,12 @@
     },
     "build": {
       "outputs": ["dist/**"],
-      "inputs": ["$TURBO_DEFAULT$", "packages/**/worlds.json"]
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**",
+        "package.json",
+        "../../packages/contracts/worlds.json"
+      ]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
