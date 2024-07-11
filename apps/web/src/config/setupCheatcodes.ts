@@ -445,18 +445,22 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
           inputType: "number",
           defaultValue: gameConfig?.goldGenRate ?? BigInt(1),
         },
-        gameOverBlock: {
-          label: "Game over block",
+        roundTimeLeftInSeconds: {
+          label: "Round time left",
           inputType: "number",
-          defaultValue: gameConfig?.gameOverBlock ?? BigInt(0),
+          defaultValue: 1000,
         },
       },
       execute: async (properties) => {
-        const success = await setTableValue(
-          tables.P_GameConfig,
-          {},
-          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
-        );
+        const currBlock = tables.BlockNumber.get() ?? { value: 0n, avgBlockTime: 0 };
+        const finalBlockFromTimeLeft =
+          BigInt(properties.roundTimeLeftInSeconds.value * currBlock.avgBlockTime) + currBlock.value;
+        const newProperties = {
+          turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
+          goldGenRate: BigInt(properties.goldGenRate.value),
+          gameOverBlock: finalBlockFromTimeLeft,
+        };
+        const success = await setTableValue(tables.P_GameConfig, {}, newProperties);
 
         if (success) {
           notify("success", "Game config updated");
