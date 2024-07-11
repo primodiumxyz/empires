@@ -102,7 +102,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className={cn("flex flex-col", activeTab === index && "col-span-full")}>
       <div
         className={cn(
           "cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
