@@ -17,6 +17,8 @@
     "package.json": "pnpm sort-package-json"
   },
   "devDependencies": {
+    "@eslint/js": "^9.6.0",
+    "@types/eslint__js": "^8.42.3",
     "eslint": "^9.6.0",
     "husky": ">=6",
     "lint-staged": ">=10",
