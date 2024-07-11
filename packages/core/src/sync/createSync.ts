@@ -1,11 +1,11 @@
-import { Keys } from "@core/lib";
-import { CoreConfig, CreateNetworkResult, SyncSourceType, SyncStep, Tables } from "@core/lib/types";
-import { getSecondaryQuery } from "@core/sync/queries/secondaryQueries";
 import { Hex } from "viem";
 
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { StorageAdapterLog } from "@primodiumxyz/reactive-tables/utils";
 import { Read, Sync } from "@primodiumxyz/sync-stack";
+import { Keys } from "@core/lib";
+import { CoreConfig, CreateNetworkResult, SyncSourceType, SyncStep, Tables } from "@core/lib/types";
+import { getSecondaryQuery } from "@core/sync/queries/secondaryQueries";
 
 import { getInitialQuery } from "./queries/initialQueries";
 
@@ -31,7 +31,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
   ) => {
     const sync = Sync.withCustom({
       reader: Read.fromRPC.filter({
-        address: config.worldAddress as Hex,
+        address: config.worldAddress,
         publicClient,
         fromBlock,
         toBlock,
@@ -82,7 +82,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
 
     const sync = Sync.withCustom({
       reader: Read.fromRPC.subscribe({
-        address: config.worldAddress as Hex,
+        address: config.worldAddress,
         publicClient,
       }),
       writer: (logs) =>
@@ -153,7 +153,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
         indexerUrl,
         query: getInitialQuery({
           tables: tableDefs,
-          worldAddress: config.worldAddress as Hex,
+          worldAddress: config.worldAddress,
         }),
       }),
       writer: storageAdapter,
@@ -187,7 +187,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
         indexerUrl,
         query: getSecondaryQuery({
           tables: tableDefs,
-          worldAddress: config.worldAddress as Hex,
+          worldAddress: config.worldAddress,
         }),
       }),
       writer: storageAdapter,

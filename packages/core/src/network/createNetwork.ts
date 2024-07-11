@@ -32,7 +32,7 @@ export function createNetwork(config: CoreConfig): CreateNetworkResult {
       mudConfig,
       world,
       publicClient,
-      address: config.worldAddress as Hex,
+      address: config.worldAddress,
       otherTableDefs,
       syncTables,
       devTools: config.devTools,

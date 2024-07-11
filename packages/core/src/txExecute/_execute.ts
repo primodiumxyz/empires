@@ -1,5 +1,6 @@
-import { Core } from "@core/lib/types";
 import { CallExecutionError, ContractFunctionExecutionError, Hex, PublicClient, TransactionReceipt } from "viem";
+
+import { Core } from "@core/lib/types";
 
 export async function _execute({ network: { waitForTransaction, publicClient } }: Core, txPromise: Promise<Hex>) {
   let receipt: TransactionReceipt | undefined = undefined;
@@ -54,7 +55,7 @@ async function callTransaction(publicClient: PublicClient, txHash: Hex): Promise
   const tx = await publicClient.getTransaction({ hash: txHash });
   if (!tx) throw new Error("Transaction does not exist");
   await publicClient.call({
-    account: tx.from!,
+    account: tx.from,
     to: tx.to!,
     data: tx.input,
   });
