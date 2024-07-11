@@ -11,7 +11,7 @@ export type CheatcodeInputsBase = {
 };
 
 export type CheatcodeInputs<T extends CheatcodeInputsBase> = {
-  [K in keyof T]: T[K] & { value: T[K]["defaultValue"] };
+  [K in keyof T]: T[K] & { value: T[K]["defaultValue"]; id?: string | number };
 };
 
 export type Cheatcode<T extends CheatcodeInputsBase = CheatcodeInputsBase> = {

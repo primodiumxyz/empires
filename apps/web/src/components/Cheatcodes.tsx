@@ -137,6 +137,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
                       ...prev,
                       [inputKey]: {
                         ...input,
+                        id: e.target.value,
                         value: formatValue(inputType, options.find((o) => o.id === e.target.value)?.value),
                       },
                     }));
@@ -171,7 +172,11 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
             const argsWithValues = Object.entries(inputs).reduce((acc, [inputKey, input]) => {
               return {
                 ...acc,
-                [inputKey]: { ...input, value: inputValues[inputKey]?.value ?? input.defaultValue },
+                [inputKey]: {
+                  ...input,
+                  value: inputValues[inputKey]?.value ?? input.defaultValue,
+                  id: inputValues[inputKey]?.id,
+                },
               };
             }, {} as CheatcodeInputs<T>);
 
