@@ -6,15 +6,10 @@ import { createCheatcode } from "@/util/cheatcodes";
 import { EmpireEnumToName } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
-// TODO: actual calls not done (need to drip until balance enough)
-// TODO: notify toast on success
-
 export const setupCheatcodes = (core: Core, accountClient: AccountClient, contractCalls: ContractCalls) => {
-  const { tables, utils } = core;
+  const { tables } = core;
   const { playerAccount } = accountClient;
-  const { publicClient } = playerAccount;
-  const { createDestroyer, removeDestroyer, updateWorld, requestDrip, setTableValue } = contractCalls;
-  const { getTotalCost } = utils;
+  const { updateWorld, requestDrip, setTableValue } = contractCalls;
 
   const factions = tables.Faction.getAll();
   const planets = tables.Planet.getAll();
@@ -389,7 +384,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     caption: "End the game",
     inputs: {},
     execute: async () => {
-      const nextBlock = (await publicClient.getBlockNumber()) + BigInt(1);
+      const nextBlock = (await playerAccount.publicClient.getBlockNumber()) + BigInt(1);
       const success = await setTableValue(tables.P_GameConfig, {}, { gameOverBlock: nextBlock });
 
       if (success) {

@@ -46,8 +46,8 @@ const App = () => {
             <div className="flex h-screen w-screen items-center justify-center bg-neutral">
               <Landing />
               <ToastContainer
-                toastClassName="text-xs border bg-neutral border-secondary rounded-box"
-                progressClassName="bg-accent"
+                toastClassName="text-xs border text-base-100 bg-neutral border-neutral rounded-box"
+                progressClassName="bg-primary"
                 position="bottom-left"
                 autoClose={3000}
                 hideProgressBar={false}
