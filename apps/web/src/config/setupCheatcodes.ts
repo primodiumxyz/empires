@@ -1,5 +1,5 @@
 import { EEmpire } from "@primodiumxyz/contracts";
-import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
+import { ENPCAction, EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { Entity, Properties } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
@@ -13,7 +13,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const { tables, utils } = core;
   const { playerAccount } = accountClient;
   const { publicClient } = playerAccount;
-  const { createDestroyer, removeDestroyer, updateWorld, setTableValue } = contractCalls;
+  const { createDestroyer, removeDestroyer, updateWorld, requestDrip, setTableValue } = contractCalls;
   const { getTotalCost } = utils;
 
   const factions = tables.Faction.getAll();
@@ -297,10 +297,33 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
         },
       },
       execute: async ({ planet }) => {
-        let success = true;
+        const planetEntity = planet.id as Entity;
+        const planetData = tables.Planet.get(planetEntity);
+        if (!planetData) return false;
 
-        // TODO
+        const goldCount = planetData.goldCount;
+        const destroyerPrice =
+          tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction.BuyDestroyers })?.goldCost ?? BigInt(0);
+        if (destroyerPrice === BigInt(0)) {
+          console.log("[Spend gold] Destroyer price is 0");
+          return false;
+        }
 
+        const destroyersToBuy = goldCount / destroyerPrice;
+        if (destroyersToBuy === BigInt(0)) {
+          console.error("[Spend gold] Not enough gold to buy destroyers");
+          return false;
+        }
+
+        const newGoldCount = goldCount - BigInt(destroyersToBuy * destroyerPrice);
+        const currentDestroyerCount = planetData.destroyerCount;
+        const newDestroyerCount = currentDestroyerCount + BigInt(destroyersToBuy);
+
+        const success = await setTableValue(
+          tables.Planet,
+          { id: planetEntity },
+          { goldCount: newGoldCount, destroyerCount: newDestroyerCount },
+        );
         return success;
       },
     }),
@@ -331,7 +354,6 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
         },
       },
       execute: async ({ empire, amount, recipient }) => {
-        console.log(empire);
         const playerId = addressToEntity(recipient.value);
         const factionId = empire.id as EEmpire;
         tables.Faction.getWithKeys({ id: factionId });
@@ -359,6 +381,17 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
         ]);
 
         return success.every(Boolean);
+      },
+    }),
+
+    // drip eth
+    createCheatcode({
+      title: "Drip",
+      caption: "Drip eth to the player account",
+      inputs: {},
+      execute: async () => {
+        requestDrip?.(accountClient.playerAccount.address);
+        return true;
       },
     }),
   ];
