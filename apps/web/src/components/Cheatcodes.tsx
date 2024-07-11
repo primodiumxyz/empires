@@ -175,7 +175,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
                 [inputKey]: {
                   ...input,
                   value: inputValues[inputKey]?.value ?? input.defaultValue,
-                  id: inputValues[inputKey]?.id,
+                  id: inputValues[inputKey]?.id ?? input.options?.[0]?.id,
                 },
               };
             }, {} as CheatcodeInputs<T>);
