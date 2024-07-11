@@ -1,4 +1,4 @@
-import { EEmpire, ENPCAction, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
+import { EEmpire, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { Entity, Properties } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
