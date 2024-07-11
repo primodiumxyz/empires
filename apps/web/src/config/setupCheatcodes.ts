@@ -1,4 +1,4 @@
-import { EEmpire } from "@primodiumxyz/contracts";
+import { EEmpire, OTHER_EMPIRE_COUNT } from "@primodiumxyz/contracts";
 import { ENPCAction, EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { Entity, Properties } from "@primodiumxyz/reactive-tables";
@@ -49,78 +49,31 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
   const cheatcodes = [
     /* ------------------------------- DESTROYERS ------------------------------- */
-    // create destroyers on a planet
+    // Set the amount of destroyers on a planet
     createCheatcode({
-      title: "[WIP] Create destroyers",
-      caption: "Create a specified number of destroyers on a planet",
+      title: "Set destroyers",
+      caption: "Set the amount of destroyers on a planet",
       inputs: {
-        amount: {
-          label: "Amount",
-          inputType: "number",
-          defaultValue: 1,
-        },
         planet: {
           label: "Planet",
           inputType: "string",
           defaultValue: entityToPlanetName(planets[0]),
           options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
         },
-      },
-      execute: async ({ amount, planet }) => {
-        let success = true;
-        let balance = await accountClient.playerAccount.publicClient.getBalance({
-          address: accountClient.playerAccount.address,
-        });
-
-        for (let i = 0; i < amount.value; i++) {
-          const planetEntity = planets.find((entity) => entityToPlanetName(entity) === planet.value);
-          const planetData = tables.Planet.get(planetEntity);
-          const price = getTotalCost(EPlayerAction.CreateDestroyer, planetData?.factionId as EEmpire);
-
-          // TODO
-          if (balance < price) {
-            // await accountClient.requestDrip(accountClient.playerAccount.address);
-            // const txSuccess = success && await createDestroyer(planet);
-            // if (!txSuccess) {
-            //   success = false;
-            //   break;
-            // }
-          }
-
-          balance -= price;
-        }
-
-        return success;
-      },
-    }),
-
-    // remove destroyers from a planet
-    createCheatcode({
-      title: "[WIP] Remove destroyers",
-      caption: "Remove a specified number of destroyers from a planet",
-      inputs: {
         amount: {
           label: "Amount",
           inputType: "number",
           defaultValue: 1,
         },
-        planet: {
-          label: "Planet",
-          inputType: "string",
-          defaultValue:
-            planetsWithDestroyers.length > 0
-              ? entityToPlanetName(planetsWithDestroyers[0])
-              : "No planetsData with destroyers",
-          options:
-            planetsWithDestroyers.length > 0
-              ? planetsWithDestroyers.map((entity) => ({ id: entity, value: entityToPlanetName(entity) }))
-              : [],
-        },
       },
       execute: async ({ amount, planet }) => {
-        let success = true;
-
-        // TODO: same as above
+        const success = await setTableValue(
+          tables.Planet,
+          {
+            id: planet.id as Entity,
+          },
+          { destroyerCount: BigInt(amount.value) },
+        );
 
         return success;
       },
@@ -129,13 +82,8 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     // send destroyers from a planet to another
     createCheatcode({
       title: "[WIP] Send destroyers",
-      caption: "Send a specified number of destroyers from one planet to another",
+      caption: "Send destroyers from one planet to another",
       inputs: {
-        amount: {
-          label: "Amount",
-          inputType: "number",
-          defaultValue: 1,
-        },
         from: {
           label: "From",
           inputType: "string",
@@ -161,12 +109,183 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
             .map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
         },
       },
-      execute: async ({ amount, from, to }) => {
-        let success = true;
+      execute: async ({ from, to }) => {
+        const fromEntity = from.id as Entity;
+        const toEntity = to.id as Entity;
+        const fromPlanetData = tables.Planet.get(fromEntity);
+        const toPlanetData = tables.Planet.get(toEntity);
+        if (!fromPlanetData || !toPlanetData) {
+          console.log("[CHEATCODE] Send destroyers: invalid planets");
+          return false;
+        }
 
-        // TODO
+        const destroyersToMove = fromPlanetData.destroyerCount ?? BigInt(0);
+        if (destroyersToMove === BigInt(0)) {
+          console.log("[CHEATCODE] Send destroyers: no destroyers to send");
+          return false;
+        }
+
+        await setTableValue(tables.Planet, { id: fromEntity }, { destroyerCount: BigInt(0) });
+
+        if (toPlanetData.factionId === fromPlanetData.factionId) {
+          return await setTableValue(
+            tables.Planet,
+            { id: toEntity },
+            { destroyerCount: toPlanetData.destroyerCount + destroyersToMove },
+          );
+        } else {
+          const conquer = toPlanetData.destroyerCount < destroyersToMove;
+          const remainingDestroyers = conquer
+            ? destroyersToMove - toPlanetData.destroyerCount
+            : toPlanetData.destroyerCount - destroyersToMove;
+
+          if (conquer) {
+            const success = (
+              await Promise.all([
+                // TODO: replicate this:
+                // FactionPlanetsSet.add(empire, planetId);
+                // FactionPlanetsSet.remove(planetData.factionId, planetId);
+                await setTableValue(tables.Planet, { id: toEntity }, { factionId: fromPlanetData.factionId }),
+              ])
+            ).every(Boolean);
+
+            if (!success) return false;
+          }
+
+          const success = await setTableValue(tables.Planet, { id: toEntity }, { destroyerCount: remainingDestroyers });
+          return success;
+        }
+      },
+    }),
+
+    /* ---------------------------------- GOLD ---------------------------------- */
+    // set gold count for a planet
+    createCheatcode({
+      title: "Set gold",
+      caption: "Set the gold count for a planet",
+      inputs: {
+        amount: {
+          label: "Amount",
+          inputType: "number",
+          defaultValue: 1,
+        },
+        planet: {
+          label: "Planet",
+          inputType: "string",
+          defaultValue: entityToPlanetName(planets[0]),
+          options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        },
+      },
+      execute: async ({ amount, planet }) => {
+        const success = await setTableValue(
+          tables.Planet,
+          {
+            id: planet.id as Entity,
+          },
+          { goldCount: BigInt(amount.value) },
+        );
 
         return success;
+      },
+    }),
+
+    // generate gold on all planetsData
+    createCheatcode({
+      title: "Generate gold",
+      caption: "Give a specified amount of gold to all planetsData",
+      inputs: {
+        amount: {
+          label: "Amount",
+          inputType: "number",
+          defaultValue: 1,
+        },
+      },
+      execute: async ({ amount }) => {
+        const success = await Promise.all(
+          planets.map((entity) =>
+            setTableValue(
+              tables.Planet,
+              { id: entity },
+              { goldCount: (tables.Planet.get(entity)?.goldCount ?? BigInt(0)) + BigInt(amount.value) },
+            ),
+          ),
+        );
+
+        return success.every(Boolean);
+      },
+    }),
+
+    /* --------------------------------- SHARES --------------------------------- */
+    // mint shares from an empire
+    createCheatcode({
+      title: "[WIP] Give points",
+      caption: "Give points from an empire to an address",
+      inputs: {
+        empire: {
+          label: "Empire",
+          inputType: "string",
+          // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
+          defaultValue: EmpireEnumToName[Number(factions[0]) as EEmpire],
+          // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
+          options: factions.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        },
+        amount: {
+          label: "Units",
+          inputType: "number",
+          defaultValue: 1,
+        },
+        recipient: {
+          label: "Recipient",
+          inputType: "string",
+          defaultValue: playerAccount.address,
+        },
+      },
+      execute: async ({ empire, amount, recipient }) => {
+        const playerId = addressToEntity(recipient.value);
+        const factionId = empire.id as EEmpire;
+        const currentPoints = tables.Value_PointsMap.getWithKeys({ factionId, playerId })?.value ?? BigInt(0);
+        const currentCost = tables.Faction.getWithKeys({ id: factionId })?.pointCost ?? BigInt(0);
+        const increaseCost = tables.P_PointConfig.get()?.pointCostIncrease ?? BigInt(1);
+
+        const pointsToIssue = BigInt(amount.value) * BigInt(OTHER_EMPIRE_COUNT);
+        const newPoints = currentPoints + pointsToIssue;
+
+        const success = await Promise.all([
+          // TODO: replicate this:
+          // function set(EEmpire empire, bytes32 playerId, uint256 value) internal {
+          //   if (has(empire, playerId)) {
+          //     uint256 prevValue = get(empire, playerId);
+
+          //     if (value < prevValue) Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) - (prevValue - value));
+          //     else Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) + (value - prevValue));
+
+          //     Value_PointsMap.set(empire, playerId, value);
+          //   } else {
+          //     Keys_PointsMap.push(empire, playerId);
+          //     Value_PointsMap.set(empire, playerId, value);
+          //     Meta_PointsMap.set(empire, playerId, true, Keys_PointsMap.length(empire) - 1);
+          //     Faction.setPointsIssued(empire, Faction.getPointsIssued(empire) + value);
+          //   }
+          // }
+
+          // this is not enough
+          // setTableValue(
+          //   tables.Value_PointsMap,
+          //   { playerId, factionId },
+          //   {
+          //     value: newPoints,
+          //   },
+          // ),
+          setTableValue(
+            tables.Faction,
+            { id: factionId },
+            {
+              pointCost: currentCost + increaseCost * BigInt(OTHER_EMPIRE_COUNT),
+            },
+          ),
+        ]);
+
+        return success.every(Boolean);
       },
     }),
 
@@ -227,163 +346,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       },
     }),
 
-    /* ---------------------------------- GOLD ---------------------------------- */
-    // generate gold on all planetsData
-    createCheatcode({
-      title: "Generate gold",
-      caption: "Give a specified amount of gold to all planetsData",
-      inputs: {
-        amount: {
-          label: "Amount",
-          inputType: "number",
-          defaultValue: 1,
-        },
-      },
-      execute: async ({ amount }) => {
-        const success = await Promise.all(
-          planets.map((entity) =>
-            setTableValue(
-              tables.Planet,
-              { id: entity },
-              { goldCount: (tables.Planet.get(entity)?.goldCount ?? BigInt(0)) + BigInt(amount.value) },
-            ),
-          ),
-        );
-
-        return success.every(Boolean);
-      },
-    }),
-
-    // set gold count for a planet
-    createCheatcode({
-      title: "Set gold",
-      caption: "Set the gold count for a planet",
-      inputs: {
-        amount: {
-          label: "Amount",
-          inputType: "number",
-          defaultValue: 1,
-        },
-        planet: {
-          label: "Planet",
-          inputType: "string",
-          defaultValue: entityToPlanetName(planets[0]),
-          options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
-        },
-      },
-      execute: async ({ amount, planet }) => {
-        const success = await setTableValue(
-          tables.Planet,
-          {
-            id: planet.id as Entity,
-          },
-          { goldCount: BigInt(amount.value) },
-        );
-
-        return success;
-      },
-    }),
-
-    // spend gold on destroyers for a planet
-    createCheatcode({
-      title: "[WIP] Spend gold",
-      caption: "Spend gold on destroyers for a planet",
-      inputs: {
-        planet: {
-          label: "Planet",
-          inputType: "string",
-          defaultValue: entityToPlanetName(planets[0]),
-          options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
-        },
-      },
-      execute: async ({ planet }) => {
-        const planetEntity = planet.id as Entity;
-        const planetData = tables.Planet.get(planetEntity);
-        if (!planetData) return false;
-
-        const goldCount = planetData.goldCount;
-        const destroyerPrice =
-          tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction.BuyDestroyers })?.goldCost ?? BigInt(0);
-        if (destroyerPrice === BigInt(0)) {
-          console.log("[Spend gold] Destroyer price is 0");
-          return false;
-        }
-
-        const destroyersToBuy = goldCount / destroyerPrice;
-        if (destroyersToBuy === BigInt(0)) {
-          console.error("[Spend gold] Not enough gold to buy destroyers");
-          return false;
-        }
-
-        const newGoldCount = goldCount - BigInt(destroyersToBuy * destroyerPrice);
-        const currentDestroyerCount = planetData.destroyerCount;
-        const newDestroyerCount = currentDestroyerCount + BigInt(destroyersToBuy);
-
-        const success = await setTableValue(
-          tables.Planet,
-          { id: planetEntity },
-          { goldCount: newGoldCount, destroyerCount: newDestroyerCount },
-        );
-        return success;
-      },
-    }),
-
-    /* --------------------------------- SHARES --------------------------------- */
-    // mint shares from an empire
-    createCheatcode({
-      title: "[WIP] Give points",
-      caption: "Give points from an empire to an address",
-      inputs: {
-        empire: {
-          label: "Empire",
-          inputType: "string",
-          // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
-          defaultValue: EmpireEnumToName[Number(factions[0]) as EEmpire],
-          // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
-          options: factions.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
-        },
-        amount: {
-          label: "Units",
-          inputType: "number",
-          defaultValue: 1,
-        },
-        recipient: {
-          label: "Recipient",
-          inputType: "string",
-          defaultValue: playerAccount.address,
-        },
-      },
-      execute: async ({ empire, amount, recipient }) => {
-        const playerId = addressToEntity(recipient.value);
-        const factionId = empire.id as EEmpire;
-        tables.Faction.getWithKeys({ id: factionId });
-        const currentCost = tables.Faction.getWithKeys({ id: factionId })?.pointCost ?? BigInt(0);
-        const increaseCost = tables.P_PointConfig.get()?.pointCostIncrease ?? BigInt(1);
-
-        // TODO: not working
-        const success = await Promise.all([
-          setTableValue(
-            tables.Value_PointsMap,
-            { playerId, factionId },
-            {
-              value:
-                (tables.Value_PointsMap.getWithKeys({ playerId, factionId })?.value ?? BigInt(0)) +
-                BigInt(amount.value),
-            },
-          ),
-          setTableValue(
-            tables.Faction,
-            { id: factionId },
-            {
-              pointCost: currentCost + BigInt(amount.value) * increaseCost,
-            },
-          ),
-        ]);
-
-        return success.every(Boolean);
-      },
-    }),
-
+    /* ---------------------------------- UTILS --------------------------------- */
     // drip eth
     createCheatcode({
       title: "Drip",
