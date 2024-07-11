@@ -75,7 +75,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           </p>
 
           <div className="flex items-center gap-2">
-            <Tooltip tooltipContent={`Cost: ${createDestroyerPriceUsd}`}>
+            <Tooltip tooltipContent={`Cost: ${killDestroyerPriceUsd}`}>
               <TransactionQueueMask id={`${entity}-kill-destroyer`}>
                 <button
                   onClick={() => calls.removeDestroyer(entity, killDestroyerPriceWei)}
@@ -87,7 +87,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               </TransactionQueueMask>
             </Tooltip>
 
-            <Tooltip tooltipContent={`Cost: ${killDestroyerPriceUsd}`}>
+            <Tooltip tooltipContent={`Cost: ${createDestroyerPriceUsd}`}>
               <TransactionQueueMask id={`${entity}-create-destroyer`}>
                 <button
                   onClick={() => calls.createDestroyer(entity, createDestroyerPriceWei)}
