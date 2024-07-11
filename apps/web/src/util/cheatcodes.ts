@@ -6,7 +6,7 @@ export type CheatcodeInputsBase = {
     label: string;
     defaultValue?: Primitive;
     inputType?: PrimitiveType;
-    options?: Primitive[];
+    options?: { id: string | number; value: Primitive }[];
   };
 };
 

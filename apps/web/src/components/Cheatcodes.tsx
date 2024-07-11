@@ -121,8 +121,10 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
       >
         {Object.entries(inputs).map(([inputKey, input]) => {
           const { label, inputType = "string", options = [] } = input;
+          if (options.length !== new Set(options.map((o) => o.id)).size)
+            throw new Error("Options should have unique ids");
           // default value will be either provided, or first option if any, or default value corresponding to the input type
-          const defaultValue = formatValue(inputType, input.defaultValue ?? options[0]).toString();
+          const defaultValue = formatValue(inputType, input.defaultValue ?? options[0]?.value).toString();
 
           return (
             <div key={inputKey} className="flex flex-col gap-1 text-sm">
@@ -133,14 +135,17 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
                   onChange={(e) => {
                     setInputValues((prev) => ({
                       ...prev,
-                      [inputKey]: { ...input, value: formatValue(inputType, e.target.value) },
+                      [inputKey]: {
+                        ...input,
+                        value: formatValue(inputType, options.find((o) => o.id === e.target.value)?.value),
+                      },
                     }));
                   }}
                   className="max-h-8 bg-gray-800 p-2 text-gray-300"
                 >
-                  {options?.map((option, i) => (
-                    <option key={i} value={option.toString()}>
-                      {option.toString()}
+                  {options?.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.value.toString()}
                     </option>
                   ))}
                 </select>
