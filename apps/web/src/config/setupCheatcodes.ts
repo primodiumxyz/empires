@@ -20,12 +20,6 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const planetsData = planets
     .map((entity) => tables.Planet.get(entity))
     .filter((planetData) => !!planetData?.factionId) as unknown as Properties<typeof tables.Planet.propertiesSchema>[];
-  const planetsWithDestroyers = planetsData
-    .map((planet, i) => {
-      if (planet.destroyerCount) return planets[i];
-      return undefined;
-    })
-    .filter(Boolean) as Entity[];
 
   // config
   const gameConfig = tables.P_GameConfig.get();
@@ -145,32 +139,20 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       from: {
         label: "From",
         inputType: "string",
-        defaultValue:
-          planetsWithDestroyers.length > 0
-            ? entityToPlanetName(planetsWithDestroyers[0])
-            : "No planetsData with destroyers",
-        options:
-          planetsWithDestroyers.length > 0
-            ? planetsWithDestroyers.map((entity) => ({ id: entity, value: entityToPlanetName(entity) }))
-            : [],
+        defaultValue: planets.length > 0 ? entityToPlanetName(planets[0]) : "No planetsData with destroyers",
+        options: planets.length > 0 ? planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })) : [],
       },
       to: {
         label: "To",
         inputType: "string",
-        defaultValue: planetsWithDestroyers
-          .map((entity) => getNearbyPlanetEntities(tables.Planet.get(entity)!))
-          .flat()
-          .map((entity) => entityToPlanetName(entity))[0],
-        options: planetsWithDestroyers
-          .map((entity) => getNearbyPlanetEntities(tables.Planet.get(entity)!))
-          .flat()
-          .map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        options: planets.length > 0 ? planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })) : [],
       },
     },
     execute: async ({ from, to }) => {
       const fromEntity = from.id as Entity;
       const toEntity = to.id as Entity;
       const fromPlanetData = tables.Planet.get(fromEntity);
+      console.log({ fromPlanetData });
       const toPlanetData = tables.Planet.get(toEntity);
       if (!fromPlanetData || !toPlanetData) {
         console.log("[CHEATCODE] Send destroyers: invalid planets");
