@@ -37,6 +37,7 @@ export const worldInput = {
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
         pointRake: "uint256", // times 10_000
+        pointSellTax: "uint256",
       },
     },
 

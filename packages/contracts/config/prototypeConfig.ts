@@ -40,6 +40,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointGenRate: BigInt(POINTS_UNIT * 0.2),
         pointCostIncrease: BigInt(POINTS_UNIT * 0.1),
         pointRake: scaleRake(0.001), // out of 1, scales to out of 10000
+        pointSellTax: BigInt(POINTS_UNIT * 0),
       },
       P_ActionConfig: {
         actionGenRate: BigInt(POINTS_UNIT/2),
