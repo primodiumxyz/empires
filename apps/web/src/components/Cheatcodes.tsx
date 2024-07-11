@@ -60,7 +60,7 @@ export const Cheatcodes = () => {
         <CheatcodesCloseButton setOpen={setOpen} />
         {/* cheatcodes */}
         <h1 className="font-semibold uppercase text-gray-300">Cheatcodes</h1>
-        <div className="flex flex-col gap-4 overflow-auto pr-2">
+        <div className="grid grid-cols-1 gap-4 overflow-auto pr-2 md:grid-cols-2 lg:grid-cols-3">
           {cheatcodes.map((cheatcode, i) => (
             // @ts-expect-error wrong type inference -- will fix on base template
             <Cheatcode key={i} cheatcode={cheatcode} index={i} activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -117,7 +117,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
       </div>
       <div
         className={cn(
-          "hidden gap-2 overflow-hidden bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4",
+          "grid hidden gap-2 overflow-hidden bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4",
           activeTab === index && "grid",
         )}
       >
