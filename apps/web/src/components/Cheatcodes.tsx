@@ -120,16 +120,16 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         )}
       >
         {Object.entries(inputs).map(([inputKey, input]) => {
-          const { label, inputType = "string", options = [] } = input;
-          if (options.length !== new Set(options.map((o) => o.id)).size)
+          const { label, inputType = "string", options } = input;
+          if (options && options.length !== new Set(options.map((o) => o.id)).size)
             throw new Error("Options should have unique ids");
           // default value will be either provided, or first option if any, or default value corresponding to the input type
-          const defaultValue = formatValue(inputType, input.defaultValue ?? options[0]?.value).toString();
+          const defaultValue = formatValue(inputType, input.defaultValue ?? options?.[0]?.value).toString();
 
           return (
             <div key={inputKey} className="flex flex-col gap-1 text-sm">
               <label className="text-gray-300">{label}</label>
-              {options.length > 0 ? (
+              {options ? (
                 <select
                   defaultValue={defaultValue}
                   onChange={(e) => {
