@@ -7,7 +7,7 @@ import { addressToId } from "src/utils.sol";
 import { Faction, Player, ActionCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
-import { OTHER_EMPIRE_COUNT } from "src/constants.sol";
+import { EMPIRE_COUNT } from "src/constants.sol";
 
 contract LibPriceTest is PrimodiumTest {
   P_PointConfigData config;
@@ -54,17 +54,17 @@ contract LibPriceTest is PrimodiumTest {
     uint256 initPointCost = config.startPointCost;
     assertEq(
       LibPrice.getRegressPointCost(EEmpire.Red),
-      initPointCost * OTHER_EMPIRE_COUNT,
+      initPointCost * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 points incorrect"
     );
     assertEq(
       LibPrice.getRegressPointCost(EEmpire.Blue),
-      initPointCost * OTHER_EMPIRE_COUNT,
+      initPointCost * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 points incorrect"
     );
     assertEq(
       LibPrice.getRegressPointCost(EEmpire.Green),
-      initPointCost * OTHER_EMPIRE_COUNT,
+      initPointCost * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 points incorrect"
     );
   }
@@ -73,18 +73,18 @@ contract LibPriceTest is PrimodiumTest {
     uint256 initPointCost = config.startPointCost;
     assertEq(
       LibPrice.getProgressPointCost(EEmpire.Red),
-      OTHER_EMPIRE_COUNT * (initPointCost + ((OTHER_EMPIRE_COUNT - 1) * config.pointCostIncrease) / 2),
-      "Red Empire point cost for OTHER_EMPIRE_COUNT points incorrect"
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
+      "Red Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
     assertEq(
       LibPrice.getProgressPointCost(EEmpire.Blue),
-      OTHER_EMPIRE_COUNT * (initPointCost + ((OTHER_EMPIRE_COUNT - 1) * config.pointCostIncrease) / 2),
-      "Blue Empire point cost for OTHER_EMPIRE_COUNT points incorrect"
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
+      "Blue Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
     assertEq(
       LibPrice.getProgressPointCost(EEmpire.Green),
-      OTHER_EMPIRE_COUNT * (initPointCost + ((OTHER_EMPIRE_COUNT - 1) * config.pointCostIncrease) / 2),
-      "Green Empire point cost for OTHER_EMPIRE_COUNT points incorrect"
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
+      "Green Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
   }
 

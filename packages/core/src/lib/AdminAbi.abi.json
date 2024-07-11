@@ -1,0 +1,9 @@
+[
+  {
+    "type": "function",
+    "name": "Admin__withdrawRake",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "view"
+  }
+]

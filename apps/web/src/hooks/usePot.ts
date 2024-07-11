@@ -4,10 +4,17 @@ import { useCore } from "@primodiumxyz/core/react";
 
 export const usePot = () => {
   const { tables } = useCore();
-  const hex = resourceToHex({
+  const gameHex = resourceToHex({
     type: "namespace",
     namespace: tables.P_GameConfig.metadata.globalName.split("__")[0],
     name: "",
   });
-  return tables.Balances.useWithKeys({ namespaceId: hex })?.balance ?? 0n;
+  const adminHex = resourceToHex({
+    type: "namespace",
+    namespace: "Admin",
+    name: "",
+  });
+  const pot = tables.Balances.useWithKeys({ namespaceId: gameHex })?.balance ?? 0n;
+  const rake = tables.Balances.useWithKeys({ namespaceId: adminHex })?.balance ?? 0n;
+  return { pot, rake };
 };

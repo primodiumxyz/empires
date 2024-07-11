@@ -12,9 +12,6 @@ import { ConfigWithPrototypes } from "./ts/prototypes/types";
 export const worldInput = {
   namespace: "Empires",
 
-  // add all subsystems here
-  // systems: {},
-
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
   enums: MUDEnums,
   tables: {
@@ -31,6 +28,7 @@ export const worldInput = {
     P_PointConfig: {
       key: [],
       schema: {
+        pointUnit: "uint256",
         minPointCost: "uint256",
         startPointCost: "uint256",
         pointGenRate: "uint256",
@@ -47,11 +45,6 @@ export const worldInput = {
         startActionCost: "uint256",
         minActionCost: "uint256",
       },
-    },
-
-    RakeTaken: {
-      key: [],
-      schema: { value: "bool" },
     },
 
     Turn: {
@@ -194,7 +187,7 @@ const getConfig = async () => {
   const world = defineWorld({
     ...worldInput,
     modules: [],
-    excludeSystems: exclude,
+    excludeSystems: [...exclude, "WithdrawRakeSystem"],
   });
 
   return world;

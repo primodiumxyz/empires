@@ -3,6 +3,7 @@ import { Address } from "viem";
 import { AccountClient, Core, createExecute } from "@primodiumxyz/core";
 import { createActionCalls } from "@/contractCalls/contractCalls/actions";
 import { createDevCalls } from "@/contractCalls/contractCalls/dev";
+import { createEndGameCalls } from "@/contractCalls/contractCalls/endGame";
 import { createResetCalls } from "@/contractCalls/contractCalls/reset";
 import { createUpdateCalls } from "@/contractCalls/contractCalls/update";
 
@@ -19,6 +20,7 @@ export const createContractCalls = (
   const actionCalls = createActionCalls(core, accountClient, execute);
   const updateCalls = createUpdateCalls(core, accountClient, execute);
   const resetCalls = createResetCalls(core, accountClient, execute);
+  const endGameCalls = createEndGameCalls(core, accountClient, execute);
 
   return {
     ...execute,
@@ -26,6 +28,7 @@ export const createContractCalls = (
     ...actionCalls,
     ...updateCalls,
     ...resetCalls,
+    ...endGameCalls,
     requestDrip,
   };
 };

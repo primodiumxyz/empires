@@ -6,7 +6,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
-import { P_PointConfig, P_GameConfig, WinningEmpire, Player, RakeTaken, Faction } from "codegen/index.sol";
+import { P_GameConfig, WinningEmpire, Player, Faction } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EEmpire } from "codegen/common.sol";
 
@@ -14,7 +14,7 @@ import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 
 import { PointsMap } from "adts/PointsMap.sol";
 
-import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
 
 /**
@@ -29,20 +29,6 @@ contract RewardsSystem is EmpiresSystem {
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     require(endBlock > 0 && block.number > endBlock, "[RewardsSystem] Game is not over");
     _;
-  }
-
-  /**
-   * @dev Internal function to take the rake from the rewards system.
-   * This function is private and can only be called within the contract.
-   */
-  function _takeRake() private {
-    if (RakeTaken.get()) return;
-
-    uint256 pot = Balances.get(EMPIRES_NAMESPACE_ID);
-    uint256 rake = (pot * P_PointConfig.getPointRake()) / 10_000;
-
-    IWorld(_world()).transferBalanceToNamespace(EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, rake);
-    RakeTaken.set(true);
   }
 
   /**
@@ -71,8 +57,6 @@ contract RewardsSystem is EmpiresSystem {
     if (factionPoints == 0) {
       return;
     }
-
-    _takeRake();
 
     uint256 playerFactionPoints = PointsMap.get(empire, playerId);
     if (playerFactionPoints == 0) return;

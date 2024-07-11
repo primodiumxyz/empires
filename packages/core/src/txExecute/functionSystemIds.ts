@@ -17,6 +17,11 @@ export const functionSystemIds: {
   Empires__updateWorld: getSystemId("UpdateSystem"),
   Empires__resetGame: getSystemId("ResetSystem"),
 
+  Empires__claimVictory: getSystemId("RewardsSystem"),
+  Empires__withdrawEarnings: getSystemId("RewardsSystem"),
+
+  Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
+
   /* ----------------------------------- Dev ---------------------------------- */
   Empires__devSetField: getSystemId("DevSystem"),
 };
