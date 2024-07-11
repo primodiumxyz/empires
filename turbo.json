@@ -1,18 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["packages/contracts/worlds.json"],
   "tasks": {
     "//#dev:indexer": {
       "cache": false,
       "persistent": true
     },
     "build": {
-      "outputs": ["dist/**"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**",
-        "package.json",
-        "../../packages/contracts/worlds.json"
-      ]
+      "outputs": ["dist/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
