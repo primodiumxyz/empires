@@ -3,13 +3,12 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import CheatcodesButton, { CheatcodesCloseButton } from "@/components/CheatcodesButton";
 import { setupCheatcodes } from "@/config/setupCheatcodes";
-import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, createCheatcode } from "@/util/cheatcodes";
+import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 
 import "@/index.css";
 
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useTxExecute } from "@/hooks/useTxExecute";
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
@@ -63,6 +62,7 @@ export const Cheatcodes = () => {
         <h1 className="font-semibold uppercase text-gray-300">Cheatcodes</h1>
         <div className="flex flex-col gap-4 overflow-auto pr-2">
           {cheatcodes.map((cheatcode, i) => (
+            // @ts-expect-error wrong type inference -- will fix on base template
             <Cheatcode key={i} cheatcode={cheatcode} index={i} activeTab={activeTab} setActiveTab={setActiveTab} />
           ))}
         </div>
@@ -122,20 +122,50 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         )}
       >
         {Object.entries(inputs).map(([inputKey, input]) => {
+          const { label, inputType = "string", options } = input;
+          if (options && options?.length !== new Set(options?.map((o) => o.id)).size)
+            throw new Error("Options should have unique ids");
+          // default value will be either provided, or first option if any, or default value corresponding to the input type
+          const defaultValue = formatValue(inputType, input.defaultValue ?? options?.[0]?.value).toString();
+
           return (
             <div key={inputKey} className="flex flex-col gap-1 text-sm">
-              <label className="text-gray-300">{input.label}</label>
-              <input
-                type={input.inputType || "text"}
-                placeholder={input.defaultValue.toString()}
-                onChange={(e) => {
-                  setInputValues((prev) => ({
-                    ...prev,
-                    [inputKey]: { ...input, value: e.target.value },
-                  }));
-                }}
-                className="max-h-8 bg-gray-800 p-2 text-gray-300"
-              />
+              <label className="text-gray-300">{label}</label>
+              {options ? (
+                <select
+                  defaultValue={defaultValue}
+                  onChange={(e) => {
+                    setInputValues((prev) => ({
+                      ...prev,
+                      [inputKey]: {
+                        ...input,
+                        id: e.target.value,
+                        value: formatValue(inputType, options.find((o) => o.id === e.target.value)?.value),
+                      },
+                    }));
+                  }}
+                  className="max-h-8 bg-gray-800 p-2 text-gray-300"
+                >
+                  {options?.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.value.toString()}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  placeholder={defaultValue}
+                  defaultValue={defaultValue}
+                  onChange={(e) => {
+                    setInputValues((prev) => ({
+                      ...prev,
+                      [inputKey]: { ...input, value: formatValue(inputType, e.target.value) },
+                    }));
+                  }}
+                  className="max-h-8 bg-gray-800 p-2 text-gray-300"
+                />
+              )}
             </div>
           );
         })}
@@ -144,7 +174,11 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
             const argsWithValues = Object.entries(inputs).reduce((acc, [inputKey, input]) => {
               return {
                 ...acc,
-                [inputKey]: { ...input, value: inputValues[inputKey]?.value ?? input.defaultValue },
+                [inputKey]: {
+                  ...input,
+                  value: inputValues[inputKey]?.value ?? input.defaultValue,
+                  id: inputValues[inputKey]?.id ?? input.options?.[0]?.id,
+                },
               };
             }, {} as CheatcodeInputs<T>);
 
