@@ -138,20 +138,19 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       from: {
         label: "From",
         inputType: "string",
-        defaultValue: planets.length > 0 ? entityToPlanetName(planets[0]) : "No planetsData with destroyers",
-        options: planets.length > 0 ? planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })) : [],
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
       },
       to: {
         label: "To",
         inputType: "string",
-        options: planets.length > 0 ? planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })) : [],
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
       },
     },
     execute: async ({ from, to }) => {
       const fromEntity = from.id as Entity;
       const toEntity = to.id as Entity;
       const fromPlanetData = tables.Planet.get(fromEntity);
-      console.log({ fromPlanetData });
       const toPlanetData = tables.Planet.get(toEntity);
       if (!fromPlanetData || !toPlanetData) {
         console.log("[CHEATCODE] Send destroyers: invalid planets");
