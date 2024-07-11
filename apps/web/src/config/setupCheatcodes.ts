@@ -1,7 +1,6 @@
 import { Hex } from "viem";
 
-import { EEmpire, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
-import { ENPCAction } from "@primodiumxyz/contracts/config/enums";
+import { EEmpire, ENPCAction, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { Entity, Properties } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
@@ -592,20 +591,19 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       },
     }),
 
-    // TODO: thresholds percentage
     P_NPCActionThresholds: createCheatcode({
       title: "Update NPC action thresholds",
       caption: "P_NPCActionThresholds",
       inputs: {
         none: {
-          label: "None (0-100%)",
+          label: "None (0-100)",
           inputType: "number",
-          defaultValue: Number(npcActionThresholds?.none ?? BigInt(2000)) / 100,
+          defaultValue: Number(npcActionThresholds?.none ?? BigInt(0)) / 100,
         },
         buyDestroyers: {
-          label: "Buy destroyers (0-100%)",
+          label: "Buy destroyers (0-100)",
           inputType: "number",
-          defaultValue: Number(npcActionThresholds?.buyDestroyers ?? BigInt(8000)) / 100,
+          defaultValue: Number(npcActionThresholds?.buyDestroyers ?? BigInt(0)) / 100,
         },
       },
       execute: async (properties) => {
@@ -617,7 +615,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
         const success = await setTableValue(
           tables.P_NPCActionThresholds,
           {},
-          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value * 100)])),
+          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, value.value / 100])),
         );
 
         if (success) {
@@ -635,24 +633,24 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       caption: "P_NPCMoveThresholds",
       inputs: {
         none: {
-          label: "None (0-100%)",
+          label: "None (0-100)",
           inputType: "number",
-          defaultValue: Number(npcMoveThresholds?.none ?? BigInt(2500)) / 100,
+          defaultValue: Number(npcMoveThresholds?.none ?? BigInt(0)) / 100,
         },
         expand: {
-          label: "Expand (0-100%)",
+          label: "Expand (0-100)",
           inputType: "number",
-          defaultValue: Number(npcMoveThresholds?.expand ?? BigInt(5250)) / 100,
+          defaultValue: Number(npcMoveThresholds?.expand ?? BigInt(0)) / 100,
         },
         lateral: {
-          label: "Lateral (0-100%)",
+          label: "Lateral (0-100)",
           inputType: "number",
-          defaultValue: Number(npcMoveThresholds?.lateral ?? BigInt(1500)) / 100,
+          defaultValue: Number(npcMoveThresholds?.lateral ?? BigInt(0)) / 100,
         },
         retreat: {
-          label: "Retreat (0-100%)",
+          label: "Retreat (0-100)",
           inputType: "number",
-          defaultValue: Number(npcMoveThresholds?.retreat ?? BigInt(750)) / 100,
+          defaultValue: Number(npcMoveThresholds?.retreat ?? BigInt(0)) / 100,
         },
       },
       execute: async (properties) => {
@@ -664,7 +662,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
         const success = await setTableValue(
           tables.P_NPCMoveThresholds,
           {},
-          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value * 100)])),
+          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, value.value / 100])),
         );
 
         if (success) {
