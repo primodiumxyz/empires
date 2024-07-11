@@ -1,5 +1,3 @@
-import { CreateNetworkResult } from "@core/lib/types";
-
 import {
   createLocalBigIntTable,
   createLocalBoolTable,
@@ -7,6 +5,7 @@ import {
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
+import { CreateNetworkResult } from "@core/lib/types";
 
 import { createTransactionQueueTable } from "./customTables/TransactionQueueTable";
 

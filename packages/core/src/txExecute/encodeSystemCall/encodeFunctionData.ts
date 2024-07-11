@@ -1,4 +1,3 @@
-import { Tables } from "@core/lib/types";
 import { formatAbiItem, type Abi } from "abitype";
 import {
   concatHex,
@@ -10,6 +9,8 @@ import {
   Hex,
   toFunctionSelector,
 } from "viem";
+
+import { Tables } from "@core/lib/types";
 
 export function encodeFunctionData<
   abi extends Abi | readonly unknown[] = Abi | readonly unknown[],

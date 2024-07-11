@@ -1,6 +1,4 @@
 import { createBlockStream } from "@latticexyz/block-logs-stream";
-import { SyncStep } from "@core/lib";
-import { SyncTables } from "@core/tables/syncTables";
 import {
   concatMap,
   filter,
@@ -25,6 +23,8 @@ import {
 } from "@primodiumxyz/reactive-tables";
 import { StorageAdapterBlock } from "@primodiumxyz/reactive-tables/utils";
 import { Read } from "@primodiumxyz/sync-stack";
+import { SyncStep } from "@core/lib";
+import { SyncTables } from "@core/tables/syncTables";
 
 export type Recs<config extends StoreConfig, extraTables extends ContractTableDefs> = Omit<
   WrapperResult<config, extraTables>,
