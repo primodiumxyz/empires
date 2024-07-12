@@ -2,8 +2,13 @@
 pragma solidity >=0.8.24;
 
 import "forge-std/Test.sol";
+
+import { RESOURCE_SYSTEM, RESOURCE_NAMESPACE } from "@latticexyz/world/src/worldResourceTypes.sol";
+import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
+import { System } from "@latticexyz/world/src/System.sol";
+
 import { idToAddress, addressToId } from "src/utils.sol";
-import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { NamespaceOwner } from "@latticexyz/world/src/codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
@@ -11,6 +16,12 @@ import { EEmpire } from "codegen/common.sol";
 
 function toString(bytes32 id) pure returns (string memory) {
   return string(abi.encodePacked(id));
+}
+
+contract WorldBalanceTestSystem is System {
+  function echoValue() public payable returns (uint256) {
+    return _msgValue();
+  }
 }
 
 contract PrimodiumTest is MudTest {
@@ -21,6 +32,15 @@ contract PrimodiumTest is MudTest {
   address payable alice;
   address payable bob;
   address payable eve;
+
+  WorldBalanceTestSystem public system = new WorldBalanceTestSystem();
+
+  ResourceId public systemId =
+    WorldResourceIdLib.encode({
+      typeId: RESOURCE_SYSTEM,
+      namespace: WorldResourceIdInstance.getNamespace(EMPIRES_NAMESPACE_ID),
+      name: "testSystem"
+    });
 
   function setUp() public virtual override {
     super.setUp();
@@ -52,5 +72,12 @@ contract PrimodiumTest is MudTest {
 
   function assertEq(EEmpire a, EEmpire b) internal {
     assertEq(uint8(a), uint8(b));
+  }
+
+  function sendEther(address from, uint256 value) internal {
+    vm.stopPrank();
+
+    vm.prank(from);
+    bytes memory data = world.call{ value: value }(systemId, abi.encodeCall(system.echoValue, ()));
   }
 }

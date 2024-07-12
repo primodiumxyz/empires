@@ -43,9 +43,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointSellTax: BigInt(POINTS_UNIT * 0),
       },
       P_ActionConfig: {
-        actionGenRate: BigInt(POINTS_UNIT/2),
-        actionCostIncrease: BigInt(POINTS_UNIT/2),
-        startActionCost: BigInt(POINTS_UNIT/2),
+        actionGenRate: BigInt(POINTS_UNIT / 2),
+        actionCostIncrease: BigInt(POINTS_UNIT / 2),
+        startActionCost: BigInt(POINTS_UNIT / 2),
         minActionCost: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({

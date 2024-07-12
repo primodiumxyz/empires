@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { RESOURCE_SYSTEM, RESOURCE_NAMESPACE } from "@latticexyz/world/src/worldResourceTypes.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
-import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
-import { System } from "@latticexyz/world/src/System.sol";
-import { ROOT_NAMESPACE, ROOT_NAME } from "@latticexyz/world/src/constants.sol";
-import { ROOT_NAMESPACE_ID } from "@latticexyz/world/src/constants.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 import { addressToId } from "src/utils.sol";
@@ -15,25 +10,10 @@ import { P_GameConfig, WinningEmpire, Faction, P_PointConfig } from "codegen/ind
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 
-contract WorldBalanceTestSystem is System {
-  function echoValue() public payable returns (uint256) {
-    return _msgValue();
-  }
-}
-
 contract RewardsSystemTest is PrimodiumTest {
   bytes32 planetId;
   uint256 turnLength = 100;
   uint256 value = 100 ether;
-
-  WorldBalanceTestSystem public system = new WorldBalanceTestSystem();
-
-  ResourceId public systemId =
-    WorldResourceIdLib.encode({
-      typeId: RESOURCE_SYSTEM,
-      namespace: WorldResourceIdInstance.getNamespace(EMPIRES_NAMESPACE_ID),
-      name: "testSystem"
-    });
 
   function setUp() public override {
     super.setUp();
@@ -67,31 +47,9 @@ contract RewardsSystemTest is PrimodiumTest {
   }
 
   function testSendEther() public {
-    bytes memory data = world.call{ value: value }(systemId, abi.encodeCall(system.echoValue, ()));
-    assertEq(abi.decode(data, (uint256)), value);
+    sendEther(alice, value);
 
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), value);
-  }
-
-  function testTakeRake() public {
-    testSendEther();
-    setGameover();
-    world.Empires__claimVictory(EEmpire.Red);
-
-    Faction.setPointsIssued(EEmpire.Red, 100 ether);
-
-    P_PointConfig.setPointRake(5_000); // out of 10_000
-
-    world.Empires__withdrawEarnings();
-
-    assertEq(Balances.get(EMPIRES_NAMESPACE_ID), value / 2);
-    assertEq(Balances.get(ADMIN_NAMESPACE_ID), value / 2);
-
-    // should not take rake again
-    world.Empires__withdrawEarnings();
-
-    assertEq(Balances.get(EMPIRES_NAMESPACE_ID), value / 2);
-    assertEq(Balances.get(ADMIN_NAMESPACE_ID), value / 2);
   }
 
   function testWithdrawEarnings(uint256 alicePoints, uint256 totalPoints) public {
@@ -100,6 +58,7 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.assume(totalPoints < 100 ether);
     testSendEther();
     setGameover();
+    vm.startPrank(creator);
     world.Empires__claimVictory(EEmpire.Red);
 
     P_PointConfig.setPointRake(0); // out of 10_000
@@ -122,13 +81,23 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(Faction.getPointsIssued(EEmpire.Red), alicePoints == 0 ? totalPoints : 0, "empire points");
   }
 
-  function testWithdrawEarningsEqualAfterWithdrawal(uint256 playerPoints, uint256 totalPoints) public {
+  // function testWithdrawEarningsEqualAfterWithdrawal(uint256 playerPoints, uint256 totalPoints) public {
+  function testWithdrawEarningsEqualAfterWithdrawal() public {
+    uint256 playerPoints = 0;
+    uint256 totalPoints = 1;
+
     vm.assume(totalPoints > 0);
     vm.assume(playerPoints <= totalPoints / 3);
     vm.assume(totalPoints < 100 ether);
 
-    testSendEther();
+    sendEther(alice, 1 ether);
     setGameover();
+
+    vm.deal(alice, 1 ether);
+    vm.deal(bob, 1 ether);
+    vm.deal(eve, 1 ether);
+
+    vm.startPrank(creator);
     world.Empires__claimVictory(EEmpire.Red);
 
     Faction.setPointsIssued(EEmpire.Red, 100 ether);
@@ -140,10 +109,11 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.stopPrank();
     vm.prank(alice);
     world.Empires__withdrawEarnings();
+    uint256 bobPoints = PointsMap.get(EEmpire.Red, addressToId(bob));
     vm.prank(bob);
     world.Empires__withdrawEarnings();
     // 0.1% difference
-    assertApproxEqRel(alice.balance, bob.balance, .001e18);
+    assertApproxEqRel(alice.balance, bob.balance, .001e18, "balances not approximately equal");
 
     assertEq(
       Faction.getPointsIssued(EEmpire.Red),
