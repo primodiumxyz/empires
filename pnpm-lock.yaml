@@ -36,8 +36,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       '@primodiumxyz/reactive-tables':
-        specifier: ^3.3.1
-        version: 3.3.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        specifier: ^3.4.0
+        version: 3.4.0(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@privy-io/react-auth':
         specifier: ^1.72.0
         version: 1.73.0(@babel/core@7.24.7)(@types/react@18.3.3)(react-dom@18.3.1)(react-is@18.3.1)(react@18.3.1)(typescript@5.5.2)
@@ -56,6 +56,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-toastify:
+        specifier: ^10.0.5
+        version: 10.0.5(react-dom@18.3.1)(react@18.3.1)
       tailwind-merge:
         specifier: ^2.3.0
         version: 2.3.0
@@ -221,8 +224,8 @@ importers:
         specifier: workspace:*
         version: link:../contracts
       '@primodiumxyz/reactive-tables':
-        specifier: ^3.3.1
-        version: 3.3.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        specifier: ^3.4.0
+        version: 3.4.0(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@primodiumxyz/sync-stack':
         specifier: ^0.6.9
         version: 0.6.9(typescript@5.5.2)
@@ -256,7 +259,7 @@ importers:
         version: 6.4.6(vitest@0.32.4)
       '@testing-library/react':
         specifier: ^16.0.0
-        version: 16.0.0(@testing-library/dom@10.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
+        version: 16.0.0(@testing-library/dom@10.3.1)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
       '@testing-library/react-hooks':
         specifier: ^8.0.1
         version: 8.0.1(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
@@ -3206,8 +3209,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@primodiumxyz/reactive-tables@3.3.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
-    resolution: {integrity: sha512-Ycbop6ApI1Sm+D0w16kD8X8gXdHj86CKFMkMpea31m0APLC1Gdf8KEKQhlQtvm3ix3CVYbVln4lDCwO/0RPjOA==}
+  /@primodiumxyz/reactive-tables@3.4.0(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
+    resolution: {integrity: sha512-Zp35uMy9pdoRpd/3tR/5B9XwynrmIzZpfAgYDMkyGzmTWgcDhSj+Bayb8XOPZOBzpOYvtHY5GP52e37sVblPCg==}
     engines: {node: 20.x, pnpm: 8.x}
     dependencies:
       '@latticexyz/protocol-parser': 2.0.9(typescript@5.5.2)(zod@3.23.8)
@@ -4246,8 +4249,8 @@ packages:
     resolution: {integrity: sha512-uNtAwenT276M9QYCjTBoHZ8X3MUeCRoGK59zPi92hMIxdfS9AyHjkDWJ94WroDxnv48UE+hIeo21BU84jKc8aQ==}
     dev: false
 
-  /@testing-library/dom@10.3.0:
-    resolution: {integrity: sha512-pT/TYB2+IyMYkkB6lqpkzD7VFbsR0JBJtflK3cS68sCNWxmOhWwRm1XvVHlseNEorsNcxkYsb4sRDV3aNIpttg==}
+  /@testing-library/dom@10.3.1:
+    resolution: {integrity: sha512-q/WL+vlXMpC0uXDyfsMtc1rmotzLV8Y0gq6q1gfrrDjQeHoeLrqHbxdPvPNAh1i+xuJl7+BezywcXArz7vLqKQ==}
     engines: {node: '>=18'}
     dependencies:
       '@babel/code-frame': 7.24.7
@@ -4315,7 +4318,7 @@ packages:
       react-error-boundary: 3.1.4(react@18.3.1)
     dev: true
 
-  /@testing-library/react@16.0.0(@testing-library/dom@10.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1):
+  /@testing-library/react@16.0.0(@testing-library/dom@10.3.1)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-guuxUKRWQ+FgNX0h0NS0FIq3Q3uLtWVpBzcLOggmfMoUpgBnzBzvLLd4fbm6yS8ydJd94cIfY4yP9qUQjM2KwQ==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -4331,7 +4334,7 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.24.7
-      '@testing-library/dom': 10.3.0
+      '@testing-library/dom': 10.3.1
       '@types/react': 18.3.3
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -8945,6 +8948,17 @@ packages:
 
   /react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
+
+  /react-toastify@10.0.5(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-mNKt2jBXJg4O7pSdbNUfDdTsK9FIdikfsIE/yUCxbAEXl4HMyJaivrVFcn3Elvt5xvCQYhUZm+hqTIu1UXM3Pw==}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+    dependencies:
+      clsx: 2.1.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
 
   /react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}

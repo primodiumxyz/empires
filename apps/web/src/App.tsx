@@ -1,6 +1,9 @@
 import { useMemo, useRef } from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
+import { ToastContainer } from "react-toastify";
 import { defineChain } from "viem";
+
+import "react-toastify/dist/ReactToastify.min.css";
 
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider } from "@primodiumxyz/core/react";
@@ -42,6 +45,19 @@ const App = () => {
           <CoreProvider {...core}>
             <div className="flex h-screen w-screen items-center justify-center bg-neutral">
               <Landing />
+              <ToastContainer
+                toastClassName="text-xs border text-base-100 bg-neutral border-neutral rounded-box"
+                progressClassName="bg-primary"
+                position="bottom-left"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
             </div>
           </CoreProvider>
         </EthPriceProvider>

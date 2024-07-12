@@ -15,7 +15,7 @@ const Landing = () => {
     return <>Syncing {Math.floor(progress * 100)}%</>;
   }
 
-  if ((!usingBurner && !authenticated) || (usingBurner && value === null)) {
+  if ((!usingBurner && !authenticated) || (usingBurner && !value)) {
     // Replace this code with however you'd like to handle an unauthenticated user
     // As an example, you might redirect them to a login page
     return <Login />;

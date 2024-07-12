@@ -42,9 +42,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointRake: scaleRake(0.001), // out of 1, scales to out of 10000
       },
       P_ActionConfig: {
-        actionGenRate: BigInt(POINTS_UNIT/2),
-        actionCostIncrease: BigInt(POINTS_UNIT/2),
-        startActionCost: BigInt(POINTS_UNIT/2),
+        actionGenRate: BigInt(POINTS_UNIT / 2),
+        actionCostIncrease: BigInt(POINTS_UNIT / 2),
+        startActionCost: BigInt(POINTS_UNIT / 2),
         minActionCost: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
