@@ -2,10 +2,11 @@ import { AccountClient, Core, ExecuteFunctions, TxQueueOptions } from "@primodiu
 import { Entity } from "@primodiumxyz/reactive-tables";
 
 export const createActionCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
-  const createDestroyer = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
-    await execute({
+  const createDestroyer = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
       functionName: "Empires__createDestroyer",
       args: [planetId],
+      options: { value: payment },
       txQueueOptions: {
         id: `${planetId}-create-destroyer`,
         ...options,
@@ -14,10 +15,11 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  const killDestroyer = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
-    await execute({
+  const killDestroyer = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
       functionName: "Empires__killDestroyer",
       args: [planetId],
+      options: { value: payment },
       txQueueOptions: {
         id: `${planetId}-kill-destroyer`,
         ...options,

@@ -12,9 +12,6 @@ import { ConfigWithPrototypes } from "./ts/prototypes/types";
 export const worldInput = {
   namespace: "Empires",
 
-  // add all subsystems here
-  // systems: {},
-
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
   enums: MUDEnums,
   tables: {
@@ -23,6 +20,30 @@ export const worldInput = {
       key: [],
       schema: {
         turnLengthBlocks: "uint256",
+        goldGenRate: "uint256",
+        gameOverBlock: "uint256",
+      },
+    },
+
+    P_PointConfig: {
+      key: [],
+      schema: {
+        pointUnit: "uint256",
+        minPointCost: "uint256",
+        startPointCost: "uint256",
+        pointGenRate: "uint256",
+        pointCostIncrease: "uint256",
+        pointRake: "uint256", // times 10_000
+      },
+    },
+
+    P_ActionConfig: {
+      key: [],
+      schema: {
+        actionGenRate: "uint256",
+        actionCostIncrease: "uint256",
+        startActionCost: "uint256",
+        minActionCost: "uint256",
       },
     },
 
@@ -35,8 +56,30 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
-        points: "bytes32",
+        spent: "uint256",
       },
+    },
+
+    WinningEmpire: {
+      key: [],
+      schema: { empire: "EEmpire" },
+    },
+    /* ------------------------------- Points Map ------------------------------- */
+
+    // Used in the mbuilding utilities Map data structure
+    Value_PointsMap: {
+      key: ["factionId", "playerId"],
+      schema: { playerId: "bytes32", factionId: "EEmpire", value: "uint256" },
+    },
+
+    Meta_PointsMap: {
+      key: ["factionId", "playerId"],
+      schema: { playerId: "bytes32", factionId: "EEmpire", stored: "bool", index: "uint256" },
+    },
+
+    Keys_PointsMap: {
+      key: ["factionId"],
+      schema: { factionId: "EEmpire", players: "bytes32[]" },
     },
 
     // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
@@ -48,6 +91,7 @@ export const worldInput = {
         r: "int128",
         isPlanet: "bool",
         destroyerCount: "uint256",
+        goldCount: "uint256",
         factionId: "EEmpire",
       },
     },
@@ -57,6 +101,17 @@ export const worldInput = {
       schema: {
         id: "EEmpire",
         origin: "EOrigin",
+        pointsIssued: "uint256",
+        pointCost: "uint256",
+      },
+    },
+
+    ActionCost: {
+      key: ["factionId", "action"],
+      schema: {
+        factionId: "EEmpire",
+        action: "EPlayerAction",
+        value: "uint256",
       },
     },
 
@@ -84,9 +139,24 @@ export const worldInput = {
 
     /* -------------------------------- Movement -------------------------------- */
 
+    P_NPCActionThresholds: {
+      key: [],
+      schema: {
+        none: "uint256",
+        buyDestroyers: "uint256",
+      },
+    },
+
+    P_NPCActionCosts: {
+      key: ["action"],
+      schema: {
+        action: "ENPCAction",
+        goldCost: "uint256",
+      },
+    },
     // each value denotes a threshold for the likelihood of a move in that direction
     // the total is out of 10000
-    P_MoveConfig: {
+    P_NPCMoveThresholds: {
       key: [],
       schema: {
         none: "uint256",
@@ -117,7 +187,7 @@ const getConfig = async () => {
   const world = defineWorld({
     ...worldInput,
     modules: [],
-    excludeSystems: exclude,
+    excludeSystems: [...exclude, "WithdrawRakeSystem"],
   });
 
   return world;

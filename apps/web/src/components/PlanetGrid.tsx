@@ -1,7 +1,7 @@
 import { useCore } from "@primodiumxyz/core/react";
 import { Planet } from "@/components/Planet";
 
-export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ tileSize = 100, margin = 10 }) => {
+export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ tileSize = 150, margin = 10 }) => {
   const { tables } = useCore();
   const entities = tables.Planet.useAll();
 

@@ -1,6 +1,19 @@
 [
   {
     "type": "function",
+    "name": "Empires__claimVictory",
+    "inputs": [
+      {
+        "name": "empire",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__createDestroyer",
     "inputs": [
       {
@@ -10,7 +23,7 @@
       }
     ],
     "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "payable"
   },
   {
     "type": "function",
@@ -318,7 +331,7 @@
       }
     ],
     "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "payable"
   },
   {
     "type": "function",
@@ -330,6 +343,13 @@
   {
     "type": "function",
     "name": "Empires__updateWorld",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__withdrawEarnings",
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"

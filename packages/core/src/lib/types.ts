@@ -14,6 +14,7 @@ import {
 
 import { IWorldAbi, mudConfig } from "@primodiumxyz/contracts";
 import { AllTableDefs, ContractTables, Entity, World, WrapperResult } from "@primodiumxyz/reactive-tables";
+import AdminAbi from "@core/lib/AdminAbi.abi.json";
 import { ChainConfig } from "@core/network/config/chainConfigs";
 import { otherTableDefs } from "@core/network/otherTableDefs";
 import { Recs } from "@core/recs/setupRecs";
@@ -132,7 +133,7 @@ export type Clock = {
  * World Abi. Combination of IWorld abi and CallWithSignature abi.
  */
 
-export type WorldAbiType = typeof IWorldAbi & typeof CallWithSignatureAbi;
+export type WorldAbiType = typeof IWorldAbi & typeof CallWithSignatureAbi & typeof AdminAbi;
 
 type _Account<
   IsLocalAccount extends boolean = false,
