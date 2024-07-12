@@ -43,7 +43,6 @@ const SellEmpirePoints = ({ empire }: { empire: EEmpire }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     const max = Number(formatEther(playerPoints));
-    console.log({ value, max, playerPoints });
     if (value >= 0n && value <= max) {
       setAmountToSell(value.toString());
     }
