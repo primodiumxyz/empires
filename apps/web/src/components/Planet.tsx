@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon } from "@heroicons/react/24/solid";
+import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
@@ -45,9 +45,13 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   const createDestroyerPriceWei = useActionCost(EPlayerAction.CreateDestroyer, planetFaction);
   const killDestroyerPriceWei = useActionCost(EPlayerAction.KillDestroyer, planetFaction);
+  const addShieldPriceWei = useActionCost(EPlayerAction.AddShield, planetFaction);
+  const removeShieldPriceWei = useActionCost(EPlayerAction.RemoveShield, planetFaction);
 
   const createDestroyerPriceUsd = utils.ethToUSD(createDestroyerPriceWei, price ?? 0);
   const killDestroyerPriceUsd = utils.ethToUSD(killDestroyerPriceWei, price ?? 0);
+  const addShieldPriceUsd = utils.ethToUSD(addShieldPriceWei, price ?? 0);
+  const removeShieldPriceUsd = utils.ethToUSD(removeShieldPriceWei, price ?? 0);
 
   if (!planet) return null;
 
@@ -69,35 +73,71 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           </p>
           <p className="font-bold">{entityToPlanetName(entity)}</p>
         </div>
-        <div className="rounded-lg bg-white/20 p-1">
-          <p className="flex items-center justify-center gap-2">
-            <RocketLaunchIcon className="size-4" /> {planet.destroyerCount.toLocaleString()}
-          </p>
+        <div className="flex items-center gap-2">
+          {/* destroyers */}
+          <div className="rounded-lg bg-white/20 p-1">
+            <p className="flex items-center justify-center gap-2">
+              <RocketLaunchIcon className="size-4" /> {planet.destroyerCount.toLocaleString()}
+            </p>
 
-          <div className="flex items-center gap-2">
-            <Tooltip tooltipContent={`Cost: ${killDestroyerPriceUsd}`}>
-              <TransactionQueueMask id={`${entity}-kill-destroyer`}>
-                <button
-                  onClick={() => calls.removeDestroyer(entity, killDestroyerPriceWei)}
-                  className="btn btn-square btn-xs"
-                  disabled={gameOver || planet.factionId == 0}
-                >
-                  <MinusIcon className="size-4" />
-                </button>
-              </TransactionQueueMask>
-            </Tooltip>
+            <div className="flex items-center gap-2">
+              <Tooltip tooltipContent={`Cost: ${killDestroyerPriceUsd}`}>
+                <TransactionQueueMask id={`${entity}-kill-destroyer`}>
+                  <button
+                    onClick={() => calls.removeDestroyer(entity, killDestroyerPriceWei)}
+                    className="btn btn-square btn-xs"
+                    disabled={gameOver || planet.factionId == 0}
+                  >
+                    <MinusIcon className="size-4" />
+                  </button>
+                </TransactionQueueMask>
+              </Tooltip>
 
-            <Tooltip tooltipContent={`Cost: ${createDestroyerPriceUsd}`}>
-              <TransactionQueueMask id={`${entity}-create-destroyer`}>
-                <button
-                  onClick={() => calls.createDestroyer(entity, createDestroyerPriceWei)}
-                  className="btn btn-square btn-xs"
-                  disabled={gameOver || planet.factionId == 0}
-                >
-                  <PlusIcon className="size-4" />
-                </button>
-              </TransactionQueueMask>
-            </Tooltip>
+              <Tooltip tooltipContent={`Cost: ${createDestroyerPriceUsd}`}>
+                <TransactionQueueMask id={`${entity}-create-destroyer`}>
+                  <button
+                    onClick={() => calls.createDestroyer(entity, createDestroyerPriceWei)}
+                    className="btn btn-square btn-xs"
+                    disabled={gameOver || planet.factionId == 0}
+                  >
+                    <PlusIcon className="size-4" />
+                  </button>
+                </TransactionQueueMask>
+              </Tooltip>
+            </div>
+          </div>
+
+          {/* shields */}
+          <div className="rounded-lg bg-white/20 p-1">
+            <p className="flex items-center justify-center gap-2">
+              <ShieldCheckIcon className="size-4" /> {planet.shieldCount.toLocaleString()}
+            </p>
+
+            <div className="flex items-center gap-2">
+              <Tooltip tooltipContent={`Cost: ${removeShieldPriceUsd}`}>
+                <TransactionQueueMask id={`${entity}-remove-shield`}>
+                  <button
+                    onClick={() => calls.removeShield(entity, removeShieldPriceWei)}
+                    className="btn btn-square btn-xs"
+                    disabled={gameOver || planet.factionId == 0}
+                  >
+                    <MinusIcon className="size-4" />
+                  </button>
+                </TransactionQueueMask>
+              </Tooltip>
+
+              <Tooltip tooltipContent={`Cost: ${addShieldPriceUsd}`}>
+                <TransactionQueueMask id={`${entity}-add-shield`}>
+                  <button
+                    onClick={() => calls.addShield(entity, addShieldPriceWei)}
+                    className="btn btn-square btn-xs"
+                    disabled={gameOver || planet.factionId == 0}
+                  >
+                    <PlusIcon className="size-4" />
+                  </button>
+                </TransactionQueueMask>
+              </Tooltip>
+            </div>
           </div>
         </div>
         <div className="flex">
