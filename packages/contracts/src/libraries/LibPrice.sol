@@ -128,4 +128,15 @@ library LibPrice {
       ActionCost.set(_empireImpacted, EPlayerAction(i), newActionCost);
     }
   }
+
+  /**
+   * @dev Calculates the value of selling a specific number of points from a specific empire.
+   * @param _empire The empire to sell points from.
+   * @param _pointUnits The number of points to sell.
+   * @return pointSaleValue The value of the points to be sold.
+   */
+  function getPointSaleValue(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
+    uint256 pointSaleValue;
+    return pointSaleValue;
+  }
 }

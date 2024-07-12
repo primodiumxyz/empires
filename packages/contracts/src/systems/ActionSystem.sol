@@ -83,4 +83,23 @@ contract ActionSystem is EmpiresSystem {
     }
     LibPrice.actionCostUp(_empireImpacted, _actionType);
   }
+
+  /**
+   * @dev A player action to sell some points of an empire that they currently own.
+   * @param _empire The empire to sell points from.
+   * @param _pointUnits The number of points to sell.
+   */
+  function sellPoints(EEmpire _empire, uint256 _pointUnits) public {
+    bytes32 playerId = addressToId(_msgSender());
+    // require(Player's points are >= _pointUnits, "[ActionSystem] Insufficient points");
+
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _pointUnits);
+    // require that the price isn't at minimum or will reach below minimum
+    // set Faction.setPointCost
+
+    LibPoint.removePoints(_empire, playerId, _pointUnits);
+
+    // require that the pot has enough to send
+    // send eth to player
+  }
 }
