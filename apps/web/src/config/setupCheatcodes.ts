@@ -86,7 +86,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
   const addPlanetToFaction = async (factionId: EEmpire, planetId: Hex) => {
     try {
-      if (tables.Meta_FactionPlanetsSet.hasWithKeys({ factionId, planetId })) return;
+      if (tables.Meta_FactionPlanetsSet.hasWithKeys({ factionId, planetId })) return true;
 
       const prevSet = tables.Keys_FactionPlanetsSet.getWithKeys({ factionId })?.itemKeys ?? [];
 
@@ -105,17 +105,17 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
   const removePlanetFromFaction = async (factionId: EEmpire, planetId: Hex) => {
     try {
-      if (!tables.Meta_FactionPlanetsSet.hasWithKeys({ factionId, planetId })) return;
+      if (!tables.Meta_FactionPlanetsSet.hasWithKeys({ factionId, planetId })) return true;
 
       if (tables.Keys_FactionPlanetsSet.getWithKeys({ factionId })?.itemKeys.length == 1) {
         await removeTable(tables.Meta_FactionPlanetsSet, { factionId, planetId });
         await removeTable(tables.Keys_FactionPlanetsSet, { factionId });
-        return;
+        return true;
       }
 
       const index = tables.Meta_FactionPlanetsSet.getWithKeys({ factionId, planetId })?.index;
       const currElems = tables.Keys_FactionPlanetsSet.getWithKeys({ factionId })?.itemKeys ?? [];
-      if (!index || currElems.length == 0) return;
+      if (!index || currElems.length == 0) return true;
       const replacement = currElems[currElems.length - 1];
 
       // update replacement data
