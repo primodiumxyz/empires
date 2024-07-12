@@ -60,7 +60,7 @@ export const Cheatcodes = () => {
         <CheatcodesCloseButton setOpen={setOpen} />
         {/* cheatcodes */}
         <h1 className="font-semibold uppercase text-gray-300">Cheatcodes</h1>
-        <div className="flex flex-col gap-4 overflow-auto pr-2">
+        <div className="grid grid-cols-1 gap-4 overflow-auto pr-2 md:grid-cols-2 lg:grid-cols-3">
           {cheatcodes.map((cheatcode, i) => (
             // @ts-expect-error wrong type inference -- will fix on base template
             <Cheatcode key={i} cheatcode={cheatcode} index={i} activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -102,7 +102,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className={cn("flex flex-col", activeTab === index && "col-span-full")}>
       <div
         className={cn(
           "cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
@@ -117,14 +117,16 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
       </div>
       <div
         className={cn(
-          "hidden gap-2 overflow-hidden bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4",
+          "grid hidden gap-2 overflow-hidden bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4",
           activeTab === index && "grid",
         )}
       >
         {Object.entries(inputs).map(([inputKey, input]) => {
           const { label, inputType = "string", options } = input;
-          if (options && options?.length !== new Set(options?.map((o) => o.id)).size)
-            throw new Error("Options should have unique ids");
+          if (options && options?.length !== new Set(options?.map((o) => o.id)).size) {
+            console.error('Cheatcode input options must have unique "id" values', input);
+            return;
+          }
           // default value will be either provided, or first option if any, or default value corresponding to the input type
           const defaultValue = formatValue(inputType, input.defaultValue ?? options?.[0]?.value).toString();
 

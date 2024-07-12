@@ -2,29 +2,23 @@ import { Hex } from "viem";
 
 import { worldInput } from "@primodiumxyz/contracts/mud.config";
 import { ExecuteFunctions } from "@primodiumxyz/core";
-import { ContractTable, ContractTableDef, Entity, Properties } from "@primodiumxyz/reactive-tables";
-import {
-  encodeField,
-  encodeKeys,
-  entityToHexKeyTuple,
-  SchemaToPrimitives,
-  StaticAbiType,
-  uuid,
-} from "@primodiumxyz/reactive-tables/utils";
+import { ContractTable, ContractTableDef, Properties } from "@primodiumxyz/reactive-tables";
+import { encodeField, encodeKeys, SchemaToPrimitives, StaticAbiType, uuid } from "@primodiumxyz/reactive-tables/utils";
 
 export const createDevCalls = ({ execute }: ExecuteFunctions) => {
   async function removeTable<tableDef extends ContractTableDef = ContractTableDef>(
     table: ContractTable<tableDef>,
-    entity: Entity,
+    keys: SchemaToPrimitives<ContractTable<tableDef>["metadata"]["abiKeySchema"]>,
   ) {
     const tableId = table.id as Hex;
-    const key = entityToHexKeyTuple(entity);
+
+    const keyTuple = encodeKeys(table.metadata.abiKeySchema, keys);
 
     return await execute({
       functionName: `${worldInput.namespace}__devDeleteRecord`,
-      args: [tableId, key],
+      args: [tableId, keyTuple],
       txQueueOptions: {
-        id: entity,
+        id: "removeTable",
       },
     });
   }
