@@ -28,5 +28,31 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  return { createDestroyer, removeDestroyer: killDestroyer };
+  const addShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__addShield",
+      args: [planetId],
+      options: { value: payment },
+      txQueueOptions: {
+        id: `${planetId}-add-shield`,
+        ...options,
+      },
+      onComplete: (receipt) => {},
+    });
+  };
+
+  const removeShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__removeShield",
+      args: [planetId],
+      options: { value: payment },
+      txQueueOptions: {
+        id: `${planetId}-remove-shield`,
+        ...options,
+      },
+      onComplete: (receipt) => {},
+    });
+  };
+
+  return { createDestroyer, removeDestroyer: killDestroyer, addShield, removeShield };
 };

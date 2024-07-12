@@ -27,26 +27,6 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const npcActionThresholds = tables.P_NPCActionThresholds.get();
   const npcMoveThresholds = tables.P_NPCMoveThresholds.get();
 
-  // utils
-  const getNearbyPlanetEntities = (planet: Properties<typeof tables.Planet.propertiesSchema>) => {
-    const { q, r } = { q: Number(planet.q), r: Number(planet.r) };
-    return [
-      { q: q - 1, r: r },
-      { q: q + 1, r: r },
-      { q: q, r: r - 1 },
-      { q: q, r: r + 1 },
-      { q: q - 1, r: r + 1 },
-      { q: q + 1, r: r - 1 },
-    ]
-      .map(({ q, r }) =>
-        planets.find((entity) => {
-          const planetData = tables.Planet.get(entity);
-          return planetData?.q === BigInt(q) && planetData?.r === BigInt(r);
-        }),
-      )
-      .filter(Boolean) as Entity[];
-  };
-
   /* ------------------------------- DESTROYERS ------------------------------- */
   // Set the amount of destroyers on a planet
   const setDestroyers = createCheatcode({
@@ -130,6 +110,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       return false;
     }
   };
+
   // send destroyers from a planet to another
   const sendDestroyers = createCheatcode({
     title: "Send destroyers",
@@ -206,6 +187,43 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
           );
           return false;
         }
+      }
+    },
+  });
+
+  /* --------------------------------- SHIELDS -------------------------------- */
+  // Set the amount of destroyers on a planet
+  const setShields = createCheatcode({
+    title: "Set shields",
+    caption: "Set the amount of shields on a planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+      },
+      amount: {
+        label: "Amount",
+        inputType: "number",
+        defaultValue: 1,
+      },
+    },
+    execute: async ({ amount, planet }) => {
+      const success = await setTableValue(
+        tables.Planet,
+        {
+          id: planet.id as Entity,
+        },
+        { shieldCount: BigInt(amount.value) },
+      );
+
+      if (success) {
+        notify("success", `Shields set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
+        return true;
+      } else {
+        notify("error", `Failed to set shields on ${entityToPlanetName(planet.id as Entity)}`);
+        return false;
       }
     },
   });
