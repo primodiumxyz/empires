@@ -16,9 +16,6 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   // game
   const factions = tables.Faction.getAll();
   const planets = tables.Planet.getAll();
-  const planetsData = planets
-    .map((entity) => tables.Planet.get(entity))
-    .filter((planetData) => !!planetData?.factionId) as unknown as Properties<typeof tables.Planet.propertiesSchema>[];
 
   // config
   const gameConfig = tables.P_GameConfig.get();
@@ -265,10 +262,10 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     },
   });
 
-  // generate gold on all planetsData
+  // generate gold on all planets
   const generateGold = createCheatcode({
     title: "Generate gold",
-    caption: "Give a specified amount of gold to all planetsData",
+    caption: "Give a specified amount of gold to all planets",
     inputs: {
       amount: {
         label: "Amount",
