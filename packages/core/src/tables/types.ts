@@ -14,4 +14,5 @@ export type TxQueueOptions = {
   force?: true;
   metadata?: object;
   type?: string;
+  timeout?: number;
 };

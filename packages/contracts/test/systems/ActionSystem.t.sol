@@ -25,6 +25,8 @@ contract ActionSystemTest is PrimodiumTest {
     } while (Planet.getFactionId(planetId) == EEmpire.NULL);
     aliceId = addressToId(alice);
     bobId = addressToId(bob);
+    vm.prank(creator);
+    P_PointConfig.setPointRake(0);
   }
 
   function testCreateDestroyer() public {
@@ -100,7 +102,15 @@ contract ActionSystemTest is PrimodiumTest {
     assertGt(ActionCost.get(empire, EPlayerAction.KillDestroyer), actionCost, "Action Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), P_PointConfig.getPointUnit(), "Player should have received blue points");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), P_PointConfig.getPointUnit(), "Player should have received green points");
+    assertEq(
+      PointsMap.get(EEmpire.Blue, bobId),
+      P_PointConfig.getPointUnit(),
+      "Player should have received blue points"
+    );
+    assertEq(
+      PointsMap.get(EEmpire.Green, bobId),
+      P_PointConfig.getPointUnit(),
+      "Player should have received green points"
+    );
   }
 }
