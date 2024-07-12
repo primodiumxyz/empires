@@ -20,7 +20,7 @@ export const Pot = () => {
         <p className="text-left text-xs font-bold uppercase">Pot</p>
         <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
           {loading && <p>Loading...</p>}
-          {!loading && price && <p>{utils.ethToUSD(pot, price)}</p>}
+          {!loading && price && <p>{utils.weiToUsd(pot, price)}</p>}
           <p className="text-xs">{formatEther(pot)}ETH</p>
         </div>
       </div>
@@ -28,7 +28,7 @@ export const Pot = () => {
         <p className="text-left text-xs font-bold uppercase">Rake</p>
         <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
           {loading && <p>Loading...</p>}
-          {!loading && price && <p>{utils.ethToUSD(rake, price)}</p>}
+          {!loading && price && <p>{utils.weiToUsd(rake, price)}</p>}
           <p className="text-xs">{formatEther(rake)}ETH</p>
           <button className="btn btn-xs" onClick={calls.withdrawRake}>
             Withdraw

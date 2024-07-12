@@ -60,17 +60,31 @@ export function createPriceUtils(tables: Tables) {
     return pointCost;
   }
 
-  function ethToUSD(wei: bigint, ETHtoUSD: number) {
+  function weiToUsd<N extends boolean = false>(
+    wei: bigint,
+    weiToUsd: number,
+    asNumber?: N,
+  ): N extends true ? number : string {
     const balance = Number(formatEther(wei));
-    if (isNaN(balance)) return null;
-    const balanceInUsd = balance * ETHtoUSD;
-    return balanceInUsd.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    if (isNaN(balance))
+      return asNumber ? (0 as N extends true ? number : string) : ("0.00" as N extends true ? number : string);
+    const balanceInUsd = balance * weiToUsd;
+    if (asNumber) return balanceInUsd as N extends true ? number : string;
+    return balanceInUsd.toLocaleString("en-US", { style: "currency", currency: "USD" }) as N extends true
+      ? number
+      : string;
   }
+
+  function usdToWei(USD: number, weiToUsd: number): bigint {
+    return BigInt(USD / weiToUsd);
+  }
+
   return {
     getTotalCost,
     getProgressPointCost,
     getRegressPointCost,
     getPointCost,
-    ethToUSD,
+    weiToUsd,
+    usdToWei,
   };
 }

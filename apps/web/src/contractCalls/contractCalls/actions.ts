@@ -28,5 +28,16 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  return { createDestroyer, removeDestroyer: killDestroyer };
+  const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__sellPoints",
+      args: [empire, amount],
+      txQueueOptions: {
+        id: `sell-points`,
+        ...options,
+      },
+      onComplete: (receipt) => {},
+    });
+  };
+  return { createDestroyer, removeDestroyer: killDestroyer, sellPoints };
 };
