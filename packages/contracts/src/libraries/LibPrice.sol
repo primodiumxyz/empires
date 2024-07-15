@@ -142,7 +142,7 @@ library LibPrice {
     uint256 pointCostDecrease = config.pointCostIncrease;
     uint256 currentPointCost = Faction.getPointCost(_empire);
     for (uint256 i = 0; i < _pointUnits; i++) {
-      if (currentPointCost - pointCostDecrease >= config.minPointCost) {
+      if (currentPointCost >= config.minPointCost + pointCostDecrease) {
         currentPointCost -= pointCostDecrease;
         pointSaleValue += currentPointCost - config.pointSellTax;
       } else {
@@ -161,7 +161,7 @@ library LibPrice {
   function sellEmpirePointCostDown(EEmpire _empire, uint256 _pointUnits) internal {
     uint256 currentPointCost = Faction.getPointCost(_empire);
     uint256 pointCostDecrease = P_PointConfig.getPointCostIncrease();
-    if(currentPointCost - pointCostDecrease * _pointUnits >= P_PointConfig.getMinPointCost()) {
+    if(currentPointCost >= P_PointConfig.getMinPointCost() + pointCostDecrease * _pointUnits) {
       Faction.setPointCost(_empire, currentPointCost - pointCostDecrease * _pointUnits);
     } else {
       revert("[LibPrice] Selling points beyond minimum price");
