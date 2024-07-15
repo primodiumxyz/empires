@@ -101,10 +101,10 @@ library LibPrice {
    * @dev Decreases the cost of points for a specific empire.
    * @param _empire The empire to decrease the point cost for.
    */
-  function empirePointCostDown(EEmpire _empire) internal {
+  function turnEmpirePointCostDown(EEmpire _empire) internal {
     P_PointConfigData memory config = P_PointConfig.get();
     uint256 newPointCost = Faction.getPointCost(_empire);
-    if (newPointCost > config.minPointCost + config.pointGenRate) {
+    if (newPointCost >= config.minPointCost + config.pointGenRate) {
       newPointCost -= config.pointGenRate;
     } else {
       newPointCost = config.minPointCost;
@@ -131,12 +131,40 @@ library LibPrice {
 
   /**
    * @dev Calculates the value of selling a specific number of points from a specific empire.
+   * @notice The value of the points sold is calculated based on the current point cost and the point sell tax. Reverts if exceeding the minimum point cost.
    * @param _empire The empire to sell points from.
    * @param _pointUnits The number of points to sell.
    * @return pointSaleValue The value of the points to be sold.
    */
   function getPointSaleValue(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
     uint256 pointSaleValue;
+    P_PointConfigData memory config = P_PointConfig.get();
+    uint256 pointCostDecrease = config.pointCostIncrease;
+    uint256 currentPointCost = Faction.getPointCost(_empire);
+    for (uint256 i = 0; i < _pointUnits; i++) {
+      if (currentPointCost - pointCostDecrease >= config.minPointCost) {
+        pointSaleValue += currentPointCost - config.pointSellTax;
+        currentPointCost -= pointCostDecrease;
+      } else {
+        revert("[LibPrice] Selling points beyond minimum price");
+      }
+    }
     return pointSaleValue;
+  }
+
+  /**
+   * @dev Decreases an empire's point cost by a specific number of point units.
+   * @param _empire The empire for which the point cost is being decreased.
+   * @param _pointUnits The number of point units to decrease the cost by.
+   * @notice If the resulting point cost after the decrease is less than the minimum point cost, the function reverts with an error message.
+   */
+  function sellEmpirePointCostDown(EEmpire _empire, uint256 _pointUnits) internal {
+    uint256 currentPointCost = Faction.getPointCost(_empire);
+    uint256 pointCostDecrease = P_PointConfig.getPointCostIncrease();
+    if(currentPointCost - pointCostDecrease * _pointUnits >= P_PointConfig.getMinPointCost()) {
+      Faction.setPointCost(_empire, currentPointCost - pointCostDecrease * _pointUnits);
+    } else {
+      revert("[LibPrice] Selling points beyond minimum price");
+    }
   }
 }
