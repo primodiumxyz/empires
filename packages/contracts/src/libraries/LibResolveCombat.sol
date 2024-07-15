@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Arrivals, Planet, PlanetData } from "codegen/index.sol";
+import { Arrivals, Planet, PlanetData, BattleNPCAction, BattleNPCActionData } from "codegen/index.sol";
 import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
+import { pseudorandomEntity } from "src/utils.sol";
 
 library LibResolveCombat {
   function resolveCombat(EEmpire empire, bytes32 planetId) internal {
@@ -28,6 +29,15 @@ library LibResolveCombat {
       }
 
       Planet.setDestroyerCount(planetId, remainingDestroyers);
+      BattleNPCAction.set(
+        pseudorandomEntity(),
+        BattleNPCActionData({
+          planetId: planetId,
+          attackingShipCount: arrivingDestroyers,
+          defendingShipCount: planetData.destroyerCount,
+          conquer: conquer
+        })
+      );
     }
     Arrivals.deleteRecord(planetId);
   }

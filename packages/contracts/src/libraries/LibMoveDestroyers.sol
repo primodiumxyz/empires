@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, Arrivals } from "codegen/index.sol";
+import { Faction, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, MoveNPCAction, MoveNPCActionData, Arrivals } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
-import { pseudorandom, coordToId } from "src/utils.sol";
+import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 
 library LibMoveDestroyers {
   function moveDestroyers(bytes32 planetId) internal returns (bool) {
@@ -24,6 +24,10 @@ library LibMoveDestroyers {
 
     Arrivals.set(target, Arrivals.get(target) + destroyersToMove);
     Planet.setDestroyerCount(planetId, planetData.destroyerCount - destroyersToMove);
+    MoveNPCAction.set(
+      pseudorandomEntity(),
+      MoveNPCActionData({ originPlanetId: planetId, destinationPlanetId: target, shipCount: destroyersToMove })
+    );
     return true;
   }
 

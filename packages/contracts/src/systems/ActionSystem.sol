@@ -2,12 +2,12 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, PlanetData, Player, P_PointConfig } from "codegen/index.sol";
+import { Planet, PlanetData, Player, P_PointConfig, CreateDestroyerPlayerAction, CreateDestroyerPlayerActionData, KillDestroyerPlayerAction, KillDestroyerPlayerActionData } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
-import { addressToId } from "src/utils.sol";
+import { addressToId, pseudorandomEntity } from "src/utils.sol";
 
 /**
  * @title ActionSystem
@@ -22,14 +22,22 @@ contract ActionSystem is EmpiresSystem {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    require(
-      _msgValue() == LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, planetData.factionId, true),
-      "[ActionSystem] Incorrect payment"
-    );
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, planetData.factionId, true);
+    require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
     _purchaseAction(EPlayerAction.CreateDestroyer, planetData.factionId, true, _msgValue());
 
     Planet.setDestroyerCount(_planetId, planetData.destroyerCount + 1);
+
+    CreateDestroyerPlayerAction.set(
+      pseudorandomEntity(),
+      CreateDestroyerPlayerActionData({
+        playerId: addressToId(_msgSender()),
+        planetId: _planetId,
+        newDestroyerCount: planetData.destroyerCount + 1,
+        ethSpent: cost
+      })
+    );
   }
 
   /**
@@ -41,14 +49,21 @@ contract ActionSystem is EmpiresSystem {
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.destroyerCount > 0, "[ActionSystem] No destroyers to kill");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    require(
-      _msgValue() == LibPrice.getTotalCost(EPlayerAction.KillDestroyer, planetData.factionId, false),
-      "[ActionSystem] Incorrect payment"
-    );
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillDestroyer, planetData.factionId, false);
+    require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
     _purchaseAction(EPlayerAction.KillDestroyer, planetData.factionId, false, _msgValue());
 
     Planet.setDestroyerCount(_planetId, planetData.destroyerCount - 1);
+    KillDestroyerPlayerAction.set(
+      pseudorandomEntity(),
+      KillDestroyerPlayerActionData({
+        playerId: addressToId(_msgSender()),
+        planetId: _planetId,
+        ethSpent: cost,
+        newDestroyerCount: planetData.destroyerCount - 1
+      })
+    );
   }
 
   /**
