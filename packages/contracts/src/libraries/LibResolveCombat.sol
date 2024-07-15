@@ -35,7 +35,8 @@ library LibResolveCombat {
           planetId: planetId,
           attackingShipCount: arrivingDestroyers,
           defendingShipCount: planetData.destroyerCount,
-          conquer: conquer
+          conquer: conquer,
+          timestamp: block.timestamp
         })
       );
     }

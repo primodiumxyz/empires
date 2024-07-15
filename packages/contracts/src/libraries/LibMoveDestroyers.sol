@@ -26,7 +26,12 @@ library LibMoveDestroyers {
     Planet.setDestroyerCount(planetId, planetData.destroyerCount - destroyersToMove);
     MoveNPCAction.set(
       pseudorandomEntity(),
-      MoveNPCActionData({ originPlanetId: planetId, destinationPlanetId: target, shipCount: destroyersToMove })
+      MoveNPCActionData({
+        originPlanetId: planetId,
+        destinationPlanetId: target,
+        shipCount: destroyersToMove,
+        timestamp: block.timestamp
+      })
     );
     return true;
   }

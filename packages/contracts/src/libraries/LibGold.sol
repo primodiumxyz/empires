@@ -35,7 +35,8 @@ library LibGold {
         BuyDestroyersNPCActionData({
           goldSpent: destroyersToBuy * destroyerPrice,
           destroyerBought: destroyersToBuy,
-          planetId: planetId
+          planetId: planetId,
+          timestamp: block.timestamp
         })
       );
     }

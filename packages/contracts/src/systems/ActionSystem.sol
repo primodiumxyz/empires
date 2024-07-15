@@ -35,7 +35,8 @@ contract ActionSystem is EmpiresSystem {
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         newDestroyerCount: planetData.destroyerCount + 1,
-        ethSpent: cost
+        ethSpent: cost,
+        timestamp: block.timestamp
       })
     );
   }
@@ -61,7 +62,8 @@ contract ActionSystem is EmpiresSystem {
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
-        newDestroyerCount: planetData.destroyerCount - 1
+        newDestroyerCount: planetData.destroyerCount - 1,
+        timestamp: block.timestamp
       })
     );
   }
