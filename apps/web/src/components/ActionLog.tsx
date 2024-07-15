@@ -59,7 +59,7 @@ export const ActionLog = () => {
         actor: formatAddress(action.playerId, true),
         type: "Create Ships",
         timestamp: action.timestamp,
-        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, Ships created: ${action.newDestroyerCount}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
       };
     });
 
@@ -69,7 +69,7 @@ export const ActionLog = () => {
         actor: formatAddress(action.playerId, true),
         type: "Kill Ships",
         timestamp: action.timestamp,
-        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, Ship destroyed: ${action.newDestroyerCount}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
       };
     });
 

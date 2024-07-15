@@ -30,7 +30,7 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
 
       setTimeout(() => {
         setCurrentData((prevData) => prevData.filter((item) => item.id !== entity));
-      }, 5000);
+      }, 3000);
     });
 
     return () => {
