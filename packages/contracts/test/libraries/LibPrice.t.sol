@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Faction, Player, ActionCost, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, P_GameConfig } from "codegen/index.sol";
+import { Faction, Player, ActionCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, P_GameConfig } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
@@ -358,64 +358,5 @@ contract LibPriceTest is PrimodiumTest {
       actionConfig.minActionCost + 1,
       "Red Empire action cost should remain unchanged"
     );
-  }
-
-  function testHistoricalPointCost() public {
-    // game over block is set to `block.number + 1_000` right before `initPrice` is called
-    uint256 initialBlockNumber = P_GameConfig.getGameOverBlock() - 1_000;
-
-    vm.startPrank(creator);
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Red, initialBlockNumber),
-      config.startPointCost,
-      "Historical point cost for Red Empire incorrect"
-    );
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Blue, initialBlockNumber),
-      config.startPointCost,
-      "Historical point cost for Blue Empire incorrect"
-    );
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Green, initialBlockNumber),
-      config.startPointCost,
-      "Historical point cost for Green Empire incorrect"
-    );
-
-    LibPrice.pointCostUp(EEmpire.Red, 1);
-    LibPrice.pointCostUp(EEmpire.Blue, 2);
-    LibPrice.pointCostUp(EEmpire.Green, 3);
-    uint256 nextBlockNumber = block.number;
-
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Red, initialBlockNumber),
-      config.startPointCost,
-      "Existing entry in historical point cost for Red Empire should not change"
-    );
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Blue, initialBlockNumber),
-      config.startPointCost,
-      "Existing entry in historical point cost for Blue Empire should not change"
-    );
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Green, initialBlockNumber),
-      config.startPointCost,
-      "Existing entry in historical point cost for Green Empire should not change"
-    );
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Red, nextBlockNumber),
-      config.startPointCost + config.pointCostIncrease,
-      "New entry in historical point cost for Red Empire incorrect"
-    );
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Blue, nextBlockNumber),
-      config.startPointCost + 2 * config.pointCostIncrease,
-      "New entry in historical point cost for Blue Empire incorrect"
-    );
-    assertEq(
-      HistoricalPointCost.get(EEmpire.Green, nextBlockNumber),
-      config.startPointCost + 3 * config.pointCostIncrease,
-      "New entry in historical point cost for Green Empire incorrect"
-    );
-    vm.stopPrank();
   }
 }
