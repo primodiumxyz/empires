@@ -174,6 +174,18 @@ export const worldInput = {
         destroyerCount: "uint256",
       },
     },
+
+    /* ----------------------------- Historical data ---------------------------- */
+
+    HistoricalPointCost: {
+      key: ["empire", "turn"],
+      schema: {
+        empire: "EEmpire",
+        turn: "uint256", // the block number of the turn execution
+        cost: "uint256", // the cost of each point for this empire in wei
+      },
+      type: "offchainTable",
+    },
   },
 } as const;
 
