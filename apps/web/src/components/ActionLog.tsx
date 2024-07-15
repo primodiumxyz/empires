@@ -29,7 +29,7 @@ export const ActionLog = () => {
         actor: entityToPlanetName(action.originPlanetId as Entity),
         type: "Move",
         timestamp: action.timestamp,
-        details: `Ships: ${action.shipCount}, From: ${entityToPlanetName(action.originPlanetId as Entity)}, To: ${entityToPlanetName(action.destinationPlanetId as Entity)}`,
+        details: `Ship moved: ${action.shipCount}, Origin: ${entityToPlanetName(action.originPlanetId as Entity)}, Dest: ${entityToPlanetName(action.destinationPlanetId as Entity)}`,
       };
     });
 
@@ -39,7 +39,7 @@ export const ActionLog = () => {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Battle",
         timestamp: action.timestamp,
-        details: `At: ${entityToPlanetName(action.planetId as Entity)}, Attacking: ${action.attackingShipCount}, Defending: ${action.defendingShipCount}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, Attack Ct: ${action.attackingShipCount}, Defend Ct: ${action.defendingShipCount}`,
       };
     });
 
@@ -47,9 +47,9 @@ export const ActionLog = () => {
       const action = tables.BuyDestroyersNPCAction.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
-        type: "Buy",
+        type: "Buy Ships",
         timestamp: action.timestamp,
-        details: `Bought: ${action.destroyerBought}, Gold: ${action.goldSpent}, At: ${entityToPlanetName(action.planetId as Entity)}`,
+        details: `Ships Bought: ${action.destroyerBought}, Gold spent: ${action.goldSpent}, Planet: ${entityToPlanetName(action.planetId as Entity)}`,
       };
     });
 
@@ -59,7 +59,7 @@ export const ActionLog = () => {
         actor: formatAddress(action.playerId, true),
         type: "Create Ships",
         timestamp: action.timestamp,
-        details: `At: ${entityToPlanetName(action.planetId as Entity)}, Ship count: ${action.newDestroyerCount}, Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, Ships created: ${action.newDestroyerCount}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
       };
     });
 
@@ -69,7 +69,7 @@ export const ActionLog = () => {
         actor: formatAddress(action.playerId, true),
         type: "Kill Ships",
         timestamp: action.timestamp,
-        details: `At: ${entityToPlanetName(action.planetId as Entity)}, Ship count: ${action.newDestroyerCount}, Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, Ship destroyed: ${action.newDestroyerCount}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
       };
     });
 
