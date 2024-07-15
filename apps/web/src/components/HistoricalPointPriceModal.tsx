@@ -5,6 +5,7 @@ import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
+import { Modal } from "@/components/core/Modal";
 import { EmpireEnumToColor } from "@/components/Planet";
 import { cn } from "@/util/client";
 
@@ -26,33 +27,15 @@ export const HistoricalPointPriceModal = () => {
   }, [open]);
 
   return (
-    <>
-      {/* open button */}
-      <OpenModalButton ref={buttonRef} setOpen={setOpen} className={open ? "hidden" : ""} />
-      {/* overlay */}
-      <div
-        className={cn(
-          "absolute h-[95%] w-[95%] rounded-btn bg-gray-950 bg-opacity-90 md:h-[90%] md:w-[90%]",
-          !open && "hidden",
-        )}
-      />
-      {/* modal */}
-      <div
-        ref={modalRef}
-        className={cn(
-          "absolute flex h-[95%] w-[95%] flex-col gap-2 py-4 pl-4 pr-2 md:h-[90%] md:w-[90%]",
-          !open && "hidden",
-        )}
-      >
-        {/* close button */}
-        <CloseModalButton setOpen={setOpen} />
-        {/* cheatcodes */}
-        <h1 className="font-semibold uppercase text-gray-300">Points price history</h1>
-        <div className="grid grid-cols-1 gap-4 overflow-auto pr-2 md:grid-cols-2 lg:grid-cols-3">
-          <HistoricalPointPriceChart />
-        </div>
+    <Modal
+      icon={<PresentationChartLineIcon className="h-8 w-8 fill-neutral" />}
+      buttonClassName="bottom-2 right-12 h-14 w-14"
+    >
+      <h1 className="font-semibold uppercase text-gray-300">Points price history</h1>
+      <div className="grid grid-cols-1 gap-4 overflow-auto pr-2 md:grid-cols-2 lg:grid-cols-3">
+        <HistoricalPointPriceChart />
       </div>
-    </>
+    </Modal>
   );
 };
 
@@ -145,32 +128,3 @@ const HistoricalPointPriceChart = () => {
 
   return <svg ref={svgRef} width={800} height={400}></svg>;
 };
-
-type ModalButtonProps = {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  className?: string;
-};
-
-const OpenModalButton = forwardRef<HTMLButtonElement, ModalButtonProps>(({ setOpen, className }, ref) => {
-  return (
-    <button
-      ref={ref}
-      className={cn(
-        "absolute bottom-2 right-12 flex h-14 w-14 cursor-pointer items-center justify-center rounded-btn bg-white opacity-70 transition-opacity hover:opacity-100",
-        className,
-      )}
-      onClick={() => setOpen(true)}
-    >
-      <PresentationChartLineIcon className="h-8 w-8 fill-neutral" />
-    </button>
-  );
-});
-
-export const CloseModalButton = ({ setOpen, className }: ModalButtonProps) => (
-  <button
-    className={cn("absolute right-2 top-2 rounded-btn bg-neutral p-2 transition-colors hover:bg-primary", className)}
-    onClick={() => setOpen(false)}
-  >
-    <XCircleIcon className="h-6 w-6" />
-  </button>
-);
