@@ -143,8 +143,8 @@ library LibPrice {
     uint256 currentPointCost = Faction.getPointCost(_empire);
     for (uint256 i = 0; i < _pointUnits; i++) {
       if (currentPointCost - pointCostDecrease >= config.minPointCost) {
-        pointSaleValue += currentPointCost - config.pointSellTax;
         currentPointCost -= pointCostDecrease;
+        pointSaleValue += currentPointCost - config.pointSellTax;
       } else {
         revert("[LibPrice] Selling points beyond minimum price");
       }
