@@ -1,4 +1,5 @@
 import { Account } from "@/components/Account";
+import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { PlanetGrid } from "@/components/PlanetGrid";
@@ -19,6 +20,7 @@ const Game = () => {
           <AdvanceTurn />
           <ResetGame />
         </div>
+        <ActionLog />
       </div>
       {DEV && <Cheatcodes />}
     </>
