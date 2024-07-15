@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Faction, Player, ActionCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, P_GameConfig } from "codegen/index.sol";
+import { Faction, Player, ActionCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
@@ -12,7 +12,6 @@ import { EMPIRE_COUNT } from "src/constants.sol";
 contract LibPriceTest is PrimodiumTest {
   P_PointConfigData config;
   P_ActionConfigData actionConfig;
-
   function setUp() public override {
     super.setUp();
     config = P_PointConfig.get();
