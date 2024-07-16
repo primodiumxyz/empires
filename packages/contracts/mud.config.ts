@@ -22,6 +22,7 @@ export const worldInput = {
         turnLengthBlocks: "uint256",
         goldGenRate: "uint256",
         gameOverBlock: "uint256",
+        gameStartBlock: "uint256",
       },
     },
 

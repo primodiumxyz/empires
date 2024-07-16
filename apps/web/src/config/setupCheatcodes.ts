@@ -450,6 +450,11 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
           inputType: "number",
           defaultValue: 1000,
         },
+        gameStartBlock: {
+          label: "Game start block",
+          inputType: "number",
+          defaultValue: gameConfig?.gameStartBlock ?? BigInt(0),
+        },
       },
       execute: async (properties) => {
         const currBlock = tables.BlockNumber.get() ?? { value: 0n, avgBlockTime: 0 };
@@ -459,6 +464,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
           turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
           goldGenRate: BigInt(properties.goldGenRate.value),
           gameOverBlock: finalBlockFromTimeLeft,
+          gameStartBlock: BigInt(properties.gameStartBlock.value),
         };
         const success = await setTableValue(tables.P_GameConfig, {}, newProperties);
 
