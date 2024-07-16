@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon } from "@heroicons/react/24/solid";
 import { bigIntMin } from "@latticexyz/common/utils";
 
@@ -51,8 +51,8 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const createDestroyerPriceUsd = utils.ethToUSD(createDestroyerPriceWei, price ?? 0);
   const killDestroyerPriceUsd = utils.ethToUSD(killDestroyerPriceWei, price ?? 0);
 
-  const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: string }[]>([]);
-  const [goldFloatingTexts, setGoldFloatingTexts] = useState<{ id: number; text: string }[]>([]);
+  const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
+  const [goldFloatingTexts, setGoldFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
   const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       // Remove the floating text after 3 seconds
       setTimeout(() => {
         setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 3000);
+      }, 5000);
     });
     return () => {
       listener.unsubscribe();
@@ -84,13 +84,13 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       if (data.planetId !== entity) return;
 
       // Add floating "+1" text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: "-1 Ship" }]);
+      setFloatingTexts((prev) => [...prev, { id: nextId, text: <>-1 Ship</> }]);
       setNextId((prev) => prev + 1);
 
       // Remove the floating text after 3 seconds
       setTimeout(() => {
         setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 3000);
+      }, 5000);
     });
     return () => {
       listener.unsubscribe();
@@ -112,7 +112,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       setTimeout(() => {
         setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
         setGoldFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 3000);
+      }, 5000);
     });
     return () => {
       listener.unsubscribe();
@@ -133,7 +133,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         setConquered(true);
         setTimeout(() => {
           setConquered(false);
-        }, 3000);
+        }, 5000);
       }
     });
     return () => {

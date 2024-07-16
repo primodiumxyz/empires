@@ -43,7 +43,7 @@ type _ArrowProps = {
   margin?: number;
 };
 
-export const _Arrow: React.FC<_ArrowProps> = ({ origin, destination, shipCount, tileSize = 150, margin = 10 }) => {
+const _Arrow: React.FC<_ArrowProps> = ({ origin, destination, shipCount, tileSize = 150, margin = 10 }) => {
   const [originLeft, originTop, destinationLeft, destinationTop] = useMemo(() => {
     const originCartesianCoord = convertAxialToCartesian(
       { q: Number(origin.q ?? 0n), r: Number(origin.r ?? 0n) },
@@ -85,8 +85,11 @@ export const _Arrow: React.FC<_ArrowProps> = ({ origin, destination, shipCount, 
         {formatNumber(shipCount)} ships
       </div>
       <svg height="40" width={length}>
-        <line x1="0" y1="20" x2={length - 29} y2="20" style={{ stroke: "white", strokeWidth: 20, opacity: 0.5 }} />
-        <polygon points={`${length - 30},0 ${length},20 ${length - 30},40`} style={{ fill: "white", opacity: 0.5 }} />
+        <line x1="30" y1="20" x2={length - 59} y2="20" style={{ stroke: "white", strokeWidth: 20, opacity: 0.8 }} />
+        <polygon
+          points={`${length - 60},0 ${length - 30},20 ${length - 60},40`}
+          style={{ fill: "white", opacity: 0.8 }}
+        />
       </svg>
     </div>
   );
