@@ -1,25 +1,15 @@
-// function getPointSaleValue(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
-//   uint256 pointSaleValue;
-//   P_PointConfigData memory config = P_PointConfig.get();
-//   uint256 pointCostDecrease = config.pointCostIncrease;
-//   uint256 currentPointCost = Faction.getPointCost(_empire);
-//   for (uint256 i = 0; i < _pointUnits; i++) {
-//     if (currentPointCost >= config.minPointCost + pointCostDecrease) {
-//       currentPointCost -= pointCostDecrease;
-//       pointSaleValue += currentPointCost - config.pointSellTax;
-//     } else {
-//       revert("[LibPrice] Selling points beyond minimum price");
-//     }
-//   }
-//   return pointSaleValue;
-// }
-
 import { useCallback, useMemo } from "react";
 
 import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 
-export const usePointPrice = () => {
+type EmpirePrices = { [key in Exclude<EEmpire, EEmpire.LENGTH>]: bigint | undefined };
+type PointPrice = {
+  sell: EmpirePrices;
+  buy: EmpirePrices;
+};
+
+export const usePointPrice = (): PointPrice => {
   const { tables } = useCore();
 
   const config = tables.P_PointConfig.use();
@@ -41,9 +31,16 @@ export const usePointPrice = () => {
 
   return useMemo(
     () => ({
-      [EEmpire.Red]: getPointSaleValue(redEmpirePointCost),
-      [EEmpire.Blue]: getPointSaleValue(blueEmpirePointCost),
-      [EEmpire.Green]: getPointSaleValue(greenEmpirePointCost),
+      sell: {
+        [EEmpire.Red]: getPointSaleValue(redEmpirePointCost),
+        [EEmpire.Blue]: getPointSaleValue(blueEmpirePointCost),
+        [EEmpire.Green]: getPointSaleValue(greenEmpirePointCost),
+      },
+      buy: {
+        [EEmpire.Red]: redEmpirePointCost,
+        [EEmpire.Blue]: blueEmpirePointCost,
+        [EEmpire.Green]: greenEmpirePointCost,
+      },
     }),
     [redEmpirePointCost, blueEmpirePointCost, greenEmpirePointCost, getPointSaleValue],
   );

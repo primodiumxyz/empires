@@ -50,7 +50,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
   const historicalPriceEntities = tables.HistoricalPointCost.useAll();
   const gameStartBlock = tables.P_GameConfig.use()?.gameStartBlock ?? BigInt(0);
 
-  const sellPointPrice = usePointPrice();
+  const { sell: sellPointPrice, buy: buyPointPrice } = usePointPrice();
 
   const historicalPriceData = useMemo(() => {
     // get data
@@ -233,26 +233,51 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
           </div>
         </>
       ) : (
-        "No available activity to display"
+        <span className="font-medium">No available activity to display</span>
       )}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-4">
           <h2 className="text-sm font-semibold text-gray-400">Latest turn</h2>
           <span className="text-sm text-gray-300">{latestTurn}</span>
         </div>
-        <h2 className="text-sm font-semibold text-gray-400">Current point cost (sell)</h2>
-        <div className="grid grid-cols-[min-content_1fr] gap-x-4 text-sm text-gray-300">
-          {Object.entries(sellPointPrice).map(([empire, price]) => (
-            <Fragment key={empire}>
-              <span className={`text-${EmpireEnumToColor[Number(empire) as EEmpire]}-400`}>
-                {/* @ts-expect-error Property 'LENGTH' does not exist on type 'typeof EEmpire'. */}
-                {EmpireEnumToName[Number(empire) as EEmpire]}
-              </span>
-              <span className={`text-${EmpireEnumToColor[Number(empire) as EEmpire]}-400`}>
-                {formatEther(price ?? BigInt(0))} ETH
-              </span>
-            </Fragment>
-          ))}
+        <div className="flex flex-col gap-2">
+          <h2 className="text-sm font-semibold text-gray-400">Current points price</h2>
+          <table className="min-w-full divide-y divide-gray-700 text-sm">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider text-gray-500">
+                  Empire
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider text-gray-500">
+                  Buy Price (ETH)
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider text-gray-500">
+                  Sell Price (ETH)
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-700">
+              {Object.entries(buyPointPrice).map(([_empire, buyPrice]) => {
+                const empire = _empire as unknown as keyof typeof buyPointPrice;
+                const color = EmpireEnumToColor[Number(empire) as EEmpire];
+
+                return (
+                  <tr key={empire}>
+                    <td className={`whitespace-nowrap px-4 py-2 text-${color}-400`}>
+                      {/* @ts-expect-error Property 'EEmpire' does not exist on type 'typeof EEmpire'. */}
+                      {EmpireEnumToName[Number(empire) as EEmpire]}
+                    </td>
+                    <td className={`whitespace-nowrap px-4 py-2 text-${color}-400`}>
+                      {!!buyPrice ? formatEther(buyPrice) : "could not retrieve"}
+                    </td>
+                    <td className={`whitespace-nowrap px-4 py-2 text-${color}-400`}>
+                      {!!sellPointPrice[empire] ? formatEther(sellPointPrice[empire]) : "can't sell"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
