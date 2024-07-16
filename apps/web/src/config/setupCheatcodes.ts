@@ -2,7 +2,7 @@ import { Hex } from "viem";
 
 import { EEmpire, ENPCAction, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
-import { Entity, Properties } from "@primodiumxyz/reactive-tables";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
 import { EmpireEnumToName } from "@/util/lookups";
@@ -11,14 +11,11 @@ import { notify } from "@/util/notify";
 export const setupCheatcodes = (core: Core, accountClient: AccountClient, contractCalls: ContractCalls) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { updateWorld, requestDrip, setTableValue, removeTable } = contractCalls;
+  const { updateWorld, requestDrip, setTableValue, removeTable, resetGame: _resetGame } = contractCalls;
 
   // game
   const factions = tables.Faction.getAll();
   const planets = tables.Planet.getAll();
-  const planetsData = planets
-    .map((entity) => tables.Planet.get(entity))
-    .filter((planetData) => !!planetData?.factionId) as unknown as Properties<typeof tables.Planet.propertiesSchema>[];
 
   // config
   const gameConfig = tables.P_GameConfig.get();
@@ -26,26 +23,6 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const actionConfig = tables.P_ActionConfig.get();
   const npcActionThresholds = tables.P_NPCActionThresholds.get();
   const npcMoveThresholds = tables.P_NPCMoveThresholds.get();
-
-  // utils
-  const getNearbyPlanetEntities = (planet: Properties<typeof tables.Planet.propertiesSchema>) => {
-    const { q, r } = { q: Number(planet.q), r: Number(planet.r) };
-    return [
-      { q: q - 1, r: r },
-      { q: q + 1, r: r },
-      { q: q, r: r - 1 },
-      { q: q, r: r + 1 },
-      { q: q - 1, r: r + 1 },
-      { q: q + 1, r: r - 1 },
-    ]
-      .map(({ q, r }) =>
-        planets.find((entity) => {
-          const planetData = tables.Planet.get(entity);
-          return planetData?.q === BigInt(q) && planetData?.r === BigInt(r);
-        }),
-      )
-      .filter(Boolean) as Entity[];
-  };
 
   /* ------------------------------- DESTROYERS ------------------------------- */
   // Set the amount of destroyers on a planet
@@ -247,10 +224,10 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     },
   });
 
-  // generate gold on all planetsData
+  // generate gold on all planets
   const generateGold = createCheatcode({
     title: "Generate gold",
-    caption: "Give a specified amount of gold to all planetsData",
+    caption: "Give a specified amount of gold to all planets",
     inputs: {
       amount: {
         label: "Amount",
@@ -411,6 +388,24 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
         return true;
       } else {
         notify("error", `Failed to end game`);
+        return false;
+      }
+    },
+  });
+
+  // reset game
+  const resetGame = createCheatcode({
+    title: "Reset game",
+    caption: "Reset the game",
+    inputs: {},
+    execute: async () => {
+      const success = await _resetGame();
+
+      if (success) {
+        notify("success", "Game reset");
+        return true;
+      } else {
+        notify("error", "Failed to reset game");
         return false;
       }
     },
@@ -687,6 +682,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     givePoints,
     advanceTurns,
     endGame,
+    resetGame,
     dripEth,
     ...Object.values(updateGameConfig),
   ];
