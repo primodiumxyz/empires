@@ -50,10 +50,10 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         minActionCost: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
-        none: 0.2,
-        expand: 0.8 * 0.5,
-        lateral: 0.8 * 0.3,
-        retreat: 0.8 * 0.2,
+        none: 0.25,
+        expand: 0.75 * 0.7,
+        lateral: 0.75 * 0.2,
+        retreat: 0.75 * 0.1,
       }),
       P_NPCActionThresholds: percentsToThresholds({
         none: 0.2,
