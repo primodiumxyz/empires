@@ -140,17 +140,14 @@ library LibPrice {
     P_PointConfigData memory config = P_PointConfig.get();
     uint256 pointCostDecrease = config.pointCostIncrease;
     uint256 currentPointCost = Faction.getPointCost(_empire);
-    uint256 minPointCost = config.minPointCost;
-    uint256 pointSellTax = config.pointSellTax;
 
-    // Check the condition
     require(
-      currentPointCost >= minPointCost + pointCostDecrease * _pointUnits,
+      currentPointCost >= config.minPointCost + pointCostDecrease * _pointUnits,
       "[LibPrice] Selling points beyond minimum price"
     );
 
     uint256 triangleSum = _pointUnits * (_pointUnits + 1) / 2;
-    uint256 totalSaleValue = (currentPointCost - pointSellTax) * _pointUnits - pointCostDecrease * triangleSum;
+    uint256 totalSaleValue = (currentPointCost - config.pointSellTax) * _pointUnits - pointCostDecrease * triangleSum;
 
     return totalSaleValue;
   }
