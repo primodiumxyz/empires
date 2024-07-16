@@ -363,21 +363,21 @@ contract LibPriceTest is PrimodiumTest {
     vm.startPrank(creator);
     Faction.setPointCost(EEmpire.Red, config.minPointCost);
     vm.expectRevert();
-    uint256 saleValue = LibPrice.getPointSaleValue(EEmpire.Red, 1);
+    LibPrice.getPointSaleValue(EEmpire.Red, 1);
   }
 
   function testFailGetPointSaleValueOversoldSingle() public {
     vm.startPrank(creator);
     Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease - 1);
     vm.expectRevert();
-    uint256 saleValue = LibPrice.getPointSaleValue(EEmpire.Red, 1);
+    LibPrice.getPointSaleValue(EEmpire.Red, 1);
   }
 
   function testFailGetPointSaleValueOversoldMultiple() public {
     vm.startPrank(creator);
     Faction.setPointCost(EEmpire.Red, config.minPointCost + 2 * config.pointCostIncrease - 1);
     vm.expectRevert();
-    uint256 saleValue = LibPrice.getPointSaleValue(EEmpire.Red, 2);
+    LibPrice.getPointSaleValue(EEmpire.Red, 2);
   }
 
   function testGetPointSaleValueNoTax() public {
