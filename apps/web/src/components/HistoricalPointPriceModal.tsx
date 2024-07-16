@@ -15,7 +15,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
-const TICK_INTERVAL = 10; // 10 seconds
+const TICK_INTERVAL = 20; // 20 seconds
 
 export const HistoricalPointPriceModal = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
@@ -198,7 +198,16 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .call(
         axisBottom(xScale)
           .tickValues(tickValues)
-          .tickFormat((d) => new Date(Number(d) * 1000).toLocaleTimeString("en-US")),
+          .tickFormat((d, index) => {
+            const date = new Date(Number(d) * 1000);
+            // return the date and time if it's the first label
+            if (index === 0) return date.toLocaleString("en-US");
+            // return the date if it's the first label for a new day
+            if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() <= TICK_INTERVAL)
+              return date.toLocaleDateString("en-US");
+            // otherwise return the time
+            return date.toLocaleTimeString("en-US");
+          }),
       )
       .selectAll("line")
       .style("stroke", "#706f6f")
