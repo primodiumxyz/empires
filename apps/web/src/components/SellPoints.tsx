@@ -6,6 +6,7 @@ import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { usePointPrice } from "@/hooks/usePointPrice";
 
 export const SellPoints = () => {
   const [empire, selectEmpire] = useState<EEmpire>(EEmpire.Green);
@@ -48,9 +49,9 @@ const SellEmpirePoints = ({ empire }: { empire: EEmpire }) => {
     }
   };
 
-  const pointsToWei = 1n;
-  const ethOut = formatEther(BigInt(Number(amountToSell) * POINTS_UNIT) / pointsToWei);
-  const usdOut = utils.weiToUsd(BigInt(Number(amountToSell) * POINTS_UNIT) / pointsToWei, price ?? 0);
+  const pointsToWei = usePointPrice(empire, BigInt(amountToSell));
+  const ethOut = formatEther(pointsToWei);
+  const usdOut = utils.weiToUsd(pointsToWei, price ?? 0);
 
   return (
     <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
