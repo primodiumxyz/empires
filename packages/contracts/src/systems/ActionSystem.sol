@@ -6,8 +6,12 @@ import { Planet, PlanetData, Player, P_PointConfig } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
+import { PointsMap } from "adts/PointsMap.sol";
+import { EMPIRE_COUNT, EMPIRES_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
+import { IWorld } from "codegen/world/IWorld.sol";
+import { Balances } from "@latticexyz/world/src/codegen/index.sol";
+
 
 /**
  * @title ActionSystem
@@ -91,15 +95,20 @@ contract ActionSystem is EmpiresSystem {
    */
   function sellPoints(EEmpire _empire, uint256 _pointUnits) public {
     bytes32 playerId = addressToId(_msgSender());
-    // require(Player's points are >= _pointUnits, "[ActionSystem] Insufficient points");
+    require(_pointUnits <= PointsMap.get(_empire, playerId), "[ActionSystem] Player does not have enough points to remove");
 
     uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _pointUnits);
-    // require that the price isn't at minimum or will reach below minimum
-    // set Faction.setPointCost
 
+    // require that the pot has enough ETH to send
+    require(pointSaleValue <= Balances.get(EMPIRES_NAMESPACE_ID), "[ActionSystem] Insufficient funds for point sale");
+
+    // set the new empire point cost
+    LibPrice.sellEmpirePointCostDown(_empire, _pointUnits);
+
+    // remove points from player and empire's issued points count
     LibPoint.removePoints(_empire, playerId, _pointUnits);
 
-    // require that the pot has enough to send
     // send eth to player
+    IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
   }
 }
