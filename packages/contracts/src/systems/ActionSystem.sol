@@ -95,7 +95,8 @@ contract ActionSystem is EmpiresSystem {
    */
   function sellPoints(EEmpire _empire, uint256 _pointUnits) public {
     bytes32 playerId = addressToId(_msgSender());
-    require(_pointUnits <= PointsMap.get(_empire, playerId), "[ActionSystem] Player does not have enough points to remove");
+    uint256 pointsScaled = _pointUnits * P_PointConfig.getPointUnit();
+    require(pointsScaled <= PointsMap.get(_empire, playerId), "[ActionSystem] Player does not have enough points to remove");
 
     uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _pointUnits);
 
@@ -106,7 +107,7 @@ contract ActionSystem is EmpiresSystem {
     LibPrice.sellEmpirePointCostDown(_empire, _pointUnits);
 
     // remove points from player and empire's issued points count
-    LibPoint.removePoints(_empire, playerId, _pointUnits);
+    LibPoint.removePoints(_empire, playerId, pointsScaled);
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
