@@ -49,7 +49,7 @@ contract UpdateSystem is EmpiresSystem {
     
     // generate new actions and points for each empire and action
     for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {
-      LibPrice.empirePointCostDown(EEmpire(i));
+      LibPrice.turnEmpirePointCostDown(EEmpire(i));
       LibPrice.empirePlayerActionsCostDown(EEmpire(i));
     }
   }
