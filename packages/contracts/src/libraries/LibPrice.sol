@@ -137,19 +137,22 @@ library LibPrice {
    * @return pointSaleValue The value of the points to be sold.
    */
   function getPointSaleValue(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
-    uint256 pointSaleValue;
     P_PointConfigData memory config = P_PointConfig.get();
     uint256 pointCostDecrease = config.pointCostIncrease;
     uint256 currentPointCost = Faction.getPointCost(_empire);
-    for (uint256 i = 0; i < _pointUnits; i++) {
-      if (currentPointCost >= config.minPointCost + pointCostDecrease) {
-        currentPointCost -= pointCostDecrease;
-        pointSaleValue += currentPointCost - config.pointSellTax;
-      } else {
-        revert("[LibPrice] Selling points beyond minimum price");
-      }
-    }
-    return pointSaleValue;
+    uint256 minPointCost = config.minPointCost;
+    uint256 pointSellTax = config.pointSellTax;
+
+    // Check the condition
+    require(
+      currentPointCost >= minPointCost + pointCostDecrease * _pointUnits,
+      "[LibPrice] Selling points beyond minimum price"
+    );
+
+    uint256 triangleSum = _pointUnits * (_pointUnits + 1) / 2;
+    uint256 totalSaleValue = (currentPointCost - pointSellTax) * _pointUnits - pointCostDecrease * triangleSum;
+
+    return totalSaleValue;
   }
 
   /**
