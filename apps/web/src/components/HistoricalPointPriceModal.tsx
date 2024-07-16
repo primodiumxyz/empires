@@ -6,23 +6,42 @@ import { formatEther } from "viem";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
+import { RadioGroup } from "@/components/core/Radio";
 import { EmpireEnumToColor } from "@/components/Planet";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
 export const HistoricalPointPriceModal = () => {
+  const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
+
   return (
     <Modal
       icon={<PresentationChartLineIcon className="h-8 w-8 fill-neutral" />}
       buttonClassName="bottom-2 right-12 h-14 w-14"
     >
-      <h1 className="font-semibold uppercase text-gray-300">Points price history</h1>
-      <HistoricalPointPriceChart />
+      <div className="flex flex-col gap-2">
+        <h1 className="whitespace-nowrap font-semibold uppercase text-gray-300">Points price history</h1>
+        <RadioGroup
+          name="select-empire-chart"
+          value={selectedEmpire.toString()}
+          options={[
+            ...Array.from(new Array(EEmpire.LENGTH))
+              .map((_, i) => i + 1)
+              .map((empire) => ({
+                id: empire.toString(),
+                // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
+                label: empire === EEmpire.LENGTH ? "ALL EMPIRES" : EmpireEnumToName[empire as EEmpire],
+              })),
+          ]}
+          onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
+        />
+      </div>
+      <HistoricalPointPriceChart selectedEmpire={selectedEmpire} />
     </Modal>
   );
 };
 
-const HistoricalPointPriceChart = () => {
+const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => {
   const { tables } = useCore();
   const fixedSvgRef = useRef<SVGSVGElement>(null);
   const scrollSvgRef = useRef<SVGSVGElement>(null);
@@ -163,16 +182,20 @@ const HistoricalPointPriceChart = () => {
       .y((d) => yScale(Number(d.cost)));
 
     // draw lines
-    Array.from(new Array(EEmpire.LENGTH - 1)).forEach((_, _empire) => {
-      const empire = _empire + 1;
-      scrollSvg
-        .append("path")
-        .datum(historicalPriceData.filter((d) => d.empire === empire))
-        .attr("fill", "none")
-        .attr("stroke", EmpireEnumToColor[empire as EEmpire])
-        .attr("stroke-width", 1.5)
-        .attr("d", lineGenerator);
-    });
+    Array.from(new Array(EEmpire.LENGTH - 1))
+      .map((_, i) => i + 1)
+      .forEach((empire) => {
+        console.log({ empire, selectedEmpire });
+        if (selectedEmpire !== EEmpire.LENGTH && selectedEmpire !== empire) return;
+
+        scrollSvg
+          .append("path")
+          .datum(historicalPriceData.filter((d) => d.empire === empire))
+          .attr("fill", "none")
+          .attr("stroke", EmpireEnumToColor[empire as EEmpire])
+          .attr("stroke-width", 1.5)
+          .attr("d", lineGenerator);
+      });
 
     // draw axis labels
     fixedSvg
@@ -195,7 +218,7 @@ const HistoricalPointPriceChart = () => {
       .text("Turn")
       .attr("fill", "#706f6f")
       .style("font-size", "14px");
-  }, [historicalPriceData]);
+  }, [historicalPriceData, selectedEmpire]);
 
   return (
     <div className="relative flex flex-col gap-4">
