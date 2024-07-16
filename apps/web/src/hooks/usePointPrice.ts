@@ -24,7 +24,7 @@ export const usePointPrice = (): PointPrice => {
   const getPointSaleValue = useCallback(
     (pointCost: bigint) => {
       if (pointCost >= minPointCost + pointCostDecrease) return pointCost - pointCostDecrease - pointSellTax;
-      return undefined;
+      return BigInt(0);
     },
     [minPointCost, pointCostDecrease, pointSellTax],
   );

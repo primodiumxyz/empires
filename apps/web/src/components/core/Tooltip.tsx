@@ -58,9 +58,17 @@ interface TooltipProps extends React.ButtonHTMLAttributes<HTMLDivElement>, Varia
   tooltipContent?: React.ReactNode;
   show?: boolean;
   rotate?: boolean;
+  containerClassName?: string;
 }
 
-export const Tooltip = ({ className, tooltipContent, children, direction, show = false }: TooltipProps) => {
+export const Tooltip = ({
+  className,
+  tooltipContent,
+  children,
+  direction,
+  show = false,
+  containerClassName,
+}: TooltipProps) => {
   const [visible, setVisible] = useState(false);
   const x = useMotionValue(0); // going to set this value on mouse move
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -77,7 +85,7 @@ export const Tooltip = ({ className, tooltipContent, children, direction, show =
       onMouseMove={handleMouseMove}
       onPointerEnter={() => setVisible(true)}
       onPointerLeave={() => setVisible(false)}
-      className="relative"
+      className={cn("relative", containerClassName)}
     >
       {(visible || show) && (
         <AnimatePresence>

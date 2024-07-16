@@ -1,14 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PresentationChartLineIcon } from "@heroicons/react/24/solid";
+import { PresentationChartLineIcon, StarIcon } from "@heroicons/react/24/solid";
 import { axisBottom, axisLeft, line, pointer, scaleLinear, select } from "d3";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
+import { bigintMax, bigintMin } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
+import { Tooltip } from "@/components/core/Tooltip";
 import { EmpireEnumToColor } from "@/components/Planet";
+import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
 export const HistoricalPointPriceModal = () => {
@@ -42,7 +46,11 @@ export const HistoricalPointPriceModal = () => {
 };
 
 const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => {
-  const { tables } = useCore();
+  const {
+    tables,
+    utils: { ethToUSD },
+  } = useCore();
+  const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
   const fixedSvgRef = useRef<SVGSVGElement>(null);
   const scrollSvgRef = useRef<SVGSVGElement>(null);
 
@@ -50,13 +58,15 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
   const gameStartBlock = tables.P_GameConfig.use()?.gameStartBlock ?? BigInt(0);
 
   const { sell: sellPointPrice, buy: buyPointPrice } = usePointPrice();
+  const cheapestBuyPrice = bigintMin(...Object.values(buyPointPrice));
+  const highestSellPrice = bigintMax(...Object.values(sellPointPrice));
 
   const historicalPriceData = useMemo(() => {
     // get data
     let data = historicalPriceEntities
       .map((entity) => ({
         ...tables.HistoricalPointCost.getEntityKeys(entity), // empire, turn
-        cost: formatEther(tables.HistoricalPointCost.get(entity)?.cost ?? BigInt(0)),
+        cost: tables.HistoricalPointCost.get(entity)?.cost ?? BigInt(0),
       }))
       .filter((d) => d.turn >= gameStartBlock);
 
@@ -80,7 +90,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       const turnIndex = index + 1;
       turnMap.set(turnIndex, {});
       items.forEach((item) => {
-        turnMap.get(turnIndex)![item.empire] = item.cost;
+        turnMap.get(turnIndex)![item.empire] = item.cost.toString();
       });
     });
 
@@ -143,7 +153,11 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     fixedSvg
       .append("g")
       .attr("transform", `translate(${margin.left},0)`)
-      .call(axisLeft(yScale).ticks(height / 80))
+      .call(
+        axisLeft(yScale)
+          .tickValues(yScale.ticks(5))
+          .tickFormat((d) => ethToUSD(BigInt(d.toString()), ethPrice ?? 0) ?? ""),
+      )
       .selectAll("line")
       .style("stroke", "#706f6f")
       .style("stroke-width", 0.5)
@@ -205,7 +219,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("x", -height / 2)
       .attr("y", margin.left - 50)
       .attr("transform", "rotate(-90)")
-      .text("Cost (ETH)")
+      .text("Cost (USD)")
       .attr("fill", "#706f6f")
       .style("font-size", "14px");
 
@@ -263,6 +277,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       });
   }, [historicalPriceData, selectedEmpire]);
 
+  if (loadingEthPrice || !ethPrice) return <span className="font-medium">Loading...</span>;
   return (
     <div className="relative flex flex-col gap-4">
       {historicalPriceData.length > 3 ? (
@@ -299,19 +314,49 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
             <tbody className="divide-y divide-gray-700">
               {Object.entries(buyPointPrice).map(([_empire, buyPrice]) => {
                 const empire = _empire as unknown as keyof typeof buyPointPrice;
-                const color = EmpireEnumToColor[Number(empire) as EEmpire];
+                const color = `text-${EmpireEnumToColor[Number(empire) as EEmpire]}-400`;
 
                 return (
                   <tr key={empire}>
-                    <td className={`whitespace-nowrap px-4 py-2 text-${color}-400`}>
+                    <td className={cn("whitespace-nowrap px-4 py-2", color)}>
                       {/* @ts-expect-error Property 'EEmpire' does not exist on type 'typeof EEmpire'. */}
                       {EmpireEnumToName[Number(empire) as EEmpire]}
                     </td>
-                    <td className={`whitespace-nowrap px-4 py-2 text-${color}-400`}>
-                      {!!buyPrice ? formatEther(buyPrice) : "could not retrieve"}
+                    <td className={cn("whitespace-nowrap px-4 py-2", color)}>
+                      {!!buyPrice ? (
+                        <div className="flex items-center gap-2">
+                          <Tooltip
+                            tooltipContent={`${formatEther(buyPrice)} ETH`}
+                            className="text-gray-300"
+                            containerClassName="w-min cursor-pointer"
+                          >
+                            {ethToUSD(buyPrice, ethPrice)}
+                          </Tooltip>
+                          {buyPrice === cheapestBuyPrice && (
+                            <StarIcon className="h-4 w-4 text-gray-300" title="Cheapest buy price" />
+                          )}
+                        </div>
+                      ) : (
+                        "could not retrieve"
+                      )}
                     </td>
-                    <td className={`whitespace-nowrap px-4 py-2 text-${color}-400`}>
-                      {!!sellPointPrice[empire] ? formatEther(sellPointPrice[empire]) : "can't sell"}
+                    <td className={cn("whitespace-nowrap px-4 py-2", color)}>
+                      {!!sellPointPrice[empire] ? (
+                        <div className="flex items-center gap-2">
+                          <Tooltip
+                            tooltipContent={`${formatEther(sellPointPrice[empire])} ETH`}
+                            className="text-gray-300"
+                            containerClassName="w-min cursor-pointer"
+                          >
+                            {ethToUSD(sellPointPrice[empire], ethPrice)}
+                          </Tooltip>
+                          {sellPointPrice[empire] === highestSellPrice && (
+                            <StarIcon className="h-4 w-4 text-gray-300" title="Highest sell price" />
+                          )}
+                        </div>
+                      ) : (
+                        "can't sell"
+                      )}
                     </td>
                   </tr>
                 );
