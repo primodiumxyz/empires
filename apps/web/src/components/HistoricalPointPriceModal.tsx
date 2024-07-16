@@ -28,16 +28,21 @@ const HistoricalPointPriceChart = () => {
   const scrollSvgRef = useRef<SVGSVGElement>(null);
 
   const historicalPriceEntities = tables.HistoricalPointCost.useAll();
-  const historicalPriceData = useMemo(() => {
-    const data = historicalPriceEntities.map((entity) => ({
-      ...tables.HistoricalPointCost.getEntityKeys(entity), // empire, turn
-      cost: formatEther(tables.HistoricalPointCost.get(entity)?.cost ?? BigInt(0)),
-    }));
+  const gameStartBlock = tables.P_GameConfig.use()?.gameStartBlock ?? BigInt(0);
 
-    // group by turn block number and assign index
+  const historicalPriceData = useMemo(() => {
+    // get data
+    let data = historicalPriceEntities
+      .map((entity) => ({
+        ...tables.HistoricalPointCost.getEntityKeys(entity), // empire, turn
+        cost: formatEther(tables.HistoricalPointCost.get(entity)?.cost ?? BigInt(0)),
+      }))
+      .filter((d) => d.turn >= gameStartBlock);
+
+    // group items by turn
     const groupedData = data.reduce(
       (acc, item) => {
-        const key = item.turn.toString() as keyof typeof acc;
+        const key = item.turn.toString();
         if (!acc[key]) acc[key] = [];
         acc[key].push(item);
         return acc;
@@ -45,33 +50,47 @@ const HistoricalPointPriceChart = () => {
       {} as Record<string, typeof data>,
     );
 
-    let index = 1;
-    const indexedData = Object.keys(groupedData).flatMap((key) => {
-      const items = groupedData[key];
-      const grouped = items.map((item) => ({
-        cost: item.cost.toString(),
-        empire: item.empire,
-        turnBlockNumber: item.turn,
-        turnIndex: index,
-      }));
+    // prepare for filling missing data (no cost for a turn means it stays the same as the previous turn)
+    const allEmpires = Array.from(new Array(EEmpire.LENGTH - 1)).map((_, i) => i + 1);
+    const turnMap = new Map<number, { [key: number]: string }>();
 
-      index++;
-      return grouped;
+    // grab costs for each turn
+    Object.entries(groupedData).forEach(([_, items], index) => {
+      const turnIndex = index + 1;
+      turnMap.set(turnIndex, {});
+      items.forEach((item) => {
+        turnMap.get(turnIndex)![item.empire] = item.cost;
+      });
     });
 
-    return indexedData;
-  }, [historicalPriceEntities]);
+    // fill costs for missing turns
+    allEmpires.forEach((empire) => {
+      let previousCost = "0";
+      turnMap.forEach((costs) => {
+        if (costs[empire] === undefined) {
+          costs[empire] = previousCost;
+        } else {
+          previousCost = costs[empire];
+        }
+      });
+    });
 
-  const latestTurn = historicalPriceData.length
-    ? {
-        blockNumber: historicalPriceData[historicalPriceData.length - 1].turnBlockNumber.toLocaleString(),
-        index: historicalPriceData[historicalPriceData.length - 1].turnIndex,
-      }
-    : { blockNumber: "0", index: 0 };
-  const latestCosts = tables.Faction.useAll().map((entity) => ({
-    empire: EmpireEnumToName[Number(entity) as EEmpire],
-    cost: formatEther(tables.Faction.get(entity)?.pointCost ?? BigInt(0)),
-  }));
+    // create the flattened data
+    const filledData: { turnIndex: number; empire: EEmpire; cost: string }[] = [];
+    turnMap.forEach((costs, turnIndex) => {
+      allEmpires.forEach((empire) => {
+        filledData.push({
+          turnIndex,
+          empire,
+          cost: costs[empire],
+        });
+      });
+    });
+
+    return filledData;
+  }, [historicalPriceEntities, gameStartBlock]);
+
+  const latestTurn = historicalPriceData.length ? historicalPriceData[historicalPriceData.length - 1].turnIndex : 0;
 
   useEffect(() => {
     if (!historicalPriceData.length) return;
@@ -82,9 +101,9 @@ const HistoricalPointPriceChart = () => {
     const minCost = 0;
     const maxCost = Math.max(...historicalPriceData.map((d) => Number(d.cost)));
 
-    const totalWidth = historicalPriceData.length * 10; // approx 10px per turn
     const height = 400;
     const margin = { top: 20, right: 30, bottom: 50, left: 70 };
+    const totalWidth = margin.left + margin.right + historicalPriceData.length * 10; // approx 10px per turn
 
     // create scales
     const xScale = scaleLinear()
@@ -116,6 +135,9 @@ const HistoricalPointPriceChart = () => {
       .style("stroke-width", 0.7)
       .style("shape-rendering", "crispEdges");
 
+    // generate integer tick values for the horizontal axis
+    const tickValues = Array.from({ length: maxTurn - minTurn + 1 }, (_, i) => minTurn + i);
+
     // create scrolling horizontal axis and lines
     const scrollSvg = select(scrollSvgRef.current);
     scrollSvg.selectAll("*").remove();
@@ -125,7 +147,11 @@ const HistoricalPointPriceChart = () => {
     scrollSvg
       .append("g")
       .attr("transform", `translate(0,${height - margin.bottom})`)
-      .call(axisBottom(xScale).ticks(totalWidth / 80))
+      .call(
+        axisBottom(xScale)
+          .tickValues(tickValues)
+          .tickFormat((d) => d.toString()),
+      )
       .selectAll("line")
       .style("stroke", "#706f6f")
       .style("stroke-width", 0.5)
@@ -137,7 +163,8 @@ const HistoricalPointPriceChart = () => {
       .y((d) => yScale(Number(d.cost)));
 
     // draw lines
-    [1, 2, 3].forEach((empire) => {
+    Array.from(new Array(EEmpire.LENGTH - 1)).forEach((_, _empire) => {
+      const empire = _empire + 1;
       scrollSvg
         .append("path")
         .datum(historicalPriceData.filter((d) => d.empire === empire))
@@ -165,30 +192,34 @@ const HistoricalPointPriceChart = () => {
       .attr("text-anchor", "middle")
       .attr("x", totalWidth / 2)
       .attr("y", height - 10)
-      .text("Turn Index")
+      .text("Turn")
       .attr("fill", "#706f6f")
       .style("font-size", "14px");
   }, [historicalPriceData]);
 
   return (
     <div className="relative flex flex-col gap-4">
-      <svg ref={fixedSvgRef} className="absolute left-0"></svg>
-      <div className="relative overflow-x-auto">
-        <svg ref={scrollSvgRef}></svg>
-      </div>
+      {historicalPriceData.length > 3 ? (
+        <>
+          <svg ref={fixedSvgRef} className="absolute left-0"></svg>
+          <div className="relative overflow-x-auto">
+            <svg ref={scrollSvgRef}></svg>
+          </div>
+        </>
+      ) : (
+        "No available activity to display"
+      )}
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold text-gray-400">Latest turn</h2>
-        <span className="text-sm text-gray-300">
-          {latestTurn.index} (at block {latestTurn.blockNumber})
-        </span>
+        <span className="text-sm text-gray-300">{latestTurn}</span>
         <h2 className="text-sm font-semibold text-gray-400">Current point cost</h2>
         <div className="grid grid-cols-[min-content_1fr] gap-x-4 text-sm text-gray-300">
-          {latestCosts.map((cost) => (
+          {/* {latestCosts.map((cost) => (
             <>
               <span>{cost.empire}</span>
               <span>{cost.cost} ETH</span>
             </>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>
