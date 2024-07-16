@@ -32,6 +32,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         turnLengthBlocks: 1n,
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
+        gameStartBlock: 0n, // currently handled in PostDeploy
       },
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),
@@ -49,10 +50,10 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         minActionCost: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
-        none: 0.20,
-        expand: 0.80 * 0.5,
-        lateral: 0.80 * 0.3,
-        retreat: 0.80 * 0.2,
+        none: 0.2,
+        expand: 0.8 * 0.5,
+        lateral: 0.8 * 0.3,
+        retreat: 0.8 * 0.2,
       }),
       P_NPCActionThresholds: percentsToThresholds({
         none: 0.2,

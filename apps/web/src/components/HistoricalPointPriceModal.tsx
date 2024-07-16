@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { PresentationChartLineIcon } from "@heroicons/react/24/solid";
 import { axisBottom, axisLeft, line, scaleLinear, select } from "d3";
 import { formatEther } from "viem";
@@ -8,6 +8,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { EmpireEnumToColor } from "@/components/Planet";
+import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
@@ -48,6 +49,8 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
 
   const historicalPriceEntities = tables.HistoricalPointCost.useAll();
   const gameStartBlock = tables.P_GameConfig.use()?.gameStartBlock ?? BigInt(0);
+
+  const sellPointPrice = usePointPrice();
 
   const historicalPriceData = useMemo(() => {
     // get data
@@ -233,16 +236,23 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
         "No available activity to display"
       )}
       <div className="flex flex-col gap-2">
-        <h2 className="text-sm font-semibold text-gray-400">Latest turn</h2>
-        <span className="text-sm text-gray-300">{latestTurn}</span>
-        <h2 className="text-sm font-semibold text-gray-400">Current point cost</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-sm font-semibold text-gray-400">Latest turn</h2>
+          <span className="text-sm text-gray-300">{latestTurn}</span>
+        </div>
+        <h2 className="text-sm font-semibold text-gray-400">Current point cost (sell)</h2>
         <div className="grid grid-cols-[min-content_1fr] gap-x-4 text-sm text-gray-300">
-          {/* {latestCosts.map((cost) => (
-            <>
-              <span>{cost.empire}</span>
-              <span>{cost.cost} ETH</span>
-            </>
-          ))} */}
+          {Object.entries(sellPointPrice).map(([empire, price]) => (
+            <Fragment key={empire}>
+              <span className={`text-${EmpireEnumToColor[Number(empire) as EEmpire]}-400`}>
+                {/* @ts-expect-error Property 'LENGTH' does not exist on type 'typeof EEmpire'. */}
+                {EmpireEnumToName[Number(empire) as EEmpire]}
+              </span>
+              <span className={`text-${EmpireEnumToColor[Number(empire) as EEmpire]}-400`}>
+                {formatEther(price ?? BigInt(0))} ETH
+              </span>
+            </Fragment>
+          ))}
         </div>
       </div>
     </div>
