@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PresentationChartLineIcon, StarIcon } from "@heroicons/react/24/solid";
-import { axisBottom, axisLeft, line, pointer, scaleLinear, select } from "d3";
+import { axisBottom, axisLeft, curveMonotoneX, line, pointer, scaleLinear, select } from "d3";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -14,6 +14,8 @@ import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
+
+const TICK_INTERVAL = 10; // 10 seconds
 
 export const HistoricalPointPriceModal = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
@@ -61,7 +63,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
   const scrollSvgRef = useRef<SVGSVGElement>(null);
 
   const historicalPriceEntities = tables.HistoricalPointCost.useAll();
-  const gameStartBlock = tables.P_GameConfig.use()?.gameStartBlock ?? BigInt(0);
+  const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? BigInt(0);
 
   const { sell: sellPointPrice, buy: buyPointPrice } = usePointPrice();
   const cheapestBuyPrice = bigintMin(...Object.values(buyPointPrice));
@@ -71,15 +73,15 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     // get data
     let data = historicalPriceEntities
       .map((entity) => ({
-        ...tables.HistoricalPointCost.getEntityKeys(entity), // empire, turn
+        ...tables.HistoricalPointCost.getEntityKeys(entity), // empire, timestamp
         cost: tables.HistoricalPointCost.get(entity)?.cost ?? BigInt(0),
       }))
-      .filter((d) => d.turn >= gameStartBlock);
+      .filter((d) => d.timestamp >= gameStartTimestamp);
 
-    // group items by turn
+    // group items by timestamp
     const groupedData = data.reduce(
       (acc, item) => {
-        const key = item.turn.toString();
+        const key = item.timestamp.toString();
         if (!acc[key]) acc[key] = [];
         acc[key].push(item);
         return acc;
@@ -87,23 +89,23 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       {} as Record<string, typeof data>,
     );
 
-    // prepare for filling missing data (no cost for a turn means it stays the same as the previous turn)
+    // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous turn)
     const allEmpires = Array.from(new Array(EEmpire.LENGTH - 1)).map((_, i) => i + 1);
-    const turnMap = new Map<number, { [key: number]: string }>();
+    const timestampMap = new Map<number, { [key: number]: string }>();
 
-    // grab costs for each turn
-    Object.entries(groupedData).forEach(([_, items], index) => {
-      const turnIndex = index + 1;
-      turnMap.set(turnIndex, {});
+    // grab costs for each timestamp
+    Object.entries(groupedData).forEach(([key, items]) => {
+      const timestamp = Number(key);
+      timestampMap.set(timestamp, {});
       items.forEach((item) => {
-        turnMap.get(turnIndex)![item.empire] = item.cost.toString();
+        timestampMap.get(timestamp)![item.empire] = item.cost.toString();
       });
     });
 
     // fill costs for missing turns
     allEmpires.forEach((empire) => {
       let previousCost = "0";
-      turnMap.forEach((costs) => {
+      timestampMap.forEach((costs) => {
         if (costs[empire] === undefined) {
           costs[empire] = previousCost;
         } else {
@@ -113,11 +115,11 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     });
 
     // create the flattened data
-    const filledData: { turnIndex: number; empire: EEmpire; cost: string }[] = [];
-    turnMap.forEach((costs, turnIndex) => {
+    const filledData: { timestamp: number; empire: EEmpire; cost: string }[] = [];
+    timestampMap.forEach((costs, timestamp) => {
       allEmpires.forEach((empire) => {
         filledData.push({
-          turnIndex,
+          timestamp,
           empire,
           cost: costs[empire],
         });
@@ -125,15 +127,17 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     });
 
     return filledData;
-  }, [historicalPriceEntities, gameStartBlock]);
+  }, [historicalPriceEntities, gameStartTimestamp]);
 
-  const latestTurn = historicalPriceData.length ? historicalPriceData[historicalPriceData.length - 1].turnIndex : 0;
+  const latestTimestamp = historicalPriceData.length
+    ? historicalPriceData[historicalPriceData.length - 1].timestamp
+    : 0;
 
   useEffect(() => {
     if (!historicalPriceData.length) return;
 
-    const minTurn = Math.min(...historicalPriceData.map((d) => Number(d.turnIndex)));
-    const maxTurn = Math.max(...historicalPriceData.map((d) => Number(d.turnIndex)));
+    const minTimestamp = Math.min(...historicalPriceData.map((d) => Number(d.timestamp)));
+    const maxTimestamp = Math.max(...historicalPriceData.map((d) => Number(d.timestamp)));
     const minCost = 0;
     const maxCost = Math.max(...historicalPriceData.map((d) => Number(d.cost)));
 
@@ -143,7 +147,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
 
     // create scales
     const xScale = scaleLinear()
-      .domain([minTurn, maxTurn])
+      .domain([minTimestamp, maxTimestamp])
       .range([margin.left, totalWidth - margin.right]);
     const yScale = scaleLinear()
       .domain([minCost, maxCost])
@@ -176,7 +180,11 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .style("shape-rendering", "crispEdges");
 
     // generate integer tick values for the horizontal axis
-    const tickValues = Array.from({ length: maxTurn - minTurn + 1 }, (_, i) => minTurn + i);
+    // or to have it much less dense
+    const tickValues = Array.from(
+      { length: (maxTimestamp - minTimestamp) / TICK_INTERVAL + 1 },
+      (_, i) => minTimestamp + i * TICK_INTERVAL,
+    );
 
     // create scrolling horizontal axis and lines
     const scrollSvg = select(scrollSvgRef.current);
@@ -190,7 +198,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .call(
         axisBottom(xScale)
           .tickValues(tickValues)
-          .tickFormat((d) => d.toString()),
+          .tickFormat((d) => new Date(Number(d) * 1000).toLocaleTimeString("en-US")),
       )
       .selectAll("line")
       .style("stroke", "#706f6f")
@@ -198,9 +206,10 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .style("shape-rendering", "crispEdges");
 
     // create lines for each empire
-    const lineGenerator = line<{ turnIndex: number; cost: string }>()
-      .x((d) => xScale(d.turnIndex))
-      .y((d) => yScale(Number(d.cost)));
+    const lineGenerator = line<{ timestamp: number; cost: string }>()
+      .x((d) => xScale(d.timestamp))
+      .y((d) => yScale(Number(d.cost)))
+      .curve(curveMonotoneX);
 
     // draw lines
     Array.from(new Array(EEmpire.LENGTH - 1))
@@ -216,6 +225,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
           .attr("stroke-width", 1.5)
           .attr("d", lineGenerator);
       });
+    console.log(historicalPriceData);
 
     // draw axis labels
     fixedSvg
@@ -298,8 +308,10 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       )}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-4">
-          <h2 className="text-sm font-semibold text-gray-400">Latest turn</h2>
-          <span className="text-sm text-gray-300">{latestTurn}</span>
+          <h2 className="text-sm font-semibold text-gray-400">Last update</h2>
+          <span className="text-sm text-gray-300">
+            {new Date(Number(latestTimestamp) * 1000).toLocaleString("en-US")}
+          </span>
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="text-sm font-semibold text-gray-400">Current points price</h2>
@@ -310,10 +322,10 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                   Empire
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider text-gray-500">
-                  Buy Price (ETH)
+                  Buy Price (USD)
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider text-gray-500">
-                  Sell Price (ETH)
+                  Sell Price (USD)
                 </th>
               </tr>
             </thead>
