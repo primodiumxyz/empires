@@ -11,7 +11,7 @@ function initPrice() {
   for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
     Faction.setPointCost(EEmpire(i), startPointCost);
     // Set the initial point cost for each empire for historical data visualization
-    HistoricalPointCost.set(EEmpire(i), block.number, startPointCost);
+    HistoricalPointCost.set(EEmpire(i), block.timestamp, startPointCost);
     for (uint256 j = 1; j < uint256(EPlayerAction.LENGTH); j++) {
       ActionCost.set(EEmpire(i), EPlayerAction(j), startActionCost);
     }

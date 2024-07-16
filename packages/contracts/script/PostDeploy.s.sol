@@ -32,7 +32,7 @@ contract PostDeploy is Script {
     console.log("Prototypes created");
 
     P_GameConfig.setGameOverBlock(block.number + 1_000);
-    P_GameConfig.setGameStartBlock(block.number);
+    P_GameConfig.setGameStartTimestamp(block.timestamp);
 
     createPlanets();
     initPrice();

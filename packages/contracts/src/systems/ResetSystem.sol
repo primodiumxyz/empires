@@ -25,7 +25,7 @@ contract ResetSystem is System {
     WinningEmpire.set(EEmpire.NULL);
 
     P_GameConfig.setGameOverBlock(block.number + 1_000);
-    P_GameConfig.setGameStartBlock(block.number);
+    P_GameConfig.setGameStartTimestamp(block.timestamp);
     createPlanets(); // Planet and Faction tables are reset to default values
     initPrice(); // Faction.setPointCost and ActionCost tables are reset to default values
   }
