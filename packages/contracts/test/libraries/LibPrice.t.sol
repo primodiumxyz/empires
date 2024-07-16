@@ -359,10 +359,6 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
-  // function setupPointSale() public {
-  //   config.
-  // }
-
   function testFailGetPointSaleValueMinPrice() public {
     vm.startPrank(creator);
     Faction.setPointCost(EEmpire.Red, config.minPointCost);
