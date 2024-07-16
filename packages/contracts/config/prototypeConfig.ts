@@ -32,6 +32,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         turnLengthBlocks: 1n,
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
+        gameStartTimestamp: 0n, // currently handled in PostDeploy
       },
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),
