@@ -15,7 +15,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
-const TICK_INTERVAL = 30; // 30 seconds
+const TICK_LABEL_INTERVAL = 30; // 30 seconds
 const PX_PER_SECOND = 3;
 
 export const HistoricalPointPriceModal = () => {
@@ -184,8 +184,8 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     // generate integer tick values for the horizontal axis
     // or to have it much less dense
     const tickValues = Array.from(
-      { length: (maxTimestamp - minTimestamp) / TICK_INTERVAL + 1 },
-      (_, i) => minTimestamp + i * TICK_INTERVAL,
+      { length: (maxTimestamp - minTimestamp) / TICK_LABEL_INTERVAL + 1 },
+      (_, i) => minTimestamp + i * TICK_LABEL_INTERVAL,
     );
 
     // create scrolling horizontal axis and lines
@@ -205,7 +205,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
             // return the date and time if it's the first label
             if (index === 0) return date.toLocaleString("en-US");
             // return the date if it's the first label for a new day
-            if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() <= TICK_INTERVAL)
+            if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() <= TICK_LABEL_INTERVAL)
               return date.toLocaleDateString("en-US");
             // otherwise return the time
             return date.toLocaleTimeString("en-US");
