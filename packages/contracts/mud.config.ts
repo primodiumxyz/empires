@@ -92,6 +92,7 @@ export const worldInput = {
         r: "int128",
         isPlanet: "bool",
         destroyerCount: "uint256",
+        shieldCount: "uint256",
         goldCount: "uint256",
         factionId: "EEmpire",
       },
@@ -145,6 +146,7 @@ export const worldInput = {
       schema: {
         none: "uint256",
         buyDestroyers: "uint256",
+        buyShields: "uint256",
       },
     },
 
