@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PresentationChartLineIcon } from "@heroicons/react/24/solid";
-import { axisBottom, axisLeft, line, scaleLinear, select } from "d3";
+import { axisBottom, axisLeft, line, pointer, scaleLinear, select } from "d3";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -9,7 +9,6 @@ import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { EmpireEnumToColor } from "@/components/Planet";
 import { usePointPrice } from "@/hooks/usePointPrice";
-import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
 export const HistoricalPointPriceModal = () => {
@@ -116,7 +115,6 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
 
   useEffect(() => {
     if (!historicalPriceData.length) return;
-    console.log(historicalPriceData);
 
     const minTurn = Math.min(...historicalPriceData.map((d) => Number(d.turnIndex)));
     const maxTurn = Math.max(...historicalPriceData.map((d) => Number(d.turnIndex)));
@@ -188,7 +186,6 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     Array.from(new Array(EEmpire.LENGTH - 1))
       .map((_, i) => i + 1)
       .forEach((empire) => {
-        console.log({ empire, selectedEmpire });
         if (selectedEmpire !== EEmpire.LENGTH && selectedEmpire !== empire) return;
 
         scrollSvg
@@ -221,6 +218,49 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .text("Turn")
       .attr("fill", "#706f6f")
       .style("font-size", "14px");
+
+    // Add mouseover effects
+    const mouseG = scrollSvg.append("g").attr("class", "mouse-over-effects");
+
+    mouseG
+      .append("path") // black vertical line to follow mouse
+      .attr("class", "mouse-line")
+      .style("stroke", "#706f6f")
+      .style("stroke-width", "1px")
+      .style("opacity", "0");
+
+    mouseG
+      .append("path") // black horizontal line to follow mouse
+      .attr("class", "mouse-line-horizontal")
+      .style("stroke", "#706f6f")
+      .style("stroke-width", "1px")
+      .style("opacity", "0");
+
+    mouseG
+      .append("rect") // append a rect to catch mouse movements on canvas
+      .attr("width", totalWidth)
+      .attr("height", height)
+      .attr("fill", "none")
+      .attr("pointer-events", "all")
+      .on("mouseout", () => {
+        select(".mouse-line").style("opacity", "0");
+        select(".mouse-line-horizontal").style("opacity", "0");
+      })
+      .on("mouseover", () => {
+        select(".mouse-line").style("opacity", "1");
+        select(".mouse-line-horizontal").style("opacity", "1");
+      })
+      .on("mousemove", function (event) {
+        const mouse = pointer(event);
+        select(".mouse-line").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
+        select(".mouse-line-horizontal").attr("d", `M0,${mouse[1]} ${totalWidth},${mouse[1]}`);
+      })
+      // and on scroll
+      .on("mousewheel", function (event) {
+        const mouse = pointer(event);
+        select(".mouse-line").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
+        select(".mouse-line-horizontal").attr("d", `M0,${mouse[1]} ${totalWidth},${mouse[1]}`);
+      });
   }, [historicalPriceData, selectedEmpire]);
 
   return (
