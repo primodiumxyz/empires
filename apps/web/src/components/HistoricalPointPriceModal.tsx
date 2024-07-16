@@ -45,6 +45,12 @@ export const HistoricalPointPriceModal = () => {
   );
 };
 
+export const ColorToTextClass: Record<string, string> = {
+  blue: "text-blue-400",
+  green: "text-green-400",
+  red: "text-red-400",
+};
+
 const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => {
   const {
     tables,
@@ -314,7 +320,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
             <tbody className="divide-y divide-gray-700">
               {Object.entries(buyPointPrice).map(([_empire, buyPrice]) => {
                 const empire = _empire as unknown as keyof typeof buyPointPrice;
-                const color = `text-${EmpireEnumToColor[Number(empire) as EEmpire]}-400`;
+                const color = ColorToTextClass[EmpireEnumToColor[Number(empire) as EEmpire]];
 
                 return (
                   <tr key={empire}>
@@ -335,9 +341,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                           >
                             {ethToUSD(buyPrice, ethPrice)}
                           </Tooltip>
-                          {buyPrice === cheapestBuyPrice && (
-                            <StarIcon className="h-4 w-4 text-gray-300" title="Cheapest buy price" />
-                          )}
+                          {buyPrice === cheapestBuyPrice && <StarIcon className="size-4" title="Cheapest buy price" />}
                         </div>
                       ) : (
                         "could not retrieve"
@@ -357,7 +361,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                             {ethToUSD(sellPointPrice[empire], ethPrice)}
                           </Tooltip>
                           {sellPointPrice[empire] === highestSellPrice && (
-                            <StarIcon className="h-4 w-4 text-gray-300" title="Highest sell price" />
+                            <StarIcon className="size-4" title="Highest sell price" />
                           )}
                         </div>
                       ) : (
