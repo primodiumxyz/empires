@@ -14,6 +14,8 @@ export const functionSystemIds: {
   /* -------------------------------- Gameplay -------------------------------- */
   Empires__createDestroyer: getSystemId("ActionSystem"),
   Empires__killDestroyer: getSystemId("ActionSystem"),
+  Empires__chargeShield: getSystemId("ActionSystem"),
+  Empires__drainShield: getSystemId("ActionSystem"),
   Empires__updateWorld: getSystemId("UpdateSystem"),
   Empires__resetGame: getSystemId("ResetSystem"),
 
