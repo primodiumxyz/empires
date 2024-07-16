@@ -2,14 +2,14 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, ActionCost, Player, P_PointConfig } from "codegen/index.sol";
+import { Planet, ActionCost, Player, P_PointConfig, Faction } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
-import { EMPIRES_NAMESPACE_ID, EMPIRE_COUNT } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, EMPIRE_COUNT } from "src/constants.sol";
 
 contract ActionSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -113,4 +113,87 @@ contract ActionSystemTest is PrimodiumTest {
       "Player should have received green points"
     );
   }
+
+  function testSellPoints() public {
+    EEmpire empire = Planet.getFactionId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, empire, true);
+    
+    vm.startPrank(alice);
+    world.Empires__createDestroyer{ value: totalCost }(planetId);
+    console.log("alice points after createDestroyer", PointsMap.get(empire, aliceId));
+
+    uint256 aliceInitPoints = PointsMap.get(empire, aliceId);
+    uint256 aliceInitBalance = alice.balance;
+    uint256 gameInitBalance = Balances.get(EMPIRES_NAMESPACE_ID);
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, 1);
+    uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateDestroyer);
+    uint256 empirePointsIssued = Faction.getPointsIssued(empire);
+
+    world.Empires__sellPoints(empire, 1);
+    
+    assertEq(PointsMap.get(empire, aliceId), aliceInitPoints - P_PointConfig.getPointUnit(), "Player should have lost points");
+    assertEq(alice.balance, aliceInitBalance + pointSaleValue, "Player should have gained balance");
+    assertEq(Balances.get(EMPIRES_NAMESPACE_ID), gameInitBalance - pointSaleValue, "Namespace should have lost balance");
+    assertEq(
+      LibPrice.getPointSaleValue(empire, 1),
+      pointSaleValue - P_PointConfig.getPointCostIncrease(),
+      "Point Sale Value should have decreased"
+    );
+    assertEq(actionCost, ActionCost.get(empire, EPlayerAction.CreateDestroyer), "Action Cost should not have changed");
+    assertEq(
+      Faction.getPointsIssued(empire),
+      empirePointsIssued - P_PointConfig.getPointUnit(),
+      "Empire should have reduced points issued"
+    );
+
+    console.log("alice points after sellPoints", PointsMap.get(empire, aliceId));
+  }
+
+  function testSellPointsFailNoPointsOwned() public {
+    EEmpire empire = Planet.getFactionId(planetId);
+    vm.startPrank(alice);
+    vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
+    world.Empires__sellPoints(empire, 1);
+  }
+
+  function testSellPointsFailNotEnoughPoints() public {
+    EEmpire empire = Planet.getFactionId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, empire, true);
+    
+    vm.startPrank(alice);
+    world.Empires__createDestroyer{ value: totalCost }(planetId);
+
+    vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
+    world.Empires__sellPoints(empire, EMPIRE_COUNT);
+  }
+
+  function testSellPointsFailNotEnoughPointsWrongEmpire() public {
+    EEmpire empire = Planet.getFactionId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, empire, true);
+    
+    vm.startPrank(alice);
+    world.Empires__createDestroyer{ value: totalCost }(planetId);
+    vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
+    world.Empires__sellPoints(EEmpire.Green, 1);
+  }
+
+  function testSellPointsFailGameBalanceInsufficient() public {
+    EEmpire empire = Planet.getFactionId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, empire, true);
+    
+    vm.startPrank(alice);
+    world.Empires__createDestroyer{ value: totalCost }(planetId);
+    
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, EMPIRE_COUNT - 1);
+
+    vm.startPrank(creator);
+    uint256 gameBalance = Balances.get(EMPIRES_NAMESPACE_ID);
+    uint256 transferUnderSale = gameBalance - pointSaleValue + 1;
+    world.transferBalanceToNamespace(EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, transferUnderSale);
+    
+    vm.startPrank(alice);
+    vm.expectRevert("[ActionSystem] Insufficient funds for point sale");
+    world.Empires__sellPoints(empire, EMPIRE_COUNT - 1);
+  }
+
 }
