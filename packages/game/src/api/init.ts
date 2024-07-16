@@ -1,6 +1,6 @@
 // import { engine } from "@primodiumxyz/engine";
-// import { Core } from "@primodiumxyz/core";
-// import type { ContractCalls } from "@client/contractCalls/createContractCalls";
+import { Core } from '@primodiumxyz/core';
+import type { ContractCalls } from '@client/contractCalls/createContractCalls';
 
 import { /* createGlobalApi, */ GlobalApi } from '@game/api/global';
 import { PrimodiumScene } from '@game/types';
@@ -12,7 +12,7 @@ import { KeybindActionKeys } from '@game/lib/constants/keybinds';
 export type InitResult = Promise<
   Record<SceneKeys, PrimodiumScene> & { GLOBAL: GlobalApi }
 >;
-async function init(/* core: Core, calls: ContractCalls */): InitResult {
+async function init(core: Core, calls: ContractCalls): InitResult {
   // const game = await engine.createGame(gameConfig);
   // const globalApi = createGlobalApi(game);
 
@@ -35,6 +35,7 @@ async function init(/* core: Core, calls: ContractCalls */): InitResult {
     GLOBAL: {
       disableGlobalInput: () => {},
       enableGlobalInput: () => {},
+      dispose: () => {},
     },
   };
 }

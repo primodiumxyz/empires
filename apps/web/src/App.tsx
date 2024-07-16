@@ -14,6 +14,7 @@ import Landing from "@/screens/Landing";
 
 const App = () => {
   const coreRef = useRef<CoreType | null>(null);
+
   const core = useMemo(() => {
     if (coreRef.current) coreRef.current.network.world.dispose();
     const config = getCoreConfig();
