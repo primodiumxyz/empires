@@ -55,7 +55,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       }),
       P_NPCActionThresholds: percentsToThresholds({
         none: 0.2,
-        buyDestroyers: 0.8,
+        buyDestroyers: 0.5,
+        buyShields: 0.3,
       }),
 
       Turn: {
@@ -70,6 +71,14 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_NPCActionCosts: {
         goldCost: 2n,
+      },
+    },
+  },
+  BuyShields: {
+    keys: [{ [ENPCAction.BuyShields]: "uint8" }],
+    tables: {
+      P_NPCActionCosts: {
+        goldCost: 3n,
       },
     },
   },
