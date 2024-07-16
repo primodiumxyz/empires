@@ -15,7 +15,8 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
-const TICK_INTERVAL = 20; // 20 seconds
+const TICK_INTERVAL = 30; // 30 seconds
+const PX_PER_SECOND = 3;
 
 export const HistoricalPointPriceModal = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
@@ -143,7 +144,8 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
 
     const height = 400;
     const margin = { top: 20, right: 30, bottom: 50, left: 70 };
-    const totalWidth = margin.left + margin.right + historicalPriceData.length * 10; // approx 10px per turn
+    // approx 3px per second
+    const totalWidth = margin.left + margin.right + (maxTimestamp - minTimestamp) * PX_PER_SECOND;
 
     // create scales
     const xScale = scaleLinear()
