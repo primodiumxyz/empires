@@ -12,7 +12,6 @@ import { addressToId } from "src/utils.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 
-
 /**
  * @title ActionSystem
  * @dev A contract that handles actions related to creating and killing destroyers on a planet.
@@ -90,23 +89,22 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player action to sell some points of an empire that they currently own.
    * @param _empire The empire to sell points from.
-   * @param _pointsUnscaled The number of points to sell.
+   * @param _points The number of points to sell.
    */
-  function sellPoints(EEmpire _empire, uint256 _pointsUnscaled) public {
+  function sellPoints(EEmpire _empire, uint256 _points) public {
     bytes32 playerId = addressToId(_msgSender());
-    uint256 pointsScaled = _pointsUnscaled * P_PointConfig.getPointUnit();
-    require(pointsScaled <= PointsMap.get(_empire, playerId), "[ActionSystem] Player does not have enough points to remove");
+    require(_points <= PointsMap.get(_empire, playerId), "[ActionSystem] Player does not have enough points to remove");
 
-    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _pointsUnscaled);
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _points);
 
     // require that the pot has enough ETH to send
     require(pointSaleValue <= Balances.get(EMPIRES_NAMESPACE_ID), "[ActionSystem] Insufficient funds for point sale");
 
     // set the new empire point cost
-    LibPrice.sellEmpirePointCostDown(_empire, _pointsUnscaled);
+    LibPrice.sellEmpirePointCostDown(_empire, _points);
 
     // remove points from player and empire's issued points count
-    LibPoint.removePoints(_empire, playerId, _pointsUnscaled);
+    LibPoint.removePoints(_empire, playerId, _points);
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);

@@ -13,12 +13,10 @@ contract LibPointTest is PrimodiumTest {
   bytes32 planetId;
   bytes32 aliceId;
   bytes32 bobId;
-  uint256 pointUnit;
   function setUp() public override {
     super.setUp();
     aliceId = addressToId(alice);
     bobId = addressToId(bob);
-    pointUnit = P_PointConfig.getPointUnit();
   }
 
   function testInitEmptyEmpireIssuedPoints() public {
@@ -30,8 +28,8 @@ contract LibPointTest is PrimodiumTest {
   function testIssuePoints() public {
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Red, aliceId, 100);
-    assertEq(Faction.getPointsIssued(EEmpire.Red), 100 * pointUnit, "Empire points issued should be 100");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), 100 * pointUnit, "Alice's Red Empire points should be 100");
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 100, "Empire points issued should be 100");
+    assertEq(PointsMap.get(EEmpire.Red, aliceId), 100, "Alice's Red Empire points should be 100");
     assertEq(PointsMap.get(EEmpire.Blue, aliceId), 0, "Alice's Blue Empire points should be 0");
     assertEq(PointsMap.get(EEmpire.Green, aliceId), 0, "Alice's Green Empire points should be 0");
     assertEq(PointsMap.get(EEmpire.Red, bobId), 0, "Bob's Red Empire points should be 0");
@@ -42,8 +40,8 @@ contract LibPointTest is PrimodiumTest {
 
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Red, aliceId, 1);
-    assertEq(Faction.getPointsIssued(EEmpire.Red), 101 * pointUnit, "Empire points issued should be 101");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), 101 * pointUnit, "Alice's Red Empire points should be 101");
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 101, "Empire points issued should be 101");
+    assertEq(PointsMap.get(EEmpire.Red, aliceId), 101, "Alice's Red Empire points should be 101");
     assertEq(PointsMap.get(EEmpire.Blue, aliceId), 0, "Alice's Blue Empire points should be 0");
     assertEq(PointsMap.get(EEmpire.Green, aliceId), 0, "Alice's Green Empire points should be 0");
     assertEq(PointsMap.get(EEmpire.Red, bobId), 0, "Bob's Red Empire points should be 0");
@@ -54,11 +52,11 @@ contract LibPointTest is PrimodiumTest {
 
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Green, aliceId, 5);
-    assertEq(Faction.getPointsIssued(EEmpire.Red), 101 * pointUnit, "Red Empire points issued should be 101");
-    assertEq(Faction.getPointsIssued(EEmpire.Green), 5 * pointUnit, "Green Empire points issued should be 5");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), 101 * pointUnit, "Alice's Red Empire points should be 101");
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 101, "Red Empire points issued should be 101");
+    assertEq(Faction.getPointsIssued(EEmpire.Green), 5, "Green Empire points issued should be 5");
+    assertEq(PointsMap.get(EEmpire.Red, aliceId), 101, "Alice's Red Empire points should be 101");
     assertEq(PointsMap.get(EEmpire.Blue, aliceId), 0, "Alice's Blue Empire points should be 0");
-    assertEq(PointsMap.get(EEmpire.Green, aliceId), 5 * pointUnit, "Alice's Green Empire points should be 5");
+    assertEq(PointsMap.get(EEmpire.Green, aliceId), 5, "Alice's Green Empire points should be 5");
     assertEq(PointsMap.get(EEmpire.Red, bobId), 0, "Bob's Red Empire points should be 0");
   }
 
@@ -67,22 +65,22 @@ contract LibPointTest is PrimodiumTest {
 
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Green, bobId, 7);
-    assertEq(Faction.getPointsIssued(EEmpire.Red), 101 * pointUnit, "Red Empire points issued should be 101");
-    assertEq(Faction.getPointsIssued(EEmpire.Green), 12 * pointUnit, "Green Empire points issued should be 12");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), 101 * pointUnit, "Alice's Red Empire points should be 101");
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 101, "Red Empire points issued should be 101");
+    assertEq(Faction.getPointsIssued(EEmpire.Green), 12, "Green Empire points issued should be 12");
+    assertEq(PointsMap.get(EEmpire.Red, aliceId), 101, "Alice's Red Empire points should be 101");
     assertEq(PointsMap.get(EEmpire.Blue, aliceId), 0, "Alice's Blue Empire points should be 0");
-    assertEq(PointsMap.get(EEmpire.Green, aliceId), 5 * pointUnit, "Alice's Green Empire points should be 5");
+    assertEq(PointsMap.get(EEmpire.Green, aliceId), 5, "Alice's Green Empire points should be 5");
     assertEq(PointsMap.get(EEmpire.Red, bobId), 0, "Bob's Red Empire points should be 0");
     assertEq(PointsMap.get(EEmpire.Blue, bobId), 0, "Bob's Blue Empire points should be 0");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), 7 * pointUnit, "Bob's Green Empire points should be 7");
+    assertEq(PointsMap.get(EEmpire.Green, bobId), 7, "Bob's Green Empire points should be 7");
   }
 
   function testRemovePoints() public {
     vm.startPrank(creator);
     LibPoint.issuePoints(EEmpire.Red, aliceId, 100);
     LibPoint.removePoints(EEmpire.Red, aliceId, 99);
-    assertEq(Faction.getPointsIssued(EEmpire.Red), 1 * pointUnit, "Empire points issued should be 1");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), 1 * pointUnit, "Alice's Red Empire points should be 1");
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 1, "Empire points issued should be 1");
+    assertEq(PointsMap.get(EEmpire.Red, aliceId), 1, "Alice's Red Empire points should be 1");
     LibPoint.removePoints(EEmpire.Red, aliceId, 1);
     assertEq(Faction.getPointsIssued(EEmpire.Red), 0, "Empire points issued should be 0");
     assertEq(PointsMap.get(EEmpire.Red, aliceId), 0, "Alice's Red Empire points should be 0");
@@ -93,12 +91,12 @@ contract LibPointTest is PrimodiumTest {
     LibPoint.issuePoints(EEmpire.Green, bobId, 3);
     LibPoint.removePoints(EEmpire.Green, aliceId, 2);
 
-    assertEq(Faction.getPointsIssued(EEmpire.Red), 11 * pointUnit, "Red Empire points issued should be 11");
-    assertEq(Faction.getPointsIssued(EEmpire.Green), 31 * pointUnit, "Green Empire points issued should be 31");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), 10 * pointUnit, "Alice's Red Empire points should be 10");
-    assertEq(PointsMap.get(EEmpire.Green, aliceId), 28 * pointUnit, "Alice's Green Empire points should be 28");
-    assertEq(PointsMap.get(EEmpire.Red, bobId), 1 * pointUnit, "Bob's Red Empire points should be 1");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), 3 * pointUnit, "Bob's Green Empire points should be 3");
+    assertEq(Faction.getPointsIssued(EEmpire.Red), 11, "Red Empire points issued should be 11");
+    assertEq(Faction.getPointsIssued(EEmpire.Green), 31, "Green Empire points issued should be 31");
+    assertEq(PointsMap.get(EEmpire.Red, aliceId), 10, "Alice's Red Empire points should be 10");
+    assertEq(PointsMap.get(EEmpire.Green, aliceId), 28, "Alice's Green Empire points should be 28");
+    assertEq(PointsMap.get(EEmpire.Red, bobId), 1, "Bob's Red Empire points should be 1");
+    assertEq(PointsMap.get(EEmpire.Green, bobId), 3, "Bob's Green Empire points should be 3");
   }
 
   function testFailRemovePoints() public {

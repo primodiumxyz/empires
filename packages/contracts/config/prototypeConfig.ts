@@ -34,13 +34,12 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         gameOverBlock: 0n, // currently handled in PostDeploy
       },
       P_PointConfig: {
-        pointUnit: BigInt(POINTS_UNIT),
-        minPointCost: BigInt(POINTS_UNIT * 0.01),
-        startPointCost: BigInt(POINTS_UNIT * 0.02),
-        pointGenRate: BigInt(POINTS_UNIT * 0.02),
-        pointCostIncrease: BigInt(POINTS_UNIT * 0.01),
+        minPointCost: 100n,
+        startPointCost: 200n,
+        pointGenRate: 200n,
+        pointCostIncrease: 100n,
         pointRake: scaleRake(0.01), // out of 1, scales to out of 10000
-        pointSellTax: BigInt(POINTS_UNIT * 0),
+        pointSellTax: 0n,
       },
       P_ActionConfig: {
         actionGenRate: BigInt(POINTS_UNIT * 0.02),
