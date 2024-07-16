@@ -70,10 +70,9 @@ contract ActionSystem is EmpiresSystem {
   ) private {
     bytes32 playerId = addressToId(_msgSender());
     Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
-    uint256 pointUnit = P_PointConfig.getPointUnit();
 
     if (_progressAction) {
-      LibPoint.issuePoints(_empireImpacted, playerId, pointUnit * (EMPIRE_COUNT - 1));
+      LibPoint.issuePoints(_empireImpacted, playerId, EMPIRE_COUNT - 1);
       LibPrice.pointCostUp(_empireImpacted, EMPIRE_COUNT - 1);
     } else {
       // Iterate through each empire except the impacted one
@@ -81,7 +80,7 @@ contract ActionSystem is EmpiresSystem {
         if (i == uint256(_empireImpacted)) {
           continue;
         }
-        LibPoint.issuePoints(EEmpire(i), playerId, pointUnit);
+        LibPoint.issuePoints(EEmpire(i), playerId, 1);
         LibPrice.pointCostUp(_empireImpacted, 1);
       }
     }
@@ -107,7 +106,7 @@ contract ActionSystem is EmpiresSystem {
     LibPrice.sellEmpirePointCostDown(_empire, _pointsUnscaled);
 
     // remove points from player and empire's issued points count
-    LibPoint.removePoints(_empire, playerId, pointsScaled);
+    LibPoint.removePoints(_empire, playerId, _pointsUnscaled);
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
