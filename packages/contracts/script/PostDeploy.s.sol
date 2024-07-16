@@ -11,6 +11,9 @@ import { initPrice } from "libraries/InitPrice.sol";
 import { P_GameConfig } from "codegen/index.sol";
 
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
+import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
+import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
+import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 import { ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 contract PostDeploy is Script {
@@ -28,13 +31,22 @@ contract PostDeploy is Script {
     createPrototypes(world);
     console.log("Prototypes created");
 
-    P_GameConfig.setGameOverBlock(block.number + 1000);
+    P_GameConfig.setGameOverBlock(block.number + 1_000);
 
     createPlanets();
     initPrice();
 
     // register the admin namespace that stores raked eth
     world.registerNamespace(ADMIN_NAMESPACE_ID);
+
+    ResourceId withdrawSystemId = WorldResourceIdLib.encode({
+      typeId: RESOURCE_SYSTEM,
+      namespace: WorldResourceIdInstance.getNamespace(ADMIN_NAMESPACE_ID),
+      name: "WithdrawRakeSyst"
+    });
+    WithdrawRakeSystem withdrawSystem = new WithdrawRakeSystem();
+    world.registerSystem(withdrawSystemId, withdrawSystem, true);
+    world.registerFunctionSelector(withdrawSystemId, "withdrawRake()");
 
     vm.stopBroadcast();
   }

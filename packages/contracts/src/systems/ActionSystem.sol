@@ -18,7 +18,7 @@ contract ActionSystem is EmpiresSystem {
    * @dev A player purchaseable action that creates a destroyer on a planet.
    * @param _planetId The ID of the planet.
    */
-  function createDestroyer(bytes32 _planetId) public payable _onlyNotGameOver {
+  function createDestroyer(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
@@ -36,7 +36,7 @@ contract ActionSystem is EmpiresSystem {
    * @dev A player purchaseable action that kills a destroyer on a planet.
    * @param _planetId The ID of the planet.
    */
-  function killDestroyer(bytes32 _planetId) public payable _onlyNotGameOver {
+  function killDestroyer(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.destroyerCount > 0, "[ActionSystem] No destroyers to kill");
