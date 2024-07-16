@@ -91,20 +91,20 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player action to sell some points of an empire that they currently own.
    * @param _empire The empire to sell points from.
-   * @param _pointUnits The number of points to sell.
+   * @param _pointsUnscaled The number of points to sell.
    */
-  function sellPoints(EEmpire _empire, uint256 _pointUnits) public {
+  function sellPoints(EEmpire _empire, uint256 _pointsUnscaled) public {
     bytes32 playerId = addressToId(_msgSender());
-    uint256 pointsScaled = _pointUnits * P_PointConfig.getPointUnit();
+    uint256 pointsScaled = _pointsUnscaled * P_PointConfig.getPointUnit();
     require(pointsScaled <= PointsMap.get(_empire, playerId), "[ActionSystem] Player does not have enough points to remove");
 
-    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _pointUnits);
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _pointsUnscaled);
 
     // require that the pot has enough ETH to send
     require(pointSaleValue <= Balances.get(EMPIRES_NAMESPACE_ID), "[ActionSystem] Insufficient funds for point sale");
 
     // set the new empire point cost
-    LibPrice.sellEmpirePointCostDown(_empire, _pointUnits);
+    LibPrice.sellEmpirePointCostDown(_empire, _pointsUnscaled);
 
     // remove points from player and empire's issued points count
     LibPoint.removePoints(_empire, playerId, pointsScaled);
