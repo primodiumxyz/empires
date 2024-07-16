@@ -30,7 +30,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
 
   const addShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
-      functionName: "Empires__addShield",
+      functionName: "Empires__chargeShield",
       args: [planetId],
       options: { value: payment },
       txQueueOptions: {
@@ -43,7 +43,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
 
   const removeShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
-      functionName: "Empires__removeShield",
+      functionName: "Empires__drainShield",
       args: [planetId],
       options: { value: payment },
       txQueueOptions: {

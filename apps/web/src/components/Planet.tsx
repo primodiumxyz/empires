@@ -45,8 +45,8 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   const createDestroyerPriceWei = useActionCost(EPlayerAction.CreateDestroyer, planetFaction);
   const killDestroyerPriceWei = useActionCost(EPlayerAction.KillDestroyer, planetFaction);
-  const addShieldPriceWei = useActionCost(EPlayerAction.AddShield, planetFaction);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.RemoveShield, planetFaction);
+  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetFaction);
+  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetFaction);
 
   const createDestroyerPriceUsd = utils.ethToUSD(createDestroyerPriceWei, price ?? 0);
   const killDestroyerPriceUsd = utils.ethToUSD(killDestroyerPriceWei, price ?? 0);
