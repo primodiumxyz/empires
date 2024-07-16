@@ -19,7 +19,7 @@ const ListItem: React.FC<ListItemProps> = ({
   className,
 }) => {
   return (
-    <li className={`flex gap-1 items-center ${strikethrough ? "line-through" : ""} ${className}`}>
+    <li className={`flex items-center gap-1 ${strikethrough ? "line-through" : ""} ${className}`}>
       {index !== undefined && <span className="mr-2 font-bold">{index + 1}.</span>}
       {bullet && <Bullet active={active} />}
       {children}
@@ -29,8 +29,8 @@ const ListItem: React.FC<ListItemProps> = ({
 
 const Bullet = ({ active }: { active?: boolean }) => {
   return (
-    <div className="w-3 h-3 border border-primary border-2 aspect-square flex justify-center items-center">
-      {active && <div className="w-2 h-2 bg-accent"></div>}
+    <div className="flex aspect-square h-3 w-3 items-center justify-center border border-2 border-primary">
+      {active && <div className="h-2 w-2 bg-accent"></div>}
     </div>
   );
 };
@@ -57,7 +57,7 @@ export const List: React.FC<ListProps> & { Item: React.FC<ListItemProps> } = ({
     return child;
   });
 
-  return <ListTag className={`list-none shadow rounded-lg ${className}`}>{enhancedChildren}</ListTag>;
+  return <ListTag className={`list-none rounded-lg shadow ${className}`}>{enhancedChildren}</ListTag>;
 };
 
 List.Item = ListItem;

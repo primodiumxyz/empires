@@ -1,5 +1,6 @@
-import { useGame } from "@/hooks/useGame";
 import { adjustDecimals } from "@primodiumxyz/core";
+import { useGame } from "@/hooks/useGame";
+
 import { Button } from "./Button";
 
 export const NumberInput: React.FC<{
@@ -31,7 +32,7 @@ export const NumberInput: React.FC<{
   };
 
   return (
-    <div className={`flex mb-4 relative justify-center items-center gap-2`}>
+    <div className={`relative mb-4 flex items-center justify-center gap-2`}>
       <Button
         size={"xs"}
         variant={"ghost"}
@@ -45,7 +46,7 @@ export const NumberInput: React.FC<{
       </Button>
       <input
         type="number"
-        className={`bg-neutral px-2 text-center w-24 border border-secondary focus:outline-none ${
+        className={`w-24 border border-secondary bg-neutral px-2 text-center focus:outline-none ${
           Number(count) > max ? "text-error" : ""
         }`}
         value={count}
@@ -71,7 +72,7 @@ export const NumberInput: React.FC<{
         +
       </Button>
       {max !== Infinity && (
-        <div className="absolute right-1/2 -bottom-1/2 translate-x-1/2 translate-y-1/2">
+        <div className="absolute -bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2">
           <Button
             variant={"ghost"}
             size={"xs"}

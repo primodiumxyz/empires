@@ -1,7 +1,8 @@
+import { forwardRef } from "react";
+import { cva, VariantProps } from "class-variance-authority";
+
 import { Tooltip } from "@/components/core/Tooltip";
 import { cn } from "@/util/client";
-import { VariantProps, cva } from "class-variance-authority";
-import { forwardRef } from "react";
 
 const badgeVariants = cva("badge flex pointer-events-auto shadow-inner", {
   variants: {
@@ -47,6 +48,6 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
         <div className={cn(badgeVariants({ variant, size, modifier, className }))} ref={ref} {...props} />
       </Tooltip>
     );
-  }
+  },
 );
 Badge.displayName = "Badge";

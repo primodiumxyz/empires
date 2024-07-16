@@ -1,10 +1,11 @@
+import { ReactNode, useEffect, useRef } from "react";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { cva, VariantProps } from "class-variance-authority";
+
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { cn } from "@/util/client";
-import { Entity } from "@primodiumxyz/reactive-tables";
-import { VariantProps, cva } from "class-variance-authority";
-import { ReactNode, useEffect, useRef } from "react";
-import { FaAngleDown } from "react-icons/fa";
 
 const dropdownVariants = cva(
   "z-50 absolute mt-1 p-1 bg-neutral border border-secondary/25 w-44 pointer-events-auto data-[state=close]:pointer-events-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=close]:animate-out data-[state=close]:fade-out fill-mode-forwards",
@@ -24,7 +25,7 @@ const dropdownVariants = cva(
       size: "md",
       variant: "bottomLeft",
     },
-  }
+  },
 );
 type DropdownValue = string | number | boolean | Entity;
 
@@ -81,8 +82,8 @@ export const Dropdown = <T extends DropdownValue>({
         role="button"
         onClick={toggleMenu}
       >
-        <div className="pointer-events-none flex flex-row gap-2 items-center justify-center">
-          {selectedChild} <FaAngleDown className="opacity-50" />
+        <div className="pointer-events-none flex flex-row items-center justify-center gap-2">
+          {selectedChild} <ChevronDownIcon className="size-4 opacity-50" />
         </div>
       </Button>
       <SecondaryCard ref={menuRef} className={cn(dropdownVariants({ variant }))}>

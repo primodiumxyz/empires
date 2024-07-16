@@ -1,6 +1,7 @@
-import { cn } from "@/util/client";
-import { VariantProps, cva } from "class-variance-authority";
 import { forwardRef } from "react";
+import { cva, VariantProps } from "class-variance-authority";
+
+import { cn } from "@/util/client";
 
 const indicatorVariants = cva("indicator-item badge", {
   variants: {
@@ -33,5 +34,5 @@ export const Indicator = forwardRef<HTMLDivElement, IndicatorProps>(
         {children}
       </div>
     );
-  }
+  },
 );

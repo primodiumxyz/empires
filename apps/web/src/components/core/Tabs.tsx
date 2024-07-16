@@ -1,7 +1,9 @@
-import { ReactNode, memo, createContext, useContext, useState, FC, useEffect, useRef } from "react";
+import { createContext, FC, memo, ReactNode, useContext, useEffect, useRef, useState } from "react";
+
+import { IconLabel } from "@/components/core/IconLabel";
+
 import { Button as _Button } from "./Button";
 import { SecondaryCard } from "./Card";
-import { IconLabel } from "@/components/core/IconLabel";
 
 interface TabProps {
   children?: ReactNode;
@@ -44,7 +46,7 @@ const Pane: FC<{
   return fragment ? (
     <>{children}</>
   ) : (
-    <SecondaryCard className={`overflow-y-auto scrollbar overflow ${className}`}>{children}</SecondaryCard>
+    <SecondaryCard className={`scrollbar overflow overflow-y-auto ${className}`}>{children}</SecondaryCard>
   );
 });
 
@@ -65,7 +67,7 @@ const Button: FC<React.ComponentProps<typeof _Button> & { index: number; togglab
         }}
       />
     );
-  }
+  },
 );
 
 const IconButton: FC<
@@ -126,7 +128,7 @@ export const Tabs: FC<TabProps> & {
   NextButton: typeof NextButton;
 } = ({ children, defaultIndex = 0, className, onChange, persistIndexKey }) => {
   const [currentIndex, setCurrentIndex] = useState<number | undefined>(
-    persistedIndexMap.has(persistIndexKey ?? "") ? persistedIndexMap.get(persistIndexKey ?? "") : defaultIndex
+    persistedIndexMap.has(persistIndexKey ?? "") ? persistedIndexMap.get(persistIndexKey ?? "") : defaultIndex,
   );
 
   // Ref to check if it's the first render

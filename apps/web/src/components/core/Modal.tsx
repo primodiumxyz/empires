@@ -1,11 +1,12 @@
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import ReactDOM from "react-dom";
+
+import { useCore } from "@primodiumxyz/core/react";
+import { KeybindActionKeys } from "@primodiumxyz/game";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { useGame } from "@/hooks/useGame";
-import { useCore } from "@primodiumxyz/core/react";
-import { KeybindActionKeys } from "@primodiumxyz/game";
-import React, { ReactNode, createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
-import { FaTimes } from "react-icons/fa";
 
 interface ModalContextType {
   isOpen: boolean;
@@ -61,7 +62,6 @@ export const Modal: React.FC<ModalProps> & {
 
     if (isOpen) {
       game.GLOBAL.disableGlobalInput();
-      tables.HoverEntity.remove(); // remove any hovered entity (probably displaying a tooltip)
     } else {
       game.GLOBAL.enableGlobalInput();
     }
@@ -143,16 +143,16 @@ Modal.Content = function ModalContent({ children, className }) {
 
   return ReactDOM.createPortal(
     <div
-      className="absolute top-0 w-screen h-screen bg-secondary/10 backdrop-blur-md flex items-center justify-center animate-in fade-in ease-in-out"
+      className="absolute top-0 flex h-screen w-screen items-center justify-center bg-secondary/10 backdrop-blur-md ease-in-out animate-in fade-in"
       onClick={handleClickOutside}
     >
       <div className={`max-w-screen max-h-screen space-y-2 ${className} p-5 pt-12`} ref={modalRef}>
-        <Card className="w-full h-full shadow-2xl pointer-events-auto" noMotion>
-          <div className="absolute top-0 -translate-y-full w-full flex justify-between items-center p-2">
-            <p className="font-bold uppercase pr-2 text-accent">{title}</p>
+        <Card className="pointer-events-auto h-full w-full shadow-2xl" noMotion>
+          <div className="absolute top-0 flex w-full -translate-y-full items-center justify-between p-2">
+            <p className="pr-2 font-bold uppercase text-accent">{title}</p>
             {!blockClose && (
-              <Button onClick={handleClose} className="btn-sm ghost">
-                <FaTimes />
+              <Button onClick={handleClose} className="ghost btn-sm">
+                <XMarkIcon className="size-4" />
               </Button>
             )}
           </div>
@@ -160,6 +160,6 @@ Modal.Content = function ModalContent({ children, className }) {
         </Card>
       </div>
     </div>,
-    document.getElementById("modal-root")!
+    document.getElementById("modal-root")!,
   );
 };

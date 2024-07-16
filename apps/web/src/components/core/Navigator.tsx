@@ -1,4 +1,5 @@
-import { FC, ReactNode, createContext, useCallback, useContext, useLayoutEffect, useState } from "react";
+import { createContext, FC, ReactNode, useCallback, useContext, useLayoutEffect, useState } from "react";
+
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 
@@ -40,7 +41,7 @@ export const Navigator: FC<{
         setHistory((prev) => [...prev, screenTitle]);
       }
     },
-    [history]
+    [history],
   );
 
   const goBack = useCallback(() => {
@@ -72,7 +73,7 @@ const Screen: FC<{
 }> = ({ title, className, children }) => {
   const { history } = useNavigation();
   if (history[history.length - 1] !== title) return null;
-  return <div className={`flex flex-col w-full ${className} animate-in fade-in duration-300`}>{children}</div>;
+  return <div className={`flex w-full flex-col ${className} duration-300 animate-in fade-in`}>{children}</div>;
 };
 
 const NavButton: FC<
@@ -131,7 +132,7 @@ const BackButton: FC<{
 const Breadcrumbs: FC<{ children?: ReactNode }> = () => {
   const { history, navigateTo } = useNavigation();
   return (
-    <SecondaryCard className="w-fit text-xs breadcrumbs pointer-events-auto">
+    <SecondaryCard className="breadcrumbs pointer-events-auto w-fit text-xs">
       <ul>
         {history.map((item, index) => (
           <li key={index}>

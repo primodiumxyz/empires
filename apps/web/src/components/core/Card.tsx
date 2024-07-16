@@ -1,7 +1,8 @@
-import { cn } from "@/util/client";
-import { lerp } from "@primodiumxyz/core";
-import { VariantProps, cva } from "class-variance-authority";
 import { forwardRef, useCallback, useRef } from "react";
+import { cva, VariantProps } from "class-variance-authority";
+
+import { lerp } from "@primodiumxyz/core";
+import { cn } from "@/util/client";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -84,20 +85,20 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
               }
             : {})}
           className={cn(
-            "card bg-neutral pixel-border p-3 bg-opacity-90 relative transition-all duration-100 ease-linear",
+            "pixel-border card relative bg-neutral bg-opacity-90 p-3 transition-all duration-100 ease-linear",
             props.noPointerEvents ? "pointer-events-none" : "pointer-events-auto",
-            className
+            className,
           )}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-transparent to-neutral" />
-          <div className="absolute inset-0 pixel-border" />
-          <div className="absolute inset-0 pixel-border blur-[2px] opacity-50 bg-blend-screen" />
-          <div className="z-50 w-full h-full">{children}</div>
+          <div className="pixel-border absolute inset-0" />
+          <div className="pixel-border absolute inset-0 opacity-50 bg-blend-screen blur-[2px]" />
+          <div className="z-50 h-full w-full">{children}</div>
           {!noDecor && (
-            <div className="opacity-30 pointer-events-none">
-              <img src="img/ui/decor1.png" className="absolute bottom-0 -right-6" />
+            <div className="pointer-events-none opacity-30">
+              <img src="img/ui/decor1.png" className="absolute -right-6 bottom-0" />
               <img src="img/ui/decor2.png" className="absolute -bottom-4" />
-              <div className="absolute top-0 -right-6">
+              <div className="absolute -right-6 top-0">
                 <img src="img/ui/decor1.png" />
                 <img src="img/ui/decor3.png" />
               </div>
@@ -106,7 +107,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 const secondaryCardVariants = cva("card p-2", {
@@ -140,7 +141,7 @@ export const SecondaryCard = forwardRef<HTMLDivElement, SecondaryCardProps>(
         {children}
       </div>
     );
-  }
+  },
 );
 
 const glassProps = cva("card border border-secondary/50 heropattern-topography-slate-500/10 backdrop-blur-md p-3", {
@@ -168,12 +169,12 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassProps>(
       <div ref={ref} className={cn(glassProps({ direction, className, noPointerEvents }))}>
         <div
           className={cn(
-            "absolute inset-0 !bg-gradient-to-br !border-none from-secondary/25 to-secondary/15",
-            glassProps({ direction })
+            "absolute inset-0 !border-none !bg-gradient-to-br from-secondary/25 to-secondary/15",
+            glassProps({ direction }),
           )}
         />
         {children}
       </div>
     );
-  }
+  },
 );

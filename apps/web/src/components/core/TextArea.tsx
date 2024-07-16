@@ -1,6 +1,7 @@
-import { cn } from "@/util/client";
 import { useEffect, useRef } from "react";
+
 import { useGame } from "@/hooks/useGame";
+import { cn } from "@/util/client";
 
 export const TextArea: React.FC<{
   placeholder?: string;
@@ -35,7 +36,7 @@ export const TextArea: React.FC<{
   }, []);
 
   return (
-    <div className="form-control w-full max-w-xs pointer-events-auto">
+    <div className="form-control pointer-events-auto w-full max-w-xs">
       <textarea
         ref={inputRef}
         tabIndex={-1}
@@ -45,7 +46,7 @@ export const TextArea: React.FC<{
         onBlur={game.GLOBAL.enableGlobalInput}
         required={!!requirePattern}
         placeholder={placeholder ?? "Type here"}
-        className={cn("input w-full max-w-xs py-2 bg-neutral border-secondary/25 resize-none", className)}
+        className={cn("input w-full max-w-xs resize-none border-secondary/25 bg-neutral py-2", className)}
       />
     </div>
   );

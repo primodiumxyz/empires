@@ -1,4 +1,4 @@
-import { ReactNode, FC } from "react";
+import { FC, ReactNode } from "react";
 
 interface JoinProps {
   className?: string;
@@ -9,7 +9,7 @@ interface JoinProps {
 export const Join: FC<JoinProps> = ({ className, direction = "horizontal", children }) => {
   return (
     <div
-      className={`join ${className} backdrop-blur-md p-1 w-fit hover:bg-secondary/25 transition-all ${
+      className={`join ${className} w-fit p-1 backdrop-blur-md transition-all hover:bg-secondary/25 ${
         direction === "horizontal" ? "join-horizontal" : "join-vertical"
       }`}
     >

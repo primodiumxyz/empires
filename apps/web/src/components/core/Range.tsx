@@ -1,6 +1,7 @@
-import { cn } from "@/util/client";
-import { VariantProps, cva } from "class-variance-authority";
 import { forwardRef } from "react";
+import { cva, VariantProps } from "class-variance-authority";
+
+import { cn } from "@/util/client";
 
 const rangeVariants = cva("range pointer-events-auto", {
   variants: {
@@ -32,7 +33,7 @@ interface RangeProps extends VariantProps<typeof rangeVariants> {
 export const Range = forwardRef<HTMLInputElement, RangeProps>(
   ({ min = 0, max = 100, defaultValue, onChange, className, variant }, ref) => {
     return (
-      <div className="flex items-center p-2 transition-all hover:bg-secondary/10 h-full">
+      <div className="flex h-full items-center p-2 transition-all hover:bg-secondary/10">
         <input
           ref={ref}
           type="range"
@@ -46,5 +47,5 @@ export const Range = forwardRef<HTMLInputElement, RangeProps>(
         />
       </div>
     );
-  }
+  },
 );

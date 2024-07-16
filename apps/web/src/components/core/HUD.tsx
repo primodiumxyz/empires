@@ -1,4 +1,4 @@
-import { FC, ReactNode, createContext, memo, useContext, useEffect, useRef } from "react";
+import { createContext, FC, memo, ReactNode, useContext, useEffect, useRef } from "react";
 
 interface HUDProps {
   children?: ReactNode;
@@ -58,7 +58,7 @@ const TopRight: FC<HUDElementProps> = memo(({ children, className }) => {
   return (
     <div
       style={{ transform: `scale(${scale})`, transformOrigin: "top right" }}
-      className={`absolute top-0 right-0 ${className}`}
+      className={`absolute right-0 top-0 ${className}`}
     >
       {children}
     </div>
@@ -70,7 +70,7 @@ const TopLeft: FC<HUDElementProps> = memo(({ children, className }) => {
   return (
     <div
       style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
-      className={`absolute top-0 left-0 ${className}`}
+      className={`absolute left-0 top-0 ${className}`}
     >
       {children}
     </div>
@@ -109,7 +109,7 @@ const TopMiddle: FC<HUDElementProps> = memo(({ children, className }) => {
         transform: `translateX(-50%) scale(${scale})`,
         transformOrigin: "top center",
       }}
-      className={`absolute top-0 left-1/2 ${className}`}
+      className={`absolute left-1/2 top-0 ${className}`}
     >
       {children}
     </div>
@@ -139,7 +139,7 @@ const Left: FC<HUDElementProps> = memo(({ children, className }) => {
         transform: `translateY(50%) scale(${scale})`,
         transformOrigin: "left center",
       }}
-      className={`absolute left-0 bottom-1/2 ${className}`}
+      className={`absolute bottom-1/2 left-0 ${className}`}
     >
       {children}
     </div>
@@ -154,7 +154,7 @@ const Right: FC<HUDElementProps> = memo(({ children, className }) => {
         transform: `translateY(50%) scale(${scale})`,
         transformOrigin: "right center",
       }}
-      className={`absolute right-0 bottom-1/2 ${className}`}
+      className={`absolute bottom-1/2 right-0 ${className}`}
     >
       {children}
     </div>
@@ -168,7 +168,7 @@ const Center: FC<HUDElementProps> = memo(({ children, className }) => {
         transform: `translateY(50%) translateX(50%) scale(${scale})`,
         transformOrigin: "center center",
       }}
-      className={`absolute right-1/2 bottom-1/2 ${className}`}
+      className={`absolute bottom-1/2 right-1/2 ${className}`}
     >
       {children}
     </div>
@@ -189,8 +189,8 @@ export const HUD: FC<HUDProps> & {
   const paddingClass = pad ? "p-3" : "";
   return (
     <ScaleContext.Provider value={scale}>
-      <div className={`screen-container ${paddingClass} fixed top-0 right-0 pointer-events-none`}>
-        <div className={`h-full relative pointer-events-none`}>{children}</div>
+      <div className={`screen-container ${paddingClass} pointer-events-none fixed right-0 top-0`}>
+        <div className={`pointer-events-none relative h-full`}>{children}</div>
       </div>
     </ScaleContext.Provider>
   );

@@ -1,11 +1,12 @@
-import { Tooltip, TooltipDirection } from "@/components/core/Tooltip";
-import { useGame } from "@/hooks/useGame";
-import { cn } from "@/util/client";
+import { forwardRef, useCallback, useEffect } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+
 import { AudioKeys } from "@primodiumxyz/assets";
 import { getRandomRange } from "@primodiumxyz/core";
 import { KeybindActionKeys } from "@primodiumxyz/game";
-import { cva, type VariantProps } from "class-variance-authority";
-import { forwardRef, useCallback, useEffect } from "react";
+import { Tooltip, TooltipDirection } from "@/components/core/Tooltip";
+import { useGame } from "@/hooks/useGame";
+import { cn } from "@/util/client";
 
 const buttonVariants = cva(
   "btn min-h-fit join-item items-center justify-center whitespace-nowrap ring-offset-background focus-visible:outline-none relative",
@@ -52,7 +53,7 @@ const buttonVariants = cva(
       size: "xs",
       shape: "default",
     },
-  }
+  },
 );
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
@@ -82,7 +83,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       selected,
       ...props
     },
-    ref
+    ref,
   ) => {
     const game = useGame();
     const api = game.UI;
@@ -96,7 +97,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
         props.onClick?.(e);
       },
-      [api.audio, clickSound, mute, props]
+      [api.audio, clickSound, mute, props],
     );
 
     const handleHoverEnter = useCallback(
@@ -112,7 +113,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         //TODOL i dont want to drill tables here
         // if (tooltip) components.HoverEntity.remove()
       },
-      [api.audio, mute, tooltip, props]
+      [api.audio, mute, tooltip, props],
     );
 
     useEffect(() => {
@@ -129,9 +130,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <Tooltip tooltipContent={tooltip} direction={tooltipDirection}>
         <button
           className={cn(
-            "cursor-pointer active:cursor-pointerDown disabled:opacity-50",
+            "active:cursor-pointerDown cursor-pointer disabled:opacity-50",
             buttonVariants({ variant, size, motion, modifier, shape, className }),
-            selected && "border-1 border-accent z-10"
+            selected && "border-1 z-10 border-accent",
           )}
           ref={ref}
           tabIndex={-1}
@@ -143,6 +144,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         </button>
       </Tooltip>
     );
-  }
+  },
 );
 Button.displayName = "Button";
