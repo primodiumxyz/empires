@@ -29,12 +29,18 @@ importers:
       '@latticexyz/faucet':
         specifier: 2.0.9
         version: 2.0.9(typescript@5.5.2)
+      '@primodiumxyz/assets':
+        specifier: workspace:*
+        version: link:../../packages/assets
       '@primodiumxyz/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
       '@primodiumxyz/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@primodiumxyz/game':
+        specifier: workspace:*
+        version: link:../../packages/game
       '@primodiumxyz/reactive-tables':
         specifier: ^3.4.0
         version: 3.4.0(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
@@ -129,6 +135,8 @@ importers:
       vitest:
         specifier: ^0.32.4
         version: 0.32.4(happy-dom@14.12.3)(jsdom@24.1.0)
+
+  packages/assets: {}
 
   packages/contracts:
     dependencies:
@@ -290,6 +298,15 @@ importers:
       vitest:
         specifier: ^0.32.4
         version: 0.32.4(happy-dom@14.12.3)(jsdom@24.1.0)
+
+  packages/game:
+    dependencies:
+      '@primodiumxyz/core':
+        specifier: workspace:*
+        version: link:../core
+      '@primodiumxyz/reactive-tables':
+        specifier: ^3.5.0
+        version: 3.5.0(prettier@3.2.5)(react@18.3.1)(zod@3.23.8)
 
 packages:
 
@@ -2249,7 +2266,6 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: true
 
   /@latticexyz/cli@2.0.9(google-protobuf@3.21.2):
     resolution: {integrity: sha512-NENGM3DeC8OB8a11No8dPqs+hSHgU1YX1Z5IUAtZUXzFhkA24z/+MEiOuN07q7I2/M/bOcoWX4XSOOGnArJOFQ==}
@@ -2385,7 +2401,6 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: true
 
   /@latticexyz/config@2.0.9:
     resolution: {integrity: sha512-iKvGHmI5Fk8J/C6tffJx1vMWhfIy03+7dk1kr1aGBsTC4BDajDoWNjmlXFxPgYtq8BxreuHVaR0W089+4nrKlQ==}
@@ -2404,7 +2419,6 @@ packages:
       - supports-color
       - typescript
       - utf-8-validate
-    dev: true
 
   /@latticexyz/config@2.0.9(@aws-sdk/client-kms@3.606.0)(asn1.js@5.4.1)(typescript@5.4.2):
     resolution: {integrity: sha512-iKvGHmI5Fk8J/C6tffJx1vMWhfIy03+7dk1kr1aGBsTC4BDajDoWNjmlXFxPgYtq8BxreuHVaR0W089+4nrKlQ==}
@@ -2532,7 +2546,6 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: true
 
   /@latticexyz/query@2.0.9(zod@3.23.8):
     resolution: {integrity: sha512-MVHJe83rjOd9K73zyWG8aNXdiPZeT0lIyjMILm07UBweqiLouVPxW3Aij980kPx4JUzZ6L34Lnovg7PbcoZKbw==}
@@ -2578,7 +2591,6 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: true
 
   /@latticexyz/schema-type@2.0.9(typescript@5.4.2)(zod@3.23.8):
     resolution: {integrity: sha512-iynRKq5qgKJO9hCyIJn57sklLSmkjtxPKhcdx0uvGeaWh/SK9d+Yz383+NyLq85vaIRNcbkp3oE8YQjK0Exx3g==}
@@ -2687,7 +2699,6 @@ packages:
       - supports-color
       - typescript
       - utf-8-validate
-    dev: true
 
   /@latticexyz/store@2.0.9(@aws-sdk/client-kms@3.606.0)(asn1.js@5.4.1)(typescript@5.4.2):
     resolution: {integrity: sha512-VNwBtNICdYBrLwMI4655fhUQLzxdXwjxt6orGYd1wjWMsP6o95MqmittWf21TVdpvK1p+bJayYJByBtxOwc1ow==}
@@ -3245,6 +3256,66 @@ packages:
       - utf-8-validate
       - yjs
       - zod
+    dev: false
+
+  /@primodiumxyz/reactive-tables@3.5.0(prettier@3.2.5)(react@18.3.1)(zod@3.23.8):
+    resolution: {integrity: sha512-VrN4LEX5OJnAvsy/EU/qOZB0bEBJBidxhSVZE8umVQY3MujaacUIOTawvqA2U2IQABd4bR4iZehvNYXdkvBB0w==}
+    engines: {node: 20.x, pnpm: 8.x}
+    dependencies:
+      '@latticexyz/protocol-parser': 2.0.9(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
+      '@latticexyz/store': 2.0.9
+      '@primodiumxyz/sync-stack': 0.6.9
+      debug: 4.3.5(supports-color@5.5.0)
+      fast-deep-equal: 3.1.3
+      mobx: 6.13.0
+      rxjs: 7.5.5
+      tinybase: 4.8.17(prettier@3.2.5)(react@18.3.1)
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
+    transitivePeerDependencies:
+      - '@automerge/automerge-repo'
+      - '@aws-sdk/client-kms'
+      - '@journeyapps/powersync-sdk-common'
+      - '@libsql/client'
+      - '@sqlite.org/sqlite-wasm'
+      - '@vlcn.io/crsqlite-wasm'
+      - asn1.js
+      - bufferutil
+      - electric-sql
+      - expo-sqlite
+      - partykit
+      - partysocket
+      - prettier
+      - react
+      - react-dom
+      - sqlite3
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - yjs
+      - zod
+    dev: false
+
+  /@primodiumxyz/sync-stack@0.6.9:
+    resolution: {integrity: sha512-TA0YMiaHvVnyZNedyOzYHYQw2PnjJgnudlDriSxCwkFB92M7xrhiSGwKaPD9Q3LHX3n4isP9Ht1oofBHhaAQDw==}
+    dependencies:
+      '@latticexyz/block-logs-stream': 2.0.9(zod@3.23.8)
+      '@latticexyz/common': 2.0.9(zod@3.23.8)
+      '@latticexyz/protocol-parser': 2.0.9(zod@3.23.8)
+      '@latticexyz/recs': 2.0.9(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.4.2)(zod@3.23.8)
+      '@latticexyz/store': 2.0.9
+      debug: 4.3.5(supports-color@5.5.0)
+      eventemitter3: 5.0.1
+      viem: 2.9.20(typescript@5.4.2)(zod@3.23.8)
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - '@aws-sdk/client-kms'
+      - asn1.js
+      - bufferutil
+      - supports-color
+      - typescript
+      - utf-8-validate
     dev: false
 
   /@primodiumxyz/sync-stack@0.6.9(typescript@5.5.2):
@@ -9673,6 +9744,58 @@ packages:
     dependencies:
       readable-stream: 2.3.8
       xtend: 4.0.2
+    dev: false
+
+  /tinybase@4.8.17(prettier@3.2.5)(react@18.3.1):
+    resolution: {integrity: sha512-vbEAY5oL0ME+m88oqoFlFnekfCZkGiypVsVTk/F5jy1x9GilGMC2GpKWnm4g01HO/4CG9OmicPgDUWhUlQEwBA==}
+    hasBin: true
+    peerDependencies:
+      '@automerge/automerge-repo': ^1.2.0
+      '@journeyapps/powersync-sdk-common': ^1.6.0
+      '@libsql/client': ^0.7.0
+      '@sqlite.org/sqlite-wasm': ^3.46.0-build2
+      '@vlcn.io/crsqlite-wasm': ^0.16.0
+      electric-sql: ^0.12.1
+      expo-sqlite: 13.2.1
+      partykit: ^0.0.107
+      partysocket: ^1.0.1
+      prettier: ^3.3.2
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      sqlite3: ^5.1.7
+      yjs: ^13.6.18
+    peerDependenciesMeta:
+      '@automerge/automerge-repo':
+        optional: true
+      '@journeyapps/powersync-sdk-common':
+        optional: true
+      '@libsql/client':
+        optional: true
+      '@sqlite.org/sqlite-wasm':
+        optional: true
+      '@vlcn.io/crsqlite-wasm':
+        optional: true
+      electric-sql:
+        optional: true
+      expo-sqlite:
+        optional: true
+      partykit:
+        optional: true
+      partysocket:
+        optional: true
+      prettier:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      sqlite3:
+        optional: true
+      yjs:
+        optional: true
+    dependencies:
+      prettier: 3.2.5
+      react: 18.3.1
     dev: false
 
   /tinybase@4.8.17(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1):
