@@ -328,7 +328,10 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                           <Tooltip
                             tooltipContent={`${formatEther(buyPrice)} ETH`}
                             className="text-gray-300"
-                            containerClassName="w-min cursor-pointer"
+                            containerClassName={cn(
+                              "w-min cursor-pointer",
+                              buyPrice === cheapestBuyPrice && "font-semibold",
+                            )}
                           >
                             {ethToUSD(buyPrice, ethPrice)}
                           </Tooltip>
@@ -346,7 +349,10 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                           <Tooltip
                             tooltipContent={`${formatEther(sellPointPrice[empire])} ETH`}
                             className="text-gray-300"
-                            containerClassName="w-min cursor-pointer"
+                            containerClassName={cn(
+                              "w-min cursor-pointer",
+                              sellPointPrice[empire] === highestSellPrice && "font-semibold",
+                            )}
                           >
                             {ethToUSD(sellPointPrice[empire], ethPrice)}
                           </Tooltip>
