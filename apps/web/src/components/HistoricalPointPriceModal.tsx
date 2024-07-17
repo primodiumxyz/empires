@@ -18,7 +18,14 @@ const DEV = import.meta.env.PRI_DEV === "true";
 const TICK_LABEL_INTERVAL = 30; // 30 seconds
 const PX_PER_SECOND = 3;
 
-export const EmpireEnumToColor: Record<EEmpire, string> = {
+export const EmpireEnumToFillColor: Record<EEmpire, string> = {
+  [EEmpire.Blue]: "stroke-blue-400",
+  [EEmpire.Green]: "stroke-green-400",
+  [EEmpire.Red]: "stroke-red-400",
+  [EEmpire.LENGTH]: "",
+};
+
+export const EmpireEnumToTextColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "text-blue-400",
   [EEmpire.Green]: "text-green-400",
   [EEmpire.Red]: "text-red-400",
@@ -234,7 +241,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
           .append("path")
           .datum(historicalPriceData.filter((d) => d.empire === empire))
           .attr("fill", "none")
-          .attr("stroke", EmpireEnumToColor[empire as EEmpire])
+          .attr("class", EmpireEnumToFillColor[empire as EEmpire])
           .attr("stroke-width", 1.5)
           .attr("d", lineGenerator);
       });
@@ -265,14 +272,14 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     const mouseG = scrollSvg.append("g").attr("class", "mouse-over-effects");
 
     mouseG
-      .append("path") // black vertical line to follow mouse
-      .attr("class", "mouse-line")
+      .append("path") // vertical line to follow mouse
+      .attr("class", "mouse-line-vertical")
       .style("stroke", "#706f6f")
       .style("stroke-width", "1px")
       .style("opacity", "0");
 
     mouseG
-      .append("path") // black horizontal line to follow mouse
+      .append("path") // horizontal line to follow mouse
       .attr("class", "mouse-line-horizontal")
       .style("stroke", "#706f6f")
       .style("stroke-width", "1px")
@@ -344,7 +351,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
             <tbody className="divide-y divide-gray-700">
               {Object.entries(buyPointPrice).map(([_empire, buyPrice]) => {
                 const empire = _empire as unknown as keyof typeof buyPointPrice;
-                const color = EmpireEnumToColor[Number(empire) as EEmpire];
+                const color = EmpireEnumToTextColor[Number(empire) as EEmpire];
 
                 return (
                   <tr key={empire}>
