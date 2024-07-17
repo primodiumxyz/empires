@@ -70,18 +70,19 @@ contract ActionSystem is EmpiresSystem {
   ) private {
     bytes32 playerId = addressToId(_msgSender());
     Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
+    uint256 pointUnit = P_PointConfig.getPointUnit();
 
     if (_progressAction) {
-      LibPoint.issuePoints(_empireImpacted, playerId, EMPIRE_COUNT - 1);
-      LibPrice.pointCostUp(_empireImpacted, EMPIRE_COUNT - 1);
+      LibPoint.issuePoints(_empireImpacted, playerId, (EMPIRE_COUNT - 1) * pointUnit);
+      LibPrice.pointCostUp(_empireImpacted, (EMPIRE_COUNT - 1) * pointUnit);
     } else {
       // Iterate through each empire except the impacted one
       for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
         if (i == uint256(_empireImpacted)) {
           continue;
         }
-        LibPoint.issuePoints(EEmpire(i), playerId, 1);
-        LibPrice.pointCostUp(_empireImpacted, 1);
+        LibPoint.issuePoints(EEmpire(i), playerId, 1 * pointUnit);
+        LibPrice.pointCostUp(_empireImpacted, 1 * pointUnit);
       }
     }
     LibPrice.actionCostUp(_empireImpacted, _actionType);

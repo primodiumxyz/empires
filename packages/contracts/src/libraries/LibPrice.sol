@@ -83,10 +83,15 @@ library LibPrice {
   /**
    * @dev Increases the cost of points for a specific empire.
    * @param _empire The empire to increase the point cost for.
-   * @param _pointsUnscaled The number of point units to increase the cost by.
+   * @param _points The number of point units to increase the cost by.
    */
-  function pointCostUp(EEmpire _empire, uint256 _pointsUnscaled) internal {
-    uint256 newPointCost = Faction.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * _pointsUnscaled;
+  function pointCostUp(EEmpire _empire, uint256 _points) internal {
+    uint256 pointUnit = P_PointConfig.getPointUnit();
+    require(_points > 0, "[LibPrice] Points must be greater than 0");
+    require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+    uint256 wholePoints = _points / pointUnit;
+    
+    uint256 newPointCost = Faction.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * wholePoints;
     Faction.setPointCost(_empire, newPointCost);
   }
 
