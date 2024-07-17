@@ -109,9 +109,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           });
 
         props.onPointerEnter?.(e);
-        // if the button is supposed to show a tooltip, remove the hover entity to not render its info as well
-        //TODOL i dont want to drill tables here
-        // if (tooltip) components.HoverEntity.remove()
       },
       [api.audio, mute, tooltip, props],
     );

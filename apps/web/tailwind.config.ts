@@ -2,11 +2,22 @@
 import daisyui from "daisyui";
 import tailwindAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        mono: ["Space Mono", ...defaultTheme.fontFamily.mono],
+        pixel: ["Silkscreen", ...defaultTheme.fontFamily.mono],
+      },
+      cursor: {
+        default: 'url("/img/cursors/normal.png"), auto',
+        pointer: 'url("/img/cursors/pointer.png") 12 0, auto',
+        pointerDown: 'url("/img/cursors/pointerdown.png") 12 0, auto',
+      },
+    },
   },
   daisyui: {
     themes: [

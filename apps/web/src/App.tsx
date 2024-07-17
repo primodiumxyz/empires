@@ -45,7 +45,7 @@ const App = () => {
         <BurnerAccountProvider>
           <EthPriceProvider>
             <CoreProvider {...core}>
-              <div className="flex h-screen w-screen items-center justify-center bg-neutral">
+              <div className="flex h-screen w-screen cursor-default items-center justify-center bg-neutral">
                 <Landing />
                 <ToastContainer
                   toastClassName="text-xs border text-base-100 bg-neutral border-neutral rounded-box"
@@ -65,7 +65,7 @@ const App = () => {
           </EthPriceProvider>
         </BurnerAccountProvider>
       </PrivyProvider>
-      <div id="modal-root" className="pointer-events-auto fixed top-0 z-50" />
+      <div id="modal-root" className="pointer-events-auto fixed top-0 z-50 cursor-default" />
     </>
   );
 };

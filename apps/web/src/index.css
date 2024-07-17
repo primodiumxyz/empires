@@ -40,6 +40,15 @@
     image-rendering: crisp-edges;
   }
 
+  .pixel-border {
+    border-image: url("/img/ui/frame3.png") 8; /* The number 16 corresponds to the slice value */
+    border-image-width: 16px;
+    border-image-outset: 0px;
+    border-image-repeat: round; /* or stretch or space */
+    image-rendering: pixelated; /* Ensures the 'nearest neighbor' scaling */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0);
+  }
+
   .container {
     position: relative;
   }
@@ -156,5 +165,12 @@
   .marquee-text2 {
     display: inline-block;
     animation: marquee2 20s linear infinite;
+  }
+
+  /* override default behavior */
+  .cursor-pointer {
+    cursor:
+      url("/img/cursors/pointer.png") 12 0,
+      auto !important;
   }
 }
