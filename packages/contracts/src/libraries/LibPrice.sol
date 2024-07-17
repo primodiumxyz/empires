@@ -42,8 +42,8 @@ library LibPrice {
    * @return pointCost The cost of all points related to the action.
    */
   function getProgressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
-    uint256 pointsUnit = P_PointConfig.getPointsUnit();
-    return getPointCost(_empireImpacted, (EMPIRE_COUNT - 1) * pointsUnit) / pointsUnit;
+    uint256 pointUnit = P_PointConfig.getPointUnit();
+    return getPointCost(_empireImpacted, (EMPIRE_COUNT - 1) * pointUnit);
   }
 
   /**
@@ -53,14 +53,14 @@ library LibPrice {
    */
   function getRegressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
     uint256 pointCost;
-    uint256 pointsUnit = P_PointConfig.getPointsUnit();
+    uint256 pointUnit = P_PointConfig.getPointUnit();
     for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
       if (i == uint256(_empireImpacted)) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), pointsUnit);
+      pointCost += getPointCost(EEmpire(i), pointUnit);
     }
-    return pointCost / pointsUnit;
+    return pointCost;
   }
 
   /**
@@ -76,9 +76,9 @@ library LibPrice {
 
     uint256 triangleSum = ((_points * (_points + 1)) / 2);
     uint256 unscaledPointCost = initPointCost + (triangleSum * pointCostIncrease);
-    uint256 pointsUnit = P_PointConfig.getPointsUnit();
-    require(unscaledPointCost >= pointsUnit, "[LibPrice] Point cost is less than minimum point cost");
-    return unscaledPointCost / pointsUnit;
+    uint256 pointUnit = P_PointConfig.getPointUnit();
+    require(unscaledPointCost >= pointUnit, "[LibPrice] Point cost is less than minimum point cost");
+    return unscaledPointCost / pointUnit;
   }
 
   /**
@@ -87,9 +87,8 @@ library LibPrice {
    * @param _points The number of point units to increase the cost by.
    */
   function pointCostUp(EEmpire _empire, uint256 _points) internal {
-    uint256 newPointCost = Faction.getPointCost(_empire) +
-      (P_PointConfig.getPointCostIncrease() * _points) /
-      P_PointConfig.getPointsUnit();
+    uint256 newPointCost = (Faction.getPointCost(_empire) + (P_PointConfig.getPointCostIncrease() * _points)) /
+      P_PointConfig.getPointUnit();
     Faction.setPointCost(_empire, newPointCost);
   }
 
