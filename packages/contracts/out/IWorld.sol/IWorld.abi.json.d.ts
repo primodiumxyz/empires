@@ -350,7 +350,7 @@ declare const abi: [
         "internalType": "enum EEmpire"
       },
       {
-        "name": "_points",
+        "name": "_pointsUnscaled",
         "type": "uint256",
         "internalType": "uint256"
       }
