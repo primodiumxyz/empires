@@ -1,11 +1,12 @@
-import { forwardRef, useCallback, useRef } from "react";
+import { CSSProperties, forwardRef, HTMLAttributes, MouseEvent, ReactNode, useCallback, useRef } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 
 import { lerp } from "@primodiumxyz/core";
 import { cn } from "@/util/client";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+/* ---------------------------------- CARD ---------------------------------- */
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
   className?: string;
   noDecor?: boolean;
   noPointerEvents?: boolean;
@@ -17,7 +18,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ children, className, noDecor = false, fragment = false, noMotion = false, ...props }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseMove = useCallback((e: MouseEvent<HTMLDivElement>) => {
       if (!containerRef.current) return;
       const { left, top, width, height } = containerRef.current.getBoundingClientRect();
 
@@ -110,6 +111,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
   },
 );
 
+/* ----------------------------- SECONDARY CARD ----------------------------- */
 const secondaryCardVariants = cva("card p-2", {
   variants: {
     variant: {
@@ -132,7 +134,7 @@ const secondaryCardVariants = cva("card p-2", {
   },
 });
 
-interface SecondaryCardProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof secondaryCardVariants> {}
+interface SecondaryCardProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof secondaryCardVariants> {}
 
 export const SecondaryCard = forwardRef<HTMLDivElement, SecondaryCardProps>(
   ({ children, className, variant, noDecor, noPointerEvents, ...props }, ref) => {
@@ -144,6 +146,7 @@ export const SecondaryCard = forwardRef<HTMLDivElement, SecondaryCardProps>(
   },
 );
 
+/* ------------------------------- GLASS CARD ------------------------------- */
 const glassProps = cva("card border border-secondary/50 heropattern-topography-slate-500/10 backdrop-blur-md p-3", {
   variants: {
     direction: {
@@ -161,7 +164,7 @@ const glassProps = cva("card border border-secondary/50 heropattern-topography-s
     noPointerEvents: false,
   },
 });
-interface GlassProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof glassProps> {}
+interface GlassProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof glassProps> {}
 
 export const GlassCard = forwardRef<HTMLDivElement, GlassProps>(
   ({ children, className, direction, noPointerEvents }, ref) => {

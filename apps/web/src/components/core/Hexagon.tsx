@@ -8,7 +8,7 @@ export const Hexagon: React.FC<{
   children?: React.ReactNode;
 }> = ({ size = 100, fillClassname = "fill-gray-600", style, className, children }) => {
   return (
-    <div style={style} className={cn(className)}>
+    <div style={style} className={className}>
       <div className="relative">
         <svg
           version="1.1"
