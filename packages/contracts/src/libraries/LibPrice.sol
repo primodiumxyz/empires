@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Player, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
+import { Faction, Player, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 
@@ -85,6 +85,7 @@ library LibPrice {
   function pointCostUp(EEmpire _empire, uint256 _pointUnits) internal {
     uint256 newPointCost = Faction.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * _pointUnits;
     Faction.setPointCost(_empire, newPointCost);
+    HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
   }
 
   /**
@@ -110,6 +111,7 @@ library LibPrice {
       newPointCost = config.minPointCost;
     }
     Faction.setPointCost(_empire, newPointCost);
+    HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
   }
 
   /**
@@ -161,8 +163,10 @@ library LibPrice {
   function sellEmpirePointCostDown(EEmpire _empire, uint256 _pointUnits) internal {
     uint256 currentPointCost = Faction.getPointCost(_empire);
     uint256 pointCostDecrease = P_PointConfig.getPointCostIncrease();
-    if(currentPointCost >= P_PointConfig.getMinPointCost() + pointCostDecrease * _pointUnits) {
-      Faction.setPointCost(_empire, currentPointCost - pointCostDecrease * _pointUnits);
+    if (currentPointCost >= P_PointConfig.getMinPointCost() + pointCostDecrease * _pointUnits) {
+      uint256 newPointCost = currentPointCost - pointCostDecrease * _pointUnits;
+      Faction.setPointCost(_empire, newPointCost);
+      HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
     } else {
       revert("[LibPrice] Selling points beyond minimum price");
     }
