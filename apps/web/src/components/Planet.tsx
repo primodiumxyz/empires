@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon } from "@heroicons/react/24/solid";
+import { bigIntMin } from "@latticexyz/common/utils";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
@@ -32,6 +33,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const planet = tables.Planet.use(entity);
   const { createDestroyer, removeDestroyer } = useContractCalls();
   const planetFaction = (planet?.factionId ?? 0) as EEmpire;
+  const [conquered, setConquered] = useState(false);
 
   const { price } = useEthPrice();
   const { gameOver } = useTimeLeft();
@@ -51,6 +53,96 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const createDestroyerPriceUsd = utils.ethToUSD(createDestroyerPriceWei, price ?? 0);
   const killDestroyerPriceUsd = utils.ethToUSD(killDestroyerPriceWei, price ?? 0);
 
+  const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
+  const [goldFloatingTexts, setGoldFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
+  const [nextId, setNextId] = useState(0);
+
+  useEffect(() => {
+    const listener = tables.CreateDestroyerPlayerAction.update$.subscribe(({ properties: { current } }) => {
+      if (!current) return;
+      const data = { planetId: current.planetId, shipCount: 1n };
+      console.log({ planetId: data.planetId, entity });
+      if (data.planetId !== entity) return;
+
+      // Add floating "+1" text
+      setFloatingTexts((prev) => [...prev, { id: nextId, text: "+1 Ship" }]);
+      setNextId((prev) => prev + 1);
+
+      // Remove the floating text after 3 seconds
+      setTimeout(() => {
+        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
+      }, 5000);
+    });
+    return () => {
+      listener.unsubscribe();
+    };
+  }, [nextId]);
+
+  useEffect(() => {
+    const listener = tables.KillDestroyerPlayerAction.update$.subscribe(({ properties: { current } }) => {
+      if (!current) return;
+      const data = { planetId: current.planetId, shipCount: 1n };
+      console.log({ planetId: data.planetId, entity });
+      if (data.planetId !== entity) return;
+
+      // Add floating "+1" text
+      setFloatingTexts((prev) => [...prev, { id: nextId, text: <>-1 Ship</> }]);
+      setNextId((prev) => prev + 1);
+
+      // Remove the floating text after 3 seconds
+      setTimeout(() => {
+        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
+      }, 5000);
+    });
+    return () => {
+      listener.unsubscribe();
+    };
+  }, [nextId]);
+
+  useEffect(() => {
+    const listener = tables.BuyDestroyersNPCAction.update$.subscribe(({ properties: { current } }) => {
+      if (!current) return;
+      const data = { planetId: current.planetId, shipCount: current.destroyerBought, goldSpent: current.goldSpent };
+      if (data.planetId !== entity) return;
+
+      // Add floating text
+      setGoldFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.goldSpent} Gold` }]);
+      setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount} Ship(s)` }]);
+      setNextId((prev) => prev + 1);
+
+      // Remove the floating text after 3 seconds
+      setTimeout(() => {
+        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
+        setGoldFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
+      }, 5000);
+    });
+    return () => {
+      listener.unsubscribe();
+    };
+  }, [nextId]);
+
+  useEffect(() => {
+    const listener = tables.BattleNPCAction.update$.subscribe(({ properties: { current } }) => {
+      if (!current || current.planetId !== entity) return;
+      const data = {
+        planetId: current.planetId,
+        deaths: bigIntMin(current.attackingShipCount, current.defendingShipCount),
+        conquered: current.conquer,
+      };
+
+      // if conquered, flash the planet's stroke
+      if (data.conquered) {
+        setConquered(true);
+        setTimeout(() => {
+          setConquered(false);
+        }, 5000);
+      }
+    });
+    return () => {
+      listener.unsubscribe();
+    };
+  }, [planet]);
+
   if (!planet) return null;
 
   return (
@@ -59,6 +151,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       size={tileSize}
       className="absolute -translate-x-1/2 -translate-y-1/2"
       fillClassname={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "fill-gray-600"}
+      stroke={conquered ? "yellow" : "none"}
       style={{
         top: `${top + 50}px`,
         left: `${left}px`,
@@ -109,6 +202,23 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         <Badge variant="glass" size="lg" className="flex items-center gap-1 border-none bg-gray-50/20">
           <CurrencyYenIcon className="size-5" /> {planet.goldCount.toLocaleString()}
         </Badge>
+
+        {floatingTexts.map((item) => (
+          <div
+            key={item.id}
+            className="floating-text pointer-events-none w-full rounded bg-white p-2 text-xs text-black"
+          >
+            {item.text}
+          </div>
+        ))}
+      </div>
+      <div className="relative flex">
+        <CurrencyYenIcon className="size-6" /> {planet.goldCount.toLocaleString()}
+        {goldFloatingTexts.map((item) => (
+          <div key={item.id} className="floating-text pointer-events-none w-20 rounded bg-error p-2 text-xs">
+            {item.text}
+          </div>
+        ))}
       </div>
     </Hexagon>
   );

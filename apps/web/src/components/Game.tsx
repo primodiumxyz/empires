@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useCore } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
 import { Account } from "@/components/Account";
+import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
@@ -54,6 +55,7 @@ const Game = () => {
         <div className="absolute bottom-0 left-1/2 m-5 flex -translate-x-1/2 flex-col items-center gap-1">
           <AdvanceTurn />
         </div>
+        <ActionLog />
       </div>
 
       <HistoricalPointPriceModal />
