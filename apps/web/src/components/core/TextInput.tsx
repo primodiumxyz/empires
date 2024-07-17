@@ -12,6 +12,7 @@ export const TextInput: React.FC<{
   className?: string;
   maxLength?: number;
   value?: string;
+  defaultValue?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   requirePattern?: string;
 }> = ({
@@ -23,6 +24,7 @@ export const TextInput: React.FC<{
   className,
   maxLength,
   value,
+  defaultValue,
   onChange,
   requirePattern,
 }) => {
@@ -71,6 +73,7 @@ export const TextInput: React.FC<{
         type="text"
         tabIndex={-1}
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
         maxLength={maxLength}
         onFocus={game.GLOBAL.disableGlobalInput}
