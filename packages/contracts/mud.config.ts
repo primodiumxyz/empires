@@ -28,7 +28,6 @@ export const worldInput = {
     P_PointConfig: {
       key: [],
       schema: {
-        pointsUnit: "uint256",
         minPointCost: "uint256",
         startPointCost: "uint256",
         pointGenRate: "uint256",

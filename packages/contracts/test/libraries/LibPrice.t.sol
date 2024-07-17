@@ -19,66 +19,77 @@ contract LibPriceTest is PrimodiumTest {
   }
 
   function testStartGetPointCost() public {
-    uint256 pointsSpent = 100_000;
-    uint256 triangleSum = ((pointsSpent * (pointsSpent + 1)) / 2);
-
     assertEq(
-      LibPrice.getPointCost(EEmpire.Red, pointsSpent),
-      (config.startPointCost + (triangleSum * config.pointCostIncrease)) / config.pointsUnit,
+      LibPrice.getPointCost(EEmpire.Red, 1),
+      config.startPointCost + config.pointCostIncrease,
       "Starting Red Empire point cost incorrect"
     );
     assertEq(
-      LibPrice.getPointCost(EEmpire.Blue, pointsSpent),
-      (config.startPointCost + (triangleSum * config.pointCostIncrease)) / config.pointsUnit,
+      LibPrice.getPointCost(EEmpire.Blue, 1),
+      config.startPointCost + config.pointCostIncrease,
       "Starting Blue Empire point cost incorrect"
     );
     assertEq(
-      LibPrice.getPointCost(EEmpire.Green, pointsSpent),
-      (config.startPointCost + (triangleSum * config.pointCostIncrease)) / config.pointsUnit,
+      LibPrice.getPointCost(EEmpire.Green, 1),
+      config.startPointCost + config.pointCostIncrease,
       "Starting Green Empire point cost incorrect"
     );
   }
 
+  function testGetTwoPointsCost() public {
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Red, 2),
+      config.startPointCost + (config.pointCostIncrease * 3),
+      "Red Empire point cost for 2 points incorrect"
+    );
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Blue, 2),
+      config.startPointCost + (config.pointCostIncrease * 3),
+      "Blue Empire point cost for 2 points incorrect"
+    );
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Green, 2),
+      config.startPointCost + (config.pointCostIncrease * 3),
+      "Green Empire point cost for 2 points incorrect"
+    );
+  }
+
   function testGetRegressPointCost() public {
-    uint256 pointsSpent = 100_000;
-    uint256 triangleSum = ((pointsSpent * (pointsSpent + 1)) / 2);
     uint256 initPointCost = config.startPointCost;
     assertEq(
       LibPrice.getRegressPointCost(EEmpire.Red),
-      ((initPointCost + config.pointCostIncrease) * (EMPIRE_COUNT - 1)) / config.pointsUnit,
+      (initPointCost + config.pointCostIncrease) * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 points incorrect"
     );
     assertEq(
       LibPrice.getRegressPointCost(EEmpire.Blue),
-      ((initPointCost + config.pointCostIncrease) * (EMPIRE_COUNT - 1)) / config.pointsUnit,
+      (initPointCost + config.pointCostIncrease) * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 points incorrect"
     );
     assertEq(
       LibPrice.getRegressPointCost(EEmpire.Green),
-      ((initPointCost + config.pointCostIncrease) * (EMPIRE_COUNT - 1)) / config.pointsUnit,
+      (initPointCost + config.pointCostIncrease) * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 points incorrect"
     );
   }
 
   function testGetProgressPointCost() public {
     uint256 initPointCost = config.startPointCost;
-    uint256 pointsSpent = 200_000;
-    uint256 triangleSum = ((pointsSpent * (pointsSpent + 1)) / 2);
     assertEq(
       LibPrice.getProgressPointCost(EEmpire.Red),
-      ((EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2)),
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
       "Red Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
-    // assertEq(
-    //   LibPrice.getProgressPointCost(EEmpire.Blue) * config.pointsUnit,
-    //   (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
-    //   "Blue Empire point cost for EMPIRE_COUNT - 1 points incorrect"
-    // );
-    // assertEq(
-    //   LibPrice.getProgressPointCost(EEmpire.Green) * config.pointsUnit,
-    //   (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
-    //   "Green Empire point cost for EMPIRE_COUNT - 1 points incorrect"
-    // );
+    assertEq(
+      LibPrice.getProgressPointCost(EEmpire.Blue),
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
+      "Blue Empire point cost for EMPIRE_COUNT - 1 points incorrect"
+    );
+    assertEq(
+      LibPrice.getProgressPointCost(EEmpire.Green),
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
+      "Green Empire point cost for EMPIRE_COUNT - 1 points incorrect"
+    );
   }
 
   function testGetTotalCostProgress() public {
@@ -99,18 +110,10 @@ contract LibPriceTest is PrimodiumTest {
 
   function testPointCostUp() public {
     vm.startPrank(creator);
-
-    uint256 pointsSpent = 200_000;
-    uint256 triangleSum = ((pointsSpent * (pointsSpent + 1)) / 2);
-
     uint256 beginPointCost = LibPrice.getPointCost(EEmpire.Red, 1);
     LibPrice.pointCostUp(EEmpire.Red, 1);
-    uint256 nextPointCost = LibPrice.getPointCost(EEmpire.Red, pointsSpent);
-    assertEq(
-      nextPointCost,
-      beginPointCost + config.pointCostIncrease * triangleSum,
-      "First point cost increase incorrect"
-    );
+    uint256 nextPointCost = LibPrice.getPointCost(EEmpire.Red, 1);
+    assertEq(nextPointCost, beginPointCost + config.pointCostIncrease, "First point cost increase incorrect");
     LibPrice.pointCostUp(EEmpire.Red, 1);
     uint256 finalPointCost = LibPrice.getPointCost(EEmpire.Red, 1);
     assertEq(finalPointCost, nextPointCost + config.pointCostIncrease, "Second point cost increase incorrect");
