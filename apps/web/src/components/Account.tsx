@@ -8,7 +8,7 @@ import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
-import { Card, SecondaryCard } from "@/components/core/Card";
+import { Card } from "@/components/core/Card";
 import { Divider } from "@/components/core/Divider";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
@@ -34,23 +34,25 @@ export const Account = () => {
   const balance = useBalance(address).value ?? 0n;
 
   return (
-    <SecondaryCard className="absolute left-4 top-4 flex flex-col justify-center gap-1 text-center">
-      <p className="text-left text-xs font-bold uppercase">Account</p>
-      <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
-        <p className="flex items-center gap-2">
-          <span className="font-mono text-sm">{address.slice(0, 7)}</span>
-          <Button onClick={handleLogout} variant="neutral" size="sm">
-            <ArrowLeftEndOnRectangleIcon className="size-4" />
-          </Button>
-        </p>
-        <Divider className="my-1 w-16 self-center" />
-        {loading && <p>Loading...</p>}
-        {!loading && price && <p>{ethToUSD(balance, price)}</p>}
-        <p className="text-xs">{formatEther(balance)}ETH</p>
-        <Divider className="my-1 w-16 self-center" />
-        <Points playerId={entity} />
-      </div>
-    </SecondaryCard>
+    <div className="absolute left-4 top-4">
+      <Card className="flex flex-col justify-center gap-1 text-center" noDecor>
+        <p className="text-left text-xs font-bold uppercase">Account</p>
+        <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
+          <p className="flex items-center gap-2">
+            <span className="font-mono text-sm">{address.slice(0, 7)}</span>
+            <Button onClick={handleLogout} variant="neutral" size="sm">
+              <ArrowLeftEndOnRectangleIcon className="size-4" />
+            </Button>
+          </p>
+          <Divider className="my-1 w-16 self-center" />
+          {loading && <p>Loading...</p>}
+          {!loading && price && <p>{ethToUSD(balance, price)}</p>}
+          <p className="text-xs">{formatEther(balance)}ETH</p>
+          <Divider className="my-1 w-16 self-center" />
+          <Points playerId={entity} />
+        </div>
+      </Card>
+    </div>
   );
 };
 

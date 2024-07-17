@@ -34,7 +34,7 @@ export const AdvanceTurn = () => {
         onClick={() => updateWorld()}
         disabled={turn.nextTurnBlock > blockNumber}
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 text-white">
           <p className="text-md font-bold">{EmpireEnumToName[turn.empire as EEmpire]}'s Turn</p>
           {turn.nextTurnBlock <= blockNumber && (
             <p className="flex items-center gap-2 text-sm">
