@@ -8,7 +8,7 @@ import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 import { createPlanets } from "libraries/CreatePlanets.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { WinningEmpire, P_GameConfig } from "codegen/index.sol";
+import { WinningEmpire, HistoricalPointCost, P_GameConfig } from "codegen/index.sol";
 
 contract ResetSystem is System {
   function resetGame() public {
@@ -25,6 +25,7 @@ contract ResetSystem is System {
     WinningEmpire.set(EEmpire.NULL);
 
     P_GameConfig.setGameOverBlock(block.number + 1_000);
+    P_GameConfig.setGameStartTimestamp(block.timestamp);
     createPlanets(); // Planet and Faction tables are reset to default values
     initPrice(); // Faction.setPointCost and ActionCost tables are reset to default values
   }

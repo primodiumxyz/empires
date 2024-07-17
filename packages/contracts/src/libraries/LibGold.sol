@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { pseudorandom } from "src/utils.sol";
-import { Planet, P_NPCActionThresholdsData, P_NPCActionThresholds, P_NPCActionCosts } from "codegen/index.sol";
+import { pseudorandom, pseudorandomEntity } from "src/utils.sol";
+import { Planet, P_NPCActionThresholdsData, P_NPCActionThresholds, P_NPCActionCosts, BuyDestroyersNPCAction, BuyDestroyersNPCActionData } from "codegen/index.sol";
 import { ENPCAction } from "codegen/common.sol";
 
 library LibGold {
@@ -29,6 +29,16 @@ library LibGold {
       uint256 newGoldCount = goldCount - (destroyersToBuy * destroyerPrice);
       Planet.setDestroyerCount(planetId, Planet.getDestroyerCount(planetId) + destroyersToBuy);
       Planet.setGoldCount(planetId, newGoldCount);
+
+      BuyDestroyersNPCAction.set(
+        pseudorandomEntity(),
+        BuyDestroyersNPCActionData({
+          goldSpent: destroyersToBuy * destroyerPrice,
+          destroyerBought: destroyersToBuy,
+          planetId: planetId,
+          timestamp: block.timestamp
+        })
+      );
     }
   }
 }
