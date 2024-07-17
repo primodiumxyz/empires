@@ -1,5 +1,3 @@
-import { cn } from "@/util/client";
-
 export const Hexagon: React.FC<{
   size?: number;
   fillClassname?: string;
