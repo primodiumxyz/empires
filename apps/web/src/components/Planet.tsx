@@ -150,7 +150,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       key={entity}
       size={tileSize}
       className="absolute -translate-x-1/2 -translate-y-1/2"
-      fillClassname={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "fill-gray-600"}
+      fillClassName={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "fill-gray-600"}
       stroke={conquered ? "yellow" : "none"}
       style={{
         top: `${top + 50}px`,
