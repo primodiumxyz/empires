@@ -103,18 +103,38 @@ contract LibPriceTest is PrimodiumTest {
     vm.startPrank(creator);
 
     uint256 pointsSpent = 200_000;
+    uint256 triangleSum = ((pointsSpent * (pointsSpent + 1)) / 2);
 
-    uint256 beginPointCost = (config.startPointCost + (config.pointCostIncrease * pointsSpent)) / config.pointUnit;
+    uint256 beginPointCost = config.startPointCost;
     LibPrice.pointCostUp(EEmpire.Red, pointsSpent);
-
-    assertEq(Faction.getPointCost(EEmpire.Red), beginPointCost, "First point cost increase incorrect");
-
+    uint256 nextPointCost = LibPrice.getPointCost(EEmpire.Red, pointsSpent);
+    assertEq(
+      nextPointCost,
+      (beginPointCost + config.pointCostIncrease * pointsSpent),
+      "First point cost increase incorrect"
+    );
     LibPrice.pointCostUp(EEmpire.Red, pointsSpent);
-    uint256 finalPointCost = (beginPointCost + (config.pointCostIncrease * pointsSpent)) / config.pointUnit;
-    assertEq(Faction.getPointCost(EEmpire.Red), finalPointCost, "Second point cost increase incorrect");
-
-    assertEq(Faction.getPointCost(EEmpire.Blue), config.startPointCost, "Blue Empire point cost should not change");
-    assertEq(Faction.getPointCost(EEmpire.Green), config.startPointCost, "Green Empire point cost should not change");
+    uint256 finalPointCost = LibPrice.getPointCost(EEmpire.Red, pointsSpent);
+    assertEq(
+      finalPointCost,
+      nextPointCost + (beginPointCost + config.pointCostIncrease * triangleSum) / config.pointUnit,
+      "Second point cost increase incorrect"
+    );
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Blue, pointsSpent),
+      config.startPointCost + config.pointCostIncrease,
+      "Blue Empire point cost should not change"
+    );
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Green, pointsSpent),
+      config.startPointCost + config.pointCostIncrease,
+      "Green Empire point cost should not change"
+    );
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Red, pointsSpent),
+      finalPointCost + (config.pointCostIncrease * pointsSpent),
+      "Red Empire point cost for 2 points incorrect"
+    );
   }
 
   function testActionCostUp() public {
