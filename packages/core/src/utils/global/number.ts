@@ -48,20 +48,30 @@ type FormatOptions = {
 };
 
 /**
- * Returns the maximum of two bigints.
- * @param a - The first bigint.
- * @param b - The second bigint.
+ * Returns the maximum of a list of bigints.
+ * @param values - An array of bigints (or undefined)
  * @returns The maximum bigint.
  */
-export const bigintMax = (a: bigint, b: bigint): bigint => (a > b ? a : b);
+export const bigintMax = (...values: (bigint | undefined)[]): bigint | undefined => {
+  return values.reduce<bigint | undefined>((max, current) => {
+    if (current === undefined) return max;
+    if (max === undefined || current > max) return current;
+    return max;
+  }, undefined);
+};
 
 /**
- * Returns the minimum of two bigints.
- * @param a - The first bigint.
- * @param b - The second bigint.
- * @returns The minimum bigint.
+ * Returns the minimum of a list of bigints.
+ * @param values - An array of bigints or undefined.
+ * @returns The minimum bigint or undefined if no valid bigints are provided.
  */
-export const bigintMin = (a: bigint, b: bigint): bigint => (a < b ? a : b);
+export const bigintMin = (...values: (bigint | undefined)[]): bigint | undefined => {
+  return values.reduce<bigint | undefined>((min, current) => {
+    if (current === undefined) return min;
+    if (min === undefined || current < min) return current;
+    return min;
+  }, undefined);
+};
 
 const shorten = (n: number, digits: number): string => {
   const units = ["", "K", "M", "B", "T"];

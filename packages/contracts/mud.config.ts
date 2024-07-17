@@ -22,6 +22,7 @@ export const worldInput = {
         turnLengthBlocks: "uint256",
         goldGenRate: "uint256",
         gameOverBlock: "uint256",
+        gameStartTimestamp: "uint256",
       },
     },
 
@@ -173,6 +174,18 @@ export const worldInput = {
         planetId: "bytes32",
         destroyerCount: "uint256",
       },
+    },
+
+    /* ----------------------------- Historical data ---------------------------- */
+
+    HistoricalPointCost: {
+      key: ["empire", "timestamp"],
+      schema: {
+        empire: "EEmpire",
+        timestamp: "uint256",
+        cost: "uint256", // the cost of each point for this empire in wei
+      },
+      type: "offchainTable",
     },
   },
 } as const;

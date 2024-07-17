@@ -5,6 +5,7 @@ import { initGame, PrimodiumGame } from "@primodiumxyz/game";
 import { Account } from "@/components/Account";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
+import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { PlanetGrid } from "@/components/PlanetGrid";
 import { Pot } from "@/components/Pot";
 import { TimeLeft } from "@/components/TimeLeft";
@@ -53,6 +54,8 @@ const Game = () => {
           <AdvanceTurn />
         </div>
       </div>
+
+      <HistoricalPointPriceModal />
       {DEV && <Cheatcodes />}
     </GameProvider>
   );
