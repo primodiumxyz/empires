@@ -13,11 +13,12 @@ import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
+import { cn } from "@/util/client";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "blue",
-  [EEmpire.Green]: "green",
-  [EEmpire.Red]: "red",
+  [EEmpire.Blue]: "fill-blue-600",
+  [EEmpire.Green]: "fill-green-600",
+  [EEmpire.Red]: "fill-red-600",
   [EEmpire.LENGTH]: "",
 };
 
@@ -54,9 +55,9 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   return (
     <Hexagon
       key={entity}
-      fill={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "grey"}
       size={tileSize}
       className="absolute -translate-x-1/2 -translate-y-1/2"
+      fillClassname={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "fill-gray-600"}
       style={{
         top: `${top + 50}px`,
         left: `${left}px`,

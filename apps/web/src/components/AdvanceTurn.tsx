@@ -9,9 +9,9 @@ import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
 export const EmpireEnumToColor = {
-  [EEmpire.Blue]: "btn-accent",
-  [EEmpire.Green]: "btn-success",
-  [EEmpire.Red]: "bg-red-700",
+  [EEmpire.Blue]: "bg-blue-600",
+  [EEmpire.Green]: "bg-green-600",
+  [EEmpire.Red]: "bg-red-600",
   [EEmpire.LENGTH]: "",
 };
 
