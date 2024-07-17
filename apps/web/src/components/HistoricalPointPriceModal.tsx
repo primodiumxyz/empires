@@ -31,7 +31,7 @@ export const HistoricalPointPriceModal = () => {
   return (
     <Modal title="Points Price History">
       <Modal.Button
-        className={cn("btn-secondary btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-12" : "right-2")}
+        className={cn("btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-12" : "right-2")}
         variant="info"
       >
         <PresentationChartLineIcon className="size-8" />

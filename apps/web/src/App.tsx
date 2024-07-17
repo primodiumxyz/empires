@@ -10,9 +10,18 @@ import { CoreProvider } from "@primodiumxyz/core/react";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
+import { useSettings } from "@/hooks/useSettings";
 import Landing from "@/screens/Landing";
+import { cn } from "@/util/client";
+
+const fontStyle = "font-pixel text-sm";
 
 const App = () => {
+  const settings = useSettings();
+  const fontStyle = useMemo(
+    () => `font-${settings.fontStyle.family} text-${settings.fontStyle.size}`,
+    [settings.fontStyle],
+  );
   const coreRef = useRef<CoreType | null>(null);
 
   const core = useMemo(() => {
@@ -45,10 +54,15 @@ const App = () => {
         <BurnerAccountProvider>
           <EthPriceProvider>
             <CoreProvider {...core}>
-              <div className="flex h-screen w-screen cursor-default items-center justify-center bg-neutral">
+              <div
+                className={cn(
+                  "flex h-screen w-screen cursor-default items-center justify-center bg-neutral",
+                  fontStyle,
+                )}
+              >
                 <Landing />
                 <ToastContainer
-                  toastClassName="text-xs border text-base-100 bg-neutral border-neutral rounded-box"
+                  toastClassName={cn("text-xs border text-base-100 bg-neutral border-neutral rounded-box", fontStyle)}
                   progressClassName="bg-primary"
                   position="bottom-left"
                   autoClose={3000}
@@ -65,7 +79,7 @@ const App = () => {
           </EthPriceProvider>
         </BurnerAccountProvider>
       </PrivyProvider>
-      <div id="modal-root" className="pointer-events-auto fixed top-0 z-50 cursor-default" />
+      <div id="modal-root" className={cn("pointer-events-auto fixed top-0 z-50 cursor-default", fontStyle)} />
     </>
   );
 };

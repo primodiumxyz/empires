@@ -2,6 +2,7 @@ import { usePrivy } from "@privy-io/react-auth";
 
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 
+// TODO: design, outside of the game provider so can't use core components relying on it (e.g. Button) now
 function Login() {
   const { ready, authenticated, login } = usePrivy();
   // Disable login when Privy is not ready or the user is already authenticated

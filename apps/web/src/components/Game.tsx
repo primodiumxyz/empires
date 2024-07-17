@@ -9,6 +9,7 @@ import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModa
 import { PlanetGrid } from "@/components/PlanetGrid";
 import { Pot } from "@/components/Pot";
 import { TimeLeft } from "@/components/TimeLeft";
+import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -56,6 +57,7 @@ const Game = () => {
       </div>
 
       <HistoricalPointPriceModal />
+      <UserSettings />
       {DEV && <Cheatcodes />}
     </GameProvider>
   );

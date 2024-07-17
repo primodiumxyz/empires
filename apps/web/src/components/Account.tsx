@@ -48,7 +48,7 @@ export const Account = () => {
           <p className="text-left text-xs font-bold uppercase">Account</p>
           <div className="flex flex-col justify-center gap-1 rounded border border-gray-600 p-2 text-center text-white">
             <p className="flex items-center gap-2">
-              <span className="font-mono text-sm">{address.slice(0, 7)}</span>
+              <span className="text-xs">{address.slice(0, 7)}</span>
               <Button onClick={handleLogout} variant="neutral" size="sm">
                 <ArrowLeftEndOnRectangleIcon className="size-4" />
               </Button>

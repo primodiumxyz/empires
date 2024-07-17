@@ -20,6 +20,12 @@ importers:
       '@amplitude/analytics-browser':
         specifier: ^2.9.2
         version: 2.9.3
+      '@fontsource/silkscreen':
+        specifier: ^5.0.20
+        version: 5.0.20
+      '@fontsource/space-mono':
+        specifier: ^5.0.20
+        version: 5.0.20
       '@heroicons/react':
         specifier: ^2.1.4
         version: 2.1.4(react@18.3.1)
@@ -2079,6 +2085,14 @@ packages:
     resolution: {integrity: sha512-fERDVz7topgNjtXsJTTW1JKLy0rhuLRcquYqNR9rF7OcVpCa2OVW49ZPDIhaRRCaUuvVxI+N416xUoF76HNSXA==}
     dependencies:
       fast-deep-equal: 3.1.3
+    dev: false
+
+  /@fontsource/silkscreen@5.0.20:
+    resolution: {integrity: sha512-9I/01X0WKVF4t0v91h2GTkbNqbfXx5iJHlUKNV++NPUqR4I7Rw/ROJg+WQ1giMx8Uz3KYxiOMsElCC2QNXVTXw==}
+    dev: false
+
+  /@fontsource/space-mono@5.0.20:
+    resolution: {integrity: sha512-F+9Y/PA06mB6kXI6l8ub0vSR72x3wpzJtxAUoPpvJDu9nWADFIwunkfzSS9PyzFQOgAPPzuCfywTTG+GfQxqeg==}
     dev: false
 
   /@headlessui/react@1.7.19(react-dom@18.3.1)(react@18.3.1):
