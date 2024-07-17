@@ -41,7 +41,7 @@ library LibPrice {
    * @return pointCost The cost of all points related to the action.
    */
   function getProgressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
-    return getPointCost(_empireImpacted, EMPIRE_COUNT - 1);
+    return getPointCost(_empireImpacted, (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit());
   }
 
   /**
@@ -55,7 +55,7 @@ library LibPrice {
       if (i == uint256(_empireImpacted)) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), 1);
+      pointCost += getPointCost(EEmpire(i), 1 * P_PointConfig.getPointUnit());
     }
     return pointCost;
   }
@@ -63,17 +63,20 @@ library LibPrice {
   /**
    * @dev Calculates the cost of a specific number of points for a specific empire.
    * @param _empire The empire to purchase points from.
-   * @param _pointsUnscaled The number of points.
+   * @param _points The number of points. (in 1e18)
    * @return pointCost The cost of the points from the specific empire.
    */
-  function getPointCost(EEmpire _empire, uint256 _pointsUnscaled) internal view returns (uint256) {
-    require(_pointsUnscaled > 0, "[LibPrice] Point units must be greater than 0");
+  function getPointCost(EEmpire _empire, uint256 _points) internal view returns (uint256) {
+    uint256 pointUnit = P_PointConfig.getPointUnit();
+    require(_points > 0, "[LibPrice] Points must be greater than 0");
+    require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+
     uint256 initPointCost = Faction.getPointCost(_empire);
     uint256 pointCostIncrease = P_PointConfig.getPointCostIncrease();
-    uint256 pointCost = 0;
-    for (uint256 i = 0; i < _pointsUnscaled; i++) {
-      pointCost += initPointCost + i * pointCostIncrease;
-    }
+    uint256 wholePoints = _points / pointUnit;
+
+    uint256 triangleSumOBO = (wholePoints - 1) * wholePoints / 2;
+    uint256 pointCost = initPointCost * wholePoints + pointCostIncrease * triangleSumOBO;
     return pointCost;
   }
 
