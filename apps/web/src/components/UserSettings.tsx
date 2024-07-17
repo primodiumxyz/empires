@@ -13,7 +13,7 @@ export const UserSettings = () => {
   return (
     <Modal title="Settings">
       <Modal.Button
-        className={cn("btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-32" : "right-22")}
+        className={cn("btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-52" : "right-42")}
         variant="ghost"
       >
         <Cog6ToothIcon className="size-8" />
