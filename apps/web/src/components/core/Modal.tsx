@@ -2,11 +2,11 @@ import React, { createContext, ReactNode, useCallback, useContext, useEffect, us
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import ReactDOM from "react-dom";
 
-import { useCore } from "@primodiumxyz/core/react";
 import { KeybindActionKeys } from "@primodiumxyz/game";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { useGame } from "@/hooks/useGame";
+import { cn } from "@/util/client";
 
 interface ModalContextType {
   isOpen: boolean;
@@ -40,7 +40,6 @@ export const Modal: React.FC<ModalProps> & {
   Content: React.FC<{ children: ReactNode; className?: string }>;
 } = ({ children, title, keybind, keybindClose, startOpen = false, onClose, blockClose = false }) => {
   const [isOpen, setIsOpen] = useState(startOpen);
-  const { tables } = useCore();
   const game = useGame();
   const {
     audio,
@@ -140,13 +139,15 @@ Modal.Content = function ModalContent({ children, className }) {
   };
 
   if (!isOpen) return null;
-
   return ReactDOM.createPortal(
     <div
       className="absolute top-0 flex h-screen w-screen items-center justify-center bg-secondary/10 backdrop-blur-md ease-in-out animate-in fade-in"
       onClick={handleClickOutside}
     >
-      <div className={`max-w-screen max-h-screen space-y-2 ${className} p-5 pt-12`} ref={modalRef}>
+      <div
+        className={cn("max-h-screen w-screen max-w-screen-xl space-y-2 p-5 pt-12 md:w-[90%]", className)}
+        ref={modalRef}
+      >
         <Card className="pointer-events-auto h-full w-full shadow-2xl" noMotion>
           <div className="absolute top-0 flex w-full -translate-y-full items-center justify-between p-2">
             <p className="pr-2 font-bold uppercase text-accent">{title}</p>

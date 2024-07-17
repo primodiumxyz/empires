@@ -22,12 +22,11 @@ export const HistoricalPointPriceModal = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
 
   return (
-    <Modal
-      icon={<PresentationChartLineIcon className="h-8 w-8 fill-neutral" />}
-      buttonClassName="bottom-2 right-12 h-14 w-14"
-    >
-      <div className="flex flex-col gap-2">
-        <h1 className="whitespace-nowrap font-semibold uppercase text-gray-300">Points price history</h1>
+    <Modal title="Points Price History">
+      <Modal.Button className="btn-secondary btn-md absolute bottom-2 right-12 h-[58px] w-fit" variant="info">
+        <PresentationChartLineIcon className="size-8" />
+      </Modal.Button>
+      <Modal.Content>
         <RadioGroup
           name="select-empire-chart"
           value={selectedEmpire.toString()}
@@ -42,8 +41,8 @@ export const HistoricalPointPriceModal = () => {
           ]}
           onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
         />
-      </div>
-      <HistoricalPointPriceChart selectedEmpire={selectedEmpire} />
+        <HistoricalPointPriceChart selectedEmpire={selectedEmpire} />
+      </Modal.Content>
     </Modal>
   );
 };
@@ -90,7 +89,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       {} as Record<string, typeof data>,
     );
 
-    // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous turn)
+    // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
     const allEmpires = Array.from(new Array(EEmpire.LENGTH - 1)).map((_, i) => i + 1);
     const timestampMap = new Map<number, { [key: number]: string }>();
 
@@ -103,7 +102,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       });
     });
 
-    // fill costs for missing turns
+    // fill costs for missing timestamps
     allEmpires.forEach((empire) => {
       let previousCost = "0";
       timestampMap.forEach((costs) => {
@@ -143,7 +142,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     const maxCost = Math.max(...historicalPriceData.map((d) => Number(d.cost)));
 
     const height = 400;
-    const margin = { top: 20, right: 30, bottom: 50, left: 70 };
+    const margin = { top: 20, right: 30, bottom: 50, left: 80 };
     // approx 3px per second
     const totalWidth = margin.left + margin.right + (maxTimestamp - minTimestamp) * PX_PER_SECOND;
 
@@ -236,7 +235,6 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
           .attr("stroke-width", 1.5)
           .attr("d", lineGenerator);
       });
-    console.log(historicalPriceData);
 
     // draw axis labels
     fixedSvg
@@ -244,7 +242,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("class", "axis-label")
       .attr("text-anchor", "middle")
       .attr("x", -height / 2)
-      .attr("y", margin.left - 50)
+      .attr("y", margin.left - 60)
       .attr("transform", "rotate(-90)")
       .text("Cost (USD)")
       .attr("fill", "#706f6f")
@@ -256,7 +254,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("text-anchor", "middle")
       .attr("x", totalWidth / 2)
       .attr("y", height - 10)
-      .text("Turn")
+      .text("Time")
       .attr("fill", "#706f6f")
       .style("font-size", "14px");
 
