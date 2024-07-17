@@ -7,10 +7,11 @@ import "@/index.css";
 
 /* ---------------------------------- MODAL --------------------------------- */
 
-export const Modal: FC<{ children: ReactNode; icon: ReactNode; buttonClassName?: string }> = ({
+export const Modal: FC<{ children: ReactNode; icon: ReactNode; buttonClassName?: string; className?: string }> = ({
   children,
   icon,
   buttonClassName,
+  className,
 }) => {
   const [open, setOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -50,6 +51,7 @@ export const Modal: FC<{ children: ReactNode; icon: ReactNode; buttonClassName?:
         className={cn(
           "absolute flex h-[95%] w-[95%] flex-col gap-2 py-4 pl-4 pr-2 md:h-[90%] md:w-[90%]",
           !open && "hidden",
+          className,
         )}
       >
         {/* close button */}

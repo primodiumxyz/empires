@@ -1,8 +1,10 @@
 import { useMemo } from "react";
+import { BookOpenIcon } from "@heroicons/react/24/outline";
 
 import { entityToPlanetName, formatAddress } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Modal } from "@/components/core/Modal";
 import { useEthPrice } from "@/hooks/useEthPrice";
 
 type ActionLogEntry = {
@@ -85,8 +87,12 @@ export const ActionLog = () => {
   }, [moveActions, battleActions, buyActions, createActions, killActions]);
 
   return (
-    <div className="absolute bottom-4 left-4 flex h-3/4 w-72 flex-col gap-2 overflow-y-auto rounded bg-secondary p-4 text-white">
-      <h2 className="mb-2 text-xs font-bold uppercase">Action Log</h2>
+    <Modal
+      icon={<BookOpenIcon className="h-8 w-8 fill-neutral" />}
+      buttonClassName="bottom-2 right-28 h-14 w-14"
+      className="!w-96"
+    >
+      <h1 className="whitespace-nowrap font-semibold uppercase text-gray-300">Action Log</h1>
       {actions.map((action, index) => (
         <div key={index} className="rounded border border-white/20 bg-white/20 p-1 text-sm">
           <p className="font-bold">
@@ -96,6 +102,6 @@ export const ActionLog = () => {
           <p className="text-xs text-gray-300">{new Date(Number(action.timestamp) * 1000).toLocaleString()}</p>
         </div>
       ))}
-    </div>
+    </Modal>
   );
 };
