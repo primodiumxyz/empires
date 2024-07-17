@@ -3,6 +3,8 @@ import { formatEther } from "viem";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatTime } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { Button } from "@/components/core/Button";
+import { Card } from "@/components/core/Card";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePot } from "@/hooks/usePot";
@@ -11,9 +13,13 @@ import { useTimeLeft } from "@/hooks/useTimeLeft";
 export const TimeLeft = () => {
   const { timeLeftMs, gameOver } = useTimeLeft();
   return (
-    <div className="absolute top-4 flex w-72 flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
-      {!gameOver && <p>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)} </p>}
+    <div className="absolute top-4 flex w-72 flex-col justify-center gap-1 rounded p-2 text-center">
       {gameOver && <GameOver />}
+      {!gameOver && (
+        <Card className="py-2 text-sm" noDecor>
+          Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}{" "}
+        </Card>
+      )}
     </div>
   );
 };
@@ -21,30 +27,45 @@ export const TimeLeft = () => {
 const GameOver = () => {
   const { tables } = useCore();
   const victoryClaimed = tables.WinningEmpire.use()?.empire ?? (0 as EEmpire);
+
   return (
     <>
-      {!victoryClaimed && <ClaimVictoryButtons />}
       {!!victoryClaimed && <WithdrawButton empire={victoryClaimed} />}
+      {!victoryClaimed && <ClaimVictoryButtons />}
     </>
   );
 };
 const ClaimVictoryButtons = () => {
-  const calls = useContractCalls();
+  const { claimVictory } = useContractCalls();
+
   return (
-    <div className="flex flex-col gap-1">
-      <p className="text-sm font-bold uppercase">Game over. Claim Victory for an empire</p>
-      <div className="flex justify-center gap-2">
-        <button className="btn bg-red-700" onClick={() => calls.claimVictory(EEmpire.Red)}>
-          Red
-        </button>
-        <button className="btn btn-success" onClick={() => calls.claimVictory(EEmpire.Green)}>
-          Green
-        </button>
-        <button className="btn btn-accent" onClick={() => calls.claimVictory(EEmpire.Blue)}>
-          Blue
-        </button>
+    <Card>
+      <div className="flex flex-col gap-1">
+        <p className="text-sm font-bold uppercase">Game over.</p>
+        <p className="text-sm font-semibold uppercase">Claim Victory for an empire</p>
+        <div className="flex justify-center gap-2">
+          <Button variant="ghost" size="md" className="bg-red-600 text-white" onClick={() => claimVictory(EEmpire.Red)}>
+            Red
+          </Button>
+          <Button
+            variant="ghost"
+            size="md"
+            className="bg-green-600 text-white"
+            onClick={() => claimVictory(EEmpire.Green)}
+          >
+            Green
+          </Button>
+          <Button
+            variant="ghost"
+            size="md"
+            className="bg-blue-600 text-white"
+            onClick={() => claimVictory(EEmpire.Blue)}
+          >
+            Blue
+          </Button>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
@@ -64,20 +85,23 @@ const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
   const playerPotUSD = price ? utils.ethToUSD(playerPot, price) : "loading...";
 
   const empireName = empire == EEmpire.Blue ? "Blue" : empire == EEmpire.Green ? "Green" : "Red";
+
   return (
-    <div className="flex flex-col">
-      <p>Game over. {empireName} won!</p>
+    <Card className="flex flex-col">
+      <p>
+        Game over. <span className="font-semibold">{empireName}</span> won!
+      </p>
       {playerPot > 0n && (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-1">
           <p>
-            You earned {playerPotUSD} ({formatEther(playerPot)}ETH)!
+            You earned {playerPotUSD} ({formatEther(playerPot)} ETH)!
           </p>
-          <button className="btn btn-primary btn-sm" onClick={calls.withdrawEarnings}>
+          <Button variant="primary" size="sm" onClick={calls.withdrawEarnings}>
             Withdraw
-          </button>
+          </Button>
         </div>
       )}
-      {playerPot == 0n && <p>You have no earnings to withdraw.</p>}
-    </div>
+      {playerPot === 0n && <p>You have no earnings to withdraw.</p>}
+    </Card>
   );
 };

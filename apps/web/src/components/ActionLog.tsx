@@ -4,8 +4,12 @@ import { BookOpenIcon } from "@heroicons/react/24/outline";
 import { entityToPlanetName, formatAddress } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { AutoSizer } from "@/components/core/AutoSizer";
 import { Modal } from "@/components/core/Modal";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { cn } from "@/util/client";
+
+const DEV = import.meta.env.PRI_DEV === "true";
 
 type ActionLogEntry = {
   actor: string;
@@ -86,22 +90,32 @@ export const ActionLog = () => {
     return allActions;
   }, [moveActions, battleActions, buyActions, createActions, killActions]);
 
+  console.log(actions);
   return (
-    <Modal
-      icon={<BookOpenIcon className="h-8 w-8 fill-neutral" />}
-      buttonClassName="bottom-2 right-28 h-14 w-14"
-      className="!w-96"
-    >
-      <h1 className="whitespace-nowrap font-semibold uppercase text-gray-300">Action Log</h1>
-      {actions.map((action, index) => (
-        <div key={index} className="rounded border border-white/20 bg-white/20 p-1 text-sm">
-          <p className="font-bold">
-            {action.type} ({action.actor})
-          </p>
-          <p className="text-[0.7rem]">{action.details}</p>
-          <p className="text-xs text-gray-300">{new Date(Number(action.timestamp) * 1000).toLocaleString()}</p>
-        </div>
-      ))}
+    <Modal title="Action Log">
+      <Modal.Button
+        className={cn("btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-32" : "right-22")}
+        variant="info"
+      >
+        <BookOpenIcon className="size-8" />
+      </Modal.Button>
+      <Modal.Content className="h-screen !w-[400px] md:h-3/4">
+        <AutoSizer
+          items={actions}
+          itemSize={70}
+          render={(action) => {
+            return (
+              <div className="rounded border border-white/20 bg-white/20 p-1 text-sm">
+                <p className="font-bold">
+                  {action.type} ({action.actor})
+                </p>
+                <p className="text-[0.7rem]">{action.details}</p>
+                <p className="text-xs text-gray-300">{new Date(Number(action.timestamp) * 1000).toLocaleString()}</p>
+              </div>
+            );
+          }}
+        />
+      </Modal.Content>
     </Modal>
   );
 };
