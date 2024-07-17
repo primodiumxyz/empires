@@ -292,22 +292,22 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("fill", "none")
       .attr("pointer-events", "all")
       .on("mouseout", () => {
-        select(".mouse-line").style("opacity", "0");
+        select(".mouse-line-vertical").style("opacity", "0");
         select(".mouse-line-horizontal").style("opacity", "0");
       })
       .on("mouseover", () => {
-        select(".mouse-line").style("opacity", "1");
+        select(".mouse-line-vertical").style("opacity", "1");
         select(".mouse-line-horizontal").style("opacity", "1");
       })
       .on("mousemove", function (event) {
         const mouse = pointer(event);
-        select(".mouse-line").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
+        select(".mouse-line-vertical").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
         select(".mouse-line-horizontal").attr("d", `M0,${mouse[1]} ${totalWidth},${mouse[1]}`);
       })
       // and on scroll
       .on("mousewheel", function (event) {
         const mouse = pointer(event);
-        select(".mouse-line").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
+        select(".mouse-line-vertical").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
         select(".mouse-line-horizontal").attr("d", `M0,${mouse[1]} ${totalWidth},${mouse[1]}`);
       });
   }, [historicalPriceData, selectedEmpire]);
