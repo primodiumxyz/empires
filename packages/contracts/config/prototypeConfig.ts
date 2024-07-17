@@ -1,6 +1,6 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
-import { POINT_UNIT } from "./constants";
+import { POINTS_UNIT } from "./constants";
 import { EEmpire, ENPCAction } from "./enums";
 
 const percentsToThresholds = <T extends Record<string, number>>(percents: T): Record<keyof T, bigint> => {
@@ -23,7 +23,6 @@ const scaleRake = (rakePct: number) => {
   return BigInt(Math.round(rakePct * 10000));
 };
 
-const pointConfigUnit = 1000;
 export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = {
   /* ---------------------------------- World --------------------------------- */
   World: {
@@ -36,18 +35,18 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
       P_PointConfig: {
         // a smaller unit allows for more precise point cost calculations
-        pointUnit: BigInt(pointConfigUnit),
-        minPointCost: BigInt(pointConfigUnit * 0.01),
-        startPointCost: BigInt(pointConfigUnit * 0.02),
-        pointGenRate: BigInt(pointConfigUnit * 0.02),
-        pointCostIncrease: BigInt(pointConfigUnit * 0.01),
+        pointsUnit: 1000n,
+        minPointCost: BigInt(POINTS_UNIT * 0.01),
+        startPointCost: BigInt(POINTS_UNIT * 0.02),
+        pointGenRate: BigInt(POINTS_UNIT * 0.02),
+        pointCostIncrease: BigInt(POINTS_UNIT * 0.01),
         pointRake: scaleRake(0.01), // out of 1, scales to out of 10000
         pointSellTax: 0n,
       },
       P_ActionConfig: {
-        actionGenRate: BigInt(POINT_UNIT * 0.02),
-        actionCostIncrease: BigInt(POINT_UNIT * 0.02),
-        startActionCost: BigInt(POINT_UNIT * 0.02),
+        actionGenRate: BigInt(POINTS_UNIT * 0.02),
+        actionCostIncrease: BigInt(POINTS_UNIT * 0.02),
+        startActionCost: BigInt(POINTS_UNIT * 0.02),
         minActionCost: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
