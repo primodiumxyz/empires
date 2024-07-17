@@ -136,21 +136,26 @@ library LibPrice {
    * @dev Calculates the value of selling a specific number of points from a specific empire.
    * @notice The value of the points sold is calculated based on the current point cost and the point sell tax. Reverts if exceeding the minimum point cost.
    * @param _empire The empire to sell points from.
-   * @param _pointsUnscaled The number of points to sell.
+   * @param _points The number of points to sell.
    * @return pointSaleValue The value of the points to be sold.
    */
-  function getPointSaleValue(EEmpire _empire, uint256 _pointsUnscaled) internal view returns (uint256) {
+  function getPointSaleValue(EEmpire _empire, uint256 _points) internal view returns (uint256) {
     P_PointConfigData memory config = P_PointConfig.get();
-    uint256 pointCostDecrease = config.pointCostIncrease;
+    uint256 pointUnit = config.pointUnit;
+
+    require(_points > 0, "[LibPrice] Points must be greater than 0");
+    require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+    uint256 wholePoints = _points / pointUnit;
     uint256 currentPointCost = Faction.getPointCost(_empire);
+    uint256 pointCostDecrease = config.pointCostIncrease;
 
     require(
-      currentPointCost >= config.minPointCost + pointCostDecrease * _pointsUnscaled,
+      currentPointCost >= config.minPointCost + pointCostDecrease * wholePoints,
       "[LibPrice] Selling points beyond minimum price"
     );
 
-    uint256 triangleSum = _pointsUnscaled * (_pointsUnscaled + 1) / 2;
-    uint256 totalSaleValue = (currentPointCost - config.pointSellTax) * _pointsUnscaled - pointCostDecrease * triangleSum;
+    uint256 triangleSum = wholePoints * (wholePoints + 1) / 2;
+    uint256 totalSaleValue = (currentPointCost - config.pointSellTax) * wholePoints - pointCostDecrease * triangleSum;
 
     return totalSaleValue;
   }
@@ -158,14 +163,21 @@ library LibPrice {
   /**
    * @dev Decreases an empire's point cost by a specific number of point units.
    * @param _empire The empire for which the point cost is being decreased.
-   * @param _pointsUnscaled The number of point units to decrease the cost by.
+   * @param _points The number of point units to decrease the cost by.
    * @notice If the resulting point cost after the decrease is less than the minimum point cost, the function reverts with an error message.
    */
-  function sellEmpirePointCostDown(EEmpire _empire, uint256 _pointsUnscaled) internal {
+  function sellEmpirePointCostDown(EEmpire _empire, uint256 _points) internal {
+    P_PointConfigData memory config = P_PointConfig.get();
+    uint256 pointUnit = config.pointUnit;
+    require(_points > 0, "[LibPrice] Points must be greater than 0");
+    require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+    uint256 wholePoints = _points / pointUnit;
+    
     uint256 currentPointCost = Faction.getPointCost(_empire);
-    uint256 pointCostDecrease = P_PointConfig.getPointCostIncrease();
-    if(currentPointCost >= P_PointConfig.getMinPointCost() + pointCostDecrease * _pointsUnscaled) {
-      Faction.setPointCost(_empire, currentPointCost - pointCostDecrease * _pointsUnscaled);
+    uint256 pointCostDecrease = config.pointCostIncrease;
+    
+    if(currentPointCost >= config.minPointCost + pointCostDecrease * wholePoints) {
+      Faction.setPointCost(_empire, currentPointCost - pointCostDecrease * wholePoints);
     } else {
       revert("[LibPrice] Selling points beyond minimum price");
     }
