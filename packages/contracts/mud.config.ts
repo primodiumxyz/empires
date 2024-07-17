@@ -176,6 +176,76 @@ export const worldInput = {
       },
     },
 
+    /* ----------------------------- Offchain Tables ---------------------------- */
+
+    // used to generate random ids for offchain tables
+    Nonce: {
+      key: [],
+      schema: {
+        value: "uint256",
+      },
+    },
+
+    MoveNPCAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        originPlanetId: "bytes32",
+        destinationPlanetId: "bytes32",
+        shipCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    BattleNPCAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        attackingShipCount: "uint256",
+        defendingShipCount: "uint256",
+        conquer: "bool",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    BuyDestroyersNPCAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        goldSpent: "uint256",
+        destroyerBought: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    CreateDestroyerPlayerAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    KillDestroyerPlayerAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {

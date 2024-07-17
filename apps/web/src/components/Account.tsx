@@ -3,7 +3,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { formatNumber } from "@primodiumxyz/core";
+import { formatAddress, formatNumber } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { useBalance } from "@/hooks/useBalance";
@@ -34,7 +34,7 @@ export const Account = () => {
       <p className="text-left text-xs font-bold uppercase">Account</p>
       <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
         <p className="flex items-center gap-2">
-          {address.slice(0, 7)}
+          {formatAddress(address)}
           <button onClick={handleLogout} className="btn btn-primary btn-sm">
             <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
           </button>

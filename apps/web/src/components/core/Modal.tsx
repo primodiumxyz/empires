@@ -7,10 +7,11 @@ import "@/index.css";
 
 /* ---------------------------------- MODAL --------------------------------- */
 
-export const Modal: FC<{ children: ReactNode; icon: ReactNode; buttonClassName?: string }> = ({
+export const Modal: FC<{ children: ReactNode; icon: ReactNode; buttonClassName?: string; className?: string }> = ({
   children,
   icon,
   buttonClassName,
+  className,
 }) => {
   const [open, setOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -48,8 +49,9 @@ export const Modal: FC<{ children: ReactNode; icon: ReactNode; buttonClassName?:
       <div
         ref={modalRef}
         className={cn(
-          "absolute flex h-[95%] w-[95%] flex-col gap-2 py-4 pl-4 pr-2 md:h-[90%] md:w-[90%]",
+          "absolute flex h-[95%] w-[95%] flex-col gap-2 overflow-y-auto py-4 pl-4 pr-2 md:h-[90%] md:w-[90%]",
           !open && "hidden",
+          className,
         )}
       >
         {/* close button */}
@@ -86,7 +88,10 @@ const ModalOpenButton = forwardRef<HTMLButtonElement, ModalButtonProps>(({ icon,
 
 const ModalCloseButton = ({ setOpen, icon, className }: Omit<ModalButtonProps, "icon"> & { icon?: ReactNode }) => (
   <button
-    className={cn("absolute right-2 top-2 rounded-btn bg-neutral p-2 transition-colors hover:bg-primary", className)}
+    className={cn(
+      "sticky top-0 w-min self-end rounded-btn bg-neutral p-2 transition-colors hover:bg-primary",
+      className,
+    )}
     onClick={() => setOpen(false)}
   >
     {icon ?? <XCircleIcon className="h-6 w-6" />}

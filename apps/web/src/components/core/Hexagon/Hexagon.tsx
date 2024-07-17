@@ -4,9 +4,10 @@ export const Hexagon: React.FC<{
   size?: number;
   fill?: string;
   style?: React.CSSProperties;
+  stroke?: string;
   className?: string;
   children?: React.ReactNode;
-}> = ({ size = 100, fill = "#fff", style, className, children }) => {
+}> = ({ size = 100, fill = "#fff", style, stroke, className, children }) => {
   return (
     <div style={style} className={cn(className)}>
       <div className="relative">
@@ -20,6 +21,8 @@ export const Hexagon: React.FC<{
         >
           <path
             fill={fill}
+            stroke={stroke}
+            strokeWidth="2"
             d="M69.28203230275508 9.999999999999998Q86.60254037844386 0 103.92304845413264 9.999999999999998L155.88457268119896 40Q173.20508075688772 50 173.20508075688772 70L173.20508075688772 130Q173.20508075688772 150 155.88457268119896 160L103.92304845413264 190Q86.60254037844386 200 69.28203230275508 190L17.320508075688775 160Q0 150 0 130L0 70Q0 50 17.320508075688775 40Z"
           ></path>
         </svg>
