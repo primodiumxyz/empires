@@ -1,3 +1,5 @@
+import { cn } from "@/util/client";
+
 export const Divider: React.FC<{
   className?: string;
   children?: React.ReactNode;
@@ -5,9 +7,11 @@ export const Divider: React.FC<{
 }> = ({ className, children, direction = "horizontal" }) => {
   return (
     <div
-      className={`divider ${className} border border-secondary ${
-        direction === "horizontal" ? "divider-horizontal" : "divider-vertical"
-      }`}
+      className={cn(
+        "divider border border-secondary",
+        direction === "horizontal" ? "divider-horizontal" : "divider-vertical",
+        className,
+      )}
     >
       {children}
     </div>

@@ -6,6 +6,10 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Badge } from "@/components/core/Badge";
+import { Button } from "@/components/core/Button";
+import { Card, SecondaryCard } from "@/components/core/Card";
+import { Divider } from "@/components/core/Divider";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useEthPrice } from "@/hooks/useEthPrice";
@@ -30,23 +34,23 @@ export const Account = () => {
   const balance = useBalance(address).value ?? 0n;
 
   return (
-    <div className="absolute left-4 top-4 flex flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
+    <SecondaryCard className="absolute left-4 top-4 flex flex-col justify-center gap-1 text-center">
       <p className="text-left text-xs font-bold uppercase">Account</p>
       <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
         <p className="flex items-center gap-2">
-          {address.slice(0, 7)}
-          <button onClick={handleLogout} className="btn btn-primary btn-sm">
-            <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
-          </button>
+          <span className="font-mono text-sm">{address.slice(0, 7)}</span>
+          <Button onClick={handleLogout} variant="neutral" size="sm">
+            <ArrowLeftEndOnRectangleIcon className="size-4" />
+          </Button>
         </p>
-        <hr />
+        <Divider className="my-1 w-16 self-center" />
         {loading && <p>Loading...</p>}
         {!loading && price && <p>{ethToUSD(balance, price)}</p>}
         <p className="text-xs">{formatEther(balance)}ETH</p>
-        <hr />
+        <Divider className="my-1 w-16 self-center" />
         <Points playerId={entity} />
       </div>
-    </div>
+    </SecondaryCard>
   );
 };
 
@@ -69,22 +73,28 @@ const Points = ({ playerId }: { playerId: Entity }) => {
   const bluePct = Number(bluePctTimes10000) / 100;
 
   return (
-    <div className="grid w-full grid-cols-[2rem_1fr] items-center">
-      <div className="h-4 w-4 rounded-full bg-green-500" />
-      <p>
-        {formatEther(greenPlayerPoints)}{" "}
-        {greenPct > 0 && <span className="text-xs opacity-70">({formatNumber(greenPct)}%)</span>}
-      </p>
-      <div className="h-4 w-4 rounded-full bg-red-500" />
-      <p>
-        {formatEther(redPlayerPoints)}{" "}
-        {redPct > 0 && <span className="text-xs opacity-70">({formatNumber(redPct)}%)</span>}
-      </p>
-      <div className="h-4 w-4 rounded-full bg-blue-500" />
-      <p>
-        {formatEther(bluePlayerPoints)}{" "}
-        {bluePct > 0 && <span className="text-xs opacity-70">({formatNumber(bluePct)}%)</span>}
-      </p>
+    <div className="flex flex-col gap-1">
+      <Badge variant="glass" size="md" className="flex h-6 w-full items-center justify-start gap-2 bg-green-600">
+        <div className="size-4 rounded-full bg-green-600" />
+        <p>
+          {formatEther(greenPlayerPoints)}{" "}
+          {greenPct > 0 && <span className="text-xs opacity-70">({formatNumber(greenPct)}%)</span>}
+        </p>
+      </Badge>
+      <Badge variant="glass" size="md" className="flex h-6 w-full items-center justify-start gap-2 bg-red-600">
+        <div className="h-4 w-4 rounded-full bg-red-600" />
+        <p>
+          {formatEther(redPlayerPoints)}{" "}
+          {redPct > 0 && <span className="text-xs opacity-70">({formatNumber(redPct)}%)</span>}
+        </p>
+      </Badge>
+      <Badge variant="glass" size="md" className="flex h-6 w-full items-center justify-start gap-2 bg-blue-600">
+        <div className="h-4 w-4 rounded-full bg-blue-600" />
+        <p>
+          {formatEther(bluePlayerPoints)}{" "}
+          {bluePct > 0 && <span className="text-xs opacity-70">({formatNumber(bluePct)}%)</span>}
+        </p>
+      </Badge>
     </div>
   );
 };
