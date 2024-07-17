@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { Faction, Player, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
-import { EMPIRE_COUNT, POINT_UNIT } from "src/constants.sol";
+import { EMPIRE_COUNT } from "src/constants.sol";
 import { console } from "forge-std/console.sol";
 
 /**

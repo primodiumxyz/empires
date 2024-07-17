@@ -7,7 +7,7 @@ import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { PointsMap } from "adts/PointsMap.sol";
-import { EMPIRE_COUNT, EMPIRES_NAMESPACE_ID, POINT_UNIT } from "src/constants.sol";
+import { EMPIRE_COUNT, EMPIRES_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
@@ -71,16 +71,16 @@ contract ActionSystem is EmpiresSystem {
     Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
 
     if (_progressAction) {
-      LibPoint.issuePoints(_empireImpacted, playerId, (EMPIRE_COUNT - 1) * POINT_UNIT);
-      LibPrice.pointCostUp(_empireImpacted, (EMPIRE_COUNT - 1) * POINT_UNIT);
+      LibPoint.issuePoints(_empireImpacted, playerId, EMPIRE_COUNT - 1);
+      LibPrice.pointCostUp(_empireImpacted, EMPIRE_COUNT - 1);
     } else {
       // Iterate through each empire except the impacted one
       for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
         if (i == uint256(_empireImpacted)) {
           continue;
         }
-        LibPoint.issuePoints(EEmpire(i), playerId, POINT_UNIT);
-        LibPrice.pointCostUp(_empireImpacted, POINT_UNIT);
+        LibPoint.issuePoints(EEmpire(i), playerId, 1);
+        LibPrice.pointCostUp(_empireImpacted, 1);
       }
     }
     LibPrice.actionCostUp(_empireImpacted, _actionType);
