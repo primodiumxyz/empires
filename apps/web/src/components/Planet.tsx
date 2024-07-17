@@ -164,10 +164,18 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           </p>
           <p className="font-bold">{entityToPlanetName(entity)}</p>
         </div>
-        <SecondaryCard className="flex flex-col gap-1 border-none bg-gray-50/20">
+        <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
           <p className="flex items-center justify-center gap-2">
             <RocketLaunchIcon className="size-4" /> {planet.destroyerCount.toLocaleString()}
           </p>
+          {floatingTexts.map((item) => (
+            <div
+              key={item.id}
+              className="floating-text pointer-events-none w-fit rounded bg-white p-2 text-xs text-black"
+            >
+              {item.text}
+            </div>
+          ))}
 
           <div className="flex items-center gap-2">
             <TransactionQueueMask id={`${entity}-kill-destroyer`}>
@@ -199,26 +207,17 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
             </TransactionQueueMask>
           </div>
         </SecondaryCard>
-        <Badge variant="glass" size="lg" className="flex items-center gap-1 border-none bg-gray-50/20">
+        <Badge variant="glass" size="lg" className="relative flex items-center gap-1 border-none bg-gray-50/20">
           <CurrencyYenIcon className="size-5" /> {planet.goldCount.toLocaleString()}
+          {goldFloatingTexts.map((item) => (
+            <div
+              key={item.id}
+              className="floating-text pointer-events-none w-fit rounded bg-white p-2 text-xs text-black"
+            >
+              {item.text}
+            </div>
+          ))}
         </Badge>
-
-        {floatingTexts.map((item) => (
-          <div
-            key={item.id}
-            className="floating-text pointer-events-none w-full rounded bg-white p-2 text-xs text-black"
-          >
-            {item.text}
-          </div>
-        ))}
-      </div>
-      <div className="relative flex">
-        <CurrencyYenIcon className="size-6" /> {planet.goldCount.toLocaleString()}
-        {goldFloatingTexts.map((item) => (
-          <div key={item.id} className="floating-text pointer-events-none w-20 rounded bg-error p-2 text-xs">
-            {item.text}
-          </div>
-        ))}
       </div>
     </Hexagon>
   );
