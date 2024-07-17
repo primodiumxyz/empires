@@ -13,6 +13,14 @@ import { Divider } from "@/components/core/Divider";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { cn } from "@/util/client";
+
+export const EmpireEnumToColor: Record<EEmpire, string> = {
+  [EEmpire.Blue]: "bg-blue-600",
+  [EEmpire.Green]: "bg-green-600",
+  [EEmpire.Red]: "bg-red-600",
+  [EEmpire.LENGTH]: "",
+};
 
 export const Account = () => {
   const { logout } = usePrivy();
@@ -35,68 +43,51 @@ export const Account = () => {
 
   return (
     <div className="absolute left-4 top-4">
-      <Card className="flex flex-col justify-center gap-1 text-center" noDecor>
-        <p className="text-left text-xs font-bold uppercase">Account</p>
-        <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
-          <p className="flex items-center gap-2">
-            <span className="font-mono text-sm">{address.slice(0, 7)}</span>
-            <Button onClick={handleLogout} variant="neutral" size="sm">
-              <ArrowLeftEndOnRectangleIcon className="size-4" />
-            </Button>
-          </p>
-          <Divider className="my-1 w-16 self-center" />
-          {loading && <p>Loading...</p>}
-          {!loading && price && <p>{ethToUSD(balance, price)}</p>}
-          <p className="text-xs">{formatEther(balance)}ETH</p>
-          <Divider className="my-1 w-16 self-center" />
-          <Points playerId={entity} />
+      <Card noDecor>
+        <div className="flex flex-col justify-center gap-1 text-center">
+          <p className="text-left text-xs font-bold uppercase">Account</p>
+          <div className="flex flex-col justify-center gap-1 rounded border border-gray-600 p-2 text-center text-white">
+            <p className="flex items-center gap-2">
+              <span className="font-mono text-sm">{address.slice(0, 7)}</span>
+              <Button onClick={handleLogout} variant="neutral" size="sm">
+                <ArrowLeftEndOnRectangleIcon className="size-4" />
+              </Button>
+            </p>
+            <Divider className="my-1 w-16 self-center" />
+            {loading && <p>Loading...</p>}
+            {!loading && price && <p>{ethToUSD(balance, price)}</p>}
+            <p className="text-xs">{formatEther(balance)}ETH</p>
+            <Divider className="my-1 w-16 self-center" />
+            <div className="flex flex-col gap-1">
+              <EmpirePoints empire={EEmpire.Red} playerId={entity} />
+              <EmpirePoints empire={EEmpire.Green} playerId={entity} />
+              <EmpirePoints empire={EEmpire.Blue} playerId={entity} />
+            </div>
+          </div>
         </div>
       </Card>
     </div>
   );
 };
 
-const Points = ({ playerId }: { playerId: Entity }) => {
+const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
   const { tables } = useCore();
-  const greenPlayerPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Green, playerId })?.value ?? 0n;
-  const redPlayerPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Red, playerId })?.value ?? 0n;
-  const bluePlayerPoints = tables.Value_PointsMap.useWithKeys({ factionId: EEmpire.Blue, playerId })?.value ?? 0n;
 
-  const greenEmpirePoints = tables.Faction.useWithKeys({ id: EEmpire.Green })?.pointsIssued ?? 0n;
-  const redEmpirePoints = tables.Faction.useWithKeys({ id: EEmpire.Red })?.pointsIssued ?? 0n;
-  const blueEmpirePoints = tables.Faction.useWithKeys({ id: EEmpire.Blue })?.pointsIssued ?? 0n;
-
-  const greenPctTimes10000 = greenEmpirePoints > 0 ? (greenPlayerPoints * 10000n) / greenEmpirePoints : 0n;
-  const redPctTimes10000 = redEmpirePoints > 0 ? (redPlayerPoints * 10000n) / redEmpirePoints : 0n;
-  const bluePctTimes10000 = blueEmpirePoints > 0 ? (bluePlayerPoints * 10000n) / blueEmpirePoints : 0n;
-
-  const greenPct = Number(greenPctTimes10000) / 100;
-  const redPct = Number(redPctTimes10000) / 100;
-  const bluePct = Number(bluePctTimes10000) / 100;
+  const playerPoints = tables.Value_PointsMap.useWithKeys({ factionId: empire, playerId })?.value ?? 0n;
+  const empirePoints = tables.Faction.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
+  const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
+  const pct = Number(pctTimes10000) / 100;
 
   return (
-    <div className="flex flex-col gap-1">
-      <Badge variant="glass" size="md" className="flex h-6 w-full items-center justify-start gap-2 bg-green-600">
-        <div className="size-4 rounded-full bg-green-600" />
-        <p>
-          {formatEther(greenPlayerPoints)}{" "}
-          {greenPct > 0 && <span className="text-xs opacity-70">({formatNumber(greenPct)}%)</span>}
-        </p>
-      </Badge>
-      <Badge variant="glass" size="md" className="flex h-6 w-full items-center justify-start gap-2 bg-red-600">
-        <div className="h-4 w-4 rounded-full bg-red-600" />
-        <p>
-          {formatEther(redPlayerPoints)}{" "}
-          {redPct > 0 && <span className="text-xs opacity-70">({formatNumber(redPct)}%)</span>}
-        </p>
-      </Badge>
-      <Badge variant="glass" size="md" className="flex h-6 w-full items-center justify-start gap-2 bg-blue-600">
-        <div className="h-4 w-4 rounded-full bg-blue-600" />
-        <p>
-          {formatEther(bluePlayerPoints)}{" "}
-          {bluePct > 0 && <span className="text-xs opacity-70">({formatNumber(bluePct)}%)</span>}
-        </p>
-      </Badge>
-    </div>
+    <Badge
+      variant="glass"
+      size="md"
+      className={cn("flex h-6 w-full items-center justify-start gap-2 border-none", EmpireEnumToColor[empire])}
+    >
+      <div className={cn("h-4 w-4 rounded-full", EmpireEnumToColor[empire])} />
+      <p>
+        {formatEther(playerPoints)} {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
+      </p>
+    </Badge>
   );
 };
