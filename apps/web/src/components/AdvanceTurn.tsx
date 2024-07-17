@@ -12,6 +12,7 @@ export const EmpireEnumToColor = {
   [EEmpire.Blue]: "btn-accent",
   [EEmpire.Green]: "btn-success",
   [EEmpire.Red]: "bg-red-700",
+  [EEmpire.LENGTH]: "",
 };
 
 export const AdvanceTurn = () => {

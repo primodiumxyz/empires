@@ -9,7 +9,6 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { Tooltip } from "@/components/core/Tooltip";
-import { EmpireEnumToColor } from "@/components/Planet";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
@@ -18,6 +17,13 @@ import { EmpireEnumToName } from "@/util/lookups";
 const DEV = import.meta.env.PRI_DEV === "true";
 const TICK_LABEL_INTERVAL = 30; // 30 seconds
 const PX_PER_SECOND = 3;
+
+export const EmpireEnumToColor: Record<EEmpire, string> = {
+  [EEmpire.Blue]: "text-blue-400",
+  [EEmpire.Green]: "text-green-400",
+  [EEmpire.Red]: "text-red-400",
+  [EEmpire.LENGTH]: "",
+};
 
 export const HistoricalPointPriceModal = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
@@ -39,7 +45,6 @@ export const HistoricalPointPriceModal = () => {
               .map((_, i) => i + 1)
               .map((empire) => ({
                 id: empire.toString(),
-                // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
                 label: empire === EEmpire.LENGTH ? "ALL EMPIRES" : EmpireEnumToName[empire as EEmpire],
               })),
           ]}
@@ -49,12 +54,6 @@ export const HistoricalPointPriceModal = () => {
       </Modal.Content>
     </Modal>
   );
-};
-
-export const ColorToTextClass: Record<string, string> = {
-  blue: "text-blue-400",
-  green: "text-green-400",
-  red: "text-red-400",
 };
 
 const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => {
@@ -345,12 +344,11 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
             <tbody className="divide-y divide-gray-700">
               {Object.entries(buyPointPrice).map(([_empire, buyPrice]) => {
                 const empire = _empire as unknown as keyof typeof buyPointPrice;
-                const color = ColorToTextClass[EmpireEnumToColor[Number(empire) as EEmpire]];
+                const color = EmpireEnumToColor[Number(empire) as EEmpire];
 
                 return (
                   <tr key={empire}>
                     <td className={cn("whitespace-nowrap px-4 py-2", color)}>
-                      {/* @ts-expect-error Property 'EEmpire' does not exist on type 'typeof EEmpire'. */}
                       {EmpireEnumToName[Number(empire) as EEmpire]}
                     </td>
                     <td className={cn("whitespace-nowrap px-4 py-2", color)}>

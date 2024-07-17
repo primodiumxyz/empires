@@ -295,9 +295,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       empire: {
         label: "Empire",
         inputType: "string",
-        // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
         defaultValue: EmpireEnumToName[Number(factions[0]) as EEmpire],
-        // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
         options: factions.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
       },
       amount: {
