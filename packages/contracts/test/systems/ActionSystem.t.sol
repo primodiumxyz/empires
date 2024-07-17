@@ -81,7 +81,7 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.get(EEmpire.Red, aliceId),
-      (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit(),
+      (EMPIRE_COUNT - 1) * pointUnit,
       "Player should have received points"
     );
   }
@@ -106,12 +106,12 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.get(EEmpire.Blue, bobId),
-      P_PointConfig.getPointUnit(),
+      pointUnit,
       "Player should have received blue points"
     );
     assertEq(
       PointsMap.get(EEmpire.Green, bobId),
-      P_PointConfig.getPointUnit(),
+      pointUnit,
       "Player should have received green points"
     );
   }
