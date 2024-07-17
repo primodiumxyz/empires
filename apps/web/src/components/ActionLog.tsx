@@ -99,7 +99,7 @@ export const ActionLog = () => {
       >
         <BookOpenIcon className="size-8" />
       </Modal.Button>
-      <Modal.Content className="h-screen md:h-3/4">
+      <Modal.Content className="h-screen !w-[400px] md:h-3/4">
         <AutoSizer
           items={actions}
           itemSize={70}
