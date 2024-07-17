@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import CheatcodesButton, { CheatcodesCloseButton } from "@/components/CheatcodesButton";
@@ -9,6 +9,7 @@ import { cn } from "@/util/client";
 
 import "@/index.css";
 
+import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Modal } from "@/components/core/Modal";
 import { TextInput } from "@/components/core/TextInput";
@@ -72,7 +73,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   activeTab: number | undefined;
   setActiveTab: Dispatch<SetStateAction<number | undefined>>;
 }) => {
-  const { title, caption, inputs, execute: _execute } = cheatcode;
+  const { title, caption, inputs, execute: _execute, bg = "bg-gray-500/10" } = cheatcode;
   const [inputValues, setInputValues] = useState<CheatcodeInputs<T>>({} as CheatcodeInputs<T>);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"success" | "error" | undefined>(undefined);
@@ -96,6 +97,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
       <div
         className={cn(
           "cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
+          bg,
           activeTab === index && "bg-primary",
         )}
         onClick={() => setActiveTab(activeTab === index ? undefined : index)}
