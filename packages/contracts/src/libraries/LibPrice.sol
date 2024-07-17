@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Player, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
+import { Faction, Player, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 
@@ -85,6 +85,7 @@ library LibPrice {
   function pointCostUp(EEmpire _empire, uint256 _pointUnits) internal {
     uint256 newPointCost = Faction.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * _pointUnits;
     Faction.setPointCost(_empire, newPointCost);
+    HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
   }
 
   /**
@@ -101,15 +102,16 @@ library LibPrice {
    * @dev Decreases the cost of points for a specific empire.
    * @param _empire The empire to decrease the point cost for.
    */
-  function empirePointCostDown(EEmpire _empire) internal {
+  function turnEmpirePointCostDown(EEmpire _empire) internal {
     P_PointConfigData memory config = P_PointConfig.get();
     uint256 newPointCost = Faction.getPointCost(_empire);
-    if (newPointCost > config.minPointCost + config.pointGenRate) {
+    if (newPointCost >= config.minPointCost + config.pointGenRate) {
       newPointCost -= config.pointGenRate;
     } else {
       newPointCost = config.minPointCost;
     }
     Faction.setPointCost(_empire, newPointCost);
+    HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
   }
 
   /**
@@ -131,12 +133,42 @@ library LibPrice {
 
   /**
    * @dev Calculates the value of selling a specific number of points from a specific empire.
+   * @notice The value of the points sold is calculated based on the current point cost and the point sell tax. Reverts if exceeding the minimum point cost.
    * @param _empire The empire to sell points from.
    * @param _pointUnits The number of points to sell.
    * @return pointSaleValue The value of the points to be sold.
    */
   function getPointSaleValue(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
-    uint256 pointSaleValue;
-    return pointSaleValue;
+    P_PointConfigData memory config = P_PointConfig.get();
+    uint256 pointCostDecrease = config.pointCostIncrease;
+    uint256 currentPointCost = Faction.getPointCost(_empire);
+
+    require(
+      currentPointCost >= config.minPointCost + pointCostDecrease * _pointUnits,
+      "[LibPrice] Selling points beyond minimum price"
+    );
+
+    uint256 triangleSum = _pointUnits * (_pointUnits + 1) / 2;
+    uint256 totalSaleValue = (currentPointCost - config.pointSellTax) * _pointUnits - pointCostDecrease * triangleSum;
+
+    return totalSaleValue;
+  }
+
+  /**
+   * @dev Decreases an empire's point cost by a specific number of point units.
+   * @param _empire The empire for which the point cost is being decreased.
+   * @param _pointUnits The number of point units to decrease the cost by.
+   * @notice If the resulting point cost after the decrease is less than the minimum point cost, the function reverts with an error message.
+   */
+  function sellEmpirePointCostDown(EEmpire _empire, uint256 _pointUnits) internal {
+    uint256 currentPointCost = Faction.getPointCost(_empire);
+    uint256 pointCostDecrease = P_PointConfig.getPointCostIncrease();
+    if (currentPointCost >= P_PointConfig.getMinPointCost() + pointCostDecrease * _pointUnits) {
+      uint256 newPointCost = currentPointCost - pointCostDecrease * _pointUnits;
+      Faction.setPointCost(_empire, newPointCost);
+      HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
+    } else {
+      revert("[LibPrice] Selling points beyond minimum price");
+    }
   }
 }

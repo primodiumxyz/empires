@@ -2,6 +2,7 @@ import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
+import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { PlanetGrid } from "@/components/PlanetGrid";
 import { Pot } from "@/components/Pot";
 import { ResetGame } from "@/components/ResetGame";
@@ -22,6 +23,8 @@ const Game = () => {
         </div>
         <ActionLog />
       </div>
+
+      <HistoricalPointPriceModal />
       {DEV && <Cheatcodes />}
     </>
   );
