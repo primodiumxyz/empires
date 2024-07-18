@@ -325,6 +325,12 @@ importers:
 
   packages/game:
     dependencies:
+      '@primodiumxyz/assets':
+        specifier: workspace:*
+        version: link:../assets
+      '@primodiumxyz/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@primodiumxyz/core':
         specifier: workspace:*
         version: link:../core
