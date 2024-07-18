@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Player } from "codegen/index.sol";
+import { Faction, Player, P_PointConfig } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 

@@ -87,16 +87,16 @@ contract ActionSystem is EmpiresSystem {
     uint256 pointUnit = P_PointConfig.getPointUnit();
 
     if (_progressAction) {
-      LibPoint.issuePoints(_empireImpacted, playerId, pointUnit * (EMPIRE_COUNT - 1));
-      LibPrice.pointCostUp(_empireImpacted, EMPIRE_COUNT - 1);
+      LibPoint.issuePoints(_empireImpacted, playerId, (EMPIRE_COUNT - 1) * pointUnit);
+      LibPrice.pointCostUp(_empireImpacted, (EMPIRE_COUNT - 1) * pointUnit);
     } else {
       // Iterate through each empire except the impacted one
       for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
         if (i == uint256(_empireImpacted)) {
           continue;
         }
-        LibPoint.issuePoints(EEmpire(i), playerId, pointUnit);
-        LibPrice.pointCostUp(_empireImpacted, 1);
+        LibPoint.issuePoints(EEmpire(i), playerId, 1 * pointUnit);
+        LibPrice.pointCostUp(_empireImpacted, 1 * pointUnit);
       }
     }
     LibPrice.actionCostUp(_empireImpacted, _actionType);
@@ -105,26 +105,22 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player action to sell some points of an empire that they currently own.
    * @param _empire The empire to sell points from.
-   * @param _pointUnits The number of points to sell.
+   * @param _points The number of points to sell.
    */
-  function sellPoints(EEmpire _empire, uint256 _pointUnits) public {
+  function sellPoints(EEmpire _empire, uint256 _points) public {
     bytes32 playerId = addressToId(_msgSender());
-    uint256 pointsScaled = _pointUnits * P_PointConfig.getPointUnit();
-    require(
-      pointsScaled <= PointsMap.get(_empire, playerId),
-      "[ActionSystem] Player does not have enough points to remove"
-    );
+    require(_points <= PointsMap.get(_empire, playerId), "[ActionSystem] Player does not have enough points to remove");
 
-    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _pointUnits);
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _points);
 
     // require that the pot has enough ETH to send
     require(pointSaleValue <= Balances.get(EMPIRES_NAMESPACE_ID), "[ActionSystem] Insufficient funds for point sale");
 
     // set the new empire point cost
-    LibPrice.sellEmpirePointCostDown(_empire, _pointUnits);
+    LibPrice.sellEmpirePointCostDown(_empire, _points);
 
     // remove points from player and empire's issued points count
-    LibPoint.removePoints(_empire, playerId, pointsScaled);
+    LibPoint.removePoints(_empire, playerId, _points);
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);

@@ -109,7 +109,6 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.stopPrank();
     vm.prank(alice);
     world.Empires__withdrawEarnings();
-    uint256 bobPoints = PointsMap.get(EEmpire.Red, addressToId(bob));
     vm.prank(bob);
     world.Empires__withdrawEarnings();
     // 0.1% difference

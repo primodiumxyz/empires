@@ -15,6 +15,7 @@ contract ActionSystemTest is PrimodiumTest {
   bytes32 planetId;
   bytes32 aliceId;
   bytes32 bobId;
+  uint256 pointUnit;
 
   function setUp() public override {
     super.setUp();
@@ -27,6 +28,7 @@ contract ActionSystemTest is PrimodiumTest {
     bobId = addressToId(bob);
     vm.prank(creator);
     P_PointConfig.setPointRake(0);
+    pointUnit = P_PointConfig.getPointUnit();
   }
 
   function testCreateDestroyer() public {
@@ -79,7 +81,7 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.get(EEmpire.Red, aliceId),
-      (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit(),
+      (EMPIRE_COUNT - 1) * pointUnit,
       "Player should have received points"
     );
   }
@@ -104,12 +106,12 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.get(EEmpire.Blue, bobId),
-      P_PointConfig.getPointUnit(),
+      pointUnit,
       "Player should have received blue points"
     );
     assertEq(
       PointsMap.get(EEmpire.Green, bobId),
-      P_PointConfig.getPointUnit(),
+      pointUnit,
       "Player should have received green points"
     );
   }
@@ -118,35 +120,41 @@ contract ActionSystemTest is PrimodiumTest {
     EEmpire empire = Planet.getFactionId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, empire, true);
     
+    console.log("alice balance before createDestroyer", alice.balance);
+    console.log("marginal action cost before createDestroyer", ActionCost.get(empire, EPlayerAction.CreateDestroyer));
     vm.startPrank(alice);
     world.Empires__createDestroyer{ value: totalCost }(planetId);
     console.log("alice points after createDestroyer", PointsMap.get(empire, aliceId));
+    console.log("alice balance after createDestroyer", alice.balance);
+
 
     uint256 aliceInitPoints = PointsMap.get(empire, aliceId);
     uint256 aliceInitBalance = alice.balance;
     uint256 gameInitBalance = Balances.get(EMPIRES_NAMESPACE_ID);
-    uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, 1);
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, 1 * pointUnit);
     uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateDestroyer);
     uint256 empirePointsIssued = Faction.getPointsIssued(empire);
 
-    world.Empires__sellPoints(empire, 1);
+    world.Empires__sellPoints(empire, 1 * pointUnit);
     
-    assertEq(PointsMap.get(empire, aliceId), aliceInitPoints - P_PointConfig.getPointUnit(), "Player should have lost points");
+    assertEq(PointsMap.get(empire, aliceId), aliceInitPoints - (1 * pointUnit), "Player should have lost points");
     assertEq(alice.balance, aliceInitBalance + pointSaleValue, "Player should have gained balance");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), gameInitBalance - pointSaleValue, "Namespace should have lost balance");
     assertEq(
-      LibPrice.getPointSaleValue(empire, 1),
+      LibPrice.getPointSaleValue(empire, 1 * pointUnit),
       pointSaleValue - P_PointConfig.getPointCostIncrease(),
       "Point Sale Value should have decreased"
     );
     assertEq(actionCost, ActionCost.get(empire, EPlayerAction.CreateDestroyer), "Action Cost should not have changed");
     assertEq(
       Faction.getPointsIssued(empire),
-      empirePointsIssued - P_PointConfig.getPointUnit(),
+      empirePointsIssued - (1 * pointUnit),
       "Empire should have reduced points issued"
     );
 
     console.log("alice points after sellPoints", PointsMap.get(empire, aliceId));
+    console.log("alice balance after sellPoints", alice.balance);
+
   }
 
   function testSellPointsFailNoPointsOwned() public {
@@ -164,7 +172,7 @@ contract ActionSystemTest is PrimodiumTest {
     world.Empires__createDestroyer{ value: totalCost }(planetId);
 
     vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
-    world.Empires__sellPoints(empire, EMPIRE_COUNT);
+    world.Empires__sellPoints(empire, EMPIRE_COUNT * pointUnit);
   }
 
   function testSellPointsFailNotEnoughPointsWrongEmpire() public {
@@ -174,7 +182,7 @@ contract ActionSystemTest is PrimodiumTest {
     vm.startPrank(alice);
     world.Empires__createDestroyer{ value: totalCost }(planetId);
     vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
-    world.Empires__sellPoints(EEmpire.Green, 1);
+    world.Empires__sellPoints(EEmpire.Green, 1 * pointUnit);
   }
 
   function testSellPointsFailGameBalanceInsufficient() public {
@@ -184,7 +192,7 @@ contract ActionSystemTest is PrimodiumTest {
     vm.startPrank(alice);
     world.Empires__createDestroyer{ value: totalCost }(planetId);
     
-    uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, EMPIRE_COUNT - 1);
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, (EMPIRE_COUNT - 1) * pointUnit);
 
     vm.startPrank(creator);
     uint256 gameBalance = Balances.get(EMPIRES_NAMESPACE_ID);
@@ -193,7 +201,7 @@ contract ActionSystemTest is PrimodiumTest {
     
     vm.startPrank(alice);
     vm.expectRevert("[ActionSystem] Insufficient funds for point sale");
-    world.Empires__sellPoints(empire, EMPIRE_COUNT - 1);
+    world.Empires__sellPoints(empire, (EMPIRE_COUNT - 1) * pointUnit);
   }
 
 }
