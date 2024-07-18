@@ -15,7 +15,7 @@ export function createPriceUtils(tables: Tables) {
       totalCost = getRegressPointCost(_empireImpacted);
     }
 
-    totalCost += tables.ActionCost.getWithKeys({ factionId: _empireImpacted, action: _actionType })?.value ?? 0n;
+    totalCost += tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
     return totalCost;
   }
 
@@ -51,7 +51,7 @@ export function createPriceUtils(tables: Tables) {
    * @return pointCost The cost of the points from the specific empire.
    */
   function getPointCost(_empire: EEmpire, _pointUnits: number): bigint {
-    const initPointCost = tables.Faction.getWithKeys({ id: _empire })?.pointCost ?? 0n;
+    const initPointCost = tables.Empire.getWithKeys({ id: _empire })?.pointCost ?? 0n;
     const pointCostIncrease = tables.P_PointConfig.get()?.pointCostIncrease ?? 0n;
     let pointCost = 0n;
     for (let i = 0; i < _pointUnits; i++) {

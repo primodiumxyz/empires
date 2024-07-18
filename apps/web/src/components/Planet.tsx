@@ -32,7 +32,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const { tables, utils } = useCore();
   const planet = tables.Planet.use(entity);
   const { createShip, removeShip } = useContractCalls();
-  const planetFaction = (planet?.factionId ?? 0) as EEmpire;
+  const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
   const [conquered, setConquered] = useState(false);
 
   const { price } = useEthPrice();
@@ -47,8 +47,8 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     return [cartesianCoord.x, cartesianCoord.y];
   }, [planet, tileSize, margin]);
 
-  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetFaction);
-  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetFaction);
+  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire);
+  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire);
 
   const createShipPriceUsd = utils.ethToUSD(createShipPriceWei, price ?? 0);
   const killShipPriceUsd = utils.ethToUSD(killShipPriceWei, price ?? 0);
@@ -150,7 +150,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       key={entity}
       size={tileSize}
       className="absolute -translate-x-1/2 -translate-y-1/2"
-      fillClassName={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "fill-gray-600"}
+      fillClassName={planet?.empireId !== 0 ? EmpireEnumToColor[planetEmpire] : "fill-gray-600"}
       stroke={conquered ? "yellow" : "none"}
       style={{
         top: `${top + 50}px`,
@@ -186,7 +186,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
                 shape="square"
                 className="border-none"
                 onClick={() => removeShip(entity, killShipPriceWei)}
-                disabled={gameOver || planet.factionId == 0}
+                disabled={gameOver || planet.empireId == 0}
               >
                 <MinusIcon className="size-4" />
               </Button>
@@ -200,7 +200,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
                 shape="square"
                 className="border-none"
                 onClick={() => createShip(entity, createShipPriceWei)}
-                disabled={gameOver || planet.factionId == 0}
+                disabled={gameOver || planet.empireId == 0}
               >
                 <PlusIcon className="size-4" />
               </Button>
