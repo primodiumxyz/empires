@@ -24,10 +24,16 @@ library LibPrice {
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
     if (_progressAction) {
-      require(_actionType == EPlayerAction.CreateDestroyer, "[LibPrice] Action type is not a progressive action");
+      require(
+        _actionType == EPlayerAction.CreateDestroyer || _actionType == EPlayerAction.ChargeShield,
+        "[LibPrice] Action type is not a progressive action"
+      );
       totalCost = getProgressPointCost(_empireImpacted);
     } else {
-      require(_actionType == EPlayerAction.KillDestroyer, "[LibPrice] Action type is not a regressive action");
+      require(
+        _actionType == EPlayerAction.KillDestroyer || _actionType == EPlayerAction.DrainShield,
+        "[LibPrice] Action type is not a regressive action"
+      );
       totalCost = getRegressPointCost(_empireImpacted);
     }
 
@@ -127,16 +133,5 @@ library LibPrice {
       }
       ActionCost.set(_empireImpacted, EPlayerAction(i), newActionCost);
     }
-  }
-
-  /**
-   * @dev Calculates the value of selling a specific number of points from a specific empire.
-   * @param _empire The empire to sell points from.
-   * @param _pointUnits The number of points to sell.
-   * @return pointSaleValue The value of the points to be sold.
-   */
-  function getPointSaleValue(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
-    uint256 pointSaleValue;
-    return pointSaleValue;
   }
 }

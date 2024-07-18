@@ -79,7 +79,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [{ [ENPCAction.BuyShields]: "uint8" }],
     tables: {
       P_NPCActionCosts: {
-        goldCost: 3n,
+        goldCost: 2n,
       },
     },
   },

@@ -22,6 +22,7 @@ library LibResolveCombat {
             }
             // attackers destroy shields and damage destroyers, but don't conquer
             else if (arrivingDestroyers < planetData.shieldCount + planetData.destroyerCount) {
+                arrivingDestroyers -= planetData.shieldCount;
                 Planet.setShieldCount(planetId, 0);
                 Planet.setDestroyerCount(planetId, planetData.destroyerCount - arrivingDestroyers);
             }

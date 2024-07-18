@@ -73,7 +73,7 @@ contract ActionSystem is EmpiresSystem {
      * @dev A player purchaseable action that decreases the shield on a planet.
      * @param _planetId The ID of the planet.
      */
-    function drainDestroyer(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+    function drainShield(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
         PlanetData memory planetData = Planet.get(_planetId);
         require(planetData.isPlanet, "[ActionSystem] Planet not found");
         require(planetData.shieldCount > 0, "[ActionSystem] No shields to drain");
