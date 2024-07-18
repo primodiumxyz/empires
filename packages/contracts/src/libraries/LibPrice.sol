@@ -55,7 +55,7 @@ library LibPrice {
       if (i == uint256(_empireImpacted)) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), 1 * P_PointConfig.getPointUnit());
+      pointCost += getPointCost(EEmpire(i), P_PointConfig.getPointUnit());
     }
     return pointCost;
   }
