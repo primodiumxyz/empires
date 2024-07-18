@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { pseudorandom, pseudorandomEntity } from "src/utils.sol";
-import { Planet, P_NPCActionThresholdsData, P_NPCActionThresholds, P_NPCActionCosts, BuyDestroyersNPCAction, BuyDestroyersNPCActionData } from "codegen/index.sol";
+import { Planet, P_NPCActionThresholdsData, P_NPCActionThresholds, P_NPCActionCosts, BuyShipsNPCAction, BuyShipsNPCActionData } from "codegen/index.sol";
 import { ENPCAction } from "codegen/common.sol";
 
 library LibGold {
@@ -21,20 +21,20 @@ library LibGold {
 
     if (value < actionConfig.none) {
       return;
-    } else if (value < actionConfig.buyDestroyers) {
-      uint256 destroyerPrice = P_NPCActionCosts.get(ENPCAction.BuyDestroyers);
-      if (destroyerPrice == 0) return;
-      uint256 destroyersToBuy = goldCount / destroyerPrice;
-      if (destroyersToBuy == 0) return;
-      uint256 newGoldCount = goldCount - (destroyersToBuy * destroyerPrice);
-      Planet.setDestroyerCount(planetId, Planet.getDestroyerCount(planetId) + destroyersToBuy);
+    } else if (value < actionConfig.buyShips) {
+      uint256 shipPrice = P_NPCActionCosts.get(ENPCAction.BuyShips);
+      if (shipPrice == 0) return;
+      uint256 shipsToBuy = goldCount / shipPrice;
+      if (shipsToBuy == 0) return;
+      uint256 newGoldCount = goldCount - (shipsToBuy * shipPrice);
+      Planet.setShipCount(planetId, Planet.getShipCount(planetId) + shipsToBuy);
       Planet.setGoldCount(planetId, newGoldCount);
 
-      BuyDestroyersNPCAction.set(
+      BuyShipsNPCAction.set(
         pseudorandomEntity(),
-        BuyDestroyersNPCActionData({
-          goldSpent: destroyersToBuy * destroyerPrice,
-          destroyerBought: destroyersToBuy,
+        BuyShipsNPCActionData({
+          goldSpent: shipsToBuy * shipPrice,
+          shipBought: shipsToBuy,
           planetId: planetId,
           timestamp: block.timestamp
         })

@@ -5,12 +5,12 @@ import { Faction, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsDa
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 
-library LibMoveDestroyers {
-  function moveDestroyers(bytes32 planetId) internal returns (bool) {
+library LibMoveShips {
+  function moveShips(bytes32 planetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
-    if (planetData.factionId == EEmpire.NULL || planetData.destroyerCount == 0) return false;
+    if (planetData.factionId == EEmpire.NULL || planetData.shipCount == 0) return false;
 
-    // move destroyers
+    // move ships
     bytes32 target;
     uint i = 0;
     do {
@@ -20,16 +20,16 @@ library LibMoveDestroyers {
     } while (!Planet.getIsPlanet(target));
     if (target == planetId) return false;
 
-    uint256 destroyersToMove = planetData.destroyerCount;
+    uint256 shipsToMove = planetData.shipCount;
 
-    Arrivals.set(target, Arrivals.get(target) + destroyersToMove);
-    Planet.setDestroyerCount(planetId, planetData.destroyerCount - destroyersToMove);
+    Arrivals.set(target, Arrivals.get(target) + shipsToMove);
+    Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
     MoveNPCAction.set(
       pseudorandomEntity(),
       MoveNPCActionData({
         originPlanetId: planetId,
         destinationPlanetId: target,
-        shipCount: destroyersToMove,
+        shipCount: shipsToMove,
         timestamp: block.timestamp
       })
     );

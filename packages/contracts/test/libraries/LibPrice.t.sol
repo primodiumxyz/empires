@@ -21,7 +21,11 @@ contract LibPriceTest is PrimodiumTest {
   }
 
   function testStartGetPointCost() public {
-    assertEq(LibPrice.getPointCost(EEmpire.Red, 1 * pointUnit), config.startPointCost, "Starting Red Empire point cost incorrect");
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Red, 1 * pointUnit),
+      config.startPointCost,
+      "Starting Red Empire point cost incorrect"
+    );
     assertEq(
       LibPrice.getPointCost(EEmpire.Blue, 1 * pointUnit),
       config.startPointCost,
@@ -92,7 +96,7 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetTotalCostProgress() public {
     assertEq(
-      LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, EEmpire.Red, true),
+      LibPrice.getTotalCost(EPlayerAction.CreateShip, EEmpire.Red, true),
       actionConfig.startActionCost + LibPrice.getProgressPointCost(EEmpire.Red),
       "Total cost for Red Empire incorrect"
     );
@@ -100,7 +104,7 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetTotalCostRegress() public {
     assertEq(
-      LibPrice.getTotalCost(EPlayerAction.KillDestroyer, EEmpire.Red, false),
+      LibPrice.getTotalCost(EPlayerAction.KillShip, EEmpire.Red, false),
       actionConfig.startActionCost + LibPrice.getRegressPointCost(EEmpire.Red),
       "Total cost for Red Empire incorrect"
     );
@@ -115,7 +119,11 @@ contract LibPriceTest is PrimodiumTest {
     LibPrice.pointCostUp(EEmpire.Red, 1 * pointUnit);
     uint256 finalPointCost = LibPrice.getPointCost(EEmpire.Red, 1 * pointUnit);
     assertEq(finalPointCost, nextPointCost + config.pointCostIncrease, "Second point cost increase incorrect");
-    assertEq(LibPrice.getPointCost(EEmpire.Blue, 1 * pointUnit), config.startPointCost, "Blue Empire point cost should not change");
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Blue, 1 * pointUnit),
+      config.startPointCost,
+      "Blue Empire point cost should not change"
+    );
     assertEq(
       LibPrice.getPointCost(EEmpire.Green, 1 * pointUnit),
       config.startPointCost,
@@ -130,29 +138,29 @@ contract LibPriceTest is PrimodiumTest {
 
   function testActionCostUp() public {
     vm.startPrank(creator);
-    uint256 beginActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer);
-    LibPrice.actionCostUp(EEmpire.Red, EPlayerAction.CreateDestroyer);
-    uint256 nextActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer);
+    uint256 beginActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip);
+    LibPrice.actionCostUp(EEmpire.Red, EPlayerAction.CreateShip);
+    uint256 nextActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip);
     assertEq(nextActionCost, beginActionCost + actionConfig.actionCostIncrease, "First action cost increase incorrect");
-    LibPrice.actionCostUp(EEmpire.Red, EPlayerAction.CreateDestroyer);
-    uint256 finalActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer);
+    LibPrice.actionCostUp(EEmpire.Red, EPlayerAction.CreateShip);
+    uint256 finalActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip);
     assertEq(
       finalActionCost,
       nextActionCost + actionConfig.actionCostIncrease,
       "Second action cost increase incorrect"
     );
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.KillDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.KillShip),
       actionConfig.startActionCost,
       "Red Empire's other action costs should not change"
     );
     assertEq(
-      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip),
       actionConfig.startActionCost,
       "Blue Empire's other action costs should not change"
     );
     assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip),
       actionConfig.startActionCost,
       "Green Empire's other action costs should not change"
     );
@@ -240,122 +248,106 @@ contract LibPriceTest is PrimodiumTest {
 
   function testEmpirePlayerActionsCostDown() public {
     vm.startPrank(creator);
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateDestroyer, actionConfig.minActionCost + actionConfig.actionGenRate);
-    ActionCost.set(EEmpire.Red, EPlayerAction.KillDestroyer, actionConfig.minActionCost + actionConfig.actionGenRate);
-    ActionCost.set(
-      EEmpire.Blue,
-      EPlayerAction.CreateDestroyer,
-      actionConfig.minActionCost + actionConfig.actionGenRate
-    );
-    ActionCost.set(EEmpire.Blue, EPlayerAction.KillDestroyer, actionConfig.minActionCost + actionConfig.actionGenRate);
-    ActionCost.set(
-      EEmpire.Green,
-      EPlayerAction.CreateDestroyer,
-      actionConfig.minActionCost + actionConfig.actionGenRate
-    );
-    ActionCost.set(EEmpire.Green, EPlayerAction.KillDestroyer, actionConfig.minActionCost + actionConfig.actionGenRate);
+    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate);
+    ActionCost.set(EEmpire.Red, EPlayerAction.KillShip, actionConfig.minActionCost + actionConfig.actionGenRate);
+    ActionCost.set(EEmpire.Blue, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate);
+    ActionCost.set(EEmpire.Blue, EPlayerAction.KillShip, actionConfig.minActionCost + actionConfig.actionGenRate);
+    ActionCost.set(EEmpire.Green, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate);
+    ActionCost.set(EEmpire.Green, EPlayerAction.KillShip, actionConfig.minActionCost + actionConfig.actionGenRate);
 
     LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
       actionConfig.minActionCost,
       "Red Empire action cost down incorrect when matching gen rate"
     );
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.KillDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.KillShip),
       actionConfig.minActionCost,
       "Red Empire action cost down should affect all actions of the empire"
     );
     assertEq(
-      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip),
       actionConfig.minActionCost + actionConfig.actionGenRate,
       "Blue Empire action cost should not change"
     );
     assertEq(
-      ActionCost.get(EEmpire.Blue, EPlayerAction.KillDestroyer),
+      ActionCost.get(EEmpire.Blue, EPlayerAction.KillShip),
       actionConfig.minActionCost + actionConfig.actionGenRate,
       "Blue Empire action cost should not change"
     );
     assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip),
       actionConfig.minActionCost + actionConfig.actionGenRate,
       "Green Empire action cost should not change"
     );
     assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.KillDestroyer),
+      ActionCost.get(EEmpire.Green, EPlayerAction.KillShip),
       actionConfig.minActionCost + actionConfig.actionGenRate,
       "Green Empire action cost should not change"
     );
 
-    ActionCost.set(
-      EEmpire.Red,
-      EPlayerAction.CreateDestroyer,
-      actionConfig.minActionCost + actionConfig.actionGenRate - 1
-    );
+    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate - 1);
     LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
       actionConfig.minActionCost,
       "Red Empire action cost down incorrect when less than gen rate"
     );
 
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateDestroyer, actionConfig.minActionCost);
+    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, actionConfig.minActionCost);
     LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
       actionConfig.minActionCost,
       "Red Empire action cost down incorrect when at min cost"
     );
 
-    ActionCost.set(
-      EEmpire.Red,
-      EPlayerAction.CreateDestroyer,
-      actionConfig.minActionCost + actionConfig.actionGenRate + 1
-    );
+    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate + 1);
     LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
       actionConfig.minActionCost + 1,
       "Red Empire action cost down incorrect when greater than gen rate"
     );
 
     ActionCost.set(
       EEmpire.Red,
-      EPlayerAction.CreateDestroyer,
+      EPlayerAction.CreateShip,
       actionConfig.minActionCost + actionConfig.actionGenRate * 2 + 1
     );
     LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
       actionConfig.minActionCost + actionConfig.actionGenRate + 1,
       "Red Empire action cost down incorrect when much greater than gen rate"
     );
     LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
       actionConfig.minActionCost + 1,
       "Sequential Action cost down not working"
     );
 
     assertEq(
-      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip),
       actionConfig.minActionCost + actionConfig.actionGenRate,
       "Blue Empire action cost should remain unchanged"
     );
     assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip),
       actionConfig.minActionCost + actionConfig.actionGenRate,
       "Green Empire action cost should remain unchanged"
     );
 
     LibPrice.empirePlayerActionsCostDown(EEmpire.Green);
     assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip),
       actionConfig.minActionCost,
       "Empire action cost down incorrect when different empire"
     );
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer),
+      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
       actionConfig.minActionCost + 1,
       "Red Empire action cost should remain unchanged"
     );
@@ -390,10 +382,26 @@ contract LibPriceTest is PrimodiumTest {
     Faction.setPointCost(EEmpire.Blue, config.minPointCost + config.pointCostIncrease + 1);
     Faction.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
 
-    assertEq(LibPrice.getPointSaleValue(EEmpire.Red, 1 * pointUnit), config.minPointCost, "Red Empire point sale value incorrect");
-    assertEq(LibPrice.getPointSaleValue(EEmpire.Blue, 1 * pointUnit), config.minPointCost + 1, "Blue Empire point sale value incorrect");
-    assertEq(LibPrice.getPointSaleValue(EEmpire.Green, 1 * pointUnit), config.minPointCost + config.pointCostIncrease, "Green Empire point sale value incorrect");
-    assertEq(LibPrice.getPointSaleValue(EEmpire.Green, 2 * pointUnit), config.minPointCost * 2 + config.pointCostIncrease, "Green Empire multiple point sale value incorrect");
+    assertEq(
+      LibPrice.getPointSaleValue(EEmpire.Red, 1 * pointUnit),
+      config.minPointCost,
+      "Red Empire point sale value incorrect"
+    );
+    assertEq(
+      LibPrice.getPointSaleValue(EEmpire.Blue, 1 * pointUnit),
+      config.minPointCost + 1,
+      "Blue Empire point sale value incorrect"
+    );
+    assertEq(
+      LibPrice.getPointSaleValue(EEmpire.Green, 1 * pointUnit),
+      config.minPointCost + config.pointCostIncrease,
+      "Green Empire point sale value incorrect"
+    );
+    assertEq(
+      LibPrice.getPointSaleValue(EEmpire.Green, 2 * pointUnit),
+      config.minPointCost * 2 + config.pointCostIncrease,
+      "Green Empire multiple point sale value incorrect"
+    );
   }
 
   function testGetPointSaleValueWithTax() public {
@@ -405,14 +413,33 @@ contract LibPriceTest is PrimodiumTest {
     Faction.setPointCost(EEmpire.Blue, config.minPointCost + config.pointCostIncrease + 1);
     Faction.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
 
-    assertEq(LibPrice.getPointSaleValue(EEmpire.Red, 1 * pointUnit), config.minPointCost - sellTax, "Red Empire point sale value incorrect");
-    assertEq(LibPrice.getPointSaleValue(EEmpire.Blue, 1 * pointUnit), config.minPointCost - sellTax + 1, "Blue Empire point sale value incorrect");
-    assertEq(LibPrice.getPointSaleValue(EEmpire.Green, 1 * pointUnit), config.minPointCost - sellTax + config.pointCostIncrease, "Green Empire point sale value incorrect");
-    assertEq(LibPrice.getPointSaleValue(EEmpire.Green, 2 * pointUnit), (config.minPointCost - sellTax) * 2 + config.pointCostIncrease, "Green Empire multiple point sale value incorrect");
+    assertEq(
+      LibPrice.getPointSaleValue(EEmpire.Red, 1 * pointUnit),
+      config.minPointCost - sellTax,
+      "Red Empire point sale value incorrect"
+    );
+    assertEq(
+      LibPrice.getPointSaleValue(EEmpire.Blue, 1 * pointUnit),
+      config.minPointCost - sellTax + 1,
+      "Blue Empire point sale value incorrect"
+    );
+    assertEq(
+      LibPrice.getPointSaleValue(EEmpire.Green, 1 * pointUnit),
+      config.minPointCost - sellTax + config.pointCostIncrease,
+      "Green Empire point sale value incorrect"
+    );
+    assertEq(
+      LibPrice.getPointSaleValue(EEmpire.Green, 2 * pointUnit),
+      (config.minPointCost - sellTax) * 2 + config.pointCostIncrease,
+      "Green Empire multiple point sale value incorrect"
+    );
   }
 
   function testSellTaxLessThanIncrease() public {
-    assertTrue(config.pointSellTax < config.pointCostIncrease, "Sell tax should be less than point cost increase in config");
+    assertTrue(
+      config.pointSellTax < config.pointCostIncrease,
+      "Sell tax should be less than point cost increase in config"
+    );
   }
 
   function testFailSellEmpirePointCostDownMinPrice() public {
@@ -446,17 +473,27 @@ contract LibPriceTest is PrimodiumTest {
     LibPrice.sellEmpirePointCostDown(EEmpire.Blue, 1 * pointUnit);
     LibPrice.sellEmpirePointCostDown(EEmpire.Green, 1 * pointUnit);
 
-
     assertEq(Faction.getPointCost(EEmpire.Red), config.minPointCost, "Red Empire point cost after sale incorrect");
-    assertEq(Faction.getPointCost(EEmpire.Blue), config.minPointCost + 1, "Blue Empire point cost after sale incorrect");
-    assertEq(Faction.getPointCost(EEmpire.Green), config.minPointCost + config.pointCostIncrease, "Green Empire point cost after sale incorrect");
+    assertEq(
+      Faction.getPointCost(EEmpire.Blue),
+      config.minPointCost + 1,
+      "Blue Empire point cost after sale incorrect"
+    );
+    assertEq(
+      Faction.getPointCost(EEmpire.Green),
+      config.minPointCost + config.pointCostIncrease,
+      "Green Empire point cost after sale incorrect"
+    );
   }
 
   function testSellEmpirePointCostDownMultiple() public {
     vm.startPrank(creator);
     Faction.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
     LibPrice.sellEmpirePointCostDown(EEmpire.Green, 2 * pointUnit);
-    assertEq(Faction.getPointCost(EEmpire.Green), config.minPointCost, "Green Empire point cost after multiple points sold incorrect");
+    assertEq(
+      Faction.getPointCost(EEmpire.Green),
+      config.minPointCost,
+      "Green Empire point cost after multiple points sold incorrect"
+    );
   }
-
 }

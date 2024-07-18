@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, PlanetData, Player, P_PointConfig, CreateDestroyerPlayerAction, CreateDestroyerPlayerActionData, KillDestroyerPlayerAction, KillDestroyerPlayerActionData } from "codegen/index.sol";
+import { Planet, PlanetData, Player, P_PointConfig, CreateShipPlayerAction, CreateShipPlayerActionData, KillShipPlayerAction, KillShipPlayerActionData } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -14,27 +14,27 @@ import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 
 /**
  * @title ActionSystem
- * @dev A contract that handles actions related to creating and killing destroyers on a planet.
+ * @dev A contract that handles actions related to creating and killing ships on a planet.
  */
 contract ActionSystem is EmpiresSystem {
   /**
-   * @dev A player purchaseable action that creates a destroyer on a planet.
+   * @dev A player purchaseable action that creates a ship on a planet.
    * @param _planetId The ID of the planet.
    */
-  function createDestroyer(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function createShip(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, planetData.factionId, true);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, planetData.factionId, true);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.CreateDestroyer, planetData.factionId, true, _msgValue());
+    _purchaseAction(EPlayerAction.CreateShip, planetData.factionId, true, _msgValue());
 
-    Planet.setDestroyerCount(_planetId, planetData.destroyerCount + 1);
+    Planet.setShipCount(_planetId, planetData.shipCount + 1);
 
-    CreateDestroyerPlayerAction.set(
+    CreateShipPlayerAction.set(
       pseudorandomEntity(),
-      CreateDestroyerPlayerActionData({
+      CreateShipPlayerActionData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
@@ -44,23 +44,23 @@ contract ActionSystem is EmpiresSystem {
   }
 
   /**
-   * @dev A player purchaseable action that kills a destroyer on a planet.
+   * @dev A player purchaseable action that kills a ship on a planet.
    * @param _planetId The ID of the planet.
    */
-  function killDestroyer(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function killShip(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
-    require(planetData.destroyerCount > 0, "[ActionSystem] No destroyers to kill");
+    require(planetData.shipCount > 0, "[ActionSystem] No ships to kill");
     require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillDestroyer, planetData.factionId, false);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.factionId, false);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.KillDestroyer, planetData.factionId, false, _msgValue());
+    _purchaseAction(EPlayerAction.KillShip, planetData.factionId, false, _msgValue());
 
-    Planet.setDestroyerCount(_planetId, planetData.destroyerCount - 1);
-    KillDestroyerPlayerAction.set(
+    Planet.setShipCount(_planetId, planetData.shipCount - 1);
+    KillShipPlayerAction.set(
       pseudorandomEntity(),
-      KillDestroyerPlayerActionData({
+      KillShipPlayerActionData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,

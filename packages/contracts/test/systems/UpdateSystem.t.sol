@@ -62,22 +62,22 @@ contract UpdateSystemTest is PrimodiumTest {
     assertEq(Planet.getGoldCount(planetId), 100);
   }
 
-  function testSpendGoldBuyDestroyersAction() public {
-    uint256 destroyersAction = P_NPCActionThresholds.getBuyDestroyers() - 1;
+  function testSpendGoldBuyShipsAction() public {
+    uint256 shipsAction = P_NPCActionThresholds.getBuyShips() - 1;
     uint256 gold = 9;
 
     Planet.setGoldCount(planetId, gold);
 
-    uint256 destroyerPrice = 2;
-    P_NPCActionCosts.set(ENPCAction.BuyDestroyers, destroyerPrice);
+    uint256 shipPrice = 2;
+    P_NPCActionCosts.set(ENPCAction.BuyShips, shipPrice);
 
-    uint256 expectedDestroyers = gold / destroyerPrice;
-    uint256 expectedRemainder = gold % destroyerPrice;
+    uint256 expectedShips = gold / shipPrice;
+    uint256 expectedRemainder = gold % shipPrice;
 
-    LibGold._spendGold(planetId, destroyersAction);
+    LibGold._spendGold(planetId, shipsAction);
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
-    assertEq(Planet.getDestroyerCount(planetId), expectedDestroyers, "destroyers wrong");
+    assertEq(Planet.getShipCount(planetId), expectedShips, "ships wrong");
   }
 
   function testGeneratePointsAndPlayerActions() public {
@@ -89,12 +89,12 @@ contract UpdateSystemTest is PrimodiumTest {
 
     P_ActionConfigData memory actionCfg = P_ActionConfig.get();
     uint256 beginActionCost = actionCfg.minActionCost + actionCfg.actionGenRate;
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Red, EPlayerAction.KillDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Blue, EPlayerAction.CreateDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Blue, EPlayerAction.KillDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Green, EPlayerAction.CreateDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Green, EPlayerAction.KillDestroyer, beginActionCost);
+    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, beginActionCost);
+    ActionCost.set(EEmpire.Red, EPlayerAction.KillShip, beginActionCost);
+    ActionCost.set(EEmpire.Blue, EPlayerAction.CreateShip, beginActionCost);
+    ActionCost.set(EEmpire.Blue, EPlayerAction.KillShip, beginActionCost);
+    ActionCost.set(EEmpire.Green, EPlayerAction.CreateShip, beginActionCost);
+    ActionCost.set(EEmpire.Green, EPlayerAction.KillShip, beginActionCost);
 
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld();
@@ -103,13 +103,11 @@ contract UpdateSystemTest is PrimodiumTest {
     assertEq(Faction.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
     assertEq(Faction.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
 
-    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
-
-
+    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
   }
 }

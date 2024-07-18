@@ -40,8 +40,8 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
   function testWithdrawRake() public {
     P_PointConfig.setPointRake(5000);
     switchPrank(alice);
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
-    world.Empires__createDestroyer{ value: cost }(planetId);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getFactionId(planetId), true);
+    world.Empires__createShip{ value: cost }(planetId);
     assertEq(Balances.get(ADMIN_NAMESPACE_ID), cost / 2, "rake value correct");
 
     ResourceId systemId = WorldResourceIdLib.encode({

@@ -8,18 +8,15 @@ import { pseudorandomEntity } from "src/utils.sol";
 
 library LibResolveCombat {
   function resolveCombat(EEmpire empire, bytes32 planetId) internal {
-    uint256 arrivingDestroyers = Arrivals.get(planetId);
-    if (arrivingDestroyers == 0) return;
+    uint256 arrivingShips = Arrivals.get(planetId);
+    if (arrivingShips == 0) return;
 
     PlanetData memory planetData = Planet.get(planetId);
-    if (empire == planetData.factionId)
-      Planet.setDestroyerCount(planetId, planetData.destroyerCount + arrivingDestroyers);
+    if (empire == planetData.factionId) Planet.setShipCount(planetId, planetData.shipCount + arrivingShips);
     else {
-      bool conquer = planetData.destroyerCount < arrivingDestroyers;
+      bool conquer = planetData.shipCount < arrivingShips;
 
-      uint256 remainingDestroyers = conquer
-        ? arrivingDestroyers - planetData.destroyerCount
-        : planetData.destroyerCount - arrivingDestroyers;
+      uint256 remainingShips = conquer ? arrivingShips - planetData.shipCount : planetData.shipCount - arrivingShips;
 
       if (conquer) {
         FactionPlanetsSet.add(empire, planetId);
@@ -28,13 +25,13 @@ library LibResolveCombat {
         Planet.setFactionId(planetId, empire);
       }
 
-      Planet.setDestroyerCount(planetId, remainingDestroyers);
+      Planet.setShipCount(planetId, remainingShips);
       BattleNPCAction.set(
         pseudorandomEntity(),
         BattleNPCActionData({
           planetId: planetId,
-          attackingShipCount: arrivingDestroyers,
-          defendingShipCount: planetData.destroyerCount,
+          attackingShipCount: arrivingShips,
+          defendingShipCount: planetData.shipCount,
           conquer: conquer,
           timestamp: block.timestamp
         })

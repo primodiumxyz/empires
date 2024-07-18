@@ -92,7 +92,7 @@ export const worldInput = {
         q: "int128",
         r: "int128",
         isPlanet: "bool",
-        destroyerCount: "uint256",
+        shipCount: "uint256",
         goldCount: "uint256",
         factionId: "EEmpire",
       },
@@ -145,7 +145,7 @@ export const worldInput = {
       key: [],
       schema: {
         none: "uint256",
-        buyDestroyers: "uint256",
+        buyShips: "uint256",
       },
     },
 
@@ -172,7 +172,7 @@ export const worldInput = {
       key: ["planetId"],
       schema: {
         planetId: "bytes32",
-        destroyerCount: "uint256",
+        shipCount: "uint256",
       },
     },
 
@@ -211,19 +211,19 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyDestroyersNPCAction: {
+    BuyShipsNPCAction: {
       key: ["id"],
       schema: {
         id: "bytes32",
         planetId: "bytes32",
         goldSpent: "uint256",
-        destroyerBought: "uint256",
+        shipBought: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
     },
 
-    CreateDestroyerPlayerAction: {
+    CreateShipPlayerAction: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -235,7 +235,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    KillDestroyerPlayerAction: {
+    KillShipPlayerAction: {
       key: ["id"],
       schema: {
         id: "bytes32",
