@@ -4,10 +4,11 @@ import { EEmpire, EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { Tables } from "@core/lib";
 
 const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
+const PROGRESS_ACTIONS = [EPlayerAction.CreateDestroyer, EPlayerAction.ChargeShield];
 
 export function createPriceUtils(tables: Tables) {
   function getTotalCost(_actionType: EPlayerAction, _empireImpacted: EEmpire): bigint {
-    const progressAction = _actionType == EPlayerAction.CreateDestroyer;
+    const progressAction = PROGRESS_ACTIONS.includes(_actionType);
     let totalCost = 0n;
     if (progressAction) {
       totalCost = getProgressPointCost(_empireImpacted);
