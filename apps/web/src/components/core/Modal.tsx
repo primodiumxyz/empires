@@ -1,94 +1,167 @@
-import { Dispatch, FC, forwardRef, ReactNode, SetStateAction, useEffect, useRef, useState } from "react";
-import { XCircleIcon } from "@heroicons/react/24/solid";
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import ReactDOM from "react-dom";
 
+import { KeybindActionKeys } from "@primodiumxyz/game";
+import { Button } from "@/components/core/Button";
+import { Card } from "@/components/core/Card";
+import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
 
-import "@/index.css";
+// TODO: default overlow-y behavior on modal
+interface ModalContextType {
+  isOpen: boolean;
+  title?: string;
+  handleClose: () => void;
+  blockClose: boolean;
+  handleOpen: () => void;
+}
 
-/* ---------------------------------- MODAL --------------------------------- */
-
-export const Modal: FC<{ children: ReactNode; icon: ReactNode; buttonClassName?: string }> = ({
-  children,
-  icon,
-  buttonClassName,
-}) => {
-  const [open, setOpen] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const closeModal = (e: MouseEvent) => {
-      if (!open || !modalRef.current || !buttonRef.current) return;
-      if (!modalRef.current.contains(e.target as Node) && !buttonRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("click", closeModal);
-    return () => document.removeEventListener("click", closeModal);
-  }, [open]);
-
-  return (
-    <>
-      {/* open button */}
-      <ModalOpenButton
-        ref={buttonRef}
-        icon={icon}
-        setOpen={setOpen}
-        className={cn(buttonClassName, open ? "hidden" : "")}
-      />
-      {/* overlay */}
-      <div
-        className={cn(
-          "absolute h-[95%] w-[95%] rounded-btn bg-gray-950 bg-opacity-90 md:h-[90%] md:w-[90%]",
-          !open && "hidden",
-        )}
-      />
-      {/* modal */}
-      <div
-        ref={modalRef}
-        className={cn(
-          "absolute flex h-[95%] w-[95%] flex-col gap-2 py-4 pl-4 pr-2 md:h-[90%] md:w-[90%]",
-          !open && "hidden",
-        )}
-      >
-        {/* close button */}
-        <ModalCloseButton setOpen={setOpen} />
-        {/* content */}
-        {children}
-      </div>
-    </>
-  );
-};
-
-/* --------------------------------- BUTTONS -------------------------------- */
-
-type ModalButtonProps = {
-  icon: ReactNode;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  className?: string;
-};
-
-const ModalOpenButton = forwardRef<HTMLButtonElement, ModalButtonProps>(({ icon, setOpen, className }, ref) => {
-  return (
-    <button
-      ref={ref}
-      className={cn(
-        "absolute bottom-10 right-2 flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-btn bg-white opacity-70 transition-opacity hover:opacity-100",
-        className,
-      )}
-      onClick={() => setOpen(true)}
-    >
-      {icon}
-    </button>
-  );
+const ModalContext = createContext<ModalContextType>({
+  isOpen: false,
+  title: undefined,
+  handleClose: () => null,
+  handleOpen: () => null,
+  blockClose: false,
 });
 
-const ModalCloseButton = ({ setOpen, icon, className }: Omit<ModalButtonProps, "icon"> & { icon?: ReactNode }) => (
-  <button
-    className={cn("absolute right-2 top-2 rounded-btn bg-neutral p-2 transition-colors hover:bg-primary", className)}
-    onClick={() => setOpen(false)}
-  >
-    {icon ?? <XCircleIcon className="h-6 w-6" />}
-  </button>
-);
+interface ModalProps {
+  children: ReactNode;
+  title?: string;
+  keybind?: KeybindActionKeys;
+  keybindClose?: boolean;
+  startOpen?: boolean;
+  onClose?: () => void;
+  blockClose?: boolean;
+}
+
+export const Modal: React.FC<ModalProps> & {
+  Button: React.FC<React.ComponentProps<typeof Button>>;
+  CloseButton: React.FC<React.ComponentProps<typeof Button>>;
+  Content: React.FC<{ children: ReactNode; className?: string }>;
+} = ({ children, title, keybind, keybindClose, startOpen = false, onClose, blockClose = false }) => {
+  const [isOpen, setIsOpen] = useState(startOpen);
+  const game = useGame();
+  const {
+    audio,
+    input: { addListener },
+  } = useRef(game.UI).current;
+
+  const handleClose = useCallback(() => {
+    if (blockClose || !isOpen) return;
+    audio.play("Sequence2", "ui");
+    onClose?.();
+    setIsOpen(false);
+  }, [isOpen, audio, onClose]);
+
+  useEffect(() => {
+    const handleOpenPress = () => {
+      if (!isOpen) setIsOpen(true);
+      if (isOpen && keybindClose) setIsOpen(false);
+    };
+
+    if (isOpen) {
+      game.GLOBAL.disableGlobalInput();
+    } else {
+      game.GLOBAL.enableGlobalInput();
+    }
+
+    const openListener = keybind ? addListener(keybind, handleOpenPress) : null;
+    // use a dom listener to keep esc in any case
+    const closeOnEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        handleClose();
+      }
+    };
+    addEventListener("keydown", closeOnEsc);
+
+    return () => {
+      openListener?.dispose();
+      removeEventListener("keydown", closeOnEsc);
+
+      game.GLOBAL.enableGlobalInput();
+    };
+  }, [isOpen, audio, keybind, keybindClose, addListener, game, handleClose]);
+
+  return (
+    <ModalContext.Provider
+      value={{
+        isOpen,
+        handleClose,
+        title,
+        handleOpen: () => setIsOpen(true),
+        blockClose,
+      }}
+    >
+      {children}
+    </ModalContext.Provider>
+  );
+};
+
+Modal.Button = function ModalButton(props: React.ComponentProps<typeof Button>) {
+  const { handleOpen } = useContext(ModalContext);
+
+  return (
+    <Button
+      {...props}
+      clickSound={props.clickSound ?? "Sequence"}
+      onClick={(e) => {
+        handleOpen();
+        props.onClick?.(e);
+      }}
+    />
+  );
+};
+
+Modal.CloseButton = function ModalButton(props: React.ComponentProps<typeof Button>) {
+  const { handleClose } = useContext(ModalContext);
+
+  return (
+    <Button
+      {...props}
+      clickSound={props.clickSound ?? "Sequence"}
+      onClick={(e) => {
+        if (props.onClick) props.onClick(e);
+        handleClose();
+      }}
+    />
+  );
+};
+
+Modal.Content = function ModalContent({ children, className }) {
+  const { isOpen, title, blockClose, handleClose } = useContext(ModalContext);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      handleClose();
+    }
+  };
+
+  if (!isOpen) return null;
+  return ReactDOM.createPortal(
+    <div
+      className="absolute top-0 flex h-screen w-screen items-center justify-center bg-secondary/10 backdrop-blur-md ease-in-out animate-in fade-in"
+      onClick={handleClickOutside}
+    >
+      <div
+        className={cn("max-h-screen w-screen max-w-screen-xl space-y-2 p-5 pt-12 md:w-[90%]", className)}
+        ref={modalRef}
+      >
+        <Card className="pointer-events-auto h-full w-full shadow-2xl" noMotion>
+          <div className="absolute top-0 flex w-full -translate-y-full items-center justify-between p-2">
+            <p className="pr-2 font-bold uppercase text-accent">{title}</p>
+            {!blockClose && (
+              <Button onClick={handleClose} className="ghost btn-sm">
+                <XMarkIcon className="size-4" />
+              </Button>
+            )}
+          </div>
+          {children}
+        </Card>
+      </div>
+    </div>,
+    document.getElementById("modal-root")!,
+  );
+};

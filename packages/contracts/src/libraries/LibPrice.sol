@@ -41,7 +41,7 @@ library LibPrice {
    * @return pointCost The cost of all points related to the action.
    */
   function getProgressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
-    return getPointCost(_empireImpacted, EMPIRE_COUNT - 1);
+    return getPointCost(_empireImpacted, (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit());
   }
 
   /**
@@ -55,7 +55,7 @@ library LibPrice {
       if (i == uint256(_empireImpacted)) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), 1);
+      pointCost += getPointCost(EEmpire(i), P_PointConfig.getPointUnit());
     }
     return pointCost;
   }
@@ -63,27 +63,35 @@ library LibPrice {
   /**
    * @dev Calculates the cost of a specific number of points for a specific empire.
    * @param _empire The empire to purchase points from.
-   * @param _pointUnits The number of points.
+   * @param _points The number of points. (in 1e18)
    * @return pointCost The cost of the points from the specific empire.
    */
-  function getPointCost(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
-    require(_pointUnits > 0, "[LibPrice] Point units must be greater than 0");
+  function getPointCost(EEmpire _empire, uint256 _points) internal view returns (uint256) {
+    uint256 pointUnit = P_PointConfig.getPointUnit();
+    require(_points > 0, "[LibPrice] Points must be greater than 0");
+    require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+
     uint256 initPointCost = Faction.getPointCost(_empire);
     uint256 pointCostIncrease = P_PointConfig.getPointCostIncrease();
-    uint256 pointCost = 0;
-    for (uint256 i = 0; i < _pointUnits; i++) {
-      pointCost += initPointCost + i * pointCostIncrease;
-    }
+    uint256 wholePoints = _points / pointUnit;
+
+    uint256 triangleSumOBO = (wholePoints - 1) * wholePoints / 2;
+    uint256 pointCost = initPointCost * wholePoints + pointCostIncrease * triangleSumOBO;
     return pointCost;
   }
 
   /**
    * @dev Increases the cost of points for a specific empire.
    * @param _empire The empire to increase the point cost for.
-   * @param _pointUnits The number of point units to increase the cost by.
+   * @param _points The number of point units to increase the cost by.
    */
-  function pointCostUp(EEmpire _empire, uint256 _pointUnits) internal {
-    uint256 newPointCost = Faction.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * _pointUnits;
+  function pointCostUp(EEmpire _empire, uint256 _points) internal {
+    uint256 pointUnit = P_PointConfig.getPointUnit();
+    require(_points > 0, "[LibPrice] Points must be greater than 0");
+    require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+    uint256 wholePoints = _points / pointUnit;
+    
+    uint256 newPointCost = Faction.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * wholePoints;
     Faction.setPointCost(_empire, newPointCost);
     HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
   }
@@ -135,21 +143,26 @@ library LibPrice {
    * @dev Calculates the value of selling a specific number of points from a specific empire.
    * @notice The value of the points sold is calculated based on the current point cost and the point sell tax. Reverts if exceeding the minimum point cost.
    * @param _empire The empire to sell points from.
-   * @param _pointUnits The number of points to sell.
+   * @param _points The number of points to sell.
    * @return pointSaleValue The value of the points to be sold.
    */
-  function getPointSaleValue(EEmpire _empire, uint256 _pointUnits) internal view returns (uint256) {
+  function getPointSaleValue(EEmpire _empire, uint256 _points) internal view returns (uint256) {
     P_PointConfigData memory config = P_PointConfig.get();
-    uint256 pointCostDecrease = config.pointCostIncrease;
+    uint256 pointUnit = config.pointUnit;
+
+    require(_points > 0, "[LibPrice] Points must be greater than 0");
+    require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+    uint256 wholePoints = _points / pointUnit;
     uint256 currentPointCost = Faction.getPointCost(_empire);
+    uint256 pointCostDecrease = config.pointCostIncrease;
 
     require(
-      currentPointCost >= config.minPointCost + pointCostDecrease * _pointUnits,
+      currentPointCost >= config.minPointCost + pointCostDecrease * wholePoints,
       "[LibPrice] Selling points beyond minimum price"
     );
 
-    uint256 triangleSum = _pointUnits * (_pointUnits + 1) / 2;
-    uint256 totalSaleValue = (currentPointCost - config.pointSellTax) * _pointUnits - pointCostDecrease * triangleSum;
+    uint256 triangleSum = wholePoints * (wholePoints + 1) / 2;
+    uint256 totalSaleValue = (currentPointCost - config.pointSellTax) * wholePoints - pointCostDecrease * triangleSum;
 
     return totalSaleValue;
   }
@@ -157,14 +170,21 @@ library LibPrice {
   /**
    * @dev Decreases an empire's point cost by a specific number of point units.
    * @param _empire The empire for which the point cost is being decreased.
-   * @param _pointUnits The number of point units to decrease the cost by.
+   * @param _points The number of point units to decrease the cost by.
    * @notice If the resulting point cost after the decrease is less than the minimum point cost, the function reverts with an error message.
    */
-  function sellEmpirePointCostDown(EEmpire _empire, uint256 _pointUnits) internal {
+  function sellEmpirePointCostDown(EEmpire _empire, uint256 _points) internal {
+    P_PointConfigData memory config = P_PointConfig.get();
+    uint256 pointUnit = config.pointUnit;
+    require(_points > 0, "[LibPrice] Points must be greater than 0");
+    require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+    uint256 wholePoints = _points / pointUnit;
+    
     uint256 currentPointCost = Faction.getPointCost(_empire);
-    uint256 pointCostDecrease = P_PointConfig.getPointCostIncrease();
-    if (currentPointCost >= P_PointConfig.getMinPointCost() + pointCostDecrease * _pointUnits) {
-      uint256 newPointCost = currentPointCost - pointCostDecrease * _pointUnits;
+    uint256 pointCostDecrease = config.pointCostIncrease;
+    
+    if (currentPointCost >= config.minPointCost + pointCostDecrease * wholePoints) {
+      uint256 newPointCost = currentPointCost - pointCostDecrease * wholePoints;
       Faction.setPointCost(_empire, newPointCost);
       HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
     } else {

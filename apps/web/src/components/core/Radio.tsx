@@ -22,7 +22,7 @@ const RadioButton: React.FC<{
 
         <div
           className={cn(
-            "flex aspect-square h-6 w-6 items-center justify-center border border-2 border-primary",
+            "active:cursor-pointerDown flex aspect-square h-6 w-6 items-center justify-center border-2 border-primary",
             className,
           )}
         >

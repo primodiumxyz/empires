@@ -2,23 +2,28 @@ import { Hex } from "viem";
 
 import { EEmpire, ENPCAction, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
-import { Entity, Properties } from "@primodiumxyz/reactive-tables";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
 import { EmpireEnumToName } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
+export const CheatcodeToBg: Record<string, string> = {
+  destroyers: "bg-red-500/10",
+  gold: "bg-yellow-500/10",
+  points: "bg-green-500/10",
+  time: "bg-blue-500/10",
+  config: "bg-gray-500/10",
+};
+
 export const setupCheatcodes = (core: Core, accountClient: AccountClient, contractCalls: ContractCalls) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { updateWorld, requestDrip, setTableValue, removeTable } = contractCalls;
+  const { updateWorld, requestDrip, setTableValue, removeTable, resetGame: _resetGame } = contractCalls;
 
   // game
   const factions = tables.Faction.getAll();
   const planets = tables.Planet.getAll();
-  const planetsData = planets
-    .map((entity) => tables.Planet.get(entity))
-    .filter((planetData) => !!planetData?.factionId) as unknown as Properties<typeof tables.Planet.propertiesSchema>[];
 
   // config
   const gameConfig = tables.P_GameConfig.get();
@@ -27,31 +32,12 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const npcActionThresholds = tables.P_NPCActionThresholds.get();
   const npcMoveThresholds = tables.P_NPCMoveThresholds.get();
 
-  // utils
-  const getNearbyPlanetEntities = (planet: Properties<typeof tables.Planet.propertiesSchema>) => {
-    const { q, r } = { q: Number(planet.q), r: Number(planet.r) };
-    return [
-      { q: q - 1, r: r },
-      { q: q + 1, r: r },
-      { q: q, r: r - 1 },
-      { q: q, r: r + 1 },
-      { q: q - 1, r: r + 1 },
-      { q: q + 1, r: r - 1 },
-    ]
-      .map(({ q, r }) =>
-        planets.find((entity) => {
-          const planetData = tables.Planet.get(entity);
-          return planetData?.q === BigInt(q) && planetData?.r === BigInt(r);
-        }),
-      )
-      .filter(Boolean) as Entity[];
-  };
-
   /* ------------------------------- DESTROYERS ------------------------------- */
   // Set the amount of destroyers on a planet
   const setDestroyers = createCheatcode({
     title: "Set destroyers",
     caption: "Set the amount of destroyers on a planet",
+    bg: CheatcodeToBg["destroyers"],
     inputs: {
       planet: {
         label: "Planet",
@@ -133,6 +119,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   // send destroyers from a planet to another
   const sendDestroyers = createCheatcode({
     title: "Send destroyers",
+    bg: CheatcodeToBg["destroyers"],
     caption: "Send destroyers from one planet to another",
     inputs: {
       from: {
@@ -214,6 +201,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   // set gold count for a planet
   const setGoldCount = createCheatcode({
     title: "Set gold",
+    bg: CheatcodeToBg["gold"],
     caption: "Set the gold count for a planet",
     inputs: {
       amount: {
@@ -247,10 +235,11 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     },
   });
 
-  // generate gold on all planetsData
+  // generate gold on all planets
   const generateGold = createCheatcode({
     title: "Generate gold",
-    caption: "Give a specified amount of gold to all planetsData",
+    bg: CheatcodeToBg["gold"],
+    caption: "Give a specified amount of gold to all planets",
     inputs: {
       amount: {
         label: "Amount",
@@ -279,9 +268,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     },
   });
 
-  /* --------------------------------- SHARES --------------------------------- */
-  // mint shares from an empire
-
+  /* --------------------------------- POINTS --------------------------------- */
   const setFactionPlayerPoints = async (playerId: Entity, factionId: EEmpire, value: bigint): Promise<boolean> => {
     try {
       const has = tables.Meta_PointsMap.hasWithKeys({ factionId, playerId });
@@ -311,16 +298,17 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       return false;
     }
   };
+
+  // mint shares from an empire
   const givePoints = createCheatcode({
     title: "Give points",
+    bg: CheatcodeToBg["points"],
     caption: "Give points from an empire to an address",
     inputs: {
       empire: {
         label: "Empire",
         inputType: "string",
-        // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
         defaultValue: EmpireEnumToName[Number(factions[0]) as EEmpire],
-        // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
         options: factions.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
       },
       amount: {
@@ -369,6 +357,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   // advance turns
   const advanceTurns = createCheatcode({
     title: "Advance turns",
+    bg: CheatcodeToBg["time"],
     caption: "Advance a specified number of turns",
     inputs: {
       amount: {
@@ -400,6 +389,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   // end game
   const endGame = createCheatcode({
     title: "End game",
+    bg: CheatcodeToBg["time"],
     caption: "End the game",
     inputs: {},
     execute: async () => {
@@ -416,10 +406,30 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     },
   });
 
+  // reset game
+  const resetGame = createCheatcode({
+    title: "Reset game",
+    bg: CheatcodeToBg["time"],
+    caption: "Reset the game",
+    inputs: {},
+    execute: async () => {
+      const success = await _resetGame();
+
+      if (success) {
+        notify("success", "Game reset");
+        return true;
+      } else {
+        notify("error", "Failed to reset game");
+        return false;
+      }
+    },
+  });
+
   /* ---------------------------------- UTILS --------------------------------- */
   // drip eth
   const dripEth = createCheatcode({
     title: "Drip",
+    bg: "bg-purple-500/10",
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
@@ -433,6 +443,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const updateGameConfig = {
     P_GameConfig: createCheatcode({
       title: "Update game config",
+      bg: CheatcodeToBg["config"],
       caption: "P_GameConfig",
       inputs: {
         turnLengthBlocks: {
@@ -480,6 +491,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
     P_PointConfig: createCheatcode({
       title: "Update point config",
+      bg: CheatcodeToBg["config"],
       caption: "P_PointConfig",
       inputs: {
         pointUnit: {
@@ -532,6 +544,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
     P_ActionConfig: createCheatcode({
       title: "Update action config",
+      bg: CheatcodeToBg["config"],
       caption: "P_ActionConfig",
       inputs: {
         actionGenRate: {
@@ -574,6 +587,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
     P_NPCActionCosts: createCheatcode({
       title: "Update NPC action costs",
+      bg: CheatcodeToBg["config"],
       caption: "P_NPCActionCosts",
       inputs: {
         buyDestroyers: {
@@ -602,6 +616,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
     P_NPCActionThresholds: createCheatcode({
       title: "Update NPC action thresholds",
+      bg: CheatcodeToBg["config"],
       caption: "P_NPCActionThresholds",
       inputs: {
         none: {
@@ -639,6 +654,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
     P_NPCMoveThresholds: createCheatcode({
       title: "Update NPC move thresholds",
+      bg: CheatcodeToBg["config"],
       caption: "P_NPCMoveThresholds",
       inputs: {
         none: {
@@ -693,6 +709,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     givePoints,
     advanceTurns,
     endGame,
+    resetGame,
     dripEth,
     ...Object.values(updateGameConfig),
   ];

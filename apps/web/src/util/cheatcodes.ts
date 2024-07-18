@@ -19,6 +19,7 @@ export type Cheatcode<T extends CheatcodeInputsBase = CheatcodeInputsBase> = {
   caption: string;
   inputs: T;
   execute: (args: CheatcodeInputs<T>) => Promise<boolean>;
+  bg?: string;
 };
 
 export const createCheatcode = <T extends CheatcodeInputsBase>(cheatcode: Cheatcode<T>): Cheatcode<T> => cheatcode;

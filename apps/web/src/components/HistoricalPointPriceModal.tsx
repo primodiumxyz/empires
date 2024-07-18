@@ -8,25 +8,41 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { Tooltip } from "@/components/core/Tooltip";
-import { EmpireEnumToColor } from "@/components/Planet";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
+const DEV = import.meta.env.PRI_DEV === "true";
 const TICK_LABEL_INTERVAL = 30; // 30 seconds
 const PX_PER_SECOND = 3;
+
+export const EmpireEnumToFillColor: Record<EEmpire, string> = {
+  [EEmpire.Blue]: "stroke-blue-400",
+  [EEmpire.Green]: "stroke-green-400",
+  [EEmpire.Red]: "stroke-red-400",
+  [EEmpire.LENGTH]: "",
+};
+
+export const EmpireEnumToTextColor: Record<EEmpire, string> = {
+  [EEmpire.Blue]: "text-blue-400",
+  [EEmpire.Green]: "text-green-400",
+  [EEmpire.Red]: "text-red-400",
+  [EEmpire.LENGTH]: "",
+};
 
 export const HistoricalPointPriceModal = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
 
   return (
-    <Modal
-      icon={<PresentationChartLineIcon className="h-8 w-8 fill-neutral" />}
-      buttonClassName="bottom-2 right-12 h-14 w-14"
-    >
-      <div className="flex flex-col gap-2">
-        <h1 className="whitespace-nowrap font-semibold uppercase text-gray-300">Points price history</h1>
+    <Modal title="Points Price History">
+      <Modal.Button
+        className={cn("btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-12" : "right-2")}
+        variant="info"
+      >
+        <PresentationChartLineIcon className="size-8" />
+      </Modal.Button>
+      <Modal.Content>
         <RadioGroup
           name="select-empire-chart"
           value={selectedEmpire.toString()}
@@ -35,22 +51,15 @@ export const HistoricalPointPriceModal = () => {
               .map((_, i) => i + 1)
               .map((empire) => ({
                 id: empire.toString(),
-                // @ts-expect-error Property '[EEmpire.LENGTH]' does not exist on type 'typeof EEmpire'.
                 label: empire === EEmpire.LENGTH ? "ALL EMPIRES" : EmpireEnumToName[empire as EEmpire],
               })),
           ]}
           onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
         />
-      </div>
-      <HistoricalPointPriceChart selectedEmpire={selectedEmpire} />
+        <HistoricalPointPriceChart selectedEmpire={selectedEmpire} />
+      </Modal.Content>
     </Modal>
   );
-};
-
-export const ColorToTextClass: Record<string, string> = {
-  blue: "text-blue-400",
-  green: "text-green-400",
-  red: "text-red-400",
 };
 
 const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => {
@@ -94,7 +103,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       {} as Record<string, typeof data>,
     );
 
-    // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous turn)
+    // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
     const allEmpires = Array.from(new Array(EEmpire.LENGTH - 1)).map((_, i) => i + 1);
     const timestampMap = new Map<number, { [key: number]: string }>();
 
@@ -107,7 +116,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       });
     });
 
-    // fill costs for missing turns
+    // fill costs for missing timestamps
     allEmpires.forEach((empire) => {
       let previousCost = "0";
       timestampMap.forEach((costs) => {
@@ -147,7 +156,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     const maxCost = Math.max(...historicalPriceData.map((d) => Number(d.cost)));
 
     const height = 400;
-    const margin = { top: 20, right: 30, bottom: 50, left: 70 };
+    const margin = { top: 20, right: 30, bottom: 50, left: 80 };
     // approx 3px per second
     const totalWidth = margin.left + margin.right + (maxTimestamp - minTimestamp) * PX_PER_SECOND;
 
@@ -236,7 +245,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
           .append("path")
           .datum(historicalPriceData.filter((d) => d.empire === empire))
           .attr("fill", "none")
-          .attr("stroke", EmpireEnumToColor[empire as EEmpire])
+          .attr("class", EmpireEnumToFillColor[empire as EEmpire])
           .attr("stroke-width", 1.5)
           .attr("d", lineGenerator);
       });
@@ -247,7 +256,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("class", "axis-label")
       .attr("text-anchor", "middle")
       .attr("x", -height / 2)
-      .attr("y", margin.left - 50)
+      .attr("y", margin.left - 60)
       .attr("transform", "rotate(-90)")
       .text("Cost (Usd)")
       .attr("fill", "#706f6f")
@@ -259,7 +268,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("text-anchor", "middle")
       .attr("x", totalWidth / 2)
       .attr("y", height - 10)
-      .text("Turn")
+      .text("Time")
       .attr("fill", "#706f6f")
       .style("font-size", "14px");
 
@@ -267,14 +276,14 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     const mouseG = scrollSvg.append("g").attr("class", "mouse-over-effects");
 
     mouseG
-      .append("path") // black vertical line to follow mouse
-      .attr("class", "mouse-line")
+      .append("path") // vertical line to follow mouse
+      .attr("class", "mouse-line-vertical")
       .style("stroke", "#706f6f")
       .style("stroke-width", "1px")
       .style("opacity", "0");
 
     mouseG
-      .append("path") // black horizontal line to follow mouse
+      .append("path") // horizontal line to follow mouse
       .attr("class", "mouse-line-horizontal")
       .style("stroke", "#706f6f")
       .style("stroke-width", "1px")
@@ -287,22 +296,22 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("fill", "none")
       .attr("pointer-events", "all")
       .on("mouseout", () => {
-        select(".mouse-line").style("opacity", "0");
+        select(".mouse-line-vertical").style("opacity", "0");
         select(".mouse-line-horizontal").style("opacity", "0");
       })
       .on("mouseover", () => {
-        select(".mouse-line").style("opacity", "1");
+        select(".mouse-line-vertical").style("opacity", "1");
         select(".mouse-line-horizontal").style("opacity", "1");
       })
       .on("mousemove", function (event) {
         const mouse = pointer(event);
-        select(".mouse-line").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
+        select(".mouse-line-vertical").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
         select(".mouse-line-horizontal").attr("d", `M0,${mouse[1]} ${totalWidth},${mouse[1]}`);
       })
       // and on scroll
       .on("mousewheel", function (event) {
         const mouse = pointer(event);
-        select(".mouse-line").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
+        select(".mouse-line-vertical").attr("d", `M${mouse[0]},${height} ${mouse[0]},0`);
         select(".mouse-line-horizontal").attr("d", `M0,${mouse[1]} ${totalWidth},${mouse[1]}`);
       });
   }, [historicalPriceData, selectedEmpire]);
@@ -343,12 +352,11 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
             <tbody className="divide-y divide-gray-700">
               {Object.entries(prices).map(([_empire, sellPrice]) => {
                 const empire = _empire as unknown as keyof typeof prices;
-                const color = ColorToTextClass[EmpireEnumToColor[Number(empire) as EEmpire]];
+                const color = EmpireEnumToTextColor[Number(empire) as EEmpire];
 
                 return (
                   <tr key={empire}>
                     <td className={cn("whitespace-nowrap px-4 py-2", color)}>
-                      {/* @ts-expect-error Property 'EEmpire' does not exist on type 'typeof EEmpire'. */}
                       {EmpireEnumToName[Number(empire) as EEmpire]}
                     </td>
                     <td className={cn("whitespace-nowrap px-4 py-2", color)}>
