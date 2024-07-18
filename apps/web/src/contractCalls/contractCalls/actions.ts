@@ -15,7 +15,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  const killShip = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const removeShip = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__killShip",
       args: [planetId],
@@ -28,5 +28,16 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  return { createShip, removeShip: killShip };
+  const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__sellPoints",
+      args: [empire, amount],
+      txQueueOptions: {
+        id: "sell-points",
+        ...options,
+      },
+      onComplete: (receipt) => {},
+    });
+  };
+  return { createShip, removeShip, sellPoints };
 };

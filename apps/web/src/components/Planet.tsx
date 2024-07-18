@@ -50,8 +50,8 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire);
   const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire);
 
-  const createShipPriceUsd = utils.ethToUSD(createShipPriceWei, price ?? 0);
-  const killShipPriceUsd = utils.ethToUSD(killShipPriceWei, price ?? 0);
+  const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
+  const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
 
   const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
   const [goldFloatingTexts, setGoldFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
@@ -61,7 +61,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     const listener = tables.CreateShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
       const data = { planetId: current.planetId, shipCount: 1n };
-      console.log({ planetId: data.planetId, entity });
       if (data.planetId !== entity) return;
 
       // Add floating "+1" text
@@ -82,7 +81,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     const listener = tables.KillShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
       const data = { planetId: current.planetId, shipCount: 1n };
-      console.log({ planetId: data.planetId, entity });
       if (data.planetId !== entity) return;
 
       // Add floating "+1" text

@@ -26,7 +26,7 @@ export const Account = () => {
   const { logout } = usePrivy();
   const { cancelBurner, usingBurner } = useBurnerAccount();
   const {
-    utils: { ethToUSD },
+    utils: { weiToUsd },
   } = useCore();
   const { price, loading } = useEthPrice();
 
@@ -55,7 +55,7 @@ export const Account = () => {
             </p>
             <Divider className="my-1 w-16 self-center" />
             {loading && <p>Loading...</p>}
-            {!loading && price && <p>{ethToUSD(balance, price)}</p>}
+            {!loading && price && <p>{weiToUsd(balance, price)}</p>}
             <p className="text-xs">{formatEther(balance)}ETH</p>
             <Divider className="my-1 w-16 self-center" />
             <div className="flex flex-col gap-1">

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useCore } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
@@ -9,6 +9,7 @@ import { Cheatcodes } from "@/components/Cheatcodes";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { PlanetGrid } from "@/components/PlanetGrid";
 import { Pot } from "@/components/Pot";
+import { SellPoints } from "@/components/SellPoints";
 import { TimeLeft } from "@/components/TimeLeft";
 import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
@@ -55,9 +56,10 @@ const Game = () => {
         <div className="absolute bottom-0 left-1/2 m-5 flex -translate-x-1/2 flex-col items-center gap-1">
           <AdvanceTurn />
         </div>
-        <ActionLog />
+        <SellPoints />
       </div>
 
+      <ActionLog />
       <HistoricalPointPriceModal />
       <UserSettings />
       {DEV && <Cheatcodes />}

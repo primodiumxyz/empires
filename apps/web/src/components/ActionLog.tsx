@@ -65,7 +65,7 @@ export const ActionLog = () => {
         actor: formatAddress(action.playerId, true),
         type: "Create Ships",
         timestamp: action.timestamp,
-        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.weiToUsd(action.ethSpent, price ?? 0)}`,
       };
     });
 
@@ -75,7 +75,7 @@ export const ActionLog = () => {
         actor: formatAddress(action.playerId, true),
         type: "Kill Ships",
         timestamp: action.timestamp,
-        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.weiToUsd(action.ethSpent, price ?? 0)}`,
       };
     });
 
@@ -90,7 +90,6 @@ export const ActionLog = () => {
     return allActions;
   }, [moveActions, battleActions, buyActions, createActions, killActions]);
 
-  console.log(actions);
   return (
     <Modal title="Action Log">
       <Modal.Button

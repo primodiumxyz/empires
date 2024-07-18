@@ -82,7 +82,7 @@ const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
   const playerEmpirePoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
   const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
-  const playerPotUSD = price ? utils.ethToUSD(playerPot, price) : "loading...";
+  const playerPotUSD = price ? utils.weiToUsd(playerPot, price) : "loading...";
 
   const empireName = empire == EEmpire.Blue ? "Blue" : empire == EEmpire.Green ? "Green" : "Red";
 
