@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Turn, P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Faction } from "codegen/index.sol";
+import { Turn, P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Empire } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibGold } from "libraries/LibGold.sol";
 import { EEmpire, ENPCAction, EPlayerAction } from "codegen/common.sol";
@@ -20,7 +20,7 @@ contract UpdateSystemTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
   }
 
   function testUpdateExecuted() public {
@@ -83,9 +83,9 @@ contract UpdateSystemTest is PrimodiumTest {
   function testGeneratePointsAndPlayerActions() public {
     P_PointConfigData memory pointCfg = P_PointConfig.get();
     uint256 beginPointCost = pointCfg.minPointCost + pointCfg.pointGenRate;
-    Faction.setPointCost(EEmpire.Red, beginPointCost);
-    Faction.setPointCost(EEmpire.Blue, beginPointCost);
-    Faction.setPointCost(EEmpire.Green, beginPointCost);
+    Empire.setPointCost(EEmpire.Red, beginPointCost);
+    Empire.setPointCost(EEmpire.Blue, beginPointCost);
+    Empire.setPointCost(EEmpire.Green, beginPointCost);
 
     P_ActionConfigData memory actionCfg = P_ActionConfig.get();
     uint256 beginActionCost = actionCfg.minActionCost + actionCfg.actionGenRate;
@@ -99,9 +99,9 @@ contract UpdateSystemTest is PrimodiumTest {
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld();
 
-    assertEq(Faction.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Faction.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Faction.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
 
     assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
     assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);

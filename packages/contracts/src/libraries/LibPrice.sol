@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Player, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
+import { Empire, Player, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 
@@ -71,7 +71,7 @@ library LibPrice {
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
 
-    uint256 initPointCost = Faction.getPointCost(_empire);
+    uint256 initPointCost = Empire.getPointCost(_empire);
     uint256 pointCostIncrease = P_PointConfig.getPointCostIncrease();
     uint256 wholePoints = _points / pointUnit;
 
@@ -91,8 +91,8 @@ library LibPrice {
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
     uint256 wholePoints = _points / pointUnit;
 
-    uint256 newPointCost = Faction.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * wholePoints;
-    Faction.setPointCost(_empire, newPointCost);
+    uint256 newPointCost = Empire.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * wholePoints;
+    Empire.setPointCost(_empire, newPointCost);
     HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
   }
 
@@ -112,13 +112,13 @@ library LibPrice {
    */
   function turnEmpirePointCostDown(EEmpire _empire) internal {
     P_PointConfigData memory config = P_PointConfig.get();
-    uint256 newPointCost = Faction.getPointCost(_empire);
+    uint256 newPointCost = Empire.getPointCost(_empire);
     if (newPointCost >= config.minPointCost + config.pointGenRate) {
       newPointCost -= config.pointGenRate;
     } else {
       newPointCost = config.minPointCost;
     }
-    Faction.setPointCost(_empire, newPointCost);
+    Empire.setPointCost(_empire, newPointCost);
     HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
   }
 
@@ -153,7 +153,7 @@ library LibPrice {
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
     uint256 wholePoints = _points / pointUnit;
-    uint256 currentPointCost = Faction.getPointCost(_empire);
+    uint256 currentPointCost = Empire.getPointCost(_empire);
     uint256 pointCostDecrease = config.pointCostIncrease;
 
     require(
@@ -180,12 +180,12 @@ library LibPrice {
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
     uint256 wholePoints = _points / pointUnit;
 
-    uint256 currentPointCost = Faction.getPointCost(_empire);
+    uint256 currentPointCost = Empire.getPointCost(_empire);
     uint256 pointCostDecrease = config.pointCostIncrease;
 
     if (currentPointCost >= config.minPointCost + pointCostDecrease * wholePoints) {
       uint256 newPointCost = currentPointCost - pointCostDecrease * wholePoints;
-      Faction.setPointCost(_empire, newPointCost);
+      Empire.setPointCost(_empire, newPointCost);
       HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
     } else {
       revert("[LibPrice] Selling points beyond minimum price");

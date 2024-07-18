@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { Arrivals, Planet, PlanetData, BattleNPCAction, BattleNPCActionData } from "codegen/index.sol";
-import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
+import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { pseudorandomEntity } from "src/utils.sol";
 
@@ -12,17 +12,17 @@ library LibResolveCombat {
     if (arrivingShips == 0) return;
 
     PlanetData memory planetData = Planet.get(planetId);
-    if (empire == planetData.factionId) Planet.setShipCount(planetId, planetData.shipCount + arrivingShips);
+    if (empire == planetData.empireId) Planet.setShipCount(planetId, planetData.shipCount + arrivingShips);
     else {
       bool conquer = planetData.shipCount < arrivingShips;
 
       uint256 remainingShips = conquer ? arrivingShips - planetData.shipCount : planetData.shipCount - arrivingShips;
 
       if (conquer) {
-        FactionPlanetsSet.add(empire, planetId);
-        FactionPlanetsSet.remove(planetData.factionId, planetId);
+        EmpirePlanetsSet.add(empire, planetId);
+        EmpirePlanetsSet.remove(planetData.empireId, planetId);
 
-        Planet.setFactionId(planetId, empire);
+        Planet.setEmpireId(planetId, empire);
       }
 
       Planet.setShipCount(planetId, remainingShips);

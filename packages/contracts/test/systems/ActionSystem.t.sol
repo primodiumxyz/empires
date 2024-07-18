@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, ActionCost, Player, P_PointConfig, Faction } from "codegen/index.sol";
+import { Planet, ActionCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
@@ -23,7 +23,7 @@ contract ActionSystemTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
     aliceId = addressToId(alice);
     bobId = addressToId(bob);
     vm.prank(creator);
@@ -32,17 +32,17 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testCreateShip() public {
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getFactionId(planetId), true);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true);
     world.Empires__createShip{ value: cost }(planetId);
     assertEq(Planet.get(planetId).shipCount, 1);
   }
 
   function testKillShip() public {
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getFactionId(planetId), true);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true);
     world.Empires__createShip{ value: cost }(planetId);
     assertEq(Planet.get(planetId).shipCount, 1);
 
-    cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getFactionId(planetId), false);
+    cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false);
     world.Empires__killShip{ value: cost }(planetId);
     assertEq(Planet.get(planetId).shipCount, 0);
   }
@@ -58,14 +58,14 @@ contract ActionSystemTest is PrimodiumTest {
     do {
       nonOwnedPlanetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(nonOwnedPlanetId) != EEmpire.NULL);
+    } while (Planet.getEmpireId(nonOwnedPlanetId) != EEmpire.NULL);
 
     vm.expectRevert("[ActionSystem] Planet is not owned");
     world.Empires__createShip(nonOwnedPlanetId);
   }
 
   function testPurchaseActionProgress() public {
-    EEmpire empire = Planet.getFactionId(planetId);
+    EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true);
     uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateShip);
 
@@ -85,7 +85,7 @@ contract ActionSystemTest is PrimodiumTest {
   function testPurchaseActionRegress() public {
     testPurchaseActionProgress();
 
-    EEmpire empire = Planet.getFactionId(planetId);
+    EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false);
     uint256 actionCost = ActionCost.get(empire, EPlayerAction.KillShip);
     uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
@@ -105,7 +105,7 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testSellPoints() public {
-    EEmpire empire = Planet.getFactionId(planetId);
+    EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true);
 
     console.log("alice balance before createShip", alice.balance);
@@ -120,7 +120,7 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 gameInitBalance = Balances.get(EMPIRES_NAMESPACE_ID);
     uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, 1 * pointUnit);
     uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateShip);
-    uint256 empirePointsIssued = Faction.getPointsIssued(empire);
+    uint256 empirePointsIssued = Empire.getPointsIssued(empire);
 
     world.Empires__sellPoints(empire, 1 * pointUnit);
 
@@ -138,7 +138,7 @@ contract ActionSystemTest is PrimodiumTest {
     );
     assertEq(actionCost, ActionCost.get(empire, EPlayerAction.CreateShip), "Action Cost should not have changed");
     assertEq(
-      Faction.getPointsIssued(empire),
+      Empire.getPointsIssued(empire),
       empirePointsIssued - (1 * pointUnit),
       "Empire should have reduced points issued"
     );
@@ -148,14 +148,14 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testSellPointsFailNoPointsOwned() public {
-    EEmpire empire = Planet.getFactionId(planetId);
+    EEmpire empire = Planet.getEmpireId(planetId);
     vm.startPrank(alice);
     vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
     world.Empires__sellPoints(empire, 1);
   }
 
   function testSellPointsFailNotEnoughPoints() public {
-    EEmpire empire = Planet.getFactionId(planetId);
+    EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true);
 
     vm.startPrank(alice);
@@ -166,7 +166,7 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testSellPointsFailNotEnoughPointsWrongEmpire() public {
-    EEmpire empire = Planet.getFactionId(planetId);
+    EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true);
 
     vm.startPrank(alice);
@@ -176,7 +176,7 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testSellPointsFailGameBalanceInsufficient() public {
-    EEmpire empire = Planet.getFactionId(planetId);
+    EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true);
 
     vm.startPrank(alice);

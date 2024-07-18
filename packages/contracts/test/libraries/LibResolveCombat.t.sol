@@ -17,33 +17,33 @@ contract LibResolveCombatTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
     vm.startPrank(creator);
   }
 
   function testReinforce() public {
     Arrivals.set(planetId, 1);
     PlanetData memory planetData = Planet.get(planetId);
-    LibResolveCombat.resolveCombat(planetData.factionId, planetId);
+    LibResolveCombat.resolveCombat(planetData.empireId, planetId);
     assertEq(Planet.getShipCount(planetId), planetData.shipCount + 1);
-    assertEq(Planet.getFactionId(planetId), planetData.factionId);
+    assertEq(Planet.getEmpireId(planetId), planetData.empireId);
   }
 
   function testAttack() public {
     Arrivals.set(planetId, 1);
-    Planet.setFactionId(planetId, EEmpire.Red);
+    Planet.setEmpireId(planetId, EEmpire.Red);
     Planet.setShipCount(planetId, 5);
     LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
     assertEq(Planet.getShipCount(planetId), 4);
-    assertEq(Planet.getFactionId(planetId), EEmpire.Red);
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Red);
   }
 
   function testConquer() public {
     Arrivals.set(planetId, 6);
-    Planet.setFactionId(planetId, EEmpire.Red);
+    Planet.setEmpireId(planetId, EEmpire.Red);
     Planet.setShipCount(planetId, 5);
     LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
     assertEq(Planet.getShipCount(planetId), 1);
-    assertEq(Planet.getFactionId(planetId), EEmpire.Blue);
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Blue);
   }
 }

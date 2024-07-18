@@ -6,7 +6,7 @@ import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 import { addressToId } from "src/utils.sol";
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_GameConfig, WinningEmpire, Faction, P_PointConfig } from "codegen/index.sol";
+import { P_GameConfig, WinningEmpire, Empire, P_PointConfig } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 
@@ -64,7 +64,7 @@ contract RewardsSystemTest is PrimodiumTest {
     P_PointConfig.setPointRake(0); // out of 10_000
 
     PointsMap.set(EEmpire.Red, addressToId(alice), alicePoints);
-    Faction.setPointsIssued(EEmpire.Red, totalPoints);
+    Empire.setPointsIssued(EEmpire.Red, totalPoints);
 
     uint256 alicePrevBalance = alice.balance;
     vm.stopPrank();
@@ -78,7 +78,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(PointsMap.get(EEmpire.Red, addressToId(alice)), 0, "alice points");
 
     // should be 0 because all points were withdrawn (or not issued in the first place)
-    assertEq(Faction.getPointsIssued(EEmpire.Red), alicePoints == 0 ? totalPoints : 0, "empire points");
+    assertEq(Empire.getPointsIssued(EEmpire.Red), alicePoints == 0 ? totalPoints : 0, "empire points");
   }
 
   // function testWithdrawEarningsEqualAfterWithdrawal(uint256 playerPoints, uint256 totalPoints) public {
@@ -100,12 +100,12 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.startPrank(creator);
     world.Empires__claimVictory(EEmpire.Red);
 
-    Faction.setPointsIssued(EEmpire.Red, 100 ether);
+    Empire.setPointsIssued(EEmpire.Red, 100 ether);
 
     PointsMap.set(EEmpire.Red, addressToId(alice), playerPoints);
     PointsMap.set(EEmpire.Red, addressToId(bob), playerPoints);
     PointsMap.set(EEmpire.Red, addressToId(eve), playerPoints);
-    Faction.setPointsIssued(EEmpire.Red, totalPoints);
+    Empire.setPointsIssued(EEmpire.Red, totalPoints);
     vm.stopPrank();
     vm.prank(alice);
     world.Empires__withdrawEarnings();
@@ -115,7 +115,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertApproxEqRel(alice.balance, bob.balance, .001e18, "balances not approximately equal");
 
     assertEq(
-      Faction.getPointsIssued(EEmpire.Red),
+      Empire.getPointsIssued(EEmpire.Red),
       playerPoints == 0 ? totalPoints : totalPoints - (playerPoints * 2),
       "empire points"
     );

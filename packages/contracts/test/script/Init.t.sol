@@ -16,7 +16,7 @@ contract InitTest is PrimodiumTest {
     PlanetData memory planetData = Planet.get(redPlanetId);
     assertTrue(planetData.isPlanet);
     assertEq(planetData.shipCount, 0);
-    assertEq(planetData.factionId, EEmpire.Red);
+    assertEq(planetData.empireId, EEmpire.Red);
     assertEq(planetData.q, 1);
     assertEq(planetData.r, -2);
   }
@@ -26,7 +26,7 @@ contract InitTest is PrimodiumTest {
     PlanetData memory planetData = Planet.get(nonOwnedPlanetId);
     assertTrue(planetData.isPlanet);
     assertEq(planetData.shipCount, 0);
-    assertEq(planetData.factionId, EEmpire.NULL);
+    assertEq(planetData.empireId, EEmpire.NULL);
     assertEq(planetData.q, -1);
     assertEq(planetData.r, 0);
   }

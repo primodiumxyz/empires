@@ -8,7 +8,7 @@ import { LibGold } from "libraries/LibGold.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { Planet, Turn, TurnData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
+import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 
@@ -35,11 +35,11 @@ contract UpdateSystem is EmpiresSystem {
       Planet.setGoldCount(planets[i], Planet.getGoldCount(planets[i]) + goldGenRate);
     }
 
-    // spend gold and move ships for each faction planet
-    bytes32[] memory factionPlanets = FactionPlanetsSet.getFactionPlanetIds(empire);
-    for (uint i = 0; i < factionPlanets.length; i++) {
-      LibGold.spendGold(factionPlanets[i]);
-      LibMoveShips.moveShips(factionPlanets[i]);
+    // spend gold and move ships for each empire planet
+    bytes32[] memory empirePlanets = EmpirePlanetsSet.getEmpirePlanetIds(empire);
+    for (uint i = 0; i < empirePlanets.length; i++) {
+      LibGold.spendGold(empirePlanets[i]);
+      LibMoveShips.moveShips(empirePlanets[i]);
     }
 
     // resolve combat for each planet

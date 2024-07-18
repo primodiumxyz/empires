@@ -16,7 +16,7 @@ contract LibMoveShipsTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
     vm.startPrank(creator);
     P_GameConfig.setGameOverBlock(block.number + 100000);
     vm.roll(1);
@@ -25,11 +25,11 @@ contract LibMoveShipsTest is PrimodiumTest {
   }
 
   function testEarlyExit() public {
-    Planet.setFactionId(planetId, EEmpire.NULL);
+    Planet.setEmpireId(planetId, EEmpire.NULL);
     bool moved = LibMoveShips.moveShips(planetId);
     assertFalse(moved, "shouldnt have moved");
     moved = LibMoveShips.moveShips(planetId);
-    Planet.setFactionId(planetId, EEmpire.Red);
+    Planet.setEmpireId(planetId, EEmpire.Red);
     moved = LibMoveShips.moveShips(planetId);
     assertFalse(moved, "shouldnt have moved again");
     Planet.setShipCount(planetId, 1);
@@ -48,7 +48,7 @@ contract LibMoveShipsTest is PrimodiumTest {
   function testGetPlanetTargetExpand() public {
     PlanetData memory planetData = Planet.get(planetId);
     // north
-    Planet.setFactionId(planetId, EEmpire.Red);
+    Planet.setEmpireId(planetId, EEmpire.Red);
     // set the move direction to none
     uint256 value = P_NPCMoveThresholds.getExpand() - 1;
     bytes32 target = LibMoveShips.getPlanetTarget(planetData, value);
@@ -66,7 +66,7 @@ contract LibMoveShipsTest is PrimodiumTest {
     bytes32 planet = coordToId(0, 0);
     // southwest
     Planet.setShipCount(planet, 1);
-    Planet.setFactionId(planet, EEmpire.Blue);
+    Planet.setEmpireId(planet, EEmpire.Blue);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
     uint256 value = P_NPCMoveThresholds.getRetreat() - 1;
@@ -84,7 +84,7 @@ contract LibMoveShipsTest is PrimodiumTest {
     bytes32 planet = coordToId(0, 0);
     // southeast
     Planet.setShipCount(planet, 1);
-    Planet.setFactionId(planet, EEmpire.Green);
+    Planet.setEmpireId(planet, EEmpire.Green);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
     uint256 value = P_NPCMoveThresholds.getLateral() - 1;

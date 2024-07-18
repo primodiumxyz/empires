@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Faction, Player, ActionCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData } from "codegen/index.sol";
+import { Empire, Player, ActionCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
@@ -168,79 +168,79 @@ contract LibPriceTest is PrimodiumTest {
 
   function testEmpirePointCostDown() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointGenRate);
-    Faction.setPointCost(EEmpire.Blue, config.minPointCost + config.pointGenRate);
-    Faction.setPointCost(EEmpire.Green, config.minPointCost + config.pointGenRate);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointGenRate);
+    Empire.setPointCost(EEmpire.Blue, config.minPointCost + config.pointGenRate);
+    Empire.setPointCost(EEmpire.Green, config.minPointCost + config.pointGenRate);
     LibPrice.turnEmpirePointCostDown(EEmpire.Red);
     assertEq(
-      Faction.getPointCost(EEmpire.Red),
+      Empire.getPointCost(EEmpire.Red),
       config.minPointCost,
       "Red Empire point cost down incorrect when matching gen rate"
     );
     assertEq(
-      Faction.getPointCost(EEmpire.Blue),
+      Empire.getPointCost(EEmpire.Blue),
       config.minPointCost + config.pointGenRate,
       "Blue Empire point cost should not change"
     );
     assertEq(
-      Faction.getPointCost(EEmpire.Green),
+      Empire.getPointCost(EEmpire.Green),
       config.minPointCost + config.pointGenRate,
       "Green Empire point cost should not change"
     );
 
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointGenRate - 1);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointGenRate - 1);
     LibPrice.turnEmpirePointCostDown(EEmpire.Red);
     assertEq(
-      Faction.getPointCost(EEmpire.Red),
+      Empire.getPointCost(EEmpire.Red),
       config.minPointCost,
       "Red Empire point cost down incorrect when less than gen rate"
     );
 
-    Faction.setPointCost(EEmpire.Red, config.minPointCost);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost);
     LibPrice.turnEmpirePointCostDown(EEmpire.Red);
     assertEq(
-      Faction.getPointCost(EEmpire.Red),
+      Empire.getPointCost(EEmpire.Red),
       config.minPointCost,
       "Red Empire point cost down incorrect when at min cost"
     );
 
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointGenRate + 1);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointGenRate + 1);
     LibPrice.turnEmpirePointCostDown(EEmpire.Red);
     assertEq(
-      Faction.getPointCost(EEmpire.Red),
+      Empire.getPointCost(EEmpire.Red),
       config.minPointCost + 1,
       "Red Empire point cost down incorrect when greater than gen rate"
     );
 
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointGenRate * 2 + 1);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointGenRate * 2 + 1);
     LibPrice.turnEmpirePointCostDown(EEmpire.Red);
     assertEq(
-      Faction.getPointCost(EEmpire.Red),
+      Empire.getPointCost(EEmpire.Red),
       config.minPointCost + config.pointGenRate + 1,
       "Red Empire point cost down incorrect when much greater than gen rate"
     );
     LibPrice.turnEmpirePointCostDown(EEmpire.Red);
-    assertEq(Faction.getPointCost(EEmpire.Red), config.minPointCost + 1, "Sequential Point cost down not working");
+    assertEq(Empire.getPointCost(EEmpire.Red), config.minPointCost + 1, "Sequential Point cost down not working");
 
     assertEq(
-      Faction.getPointCost(EEmpire.Blue),
+      Empire.getPointCost(EEmpire.Blue),
       config.minPointCost + config.pointGenRate,
       "Blue Empire point cost should remain unchanged"
     );
     assertEq(
-      Faction.getPointCost(EEmpire.Green),
+      Empire.getPointCost(EEmpire.Green),
       config.minPointCost + config.pointGenRate,
       "Green Empire point cost should remain unchanged"
     );
 
     LibPrice.turnEmpirePointCostDown(EEmpire.Green);
     assertEq(
-      Faction.getPointCost(EEmpire.Green),
+      Empire.getPointCost(EEmpire.Green),
       config.minPointCost,
       "Empire point cost down incorrect when different empire"
     );
     assertEq(
-      Faction.getPointCost(EEmpire.Red),
+      Empire.getPointCost(EEmpire.Red),
       config.minPointCost + 1,
       "Red Empire point cost should remain unchanged"
     );
@@ -355,21 +355,21 @@ contract LibPriceTest is PrimodiumTest {
 
   function testFailGetPointSaleValueMinPrice() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost);
     vm.expectRevert();
     LibPrice.getPointSaleValue(EEmpire.Red, 1);
   }
 
   function testFailGetPointSaleValueOversoldSingle() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease - 1);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease - 1);
     vm.expectRevert();
     LibPrice.getPointSaleValue(EEmpire.Red, 1);
   }
 
   function testFailGetPointSaleValueOversoldMultiple() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + 2 * config.pointCostIncrease - 1);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + 2 * config.pointCostIncrease - 1);
     vm.expectRevert();
     LibPrice.getPointSaleValue(EEmpire.Red, 2);
   }
@@ -378,9 +378,9 @@ contract LibPriceTest is PrimodiumTest {
     vm.startPrank(creator);
     config.pointSellTax = 0;
     P_PointConfig.set(config);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease);
-    Faction.setPointCost(EEmpire.Blue, config.minPointCost + config.pointCostIncrease + 1);
-    Faction.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease);
+    Empire.setPointCost(EEmpire.Blue, config.minPointCost + config.pointCostIncrease + 1);
+    Empire.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
 
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Red, 1 * pointUnit),
@@ -409,9 +409,9 @@ contract LibPriceTest is PrimodiumTest {
     config.pointSellTax = 1;
     uint256 sellTax = config.pointSellTax;
     P_PointConfig.set(config);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease);
-    Faction.setPointCost(EEmpire.Blue, config.minPointCost + config.pointCostIncrease + 1);
-    Faction.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease);
+    Empire.setPointCost(EEmpire.Blue, config.minPointCost + config.pointCostIncrease + 1);
+    Empire.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
 
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Red, 1 * pointUnit),
@@ -444,43 +444,39 @@ contract LibPriceTest is PrimodiumTest {
 
   function testFailSellEmpirePointCostDownMinPrice() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost);
     vm.expectRevert();
     LibPrice.sellEmpirePointCostDown(EEmpire.Red, 1);
   }
 
   function testFailSellEmpirePointCostDownOversoldSingle() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease - 1);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease - 1);
     vm.expectRevert();
     LibPrice.sellEmpirePointCostDown(EEmpire.Red, 1);
   }
 
   function testFailSellEmpirePointCostDownOversoldMultiple() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + 2 * config.pointCostIncrease - 1);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + 2 * config.pointCostIncrease - 1);
     vm.expectRevert();
     LibPrice.sellEmpirePointCostDown(EEmpire.Red, 2);
   }
 
   function testSellEmpirePointCostDownSingle() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease);
-    Faction.setPointCost(EEmpire.Blue, config.minPointCost + config.pointCostIncrease + 1);
-    Faction.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
+    Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease);
+    Empire.setPointCost(EEmpire.Blue, config.minPointCost + config.pointCostIncrease + 1);
+    Empire.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
 
     LibPrice.sellEmpirePointCostDown(EEmpire.Red, 1 * pointUnit);
     LibPrice.sellEmpirePointCostDown(EEmpire.Blue, 1 * pointUnit);
     LibPrice.sellEmpirePointCostDown(EEmpire.Green, 1 * pointUnit);
 
-    assertEq(Faction.getPointCost(EEmpire.Red), config.minPointCost, "Red Empire point cost after sale incorrect");
+    assertEq(Empire.getPointCost(EEmpire.Red), config.minPointCost, "Red Empire point cost after sale incorrect");
+    assertEq(Empire.getPointCost(EEmpire.Blue), config.minPointCost + 1, "Blue Empire point cost after sale incorrect");
     assertEq(
-      Faction.getPointCost(EEmpire.Blue),
-      config.minPointCost + 1,
-      "Blue Empire point cost after sale incorrect"
-    );
-    assertEq(
-      Faction.getPointCost(EEmpire.Green),
+      Empire.getPointCost(EEmpire.Green),
       config.minPointCost + config.pointCostIncrease,
       "Green Empire point cost after sale incorrect"
     );
@@ -488,10 +484,10 @@ contract LibPriceTest is PrimodiumTest {
 
   function testSellEmpirePointCostDownMultiple() public {
     vm.startPrank(creator);
-    Faction.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
+    Empire.setPointCost(EEmpire.Green, config.minPointCost + config.pointCostIncrease * 2);
     LibPrice.sellEmpirePointCostDown(EEmpire.Green, 2 * pointUnit);
     assertEq(
-      Faction.getPointCost(EEmpire.Green),
+      Empire.getPointCost(EEmpire.Green),
       config.minPointCost,
       "Green Empire point cost after multiple points sold incorrect"
     );

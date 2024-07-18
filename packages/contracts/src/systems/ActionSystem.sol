@@ -24,11 +24,11 @@ contract ActionSystem is EmpiresSystem {
   function createShip(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
-    require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, planetData.factionId, true);
+    require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, planetData.empireId, true);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.CreateShip, planetData.factionId, true, _msgValue());
+    _purchaseAction(EPlayerAction.CreateShip, planetData.empireId, true, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount + 1);
 
@@ -51,11 +51,11 @@ contract ActionSystem is EmpiresSystem {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.shipCount > 0, "[ActionSystem] No ships to kill");
-    require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.factionId, false);
+    require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.empireId, false);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.KillShip, planetData.factionId, false, _msgValue());
+    _purchaseAction(EPlayerAction.KillShip, planetData.empireId, false, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount - 1);
     KillShipPlayerAction.set(
