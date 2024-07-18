@@ -17,7 +17,7 @@ export const usePointPrice = (empire: EEmpire, points: number): { price: bigint;
     const pointCostDecrease = config?.pointCostIncrease ?? 0n;
 
     if (currentPointCost < (config?.minPointCost ?? 0n) + pointCostDecrease * pointsBigInt) {
-      return { price: 0n, message: "Insufficient point cost" };
+      return { price: 0n, message: "Selling beyond min price" };
     }
 
     const triangleSum = (pointsBigInt * (pointsBigInt + 1n)) / 2n;
