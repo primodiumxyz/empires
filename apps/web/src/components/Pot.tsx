@@ -32,7 +32,7 @@ export const Pot = () => {
           <SecondaryCard>
             <div className="flex flex-col justify-center gap-1">
               {loading && <p>Loading...</p>}
-              {!loading && price && <p>{utils.ethToUSD(pot, price)}</p>}
+              {!loading && price && <p>{utils.weiToUsd(pot, price)}</p>}
               <p className="text-xs">{formatEther(pot)} ETH</p>
             </div>
           </SecondaryCard>
@@ -42,7 +42,7 @@ export const Pot = () => {
           <SecondaryCard>
             <div className="flex flex-col justify-center gap-1 text-center">
               {loading && <p>Loading...</p>}
-              {!loading && price && <p>{utils.ethToUSD(rake, price)}</p>}
+              {!loading && price && <p>{utils.weiToUsd(rake, price)}</p>}
               <p className="text-xs">{formatEther(rake)}ETH</p>
               <Button variant="info" size="xs" onClick={calls.withdrawRake}>
                 Withdraw
@@ -65,7 +65,7 @@ export const Pot = () => {
 
 export const EmpirePoints = ({ empire }: { empire: EEmpire }) => {
   const { tables } = useCore();
-  const points = tables.Faction.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
+  const points = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const color = empire == EEmpire.Blue ? "bg-blue-500" : empire == EEmpire.Green ? "bg-green-500" : "bg-red-500";
 
   return (

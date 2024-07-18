@@ -1,47 +1,29 @@
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
-import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
+import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 
-type EmpirePrices = { [key in Exclude<EEmpire, EEmpire.LENGTH>]: bigint | undefined };
-type PointPrice = {
-  sell: EmpirePrices;
-  buy: EmpirePrices;
-};
-
-export const usePointPrice = (): PointPrice => {
+export const usePointPrice = (empire: EEmpire, points: number): { price: bigint; message: string } => {
   const { tables } = useCore();
 
+  const currentPointCost = tables.Empire.useWithKeys({ id: empire })?.pointCost ?? 0n;
   const config = tables.P_PointConfig.use();
-  const pointCostDecrease = config?.pointCostIncrease ?? BigInt(POINTS_UNIT * 0.01);
-  const minPointCost = config?.minPointCost ?? BigInt(POINTS_UNIT * 0.01);
-  const pointSellTax = config?.pointSellTax ?? BigInt(POINTS_UNIT * 0);
+  return useMemo(() => {
+    if (!config || currentPointCost == 0n || points == 0) {
+      return { price: 0n, message: "" };
+    }
 
-  const redEmpirePointCost = tables.Faction.useWithKeys({ id: EEmpire.Red })?.pointCost ?? BigInt(0);
-  const blueEmpirePointCost = tables.Faction.useWithKeys({ id: EEmpire.Blue })?.pointCost ?? BigInt(0);
-  const greenEmpirePointCost = tables.Faction.useWithKeys({ id: EEmpire.Green })?.pointCost ?? BigInt(0);
+    const pointsBigInt = BigInt(points);
+    const pointCostDecrease = config?.pointCostIncrease ?? 0n;
 
-  const getPointSaleValue = useCallback(
-    (pointCost: bigint) => {
-      if (pointCost >= minPointCost + pointCostDecrease) return pointCost - pointCostDecrease - pointSellTax;
-      return BigInt(0);
-    },
-    [minPointCost, pointCostDecrease, pointSellTax],
-  );
+    if (currentPointCost < (config?.minPointCost ?? 0n) + pointCostDecrease * pointsBigInt) {
+      return { price: 0n, message: "Selling beyond min price" };
+    }
 
-  return useMemo(
-    () => ({
-      sell: {
-        [EEmpire.Red]: getPointSaleValue(redEmpirePointCost),
-        [EEmpire.Blue]: getPointSaleValue(blueEmpirePointCost),
-        [EEmpire.Green]: getPointSaleValue(greenEmpirePointCost),
-      },
-      buy: {
-        [EEmpire.Red]: redEmpirePointCost,
-        [EEmpire.Blue]: blueEmpirePointCost,
-        [EEmpire.Green]: greenEmpirePointCost,
-      },
-    }),
-    [redEmpirePointCost, blueEmpirePointCost, greenEmpirePointCost, getPointSaleValue],
-  );
+    const triangleSum = (pointsBigInt * (pointsBigInt + 1n)) / 2n;
+    const totalSaleValue =
+      (currentPointCost - (config?.pointSellTax ?? 0n)) * pointsBigInt - pointCostDecrease * triangleSum;
+
+    return { price: totalSaleValue, message: "" };
+  }, [empire, currentPointCost, config, points]);
 };

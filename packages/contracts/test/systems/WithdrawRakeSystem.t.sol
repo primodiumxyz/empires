@@ -11,7 +11,7 @@ import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 import { addressToId } from "src/utils.sol";
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_GameConfig, WinningEmpire, Faction, P_PointConfig, Planet } from "codegen/index.sol";
+import { P_GameConfig, WinningEmpire, Empire, P_PointConfig, Planet } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
@@ -31,7 +31,7 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
 
     world.registerSystem(systemId, system, true);
     world.registerFunctionSelector(systemId, "echoValue()");
@@ -40,8 +40,8 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
   function testWithdrawRake() public {
     P_PointConfig.setPointRake(5000);
     switchPrank(alice);
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, Planet.getFactionId(planetId), true);
-    world.Empires__createDestroyer{ value: cost }(planetId);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true);
+    world.Empires__createShip{ value: cost }(planetId);
     assertEq(Balances.get(ADMIN_NAMESPACE_ID), cost / 2, "rake value correct");
 
     ResourceId systemId = WorldResourceIdLib.encode({

@@ -11,6 +11,7 @@ import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { PlanetGrid } from "@/components/PlanetGrid";
 import { Pot } from "@/components/Pot";
+import { SellPoints } from "@/components/SellPoints";
 import { TimeLeft } from "@/components/TimeLeft";
 import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
@@ -64,6 +65,9 @@ const Game = () => {
           <PlanetGrid tileSize={100} />
         </HUD.Center>
 
+        <HUD.BottomLeft>
+          <SellPoints />
+        </HUD.BottomLeft>
         <HUD.BottomMiddle>
           <AdvanceTurn />
         </HUD.BottomMiddle>

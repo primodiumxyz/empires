@@ -12,13 +12,15 @@ export const functionSystemIds: {
   unregisterDelegation: getSystemId("Registration", "CORE"),
 
   /* -------------------------------- Gameplay -------------------------------- */
-  Empires__createDestroyer: getSystemId("ActionSystem"),
-  Empires__killDestroyer: getSystemId("ActionSystem"),
+  Empires__createShip: getSystemId("ActionSystem"),
+  Empires__killShip: getSystemId("ActionSystem"),
   Empires__updateWorld: getSystemId("UpdateSystem"),
   Empires__resetGame: getSystemId("ResetSystem"),
 
   Empires__claimVictory: getSystemId("RewardsSystem"),
   Empires__withdrawEarnings: getSystemId("RewardsSystem"),
+
+  Empires__sellPoints: getSystemId("ActionSystem"),
 
   Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
 

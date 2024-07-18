@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PresentationChartLineIcon, StarIcon } from "@heroicons/react/24/solid";
+import { PresentationChartLineIcon } from "@heroicons/react/24/solid";
 import { axisBottom, axisLeft, curveMonotoneX, line, pointer, scaleLinear, select } from "d3";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { bigintMax, bigintMin } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
@@ -62,7 +61,7 @@ export const HistoricalPointPriceModal = () => {
 const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => {
   const {
     tables,
-    utils: { ethToUSD },
+    utils: { weiToUsd },
   } = useCore();
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
   const fixedSvgRef = useRef<SVGSVGElement>(null);
@@ -71,9 +70,14 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
   const historicalPriceEntities = tables.HistoricalPointCost.useAll();
   const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? BigInt(0);
 
-  const { sell: sellPointPrice, buy: buyPointPrice } = usePointPrice();
-  const cheapestBuyPrice = bigintMin(...Object.values(buyPointPrice));
-  const highestSellPrice = bigintMax(...Object.values(sellPointPrice));
+  const { price: blueSellPrice } = usePointPrice(EEmpire.Blue, 1);
+  const { price: greenSellPrice } = usePointPrice(EEmpire.Green, 1);
+  const { price: redSellPrice } = usePointPrice(EEmpire.Red, 1);
+  const prices = {
+    [EEmpire.Blue]: blueSellPrice,
+    [EEmpire.Green]: greenSellPrice,
+    [EEmpire.Red]: redSellPrice,
+  };
 
   const historicalPriceData = useMemo(() => {
     // get data
@@ -173,7 +177,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .call(
         axisLeft(yScale)
           .tickValues(yScale.ticks(5))
-          .tickFormat((d) => ethToUSD(BigInt(d.toString()), ethPrice ?? 0) ?? ""),
+          .tickFormat((d) => weiToUsd(BigInt(d.toString()), ethPrice ?? 0) ?? ""),
       )
       .selectAll("line")
       .style("stroke", "#706f6f")
@@ -250,7 +254,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("x", -height / 2)
       .attr("y", margin.left - 60)
       .attr("transform", "rotate(-90)")
-      .text("Cost (USD)")
+      .text("Cost (Usd)")
       .attr("fill", "#706f6f")
       .style("font-size", "14px");
 
@@ -337,16 +341,13 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                   Empire
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider text-gray-500">
-                  Buy Price (USD)
-                </th>
-                <th className="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider text-gray-500">
-                  Sell Price (USD)
+                  Sell Price (Usd)
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {Object.entries(buyPointPrice).map(([_empire, buyPrice]) => {
-                const empire = _empire as unknown as keyof typeof buyPointPrice;
+              {Object.entries(prices).map(([_empire, sellPrice]) => {
+                const empire = _empire as unknown as keyof typeof prices;
                 const color = EmpireEnumToTextColor[Number(empire) as EEmpire];
 
                 return (
@@ -355,40 +356,15 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                       {EmpireEnumToName[Number(empire) as EEmpire]}
                     </td>
                     <td className={cn("whitespace-nowrap px-4 py-2", color)}>
-                      {!!buyPrice ? (
+                      {!!sellPrice ? (
                         <div className="flex items-center gap-2">
                           <Tooltip
-                            tooltipContent={`${formatEther(buyPrice)} ETH`}
+                            tooltipContent={`${formatEther(sellPrice)} ETH`}
                             className="text-gray-300"
-                            containerClassName={cn(
-                              "w-min cursor-pointer",
-                              buyPrice === cheapestBuyPrice && "font-semibold",
-                            )}
+                            containerClassName={cn("w-min cursor-pointer")}
                           >
-                            {ethToUSD(buyPrice, ethPrice)}
+                            {weiToUsd(sellPrice, ethPrice)}
                           </Tooltip>
-                          {buyPrice === cheapestBuyPrice && <StarIcon className="size-4" title="Cheapest buy price" />}
-                        </div>
-                      ) : (
-                        "could not retrieve"
-                      )}
-                    </td>
-                    <td className={cn("whitespace-nowrap px-4 py-2", color)}>
-                      {!!sellPointPrice[empire] ? (
-                        <div className="flex items-center gap-2">
-                          <Tooltip
-                            tooltipContent={`${formatEther(sellPointPrice[empire])} ETH`}
-                            className="text-gray-300"
-                            containerClassName={cn(
-                              "w-min cursor-pointer",
-                              sellPointPrice[empire] === highestSellPrice && "font-semibold",
-                            )}
-                          >
-                            {ethToUSD(sellPointPrice[empire], ethPrice)}
-                          </Tooltip>
-                          {sellPointPrice[empire] === highestSellPrice && (
-                            <StarIcon className="size-4" title="Highest sell price" />
-                          )}
                         </div>
                       ) : (
                         "can't sell"

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, PlanetData, Player, P_PointConfig, CreateDestroyerPlayerAction, CreateDestroyerPlayerActionData, KillDestroyerPlayerAction, KillDestroyerPlayerActionData } from "codegen/index.sol";
+import { Planet, PlanetData, Player, P_PointConfig, CreateShipPlayerAction, CreateShipPlayerActionData, KillShipPlayerAction, KillShipPlayerActionData } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -14,27 +14,27 @@ import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 
 /**
  * @title ActionSystem
- * @dev A contract that handles actions related to creating and killing destroyers on a planet.
+ * @dev A contract that handles actions related to creating and killing ships on a planet.
  */
 contract ActionSystem is EmpiresSystem {
   /**
-   * @dev A player purchaseable action that creates a destroyer on a planet.
+   * @dev A player purchaseable action that creates a ship on a planet.
    * @param _planetId The ID of the planet.
    */
-  function createDestroyer(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function createShip(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
-    require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateDestroyer, planetData.factionId, true);
+    require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, planetData.empireId, true);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.CreateDestroyer, planetData.factionId, true, _msgValue());
+    _purchaseAction(EPlayerAction.CreateShip, planetData.empireId, true, _msgValue());
 
-    Planet.setDestroyerCount(_planetId, planetData.destroyerCount + 1);
+    Planet.setShipCount(_planetId, planetData.shipCount + 1);
 
-    CreateDestroyerPlayerAction.set(
+    CreateShipPlayerAction.set(
       pseudorandomEntity(),
-      CreateDestroyerPlayerActionData({
+      CreateShipPlayerActionData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
@@ -44,23 +44,23 @@ contract ActionSystem is EmpiresSystem {
   }
 
   /**
-   * @dev A player purchaseable action that kills a destroyer on a planet.
+   * @dev A player purchaseable action that kills a ship on a planet.
    * @param _planetId The ID of the planet.
    */
-  function killDestroyer(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function killShip(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
-    require(planetData.destroyerCount > 0, "[ActionSystem] No destroyers to kill");
-    require(planetData.factionId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillDestroyer, planetData.factionId, false);
+    require(planetData.shipCount > 0, "[ActionSystem] No ships to kill");
+    require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.empireId, false);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.KillDestroyer, planetData.factionId, false, _msgValue());
+    _purchaseAction(EPlayerAction.KillShip, planetData.empireId, false, _msgValue());
 
-    Planet.setDestroyerCount(_planetId, planetData.destroyerCount - 1);
-    KillDestroyerPlayerAction.set(
+    Planet.setShipCount(_planetId, planetData.shipCount - 1);
+    KillShipPlayerAction.set(
       pseudorandomEntity(),
-      KillDestroyerPlayerActionData({
+      KillShipPlayerActionData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
@@ -87,16 +87,16 @@ contract ActionSystem is EmpiresSystem {
     uint256 pointUnit = P_PointConfig.getPointUnit();
 
     if (_progressAction) {
-      LibPoint.issuePoints(_empireImpacted, playerId, pointUnit * (EMPIRE_COUNT - 1));
-      LibPrice.pointCostUp(_empireImpacted, EMPIRE_COUNT - 1);
+      LibPoint.issuePoints(_empireImpacted, playerId, (EMPIRE_COUNT - 1) * pointUnit);
+      LibPrice.pointCostUp(_empireImpacted, (EMPIRE_COUNT - 1) * pointUnit);
     } else {
       // Iterate through each empire except the impacted one
       for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
         if (i == uint256(_empireImpacted)) {
           continue;
         }
-        LibPoint.issuePoints(EEmpire(i), playerId, pointUnit);
-        LibPrice.pointCostUp(_empireImpacted, 1);
+        LibPoint.issuePoints(EEmpire(i), playerId, 1 * pointUnit);
+        LibPrice.pointCostUp(_empireImpacted, 1 * pointUnit);
       }
     }
     LibPrice.actionCostUp(_empireImpacted, _actionType);
@@ -105,26 +105,22 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player action to sell some points of an empire that they currently own.
    * @param _empire The empire to sell points from.
-   * @param _pointUnits The number of points to sell.
+   * @param _points The number of points to sell.
    */
-  function sellPoints(EEmpire _empire, uint256 _pointUnits) public {
+  function sellPoints(EEmpire _empire, uint256 _points) public {
     bytes32 playerId = addressToId(_msgSender());
-    uint256 pointsScaled = _pointUnits * P_PointConfig.getPointUnit();
-    require(
-      pointsScaled <= PointsMap.get(_empire, playerId),
-      "[ActionSystem] Player does not have enough points to remove"
-    );
+    require(_points <= PointsMap.get(_empire, playerId), "[ActionSystem] Player does not have enough points to remove");
 
-    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _pointUnits);
+    uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _points);
 
     // require that the pot has enough ETH to send
     require(pointSaleValue <= Balances.get(EMPIRES_NAMESPACE_ID), "[ActionSystem] Insufficient funds for point sale");
 
     // set the new empire point cost
-    LibPrice.sellEmpirePointCostDown(_empire, _pointUnits);
+    LibPrice.sellEmpirePointCostDown(_empire, _points);
 
     // remove points from player and empire's issued points count
-    LibPoint.removePoints(_empire, playerId, pointsScaled);
+    LibPoint.removePoints(_empire, playerId, _points);
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);

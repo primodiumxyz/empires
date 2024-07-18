@@ -26,7 +26,7 @@ export const Account = () => {
   const { logout } = usePrivy();
   const { cancelBurner, usingBurner } = useBurnerAccount();
   const {
-    utils: { ethToUSD },
+    utils: { weiToUsd },
   } = useCore();
   const { price, loading } = useEthPrice();
 
@@ -54,7 +54,7 @@ export const Account = () => {
           </p>
           <Divider className="my-1 w-16 self-center" />
           {loading && <p>Loading...</p>}
-          {!loading && price && <p>{ethToUSD(balance, price)}</p>}
+          {!loading && price && <p>{weiToUsd(balance, price)}</p>}
           <p className="text-xs">{formatEther(balance)}ETH</p>
           <Divider className="my-1 w-16 self-center" />
           <div className="flex flex-col gap-1">
@@ -71,8 +71,8 @@ export const Account = () => {
 const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
   const { tables } = useCore();
 
-  const playerPoints = tables.Value_PointsMap.useWithKeys({ factionId: empire, playerId })?.value ?? 0n;
-  const empirePoints = tables.Faction.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
+  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
+  const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
 

@@ -6,7 +6,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
-import { P_GameConfig, WinningEmpire, Player, Faction } from "codegen/index.sol";
+import { P_GameConfig, WinningEmpire, Player, Empire } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EEmpire } from "codegen/common.sol";
 
@@ -53,16 +53,16 @@ contract RewardsSystem is EmpiresSystem {
 
     bytes32 playerId = addressToId(_msgSender());
 
-    uint256 factionPoints = Faction.getPointsIssued(empire);
-    if (factionPoints == 0) {
+    uint256 empirePoints = Empire.getPointsIssued(empire);
+    if (empirePoints == 0) {
       return;
     }
 
-    uint256 playerFactionPoints = PointsMap.get(empire, playerId);
-    if (playerFactionPoints == 0) return;
+    uint256 playerEmpirePoints = PointsMap.get(empire, playerId);
+    if (playerEmpirePoints == 0) return;
 
     uint256 pot = (Balances.get(EMPIRES_NAMESPACE_ID));
-    uint256 playerPot = (pot * playerFactionPoints) / factionPoints;
+    uint256 playerPot = (pot * playerEmpirePoints) / empirePoints;
 
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), playerPot);
 

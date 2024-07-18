@@ -20,9 +20,9 @@ export const ActionLog = () => {
 
   const moveActions = tables.MoveNPCAction.useAll();
   const battleActions = tables.BattleNPCAction.useAll();
-  const buyActions = tables.BuyDestroyersNPCAction.useAll();
-  const createActions = tables.CreateDestroyerPlayerAction.useAll();
-  const killActions = tables.KillDestroyerPlayerAction.useAll();
+  const buyActions = tables.BuyShipsNPCAction.useAll();
+  const createActions = tables.CreateShipPlayerAction.useAll();
+  const killActions = tables.KillShipPlayerAction.useAll();
   const { price } = useEthPrice();
 
   const actions = useMemo(() => {
@@ -47,32 +47,32 @@ export const ActionLog = () => {
     });
 
     const buyActionEntries = buyActions.map((actionEntity) => {
-      const action = tables.BuyDestroyersNPCAction.get(actionEntity)!;
+      const action = tables.BuyShipsNPCAction.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Buy Ships",
         timestamp: action.timestamp,
-        details: `Ships Bought: ${action.destroyerBought}, Gold spent: ${action.goldSpent}, Planet: ${entityToPlanetName(action.planetId as Entity)}`,
+        details: `Ships Bought: ${action.shipBought}, Gold spent: ${action.goldSpent}, Planet: ${entityToPlanetName(action.planetId as Entity)}`,
       };
     });
 
     const createActionEntries = createActions.map((actionEntity) => {
-      const action = tables.CreateDestroyerPlayerAction.get(actionEntity)!;
+      const action = tables.CreateShipPlayerAction.get(actionEntity)!;
       return {
         actor: formatAddress(action.playerId, true),
         type: "Create Ships",
         timestamp: action.timestamp,
-        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.weiToUsd(action.ethSpent, price ?? 0)}`,
       };
     });
 
     const killActionEntries = killActions.map((actionEntity) => {
-      const action = tables.KillDestroyerPlayerAction.get(actionEntity)!;
+      const action = tables.KillShipPlayerAction.get(actionEntity)!;
       return {
         actor: formatAddress(action.playerId, true),
         type: "Kill Ships",
         timestamp: action.timestamp,
-        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.ethToUSD(action.ethSpent, price ?? 0)}`,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, USD Spent: ${utils.weiToUsd(action.ethSpent, price ?? 0)}`,
       };
     });
 

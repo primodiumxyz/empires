@@ -20,32 +20,32 @@ contract LibGoldTest is PrimodiumTest {
   }
 
   function testGiveGold() public {
-    P_NPCActionCosts.set(ENPCAction.BuyDestroyers, 2);
+    P_NPCActionCosts.set(ENPCAction.BuyShips, 2);
 
     Planet.setGoldCount(planetId, 1);
     uint256 noneThreshold = P_NPCActionThresholds.getNone();
-    uint256 buyThreshold = P_NPCActionThresholds.getBuyDestroyers();
+    uint256 buyThreshold = P_NPCActionThresholds.getBuyShips();
     LibGold._spendGold(planetId, buyThreshold - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
-    assertEq(Planet.getDestroyerCount(planetId), 0, "Planet destroyer count should be 0");
+    assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
 
     Planet.setGoldCount(planetId, 2);
     LibGold._spendGold(planetId, noneThreshold - 1);
 
     assertEq(Planet.getGoldCount(planetId), 2, "Planet gold count should be 1");
-    assertEq(Planet.getDestroyerCount(planetId), 0, "Planet destroyer count should be 0");
+    assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
 
     LibGold._spendGold(planetId, buyThreshold - 1);
 
     assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count");
-    assertEq(Planet.getDestroyerCount(planetId), 1, "Planet destroyer count");
+    assertEq(Planet.getShipCount(planetId), 1, "Planet ship count");
 
     Planet.setGoldCount(planetId, 9);
 
     LibGold._spendGold(planetId, buyThreshold - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count");
-    assertEq(Planet.getDestroyerCount(planetId), 5, "Planet destroyer count");
+    assertEq(Planet.getShipCount(planetId), 5, "Planet ship count");
   }
 }
