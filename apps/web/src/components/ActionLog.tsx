@@ -90,7 +90,6 @@ export const ActionLog = () => {
     return allActions;
   }, [moveActions, battleActions, buyActions, createActions, killActions]);
 
-  console.log(actions);
   return (
     <Modal title="Action Log">
       <Modal.Button
