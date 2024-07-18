@@ -3,6 +3,8 @@ import { formatEther } from "viem";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
+import { Button } from "@/components/core/Button";
+import { Card, SecondaryCard } from "@/components/core/Card";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePot } from "@/hooks/usePot";
@@ -23,34 +25,42 @@ export const Pot = () => {
   const { pot, rake } = usePot();
 
   return (
-    <div className="absolute right-4 top-4 flex flex-col justify-center gap-1">
-      <div className="flex flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
-        <p className="text-left text-xs font-bold uppercase">Pot</p>
-        <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
-          {loading && <p>Loading...</p>}
-          {!loading && price && <p>{utils.weiToUsd(pot, price)}</p>}
-          <p className="text-xs">{formatEther(pot)}ETH</p>
+    <div className="absolute right-4 top-4">
+      <Card noDecor>
+        <div className="flex flex-col justify-center gap-2 text-center">
+          <div className="flex flex-col justify-center gap-1">
+            <p className="text-left text-xs font-bold uppercase">Pot</p>
+            <SecondaryCard>
+              <div className="flex flex-col justify-center gap-1">
+                {loading && <p>Loading...</p>}
+                {!loading && price && <p>{utils.weiToUsd(pot, price)}</p>}
+                <p className="text-xs">{formatEther(pot)} ETH</p>
+              </div>
+            </SecondaryCard>
+          </div>
+          <div className="flex flex-col justify-center gap-1">
+            <p className="text-left text-xs font-bold uppercase">Rake</p>
+            <SecondaryCard>
+              <div className="flex flex-col justify-center gap-1 text-center">
+                {loading && <p>Loading...</p>}
+                {!loading && price && <p>{utils.weiToUsd(rake, price)}</p>}
+                <p className="text-xs">{formatEther(rake)}ETH</p>
+                <Button variant="info" size="xs" onClick={calls.withdrawRake}>
+                  Withdraw
+                </Button>
+              </div>
+            </SecondaryCard>
+          </div>
+          <SecondaryCard className="flex flex-col justify-center gap-1">
+            <p className="text-left text-xs font-bold uppercase">Empire Points</p>
+            <div className="flex flex-col gap-1 text-center">
+              <EmpirePoints empire={EEmpire.Blue} />
+              <EmpirePoints empire={EEmpire.Green} />
+              <EmpirePoints empire={EEmpire.Red} />
+            </div>
+          </SecondaryCard>
         </div>
-      </div>
-      <div className="flex flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
-        <p className="text-left text-xs font-bold uppercase">Rake</p>
-        <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
-          {loading && <p>Loading...</p>}
-          {!loading && price && <p>{utils.weiToUsd(rake, price)}</p>}
-          <p className="text-xs">{formatEther(rake)}ETH</p>
-          <button className="btn btn-xs" onClick={calls.withdrawRake}>
-            Withdraw
-          </button>
-        </div>
-      </div>
-      <div className="flex flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
-        <p className="text-left text-xs font-bold uppercase">Empire Points</p>
-        <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
-          <EmpirePoints empire={EEmpire.Blue} />
-          <EmpirePoints empire={EEmpire.Green} />
-          <EmpirePoints empire={EEmpire.Red} />
-        </div>
-      </div>
+      </Card>
     </div>
   );
 };
