@@ -7,6 +7,7 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
+import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { PlanetGrid } from "@/components/PlanetGrid";
 import { Pot } from "@/components/Pot";
@@ -72,6 +73,12 @@ const Game = () => {
           <HistoricalPointPriceModal />
           {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomRight>
+      </HUD>
+
+      <HUD>
+        <HUD.Right>
+          <Dashboard />
+        </HUD.Right>
       </HUD>
     </GameProvider>
   );
