@@ -89,7 +89,7 @@ export const ActionLog = () => {
 
   return (
     <Modal title="Action Log">
-      <Modal.Button className="btn-md h-[58px] w-fit" variant="info">
+      <Modal.Button size="md" className="h-[58px] w-fit" variant="info">
         <BookOpenIcon className="size-8" />
       </Modal.Button>
       <Modal.Content className="h-screen !w-[400px] md:h-3/4">

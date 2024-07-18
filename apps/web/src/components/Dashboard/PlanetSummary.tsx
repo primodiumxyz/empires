@@ -67,8 +67,6 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
         <h3 className="font-semibold text-gray-300">shield</h3>
         <span className="justify-self-end">{shieldCount.toLocaleString()}</span>
         <ShieldCheckIcon className="size-4 justify-self-center" />
-        <span>neighbors</span>
-        <div className="col-span-2">__clickable neighbors__</div>
       </div>
       {!!empireId && <PlanetQuickActions entity={entity} />}
     </>

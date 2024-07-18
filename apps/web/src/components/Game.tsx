@@ -54,9 +54,11 @@ const Game = () => {
         <HUD.TopLeft>
           <Account />
         </HUD.TopLeft>
+
         <HUD.TopMiddle>
           <TimeLeft />
         </HUD.TopMiddle>
+
         <HUD.TopRight>
           <Pot />
         </HUD.TopRight>
@@ -68,18 +70,18 @@ const Game = () => {
         <HUD.BottomLeft>
           <SellPoints />
         </HUD.BottomLeft>
+
         <HUD.BottomMiddle>
           <AdvanceTurn />
         </HUD.BottomMiddle>
+
         <HUD.BottomRight className="flex gap-2">
           <UserSettings />
           <ActionLog />
           <HistoricalPointPriceModal />
           {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomRight>
-      </HUD>
 
-      <HUD>
         <HUD.Right>
           <Dashboard />
         </HUD.Right>
