@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   ChevronLeftIcon,
   CurrencyYenIcon,
@@ -91,10 +90,10 @@ const DashboardPane = () => {
   const { tables } = useCore();
   const factionPrices = usePointPrice();
   const planets = tables.Planet.useAll().map((entity) => ({ entity, properties: tables.Planet.get(entity)! }));
+  const selectedPlanet = tables.SelectedPlanet.use();
   const factions = [EEmpire.Red, EEmpire.Green, EEmpire.Blue] as const;
-  const [selectedPlanet, setSelectedPlanet] = useState<Planet | undefined>(undefined);
 
-  if (selectedPlanet) return <PlanetSummary entity={selectedPlanet.entity} back={() => setSelectedPlanet(undefined)} />;
+  if (selectedPlanet) return <PlanetSummary entity={selectedPlanet.value} back={() => tables.SelectedPlanet.clear()} />;
 
   return (
     <>
@@ -126,7 +125,7 @@ const DashboardPane = () => {
                 "flex h-14 items-center justify-start gap-4",
                 factionId ? EmpireEnumToBorder[factionId as EEmpire] : "border-none",
               )}
-              onClick={() => setSelectedPlanet(planet)}
+              onClick={() => tables.SelectedPlanet.set({ value: entity })}
             >
               {/* TODO: map to planet image */}
               {/* <img src={EntityToPlanetSprites[planet.entity]} width={32} height={32} /> */}
