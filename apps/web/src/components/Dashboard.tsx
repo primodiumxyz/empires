@@ -94,7 +94,7 @@ const DashboardPane = () => {
   const factions = [EEmpire.Red, EEmpire.Green, EEmpire.Blue] as const;
   const [selectedPlanet, setSelectedPlanet] = useState<Planet | undefined>(undefined);
 
-  if (selectedPlanet) return <PlanetSummary planet={selectedPlanet} back={() => setSelectedPlanet(undefined)} />;
+  if (selectedPlanet) return <PlanetSummary entity={selectedPlanet.entity} back={() => setSelectedPlanet(undefined)} />;
 
   return (
     <>
@@ -117,6 +117,7 @@ const DashboardPane = () => {
             entity,
             properties: { factionId },
           } = planet;
+
           return (
             <Button
               key={entity}
@@ -215,11 +216,10 @@ const FactionSummary = ({
 };
 
 /* --------------------------------- PLANET --------------------------------- */
-const PlanetSummary = ({ planet, back }: { planet: Planet; back: () => void }) => {
-  const {
-    entity,
-    properties: { factionId, goldCount, /* shieldCount, */ destroyerCount },
-  } = planet;
+const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) => {
+  const { tables } = useCore();
+  const planet = tables.Planet.use(entity)!;
+  const { factionId, goldCount, /* shieldCount, */ destroyerCount } = planet;
   // TODO(shields): update when implemented
   const shieldCount = BigInt(0);
 
@@ -262,29 +262,30 @@ const PlanetSummary = ({ planet, back }: { planet: Planet; back: () => void }) =
         <span>neighbors</span>
         <div className="col-span-2">__clickable neighbors__</div>
       </div>
-      {!!factionId && <PlanetQuickActions planet={planet} />}
+      {!!factionId && <PlanetQuickActions entity={entity} />}
     </>
   );
 };
 
 /* --------------------------------- ACTIONS -------------------------------- */
-const PlanetQuickActions = ({ planet }: { planet: Planet }) => {
+const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
   const {
+    tables,
     utils: { ethToUSD },
   } = useCore();
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
   const { createDestroyer, removeDestroyer /* addShield, removeShield */ } = useContractCalls();
   const { gameOver } = useTimeLeft();
-  const {
-    entity,
-    properties: { factionId },
-  } = planet;
+
+  const planet = tables.Planet.use(entity)!;
+  const { factionId, destroyerCount /* , shieldCount */ } = planet;
 
   const addDestroyerPriceWei = useActionCost(EPlayerAction.CreateDestroyer, factionId);
   const removeDestroyerPriceWei = useActionCost(EPlayerAction.KillDestroyer, factionId);
   // TODO(shields): update when implemented
   // const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, factionId);
   // const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, factionId);
+  const shieldCount = BigInt(0);
   const addShieldPriceWei = BigInt(0);
   const removeShieldPriceWei = BigInt(0);
   const addShield = () => {};
@@ -332,7 +333,7 @@ const PlanetQuickActions = ({ planet }: { planet: Planet }) => {
               variant="neutral"
               size="xs"
               onClick={() => removeDestroyer(entity, removeDestroyerPriceWei)}
-              disabled={gameOver}
+              disabled={gameOver || !destroyerCount}
             >
               Buy
             </Button>
@@ -359,7 +360,7 @@ const PlanetQuickActions = ({ planet }: { planet: Planet }) => {
             {removeShieldPriceUsd} ({formatEther(removeShieldPriceWei)} ETH)
           </span>
           <TransactionQueueMask id={`${entity}-remove-shield`}>
-            <Button variant="neutral" size="xs" onClick={removeShield} disabled={gameOver}>
+            <Button variant="neutral" size="xs" onClick={removeShield} disabled={gameOver || !shieldCount}>
               Buy
             </Button>
           </TransactionQueueMask>
