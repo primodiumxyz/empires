@@ -14,7 +14,7 @@ declare const abi: [
   },
   {
     "type": "function",
-    "name": "Empires__createDestroyer",
+    "name": "Empires__createShip",
     "inputs": [
       {
         "name": "_planetId",
@@ -322,7 +322,7 @@ declare const abi: [
   },
   {
     "type": "function",
-    "name": "Empires__killDestroyer",
+    "name": "Empires__killShip",
     "inputs": [
       {
         "name": "_planetId",

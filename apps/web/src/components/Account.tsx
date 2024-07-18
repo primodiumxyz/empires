@@ -73,8 +73,8 @@ export const Account = () => {
 const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
   const { tables } = useCore();
 
-  const playerPoints = tables.Value_PointsMap.useWithKeys({ factionId: empire, playerId })?.value ?? 0n;
-  const empirePoints = tables.Faction.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
+  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
+  const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
 

@@ -2,39 +2,36 @@
 pragma solidity >=0.8.24;
 
 import { Arrivals, Planet, PlanetData, BattleNPCAction, BattleNPCActionData } from "codegen/index.sol";
-import { FactionPlanetsSet } from "adts/FactionPlanetsSet.sol";
+import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { pseudorandomEntity } from "src/utils.sol";
 
 library LibResolveCombat {
   function resolveCombat(EEmpire empire, bytes32 planetId) internal {
-    uint256 arrivingDestroyers = Arrivals.get(planetId);
-    if (arrivingDestroyers == 0) return;
+    uint256 arrivingShips = Arrivals.get(planetId);
+    if (arrivingShips == 0) return;
 
     PlanetData memory planetData = Planet.get(planetId);
-    if (empire == planetData.factionId)
-      Planet.setDestroyerCount(planetId, planetData.destroyerCount + arrivingDestroyers);
+    if (empire == planetData.empireId) Planet.setShipCount(planetId, planetData.shipCount + arrivingShips);
     else {
-      bool conquer = planetData.destroyerCount < arrivingDestroyers;
+      bool conquer = planetData.shipCount < arrivingShips;
 
-      uint256 remainingDestroyers = conquer
-        ? arrivingDestroyers - planetData.destroyerCount
-        : planetData.destroyerCount - arrivingDestroyers;
+      uint256 remainingShips = conquer ? arrivingShips - planetData.shipCount : planetData.shipCount - arrivingShips;
 
       if (conquer) {
-        FactionPlanetsSet.add(empire, planetId);
-        FactionPlanetsSet.remove(planetData.factionId, planetId);
+        EmpirePlanetsSet.add(empire, planetId);
+        EmpirePlanetsSet.remove(planetData.empireId, planetId);
 
-        Planet.setFactionId(planetId, empire);
+        Planet.setEmpireId(planetId, empire);
       }
 
-      Planet.setDestroyerCount(planetId, remainingDestroyers);
+      Planet.setShipCount(planetId, remainingShips);
       BattleNPCAction.set(
         pseudorandomEntity(),
         BattleNPCActionData({
           planetId: planetId,
-          attackingShipCount: arrivingDestroyers,
-          defendingShipCount: planetData.destroyerCount,
+          attackingShipCount: arrivingShips,
+          defendingShipCount: planetData.shipCount,
           conquer: conquer,
           timestamp: block.timestamp
         })

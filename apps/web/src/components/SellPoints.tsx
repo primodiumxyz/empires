@@ -20,7 +20,7 @@ export const SellPoints = () => {
   const calls = useContractCalls();
   const { tables, utils } = useCore();
   const { price } = useEthPrice();
-  const playerPoints = tables.Value_PointsMap.useWithKeys({ factionId: empire, playerId: entity })?.value ?? 0n;
+  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
   const [amountToSell, setAmountToSell] = useState("0");
 

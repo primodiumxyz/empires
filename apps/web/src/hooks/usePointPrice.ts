@@ -6,7 +6,7 @@ import { useCore } from "@primodiumxyz/core/react";
 export const usePointPrice = (empire: EEmpire, points: number): { price: bigint; message: string } => {
   const { tables } = useCore();
 
-  const currentPointCost = tables.Faction.useWithKeys({ id: empire })?.pointCost ?? 0n;
+  const currentPointCost = tables.Empire.useWithKeys({ id: empire })?.pointCost ?? 0n;
   const config = tables.P_PointConfig.use();
   return useMemo(() => {
     if (!config || currentPointCost == 0n || points == 0) {

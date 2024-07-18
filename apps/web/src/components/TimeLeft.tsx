@@ -78,10 +78,10 @@ const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
   const { pot } = usePot();
   const { price } = useEthPrice();
 
-  const factionPoints = tables.Faction.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
-  const playerFactionPoints = tables.Value_PointsMap.useWithKeys({ factionId: empire, playerId: entity })?.value ?? 0n;
+  const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
+  const playerEmpirePoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
-  const playerPot = factionPoints ? (pot * playerFactionPoints) / factionPoints : 0n;
+  const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
   const playerPotUSD = price ? utils.weiToUsd(playerPot, price) : "loading...";
 
   const empireName = empire == EEmpire.Blue ? "Blue" : empire == EEmpire.Green ? "Green" : "Red";
