@@ -1,5 +1,7 @@
 import { createContext, FC, memo, ReactNode, useContext, useEffect, useRef } from "react";
 
+import { cn } from "@/util/client";
+
 interface HUDProps {
   children?: ReactNode;
   scale?: number;
@@ -189,8 +191,8 @@ export const HUD: FC<HUDProps> & {
   const paddingClass = pad ? "p-3" : "";
   return (
     <ScaleContext.Provider value={scale}>
-      <div className={`screen-container ${paddingClass} pointer-events-none fixed right-0 top-0`}>
-        <div className={`pointer-events-none relative h-full`}>{children}</div>
+      <div className={cn("screen-container pointer-events-none fixed right-0 top-0", paddingClass)}>
+        <div className="pointer-events-auto relative h-full">{children}</div>
       </div>
     </ScaleContext.Provider>
   );

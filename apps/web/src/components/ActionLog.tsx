@@ -7,9 +7,6 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { AutoSizer } from "@/components/core/AutoSizer";
 import { Modal } from "@/components/core/Modal";
 import { useEthPrice } from "@/hooks/useEthPrice";
-import { cn } from "@/util/client";
-
-const DEV = import.meta.env.PRI_DEV === "true";
 
 type ActionLogEntry = {
   actor: string;
@@ -92,10 +89,7 @@ export const ActionLog = () => {
 
   return (
     <Modal title="Action Log">
-      <Modal.Button
-        className={cn("btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-32" : "right-22")}
-        variant="info"
-      >
+      <Modal.Button className="btn-md h-[58px] w-fit" variant="info">
         <BookOpenIcon className="size-8" />
       </Modal.Button>
       <Modal.Content className="h-screen !w-[400px] md:h-3/4">
