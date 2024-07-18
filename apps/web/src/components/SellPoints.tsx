@@ -3,7 +3,9 @@ import { formatEther } from "viem";
 
 import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { Button } from "@/components/core/Button";
 import { Card, SecondaryCard } from "@/components/core/Card";
+import { Dropdown } from "@/components/core/Dropdown";
 import { NumberInput } from "@/components/core/NumberInput";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
@@ -40,7 +42,7 @@ export const SellPoints = () => {
     setAmountToSell("0");
   };
 
-  const pointsToWei = usePointPrice(empire, Number(amountToSell));
+  const { price: pointsToWei, message } = usePointPrice(empire, Number(amountToSell));
   const ethOut = formatEther(pointsToWei);
   const usdOut = utils.weiToUsd(pointsToWei, price ?? 0);
   return (
@@ -50,36 +52,38 @@ export const SellPoints = () => {
           <p className="text-left text-xs font-bold uppercase">Sell Points</p>
           <SecondaryCard>
             <p className="text-left text-xs opacity-50">EMPIRE</p>
-            <select
-              value={empire}
-              onChange={(e) => selectEmpire(Number(e.target.value) as EEmpire)}
-              className="bg-neutral text-white"
-            >
-              <option value={EEmpire.Green}>Green</option>
-              <option value={EEmpire.Red}>Red</option>
-              <option value={EEmpire.Blue}>Blue</option>
-            </select>
+            <Dropdown value={empire} onChange={(value) => selectEmpire(value)} className="w-full">
+              <Dropdown.Item value={EEmpire.Green}>Green</Dropdown.Item>
+              <Dropdown.Item value={EEmpire.Red}>Red</Dropdown.Item>
+              <Dropdown.Item value={EEmpire.Blue}>Blue</Dropdown.Item>
+            </Dropdown>
           </SecondaryCard>
           <SecondaryCard className="flex flex-col gap-2">
-            <div>
-              <NumberInput
-                count={amountToSell}
-                onChange={handleInputChange}
-                min={0}
-                max={Number(formatEther(playerPoints))}
-              />
-            </div>
+            <NumberInput
+              count={amountToSell}
+              onChange={handleInputChange}
+              min={0}
+              max={Number(formatEther(playerPoints))}
+            />
             <div className="flex justify-center gap-2 rounded-md bg-primary/50 px-2 py-1 text-xs font-bold uppercase">
-              <span className="text-white">{usdOut}</span> <span>{ethOut}ETH</span>
+              {message ? (
+                <span className="text-[0.6rem] text-white">{message}</span>
+              ) : (
+                <>
+                  <span className="text-white">{usdOut}</span>
+                  <span>{ethOut}ETH</span>
+                </>
+              )}
             </div>
             <TransactionQueueMask id="sell-points">
-              <button
-                className="btn btn-secondary w-full"
+              <Button
+                size="md"
+                className="w-full"
                 disabled={amountToSell == "0" || !pointsToWei}
                 onClick={handleSubmit}
               >
                 Sell
-              </button>
+              </Button>
             </TransactionQueueMask>
           </SecondaryCard>
         </div>

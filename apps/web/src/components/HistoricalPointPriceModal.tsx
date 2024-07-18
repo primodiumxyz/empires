@@ -74,9 +74,9 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
   const historicalPriceEntities = tables.HistoricalPointCost.useAll();
   const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? BigInt(0);
 
-  const blueSellPrice = usePointPrice(EEmpire.Blue, 1n);
-  const greenSellPrice = usePointPrice(EEmpire.Green, 1n);
-  const redSellPrice = usePointPrice(EEmpire.Red, 1n);
+  const { price: blueSellPrice } = usePointPrice(EEmpire.Blue, 1);
+  const { price: greenSellPrice } = usePointPrice(EEmpire.Green, 1);
+  const { price: redSellPrice } = usePointPrice(EEmpire.Red, 1);
   const prices = {
     [EEmpire.Blue]: blueSellPrice,
     [EEmpire.Green]: greenSellPrice,
