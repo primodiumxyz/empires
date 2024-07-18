@@ -33,7 +33,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
       functionName: "Empires__sellPoints",
       args: [empire, amount],
       txQueueOptions: {
-        id: `sell-points`,
+        id: "sell-points",
         ...options,
       },
       onComplete: (receipt) => {},

@@ -33,12 +33,18 @@ export const SellPoints = () => {
     }
   };
 
-  const pointsToWei = usePointPrice(empire, BigInt(amountToSell));
+  const handleSubmit = () => {
+    calls.sellPoints(empire, BigInt(Number(amountToSell) * POINTS_UNIT));
+
+    setAmountToSell("0");
+  };
+
+  const pointsToWei = usePointPrice(empire, Number(amountToSell));
   const ethOut = formatEther(pointsToWei);
   const usdOut = utils.weiToUsd(pointsToWei, price ?? 0);
   return (
     <div className="absolute bottom-4 left-4">
-      <Card noDecor className="flex w-64 flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
+      <Card noDecor className="flex w-56 flex-col justify-center gap-1 rounded bg-secondary p-2 text-center text-white">
         <p className="text-left text-xs font-bold uppercase">Sell Points</p>
         <div className="flex flex-col justify-center gap-1 rounded border border-white/50 p-2 text-center text-white">
           <p className="text-left text-xs opacity-50">EMPIRE</p>
@@ -72,8 +78,8 @@ export const SellPoints = () => {
             <TransactionQueueMask id="sell-points">
               <button
                 className="btn btn-secondary w-full"
-                disabled={amountToSell == "0"}
-                onClick={() => calls.sellPoints(empire, BigInt(Number(amountToSell) * POINTS_UNIT))}
+                disabled={amountToSell == "0" || !pointsToWei}
+                onClick={handleSubmit}
               >
                 Sell
               </button>
