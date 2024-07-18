@@ -2,31 +2,31 @@ import { AccountClient, Core, ExecuteFunctions, TxQueueOptions } from "@primodiu
 import { Entity } from "@primodiumxyz/reactive-tables";
 
 export const createActionCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
-  const createDestroyer = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const createShip = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
-      functionName: "Empires__createDestroyer",
+      functionName: "Empires__createShip",
       args: [planetId],
       options: { value: payment },
       txQueueOptions: {
-        id: `${planetId}-create-destroyer`,
+        id: `${planetId}-create-ship`,
         ...options,
       },
       onComplete: (receipt) => {},
     });
   };
 
-  const killDestroyer = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const killShip = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
-      functionName: "Empires__killDestroyer",
+      functionName: "Empires__killShip",
       args: [planetId],
       options: { value: payment },
       txQueueOptions: {
-        id: `${planetId}-kill-destroyer`,
+        id: `${planetId}-kill-ship`,
         ...options,
       },
       onComplete: (receipt) => {},
     });
   };
 
-  return { createDestroyer, removeDestroyer: killDestroyer };
+  return { createShip, removeShip: killShip };
 };

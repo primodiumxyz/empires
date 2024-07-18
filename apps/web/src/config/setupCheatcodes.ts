@@ -9,7 +9,7 @@ import { EmpireEnumToName } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
-  destroyers: "bg-red-500/10",
+  ships: "bg-red-500/10",
   gold: "bg-yellow-500/10",
   points: "bg-green-500/10",
   time: "bg-blue-500/10",
@@ -32,12 +32,12 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const npcActionThresholds = tables.P_NPCActionThresholds.get();
   const npcMoveThresholds = tables.P_NPCMoveThresholds.get();
 
-  /* ------------------------------- DESTROYERS ------------------------------- */
-  // Set the amount of destroyers on a planet
-  const setDestroyers = createCheatcode({
-    title: "Set destroyers",
-    caption: "Set the amount of destroyers on a planet",
-    bg: CheatcodeToBg["destroyers"],
+  /* ------------------------------- SHIPS ------------------------------- */
+  // Set the amount of ships on a planet
+  const setShips = createCheatcode({
+    title: "Set ships",
+    caption: "Set the amount of ships on a planet",
+    bg: CheatcodeToBg["ships"],
     inputs: {
       planet: {
         label: "Planet",
@@ -57,14 +57,14 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
         {
           id: planet.id as Entity,
         },
-        { destroyerCount: BigInt(amount.value) },
+        { shipCount: BigInt(amount.value) },
       );
 
       if (success) {
-        notify("success", `Destroyers set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
+        notify("success", `Ships set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
         return true;
       } else {
-        notify("error", `Failed to set destroyers on ${entityToPlanetName(planet.id as Entity)}`);
+        notify("error", `Failed to set ships on ${entityToPlanetName(planet.id as Entity)}`);
         return false;
       }
     },
@@ -116,11 +116,11 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       return false;
     }
   };
-  // send destroyers from a planet to another
-  const sendDestroyers = createCheatcode({
-    title: "Send destroyers",
-    bg: CheatcodeToBg["destroyers"],
-    caption: "Send destroyers from one planet to another",
+  // send ships from a planet to another
+  const sendShips = createCheatcode({
+    title: "Send ships",
+    bg: CheatcodeToBg["ships"],
+    caption: "Send ships from one planet to another",
     inputs: {
       from: {
         label: "From",
@@ -140,29 +140,27 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       const fromPlanetData = tables.Planet.get(fromEntity);
       const toPlanetData = tables.Planet.get(toEntity);
       if (!fromPlanetData || !toPlanetData) {
-        console.log("[CHEATCODE] Send destroyers: invalid planets");
+        console.log("[CHEATCODE] Send ships: invalid planets");
         return false;
       }
 
-      const destroyersToMove = fromPlanetData.destroyerCount ?? BigInt(0);
-      if (destroyersToMove === BigInt(0)) {
-        console.log("[CHEATCODE] Send destroyers: no destroyers to send");
+      const shipsToMove = fromPlanetData.shipCount ?? BigInt(0);
+      if (shipsToMove === BigInt(0)) {
+        console.log("[CHEATCODE] Send ships: no ships to send");
         return false;
       }
 
-      await setTableValue(tables.Planet, { id: fromEntity }, { destroyerCount: BigInt(0) });
+      await setTableValue(tables.Planet, { id: fromEntity }, { shipCount: BigInt(0) });
 
       if (toPlanetData.factionId === fromPlanetData.factionId) {
         return await setTableValue(
           tables.Planet,
           { id: toEntity },
-          { destroyerCount: toPlanetData.destroyerCount + destroyersToMove },
+          { shipCount: toPlanetData.shipCount + shipsToMove },
         );
       } else {
-        const conquer = toPlanetData.destroyerCount < destroyersToMove;
-        const remainingDestroyers = conquer
-          ? destroyersToMove - toPlanetData.destroyerCount
-          : toPlanetData.destroyerCount - destroyersToMove;
+        const conquer = toPlanetData.shipCount < shipsToMove;
+        const remainingShips = conquer ? shipsToMove - toPlanetData.shipCount : toPlanetData.shipCount - shipsToMove;
 
         if (conquer) {
           const success = (
@@ -176,20 +174,18 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
           if (!success) return false;
         }
 
-        const success = await setTableValue(tables.Planet, { id: toEntity }, { destroyerCount: remainingDestroyers });
+        const success = await setTableValue(tables.Planet, { id: toEntity }, { shipCount: remainingShips });
 
         if (success) {
           notify(
             "success",
-            `Sent ${destroyersToMove} destroyers from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(
-              toEntity,
-            )}`,
+            `Sent ${shipsToMove} ships from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(toEntity)}`,
           );
           return true;
         } else {
           notify(
             "error",
-            `Failed to send destroyers from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(toEntity)}`,
+            `Failed to send ships from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(toEntity)}`,
           );
           return false;
         }
@@ -590,18 +586,17 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       bg: CheatcodeToBg["config"],
       caption: "P_NPCActionCosts",
       inputs: {
-        buyDestroyers: {
-          label: "Buy destroyers (in gold)",
+        buyShips: {
+          label: "Buy ships (in gold)",
           inputType: "number",
-          defaultValue:
-            tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction["BuyDestroyers"] })?.goldCost ?? BigInt(2),
+          defaultValue: tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction["BuyShips"] })?.goldCost ?? BigInt(2),
         },
       },
-      execute: async ({ buyDestroyers }) => {
+      execute: async ({ buyShips }) => {
         const success = await setTableValue(
           tables.P_NPCActionCosts,
-          { action: ENPCAction["BuyDestroyers"] },
-          { goldCost: BigInt(buyDestroyers.value) },
+          { action: ENPCAction["BuyShips"] },
+          { goldCost: BigInt(buyShips.value) },
         );
 
         if (success) {
@@ -624,10 +619,10 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
           inputType: "number",
           defaultValue: Number(npcActionThresholds?.none ?? BigInt(0)) / 100,
         },
-        buyDestroyers: {
-          label: "Buy destroyers (0-100)",
+        buyShips: {
+          label: "Buy ships (0-100)",
           inputType: "number",
-          defaultValue: Number(npcActionThresholds?.buyDestroyers ?? BigInt(0)) / 100,
+          defaultValue: Number(npcActionThresholds?.buyShips ?? BigInt(0)) / 100,
         },
       },
       execute: async (properties) => {
@@ -702,8 +697,8 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   };
 
   return [
-    setDestroyers,
-    sendDestroyers,
+    setShips,
+    sendShips,
     setGoldCount,
     generateGold,
     givePoints,

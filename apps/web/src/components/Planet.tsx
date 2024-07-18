@@ -31,7 +31,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 }) => {
   const { tables, utils } = useCore();
   const planet = tables.Planet.use(entity);
-  const { createDestroyer, removeDestroyer } = useContractCalls();
+  const { createShip, removeShip } = useContractCalls();
   const planetFaction = (planet?.factionId ?? 0) as EEmpire;
   const [conquered, setConquered] = useState(false);
 
@@ -47,18 +47,18 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     return [cartesianCoord.x, cartesianCoord.y];
   }, [planet, tileSize, margin]);
 
-  const createDestroyerPriceWei = useActionCost(EPlayerAction.CreateDestroyer, planetFaction);
-  const killDestroyerPriceWei = useActionCost(EPlayerAction.KillDestroyer, planetFaction);
+  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetFaction);
+  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetFaction);
 
-  const createDestroyerPriceUsd = utils.ethToUSD(createDestroyerPriceWei, price ?? 0);
-  const killDestroyerPriceUsd = utils.ethToUSD(killDestroyerPriceWei, price ?? 0);
+  const createShipPriceUsd = utils.ethToUSD(createShipPriceWei, price ?? 0);
+  const killShipPriceUsd = utils.ethToUSD(killShipPriceWei, price ?? 0);
 
   const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
   const [goldFloatingTexts, setGoldFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
   const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
-    const listener = tables.CreateDestroyerPlayerAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.CreateShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
       const data = { planetId: current.planetId, shipCount: 1n };
       console.log({ planetId: data.planetId, entity });
@@ -79,7 +79,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   }, [nextId]);
 
   useEffect(() => {
-    const listener = tables.KillDestroyerPlayerAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.KillShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
       const data = { planetId: current.planetId, shipCount: 1n };
       console.log({ planetId: data.planetId, entity });
@@ -100,9 +100,9 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   }, [nextId]);
 
   useEffect(() => {
-    const listener = tables.BuyDestroyersNPCAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.BuyShipsNPCAction.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.destroyerBought, goldSpent: current.goldSpent };
+      const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
       if (data.planetId !== entity) return;
 
       // Add floating text
@@ -166,7 +166,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         </div>
         <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
           <p className="flex items-center justify-center gap-2">
-            <RocketLaunchIcon className="size-4" /> {planet.destroyerCount.toLocaleString()}
+            <RocketLaunchIcon className="size-4" /> {planet.shipCount.toLocaleString()}
           </p>
           {floatingTexts.map((item) => (
             <div
@@ -178,28 +178,28 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           ))}
 
           <div className="flex items-center gap-2">
-            <TransactionQueueMask id={`${entity}-kill-destroyer`}>
+            <TransactionQueueMask id={`${entity}-kill-ship`}>
               <Button
-                tooltip={`Cost: ${killDestroyerPriceUsd}`}
+                tooltip={`Cost: ${killShipPriceUsd}`}
                 variant="neutral"
                 size="xs"
                 shape="square"
                 className="border-none"
-                onClick={() => removeDestroyer(entity, killDestroyerPriceWei)}
+                onClick={() => removeShip(entity, killShipPriceWei)}
                 disabled={gameOver || planet.factionId == 0}
               >
                 <MinusIcon className="size-4" />
               </Button>
             </TransactionQueueMask>
 
-            <TransactionQueueMask id={`${entity}-create-destroyer`}>
+            <TransactionQueueMask id={`${entity}-create-ship`}>
               <Button
-                tooltip={`Cost: ${createDestroyerPriceUsd}`}
+                tooltip={`Cost: ${createShipPriceUsd}`}
                 variant="neutral"
                 size="xs"
                 shape="square"
                 className="border-none"
-                onClick={() => createDestroyer(entity, createDestroyerPriceWei)}
+                onClick={() => createShip(entity, createShipPriceWei)}
                 disabled={gameOver || planet.factionId == 0}
               >
                 <PlusIcon className="size-4" />
