@@ -13,7 +13,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { Core, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { EmpireToFactionSprites } from "@primodiumxyz/game";
+import { EmpireToEmpireSprites } from "@primodiumxyz/game";
 import { Entity, Properties } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
@@ -88,24 +88,21 @@ export const Dashboard = () => {
 /* --------------------------------- CONTENT -------------------------------- */
 const DashboardPane = () => {
   const { tables } = useCore();
-  const factionPrices = usePointPrice();
   const planets = tables.Planet.useAll().map((entity) => ({ entity, properties: tables.Planet.get(entity)! }));
   const selectedPlanet = tables.SelectedPlanet.use();
-  const factions = [EEmpire.Red, EEmpire.Green, EEmpire.Blue] as const;
+  const empires = [EEmpire.Red, EEmpire.Green, EEmpire.Blue] as const;
 
   if (selectedPlanet) return <PlanetSummary entity={selectedPlanet.value} back={() => tables.SelectedPlanet.clear()} />;
 
   return (
     <>
-      <h2 className="text-sm font-semibold text-gray-300">Factions</h2>
+      <h2 className="text-sm font-semibold text-gray-300">Empires</h2>
       <div className="flex flex-col gap-2">
-        {factions.map((faction) => (
-          <FactionSummary
-            key={faction}
-            factionId={faction}
-            buyPrice={factionPrices.buy[faction] ?? BigInt(0)}
-            sellPrice={factionPrices.sell[faction] ?? BigInt(0)}
-            ownedPlanets={planets.filter((planet) => planet.properties.factionId === faction)}
+        {empires.map((empire) => (
+          <EmpireSummary
+            key={empire}
+            empireId={empire}
+            ownedPlanets={planets.filter((planet) => planet.properties.empireId === empire)}
           />
         ))}
       </div>
@@ -114,7 +111,7 @@ const DashboardPane = () => {
         {planets.map((planet) => {
           const {
             entity,
-            properties: { factionId },
+            properties: { empireId },
           } = planet;
 
           return (
@@ -123,7 +120,7 @@ const DashboardPane = () => {
               variant="neutral"
               className={cn(
                 "flex h-14 items-center justify-start gap-4",
-                factionId ? EmpireEnumToBorder[factionId as EEmpire] : "border-none",
+                empireId ? EmpireEnumToBorder[empireId as EEmpire] : "border-none",
               )}
               onClick={() => tables.SelectedPlanet.set({ value: entity })}
             >
@@ -131,7 +128,7 @@ const DashboardPane = () => {
               {/* <img src={EntityToPlanetSprites[planet.entity]} width={32} height={32} /> */}
               <img src={undefined} width={32} height={32} />
               <h3 className="text-sm font-semibold text-gray-300">{entityToPlanetName(entity)}</h3>
-              <span>{factionId ? `(${EmpireEnumToName[factionId as EEmpire]})` : "unowned"}</span>
+              <span>{empireId ? `(${EmpireEnumToName[empireId as EEmpire]})` : "unowned"}</span>
             </Button>
           );
         })}
@@ -144,55 +141,41 @@ const DashboardPane = () => {
 /*                                  SUMMARIES                                 */
 /* -------------------------------------------------------------------------- */
 
-/* --------------------------------- FACTION -------------------------------- */
+/* --------------------------------- EMPIRE --------------------------------- */
 // TODO: display the number of wallets holding points?
-const FactionSummary = ({
-  factionId,
-  buyPrice,
-  sellPrice,
-  ownedPlanets,
-}: {
-  factionId: EEmpire;
-  buyPrice: bigint;
-  sellPrice: bigint;
-  ownedPlanets: Planet[];
-}) => {
+const EmpireSummary = ({ empireId, ownedPlanets }: { empireId: EEmpire; ownedPlanets: Planet[] }) => {
   const {
     tables,
-    utils: { ethToUSD },
+    utils: { weiToUsd },
   } = useCore();
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
-  const faction = tables.Faction.useWithKeys({ id: factionId })!;
-
-  const buyPriceUsd = ethToUSD(buyPrice, ethPrice ?? 0);
-  const sellPriceUsd = ethToUSD(sellPrice, ethPrice ?? 0);
+  const { price: sellPrice } = usePointPrice(empireId, 1);
+  const sellPriceUsd = weiToUsd(sellPrice, ethPrice ?? 0);
+  const empire = tables.Empire.useWithKeys({ id: empireId })!;
 
   const totalOwnedAssets = ownedPlanets.reduce(
     (acc, planet) => {
-      if (planet.properties.factionId !== factionId) return acc;
+      if (planet.properties.empireId !== empireId) return acc;
 
       acc.gold += planet.properties.goldCount;
-      acc.destroyers += planet.properties.destroyerCount;
+      acc.ships += planet.properties.shipCount;
       // TODO(shields): uncomment when implemented
       // acc.shields += planet.properties.shieldCount;
       return acc;
     },
-    { gold: BigInt(0), destroyers: BigInt(0), shields: BigInt(0) },
+    { gold: BigInt(0), ships: BigInt(0), shields: BigInt(0) },
   );
 
   if (loadingEthPrice) return <span>loading...</span>;
   return (
-    <Card noDecor className={cn(EmpireEnumToBg[factionId], "border-none")}>
+    <Card noDecor className={cn(EmpireEnumToBg[empireId], "border-none")}>
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-x-8">
-        <img src={EmpireToFactionSprites[factionId]} width={64} height={64} />
+        <img src={EmpireToEmpireSprites[empireId]} width={64} height={64} />
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-semibold text-gray-300">{EmpireEnumToName[factionId]}</h3>
-            <Badge variant="glass">{formatEther(faction.pointsIssued)} points issued</Badge>
+            <h3 className="text-sm font-semibold text-gray-300">{EmpireEnumToName[empireId]}</h3>
+            <Badge variant="glass">{formatEther(empire.pointsIssued)} points issued</Badge>
           </div>
-          <Badge variant="primary" className="flex items-center gap-2">
-            buy {buyPriceUsd} ({formatEther(buyPrice)} ETH)
-          </Badge>
           <Badge variant={sellPrice ? "secondary" : "warning"} className="flex items-center gap-2">
             {sellPrice ? `sell ${sellPriceUsd} (${formatEther(sellPrice)} ETH)` : "can't sell"}
           </Badge>
@@ -200,7 +183,7 @@ const FactionSummary = ({
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <RocketLaunchIcon className="size-4" />
-            {totalOwnedAssets.destroyers.toLocaleString()}
+            {totalOwnedAssets.ships.toLocaleString()}
           </div>
           <div className="flex items-center gap-2">
             <ShieldCheckIcon className="size-4" /> {totalOwnedAssets.shields.toLocaleString()}
@@ -218,7 +201,7 @@ const FactionSummary = ({
 const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) => {
   const { tables } = useCore();
   const planet = tables.Planet.use(entity)!;
-  const { factionId, goldCount, /* shieldCount, */ destroyerCount } = planet;
+  const { empireId, goldCount, /* shieldCount, */ shipCount } = planet;
   // TODO(shields): update when implemented
   const shieldCount = BigInt(0);
 
@@ -235,12 +218,12 @@ const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) =
       {/* <img src={EntityToPlanetSprites[planet.entity]} width={64} height={64} className="my-2 self-center" /> */}
       <img src={undefined} width={64} height={64} className="my-2 self-center" />
       <div className="grid w-[80%] grid-cols-[1fr_auto_3rem] items-center gap-y-4 self-center">
-        {factionId ? (
+        {empireId ? (
           <>
             <h3 className="font-semibold text-gray-300">controlled by</h3>
-            <span className="justify-self-end">{EmpireEnumToName[factionId as EEmpire]} empire</span>
+            <span className="justify-self-end">{EmpireEnumToName[empireId as EEmpire]} empire</span>
             <img
-              src={EmpireToFactionSprites[factionId as EEmpire]}
+              src={EmpireToEmpireSprites[empireId as EEmpire]}
               width={32}
               height={32}
               className="justify-self-center"
@@ -252,8 +235,8 @@ const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) =
         <h3 className="font-semibold text-gray-300">gold</h3>
         <span className="justify-self-end">{goldCount.toLocaleString()}</span>
         <CurrencyYenIcon className="size-4 justify-self-center" />
-        <h3 className="font-semibold text-gray-300">destroyers</h3>
-        <span className="justify-self-end">{destroyerCount.toLocaleString()}</span>
+        <h3 className="font-semibold text-gray-300">ships</h3>
+        <span className="justify-self-end">{shipCount.toLocaleString()}</span>
         <RocketLaunchIcon className="size-4 justify-self-center" />
         <h3 className="font-semibold text-gray-300">shield</h3>
         <span className="justify-self-end">{shieldCount.toLocaleString()}</span>
@@ -261,7 +244,7 @@ const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) =
         <span>neighbors</span>
         <div className="col-span-2">__clickable neighbors__</div>
       </div>
-      {!!factionId && <PlanetQuickActions entity={entity} />}
+      {!!empireId && <PlanetQuickActions entity={entity} />}
     </>
   );
 };
@@ -270,30 +253,30 @@ const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) =
 const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
   const {
     tables,
-    utils: { ethToUSD },
+    utils: { weiToUsd },
   } = useCore();
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
-  const { createDestroyer, removeDestroyer /* addShield, removeShield */ } = useContractCalls();
+  const { createShip, removeShip /* addShield, removeShield */ } = useContractCalls();
   const { gameOver } = useTimeLeft();
 
   const planet = tables.Planet.use(entity)!;
-  const { factionId, destroyerCount /* , shieldCount */ } = planet;
+  const { empireId, shipCount /* , shieldCount */ } = planet;
 
-  const addDestroyerPriceWei = useActionCost(EPlayerAction.CreateDestroyer, factionId);
-  const removeDestroyerPriceWei = useActionCost(EPlayerAction.KillDestroyer, factionId);
+  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId);
+  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId);
   // TODO(shields): update when implemented
-  // const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, factionId);
-  // const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, factionId);
+  // const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId);
+  // const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId);
   const shieldCount = BigInt(0);
   const addShieldPriceWei = BigInt(0);
   const removeShieldPriceWei = BigInt(0);
   const addShield = () => {};
   const removeShield = () => {};
 
-  const addDestroyerPriceUsd = ethToUSD(addDestroyerPriceWei, ethPrice ?? 0);
-  const removeDestroyerPriceUsd = ethToUSD(removeDestroyerPriceWei, ethPrice ?? 0);
-  const addShieldPriceUsd = ethToUSD(addShieldPriceWei, ethPrice ?? 0);
-  const removeShieldPriceUsd = ethToUSD(removeShieldPriceWei, ethPrice ?? 0);
+  const addShipPriceUsd = weiToUsd(addShipPriceWei, ethPrice ?? 0);
+  const removeShipPriceUsd = weiToUsd(removeShipPriceWei, ethPrice ?? 0);
+  const addShieldPriceUsd = weiToUsd(addShieldPriceWei, ethPrice ?? 0);
+  const removeShieldPriceUsd = weiToUsd(removeShieldPriceWei, ethPrice ?? 0);
 
   if (loadingEthPrice) return <span>loading...</span>;
   return (
@@ -305,17 +288,12 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <RocketLaunchIcon className="size-4" />
             <PlusIcon className="size-4" />
           </div>
-          <span className="flex items-center">deploy destroyer</span>
+          <span className="flex items-center">deploy ship</span>
           <span className="flex items-center">
-            {addDestroyerPriceUsd} ({formatEther(addDestroyerPriceWei)} ETH)
+            {addShipPriceUsd} ({formatEther(addShipPriceWei)} ETH)
           </span>
-          <TransactionQueueMask id={`${entity}-create-destroyer`}>
-            <Button
-              variant="neutral"
-              size="xs"
-              onClick={() => createDestroyer(entity, addDestroyerPriceWei)}
-              disabled={gameOver}
-            >
+          <TransactionQueueMask id={`${entity}-create-ship`}>
+            <Button variant="neutral" size="xs" onClick={() => createShip(entity, addShipPriceWei)} disabled={gameOver}>
               Buy
             </Button>
           </TransactionQueueMask>
@@ -323,16 +301,16 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <RocketLaunchIcon className="size-4" />
             <MinusIcon className="size-4" />
           </div>
-          <span className="flex items-center">withdraw destroyer</span>
+          <span className="flex items-center">withdraw ship</span>
           <span className="flex items-center">
-            {removeDestroyerPriceUsd} ({formatEther(removeDestroyerPriceWei)} ETH)
+            {removeShipPriceUsd} ({formatEther(removeShipPriceWei)} ETH)
           </span>
-          <TransactionQueueMask id={`${entity}-kill-destroyer`}>
+          <TransactionQueueMask id={`${entity}-kill-ship`}>
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => removeDestroyer(entity, removeDestroyerPriceWei)}
-              disabled={gameOver || !destroyerCount}
+              onClick={() => removeShip(entity, removeShipPriceWei)}
+              disabled={gameOver || !shipCount}
             >
               Buy
             </Button>

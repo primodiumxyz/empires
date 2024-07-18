@@ -1,9 +1,9 @@
 import { EEmpire } from '@primodiumxyz/contracts';
 import { Sprites } from '@primodiumxyz/assets';
 
-export const EmpireToFactionSprites = {
-  [EEmpire.Red]: Sprites.FactionRed,
-  [EEmpire.Green]: Sprites.FactionGreen,
-  [EEmpire.Blue]: Sprites.FactionBlue,
+export const EmpireToEmpireSprites = {
+  [EEmpire.Red]: Sprites.EmpireRed,
+  [EEmpire.Green]: Sprites.EmpireGreen,
+  [EEmpire.Blue]: Sprites.EmpireBlue,
   [EEmpire.LENGTH]: undefined,
 };
