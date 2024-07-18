@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Turn, P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Faction } from "codegen/index.sol";
+import { Turn, P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Empire } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibGold } from "libraries/LibGold.sol";
 import { EEmpire, ENPCAction, EPlayerAction } from "codegen/common.sol";
@@ -20,7 +20,7 @@ contract UpdateSystemTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
   }
 
   function testUpdateExecuted() public {
@@ -62,54 +62,52 @@ contract UpdateSystemTest is PrimodiumTest {
     assertEq(Planet.getGoldCount(planetId), 100);
   }
 
-  function testSpendGoldBuyDestroyersAction() public {
-    uint256 destroyersAction = P_NPCActionThresholds.getBuyDestroyers() - 1;
+  function testSpendGoldBuyShipsAction() public {
+    uint256 shipsAction = P_NPCActionThresholds.getBuyShips() - 1;
     uint256 gold = 9;
 
     Planet.setGoldCount(planetId, gold);
 
-    uint256 destroyerPrice = 2;
-    P_NPCActionCosts.set(ENPCAction.BuyDestroyers, destroyerPrice);
+    uint256 shipPrice = 2;
+    P_NPCActionCosts.set(ENPCAction.BuyShips, shipPrice);
 
-    uint256 expectedDestroyers = gold / destroyerPrice;
-    uint256 expectedRemainder = gold % destroyerPrice;
+    uint256 expectedShips = gold / shipPrice;
+    uint256 expectedRemainder = gold % shipPrice;
 
-    LibGold._spendGold(planetId, destroyersAction);
+    LibGold._spendGold(planetId, shipsAction);
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
-    assertEq(Planet.getDestroyerCount(planetId), expectedDestroyers, "destroyers wrong");
+    assertEq(Planet.getShipCount(planetId), expectedShips, "ships wrong");
   }
 
   function testGeneratePointsAndPlayerActions() public {
     P_PointConfigData memory pointCfg = P_PointConfig.get();
     uint256 beginPointCost = pointCfg.minPointCost + pointCfg.pointGenRate;
-    Faction.setPointCost(EEmpire.Red, beginPointCost);
-    Faction.setPointCost(EEmpire.Blue, beginPointCost);
-    Faction.setPointCost(EEmpire.Green, beginPointCost);
+    Empire.setPointCost(EEmpire.Red, beginPointCost);
+    Empire.setPointCost(EEmpire.Blue, beginPointCost);
+    Empire.setPointCost(EEmpire.Green, beginPointCost);
 
     P_ActionConfigData memory actionCfg = P_ActionConfig.get();
     uint256 beginActionCost = actionCfg.minActionCost + actionCfg.actionGenRate;
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Red, EPlayerAction.KillDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Blue, EPlayerAction.CreateDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Blue, EPlayerAction.KillDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Green, EPlayerAction.CreateDestroyer, beginActionCost);
-    ActionCost.set(EEmpire.Green, EPlayerAction.KillDestroyer, beginActionCost);
+    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, beginActionCost);
+    ActionCost.set(EEmpire.Red, EPlayerAction.KillShip, beginActionCost);
+    ActionCost.set(EEmpire.Blue, EPlayerAction.CreateShip, beginActionCost);
+    ActionCost.set(EEmpire.Blue, EPlayerAction.KillShip, beginActionCost);
+    ActionCost.set(EEmpire.Green, EPlayerAction.CreateShip, beginActionCost);
+    ActionCost.set(EEmpire.Green, EPlayerAction.KillShip, beginActionCost);
 
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld();
 
-    assertEq(Faction.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Faction.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Faction.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
 
-    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.CreateDestroyer), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.KillDestroyer), beginActionCost - actionCfg.actionGenRate);
-
-
+    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
   }
 }

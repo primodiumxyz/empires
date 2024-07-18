@@ -17,9 +17,9 @@ export const usePointPrice = (): PointPrice => {
   const minPointCost = config?.minPointCost ?? BigInt(POINTS_UNIT * 0.01);
   const pointSellTax = config?.pointSellTax ?? BigInt(POINTS_UNIT * 0);
 
-  const redEmpirePointCost = tables.Faction.useWithKeys({ id: EEmpire.Red })?.pointCost ?? BigInt(0);
-  const blueEmpirePointCost = tables.Faction.useWithKeys({ id: EEmpire.Blue })?.pointCost ?? BigInt(0);
-  const greenEmpirePointCost = tables.Faction.useWithKeys({ id: EEmpire.Green })?.pointCost ?? BigInt(0);
+  const redEmpirePointCost = tables.Empire.useWithKeys({ id: EEmpire.Red })?.pointCost ?? BigInt(0);
+  const blueEmpirePointCost = tables.Empire.useWithKeys({ id: EEmpire.Blue })?.pointCost ?? BigInt(0);
+  const greenEmpirePointCost = tables.Empire.useWithKeys({ id: EEmpire.Green })?.pointCost ?? BigInt(0);
 
   const getPointSaleValue = useCallback(
     (pointCost: bigint) => {
