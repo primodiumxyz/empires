@@ -192,7 +192,7 @@ export const HUD: FC<HUDProps> & {
   return (
     <ScaleContext.Provider value={scale}>
       <div className={cn("screen-container pointer-events-none fixed right-0 top-0", paddingClass)}>
-        <div className="pointer-events-auto relative h-full">{children}</div>
+        <div className="pointer-events-none relative h-full">{children}</div>
       </div>
     </ScaleContext.Provider>
   );
