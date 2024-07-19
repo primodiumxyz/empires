@@ -1,20 +1,24 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import CheatcodesButton, { CheatcodesCloseButton } from "@/components/CheatcodesButton";
 import { setupCheatcodes } from "@/config/setupCheatcodes";
+import { useContractCalls } from "@/hooks/useContractCalls";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 
 import "@/index.css";
 
-import { useContractCalls } from "@/hooks/useContractCalls";
+import { Badge } from "@/components/core/Badge";
+import { Button } from "@/components/core/Button";
+import { Modal } from "@/components/core/Modal";
+import { TextInput } from "@/components/core/TextInput";
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
 /* -------------------------------------------------------------------------- */
 
-export const Cheatcodes = () => {
+export const Cheatcodes = ({ className }: { className?: string }) => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<number | undefined>(undefined);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -38,36 +42,23 @@ export const Cheatcodes = () => {
   }, [open]);
 
   return (
-    <>
-      {/* open button */}
-      <CheatcodesButton ref={buttonRef} setOpen={setOpen} className={open ? "hidden" : ""} />
-      {/* overlay */}
-      <div
-        className={cn(
-          "cheatcodes-modal absolute h-[95%] w-[95%] rounded-btn bg-gray-950 bg-opacity-90 md:h-[90%] md:w-[90%]",
-          !open && "hidden",
-        )}
-      />
-      {/* modal */}
-      <div
-        ref={modalRef}
-        className={cn(
-          "cheatcodes-modal absolute flex h-[95%] w-[95%] flex-col gap-2 py-4 pl-4 pr-2 md:h-[90%] md:w-[90%]",
-          !open && "hidden",
-        )}
-      >
-        {/* close button */}
-        <CheatcodesCloseButton setOpen={setOpen} />
-        {/* cheatcodes */}
-        <h1 className="font-semibold uppercase text-gray-300">Cheatcodes</h1>
-        <div className="grid grid-cols-1 gap-4 overflow-auto pr-2 md:grid-cols-2 lg:grid-cols-3">
+    <Modal title="Cheatcodes">
+      <Modal.Button className={cn("h-[26px] w-[26px] p-0", className)} variant="warning">
+        {/* <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--> */}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={16} height={16} fill="#000000">
+          <path d="M64 32C28.7 32 0 60.7 0 96v64c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm280 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm48 24a24 24 0 1 1 48 0 24 24 0 1 1-48 0zM64 288c-35.3 0-64 28.7-64 64v64c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64v-64c0-35.3-28.7-64-64-64H64zm280 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm56 24a24 24 0 1 1 48 0 24 24 0 1 1-48 0z" />
+        </svg>
+      </Modal.Button>
+      {/* TODO: remove when default overflow-y behavior on modal */}
+      <Modal.Content className="overflow-y-auto">
+        <div className="grid grid-cols-1 gap-4 pr-2 md:grid-cols-2 lg:grid-cols-3">
           {cheatcodes.map((cheatcode, i) => (
             // @ts-expect-error wrong type inference -- will fix on base template
             <Cheatcode key={i} cheatcode={cheatcode} index={i} activeTab={activeTab} setActiveTab={setActiveTab} />
           ))}
         </div>
-      </div>
-    </>
+      </Modal.Content>
+    </Modal>
   );
 };
 
@@ -82,7 +73,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   activeTab: number | undefined;
   setActiveTab: Dispatch<SetStateAction<number | undefined>>;
 }) => {
-  const { title, caption, inputs, execute: _execute } = cheatcode;
+  const { title, caption, inputs, execute: _execute, bg = "bg-gray-500/10" } = cheatcode;
   const [inputValues, setInputValues] = useState<CheatcodeInputs<T>>({} as CheatcodeInputs<T>);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"success" | "error" | undefined>(undefined);
@@ -106,6 +97,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
       <div
         className={cn(
           "cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
+          bg,
           activeTab === index && "bg-primary",
         )}
         onClick={() => setActiveTab(activeTab === index ? undefined : index)}
@@ -117,7 +109,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
       </div>
       <div
         className={cn(
-          "grid hidden gap-2 overflow-hidden bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4",
+          "hidden gap-2 overflow-hidden bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4",
           activeTab === index && "grid",
         )}
       >
@@ -155,8 +147,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
                   ))}
                 </select>
               ) : (
-                <input
-                  type="text"
+                <TextInput
                   placeholder={defaultValue}
                   defaultValue={defaultValue}
                   onChange={(e) => {
@@ -165,13 +156,16 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
                       [inputKey]: { ...input, value: formatValue(inputType, e.target.value) },
                     }));
                   }}
-                  className="max-h-8 bg-gray-800 p-2 text-gray-300"
+                  className="max-h-8 text-sm"
                 />
               )}
             </div>
           );
         })}
-        <button
+        <Button
+          variant={status === "success" ? "success" : status === "error" ? "warning" : "secondary"}
+          className="col-span-full mt-2 h-8"
+          disabled={loading}
           onClick={() => {
             const argsWithValues = Object.entries(inputs).reduce((acc, [inputKey, input]) => {
               return {
@@ -186,14 +180,9 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
 
             execute(argsWithValues);
           }}
-          className={cn(
-            "col-span-full mt-2 bg-gray-800 p-2 text-gray-300 hover:bg-primary disabled:bg-gray-800",
-            status === "success" ? "bg-green-500" : status === "error" ? "bg-red-500" : "",
-          )}
-          disabled={loading}
         >
           {loading ? "..." : status === "success" ? "Executed" : status === "error" ? "Error executing" : "Execute"}
-        </button>
+        </Button>
       </div>
     </div>
   );

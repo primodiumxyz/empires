@@ -96,7 +96,7 @@ export function AccountClientProvider({ children, ...options }: AccountProviderP
     const useLocal = !!options.playerPrivateKey;
     if (!useLocal && !options.playerAddress) throw new Error("Must provide address or private key");
 
-    if (useLocal && options.playerPrivateKey)
+    if (options.playerAddress && options.playerPrivateKey)
       console.warn("Private key provided for local account creation, ignoring address");
 
     const account = useLocal

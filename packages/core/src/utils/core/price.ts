@@ -7,7 +7,7 @@ const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
 
 export function createPriceUtils(tables: Tables) {
   function getTotalCost(_actionType: EPlayerAction, _empireImpacted: EEmpire): bigint {
-    const progressAction = _actionType == EPlayerAction.CreateDestroyer;
+    const progressAction = [EPlayerAction.CreateShip, EPlayerAction.ChargeShield].includes(_actionType);
     let totalCost = 0n;
     if (progressAction) {
       totalCost = getProgressPointCost(_empireImpacted);
@@ -15,7 +15,7 @@ export function createPriceUtils(tables: Tables) {
       totalCost = getRegressPointCost(_empireImpacted);
     }
 
-    totalCost += tables.ActionCost.getWithKeys({ factionId: _empireImpacted, action: _actionType })?.value ?? 0n;
+    totalCost += tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
     return totalCost;
   }
 
@@ -51,7 +51,7 @@ export function createPriceUtils(tables: Tables) {
    * @return pointCost The cost of the points from the specific empire.
    */
   function getPointCost(_empire: EEmpire, _pointUnits: number): bigint {
-    const initPointCost = tables.Faction.getWithKeys({ id: _empire })?.pointCost ?? 0n;
+    const initPointCost = tables.Empire.getWithKeys({ id: _empire })?.pointCost ?? 0n;
     const pointCostIncrease = tables.P_PointConfig.get()?.pointCostIncrease ?? 0n;
     let pointCost = 0n;
     for (let i = 0; i < _pointUnits; i++) {
@@ -60,17 +60,31 @@ export function createPriceUtils(tables: Tables) {
     return pointCost;
   }
 
-  function ethToUSD(wei: bigint, ETHtoUSD: number) {
+  function weiToUsd<N extends boolean = false>(
+    wei: bigint,
+    weiToUsd: number,
+    asNumber?: N,
+  ): N extends true ? number : string {
     const balance = Number(formatEther(wei));
-    if (isNaN(balance)) return null;
-    const balanceInUsd = balance * ETHtoUSD;
-    return balanceInUsd.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    if (isNaN(balance))
+      return asNumber ? (0 as N extends true ? number : string) : ("0.00" as N extends true ? number : string);
+    const balanceInUsd = balance * weiToUsd;
+    if (asNumber) return balanceInUsd as N extends true ? number : string;
+    return balanceInUsd.toLocaleString("en-US", { style: "currency", currency: "USD" }) as N extends true
+      ? number
+      : string;
   }
+
+  function usdToWei(USD: number, weiToUsd: number): bigint {
+    return BigInt(USD / weiToUsd);
+  }
+
   return {
     getTotalCost,
     getProgressPointCost,
     getRegressPointCost,
     getPointCost,
-    ethToUSD,
+    weiToUsd,
+    usdToWei,
   };
 }

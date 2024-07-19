@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Player } from "codegen/index.sol";
+import { Empire, Player, P_PointConfig } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 
@@ -30,7 +30,7 @@ library LibPoint {
   function removePoints(EEmpire _empire, bytes32 _playerId, uint256 _points) internal {
     require(_points <= PointsMap.get(_empire, _playerId), "[LibPoint] Player does not have enough points to remove");
     // Requires ordered in reverse of issuePoints() for clearer error message paths
-    require(_points <= Faction.getPointsIssued(_empire), "[LibPoint] Empire has not issued enough points to remove");
+    require(_points <= Empire.getPointsIssued(_empire), "[LibPoint] Empire has not issued enough points to remove");
     PointsMap.set(_empire, _playerId, PointsMap.get(_empire, _playerId) - _points);
   }
 }
