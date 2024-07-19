@@ -13,7 +13,6 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
-const DEV = import.meta.env.PRI_DEV === "true";
 const TICK_LABEL_INTERVAL = 30; // 30 seconds
 const PX_PER_SECOND = 3;
 
@@ -36,10 +35,7 @@ export const HistoricalPointPriceModal = () => {
 
   return (
     <Modal title="Points Price History">
-      <Modal.Button
-        className={cn("btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-12" : "right-2")}
-        variant="info"
-      >
+      <Modal.Button className="btn-md h-[58px] w-fit" variant="info">
         <PresentationChartLineIcon className="size-8" />
       </Modal.Button>
       <Modal.Content>

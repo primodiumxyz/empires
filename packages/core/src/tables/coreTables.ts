@@ -1,12 +1,12 @@
-import { CreateNetworkResult } from "@core/lib/types";
-
 import {
   createLocalBigIntTable,
   createLocalBoolTable,
   createLocalEntityTable,
+  createLocalNumberTable,
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
+import { CreateNetworkResult } from "@core/lib/types";
 
 import { createTransactionQueueTable } from "./customTables/TransactionQueueTable";
 
@@ -36,7 +36,12 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     id: "TransactionQueue",
   });
 
-  const SystemsReady = createLocalBoolTable(world, { id: "SystemsReady" });
+  const SelectedPlanet = createLocalEntityTable(world, { id: "SelectedPlanet" });
+  const SelectedTab = createLocalNumberTable(world, {
+    id: "SelectedTab",
+    persist: true,
+    version: "1",
+  });
 
   return {
     DoubleCounter,
@@ -45,6 +50,7 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     Account,
     CurrentTransaction,
     TransactionQueue,
-    SystemsReady,
+    SelectedPlanet,
+    SelectedTab,
   };
 }

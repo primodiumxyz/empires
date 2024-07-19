@@ -42,31 +42,29 @@ export const Account = () => {
   const balance = useBalance(address).value ?? 0n;
 
   return (
-    <div className="absolute left-4 top-4">
-      <Card noDecor>
-        <div className="flex flex-col justify-center gap-1 text-center">
-          <p className="text-left text-xs font-bold uppercase">Account</p>
-          <div className="flex flex-col justify-center gap-1 rounded border border-gray-600 p-2 text-center text-white">
-            <p className="flex items-center gap-2">
-              <span className="text-xs">{formatAddress(address)}</span>
-              <Button onClick={handleLogout} variant="neutral" size="sm">
-                <ArrowLeftEndOnRectangleIcon className="size-4" />
-              </Button>
-            </p>
-            <Divider className="my-1 w-16 self-center" />
-            {loading && <p>Loading...</p>}
-            {!loading && price && <p>{weiToUsd(balance, price)}</p>}
-            <p className="text-xs">{formatEther(balance)}ETH</p>
-            <Divider className="my-1 w-16 self-center" />
-            <div className="flex flex-col gap-1">
-              <EmpirePoints empire={EEmpire.Red} playerId={entity} />
-              <EmpirePoints empire={EEmpire.Green} playerId={entity} />
-              <EmpirePoints empire={EEmpire.Blue} playerId={entity} />
-            </div>
+    <Card noDecor>
+      <div className="flex flex-col justify-center gap-1 text-center">
+        <p className="text-left text-xs font-bold uppercase">Account</p>
+        <div className="flex flex-col justify-center gap-1 rounded border border-gray-600 p-2 text-center text-white">
+          <p className="flex items-center gap-2">
+            <span className="text-xs">{formatAddress(address)}</span>
+            <Button onClick={handleLogout} variant="neutral" size="sm">
+              <ArrowLeftEndOnRectangleIcon className="size-4" />
+            </Button>
+          </p>
+          <Divider className="my-1 w-16 self-center" />
+          {loading && <p>Loading...</p>}
+          {!loading && price && <p>{weiToUsd(balance, price)}</p>}
+          <p className="text-xs">{formatEther(balance)}ETH</p>
+          <Divider className="my-1 w-16 self-center" />
+          <div className="flex flex-col gap-1">
+            <EmpirePoints empire={EEmpire.Red} playerId={entity} />
+            <EmpirePoints empire={EEmpire.Green} playerId={entity} />
+            <EmpirePoints empire={EEmpire.Blue} playerId={entity} />
           </div>
         </div>
-      </Card>
-    </div>
+      </div>
+    </Card>
   );
 };
 

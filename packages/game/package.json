@@ -15,7 +15,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@primodiumxyz/assets": "workspace:*",
     "@primodiumxyz/core": "workspace:*",
+    "@primodiumxyz/contracts": "workspace:*",
     "@primodiumxyz/reactive-tables": "^3.5.0"
   }
 }
