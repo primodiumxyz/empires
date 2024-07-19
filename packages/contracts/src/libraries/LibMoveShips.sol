@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Faction, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, Arrivals } from "codegen/index.sol";
+import { Empire, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, MoveNPCAction, MoveNPCActionData, Arrivals } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
-import { pseudorandom, coordToId } from "src/utils.sol";
+import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 
-library LibMoveDestroyers {
-  function moveDestroyers(bytes32 planetId) internal returns (bool) {
+library LibMoveShips {
+  function moveShips(bytes32 planetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
-    if (planetData.factionId == EEmpire.NULL || planetData.destroyerCount == 0) return false;
+    if (planetData.empireId == EEmpire.NULL || planetData.shipCount == 0) return false;
 
-    // move destroyers
+    // move ships
     bytes32 target;
     uint i = 0;
     do {
@@ -20,16 +20,25 @@ library LibMoveDestroyers {
     } while (!Planet.getIsPlanet(target));
     if (target == planetId) return false;
 
-    uint256 destroyersToMove = planetData.destroyerCount;
+    uint256 shipsToMove = planetData.shipCount;
 
-    Arrivals.set(target, Arrivals.get(target) + destroyersToMove);
-    Planet.setDestroyerCount(planetId, planetData.destroyerCount - destroyersToMove);
+    Arrivals.set(target, Arrivals.get(target) + shipsToMove);
+    Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
+    MoveNPCAction.set(
+      pseudorandomEntity(),
+      MoveNPCActionData({
+        originPlanetId: planetId,
+        destinationPlanetId: target,
+        shipCount: shipsToMove,
+        timestamp: block.timestamp
+      })
+    );
     return true;
   }
 
   function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal view returns (bytes32 target) {
     EMovement movement = getMovement(randomValue);
-    EDirection direction = getDirection(movement, randomValue % 2 == 0, Faction.getOrigin(planetData.factionId));
+    EDirection direction = getDirection(movement, randomValue % 2 == 0, Empire.getOrigin(planetData.empireId));
 
     (int128 q, int128 r) = getNeighbor(planetData.q, planetData.r, direction);
     target = coordToId(q, r);

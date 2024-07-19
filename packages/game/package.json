@@ -1,0 +1,21 @@
+{
+  "name": "@primodiumxyz/game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "imports": {
+    "@": {
+      "default": "./src"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@primodiumxyz/core": "workspace:*",
+    "@primodiumxyz/reactive-tables": "^3.5.0"
+  }
+}

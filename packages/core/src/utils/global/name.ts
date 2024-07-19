@@ -1,4 +1,7 @@
+import { Address } from "viem";
+
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { entityToAddress } from "@core/utils/global/common";
 import { hashEntities } from "@core/utils/global/encode";
 
 /**
@@ -39,4 +42,9 @@ export const entityToPlanetName = (entity: Entity): string => {
   entityPlanetName.set(entity, name);
 
   return name;
+};
+
+export const formatAddress = (address: Address, entity?: true) => {
+  const formattedAddress = entity ? entityToAddress(address) : address;
+  return `${formattedAddress.slice(0, 5)}...${formattedAddress.slice(-3)}`;
 };

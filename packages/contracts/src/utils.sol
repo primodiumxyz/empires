@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+import { Nonce } from "codegen/index.sol";
+
 function addressToId(address a) pure returns (bytes32) {
   return bytes32(uint256(uint160((a))));
 }
@@ -23,4 +25,10 @@ function coordToId(int128 q, int128 r) pure returns (bytes32) {
 
 function pseudorandom(uint256 seed, uint256 max) view returns (uint256) {
   return uint256(keccak256(abi.encodePacked(seed, block.timestamp, block.prevrandao, block.number))) % max;
+}
+
+function pseudorandomEntity() returns (bytes32) {
+  uint256 nonce = Nonce.get();
+  Nonce.set(nonce + 1);
+  return bytes32(keccak256(abi.encodePacked(nonce, block.timestamp, block.prevrandao, block.number)));
 }
