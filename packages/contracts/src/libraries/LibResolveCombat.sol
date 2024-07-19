@@ -33,6 +33,7 @@ library LibResolveCombat {
       else if (arrivingShips > totalDefenses) {
         Planet.setShieldCount(planetId, 0);
         Planet.setShipCount(planetId, arrivingShips - totalDefenses);
+        conquer = true;
 
         EmpirePlanetsSet.add(empire, planetId);
         EmpirePlanetsSet.remove(planetData.empireId, planetId);
