@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, PlanetData, Player, P_PointConfig, CreateShipPlayerAction, CreateShipPlayerActionData, KillShipPlayerAction, KillShipPlayerActionData } from "codegen/index.sol";
+import { Planet, PlanetData, Player, P_PointConfig, CreateShipPlayerAction, CreateShipPlayerActionData, KillShipPlayerAction, KillShipPlayerActionData, ChargeShieldsPlayerAction, ChargeShieldsPlayerActionData, DrainShieldsPlayerAction, DrainShieldsPlayerActionData } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -77,14 +77,17 @@ contract ActionSystem is EmpiresSystem {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    require(
-      _msgValue() == LibPrice.getTotalCost(EPlayerAction.ChargeShield, planetData.empireId, true),
-      "[ActionSystem] Incorrect payment"
-    );
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, planetData.empireId, true);
+    require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
     _purchaseAction(EPlayerAction.ChargeShield, planetData.empireId, true, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount + 1);
+
+    ChargeShieldsPlayerAction.set(
+      pseudorandomEntity(),
+      ChargeShieldsPlayerActionData({ planetId: _planetId, goldSpent: cost, timestamp: block.timestamp })
+    );
   }
 
   /**
@@ -96,14 +99,17 @@ contract ActionSystem is EmpiresSystem {
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.shieldCount > 0, "[ActionSystem] No shields to drain");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    require(
-      _msgValue() == LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false),
-      "[ActionSystem] Incorrect payment"
-    );
+
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false);
+    require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
     _purchaseAction(EPlayerAction.DrainShield, planetData.empireId, false, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount - 1);
+    DrainShieldsPlayerAction.set(
+      pseudorandomEntity(),
+      DrainShieldsPlayerActionData({ planetId: _planetId, goldSpent: cost, timestamp: block.timestamp })
+    );
   }
 
   /**
