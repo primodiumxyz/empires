@@ -25,6 +25,7 @@ contract LibMoveShipsTest is PrimodiumTest {
   }
 
   function testEarlyExit() public {
+    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
     Planet.setEmpireId(planetId, EEmpire.NULL);
     bool moved = LibMoveShips.moveShips(planetId);
     assertFalse(moved, "shouldnt have moved");
