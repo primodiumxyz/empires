@@ -24,10 +24,16 @@ library LibPrice {
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
     if (_progressAction) {
-      require(_actionType == EPlayerAction.CreateShip, "[LibPrice] Action type is not a progressive action");
+      require(
+        _actionType == EPlayerAction.CreateShip || _actionType == EPlayerAction.ChargeShield,
+        "[LibPrice] Action type is not a progressive action"
+      );
       totalCost = getProgressPointCost(_empireImpacted);
     } else {
-      require(_actionType == EPlayerAction.KillShip, "[LibPrice] Action type is not a regressive action");
+      require(
+        _actionType == EPlayerAction.KillShip || _actionType == EPlayerAction.DrainShield,
+        "[LibPrice] Action type is not a regressive action"
+      );
       totalCost = getRegressPointCost(_empireImpacted);
     }
 

@@ -33,11 +33,15 @@ export enum EMovement {
 export enum EPlayerAction {
   CreateShip = 1,
   KillShip,
+  ChargeShield,
+  DrainShield,
   LENGTH,
 }
 
 export enum ENPCAction {
   BuyShips = 1,
+  BuyShields,
+  LENGTH,
 }
 
 export const MUDEnums = {

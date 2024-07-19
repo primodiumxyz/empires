@@ -70,6 +70,43 @@ contract ActionSystem is EmpiresSystem {
   }
 
   /**
+   * @dev A player purchaseable action that increases the shield on a planet.
+   * @param _planetId The ID of the planet.
+   */
+  function chargeShield(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+    PlanetData memory planetData = Planet.get(_planetId);
+    require(planetData.isPlanet, "[ActionSystem] Planet not found");
+    require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
+    require(
+      _msgValue() == LibPrice.getTotalCost(EPlayerAction.ChargeShield, planetData.empireId, true),
+      "[ActionSystem] Incorrect payment"
+    );
+
+    _purchaseAction(EPlayerAction.ChargeShield, planetData.empireId, true, _msgValue());
+
+    Planet.setShieldCount(_planetId, planetData.shieldCount + 1);
+  }
+
+  /**
+   * @dev A player purchaseable action that decreases the shield on a planet.
+   * @param _planetId The ID of the planet.
+   */
+  function drainShield(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+    PlanetData memory planetData = Planet.get(_planetId);
+    require(planetData.isPlanet, "[ActionSystem] Planet not found");
+    require(planetData.shieldCount > 0, "[ActionSystem] No shields to drain");
+    require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
+    require(
+      _msgValue() == LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false),
+      "[ActionSystem] Incorrect payment"
+    );
+
+    _purchaseAction(EPlayerAction.DrainShield, planetData.empireId, false, _msgValue());
+
+    Planet.setShieldCount(_planetId, planetData.shieldCount - 1);
+  }
+
+  /**
    * @dev Internal function to purchase an action.
    * @param _actionType The type of action to purchase.
    * @param _empireImpacted The empire impacted by the action.

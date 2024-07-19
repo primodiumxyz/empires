@@ -11,6 +11,7 @@ import { coordToId } from "src/utils.sol";
 
 contract LibResolveCombatTest is PrimodiumTest {
   bytes32 planetId;
+
   function setUp() public override {
     super.setUp();
     uint256 i = 0;
@@ -44,6 +45,61 @@ contract LibResolveCombatTest is PrimodiumTest {
     Planet.setShipCount(planetId, 5);
     LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
     assertEq(Planet.getShipCount(planetId), 1);
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Blue);
+  }
+
+  function testAttackFullyShielded() public {
+    Arrivals.set(planetId, 1);
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    Planet.setShipCount(planetId, 5);
+    Planet.setShieldCount(planetId, 2);
+    LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
+    assertEq(Planet.getShipCount(planetId), 5);
+    assertEq(Planet.getShieldCount(planetId), 1);
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Red);
+  }
+
+  function testAttackEqualsShield() public {
+    Arrivals.set(planetId, 2);
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    Planet.setShipCount(planetId, 5);
+    Planet.setShieldCount(planetId, 2);
+    LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
+    assertEq(Planet.getShipCount(planetId), 5);
+    assertEq(Planet.getShieldCount(planetId), 0);
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Red);
+  }
+
+  function testAttackPartiallyShielded() public {
+    Arrivals.set(planetId, 4);
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    Planet.setShipCount(planetId, 5);
+    Planet.setShieldCount(planetId, 1);
+    LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
+    assertEq(Planet.getShipCount(planetId), 2);
+    assertEq(Planet.getShieldCount(planetId), 0);
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Red);
+  }
+
+  function testAttackEqualsTotalDefenses() public {
+    Arrivals.set(planetId, 6);
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    Planet.setShipCount(planetId, 5);
+    Planet.setShieldCount(planetId, 1);
+    LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
+    assertEq(Planet.getShipCount(planetId), 0);
+    assertEq(Planet.getShieldCount(planetId), 0);
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Red);
+  }
+
+  function testExceedsTotalDefenses() public {
+    Arrivals.set(planetId, 5);
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    Planet.setShipCount(planetId, 2);
+    Planet.setShieldCount(planetId, 2);
+    LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
+    assertEq(Planet.getShipCount(planetId), 1);
+    assertEq(Planet.getShieldCount(planetId), 0);
     assertEq(Planet.getEmpireId(planetId), EEmpire.Blue);
   }
 }

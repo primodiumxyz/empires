@@ -47,9 +47,36 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Planet.get(planetId).shipCount, 0);
   }
 
+  function testChargeShield() public {
+    uint256 currentShields = Planet.get(planetId).shieldCount;
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, Planet.getEmpireId(planetId), true);
+    world.Empires__chargeShield{ value: cost }(planetId);
+    assertEq(Planet.get(planetId).shieldCount, currentShields + 1);
+  }
+
+  function testDrainShield() public {
+    uint256 cost = 0;
+    uint256 currentShields = Planet.get(planetId).shieldCount;
+    if (currentShields == 0) {
+      cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, Planet.getEmpireId(planetId), true);
+      world.Empires__chargeShield{ value: cost }(planetId);
+      currentShields = 1;
+      assertEq(Planet.get(planetId).shieldCount, currentShields);
+    }
+
+    cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false);
+    world.Empires__drainShield{ value: cost }(planetId);
+    assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
+  }
+
   function testKillShipFailNoShips() public {
     vm.expectRevert("[ActionSystem] No ships to kill");
     world.Empires__killShip(planetId);
+  }
+
+  function testDrainShieldFailNoShield() public {
+    vm.expectRevert("[ActionSystem] No shields to drain");
+    world.Empires__drainShield(planetId);
   }
 
   function testCreateFailNotOwned() public {

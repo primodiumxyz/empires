@@ -12,26 +12,42 @@ library LibResolveCombat {
     if (arrivingShips == 0) return;
 
     PlanetData memory planetData = Planet.get(planetId);
-    if (empire == planetData.empireId) Planet.setShipCount(planetId, planetData.shipCount + arrivingShips);
-    else {
-      bool conquer = planetData.shipCount < arrivingShips;
+    if (empire == planetData.empireId) {
+      Planet.setShipCount(planetId, planetData.shipCount + arrivingShips);
+    } else {
+      bool conquer = false;
+      uint256 defendingShips = Planet.get(planetId).shipCount;
+      uint256 defendingShields = Planet.get(planetId).shieldCount;
+      uint256 totalDefenses = defendingShips + defendingShields;
 
-      uint256 remainingShips = conquer ? arrivingShips - planetData.shipCount : planetData.shipCount - arrivingShips;
+      // attackers bounce off shields
+      if (arrivingShips <= defendingShields) {
+        Planet.setShieldCount(planetId, defendingShields - arrivingShips);
+      }
+      // attackers destroy shields and damage destroyers, but don't conquer
+      else if (arrivingShips <= totalDefenses) {
+        Planet.setShieldCount(planetId, 0);
+        Planet.setShipCount(planetId, totalDefenses - arrivingShips);
+      }
+      // attackers conquer planet
+      else if (arrivingShips > totalDefenses) {
+        Planet.setShieldCount(planetId, 0);
+        Planet.setShipCount(planetId, arrivingShips - totalDefenses);
 
-      if (conquer) {
         EmpirePlanetsSet.add(empire, planetId);
         EmpirePlanetsSet.remove(planetData.empireId, planetId);
-
         Planet.setEmpireId(planetId, empire);
       }
+      // should be impossible
+      else {}
 
-      Planet.setShipCount(planetId, remainingShips);
       BattleNPCAction.set(
         pseudorandomEntity(),
         BattleNPCActionData({
           planetId: planetId,
           attackingShipCount: arrivingShips,
-          defendingShipCount: planetData.shipCount,
+          defendingShipCount: defendingShips,
+          defendingShieldCount: defendingShields,
           conquer: conquer,
           timestamp: block.timestamp
         })

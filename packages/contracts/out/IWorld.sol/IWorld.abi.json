@@ -1,6 +1,19 @@
 [
   {
     "type": "function",
+    "name": "Empires__chargeShield",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__claimVictory",
     "inputs": [
       {
@@ -319,6 +332,19 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__drainShield",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
   },
   {
     "type": "function",

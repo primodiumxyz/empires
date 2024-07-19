@@ -93,6 +93,7 @@ export const worldInput = {
         r: "int128",
         isPlanet: "bool",
         shipCount: "uint256",
+        shieldCount: "uint256",
         goldCount: "uint256",
         empireId: "EEmpire",
       },
@@ -146,6 +147,7 @@ export const worldInput = {
       schema: {
         none: "uint256",
         buyShips: "uint256",
+        buyShields: "uint256",
       },
     },
 
@@ -205,6 +207,7 @@ export const worldInput = {
         planetId: "bytes32",
         attackingShipCount: "uint256",
         defendingShipCount: "uint256",
+        defendingShieldCount: "uint256",
         conquer: "bool",
         timestamp: "uint256",
       },
@@ -218,6 +221,18 @@ export const worldInput = {
         planetId: "bytes32",
         goldSpent: "uint256",
         shipBought: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    BuyShieldsNPCAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        goldSpent: "uint256",
+        shieldBought: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",

@@ -12,6 +12,7 @@ contract LibGoldTest is PrimodiumTest {
   bytes32 planetId;
   bytes32 aliceId;
   bytes32 bobId;
+
   function setUp() public override {
     super.setUp();
     aliceId = addressToId(alice);
@@ -19,33 +20,71 @@ contract LibGoldTest is PrimodiumTest {
     vm.startPrank(creator);
   }
 
-  function testGiveGold() public {
-    P_NPCActionCosts.set(ENPCAction.BuyShips, 2);
-
+  function testBuyNone() public {
     Planet.setGoldCount(planetId, 1);
-    uint256 noneThreshold = P_NPCActionThresholds.getNone();
-    uint256 buyThreshold = P_NPCActionThresholds.getBuyShips();
-    LibGold._spendGold(planetId, buyThreshold - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
 
-    Planet.setGoldCount(planetId, 2);
-    LibGold._spendGold(planetId, noneThreshold - 1);
+    LibGold._spendGold(planetId, P_NPCActionThresholds.getNone() - 1);
 
-    assertEq(Planet.getGoldCount(planetId), 2, "Planet gold count should be 1");
+    assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+  }
 
-    LibGold._spendGold(planetId, buyThreshold - 1);
+  function testBuyShips() public {
+    Planet.setGoldCount(planetId, 2);
+    P_NPCActionCosts.set(ENPCAction.BuyShips, 2);
 
-    assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count");
-    assertEq(Planet.getShipCount(planetId), 1, "Planet ship count");
+    assertEq(Planet.getGoldCount(planetId), 2, "Planet gold count should be 2");
+    assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+
+    LibGold._spendGold(planetId, P_NPCActionThresholds.getBuyShips() - 1);
+
+    assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count should be 0");
+    assertEq(Planet.getShipCount(planetId), 1, "Planet ship count should be 1");
+    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
 
     Planet.setGoldCount(planetId, 9);
 
-    LibGold._spendGold(planetId, buyThreshold - 1);
+    assertEq(Planet.getGoldCount(planetId), 9, "Planet gold count should be 9");
+    assertEq(Planet.getShipCount(planetId), 1, "Planet ship count should be 1");
+    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
 
-    assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count");
-    assertEq(Planet.getShipCount(planetId), 5, "Planet ship count");
+    LibGold._spendGold(planetId, P_NPCActionThresholds.getBuyShips() - 1);
+
+    assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
+    assertEq(Planet.getShipCount(planetId), 5, "Planet ship count should be 5");
+    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+  }
+
+  function testBuyShields() public {
+    Planet.setGoldCount(planetId, 2);
+    P_NPCActionCosts.set(ENPCAction.BuyShields, 2);
+
+    assertEq(Planet.getGoldCount(planetId), 2, "Planet gold count should be 2");
+    assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+
+    LibGold._spendGold(planetId, P_NPCActionThresholds.getBuyShields() - 1);
+
+    assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count should be 0");
+    assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 1, "Planet shield count should be 1");
+
+    Planet.setGoldCount(planetId, 7);
+
+    assertEq(Planet.getGoldCount(planetId), 7, "Planet gold count should be 7");
+    assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 1, "Planet shield count should be 1");
+
+    LibGold._spendGold(planetId, P_NPCActionThresholds.getBuyShields() - 1);
+
+    assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
+    assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
   }
 }
