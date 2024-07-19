@@ -1,0 +1,66 @@
+export enum KeybindActions {
+  Up,
+  Down,
+  Left,
+  Right,
+  Center,
+  Cycle,
+  Base,
+  Hotbar1,
+  Hotbar2,
+  Hotbar3,
+  Hotbar4,
+  Hotbar5,
+  Hotbar6,
+  Hotbar7,
+  Hotbar8,
+  Hotbar9,
+  Hotbar0,
+  NextHotbar,
+  PrevHotbar,
+
+  Marker1,
+  Marker2,
+  Marker3,
+  Marker4,
+
+  ZoomIn,
+  ZoomOut,
+  RightClick,
+  LeftClick,
+
+  Account,
+  Blueprints,
+  Objectives,
+  Resources,
+  Units,
+  Aura,
+  Fleets,
+  Chat,
+  HideAll,
+
+  Esc,
+  Modifier,
+  Map,
+  Console,
+
+  NULL,
+}
+
+export type KeybindActionKeys = keyof typeof KeybindActions;
+
+export const KeyNames: { [key: string]: string } = {
+  ['ONE']: '1',
+  ['TWO']: '2',
+  ['THREE']: '3',
+  ['FOUR']: '4',
+  ['FIVE']: '5',
+  ['SIX']: '6',
+  ['SEVEN']: '7',
+  ['EIGHT']: '8',
+  ['NINE']: '9',
+  ['ZERO']: '0',
+  ['OPEN_BRACKET']: '[',
+  ['CLOSE_BRACKET']: ']',
+  ['SEMICOLON']: ';',
+};

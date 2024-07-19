@@ -15,8 +15,8 @@ contract InitTest is PrimodiumTest {
     bytes32 redPlanetId = coordToId(1, -2);
     PlanetData memory planetData = Planet.get(redPlanetId);
     assertTrue(planetData.isPlanet);
-    assertEq(planetData.destroyerCount, 0);
-    assertEq(planetData.factionId, EEmpire.Red);
+    assertEq(planetData.shipCount, 0);
+    assertEq(planetData.empireId, EEmpire.Red);
     assertEq(planetData.q, 1);
     assertEq(planetData.r, -2);
   }
@@ -25,8 +25,8 @@ contract InitTest is PrimodiumTest {
     bytes32 nonOwnedPlanetId = coordToId(-1, 0);
     PlanetData memory planetData = Planet.get(nonOwnedPlanetId);
     assertTrue(planetData.isPlanet);
-    assertEq(planetData.destroyerCount, 0);
-    assertEq(planetData.factionId, EEmpire.NULL);
+    assertEq(planetData.shipCount, 0);
+    assertEq(planetData.empireId, EEmpire.NULL);
     assertEq(planetData.q, -1);
     assertEq(planetData.r, 0);
   }

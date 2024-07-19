@@ -32,20 +32,21 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         turnLengthBlocks: 1n,
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
+        gameStartTimestamp: 0n, // currently handled in PostDeploy
       },
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),
-        minPointCost: BigInt(POINTS_UNIT * 0.1),
-        startPointCost: BigInt(POINTS_UNIT * 0.2),
-        pointGenRate: BigInt(POINTS_UNIT * 0.2),
-        pointCostIncrease: BigInt(POINTS_UNIT * 0.1),
-        pointRake: scaleRake(0.001), // out of 1, scales to out of 10000
+        minPointCost: BigInt(POINTS_UNIT * 0.00002),
+        startPointCost: BigInt(POINTS_UNIT * 0.00004),
+        pointGenRate: BigInt(POINTS_UNIT * 0.00004),
+        pointCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        pointRake: scaleRake(0.01), // out of 1, scales to out of 10000
         pointSellTax: BigInt(POINTS_UNIT * 0),
       },
       P_ActionConfig: {
-        actionGenRate: BigInt(POINTS_UNIT / 2),
-        actionCostIncrease: BigInt(POINTS_UNIT / 2),
-        startActionCost: BigInt(POINTS_UNIT / 2),
+        actionGenRate: BigInt(POINTS_UNIT * 0.00004),
+        actionCostIncrease: BigInt(POINTS_UNIT * 0.00004),
+        startActionCost: BigInt(POINTS_UNIT * 0.00004),
         minActionCost: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
@@ -56,7 +57,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       }),
       P_NPCActionThresholds: percentsToThresholds({
         none: 0.2,
-        buyDestroyers: 0.5,
+        buyShips: 0.5,
         buyShields: 0.3,
       }),
 
@@ -67,8 +68,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     },
   },
 
-  BuyDestroyers: {
-    keys: [{ [ENPCAction.BuyDestroyers]: "uint8" }],
+  BuyShips: {
+    keys: [{ [ENPCAction.BuyShips]: "uint8" }],
     tables: {
       P_NPCActionCosts: {
         goldCost: 2n,

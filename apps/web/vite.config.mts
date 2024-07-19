@@ -47,6 +47,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@core": path.resolve(__dirname, "../../packages/core/src"),
+      "@game": path.resolve(__dirname, "../../packages/game/src"),
     },
   },
 });
