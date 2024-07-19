@@ -170,6 +170,14 @@ export const worldInput = {
       },
     },
 
+    PendingMove: {
+      key: ["planetId"],
+      schema: {
+        planetId: "bytes32",
+        destination: "bytes32",
+        shipCount: "uint256",
+      },
+    },
     Arrivals: {
       key: ["planetId"],
       schema: {
