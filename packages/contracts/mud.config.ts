@@ -261,6 +261,28 @@ export const worldInput = {
       },
       type: "offchainTable",
     },
+
+    ChargeShieldsPlayerAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        goldSpent: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    DrainShieldsPlayerAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        goldSpent: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {

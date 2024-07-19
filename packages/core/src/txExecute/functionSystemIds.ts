@@ -14,13 +14,16 @@ export const functionSystemIds: {
   /* -------------------------------- Gameplay -------------------------------- */
   Empires__createShip: getSystemId("ActionSystem"),
   Empires__killShip: getSystemId("ActionSystem"),
+  Empires__chargeShield: getSystemId("ActionSystem"),
+  Empires__drainShield: getSystemId("ActionSystem"),
+  Empires__sellPoints: getSystemId("ActionSystem"),
+
   Empires__updateWorld: getSystemId("UpdateSystem"),
+
   Empires__resetGame: getSystemId("ResetSystem"),
 
   Empires__claimVictory: getSystemId("RewardsSystem"),
   Empires__withdrawEarnings: getSystemId("RewardsSystem"),
-
-  Empires__sellPoints: getSystemId("ActionSystem"),
 
   Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
 

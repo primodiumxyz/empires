@@ -180,10 +180,6 @@
 }
 
 .floating-text {
-  position: absolute;
-  top: 0;
-  right: 0;
-  transform: translateX(90%);
   animation: float 5s ease-out forwards;
 }
 
@@ -193,7 +189,7 @@
     opacity: 1;
   }
   75% {
-    transform: translate(90%, -5px);
+    transform: translate(90%, -10px);
     opacity: 1;
   }
   100% {

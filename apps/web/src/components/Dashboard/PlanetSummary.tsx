@@ -27,9 +27,7 @@ import { EmpireEnumToName } from "@/util/lookups";
 export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) => {
   const { tables } = useCore();
   const planet = tables.Planet.use(entity)!;
-  const { empireId, goldCount, /* shieldCount, */ shipCount } = planet;
-  // TODO(shields): update when implemented
-  const shieldCount = BigInt(0);
+  const { empireId, goldCount, shieldCount, shipCount } = planet;
 
   return (
     <>
@@ -80,22 +78,16 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
     utils: { weiToUsd },
   } = useCore();
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
-  const { createShip, removeShip /* addShield, removeShield */ } = useContractCalls();
+  const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
 
   const planet = tables.Planet.use(entity)!;
-  const { empireId, shipCount /* , shieldCount */ } = planet;
+  const { empireId, shipCount, shieldCount } = planet;
 
   const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId);
   const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId);
-  // TODO(shields): update when implemented
-  // const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId);
-  // const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId);
-  const shieldCount = BigInt(0);
-  const addShieldPriceWei = BigInt(0);
-  const removeShieldPriceWei = BigInt(0);
-  const addShield = () => {};
-  const removeShield = () => {};
+  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId);
+  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId);
 
   const addShipPriceUsd = weiToUsd(addShipPriceWei, ethPrice ?? 0);
   const removeShipPriceUsd = weiToUsd(removeShipPriceWei, ethPrice ?? 0);
@@ -148,7 +140,12 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             {addShieldPriceUsd} ({formatEther(addShieldPriceWei)} ETH)
           </span>
           <TransactionQueueMask id={`${entity}-add-shield`}>
-            <Button variant="neutral" size="xs" onClick={addShield} disabled={gameOver}>
+            <Button
+              variant="neutral"
+              size="xs"
+              onClick={() => addShield(entity, addShieldPriceWei)}
+              disabled={gameOver}
+            >
               Buy
             </Button>
           </TransactionQueueMask>
@@ -161,7 +158,12 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             {removeShieldPriceUsd} ({formatEther(removeShieldPriceWei)} ETH)
           </span>
           <TransactionQueueMask id={`${entity}-remove-shield`}>
-            <Button variant="neutral" size="xs" onClick={removeShield} disabled={gameOver || !shieldCount}>
+            <Button
+              variant="neutral"
+              size="xs"
+              onClick={() => removeShield(entity, removeShieldPriceWei)}
+              disabled={gameOver || !shieldCount}
+            >
               Buy
             </Button>
           </TransactionQueueMask>

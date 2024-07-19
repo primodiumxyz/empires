@@ -28,6 +28,17 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
+  const addShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__chargeShield",
+      args: [planetId],
+      options: { value: payment },
+      txQueueOptions: {
+        id: `${planetId}-add-shield`,
+        ...options,
+      },
+    });
+  };
   const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__sellPoints",
@@ -36,8 +47,21 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         id: "sell-points",
         ...options,
       },
+    });
+  };
+
+  const removeShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__drainShield",
+      args: [planetId],
+      options: { value: payment },
+      txQueueOptions: {
+        id: `${planetId}-remove-shield`,
+        ...options,
+      },
       onComplete: (receipt) => {},
     });
   };
-  return { createShip, removeShip, sellPoints };
+
+  return { createShip, removeShip, addShield, removeShield };
 };

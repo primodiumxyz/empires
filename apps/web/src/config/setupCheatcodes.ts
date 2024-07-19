@@ -193,6 +193,43 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
     },
   });
 
+  /* --------------------------------- SHIELDS -------------------------------- */
+  // Set the amount of destroyers on a planet
+  const setShields = createCheatcode({
+    title: "Set shields",
+    caption: "Set the amount of shields on a planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+      },
+      amount: {
+        label: "Amount",
+        inputType: "number",
+        defaultValue: 1,
+      },
+    },
+    execute: async ({ amount, planet }) => {
+      const success = await setTableValue(
+        tables.Planet,
+        {
+          id: planet.id as Entity,
+        },
+        { shieldCount: BigInt(amount.value) },
+      );
+
+      if (success) {
+        notify("success", `Shields set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
+        return true;
+      } else {
+        notify("error", `Failed to set shields on ${entityToPlanetName(planet.id as Entity)}`);
+        return false;
+      }
+    },
+  });
+
   /* ---------------------------------- GOLD ---------------------------------- */
   // set gold count for a planet
   const setGoldCount = createCheatcode({
@@ -699,6 +736,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   return [
     setShips,
     sendShips,
+    setShields,
     setGoldCount,
     generateGold,
     givePoints,

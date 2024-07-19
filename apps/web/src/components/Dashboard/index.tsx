@@ -76,7 +76,7 @@ const DashboardPane = () => {
         ))}
       </div>
       <h2 className="text-sm font-semibold text-gray-300">Planets</h2>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 overflow-y-scroll">
         {planets.map((planet) => {
           const {
             entity,
