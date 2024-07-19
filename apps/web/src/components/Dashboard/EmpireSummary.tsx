@@ -54,7 +54,7 @@ export const EmpireSummary = ({ empireId, ownedPlanets }: { empireId: EEmpire; o
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-semibold text-gray-300">{EmpireEnumToName[empireId]}</h3>
-            <Badge variant="glass">{formatEther(empire.pointsIssued)} points issued</Badge>
+            <Badge variant="glass">{formatEther(empire.pointsIssued ?? 0n)} points issued</Badge>
           </div>
           <Badge variant={sellPrice ? "secondary" : "warning"} className="flex items-center gap-2">
             {sellPrice ? `sell ${sellPriceUsd} (${formatEther(sellPrice)} ETH)` : "can't sell"}
