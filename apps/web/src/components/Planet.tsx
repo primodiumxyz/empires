@@ -166,6 +166,10 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     buttonAction: () => createDestroyer(entity, createDestroyerPriceWei),
   });
 
+  useEffect(() => {
+    setInputValue("0");
+  }, [leftDivContent]);
+
 
   if (!planet) return null;
 
@@ -222,14 +226,13 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           <SecondaryCard className="flex-row gap-2 items-center justify-center absolute top-32 -right-96 z-50">
 
             {/* left */}
-            <div className="flex flex-col items-center gap-1">
-              <h3>{leftDivContent.title}</h3>
+            <div className="flex flex-col items-center justify-center gap-1 h-52">
+              <p className="pb-3">{leftDivContent.title}</p>
               <IconLabel className="text-lg drop-shadow-lg" imageUri={leftDivContent.icon} />
               <p>{leftDivContent.price}</p>
               <NumberInput
                 count={inputValue}
                 min={0}
-                max={1000}
                 onChange={setInputValue}
                 toFixed={4}
               />
