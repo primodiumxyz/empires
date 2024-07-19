@@ -21,8 +21,11 @@ export const ActionLog = () => {
   const moveActions = tables.MoveNPCAction.useAll();
   const battleActions = tables.BattleNPCAction.useAll();
   const buyActions = tables.BuyShipsNPCAction.useAll();
+  const buyShieldActions = tables.BuyShieldsNPCAction.useAll();
   const createActions = tables.CreateShipPlayerAction.useAll();
   const killActions = tables.KillShipPlayerAction.useAll();
+  const chargeShieldActions = tables.ChargeShieldsPlayerAction.useAll();
+  const drainShieldActions = tables.DrainShieldsPlayerAction.useAll();
   const { price } = useEthPrice();
 
   const actions = useMemo(() => {
@@ -76,12 +79,45 @@ export const ActionLog = () => {
       };
     });
 
+    const chargeShieldActionEntries = chargeShieldActions.map((actionEntity) => {
+      const action = tables.ChargeShieldsPlayerAction.get(actionEntity)!;
+      return {
+        actor: entityToPlanetName(action.planetId as Entity),
+        type: "Charge Shield",
+        timestamp: action.timestamp,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, Shield Charged`,
+      };
+    });
+
+    const drainShieldActionEntries = drainShieldActions.map((actionEntity) => {
+      const action = tables.DrainShieldsPlayerAction.get(actionEntity)!;
+      return {
+        actor: entityToPlanetName(action.planetId as Entity),
+        type: "Drain Shield",
+        timestamp: action.timestamp,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, Shield Drained`,
+      };
+    });
+
+    const buyShieldActionEntries = buyShieldActions.map((actionEntity) => {
+      const action = tables.BuyShieldsNPCAction.get(actionEntity)!;
+      return {
+        actor: entityToPlanetName(action.planetId as Entity),
+        type: "Buy Shield",
+        timestamp: action.timestamp,
+        details: `Planet: ${entityToPlanetName(action.planetId as Entity)}, Shield Bought ${action.shieldBought}`,
+      };
+    });
+
     const allActions = [
       ...moveActionEntries,
       ...battleActionEntries,
       ...buyActionEntries,
       ...createActionEntries,
       ...killActionEntries,
+      ...chargeShieldActionEntries,
+      ...drainShieldActionEntries,
+      ...buyShieldActionEntries,
     ];
     allActions.sort((a, b) => Number(b.timestamp - a.timestamp));
     return allActions;
