@@ -1,5 +1,8 @@
 import { createContext, FC, memo, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { toHex } from "viem";
 
+import { useCore } from "@primodiumxyz/core/react";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { IconLabel } from "@/components/core/IconLabel";
 
 import { Button as _Button } from "./Button";
@@ -15,14 +18,11 @@ interface TabProps {
 
 interface IndexContextValue {
   index: number | undefined;
-  setIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setIndex: (index: number | undefined) => void;
   persistIndexKey?: string;
 }
 
-//TODO: Works for now. Move into a simple localStorage hook down the line.
-const persistedIndexMap = new Map<string, number | undefined>();
 const IndexContext = createContext<IndexContextValue | undefined>(undefined);
-
 const useIndex = (): IndexContextValue => {
   const context = useContext(IndexContext);
   if (!context) {
@@ -53,6 +53,9 @@ const Pane: FC<{
 const Button: FC<React.ComponentProps<typeof _Button> & { index: number; togglable?: boolean }> = memo(
   ({ togglable = false, index, ...props }) => {
     const { index: currIndex, setIndex, persistIndexKey } = useIndex();
+    const {
+      tables: { SelectedTab },
+    } = useCore();
     const selected = currIndex === index;
 
     return (
@@ -63,7 +66,7 @@ const Button: FC<React.ComponentProps<typeof _Button> & { index: number; togglab
           const _index = selected && togglable ? undefined : index;
           setIndex(_index);
           if (props.onClick) props.onClick(e);
-          if (persistIndexKey) persistedIndexMap.set(persistIndexKey, _index);
+          if (persistIndexKey) setIndex(_index);
         }}
       />
     );
@@ -74,6 +77,9 @@ const IconButton: FC<
   React.ComponentProps<typeof _Button> & { index: number; togglable?: boolean; icon: string; text: string }
 > = memo(({ togglable = false, index, icon, text, ...props }) => {
   const { index: currIndex, setIndex, persistIndexKey } = useIndex();
+  const {
+    tables: { SelectedTab },
+  } = useCore();
   const selected = currIndex === index;
 
   return (
@@ -84,7 +90,7 @@ const IconButton: FC<
         const _index = selected && togglable ? undefined : index;
         setIndex(_index);
         if (props.onClick) props.onClick(e);
-        if (persistIndexKey) persistedIndexMap.set(persistIndexKey, _index);
+        if (persistIndexKey) setIndex(_index);
       }}
     >
       <IconLabel imageUri={icon} text={text} hideText={!selected} className="px-2" />
@@ -127,9 +133,12 @@ export const Tabs: FC<TabProps> & {
   PrevButton: typeof PrevButton;
   NextButton: typeof NextButton;
 } = ({ children, defaultIndex = 0, className, onChange, persistIndexKey }) => {
-  const [currentIndex, setCurrentIndex] = useState<number | undefined>(
-    persistedIndexMap.has(persistIndexKey ?? "") ? persistedIndexMap.get(persistIndexKey ?? "") : defaultIndex,
-  );
+  const {
+    tables: { SelectedTab },
+  } = useCore();
+  const entity = toHex(persistIndexKey ?? "") as Entity;
+  const currentIndex = SelectedTab.use(entity)?.value ?? defaultIndex;
+  const setCurrentIndex = (index: number | undefined) => SelectedTab.set({ value: index ?? -1 }, entity);
 
   // Ref to check if it's the first render
   const initialRender = useRef(true);

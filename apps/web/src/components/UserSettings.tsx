@@ -3,19 +3,13 @@ import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { fontStyleOptions, useSettings } from "@/hooks/useSettings";
-import { cn } from "@/util/client";
-
-const DEV = import.meta.env.PRI_DEV === "true";
 
 export const UserSettings = () => {
   const { fontStyle } = useSettings();
 
   return (
     <Modal title="Settings">
-      <Modal.Button
-        className={cn("btn-md absolute bottom-2 h-[58px] w-fit", DEV ? "right-52" : "right-42")}
-        variant="ghost"
-      >
+      <Modal.Button className="btn-md h-[58px] w-fit" variant="ghost">
         <Cog6ToothIcon className="size-8" />
       </Modal.Button>
       <Modal.Content>

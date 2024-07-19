@@ -160,7 +160,16 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           <p className="absolute left-1/2 top-4 -translate-x-1/2 transform font-mono text-xs opacity-70">
             ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
           </p>
-          <p className="font-bold">{entityToPlanetName(entity)}</p>
+          <Button
+            variant="ghost"
+            className="font-bold"
+            onClick={() => {
+              tables.SelectedPlanet.set({ value: entity });
+              utils.openPane("dashboard");
+            }}
+          >
+            {entityToPlanetName(entity)}
+          </Button>
         </div>
         <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
           <p className="flex items-center justify-center gap-2">
