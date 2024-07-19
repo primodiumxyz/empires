@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState, useRef } from "react";
 import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon } from "@heroicons/react/24/solid";
 import { bigIntMin } from "@latticexyz/common/utils";
 
@@ -152,12 +152,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   // NumberInput 
   const [inputValue, setInputValue] = useState("0");
 
-  // InteractPane
-  const [isSecondaryCardVisible, setIsSecondaryCardVisible] = useState(false);
-  const handleInteractClick = () => {
-    setIsSecondaryCardVisible(!isSecondaryCardVisible);
-  };
-  
   //leftDiv Interact Pane
   const [leftDivContent, setLeftDivContent] = useState({
     title: "Buy Ship",
@@ -170,103 +164,130 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     setInputValue("0");
   }, [leftDivContent]);
 
+  // Interact Pane
+  const [isSecondaryCardVisible, setIsSecondaryCardVisible] = useState(false);
+  const handleInteractClick = () => {
+    setIsSecondaryCardVisible(!isSecondaryCardVisible);
+  };
 
+  const interactButtonRef = useRef<HTMLButtonElement>(null);
+  const [secondaryCardStyle, setSecondaryCardStyle] = useState({ top: '0px', left: '0px' });
+
+  useEffect(() => {
+    const updateSecondaryCardPosition = () => {
+      if (interactButtonRef.current) {
+        const buttonRect = interactButtonRef.current.getBoundingClientRect();
+        setSecondaryCardStyle({
+          top: `${buttonRect.top + buttonRect.height + window.scrollY - 20}px`,
+          left: `${buttonRect.left + window.scrollX + 70}px`,
+        });
+      }
+    };
+
+    updateSecondaryCardPosition();
+    window.addEventListener('resize', updateSecondaryCardPosition);
+
+    return () => {
+      window.removeEventListener('resize', updateSecondaryCardPosition);
+    };
+  }, [isSecondaryCardVisible]);
   if (!planet) return null;
 
   return (
-    <Hexagon
-      key={entity}
-      size={tileSize}
-      className="absolute -translate-x-1/2 -translate-y-1/2 z-10"
-      fillClassName={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "fill-gray-600"}
-      stroke={conquered ? "yellow" : "none"}
-      style={{
-        top: `${top + 50}px`,
-        left: `${left}px`,
-      }}
-    >
-      <div className="flex flex-col items-center gap-2 text-white">
-        <div className="text-center">
-          <p className="absolute left-1/2 top-4 -translate-x-1/2 transform font-mono text-xs opacity-70">
-            ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
-          </p>
-          <p className="font-bold">{entityToPlanetName(entity)}</p>
-        </div>
-        <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
-          <p className="flex items-center justify-center gap-2">
-            <RocketLaunchIcon className="size-4" /> {planet.destroyerCount.toLocaleString()}
-            <CurrencyYenIcon className="size-5" /> {planet.goldCount.toLocaleString()}
-          </p>
-          {floatingTexts.map((item) => (
-            <div
-              key={item.id}
-              className="floating-text pointer-events-none w-fit rounded bg-white p-2 text-xs text-black"
-            >
-              {item.text}
-            </div>
-          ))}
-          {goldFloatingTexts.map((item) => (
-            <div
-              key={item.id}
-              className="floating-text pointer-events-none w-fit rounded bg-white p-2 text-xs text-black"
-            >
-              {item.text}
-            </div>
-          ))}
+    <>
+      <Hexagon
+        key={entity}
+        size={tileSize}
+        className="absolute -translate-x-1/2 -translate-y-1/2 z-10"
+        fillClassName={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "fill-gray-600"}
+        stroke={conquered ? "yellow" : "none"}
+        style={{
+          top: `${top + 50}px`,
+          left: `${left}px`,
+        }}
+      >
+        <div className="flex flex-col items-center gap-2 text-white">
+          <div className="text-center">
+            <p className="absolute left-1/2 top-4 -translate-x-1/2 transform font-mono text-xs opacity-70">
+              ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
+            </p>
+            <p className="font-bold">{entityToPlanetName(entity)}</p>
+          </div>
 
-
-
-        </SecondaryCard>
-
-        <Button className="p-3 h-full" onClick={handleInteractClick}>
-          Interact
-        </Button>
-
-        {isSecondaryCardVisible && (
-          <SecondaryCard className="flex-row gap-2 items-center justify-center absolute top-32 -right-96 z-50">
-
-            {/* left */}
-            <div className="flex flex-col items-center justify-center gap-1 h-52">
-              <p className="pb-3">{leftDivContent.title}</p>
-              <IconLabel className="text-lg drop-shadow-lg" imageUri={leftDivContent.icon} />
-              <p>{leftDivContent.price}</p>
-              <NumberInput
-                count={inputValue}
-                min={0}
-                onChange={setInputValue}
-                toFixed={4}
-              />
-              <Button onClick={leftDivContent.buttonAction} disabled={gameOver || planet.factionId === 0}>
-                Buy
-              </Button>
-            </div>
-          
-            {/* right */}
-            <div className="flex flex-col gap-1 items-center justify-center">
-              <Button
-                size="content"
-                variant="neutral"
-                onClick={() => createDestroyer(entity, createDestroyerPriceWei)}
-                disabled={gameOver || planet.factionId == 0}
-                onMouseEnter={() => setLeftDivContent({
-                  title: "Buy Ship",
-                  icon: shipIcon,
-                  price: createDestroyerPriceUsd,
-                  buttonAction: () => createDestroyer(entity, createDestroyerPriceWei)
-                })}
+          <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
+            <p className="flex items-center justify-center gap-2">
+              <RocketLaunchIcon className="size-4" /> {planet.destroyerCount.toLocaleString()}
+              <CurrencyYenIcon className="size-5" /> {planet.goldCount.toLocaleString()}
+            </p>
+            {floatingTexts.map((item) => (
+              <div
+                key={item.id}
+                className="floating-text pointer-events-none w-fit rounded bg-white p-2 text-xs text-black"
               >
-                <div className="flex flex-start px-1 gap-3 w-60">
-                  <IconLabel className="text-lg drop-shadow-lg" imageUri={shipIcon} />
-                  <div className="flex flex-col items-start">
-                    <p>Buy Ship</p>
-                    <p className="block text-xs opacity-75">Description of buy ship</p>
-                  </div>
-                </div>
-              </Button>
+                {item.text}
+              </div>
+            ))}
+            {goldFloatingTexts.map((item) => (
+              <div
+                key={item.id}
+                className="floating-text pointer-events-none w-fit rounded bg-white p-2 text-xs text-black"
+              >
+                {item.text}
+              </div>
+            ))}
+          </SecondaryCard>
 
-              <Button
-                size="content"
-                variant="neutral"
+          <Button ref={interactButtonRef} className="p-3 h-full" onClick={handleInteractClick}>
+            Interact
+          </Button>
+        </div>
+      </Hexagon>
+      {isSecondaryCardVisible && (
+        <SecondaryCard className="flex-row gap-2 items-center justify-center fixed z-50 bg-slate-900/85"
+          style={secondaryCardStyle}>
+
+          {/* left */}
+          <div className="flex flex-col items-center justify-center gap-1 h-52">
+            <p className="pb-3">{leftDivContent.title}</p>
+            <IconLabel className="text-lg drop-shadow-lg" imageUri={leftDivContent.icon} />
+            <p>{leftDivContent.price}</p>
+            <NumberInput
+              count={inputValue}
+              min={0}
+              onChange={setInputValue}
+              toFixed={4}
+            />
+            <Button onClick={leftDivContent.buttonAction} disabled={gameOver || planet.factionId === 0}>
+              Buy
+            </Button>
+          </div>
+
+          {/* right */}
+          <div className="flex flex-col gap-1 items-center justify-center pr-2">
+            <Button
+              size="content"
+              variant="neutral"
+              onClick={() => createDestroyer(entity, createDestroyerPriceWei)}
+              disabled={gameOver || planet.factionId == 0}
+              onMouseEnter={() => setLeftDivContent({
+                title: "Buy Ship",
+                icon: shipIcon,
+                price: createDestroyerPriceUsd,
+                buttonAction: () => createDestroyer(entity, createDestroyerPriceWei)
+              })}
+            >
+              <div className="flex flex-start px-1 gap-3 w-60">
+                <IconLabel className="text-lg drop-shadow-lg" imageUri={shipIcon} />
+                <div className="flex flex-col items-start">
+                  <p>Buy Ship</p>
+                  <p className="block text-xs opacity-75">Description of buy ship</p>
+                </div>
+              </div>
+            </Button>
+
+            <Button
+              size="content"
+              variant="neutral"
               // onClick={}
               disabled={gameOver || planet.factionId == 0}
               onMouseEnter={() => setLeftDivContent({
@@ -275,42 +296,40 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
                 price: createDestroyerPriceUsd,
                 buttonAction: () => createDestroyer(entity, createDestroyerPriceWei)
               })}
-              >
-                <div className="flex flex-start px-1 gap-3 w-60">
-                  <IconLabel className="text-lg drop-shadow-lg" imageUri={defenseIcon} />
-                  <div className="flex flex-col items-start">
-                    <p>Buy Shield</p>
-                    <p className="block text-xs opacity-75">Description of buy shield</p>
-                  </div>
+            >
+              <div className="flex flex-start px-1 gap-3 w-60">
+                <IconLabel className="text-lg drop-shadow-lg" imageUri={defenseIcon} />
+                <div className="flex flex-col items-start">
+                  <p>Buy Shield</p>
+                  <p className="block text-xs opacity-75">Description of buy shield</p>
                 </div>
-              </Button>
+              </div>
+            </Button>
 
-              <Button
-                size="content"
-                variant="neutral"
-                onClick={() => removeDestroyer(entity, killDestroyerPriceWei)}
-                disabled={gameOver || planet.factionId == 0}
-                onMouseEnter={() => setLeftDivContent({
-                  title: "Sabotage",
-                  icon: sabotageIcon,
-                  price: killDestroyerPriceUsd,
-                  buttonAction: () => removeDestroyer(entity, killDestroyerPriceWei)
-                })}
-              >
-                <div className="flex flex-start px-1 gap-3 w-60">
-                  <IconLabel className="text-lg drop-shadow-lg" imageUri={sabotageIcon} />
-                  <div className="flex flex-col items-start">
-                    <p>Sabotage</p>
-                    <p className="block text-xs opacity-75">Description of sabotage</p>
-                  </div>
+            <Button
+              size="content"
+              variant="neutral"
+              onClick={() => removeDestroyer(entity, killDestroyerPriceWei)}
+              disabled={gameOver || planet.factionId == 0}
+              onMouseEnter={() => setLeftDivContent({
+                title: "Sabotage",
+                icon: sabotageIcon,
+                price: killDestroyerPriceUsd,
+                buttonAction: () => removeDestroyer(entity, killDestroyerPriceWei)
+              })}
+            >
+              <div className="flex flex-start px-1 gap-3 w-60">
+                <IconLabel className="text-lg drop-shadow-lg" imageUri={sabotageIcon} />
+                <div className="flex flex-col items-start">
+                  <p>Sabotage</p>
+                  <p className="block text-xs opacity-75">Description of sabotage</p>
                 </div>
-              </Button>
-            </div>
-          </SecondaryCard>
-        )}
-      </div>
-    </Hexagon>
+              </div>
+            </Button>
+          </div>
+        </SecondaryCard>
+      )}
 
-
+    </>
   );
 };
