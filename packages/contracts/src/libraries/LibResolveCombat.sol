@@ -17,11 +17,11 @@ library LibResolveCombat {
             bool conquer = false;
 
             // attackers bounce off shields
-            if (arrivingDestroyers < planetData.shieldCount) {
+            if (arrivingDestroyers <= planetData.shieldCount) {
                 Planet.setShieldCount(planetId, planetData.shieldCount - arrivingDestroyers);
             }
             // attackers destroy shields and damage destroyers, but don't conquer
-            else if (arrivingDestroyers < planetData.shieldCount + planetData.destroyerCount) {
+            else if (arrivingDestroyers <= planetData.shieldCount + planetData.destroyerCount) {
                 arrivingDestroyers -= planetData.shieldCount;
                 Planet.setShieldCount(planetId, 0);
                 Planet.setDestroyerCount(planetId, planetData.destroyerCount - arrivingDestroyers);

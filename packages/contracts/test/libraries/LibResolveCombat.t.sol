@@ -59,6 +59,17 @@ contract LibResolveCombatTest is PrimodiumTest {
         assertEq(Planet.getFactionId(planetId), EEmpire.Red);
     }
 
+    function testAttackEqualsShield() public {
+        Arrivals.set(planetId, 2);
+        Planet.setFactionId(planetId, EEmpire.Red);
+        Planet.setDestroyerCount(planetId, 5);
+        Planet.setShieldCount(planetId, 2);
+        LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
+        assertEq(Planet.getDestroyerCount(planetId), 5);
+        assertEq(Planet.getShieldCount(planetId), 0);
+        assertEq(Planet.getFactionId(planetId), EEmpire.Red);
+    }
+
     function testAttackPartiallyShielded() public {
         Arrivals.set(planetId, 4);
         Planet.setFactionId(planetId, EEmpire.Red);
@@ -70,7 +81,18 @@ contract LibResolveCombatTest is PrimodiumTest {
         assertEq(Planet.getFactionId(planetId), EEmpire.Red);
     }
 
-    function testConquerShielded() public {
+    function testAttackEqualsTotalDefenses() public {
+        Arrivals.set(planetId, 6);
+        Planet.setFactionId(planetId, EEmpire.Red);
+        Planet.setDestroyerCount(planetId, 5);
+        Planet.setShieldCount(planetId, 1);
+        LibResolveCombat.resolveCombat(EEmpire.Blue, planetId);
+        assertEq(Planet.getDestroyerCount(planetId), 0);
+        assertEq(Planet.getShieldCount(planetId), 0);
+        assertEq(Planet.getFactionId(planetId), EEmpire.Red);
+    }
+
+    function testExceedsTotalDefenses() public {
         Arrivals.set(planetId, 5);
         Planet.setFactionId(planetId, EEmpire.Red);
         Planet.setDestroyerCount(planetId, 2);
