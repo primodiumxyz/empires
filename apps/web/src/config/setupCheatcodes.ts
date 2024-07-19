@@ -736,6 +736,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   return [
     setShips,
     sendShips,
+    setShields,
     setGoldCount,
     generateGold,
     givePoints,
