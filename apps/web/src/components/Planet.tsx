@@ -171,8 +171,10 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   };
 
   const interactButtonRef = useRef<HTMLButtonElement>(null);
+  const secondaryCardRef = useRef<HTMLDivElement>(null);
   const [secondaryCardStyle, setSecondaryCardStyle] = useState({ top: '0px', left: '0px' });
 
+  //Adjust Interact Pane Position
   useEffect(() => {
     const updateSecondaryCardPosition = () => {
       if (interactButtonRef.current) {
@@ -191,6 +193,30 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       window.removeEventListener('resize', updateSecondaryCardPosition);
     };
   }, [isSecondaryCardVisible]);
+
+// Close Interact Pane
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      secondaryCardRef.current &&
+      !secondaryCardRef.current.contains(event.target as Node) &&
+      interactButtonRef.current &&
+      !interactButtonRef.current.contains(event.target as Node)
+    ) {
+      setIsSecondaryCardVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isSecondaryCardVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSecondaryCardVisible]);
+
   if (!planet) return null;
 
   return (
@@ -243,7 +269,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         </div>
       </Hexagon>
       {isSecondaryCardVisible && (
-        <SecondaryCard className="flex-row gap-2 items-center justify-center fixed z-50 bg-slate-900/85"
+        <SecondaryCard ref={secondaryCardRef} className="flex-row gap-2 items-center justify-center fixed z-50 bg-slate-900/85"
           style={secondaryCardStyle}>
 
           {/* left */}
