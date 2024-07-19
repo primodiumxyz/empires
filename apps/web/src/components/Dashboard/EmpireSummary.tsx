@@ -39,8 +39,8 @@ export const EmpireSummary = ({ empireId, ownedPlanets }: { empireId: EEmpire; o
 
       acc.gold += planet.properties.goldCount;
       acc.ships += planet.properties.shipCount;
-      // TODO(shields): uncomment when implemented
-      // acc.shields += planet.properties.shieldCount;
+      acc.shields += planet.properties.shieldCount;
+
       return acc;
     },
     { gold: BigInt(0), ships: BigInt(0), shields: BigInt(0) },
