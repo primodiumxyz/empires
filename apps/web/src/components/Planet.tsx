@@ -17,6 +17,12 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 
+import { IconLabel } from "@/components/core/IconLabel";
+import { NumberInput } from "@/components/core/NumberInput";
+import shipIcon from '../assets/art sprites/UI_Ship.png';
+import defenseIcon from '../assets/art sprites/UI_Defense.png';
+import sabotageIcon from '../assets/art sprites/UI_Attack.png';
+
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "fill-blue-600",
   [EEmpire.Green]: "fill-green-600",
@@ -143,13 +149,31 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     };
   }, [planet]);
 
+  // NumberInput 
+  const [inputValue, setInputValue] = useState("0");
+
+  // InteractPane
+  const [isSecondaryCardVisible, setIsSecondaryCardVisible] = useState(false);
+  const handleInteractClick = () => {
+    setIsSecondaryCardVisible(!isSecondaryCardVisible);
+  };
+  
+  //leftDiv Interact Pane
+  const [leftDivContent, setLeftDivContent] = useState({
+    title: "Buy Ship",
+    icon: shipIcon,
+    price: createDestroyerPriceUsd,
+    buttonAction: () => createDestroyer(entity, createDestroyerPriceWei),
+  });
+
+
   if (!planet) return null;
 
   return (
     <Hexagon
       key={entity}
       size={tileSize}
-      className="absolute -translate-x-1/2 -translate-y-1/2"
+      className="absolute -translate-x-1/2 -translate-y-1/2 z-10"
       fillClassName={planet?.factionId !== 0 ? EmpireEnumToColor[planetFaction] : "fill-gray-600"}
       stroke={conquered ? "yellow" : "none"}
       style={{
@@ -167,6 +191,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
           <p className="flex items-center justify-center gap-2">
             <RocketLaunchIcon className="size-4" /> {planet.destroyerCount.toLocaleString()}
+            <CurrencyYenIcon className="size-5" /> {planet.goldCount.toLocaleString()}
           </p>
           {floatingTexts.map((item) => (
             <div
@@ -176,39 +201,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               {item.text}
             </div>
           ))}
-
-          <div className="flex items-center gap-2">
-            <TransactionQueueMask id={`${entity}-kill-destroyer`}>
-              <Button
-                tooltip={`Cost: ${killDestroyerPriceUsd}`}
-                variant="neutral"
-                size="xs"
-                shape="square"
-                className="border-none"
-                onClick={() => removeDestroyer(entity, killDestroyerPriceWei)}
-                disabled={gameOver || planet.factionId == 0}
-              >
-                <MinusIcon className="size-4" />
-              </Button>
-            </TransactionQueueMask>
-
-            <TransactionQueueMask id={`${entity}-create-destroyer`}>
-              <Button
-                tooltip={`Cost: ${createDestroyerPriceUsd}`}
-                variant="neutral"
-                size="xs"
-                shape="square"
-                className="border-none"
-                onClick={() => createDestroyer(entity, createDestroyerPriceWei)}
-                disabled={gameOver || planet.factionId == 0}
-              >
-                <PlusIcon className="size-4" />
-              </Button>
-            </TransactionQueueMask>
-          </div>
-        </SecondaryCard>
-        <Badge variant="glass" size="lg" className="relative flex items-center gap-1 border-none bg-gray-50/20">
-          <CurrencyYenIcon className="size-5" /> {planet.goldCount.toLocaleString()}
           {goldFloatingTexts.map((item) => (
             <div
               key={item.id}
@@ -217,8 +209,153 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               {item.text}
             </div>
           ))}
-        </Badge>
+
+
+
+        </SecondaryCard>
+
+        <Button className="p-3 h-full" onClick={handleInteractClick}>
+          Interact
+        </Button>
+
+        {isSecondaryCardVisible && (
+          <SecondaryCard className="flex-row gap-2 items-center justify-center absolute top-32 -right-96 z-50">
+
+            {/* left */}
+            <div className="flex flex-col items-center gap-1">
+              <h3>{leftDivContent.title}</h3>
+              <IconLabel className="text-lg drop-shadow-lg" imageUri={leftDivContent.icon} />
+              <p>{leftDivContent.price}</p>
+              <NumberInput
+                count={inputValue}
+                min={0}
+                max={1000}
+                onChange={setInputValue}
+                toFixed={4}
+              />
+              <Button onClick={leftDivContent.buttonAction} disabled={gameOver || planet.factionId === 0}>
+                Buy
+              </Button>
+            </div>
+          
+            {/* right */}
+            <div className="flex flex-col gap-1 items-center justify-center">
+              <Button
+                size="content"
+                variant="neutral"
+                onClick={() => createDestroyer(entity, createDestroyerPriceWei)}
+                disabled={gameOver || planet.factionId == 0}
+                onMouseEnter={() => setLeftDivContent({
+                  title: "Buy Ship",
+                  icon: shipIcon,
+                  price: createDestroyerPriceUsd,
+                  buttonAction: () => createDestroyer(entity, createDestroyerPriceWei)
+                })}
+              >
+                <div className="flex flex-start px-1 gap-3 w-60">
+                  <IconLabel className="text-lg drop-shadow-lg" imageUri={shipIcon} />
+                  <div className="flex flex-col items-start">
+                    <p>Buy Ship</p>
+                    <p className="block text-xs opacity-75">Description of buy ship</p>
+                  </div>
+                </div>
+              </Button>
+
+              <Button
+                size="content"
+                variant="neutral"
+              // onClick={}
+              disabled={gameOver || planet.factionId == 0}
+              onMouseEnter={() => setLeftDivContent({
+                title: "Buy Shield",
+                icon: defenseIcon,
+                price: createDestroyerPriceUsd,
+                buttonAction: () => createDestroyer(entity, createDestroyerPriceWei)
+              })}
+              >
+                <div className="flex flex-start px-1 gap-3 w-60">
+                  <IconLabel className="text-lg drop-shadow-lg" imageUri={defenseIcon} />
+                  <div className="flex flex-col items-start">
+                    <p>Buy Shield</p>
+                    <p className="block text-xs opacity-75">Description of buy shield</p>
+                  </div>
+                </div>
+              </Button>
+
+              <Button
+                size="content"
+                variant="neutral"
+                onClick={() => removeDestroyer(entity, killDestroyerPriceWei)}
+                disabled={gameOver || planet.factionId == 0}
+                onMouseEnter={() => setLeftDivContent({
+                  title: "Sabotage",
+                  icon: sabotageIcon,
+                  price: killDestroyerPriceUsd,
+                  buttonAction: () => removeDestroyer(entity, killDestroyerPriceWei)
+                })}
+              >
+                <div className="flex flex-start px-1 gap-3 w-60">
+                  <IconLabel className="text-lg drop-shadow-lg" imageUri={sabotageIcon} />
+                  <div className="flex flex-col items-start">
+                    <p>Sabotage</p>
+                    <p className="block text-xs opacity-75">Description of sabotage</p>
+                  </div>
+                </div>
+              </Button>
+            </div>
+          </SecondaryCard>
+        )}
       </div>
     </Hexagon>
+
+
   );
 };
+
+
+{/* <Navigator.Screen title="Interact" className="gap-2"> 
+<SecondaryCard className="flex-col items-center justify-center h-48 w-96 ">
+          
+<Button
+  size="content"
+  variant="neutral"
+// onClick={}
+>
+  <div className="flex flex-start px-1 gap-3 w-full">
+    <IconLabel className="text-lg drop-shadow-lg" imageUri="https://www.applesfromny.com/wp-content/uploads/2020/05/20Ounce_NYAS-Apples2.png" />
+    <div className="flex flex-col items-start">
+      <p>Buy Ship</p>
+      <p className="block text-xs opacity-75">Description of buy ship</p>
+    </div>
+  </div>
+</Button>
+
+<Button
+  size="content"
+  variant="neutral"
+// onClick={}
+>
+  <div className="flex flex-start px-1 gap-3 w-full">
+    <IconLabel className="text-lg drop-shadow-lg" imageUri="https://www.applesfromny.com/wp-content/uploads/2020/05/20Ounce_NYAS-Apples2.png" />
+    <div className="flex flex-col items-start">
+      <p>Buy Shield</p>
+      <p className="block text-xs opacity-75">Description of buy shield</p>
+    </div>
+  </div>
+</Button>
+
+<Button
+  size="content"
+  variant="neutral"
+// onClick={}
+>
+  <div className="flex flex-start px-1 gap-3 w-full">
+    <IconLabel className="text-lg drop-shadow-lg" imageUri="https://www.applesfromny.com/wp-content/uploads/2020/05/20Ounce_NYAS-Apples2.png" />
+    <div className="flex flex-col items-start">
+      <p>Sabotage</p>
+      <p className="block text-xs opacity-75">Description of sabotage</p>
+    </div>
+  </div>
+</Button>
+</SecondaryCard>
+ </Navigator.Screen> */}
