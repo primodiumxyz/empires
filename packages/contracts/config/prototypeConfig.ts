@@ -38,13 +38,13 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointUnit: BigInt(POINTS_UNIT),
         minPointCost: BigInt(POINTS_UNIT * 0.00002),
         startPointCost: BigInt(POINTS_UNIT * 0.00004),
-        pointGenRate: BigInt(POINTS_UNIT * 0.00004),
+        pointGenRate: BigInt(POINTS_UNIT * 0.00002),
         pointCostIncrease: BigInt(POINTS_UNIT * 0.00002),
         pointRake: scaleRake(0.01), // out of 1, scales to out of 10000
         pointSellTax: BigInt(POINTS_UNIT * 0),
       },
       P_ActionConfig: {
-        actionGenRate: BigInt(POINTS_UNIT * 0.00004),
+        actionGenRate: BigInt(POINTS_UNIT * 0.00002),
         actionCostIncrease: BigInt(POINTS_UNIT * 0.00004),
         startActionCost: BigInt(POINTS_UNIT * 0.00004),
         minActionCost: 0n,
