@@ -9,7 +9,6 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
-import { SecondaryCard } from "@/components/core/Card";
 import { Hexagon } from "@/components/core/Hexagon";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
@@ -166,47 +165,49 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           </p>
           <p className="font-bold">{entityToPlanetName(entity)}</p>
         </div>
-        <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
-          <p className="flex items-center justify-center gap-2">
-            <RocketLaunchIcon className="size-4" /> {planet.shipCount.toLocaleString()}
-          </p>
-          {floatingTexts.map((item) => (
-            <div
-              key={item.id}
-              className="floating-text pointer-events-none w-fit rounded bg-white p-2 text-xs text-black"
-            >
-              {item.text}
+        <div className="relative flex flex-row gap-1">
+          <div className="rounded-lg bg-white/20 p-1">
+            <p className="flex items-center justify-center gap-2">
+              <RocketLaunchIcon className="size-4" /> {planet.shipCount.toLocaleString()}
+            </p>
+            {floatingTexts.map((item) => (
+              <div
+                key={item.id}
+                className="floating-text pointer-events-none w-fit rounded bg-white p-2 text-xs text-black"
+              >
+                {item.text}
+              </div>
+            ))}
+
+            <div className="flex items-center gap-2">
+              <TransactionQueueMask id={`${entity}-kill-ship`}>
+                <Button
+                  tooltip={`Cost: ${killShipPriceUsd}`}
+                  variant="neutral"
+                  size="xs"
+                  shape="square"
+                  className="border-none"
+                  onClick={() => calls.removeShip(entity, killShipPriceWei)}
+                  disabled={gameOver || planet.empireId == 0}
+                >
+                  <MinusIcon className="size-4" />
+                </Button>
+              </TransactionQueueMask>
+
+              <TransactionQueueMask id={`${entity}-create-ship`}>
+                <Button
+                  tooltip={`Cost: ${createShipPriceUsd}`}
+                  variant="neutral"
+                  size="xs"
+                  shape="square"
+                  className="border-none"
+                  onClick={() => calls.createShip(entity, createShipPriceWei)}
+                  disabled={gameOver || planet.empireId == 0}
+                >
+                  <PlusIcon className="size-4" />
+                </Button>
+              </TransactionQueueMask>
             </div>
-          ))}
-
-          <div className="flex items-center gap-2">
-            <TransactionQueueMask id={`${entity}-kill-ship`}>
-              <Button
-                tooltip={`Cost: ${killShipPriceUsd}`}
-                variant="neutral"
-                size="xs"
-                shape="square"
-                className="border-none"
-                onClick={() => calls.removeShip(entity, killShipPriceWei)}
-                disabled={gameOver || planet.empireId == 0}
-              >
-                <MinusIcon className="size-4" />
-              </Button>
-            </TransactionQueueMask>
-
-            <TransactionQueueMask id={`${entity}-create-ship`}>
-              <Button
-                tooltip={`Cost: ${createShipPriceUsd}`}
-                variant="neutral"
-                size="xs"
-                shape="square"
-                className="border-none"
-                onClick={() => calls.createShip(entity, createShipPriceWei)}
-                disabled={gameOver || planet.empireId == 0}
-              >
-                <PlusIcon className="size-4" />
-              </Button>
-            </TransactionQueueMask>
           </div>
           {/* shields */}
           <div className="rounded-lg bg-white/20 p-1">
@@ -238,7 +239,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               </TransactionQueueMask>
             </div>
           </div>
-        </SecondaryCard>
+        </div>
         <Badge variant="glass" size="lg" className="relative flex items-center gap-1 border-none bg-gray-50/20">
           <CurrencyYenIcon className="size-5" /> {planet.goldCount.toLocaleString()}
           {goldFloatingTexts.map((item) => (
