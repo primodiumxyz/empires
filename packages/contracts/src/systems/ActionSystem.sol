@@ -25,7 +25,7 @@ contract ActionSystem is EmpiresSystem {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, planetData.empireId, true);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, planetData.empireId, true, 1);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
     _purchaseAction(EPlayerAction.CreateShip, planetData.empireId, true, _msgValue());
@@ -52,7 +52,7 @@ contract ActionSystem is EmpiresSystem {
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.shipCount > 0, "[ActionSystem] No ships to kill");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.empireId, false);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.empireId, false, 1);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
     _purchaseAction(EPlayerAction.KillShip, planetData.empireId, false, _msgValue());
@@ -77,7 +77,7 @@ contract ActionSystem is EmpiresSystem {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, planetData.empireId, true);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, planetData.empireId, true, 1);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
     _purchaseAction(EPlayerAction.ChargeShield, planetData.empireId, true, _msgValue());
@@ -100,7 +100,7 @@ contract ActionSystem is EmpiresSystem {
     require(planetData.shieldCount > 0, "[ActionSystem] No shields to drain");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
 
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false, 1);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
     _purchaseAction(EPlayerAction.DrainShield, planetData.empireId, false, _msgValue());
@@ -142,7 +142,7 @@ contract ActionSystem is EmpiresSystem {
         LibPrice.pointCostUp(_empireImpacted, 1 * pointUnit);
       }
     }
-    LibPrice.actionCostUp(_empireImpacted, _actionType);
+    LibPrice.actionCostUp(_empireImpacted, _actionType, 1);
   }
 
   /**
