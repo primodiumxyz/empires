@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, MoveNPCAction, MoveNPCActionData, Arrivals } from "codegen/index.sol";
+import { PendingMove, PendingMoveData, Empire, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, MoveNPCAction, MoveNPCActionData, Arrivals } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 
 library LibMoveShips {
-  function moveShips(bytes32 planetId) internal returns (bool) {
+  function createPendingMove(bytes32 planetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
     if (planetData.empireId == EEmpire.NULL || planetData.shipCount == 0) return false;
 
@@ -20,20 +20,39 @@ library LibMoveShips {
     } while (!Planet.getIsPlanet(target));
     if (target == planetId) return false;
 
-    uint256 shipsToMove = planetData.shipCount;
+    PendingMove.set(planetId, PendingMoveData({ empireId: planetData.empireId, destinationPlanetId: target }));
 
-    Arrivals.set(target, Arrivals.get(target) + shipsToMove);
+    return true;
+  }
+
+  function executePendingMoves(bytes32 planetId) internal {
+    PlanetData memory planetData = Planet.get(planetId);
+    bytes32 destinationPlanetId = PendingMove.getDestinationPlanetId(planetId);
+
+    if (destinationPlanetId == bytes32(0)) return;
+
+    uint256 shipsToMove = planetData.shipCount;
+    uint256 arrivingShips = Arrivals.get(destinationPlanetId, planetData.empireId);
+
+    uint256 shipCount = arrivingShips + shipsToMove;
+
+    // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
+    Arrivals.set(destinationPlanetId, planetData.empireId, shipCount);
+
+    // Clear the pending move
+    PendingMove.deleteRecord(planetId);
+
+    // Log the move
     MoveNPCAction.set(
       pseudorandomEntity(),
       MoveNPCActionData({
         originPlanetId: planetId,
-        destinationPlanetId: target,
+        destinationPlanetId: destinationPlanetId,
         shipCount: shipsToMove,
         timestamp: block.timestamp
       })
     );
-    return true;
   }
 
   function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal view returns (bytes32 target) {

@@ -140,8 +140,7 @@ export const worldInput = {
       schema: { id: "bytes32", stored: "bool", index: "uint256" },
     },
 
-    /* -------------------------------- Movement -------------------------------- */
-
+    /* ------------------------------- NPC Actions ------------------------------ */
     P_NPCActionThresholds: {
       key: [],
       schema: {
@@ -160,6 +159,8 @@ export const worldInput = {
     },
     // each value denotes a threshold for the likelihood of a move in that direction
     // the total is out of 10000
+
+    /* -------------------------------- Movement -------------------------------- */
     P_NPCMoveThresholds: {
       key: [],
       schema: {
@@ -174,14 +175,16 @@ export const worldInput = {
       key: ["planetId"],
       schema: {
         planetId: "bytes32",
-        destination: "bytes32",
-        shipCount: "uint256",
+        empireId: "EEmpire",
+        destinationPlanetId: "bytes32",
       },
     },
+
     Arrivals: {
-      key: ["planetId"],
+      key: ["planetId", "empireId"],
       schema: {
         planetId: "bytes32",
+        empireId: "EEmpire",
         shipCount: "uint256",
       },
     },

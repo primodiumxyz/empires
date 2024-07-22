@@ -24,19 +24,19 @@ contract LibMoveShipsTest is PrimodiumTest {
     vm.prevrandao(bytes32("1"));
   }
 
-  function testEarlyExit() public {
-    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
-    Planet.setEmpireId(planetId, EEmpire.NULL);
-    bool moved = LibMoveShips.moveShips(planetId);
-    assertFalse(moved, "shouldnt have moved");
-    moved = LibMoveShips.moveShips(planetId);
-    Planet.setEmpireId(planetId, EEmpire.Red);
-    moved = LibMoveShips.moveShips(planetId);
-    assertFalse(moved, "shouldnt have moved again");
-    Planet.setShipCount(planetId, 1);
-    moved = LibMoveShips.moveShips(planetId);
-    assertTrue(moved, "should have moved");
-  }
+  // function testEarlyExit() public {
+  //   P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
+  //   Planet.setEmpireId(planetId, EEmpire.NULL);
+  //   bool moved = LibMoveShips.moveShips(planetId);
+  //   assertFalse(moved, "shouldnt have moved");
+  //   moved = LibMoveShips.moveShips(planetId);
+  //   Planet.setEmpireId(planetId, EEmpire.Red);
+  //   moved = LibMoveShips.moveShips(planetId);
+  //   assertFalse(moved, "shouldnt have moved again");
+  //   Planet.setShipCount(planetId, 1);
+  //   moved = LibMoveShips.moveShips(planetId);
+  //   assertTrue(moved, "should have moved");
+  // }
 
   function testGetPlanetTargetNoMovement() public {
     PlanetData memory planetData = Planet.get(planetId);

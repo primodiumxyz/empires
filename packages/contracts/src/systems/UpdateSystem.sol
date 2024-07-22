@@ -27,10 +27,10 @@ contract UpdateSystem is EmpiresSystem {
   function updateWorld() public _onlyNotGameOver {
     EEmpire empire = _updateTurn();
 
-    bytes32[] memory planets = PlanetsSet.getPlanetIds();
     uint256 goldGenRate = P_GameConfig.getGoldGenRate();
 
     // add gold to every planet
+    bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint i = 0; i < planets.length; i++) {
       Planet.setGoldCount(planets[i], Planet.getGoldCount(planets[i]) + goldGenRate);
     }
@@ -38,13 +38,19 @@ contract UpdateSystem is EmpiresSystem {
     // spend gold and move ships for each empire planet
     bytes32[] memory empirePlanets = EmpirePlanetsSet.getEmpirePlanetIds(empire);
     for (uint i = 0; i < empirePlanets.length; i++) {
+      LibMoveShips.executePendingMoves(empirePlanets[i]);
       LibGold.spendGold(empirePlanets[i]);
-      LibMoveShips.moveShips(empirePlanets[i]);
     }
 
     // resolve combat for each planet
     for (uint i = 0; i < planets.length; i++) {
-      LibResolveCombat.resolveCombat(empire, planets[i]);
+      LibResolveCombat.resolveCombat(planets[i]);
+    }
+
+    // set new pending moves for each planet
+    empirePlanets = EmpirePlanetsSet.getEmpirePlanetIds(empire);
+    for (uint i = 0; i < empirePlanets.length; i++) {
+      LibMoveShips.createPendingMove(empirePlanets[i]);
     }
 
     // generate new actions and points for each empire and action
