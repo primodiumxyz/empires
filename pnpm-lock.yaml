@@ -172,19 +172,19 @@ importers:
         version: 2.0.9(google-protobuf@3.21.2)
       '@latticexyz/common':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.2)(zod@3.23.8)
+        version: 2.0.9(typescript@5.5.3)(zod@3.23.8)
       '@latticexyz/schema-type':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.2)(zod@3.23.8)
+        version: 2.0.9(typescript@5.5.3)(zod@3.23.8)
       '@latticexyz/store':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.2)
+        version: 2.0.9(typescript@5.5.3)
       '@latticexyz/world':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.2)
+        version: 2.0.9(typescript@5.5.3)
       '@latticexyz/world-modules':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.2)
+        version: 2.0.9(typescript@5.5.3)
       dotenv:
         specifier: ^16.3.1
         version: 16.4.5
@@ -193,14 +193,14 @@ importers:
         version: 3.14.0
       viem:
         specifier: 2.9.20
-        version: 2.9.20(typescript@5.5.2)(zod@3.23.8)
+        version: 2.9.20(typescript@5.5.3)(zod@3.23.8)
       xml2js:
         specifier: ^0.6.2
         version: 0.6.2
     devDependencies:
       '@typechain/ethers-v5':
         specifier: ^10.2.0
-        version: 10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.5.2)
+        version: 10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.5.3)
       '@types/node':
         specifier: ^18.15.11
         version: 18.19.39
@@ -224,7 +224,7 @@ importers:
         version: 1.3.1(prettier@2.8.8)
       solhint:
         specifier: ^3.3.7
-        version: 3.6.2(typescript@5.5.2)
+        version: 3.6.2(typescript@5.5.3)
       solhint-config-mud:
         specifier: 2.0.9
         version: 2.0.9
@@ -236,7 +236,7 @@ importers:
         version: github.com/mds1/solidity-trigonometry/58af3a912ab3e2203cf21189012caefe24471e29
       typechain:
         specifier: ^8.1.1
-        version: 8.3.2(typescript@5.5.2)
+        version: 8.3.2(typescript@5.5.3)
 
   packages/core:
     dependencies:
@@ -362,6 +362,9 @@ importers:
       '@primodiumxyz/core':
         specifier: workspace:*
         version: link:../core
+      '@primodiumxyz/engine':
+        specifier: workspace:*
+        version: link:../engine
       '@primodiumxyz/reactive-tables':
         specifier: ^3.5.0
         version: 3.5.0(prettier@3.2.5)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8)
@@ -2884,6 +2887,24 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@latticexyz/world-modules@2.0.9(typescript@5.5.3):
+    resolution: {integrity: sha512-0u3jrjrzIsvu7OKjrFMaL4PGArrg3Wxth2q3gKo6OqAC6BGdDeecAZPUP+HnTe4i4mY0TX0BIx4Si/mew5Eozw==}
+    dependencies:
+      '@latticexyz/common': 2.0.9(typescript@5.5.3)(zod@3.23.8)
+      '@latticexyz/config': 2.0.9(typescript@5.5.3)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.5.3)(zod@3.23.8)
+      '@latticexyz/store': 2.0.9(typescript@5.5.3)
+      '@latticexyz/world': 2.0.9(typescript@5.5.3)
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - '@aws-sdk/client-kms'
+      - asn1.js
+      - bufferutil
+      - supports-color
+      - typescript
+      - utf-8-validate
+    dev: false
+
   /@latticexyz/world@2.0.9(@aws-sdk/client-kms@3.606.0)(asn1.js@5.4.1)(typescript@5.4.2):
     resolution: {integrity: sha512-KLNiwa+2CJRyBG44Z65jI9593ynDEBEYa2QB7qtCQpseMTQipXugA/fDnszJZkwXZkNJz0HwYvB2R7jg+WQJxg==}
     dependencies:
@@ -2948,7 +2969,6 @@ packages:
       - supports-color
       - typescript
       - utf-8-validate
-    dev: true
 
   /@lit-labs/ssr-dom-shim@1.2.0:
     resolution: {integrity: sha512-yWJKmpGE6lUURKAaIltoPIE/wrbY3TEkqQt+X0m+7fQNnAv0keydnYvbiJFP1PnMhizmIWRWOG5KLhYyc/xl+g==}
@@ -4536,7 +4556,7 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.5.2):
+  /@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.5.3):
     resolution: {integrity: sha512-n3tQmCZjRE6IU4h6lqUGiQ1j866n5MTCBJreNEHHVWXa2u9GJTaeYyU1/k+1qLutkyw+sS6VAN+AbeiTqsxd/A==}
     peerDependencies:
       '@ethersproject/abi': ^5.0.0
@@ -4549,9 +4569,9 @@ packages:
       '@ethersproject/providers': 5.7.2
       ethers: 5.7.2
       lodash: 4.17.21
-      ts-essentials: 7.0.3(typescript@5.5.2)
-      typechain: 8.3.2(typescript@5.5.2)
-      typescript: 5.5.2
+      ts-essentials: 7.0.3(typescript@5.5.3)
+      typechain: 8.3.2(typescript@5.5.3)
+      typescript: 5.5.3
     dev: true
 
   /@types/aria-query@5.0.4:
@@ -6143,7 +6163,7 @@ packages:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
     dev: false
 
-  /cosmiconfig@8.3.6(typescript@5.5.2):
+  /cosmiconfig@8.3.6(typescript@5.5.3):
     resolution: {integrity: sha512-kcZ6+W5QzcJ3P1Mt+83OUv/oHFqZHIx8DuxG6eZ5RGMERoLqp4BuGjhHLYGK+Kf5XVkQvqBSmAy/nGWN3qDgEA==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -6156,7 +6176,7 @@ packages:
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
-      typescript: 5.5.2
+      typescript: 5.5.3
     dev: true
 
   /crc-32@1.2.2:
@@ -10218,7 +10238,7 @@ packages:
       '@solidity-parser/parser': 0.16.2
     dev: true
 
-  /solhint@3.6.2(typescript@5.5.2):
+  /solhint@3.6.2(typescript@5.5.3):
     resolution: {integrity: sha512-85EeLbmkcPwD+3JR7aEMKsVC9YrRSxd4qkXuMzrlf7+z2Eqdfm1wHWq1ffTuo5aDhoZxp2I9yF3QkxZOxOL7aQ==}
     hasBin: true
     dependencies:
@@ -10228,7 +10248,7 @@ packages:
       ast-parents: 0.0.1
       chalk: 4.1.2
       commander: 10.0.1
-      cosmiconfig: 8.3.6(typescript@5.5.2)
+      cosmiconfig: 8.3.6(typescript@5.5.3)
       fast-diff: 1.3.0
       glob: 8.1.0
       ignore: 5.3.1
@@ -10848,12 +10868,12 @@ packages:
     resolution: {integrity: sha512-tLJxacIQUM82IR7JO1UUkKlYuUTmoY9HBJAmNWFzheSlDS5SPMcNIepejHJa4BpPQLAcbRhRf3GDJzyj6rbKvA==}
     dev: false
 
-  /ts-essentials@7.0.3(typescript@5.5.2):
+  /ts-essentials@7.0.3(typescript@5.5.3):
     resolution: {integrity: sha512-8+gr5+lqO3G84KdiTSMRLtuyJ+nTBVRKuCrK4lidMPdVeEp0uqC875uE5NMcaA7YYMN7XsNiFQuMvasF8HT/xQ==}
     peerDependencies:
       typescript: '>=3.7.0'
     dependencies:
-      typescript: 5.5.2
+      typescript: 5.5.3
     dev: true
 
   /ts-interface-checker@0.1.13:
@@ -11063,7 +11083,7 @@ packages:
     resolution: {integrity: sha512-8j+1QmAbPvLZow5Qpi6NCaN8FB60p/6x8/vfNqOk/hC+HuvFZhL4+WfekuhQLiqFZXOgQdrs3B+XxEmCc6b3FQ==}
     dev: false
 
-  /typechain@8.3.2(typescript@5.5.2):
+  /typechain@8.3.2(typescript@5.5.3):
     resolution: {integrity: sha512-x/sQYr5w9K7yv3es7jo4KTX05CLxOf7TRWwoHlrjRh8H82G64g+k7VuWPJlgMo6qrjfCulOdfBjiaDtmhFYD/Q==}
     hasBin: true
     peerDependencies:
@@ -11078,8 +11098,8 @@ packages:
       mkdirp: 1.0.4
       prettier: 2.8.8
       ts-command-line-args: 2.5.1
-      ts-essentials: 7.0.3(typescript@5.5.2)
-      typescript: 5.5.2
+      ts-essentials: 7.0.3(typescript@5.5.3)
+      typescript: 5.5.3
     transitivePeerDependencies:
       - supports-color
     dev: true
