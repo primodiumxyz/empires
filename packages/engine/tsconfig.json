@@ -1,0 +1,16 @@
+{
+  "extends": "../../.tsconfigs/bundler/dom/library-monorepo.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "composite": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "emitDeclarationOnly": true,
+    "paths": {
+      "@engine/*": ["./src/*"]
+    },
+  },
+  "exclude": ["node_modules", "dist"]
+}

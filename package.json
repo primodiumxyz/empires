@@ -15,7 +15,8 @@
   "license": "ISC",
   "devDependencies": {
     "@primodiumxyz/pg-indexer-reader": "^0.6.9",
-    "turbo": "^2.0.4"
+    "turbo": "^2.0.4",
+    "typescript": "^5.5.3"
   },
   "packageManager": "pnpm@8.15.8",
   "engines": {
