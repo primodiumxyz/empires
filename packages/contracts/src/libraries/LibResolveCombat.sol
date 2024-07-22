@@ -31,7 +31,7 @@ library LibResolveCombat {
     (EEmpire attackingEmpire, uint256 attackingShips) = resolveAttackerBattle(planetId, defendingEmpire);
 
     if (attackingEmpire == EEmpire.NULL) {
-      Planet.setShipCount(planetId, planetData.shipCount + attackingShips);
+      Planet.setShipCount(planetId, planetData.shipCount + defendingShips);
       return;
     }
 
@@ -59,9 +59,7 @@ library LibResolveCombat {
       EmpirePlanetsSet.remove(defendingEmpire, planetId);
       Planet.setEmpireId(planetId, attackingEmpire);
       PendingMove.deleteRecord(planetId);
-    }
-    // should be impossible
-    else {
+    } else {
       revert("[LibResolveCombat] Invalid combat resolution");
     }
 
