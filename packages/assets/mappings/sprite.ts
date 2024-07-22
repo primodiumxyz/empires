@@ -2,6 +2,9 @@
 import EmpireRedImg from '../sprites/empires/empire_red.png';
 import EmpireBlueImg from '../sprites/empires/empire_blue.png';
 import EmpireGreenImg from '../sprites/empires/empire_green.png';
+import SabotageIcon from "../icons/UI_Attack.png";
+import ShieldIcon from "../icons/UI_Defense.png";
+import ShipIcon from "../icons/UI_Ship.png";
 
 // export enum Sprites {
 //   EmpireRed = 'sprites/empires/empire_red.png',
@@ -14,4 +17,7 @@ export const Sprites = {
   EmpireRed: EmpireRedImg,
   EmpireBlue: EmpireBlueImg,
   EmpireGreen: EmpireGreenImg,
+  CreateShip: ShipIcon,
+  AddShield: ShieldIcon,
+  Sabotage: SabotageIcon,
 };

@@ -1,5 +1,5 @@
 import { forwardRef, ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
+import { CurrencyYenIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
 import { bigIntMin } from "@latticexyz/common/utils";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -7,21 +7,16 @@ import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Hexagon } from "@/components/core/Hexagon";
 import { IconLabel } from "@/components/core/IconLabel";
 import { NumberInput } from "@/components/core/NumberInput";
-import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
-
-import sabotageIcon from "../assets/art sprites/UI_Attack.png";
-import shieldIcon from "../assets/art sprites/UI_Defense.png";
-import shipIcon from "../assets/art sprites/UI_Ship.png";
+import { Sprites } from "@primodiumxyz/assets";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "fill-blue-600",
@@ -89,16 +84,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       }
     };
 
-    // useEffect(() => {
-    //   const updateSecondaryCardPosition = () => {
-    //     if (interactButtonRef.current) {
-    //       const buttonRect = interactButtonRef.current.getBoundingClientRect();
-    //       setSecondaryCardStyle({
-    //         top: `${buttonRect.top + buttonRect.height + window.scrollY-200}px`,
-    //         left: `${buttonRect.left + window.scrollX - 600}px`,
-    //       });
-    //     }
-    //   };
     updateSecondaryCardPosition();
     window.addEventListener("resize", updateSecondaryCardPosition);
 
@@ -215,7 +200,7 @@ const InteractButton = forwardRef<
   //leftDiv Interact Pane
   const [leftDivContent, setLeftDivContent] = useState({
     title: "Buy Ship",
-    icon: shipIcon,
+    icon: Sprites.CreateShip,
     price: createShipPriceUsd,
     buttonAction: () => createShip(planetId, createShipPriceWei),
   });
@@ -256,14 +241,14 @@ const InteractButton = forwardRef<
               onMouseEnter={() =>
                 setLeftDivContent({
                   title: "Buy Ship",
-                  icon: shipIcon,
+                  icon: Sprites.CreateShip,
                   price: createShipPriceUsd,
                   buttonAction: () => createShip(planetId, createShipPriceWei),
                 })
               }
             >
               <div className="flex-start flex w-60 gap-3 px-1">
-                <IconLabel className="text-lg drop-shadow-lg" imageUri={shipIcon} />
+                <IconLabel className="text-lg drop-shadow-lg" imageUri={Sprites.CreateShip} />
                 <div className="flex flex-col items-start">
                   <p>Buy Ship</p>
                   <p className="block text-xs opacity-75">Description of buy ship</p>
@@ -279,14 +264,14 @@ const InteractButton = forwardRef<
               onMouseEnter={() =>
                 setLeftDivContent({
                   title: "Buy Shield",
-                  icon: shieldIcon,
+                  icon: Sprites.AddShield,
                   price: addShieldPriceUsd,
                   buttonAction: () => addShield(planetId, addShieldPriceWei),
                 })
               }
             >
               <div className="flex-start flex w-60 gap-3 px-1">
-                <IconLabel className="text-lg drop-shadow-lg" imageUri={shieldIcon} />
+                <IconLabel className="text-lg drop-shadow-lg" imageUri={Sprites.AddShield} />
                 <div className="flex flex-col items-start">
                   <p>Buy Shield</p>
                   <p className="block text-xs opacity-75">Description of buy shield</p>
@@ -302,14 +287,14 @@ const InteractButton = forwardRef<
               onMouseEnter={() =>
                 setLeftDivContent({
                   title: "Sabotage",
-                  icon: sabotageIcon,
+                  icon: Sprites.Sabotage,
                   price: killShipPriceUsd,
                   buttonAction: () => removeShip(planetId, killShipPriceWei),
                 })
               }
             >
               <div className="flex-start flex w-60 gap-3 px-1">
-                <IconLabel className="text-lg drop-shadow-lg" imageUri={sabotageIcon} />
+                <IconLabel className="text-lg drop-shadow-lg" imageUri={Sprites.Sabotage} />
                 <div className="flex flex-col items-start">
                   <p>Sabotage</p>
                   <p className="block text-xs opacity-75">Description of sabotage</p>
