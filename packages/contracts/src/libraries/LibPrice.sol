@@ -39,7 +39,7 @@ library LibPrice {
       totalCost = getRegressPointCost(_empireImpacted, _actionCount);
     }
 
-    totalCost += getMarginalActionCost(_empire, _actionType, _actionCount);
+    totalCost += getMarginalActionCost(_empireImpacted, _actionType, _actionCount);
     return totalCost;
   }
 
