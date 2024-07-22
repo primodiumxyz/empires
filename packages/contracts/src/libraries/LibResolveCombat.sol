@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { PendingMove, Arrivals, Planet, PlanetData, BattleNPCAction, BattleNPCActionData } from "codegen/index.sol";
+import { PendingMove, Arrivals, Planet, PlanetData, ShipBattleNPCAction, ShipBattleNPCActionData, PlanetBattleNPCAction, PlanetBattleNPCActionData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { pseudorandomEntity } from "src/utils.sol";
@@ -28,7 +28,8 @@ library LibResolveCombat {
 
     uint256 defendingShips = planetData.shipCount + Arrivals.get(planetId, defendingEmpire);
 
-    (EEmpire attackingEmpire, uint256 attackingShips) = resolveAttackerBattle(planetId, defendingEmpire);
+    bytes32 eventEntity = pseudorandomEntity();
+    (EEmpire attackingEmpire, uint256 attackingShips) = resolveAttackerBattle(eventEntity, planetId, defendingEmpire);
 
     if (attackingEmpire == EEmpire.NULL) {
       Planet.setShipCount(planetId, planetData.shipCount + defendingShips);
@@ -63,9 +64,9 @@ library LibResolveCombat {
       revert("[LibResolveCombat] Invalid combat resolution");
     }
 
-    BattleNPCAction.set(
-      pseudorandomEntity(),
-      BattleNPCActionData({
+    PlanetBattleNPCAction.set(
+      eventEntity,
+      PlanetBattleNPCActionData({
         planetId: planetId,
         attackingShipCount: attackingShips,
         defendingShipCount: defendingShips,
@@ -90,7 +91,11 @@ library LibResolveCombat {
    * arriving at the planet, and calculates the remaining ships after they fight each other.
    * The empire with more ships wins, and the difference in ship counts is returned.
    */
-  function resolveAttackerBattle(bytes32 planetId, EEmpire defendingEmpire) internal view returns (EEmpire, uint256) {
+  function resolveAttackerBattle(
+    bytes32 eventEntity,
+    bytes32 planetId,
+    EEmpire defendingEmpire
+  ) internal returns (EEmpire, uint256) {
     EEmpire winningEmpire = EEmpire.NULL;
     uint256 winningCount = 0;
     uint256 secondPlaceCount = 0;
@@ -107,6 +112,17 @@ library LibResolveCombat {
         secondPlaceCount = shipCount;
       }
     }
+
+    ShipBattleNPCAction.set(
+      eventEntity,
+      ShipBattleNPCActionData({
+        redShipCount: Arrivals.get(planetId, EEmpire.Red),
+        greenShipCount: Arrivals.get(planetId, EEmpire.Green),
+        blueShipCount: Arrivals.get(planetId, EEmpire.Blue),
+        planetId: planetId,
+        timestamp: block.timestamp
+      })
+    );
 
     uint256 remainingShips = winningCount - secondPlaceCount;
     return (winningEmpire, remainingShips);

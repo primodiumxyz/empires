@@ -211,7 +211,20 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BattleNPCAction: {
+    ShipBattleNPCAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        redShipCount: "uint256",
+        greenShipCount: "uint256",
+        blueShipCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    PlanetBattleNPCAction: {
       key: ["id"],
       schema: {
         id: "bytes32",
