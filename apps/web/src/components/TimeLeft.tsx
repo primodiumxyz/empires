@@ -13,7 +13,7 @@ import { useTimeLeft } from "@/hooks/useTimeLeft";
 export const TimeLeft = () => {
   const { timeLeftMs, gameOver } = useTimeLeft();
   return (
-    <div className="absolute top-4 flex w-72 flex-col justify-center gap-1 rounded p-2 text-center">
+    <div className="flex w-72 flex-col justify-center gap-1 rounded text-center">
       {gameOver && <GameOver />}
       {!gameOver && (
         <Card className="py-2 text-sm" noDecor>
@@ -78,11 +78,11 @@ const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
   const { pot } = usePot();
   const { price } = useEthPrice();
 
-  const factionPoints = tables.Faction.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
-  const playerFactionPoints = tables.Value_PointsMap.useWithKeys({ factionId: empire, playerId: entity })?.value ?? 0n;
+  const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
+  const playerEmpirePoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
-  const playerPot = factionPoints ? (pot * playerFactionPoints) / factionPoints : 0n;
-  const playerPotUSD = price ? utils.ethToUSD(playerPot, price) : "loading...";
+  const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
+  const playerPotUSD = price ? utils.weiToUsd(playerPot, price) : "loading...";
 
   const empireName = empire == EEmpire.Blue ? "Blue" : empire == EEmpire.Green ? "Green" : "Red";
 

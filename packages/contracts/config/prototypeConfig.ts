@@ -36,28 +36,29 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),
-        minPointCost: BigInt(POINTS_UNIT * 0.01),
-        startPointCost: BigInt(POINTS_UNIT * 0.02),
-        pointGenRate: BigInt(POINTS_UNIT * 0.02),
-        pointCostIncrease: BigInt(POINTS_UNIT * 0.01),
+        minPointCost: BigInt(POINTS_UNIT * 0.00002),
+        startPointCost: BigInt(POINTS_UNIT * 0.00004),
+        pointGenRate: BigInt(POINTS_UNIT * 0.00002),
+        pointCostIncrease: BigInt(POINTS_UNIT * 0.00002),
         pointRake: scaleRake(0.01), // out of 1, scales to out of 10000
         pointSellTax: BigInt(POINTS_UNIT * 0),
       },
       P_ActionConfig: {
-        actionGenRate: BigInt(POINTS_UNIT * 0.02),
-        actionCostIncrease: BigInt(POINTS_UNIT * 0.02),
-        startActionCost: BigInt(POINTS_UNIT * 0.02),
+        actionGenRate: BigInt(POINTS_UNIT * 0.00002),
+        actionCostIncrease: BigInt(POINTS_UNIT * 0.00004),
+        startActionCost: BigInt(POINTS_UNIT * 0.00004),
         minActionCost: 0n,
       },
       P_NPCMoveThresholds: percentsToThresholds({
         none: 0.25,
-        expand: 0.75 * 0.7,
-        lateral: 0.75 * 0.2,
-        retreat: 0.75 * 0.1,
+        expand: 0.75 * 0.5,
+        lateral: 0.75 * 0.3,
+        retreat: 0.75 * 0.2,
       }),
       P_NPCActionThresholds: percentsToThresholds({
         none: 0.2,
-        buyDestroyers: 0.8,
+        buyShips: 0.5,
+        buyShields: 0.3,
       }),
 
       Turn: {
@@ -67,8 +68,16 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     },
   },
 
-  BuyDestroyers: {
-    keys: [{ [ENPCAction.BuyDestroyers]: "uint8" }],
+  BuyShips: {
+    keys: [{ [ENPCAction.BuyShips]: "uint8" }],
+    tables: {
+      P_NPCActionCosts: {
+        goldCost: 2n,
+      },
+    },
+  },
+  BuyShields: {
+    keys: [{ [ENPCAction.BuyShields]: "uint8" }],
     tables: {
       P_NPCActionCosts: {
         goldCost: 2n,

@@ -78,7 +78,7 @@ export const Dropdown = <T extends DropdownValue>({
       <Button
         variant="neutral"
         size={size}
-        className="border border-secondary/25 shadow-inner"
+        className="w-full border border-secondary/25 shadow-inner"
         role="button"
         onClick={toggleMenu}
       >

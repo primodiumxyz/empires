@@ -1,6 +1,5 @@
-import { ReactNode, useEffect, useMemo, useState, useRef, forwardRef } from "react";
+import { forwardRef, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
-
 import { bigIntMin } from "@latticexyz/common/utils";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -10,19 +9,19 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
+import { SecondaryCard } from "@/components/core/Card";
 import { Hexagon } from "@/components/core/Hexagon";
+import { IconLabel } from "@/components/core/IconLabel";
+import { NumberInput } from "@/components/core/NumberInput";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 
-import { IconLabel } from "@/components/core/IconLabel";
-import { NumberInput } from "@/components/core/NumberInput";
-import shipIcon from '../assets/art sprites/UI_Ship.png';
-import shieldIcon from '../assets/art sprites/UI_Defense.png';
-import sabotageIcon from '../assets/art sprites/UI_Attack.png';
-import { SecondaryCard } from "@/components/core/Card";
+import sabotageIcon from "../assets/art sprites/UI_Attack.png";
+import shieldIcon from "../assets/art sprites/UI_Defense.png";
+import shipIcon from "../assets/art sprites/UI_Ship.png";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "fill-blue-600",
@@ -41,9 +40,8 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
   const [conquered, setConquered] = useState(false);
   const [isSecondaryCardVisible, setIsSecondaryCardVisible] = useState(false);
-  const [secondaryCardStyle, setSecondaryCardStyle] = useState({ top: '0px', left: '0px' });
+  const [secondaryCardStyle, setSecondaryCardStyle] = useState({ top: "0px", left: "0px" });
   const interactButtonRef = useRef<HTMLButtonElement>(null);
-
 
   const [left, top] = useMemo(() => {
     const cartesianCoord = convertAxialToCartesian(
@@ -82,7 +80,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   useEffect(() => {
     const updateSecondaryCardPosition = () => {
-      const buttonRect = document.querySelector('.p-3.h-full')?.getBoundingClientRect();
+      const buttonRect = document.querySelector(".p-3.h-full")?.getBoundingClientRect();
       if (buttonRect) {
         setSecondaryCardStyle({
           top: `${buttonRect.top + buttonRect.height + window.scrollY - 175}px`,
@@ -91,21 +89,21 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
       }
     };
 
-  // useEffect(() => {
-  //   const updateSecondaryCardPosition = () => {
-  //     if (interactButtonRef.current) {
-  //       const buttonRect = interactButtonRef.current.getBoundingClientRect();
-  //       setSecondaryCardStyle({
-  //         top: `${buttonRect.top + buttonRect.height + window.scrollY-200}px`,
-  //         left: `${buttonRect.left + window.scrollX - 600}px`,
-  //       });
-  //     }
-  //   };
+    // useEffect(() => {
+    //   const updateSecondaryCardPosition = () => {
+    //     if (interactButtonRef.current) {
+    //       const buttonRect = interactButtonRef.current.getBoundingClientRect();
+    //       setSecondaryCardStyle({
+    //         top: `${buttonRect.top + buttonRect.height + window.scrollY-200}px`,
+    //         left: `${buttonRect.left + window.scrollX - 600}px`,
+    //       });
+    //     }
+    //   };
     updateSecondaryCardPosition();
-    window.addEventListener('resize', updateSecondaryCardPosition);
+    window.addEventListener("resize", updateSecondaryCardPosition);
 
     return () => {
-      window.removeEventListener('resize', updateSecondaryCardPosition);
+      window.removeEventListener("resize", updateSecondaryCardPosition);
     };
   }, [isSecondaryCardVisible]);
 
@@ -161,8 +159,16 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   );
 };
 
-const InteractButton = forwardRef<HTMLButtonElement, { onClick: () => void; isSecondaryCardVisible: boolean; secondaryCardStyle: any; planetId: Entity; planetEmpire: EEmpire }>(({ onClick, isSecondaryCardVisible, secondaryCardStyle, planetId, planetEmpire }, ref) => {
-
+const InteractButton = forwardRef<
+  HTMLButtonElement,
+  {
+    onClick: () => void;
+    isSecondaryCardVisible: boolean;
+    secondaryCardStyle: any;
+    planetId: Entity;
+    planetEmpire: EEmpire;
+  }
+>(({ onClick, isSecondaryCardVisible, secondaryCardStyle, planetId, planetEmpire }, ref) => {
   const secondaryCardRef = useRef<HTMLDivElement>(null);
 
   const { utils } = useCore();
@@ -194,16 +200,16 @@ const InteractButton = forwardRef<HTMLButtonElement, { onClick: () => void; isSe
 
   useEffect(() => {
     if (isSecondaryCardVisible) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isSecondaryCardVisible]);
 
-  // NumberInput 
+  // NumberInput
   const [inputValue, setInputValue] = useState("0");
 
   //leftDiv Interact Pane
@@ -220,43 +226,43 @@ const InteractButton = forwardRef<HTMLButtonElement, { onClick: () => void; isSe
 
   return (
     <>
-      <Button ref={ref} className="p-3 h-full" onClick={handleInteractClick}>
+      <Button ref={ref} className="h-full p-3" onClick={handleInteractClick}>
         Interact
       </Button>
       {isSecondaryCardVisible && (
-        <SecondaryCard ref={secondaryCardRef} className="flex-row gap-2 items-center justify-center fixed z-50 bg-slate-900/85"
-          style={secondaryCardStyle}>
+        <SecondaryCard
+          ref={secondaryCardRef}
+          className="fixed z-50 flex-row items-center justify-center gap-2 bg-slate-900/85"
+          style={secondaryCardStyle}
+        >
           {/* Left */}
-          <div className="flex flex-col items-center justify-center gap-1 h-52">
+          <div className="flex h-52 flex-col items-center justify-center gap-1">
             <p className="pb-3">{leftDivContent.title}</p>
             <IconLabel className="text-lg drop-shadow-lg" imageUri={leftDivContent.icon} />
             <p>{leftDivContent.price}</p>
-            <NumberInput
-              count={inputValue}
-              min={0}
-              onChange={setInputValue}
-              toFixed={4}
-            />
+            <NumberInput count={inputValue} min={0} onChange={setInputValue} toFixed={4} />
             <Button onClick={leftDivContent.buttonAction} disabled={gameOver || Number(planetEmpire) === 0}>
               Buy
             </Button>
           </div>
 
           {/* Right */}
-          <div className="flex flex-col gap-1 items-center justify-center pr-2">
+          <div className="flex flex-col items-center justify-center gap-1 pr-2">
             <Button
               size="content"
               variant="neutral"
               onClick={() => createShip(planetId, createShipPriceWei)}
               disabled={gameOver || Number(planetEmpire) === 0}
-              onMouseEnter={() => setLeftDivContent({
-                title: "Buy Ship",
-                icon: shipIcon,
-                price: createShipPriceUsd,
-                buttonAction: () => createShip(planetId, createShipPriceWei)
-              })}
+              onMouseEnter={() =>
+                setLeftDivContent({
+                  title: "Buy Ship",
+                  icon: shipIcon,
+                  price: createShipPriceUsd,
+                  buttonAction: () => createShip(planetId, createShipPriceWei),
+                })
+              }
             >
-              <div className="flex flex-start px-1 gap-3 w-60">
+              <div className="flex-start flex w-60 gap-3 px-1">
                 <IconLabel className="text-lg drop-shadow-lg" imageUri={shipIcon} />
                 <div className="flex flex-col items-start">
                   <p>Buy Ship</p>
@@ -270,14 +276,16 @@ const InteractButton = forwardRef<HTMLButtonElement, { onClick: () => void; isSe
               variant="neutral"
               onClick={() => addShield(planetId, addShieldPriceWei)}
               disabled={gameOver || Number(planetEmpire) === 0}
-              onMouseEnter={() => setLeftDivContent({
-                title: "Buy Shield",
-                icon: shieldIcon,
-                price: addShieldPriceUsd,
-                buttonAction: () => addShield(planetId, addShieldPriceWei)
-              })}
+              onMouseEnter={() =>
+                setLeftDivContent({
+                  title: "Buy Shield",
+                  icon: shieldIcon,
+                  price: addShieldPriceUsd,
+                  buttonAction: () => addShield(planetId, addShieldPriceWei),
+                })
+              }
             >
-              <div className="flex flex-start px-1 gap-3 w-60">
+              <div className="flex-start flex w-60 gap-3 px-1">
                 <IconLabel className="text-lg drop-shadow-lg" imageUri={shieldIcon} />
                 <div className="flex flex-col items-start">
                   <p>Buy Shield</p>
@@ -291,14 +299,16 @@ const InteractButton = forwardRef<HTMLButtonElement, { onClick: () => void; isSe
               variant="neutral"
               onClick={() => removeShip(planetId, killShipPriceWei)}
               disabled={gameOver || Number(planetEmpire) === 0}
-              onMouseEnter={() => setLeftDivContent({
-                title: "Sabotage",
-                icon: sabotageIcon,
-                price: killShipPriceUsd,
-                buttonAction: () => removeShip(planetId, killShipPriceWei)
-              })}
+              onMouseEnter={() =>
+                setLeftDivContent({
+                  title: "Sabotage",
+                  icon: sabotageIcon,
+                  price: killShipPriceUsd,
+                  buttonAction: () => removeShip(planetId, killShipPriceWei),
+                })
+              }
             >
-              <div className="flex flex-start px-1 gap-3 w-60">
+              <div className="flex-start flex w-60 gap-3 px-1">
                 <IconLabel className="text-lg drop-shadow-lg" imageUri={sabotageIcon} />
                 <div className="flex flex-col items-start">
                   <p>Sabotage</p>
@@ -353,7 +363,6 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
         </div>
       ))}
     </div>
-
   );
 };
 
@@ -451,7 +460,6 @@ const Ships = ({
           {item.text}
         </div>
       ))}
-
     </div>
   );
 };
@@ -517,8 +525,6 @@ const Shields = ({
           {item.text}
         </div>
       ))}
-
     </div>
   );
 };
-

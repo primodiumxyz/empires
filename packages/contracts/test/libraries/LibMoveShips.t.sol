@@ -5,10 +5,10 @@ import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { Planet, PlanetData, P_NPCMoveThresholds, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
-import { LibMoveDestroyers } from "libraries/LibMoveDestroyers.sol";
+import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { coordToId } from "src/utils.sol";
 
-contract LibMoveDestroyersTest is PrimodiumTest {
+contract LibMoveShipsTest is PrimodiumTest {
   bytes32 planetId;
   function setUp() public override {
     super.setUp();
@@ -16,7 +16,7 @@ contract LibMoveDestroyersTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getFactionId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
     vm.startPrank(creator);
     P_GameConfig.setGameOverBlock(block.number + 100000);
     vm.roll(1);
@@ -25,15 +25,16 @@ contract LibMoveDestroyersTest is PrimodiumTest {
   }
 
   function testEarlyExit() public {
-    Planet.setFactionId(planetId, EEmpire.NULL);
-    bool moved = LibMoveDestroyers.moveDestroyers(planetId);
+    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
+    Planet.setEmpireId(planetId, EEmpire.NULL);
+    bool moved = LibMoveShips.moveShips(planetId);
     assertFalse(moved, "shouldnt have moved");
-    moved = LibMoveDestroyers.moveDestroyers(planetId);
-    Planet.setFactionId(planetId, EEmpire.Red);
-    moved = LibMoveDestroyers.moveDestroyers(planetId);
+    moved = LibMoveShips.moveShips(planetId);
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    moved = LibMoveShips.moveShips(planetId);
     assertFalse(moved, "shouldnt have moved again");
-    Planet.setDestroyerCount(planetId, 1);
-    moved = LibMoveDestroyers.moveDestroyers(planetId);
+    Planet.setShipCount(planetId, 1);
+    moved = LibMoveShips.moveShips(planetId);
     assertTrue(moved, "should have moved");
   }
 
@@ -41,17 +42,17 @@ contract LibMoveDestroyersTest is PrimodiumTest {
     PlanetData memory planetData = Planet.get(planetId);
     // set the move direction to none
     uint256 value = P_NPCMoveThresholds.getNone() - 1;
-    bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
+    bytes32 target = LibMoveShips.getPlanetTarget(planetData, value);
     assertEq(target, planetId);
   }
 
   function testGetPlanetTargetExpand() public {
     PlanetData memory planetData = Planet.get(planetId);
     // north
-    Planet.setFactionId(planetId, EEmpire.Red);
+    Planet.setEmpireId(planetId, EEmpire.Red);
     // set the move direction to none
     uint256 value = P_NPCMoveThresholds.getExpand() - 1;
-    bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
+    bytes32 target = LibMoveShips.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
     // direction should be southeast if left and southwest if right
 
@@ -65,12 +66,12 @@ contract LibMoveDestroyersTest is PrimodiumTest {
   function testGetPlanetTargetRetreat() public {
     bytes32 planet = coordToId(0, 0);
     // southwest
-    Planet.setDestroyerCount(planet, 1);
-    Planet.setFactionId(planet, EEmpire.Blue);
+    Planet.setShipCount(planet, 1);
+    Planet.setEmpireId(planet, EEmpire.Blue);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
     uint256 value = P_NPCMoveThresholds.getRetreat() - 1;
-    bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
+    bytes32 target = LibMoveShips.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
 
     if (left) {
@@ -83,12 +84,12 @@ contract LibMoveDestroyersTest is PrimodiumTest {
   function testGetPlanetTargetLateral() public {
     bytes32 planet = coordToId(0, 0);
     // southeast
-    Planet.setDestroyerCount(planet, 1);
-    Planet.setFactionId(planet, EEmpire.Green);
+    Planet.setShipCount(planet, 1);
+    Planet.setEmpireId(planet, EEmpire.Green);
     // set the move direction to none
     PlanetData memory planetData = Planet.get(planet);
     uint256 value = P_NPCMoveThresholds.getLateral() - 1;
-    bytes32 target = LibMoveDestroyers.getPlanetTarget(planetData, value);
+    bytes32 target = LibMoveShips.getPlanetTarget(planetData, value);
     bool left = value % 2 == 0;
 
     if (left) {

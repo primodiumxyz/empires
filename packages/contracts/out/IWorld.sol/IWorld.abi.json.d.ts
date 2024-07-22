@@ -1,6 +1,19 @@
 declare const abi: [
   {
     "type": "function",
+    "name": "Empires__chargeShield",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__claimVictory",
     "inputs": [
       {
@@ -14,7 +27,7 @@ declare const abi: [
   },
   {
     "type": "function",
-    "name": "Empires__createDestroyer",
+    "name": "Empires__createShip",
     "inputs": [
       {
         "name": "_planetId",
@@ -322,7 +335,20 @@ declare const abi: [
   },
   {
     "type": "function",
-    "name": "Empires__killDestroyer",
+    "name": "Empires__drainShield",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__killShip",
     "inputs": [
       {
         "name": "_planetId",
@@ -350,7 +376,7 @@ declare const abi: [
         "internalType": "enum EEmpire"
       },
       {
-        "name": "_pointUnits",
+        "name": "_points",
         "type": "uint256",
         "internalType": "uint256"
       }
