@@ -78,6 +78,6 @@ contract PrimodiumTest is MudTest {
     vm.stopPrank();
 
     vm.prank(from);
-    bytes memory data = world.call{ value: value }(systemId, abi.encodeCall(system.echoValue, ()));
+    world.call{ value: value }(systemId, abi.encodeCall(system.echoValue, ()));
   }
 }
