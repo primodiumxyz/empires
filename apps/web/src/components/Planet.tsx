@@ -34,7 +34,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
   const [conquered, setConquered] = useState(false);
   const [isInteractPaneVisible, setIsInteractPaneVisible] = useState(false);
-  const [InteractPaneStyle, setInteractPaneStyle] = useState({ top: "0px", left: "0px" });
   const interactButtonRef = useRef<HTMLButtonElement>(null);
 
   const [left, top] = useMemo(() => {
@@ -115,7 +114,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           ref={interactButtonRef}
           onClick={handleInteractClick}
           isInteractPaneVisible={isInteractPaneVisible}
-          InteractPaneStyle={InteractPaneStyle}
           planetId={entity}
           planetEmpire={planetEmpire}
         />
@@ -129,11 +127,10 @@ const InteractButton = forwardRef<
   {
     onClick: () => void;
     isInteractPaneVisible: boolean;
-    InteractPaneStyle: any;
     planetId: Entity;
     planetEmpire: EEmpire;
   }
->(({ onClick, isInteractPaneVisible, InteractPaneStyle, planetId, planetEmpire }, ref) => {
+>(({ onClick, isInteractPaneVisible, planetId, planetEmpire }, ref) => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
   const { utils } = useCore();
@@ -193,7 +190,7 @@ const InteractButton = forwardRef<
           noDecor
           ref={InteractPaneRef}
           className="fixed z-50 flex-row items-center justify-center gap-2 bg-slate-900/85"
-          style={InteractPaneStyle}
+          
         >
 
           <div className="flex flex-col items-center justify-center gap-1 pr-2">
