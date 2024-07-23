@@ -41,6 +41,8 @@ export function createPriceUtils(tables: Tables) {
       }
       pointCost += getPointCost(i, 1);
     }
+
+    pointCost += (pointCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
     return pointCost;
   }
 

@@ -251,7 +251,7 @@ const Ships = ({
             onClick={() => removeShip(planetId, killShipPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0}
           >
-            <MinusIcon className="size-4" />
+            <MinusIcon className="size-4" /> 50%
           </Button>
         </TransactionQueueMask>
 
@@ -343,7 +343,7 @@ const Shields = ({
             className="btn btn-square btn-xs"
             disabled={gameOver || Number(planetEmpire) === 0}
           >
-            <MinusIcon className="size-4" />
+            <MinusIcon className="size-4" /> 50%
           </Button>
         </TransactionQueueMask>
 
