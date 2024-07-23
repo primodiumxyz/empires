@@ -221,7 +221,7 @@ const InteractButton = forwardRef<
                   />
 
                   <Button
-                    className="rounded-none h-7"
+                    className="h-7"
                     onClick={() => createShip(planetId, createShipPriceWei)}
                     disabled={gameOver || Number(planetEmpire) === 0}>
                     Buy
@@ -234,7 +234,7 @@ const InteractButton = forwardRef<
             <SecondaryCard className="grid grid-cols-7 items-center justify-center w-96">
               <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={Sprites.AddShield} />
               <div className="col-span-4 flex flex-col items-start">
-                <p>Acquire Shield</p>
+                <p>Purchase Shield</p>
                 <p className="block text-xs opacity-75">Increase shield strength</p>
               </div>
               <div className="col-span-2 flex flex-col">
@@ -249,7 +249,7 @@ const InteractButton = forwardRef<
                   />
 
                   <Button
-                    className="rounded-none h-7"
+                    className="h-7"
                     onClick={() => addShield(planetId, addShieldPriceWei)}
                     disabled={gameOver || Number(planetEmpire) === 0}>
                     Buy
@@ -277,7 +277,7 @@ const InteractButton = forwardRef<
                   />
 
                   <Button
-                    className="rounded-none h-7"
+                    className="h-7"
                     onClick={() => removeShip(planetId, killShipPriceWei)}
                       disabled={gameOver || Number(planetEmpire) === 0}>
                       Buy
@@ -305,7 +305,7 @@ const InteractButton = forwardRef<
                   />
 
                   <Button
-                    className="rounded-none h-7"
+                    className="h-7"
                     onClick={() => removeShield(planetId, removeShieldPriceWei)}
                       disabled={gameOver || Number(planetEmpire) === 0}>
                       Buy
