@@ -1,4 +1,4 @@
-import { SceneConfig } from "@primodiumxyz/engine/types";
+import { SceneConfig } from "@primodiumxyz/engine";
 
 import { Scenes } from "@game/lib/constants/common";
 

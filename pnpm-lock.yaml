@@ -316,6 +316,12 @@ importers:
       '@primodiumxyz/contracts':
         specifier: workspace:*
         version: link:../contracts
+      '@primodiumxyz/engine':
+        specifier: workspace:*
+        version: link:../engine
+      '@primodiumxyz/game':
+        specifier: workspace:*
+        version: link:../game
       '@primodiumxyz/reactive-tables':
         specifier: ^3.4.0
         version: 3.4.0(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
@@ -426,6 +432,19 @@ importers:
       '@primodiumxyz/reactive-tables':
         specifier: ^3.5.0
         version: 3.5.0(prettier@3.2.5)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8)
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+    devDependencies:
+      '@types/lodash':
+        specifier: ^4.17.7
+        version: 4.17.7
+      '@types/react':
+        specifier: ^18.3.3
+        version: 18.3.3
 
 packages:
 
@@ -4869,6 +4888,10 @@ packages:
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 18.19.39
+    dev: true
+
+  /@types/lodash@4.17.7:
+    resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
     dev: true
 
   /@types/minimatch@5.1.2:

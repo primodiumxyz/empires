@@ -7,6 +7,8 @@ import {
   Type,
 } from "@primodiumxyz/reactive-tables";
 import { CreateNetworkResult } from "@core/lib/types";
+import { createKeybindTable } from "@core/tables/customTables/KeybindTable";
+import { createVolumeTable } from "@core/tables/customTables/VolumeTable";
 
 import { createTransactionQueueTable } from "./customTables/TransactionQueueTable";
 
@@ -42,6 +44,8 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     persist: true,
     version: "1",
   });
+  const Keybinds = createKeybindTable(network);
+  const Volume = createVolumeTable(network);
 
   return {
     DoubleCounter,
@@ -52,5 +56,7 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     TransactionQueue,
     SelectedPlanet,
     SelectedTab,
+    Keybinds,
+    Volume,
   };
 }

@@ -3,7 +3,6 @@
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "strict": true,
-    "composite": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,

@@ -124,3 +124,5 @@ export type PixelCoord = Coord;
 export type TileCoord = Coord;
 export type ChunkCoord = Coord;
 export type WorldCoord = Coord;
+
+export type Channel = "music" | "sfx" | "ui";

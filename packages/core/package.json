@@ -23,6 +23,8 @@
     "@latticexyz/store": "2.0.9",
     "@latticexyz/world-modules": "2.0.9",
     "@primodiumxyz/contracts": "workspace:*",
+    "@primodiumxyz/game": "workspace:*",
+    "@primodiumxyz/engine": "workspace:*",
     "@primodiumxyz/reactive-tables": "^3.4.0",
     "@primodiumxyz/sync-stack": "^0.6.9",
     "abitype": "^1.0.2",

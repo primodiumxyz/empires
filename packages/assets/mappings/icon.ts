@@ -37,12 +37,11 @@ import CategoryMilitary from "../icons/category/military.png?url";
 import CategoryProduction from "../icons/category/production.png?url";
 import CategoryStorage from "../icons/category/storage.png?url";
 import Wormhole from "../icons/UI_WormholeBase.png?url";
-import ShardSprite from "../sprites/shard/shard.png?url";
 import Fleet from "../icons/UI_Fleet.png?url";
 import Discord from "../icons/discord.svg?url";
 import Twitter from "../icons/x-twitter.svg?url";
 import EnemyFleet from "../icons/UI_Ship_Enemy.png?url";
-import Cooldown from "../sprites/cooldown/cooldown.gif";
+import Cooldown from "../icons/UI_Cooldown.gif?url";
 import Trash from "../icons/UI_Trash.png?url";
 
 export const InterfaceIcons = {
@@ -81,7 +80,6 @@ export const InterfaceIcons = {
   Return,
   Settings,
   Shard,
-  ShardSprite,
   Spectate,
   Starmap,
   Strength,
