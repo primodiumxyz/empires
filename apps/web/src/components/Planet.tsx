@@ -176,9 +176,9 @@ const InteractButton = forwardRef<
   }, [isInteractPaneVisible]);
 
   // NumberInput
-  const [inputValue1, setInputValue1] = useState("0");
-  const [inputValue2, setInputValue2] = useState("0");
-  const [inputValue3, setInputValue3] = useState("0");
+  const [inputValue1, setInputValue1] = useState("1");
+  const [inputValue2, setInputValue2] = useState("1");
+  const [inputValue3, setInputValue3] = useState("1");
 
   return (
     <>
