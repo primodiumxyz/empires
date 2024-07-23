@@ -113,7 +113,7 @@ contract ActionSystem is EmpiresSystem {
   }
 
   /**
-   * @dev Internal function to purchase an action.
+   * @dev Internal function to purchase a number of actions.
    * @param _actionType The type of action to purchase.
    * @param _empireImpacted The empire impacted by the action.
    * @param _progressAction Flag indicating if the action progressively or regressively impacts the empire.
