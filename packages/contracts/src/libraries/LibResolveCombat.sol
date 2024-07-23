@@ -29,7 +29,11 @@ library LibResolveCombat {
     uint256 defendingShips = planetData.shipCount + Arrivals.get(planetId, defendingEmpire);
 
     bytes32 eventEntity = pseudorandomEntity();
-    (EEmpire attackingEmpire, uint256 attackingShips) = resolveAttackerBattle(eventEntity, planetId, defendingEmpire);
+    (EEmpire attackingEmpire, uint256 attackingShips) = resolveMultiPartyAttackers(
+      eventEntity,
+      planetId,
+      defendingEmpire
+    );
 
     if (attackingEmpire == EEmpire.NULL) {
       Planet.setShipCount(planetId, planetData.shipCount + defendingShips);
@@ -91,7 +95,7 @@ library LibResolveCombat {
    * arriving at the planet, and calculates the remaining ships after they fight each other.
    * The empire with more ships wins, and the difference in ship counts is returned.
    */
-  function resolveAttackerBattle(
+  function resolveMultiPartyAttackers(
     bytes32 eventEntity,
     bytes32 planetId,
     EEmpire defendingEmpire
