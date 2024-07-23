@@ -33,24 +33,24 @@ contract ActionSystemTest is PrimodiumTest {
 
   function testCreateShip() public {
     uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true, 1);
-    world.Empires__createShip{ value: cost }(planetId);
+    world.Empires__createShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 1);
   }
 
   function testKillShip() public {
     uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true, 1);
-    world.Empires__createShip{ value: cost }(planetId);
+    world.Empires__createShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 1);
 
     cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false, 1);
-    world.Empires__killShip{ value: cost }(planetId);
+    world.Empires__killShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 0);
   }
 
   function testChargeShield() public {
     uint256 currentShields = Planet.get(planetId).shieldCount;
     uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, Planet.getEmpireId(planetId), true, 1);
-    world.Empires__chargeShield{ value: cost }(planetId);
+    world.Empires__chargeShield{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shieldCount, currentShields + 1);
   }
 
@@ -59,24 +59,24 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 currentShields = Planet.get(planetId).shieldCount;
     if (currentShields == 0) {
       cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, Planet.getEmpireId(planetId), true, 1);
-      world.Empires__chargeShield{ value: cost }(planetId);
+      world.Empires__chargeShield{ value: cost }(planetId, 1);
       currentShields = 1;
       assertEq(Planet.get(planetId).shieldCount, currentShields);
     }
 
     cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false, 1);
-    world.Empires__drainShield{ value: cost }(planetId);
+    world.Empires__drainShield{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
   }
 
   function testKillShipFailNoShips() public {
-    vm.expectRevert("[ActionSystem] No ships to kill");
-    world.Empires__killShip(planetId);
+    vm.expectRevert("[ActionSystem] Not enough ships to kill");
+    world.Empires__killShip(planetId, 1);
   }
 
   function testDrainShieldFailNoShield() public {
-    vm.expectRevert("[ActionSystem] No shields to drain");
-    world.Empires__drainShield(planetId);
+    vm.expectRevert("[ActionSystem] Not enough shields to drain");
+    world.Empires__drainShield(planetId, 1);
   }
 
   function testCreateFailNotOwned() public {
@@ -88,7 +88,7 @@ contract ActionSystemTest is PrimodiumTest {
     } while (Planet.getEmpireId(nonOwnedPlanetId) != EEmpire.NULL);
 
     vm.expectRevert("[ActionSystem] Planet is not owned");
-    world.Empires__createShip(nonOwnedPlanetId);
+    world.Empires__createShip(nonOwnedPlanetId, 1);
   }
 
   function testPurchaseActionProgress() public {
@@ -97,7 +97,7 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateShip);
 
     vm.startPrank(alice);
-    world.Empires__createShip{ value: totalCost }(planetId);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
     assertGt(
       LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1),
       totalCost,
@@ -118,7 +118,7 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
 
     vm.startPrank(bob);
-    world.Empires__killShip{ value: totalCost }(planetId);
+    world.Empires__killShip{ value: totalCost }(planetId, 1);
     assertGt(
       LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, 1),
       totalCost,
@@ -138,7 +138,7 @@ contract ActionSystemTest is PrimodiumTest {
     console.log("alice balance before createShip", alice.balance);
     console.log("marginal action cost before createShip", ActionCost.get(empire, EPlayerAction.CreateShip));
     vm.startPrank(alice);
-    world.Empires__createShip{ value: totalCost }(planetId);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
     console.log("alice points after createShip", PointsMap.get(empire, aliceId));
     console.log("alice balance after createShip", alice.balance);
 
@@ -186,7 +186,7 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1);
 
     vm.startPrank(alice);
-    world.Empires__createShip{ value: totalCost }(planetId);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
 
     vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
     world.Empires__sellPoints(empire, EMPIRE_COUNT * pointUnit);
@@ -197,7 +197,7 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1);
 
     vm.startPrank(alice);
-    world.Empires__createShip{ value: totalCost }(planetId);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
     vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
     world.Empires__sellPoints(EEmpire.Green, 1 * pointUnit);
   }
@@ -207,7 +207,7 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1);
 
     vm.startPrank(alice);
-    world.Empires__createShip{ value: totalCost }(planetId);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
 
     uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, (EMPIRE_COUNT - 1) * pointUnit);
 
