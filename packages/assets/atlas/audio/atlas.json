@@ -1,0 +1,230 @@
+{
+  "resources": [
+    "audio/atlas.ogg",
+    "audio/atlas.m4a",
+    "audio/atlas.mp3",
+    "audio/atlas.ac3"
+  ],
+  "spritemap": {
+    "Bleep_01": {
+      "start": 0,
+      "end": 0.4339229024943311,
+      "loop": false
+    },
+    "Bleep_02": {
+      "start": 2,
+      "end": 2.344036281179138,
+      "loop": false
+    },
+    "Bleep_03": {
+      "start": 4,
+      "end": 4.616643990929705,
+      "loop": false
+    },
+    "Bleep_04": {
+      "start": 6,
+      "end": 6.198049886621315,
+      "loop": false
+    },
+    "Bleep_05": {
+      "start": 8,
+      "end": 8.277845804988662,
+      "loop": false
+    },
+    "Bleep_06": {
+      "start": 10,
+      "end": 10.346598639455783,
+      "loop": false
+    },
+    "Bleep_07": {
+      "start": 12,
+      "end": 12.104625850340136,
+      "loop": false
+    },
+    "Click_01": {
+      "start": 14,
+      "end": 14.221383219954648,
+      "loop": false
+    },
+    "Click_02": {
+      "start": 16,
+      "end": 16.18607709750567,
+      "loop": false
+    },
+    "Click_03": {
+      "start": 18,
+      "end": 18.07111111111111,
+      "loop": false
+    },
+    "Click_04": {
+      "start": 20,
+      "end": 20.237256235827665,
+      "loop": false
+    },
+    "Complete_01": {
+      "start": 22,
+      "end": 22.5259410430839,
+      "loop": false
+    },
+    "Complete_02": {
+      "start": 24,
+      "end": 24.887392290249434,
+      "loop": false
+    },
+    "Confirm_01": {
+      "start": 26,
+      "end": 26.405850340136055,
+      "loop": false
+    },
+    "Confirm_02": {
+      "start": 28,
+      "end": 28.232108843537414,
+      "loop": false
+    },
+    "Confirm_03": {
+      "start": 30,
+      "end": 30.149455782312923,
+      "loop": false
+    },
+    "Confirm_04": {
+      "start": 32,
+      "end": 32.346598639455785,
+      "loop": false
+    },
+    "Confirm_05": {
+      "start": 34,
+      "end": 34.34562358276644,
+      "loop": false
+    },
+    "Confirm_06": {
+      "start": 36,
+      "end": 36.457687074829934,
+      "loop": false
+    },
+    "Confirm_07": {
+      "start": 38,
+      "end": 39.340204081632656,
+      "loop": false
+    },
+    "Data_Point_01": {
+      "start": 41,
+      "end": 41.38673469387755,
+      "loop": false
+    },
+    "Data_Point_02": {
+      "start": 43,
+      "end": 43.20537414965986,
+      "loop": false
+    },
+    "Data_Point_04": {
+      "start": 45,
+      "end": 45.29390022675737,
+      "loop": false
+    },
+    "Data_Point_05": {
+      "start": 47,
+      "end": 47.16287981859411,
+      "loop": false
+    },
+    "Denied_01": {
+      "start": 49,
+      "end": 49.362743764172336,
+      "loop": false
+    },
+    "Denied_02": {
+      "start": 51,
+      "end": 51.60784580498866,
+      "loop": false
+    },
+    "Denied_03": {
+      "start": 53,
+      "end": 53.355396825396824,
+      "loop": false
+    },
+    "Execute_01": {
+      "start": 55,
+      "end": 56.61086167800453,
+      "loop": false
+    },
+    "Execute_02": {
+      "start": 58,
+      "end": 58.90718820861678,
+      "loop": false
+    },
+    "Sequence_01": {
+      "start": 60,
+      "end": 60.98598639455782,
+      "loop": false
+    },
+    "Sequence_02": {
+      "start": 62,
+      "end": 62.74072562358277,
+      "loop": false
+    },
+    "Sequence_03": {
+      "start": 64,
+      "end": 65.26269841269841,
+      "loop": false
+    },
+    "Sequence_04": {
+      "start": 67,
+      "end": 67.49836734693878,
+      "loop": false
+    },
+    "Sequence_05": {
+      "start": 69,
+      "end": 74.5246485260771,
+      "loop": false
+    },
+    "Sequence_06": {
+      "start": 76,
+      "end": 77.57183673469387,
+      "loop": false
+    },
+    "Sequence_07": {
+      "start": 79,
+      "end": 79.84251700680272,
+      "loop": false
+    },
+    "Blaster": {
+      "start": 81,
+      "end": 83.29167800453514,
+      "loop": false
+    },
+    "Build": {
+      "start": 85,
+      "end": 87,
+      "loop": false
+    },
+    "Demolish": {
+      "start": 88,
+      "end": 90.40433106575964,
+      "loop": false
+    },
+    "Explosion": {
+      "start": 92,
+      "end": 94.81049886621315,
+      "loop": false
+    },
+    "Impact": {
+      "start": 96,
+      "end": 97.18396825396826,
+      "loop": false
+    },
+    "SingleBlaster": {
+      "start": 99,
+      "end": 103.66666666666667,
+      "loop": false
+    },
+    "Upgrade": {
+      "start": 105,
+      "end": 109.7937641723356,
+      "loop": false
+    },
+    "Whoosh": {
+      "start": 111,
+      "end": 113,
+      "loop": false
+    }
+  }
+}

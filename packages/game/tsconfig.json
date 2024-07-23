@@ -6,6 +6,6 @@
       "@client/*": ["../../apps/web/src/*"]
     }
   },
-  "references": [{ "path": "../../apps/web" }],
+  "references": [{ "path": "../../apps/web" }, { "path": "../../packages/engine" }],
   "exclude": ["node_modules", "dist"]
 }

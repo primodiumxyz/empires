@@ -1,0 +1,82 @@
+{
+    "meta": {
+        "app": "",
+        "version": "1.0.0"
+    },
+    "textures": [
+        {
+            "image": "atlas.png?timestamp=1721747619043",
+            "format": "RGBA8888",
+            "size": {
+                "w": 327,
+                "h": 95
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "sprites/empires/empire_blue.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 109,
+                        "h": 95
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 109,
+                        "h": 95
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 109,
+                        "h": 95
+                    }
+                },
+                {
+                    "filename": "sprites/empires/empire_green.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 109,
+                        "h": 95
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 109,
+                        "h": 95
+                    },
+                    "frame": {
+                        "x": 109,
+                        "y": 0,
+                        "w": 109,
+                        "h": 95
+                    }
+                },
+                {
+                    "filename": "sprites/empires/empire_red.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 109,
+                        "h": 95
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 109,
+                        "h": 95
+                    },
+                    "frame": {
+                        "x": 218,
+                        "y": 0,
+                        "w": 109,
+                        "h": 95
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -13,26 +13,26 @@ export type CameraConfig = {
   defaultZoom: number;
 };
 
-type PackConfig = {
-  image: Array<{
+export type PackConfig = {
+  image?: Array<{
     key: string;
     url: string;
   }>;
-  audioSprite: Array<{
+  audioSprite?: Array<{
     key: string;
     urls: string[];
     jsonURL: string;
   }>;
-  atlas: Array<{
+  atlas?: Array<{
     key: string;
     textureURL: string;
     atlasURL: string;
   }>;
-  tilemapTiledJSON: Array<{
+  tilemapTiledJSON?: Array<{
     key: string;
     url: string;
   }>;
-  bitmapFont: Array<{
+  bitmapFont?: Array<{
     key: string;
     textureURL: string;
     fontDataURL: string;

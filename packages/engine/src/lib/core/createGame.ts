@@ -18,17 +18,17 @@ export const createGame = async (config: GameConfig) => {
     key: "LOAD",
     preload: async (scene: Phaser.Scene) => {
       // Images
-      config.assetPack.image.forEach((image) => {
+      config.assetPack.image?.forEach((image) => {
         scene.load.image(image.key, image.url);
       });
 
       // Atlas
-      config.assetPack.atlas.forEach((atlas) => {
+      config.assetPack.atlas?.forEach((atlas) => {
         scene.load.atlas(atlas.key, atlas.textureURL, atlas.atlasURL);
       });
 
       // Audio Sprites
-      config.assetPack.audioSprite.forEach((audioSprite) => {
+      config.assetPack.audioSprite?.forEach((audioSprite) => {
         scene.load.audioSprite(
           audioSprite.key,
           audioSprite.jsonURL,
@@ -37,12 +37,12 @@ export const createGame = async (config: GameConfig) => {
       });
 
       // Tilemaps
-      config.assetPack.tilemapTiledJSON.forEach((tilemap) => {
+      config.assetPack.tilemapTiledJSON?.forEach((tilemap) => {
         scene.load.tilemapTiledJSON(tilemap.key, tilemap.url);
       });
 
       // Bitmap Fonts
-      config.assetPack.bitmapFont.forEach((bitmapFont) => {
+      config.assetPack.bitmapFont?.forEach((bitmapFont) => {
         scene.load.bitmapFont(
           bitmapFont.key,
           bitmapFont.textureURL,
