@@ -20,17 +20,18 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player purchaseable action that creates a ship on a planet.
    * @param _planetId The ID of the planet.
+   * @param _numActions The number of actions to purchase.
    */
-  function createShip(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function createShip(bytes32 _planetId, uint256 _numActions) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, planetData.empireId, true, 1);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, planetData.empireId, true, _numActions);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.CreateShip, planetData.empireId, true, _msgValue());
+    _purchaseAction(EPlayerAction.CreateShip, planetData.empireId, true, _numActions, _msgValue());
 
-    Planet.setShipCount(_planetId, planetData.shipCount + 1);
+    Planet.setShipCount(_planetId, planetData.shipCount + _numActions);
 
     CreateShipPlayerAction.set(
       pseudorandomEntity(),
@@ -38,6 +39,7 @@ contract ActionSystem is EmpiresSystem {
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
+        numActions: _numActions,
         timestamp: block.timestamp
       })
     );
@@ -46,24 +48,26 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player purchaseable action that kills a ship on a planet.
    * @param _planetId The ID of the planet.
+   * @param _numActions The number of actions to purchase.
    */
-  function killShip(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function killShip(bytes32 _planetId, uint256 _numActions) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
-    require(planetData.shipCount > 0, "[ActionSystem] No ships to kill");
+    require(planetData.shipCount >= _numActions, "[ActionSystem] Not enough ships to kill");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.empireId, false, 1);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.empireId, false, _numActions);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.KillShip, planetData.empireId, false, _msgValue());
+    _purchaseAction(EPlayerAction.KillShip, planetData.empireId, false, _numActions, _msgValue());
 
-    Planet.setShipCount(_planetId, planetData.shipCount - 1);
+    Planet.setShipCount(_planetId, planetData.shipCount - _numActions);
     KillShipPlayerAction.set(
       pseudorandomEntity(),
       KillShipPlayerActionData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
+        numActions: _numActions,
         timestamp: block.timestamp
       })
     );
@@ -72,43 +76,45 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player purchaseable action that increases the shield on a planet.
    * @param _planetId The ID of the planet.
+   * @param _numActions The number of actions to purchase.
    */
-  function chargeShield(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function chargeShield(bytes32 _planetId, uint256 _numActions) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, planetData.empireId, true, 1);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, planetData.empireId, true, _numActions);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.ChargeShield, planetData.empireId, true, _msgValue());
+    _purchaseAction(EPlayerAction.ChargeShield, planetData.empireId, true, _numActions, _msgValue());
 
-    Planet.setShieldCount(_planetId, planetData.shieldCount + 1);
+    Planet.setShieldCount(_planetId, planetData.shieldCount + _numActions);
 
     ChargeShieldsPlayerAction.set(
       pseudorandomEntity(),
-      ChargeShieldsPlayerActionData({ planetId: _planetId, goldSpent: cost, timestamp: block.timestamp })
+      ChargeShieldsPlayerActionData({ planetId: _planetId, ethSpent: cost, numActions: _numActions, timestamp: block.timestamp })
     );
   }
 
   /**
    * @dev A player purchaseable action that decreases the shield on a planet.
    * @param _planetId The ID of the planet.
+   * @param _numActions The number of actions to purchase.
    */
-  function drainShield(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function drainShield(bytes32 _planetId, uint256 _numActions) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
-    require(planetData.shieldCount > 0, "[ActionSystem] No shields to drain");
+    require(planetData.shieldCount >= _numActions, "[ActionSystem] Not enough shields to drain");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
 
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false, 1);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false, _numActions);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.DrainShield, planetData.empireId, false, _msgValue());
+    _purchaseAction(EPlayerAction.DrainShield, planetData.empireId, false, _numActions, _msgValue());
 
-    Planet.setShieldCount(_planetId, planetData.shieldCount - 1);
+    Planet.setShieldCount(_planetId, planetData.shieldCount - _numActions);
     DrainShieldsPlayerAction.set(
       pseudorandomEntity(),
-      DrainShieldsPlayerActionData({ planetId: _planetId, goldSpent: cost, timestamp: block.timestamp })
+      DrainShieldsPlayerActionData({ planetId: _planetId, ethSpent: cost, numActions: _numActions, timestamp: block.timestamp })
     );
   }
 
@@ -117,12 +123,14 @@ contract ActionSystem is EmpiresSystem {
    * @param _actionType The type of action to purchase.
    * @param _empireImpacted The empire impacted by the action.
    * @param _progressAction Flag indicating if the action progressively or regressively impacts the empire.
+   * @param _numActions The number of actions to purchase.
    * @param _spend The amount spent on the action.
    */
   function _purchaseAction(
     EPlayerAction _actionType,
     EEmpire _empireImpacted,
     bool _progressAction,
+    uint256 _numActions,
     uint256 _spend
   ) private {
     bytes32 playerId = addressToId(_msgSender());
@@ -130,19 +138,21 @@ contract ActionSystem is EmpiresSystem {
     uint256 pointUnit = P_PointConfig.getPointUnit();
 
     if (_progressAction) {
-      LibPoint.issuePoints(_empireImpacted, playerId, (EMPIRE_COUNT - 1) * pointUnit);
-      LibPrice.pointCostUp(_empireImpacted, (EMPIRE_COUNT - 1) * pointUnit);
+      uint256 numPoints = _numActions * (EMPIRE_COUNT - 1) * pointUnit;
+      LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
+      LibPrice.pointCostUp(_empireImpacted, numPoints);
     } else {
+      uint256 numPoints = _numActions * pointUnit;
       // Iterate through each empire except the impacted one
       for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
         if (i == uint256(_empireImpacted)) {
           continue;
         }
-        LibPoint.issuePoints(EEmpire(i), playerId, 1 * pointUnit);
-        LibPrice.pointCostUp(_empireImpacted, 1 * pointUnit);
+        LibPoint.issuePoints(EEmpire(i), playerId, numPoints);
+        LibPrice.pointCostUp(_empireImpacted, numPoints);
       }
     }
-    LibPrice.actionCostUp(_empireImpacted, _actionType, 1);
+    LibPrice.actionCostUp(_empireImpacted, _actionType, _numActions);
   }
 
   /**
