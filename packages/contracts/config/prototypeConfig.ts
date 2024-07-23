@@ -18,9 +18,9 @@ const percentsToThresholds = <T extends Record<string, number>>(percents: T): Re
   return thresholds;
 };
 
-const scaleRake = (rakePct: number) => {
-  if (rakePct < 0 || rakePct > 1) throw new Error("rakePct must be between 0 and 100");
-  return BigInt(Math.round(rakePct * 10000));
+const scaleMultiplier = (multiplier: number) => {
+  if (multiplier < 0 || multiplier > 1) throw new Error("multiplier must be between 0 and 100");
+  return BigInt(Math.round(multiplier * 10000));
 };
 
 export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = {
@@ -40,7 +40,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         startPointCost: BigInt(POINTS_UNIT * 0.00004),
         pointGenRate: BigInt(POINTS_UNIT * 0.00002),
         pointCostIncrease: BigInt(POINTS_UNIT * 0.00002),
-        pointRake: scaleRake(0.01), // out of 1, scales to out of 10000
+        pointRake: scaleMultiplier(0.01), // out of 1, scales to out of 10000
         pointSellTax: BigInt(POINTS_UNIT * 0),
       },
       P_ActionConfig: {
@@ -48,6 +48,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         actionCostIncrease: BigInt(POINTS_UNIT * 0.00004),
         startActionCost: BigInt(POINTS_UNIT * 0.00004),
         minActionCost: 0n,
+        reductionPct: scaleMultiplier(0.5), // out of 1, scales to out of 10000
+        regressMultiplier: scaleMultiplier(0.01), // out of 1, scales to out of 10000
       },
       P_NPCMoveThresholds: percentsToThresholds({
         none: 0.25,

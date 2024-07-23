@@ -46,6 +46,8 @@ export const worldInput = {
         actionCostIncrease: "uint256",
         startActionCost: "uint256",
         minActionCost: "uint256",
+        reductionPct: "uint256",
+        regressMultiplier: "uint256",
       },
     },
 
@@ -299,6 +301,7 @@ export const worldInput = {
 
 const getConfig = async () => {
   let exclude: string[] = [];
+  // eslint-disable-next-line valid-typeof
   if (typeof process != undefined && typeof process != "undefined") {
     const dotenv = await import("dotenv");
     dotenv.config({ path: "../../.env" });

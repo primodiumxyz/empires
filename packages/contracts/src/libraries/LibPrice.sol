@@ -63,6 +63,7 @@ library LibPrice {
       }
       pointCost += getPointCost(EEmpire(i), P_PointConfig.getPointUnit());
     }
+    pointCost += (pointCost * P_ActionConfig.getRegressMultiplier()) / 10000;
     return pointCost;
   }
 
