@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { ToastContainer } from "react-toastify";
 import { defineChain } from "viem";
@@ -14,8 +14,6 @@ import { useSettings } from "@/hooks/useSettings";
 import Landing from "@/screens/Landing";
 import { cn } from "@/util/client";
 
-const fontStyle = "font-pixel text-sm";
-
 const App = () => {
   const settings = useSettings();
   const fontStyle = useMemo(
@@ -23,14 +21,19 @@ const App = () => {
     [settings.fontStyle],
   );
   const coreRef = useRef<CoreType | null>(null);
+  const [core, setCore] = useState<CoreType | null>(null);
 
-  const core = useMemo(() => {
-    if (coreRef.current) coreRef.current.network.world.dispose();
-    const config = getCoreConfig();
-    const core = createCore(config);
-    coreRef.current = core;
-    return core;
+  useEffect(() => {
+    if (!coreRef.current) {
+      const config = getCoreConfig();
+      coreRef.current = createCore(config);
+    }
+    setCore(coreRef.current);
   }, []);
+
+  if (!core) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

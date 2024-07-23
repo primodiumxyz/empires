@@ -16,8 +16,6 @@ async function init(core: Core, calls: ContractCalls): InitResult {
   const game = await engine.createGame(gameConfig);
   const globalApi = createGlobalApi(game);
 
-  // core.tables.Keybinds.get("Account");
-
   return {
     ROOT: await initRootScene(globalApi, core),
     UI: await initUIScene(globalApi, core),

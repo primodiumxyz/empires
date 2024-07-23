@@ -12,6 +12,7 @@ import { createUtils } from "@core/utils/core/createUtils";
  * @returns: {@link Core}
  */
 export function createCore(config: CoreConfig): Core {
+  console.log("creating core");
   const networkResult = createNetwork(config);
   const tables = createTables(networkResult);
   const utils = createUtils(tables);

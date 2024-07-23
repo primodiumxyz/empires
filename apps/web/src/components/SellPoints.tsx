@@ -24,7 +24,6 @@ export const SellPoints = () => {
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
   useEffect(() => {
-    console.log("empire", empire);
     setAmountToSell("0");
   }, [empire]);
 

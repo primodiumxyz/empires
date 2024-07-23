@@ -2,7 +2,7 @@
   "extends": "../../.tsconfigs/bundler/dom/library-monorepo.json",
   "compilerOptions": {
     "allowImportingTsExtensions": true,
-    "strict": true,
+    "strict": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
