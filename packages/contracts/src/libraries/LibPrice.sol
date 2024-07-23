@@ -9,18 +9,20 @@ import { EMPIRE_COUNT } from "src/constants.sol";
  * @title LibPrice
  * @dev Library for calculating the cost of actions and point units in the game.
  */
-library LibPrice {
+library LibPrice { 
   /**
    * @dev Calculates the total cost of an action that is to be purchased.
    * @param _actionType The type of action.
    * @param _empireImpacted The empire impacted by the action.
    * @param _progressAction Flag indicating whether the action is progressive or regressive to the impacted empire.
+   * @param _actionCount The number of actions to be purchased.
    * @return totalCost The total cost of the action.
    */
   function getTotalCost(
     EPlayerAction _actionType,
     EEmpire _empireImpacted,
-    bool _progressAction
+    bool _progressAction,
+    uint256 _actionCount
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
     if (_progressAction) {
@@ -28,40 +30,42 @@ library LibPrice {
         _actionType == EPlayerAction.CreateShip || _actionType == EPlayerAction.ChargeShield,
         "[LibPrice] Action type is not a progressive action"
       );
-      totalCost = getProgressPointCost(_empireImpacted);
+      totalCost = getProgressPointCost(_empireImpacted, _actionCount);
     } else {
       require(
         _actionType == EPlayerAction.KillShip || _actionType == EPlayerAction.DrainShield,
         "[LibPrice] Action type is not a regressive action"
       );
-      totalCost = getRegressPointCost(_empireImpacted);
+      totalCost = getRegressPointCost(_empireImpacted, _actionCount);
     }
 
-    totalCost += ActionCost.get(_empireImpacted, _actionType);
+    totalCost += getMarginalActionCost(_empireImpacted, _actionType, _actionCount);
     return totalCost;
   }
 
   /**
    * @dev Calculates the cost of purchasing multiple points related to a progressive action that aids an empire.
    * @param _empireImpacted The empire impacted by the action.
+   * @param _actionCount The number of actions to be purchased.
    * @return pointCost The cost of all points related to the action.
    */
-  function getProgressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
-    return getPointCost(_empireImpacted, (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit());
+  function getProgressPointCost(EEmpire _empireImpacted, uint256 _actionCount) internal view returns (uint256) {
+    return getPointCost(_empireImpacted, _actionCount * (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit());
   }
 
   /**
    * @dev Calculates the cost of purchasing points related to a regressive action. Points are purchased for all empires except the impacted empire.
    * @param _empireImpacted The empire impacted by the action.
+   * @param _actionCount The number of actions to be purchased.
    * @return pointCost The cost of all points related to the action.
    */
-  function getRegressPointCost(EEmpire _empireImpacted) internal view returns (uint256) {
+  function getRegressPointCost(EEmpire _empireImpacted, uint256 _actionCount) internal view returns (uint256) {
     uint256 pointCost;
     for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
       if (i == uint256(_empireImpacted)) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), P_PointConfig.getPointUnit());
+      pointCost += getPointCost(EEmpire(i), _actionCount * P_PointConfig.getPointUnit());
     }
     return pointCost;
   }
@@ -87,6 +91,24 @@ library LibPrice {
   }
 
   /**
+   * @dev Calculates the marginal cost of a specific number of actions for a specific empire.
+   * @param _empire The empire being impacted.
+   * @param _actionType The type of action.
+   * @param _actionCount The number of actions.
+   * @return actionCost The marginal cost of the actions that impact a specific empire.
+   */
+  function getMarginalActionCost(EEmpire _empire, EPlayerAction _actionType, uint256 _actionCount) internal view returns (uint256) {
+    require(_actionCount > 0, "[LibPrice] Action count must be greater than 0");
+
+    uint256 initActionCost = ActionCost.get(_empire, _actionType);
+    uint256 actionCostIncrease = P_ActionConfig.getActionCostIncrease();
+
+    uint256 triangleSumOBO = ((_actionCount - 1) * _actionCount) / 2;
+    uint256 actionCost = initActionCost * _actionCount + actionCostIncrease * triangleSumOBO;
+    return actionCost;
+  }
+
+  /**
    * @dev Increases the cost of points for a specific empire.
    * @param _empire The empire to increase the point cost for.
    * @param _points The number of point units to increase the cost by.
@@ -106,9 +128,11 @@ library LibPrice {
    * @dev Increases the cost of a specific action for a specific empire.
    * @param _empire The empire to increase the action cost for.
    * @param _actionType The type of action to increase the cost for.
+   * @param _actionCount The number of actions to increase the cost by.
    */
-  function actionCostUp(EEmpire _empire, EPlayerAction _actionType) internal {
-    uint256 newActionCost = ActionCost.get(_empire, _actionType) + P_ActionConfig.getActionCostIncrease();
+  function actionCostUp(EEmpire _empire, EPlayerAction _actionType, uint256 _actionCount) internal {
+    require(_actionCount > 0, "[LibPrice] Action count must be greater than 0");
+    uint256 newActionCost = ActionCost.get(_empire, _actionType) + P_ActionConfig.getActionCostIncrease() * _actionCount;
     ActionCost.set(_empire, _actionType, newActionCost);
   }
 
