@@ -1,39 +1,81 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, MoveNPCAction, MoveNPCActionData, Arrivals } from "codegen/index.sol";
+import { PendingMove, PendingMoveData, Empire, Planet, PlanetData, P_NPCMoveThresholds, P_NPCMoveThresholdsData, MoveNPCAction, MoveNPCActionData, Arrivals } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 
 library LibMoveShips {
-  function moveShips(bytes32 planetId) internal returns (bool) {
+  /**
+   * @dev Creates a pending move for ships from a given planet.
+   * @param planetId The ID of the planet from which ships will move.
+   * @return bool Returns true if a pending move was successfully created, false otherwise.
+   */
+  function createPendingMove(bytes32 planetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
+    // Return false if the planet has no empire or no ships
     if (planetData.empireId == EEmpire.NULL || planetData.shipCount == 0) return false;
 
-    // move ships
+    // Find a valid target planet for the move
     bytes32 target;
     uint i = 0;
     do {
+      // Generate a random value based on the planet ID and iteration
       uint256 randomValue = pseudorandom(uint256(planetId) + (i * 256), 10_000);
+      // Get a potential target planet
       target = getPlanetTarget(planetData, randomValue);
       i++;
-    } while (!Planet.getIsPlanet(target));
+    } while (!Planet.getIsPlanet(target)); // Repeat until a valid planet is found
+
+    // Return false if the target is the same as the origin
     if (target == planetId) return false;
 
-    uint256 shipsToMove = planetData.shipCount;
+    // Create a pending move with the current empire and the target planet
+    PendingMove.set(planetId, PendingMoveData({ empireId: planetData.empireId, destinationPlanetId: target }));
 
-    Arrivals.set(target, Arrivals.get(target) + shipsToMove);
+    return true;
+  }
+
+  /**
+   * @dev Executes pending moves for ships from a given planet.
+   * @param planetId The ID of the planet from which ships will move.
+   *
+   * This function performs the following steps:
+   * 1. Retrieves the current planet data and the destination planet ID.
+   * 2. If there's no valid destination, the function returns early.
+   * 3. Calculates the number of ships to move and the total ships arriving at the destination.
+   * 4. Updates the ship count on the origin planet and the arrivals on the destination planet.
+   * 5. Clears the pending move record.
+   * 6. Logs the move action for off-chain tracking.
+   */
+  function executePendingMoves(bytes32 planetId) internal {
+    PlanetData memory planetData = Planet.get(planetId);
+    bytes32 destinationPlanetId = PendingMove.getDestinationPlanetId(planetId);
+
+    if (destinationPlanetId == bytes32(0)) return;
+
+    uint256 shipsToMove = planetData.shipCount;
+    uint256 arrivingShips = Arrivals.get(destinationPlanetId, planetData.empireId);
+
+    uint256 shipCount = arrivingShips + shipsToMove;
+
+    // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
+    Arrivals.set(destinationPlanetId, planetData.empireId, shipCount);
+
+    // Clear the pending move
+    PendingMove.deleteRecord(planetId);
+
+    // Log the move
     MoveNPCAction.set(
       pseudorandomEntity(),
       MoveNPCActionData({
         originPlanetId: planetId,
-        destinationPlanetId: target,
+        destinationPlanetId: destinationPlanetId,
         shipCount: shipsToMove,
         timestamp: block.timestamp
       })
     );
-    return true;
   }
 
   function getPlanetTarget(PlanetData memory planetData, uint256 randomValue) internal view returns (bytes32 target) {
