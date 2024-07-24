@@ -43,7 +43,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   }, [planet, tileSize, margin]);
 
   useEffect(() => {
-    const listener = tables.BattleNPCAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.PlanetBattleNPCAction.update$.subscribe(({ properties: { current } }) => {
       if (!current || current.planetId !== entity) return;
       const data = {
         planetId: current.planetId,
