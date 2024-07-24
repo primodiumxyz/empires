@@ -16,7 +16,6 @@ export const initRootScene = async (
   const sceneApi = createSceneApi(scene, core);
   sceneApi.audio.setPauseOnBlur(false);
 
-  scene.phaserScene.add.circle(0, 0, 100, 0xff0000);
   scene.camera.phaserCamera.centerOn(0, 0);
 
   const runSystems = () => runRootSystems(sceneApi, game, core);

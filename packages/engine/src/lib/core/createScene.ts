@@ -98,12 +98,12 @@ export const createScene = async (
       ui,
     },
     dispose: () => {
-      input.dispose();
-      camera.dispose();
-      objects.dispose();
       music.destroy();
       sfx.destroy();
       ui.destroy();
+      input.dispose();
+      camera.dispose();
+      objects.dispose();
       resizer.dispose();
     },
   };

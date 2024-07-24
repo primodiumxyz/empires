@@ -33,9 +33,11 @@ const Game = memo(() => {
 
       try {
         hasInitialized.current = true;
+        destroy();
+        setLoading(true);
         const pri = await initGame(core, contractCalls);
-        pri.runSystems();
         gameRef.current = pri;
+        pri.runSystems();
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -46,8 +48,10 @@ const Game = memo(() => {
       if (gameRef.current === null) return;
       gameRef.current.destroy();
       gameRef.current = null;
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      hasInitialized.current = false;
+      // await new Promise((resolve) => setTimeout(resolve, 100));
       const phaserContainer = document.getElementById("phaser-container");
+
       for (const child of Array.from(phaserContainer?.children ?? [])) {
         phaserContainer?.removeChild(child);
       }
