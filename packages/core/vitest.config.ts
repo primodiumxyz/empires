@@ -3,6 +3,7 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
+    globals: true,
     setupFiles: "./__tests__/lib/setupTests",
     // Default environment
     environment: "node",
@@ -19,6 +20,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: "@", replacement: resolve(__dirname, "src") },
+      { find: "@core", replacement: resolve(__dirname, "src") }, // Ensure this path is correct
       { find: "@test", replacement: resolve(__dirname, "__tests__") },
     ],
   },
