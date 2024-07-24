@@ -58,24 +58,10 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetRegressPointCost() public {
     uint256 initPointCost = config.startPointCost;
-    uint256 regressMultiplier = actionConfig.regressMultiplier;
-    uint256 basePoints = initPointCost * (EMPIRE_COUNT - 1);
-    uint256 regressPoints = (basePoints * regressMultiplier) / 10000;
-    assertEq(
-      LibPrice.getRegressPointCost(EEmpire.Red),
-      basePoints + regressPoints,
-      "Red Empire point cost for 2 points incorrect"
-    );
-    assertEq(
-      LibPrice.getRegressPointCost(EEmpire.Blue),
-      basePoints + regressPoints,
-      "Red Empire point cost for 2 points incorrect"
-    );
-    assertEq(
-      LibPrice.getRegressPointCost(EEmpire.Green),
-      basePoints + regressPoints,
-      "Red Empire point cost for 2 points incorrect"
-    );
+    uint256 points = initPointCost * (EMPIRE_COUNT - 1);
+    assertEq(LibPrice.getRegressPointCost(EEmpire.Red), points, "Red Empire point cost for 2 points incorrect");
+    assertEq(LibPrice.getRegressPointCost(EEmpire.Blue), points, "Red Empire point cost for 2 points incorrect");
+    assertEq(LibPrice.getRegressPointCost(EEmpire.Green), points, "Red Empire point cost for 2 points incorrect");
   }
 
   function testGetProgressPointCost() public {
@@ -106,9 +92,14 @@ contract LibPriceTest is PrimodiumTest {
   }
 
   function testGetTotalCostRegress() public {
+    uint256 regressMultiplier = actionConfig.regressMultiplier;
+    uint256 baseCost = LibPrice.getRegressPointCost(EEmpire.Red);
+    uint256 regressCost = (ActionCost.get(EEmpire.Red, EPlayerAction.KillShip) *
+      P_ActionConfig.getRegressMultiplier()) / 10000;
+
     assertEq(
       LibPrice.getTotalCost(EPlayerAction.KillShip, EEmpire.Red, false),
-      actionConfig.startActionCost + LibPrice.getRegressPointCost(EEmpire.Red),
+      baseCost + regressCost,
       "Total cost for Red Empire incorrect"
     );
   }

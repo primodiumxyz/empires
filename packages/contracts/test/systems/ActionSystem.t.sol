@@ -40,6 +40,16 @@ contract ActionSystemTest is PrimodiumTest {
   function testKillShip() public {
     vm.startPrank(creator);
     P_ActionConfig.setReductionPct(5000);
+    Planet.setShipCount(planetId, 1);
+
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false);
+    world.Empires__killShip{ value: cost }(planetId);
+    assertEq(Planet.get(planetId).shipCount, 0);
+  }
+
+  function testKillMultipleShips() public {
+    vm.startPrank(creator);
+    P_ActionConfig.setReductionPct(5000);
     Planet.setShipCount(planetId, 10);
 
     uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false);
