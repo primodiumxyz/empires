@@ -154,21 +154,21 @@ contract ActionSystemTest is PrimodiumTest {
 
   function testPurchaseActionProgressMultiple() public {
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 numActions = 5;
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, numActions);
+    uint256 actionCount = 5;
+    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, actionCount);
     uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateShip);
 
     vm.startPrank(alice);
-    world.Empires__createShip{ value: totalCost }(planetId, numActions);
+    world.Empires__createShip{ value: totalCost }(planetId, actionCount);
     assertGt(
-      LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, numActions),
+      LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, actionCount),
       totalCost,
       "Total Cost should have increased"
     );
     assertGt(ActionCost.get(empire, EPlayerAction.CreateShip), actionCost, "Action Cost should have increased");
     assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), numActions * (EMPIRE_COUNT - 1) * pointUnit, "Player should have received points");
+    assertEq(PointsMap.get(EEmpire.Red, aliceId), actionCount * (EMPIRE_COUNT - 1) * pointUnit, "Player should have received points");
   }
 
   function testPurchaseActionRegressSingle() public {
@@ -197,23 +197,23 @@ contract ActionSystemTest is PrimodiumTest {
     testPurchaseActionProgressMultiple();
 
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 numActions = 5; 
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, numActions);
+    uint256 actionCount = 5; 
+    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, actionCount);
     uint256 actionCost = ActionCost.get(empire, EPlayerAction.KillShip);
     uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
 
     vm.startPrank(bob);
-    world.Empires__killShip{ value: totalCost }(planetId, numActions);
+    world.Empires__killShip{ value: totalCost }(planetId, actionCount);
     assertGt(
-      LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, numActions),
+      LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, actionCount),
       totalCost,
       "Total Cost should have increased"
     );
     assertGt(ActionCost.get(empire, EPlayerAction.KillShip), actionCost, "Action Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), numActions * pointUnit, "Player should have received blue points");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), numActions * pointUnit, "Player should have received green points");
+    assertEq(PointsMap.get(EEmpire.Blue, bobId), actionCount * pointUnit, "Player should have received blue points");
+    assertEq(PointsMap.get(EEmpire.Green, bobId), actionCount * pointUnit, "Player should have received green points");
   }
 
   function testSellPoints() public {
