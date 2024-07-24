@@ -84,10 +84,10 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
   const planet = tables.Planet.use(entity)!;
   const { empireId, shipCount, shieldCount } = planet;
 
-  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId);
-  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId);
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId);
+  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId, 1n);
+  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId, 1n);
+  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId, 1n);
+  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId, 1n);
 
   const addShipPriceUsd = weiToUsd(addShipPriceWei, ethPrice ?? 0);
   const removeShipPriceUsd = weiToUsd(removeShipPriceWei, ethPrice ?? 0);
