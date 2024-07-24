@@ -1,2 +1,2 @@
 export * as engine from "@engine/api";
-export * from "@engine/lib/types";
+export type * from "@engine/lib/types";

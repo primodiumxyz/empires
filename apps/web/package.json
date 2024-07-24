@@ -21,6 +21,7 @@
     "@primodiumxyz/contracts": "workspace:*",
     "@primodiumxyz/core": "workspace:*",
     "@primodiumxyz/game": "workspace:*",
+    "@primodiumxyz/engine": "workspace:*",
     "@primodiumxyz/reactive-tables": "^3.4.0",
     "@privy-io/react-auth": "^1.72.0",
     "class-variance-authority": "^0.7.0",

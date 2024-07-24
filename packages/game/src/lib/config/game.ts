@@ -19,6 +19,11 @@ const gameConfig: GameConfig = {
   transparent: true,
   pixelArt: true,
   assetPack: pack,
+  fps: {
+    target: 30,
+    min: 30,
+    limit: 30,
+  },
   dom: {
     createContainer: true,
     pointerEvents: "none",

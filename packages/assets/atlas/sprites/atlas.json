@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1721747619043",
+            "image": "atlas.png?timestamp=1721839394656",
             "format": "RGBA8888",
             "size": {
-                "w": 327,
-                "h": 95
+                "w": 256,
+                "h": 1024
             },
             "scale": 1,
             "frames": [
@@ -18,20 +18,20 @@
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 109,
-                        "h": 95
+                        "w": 256,
+                        "h": 256
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 109,
-                        "h": 95
+                        "w": 256,
+                        "h": 256
                     },
                     "frame": {
                         "x": 0,
                         "y": 0,
-                        "w": 109,
-                        "h": 95
+                        "w": 256,
+                        "h": 256
                     }
                 },
                 {
@@ -39,20 +39,41 @@
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 109,
-                        "h": 95
+                        "w": 256,
+                        "h": 256
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 109,
-                        "h": 95
+                        "w": 256,
+                        "h": 256
                     },
                     "frame": {
-                        "x": 109,
+                        "x": 0,
+                        "y": 256,
+                        "w": 256,
+                        "h": 256
+                    }
+                },
+                {
+                    "filename": "sprites/empires/empire_neutral.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 256,
+                        "h": 256
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
                         "y": 0,
-                        "w": 109,
-                        "h": 95
+                        "w": 256,
+                        "h": 256
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 512,
+                        "w": 256,
+                        "h": 256
                     }
                 },
                 {
@@ -60,20 +81,20 @@
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 109,
-                        "h": 95
+                        "w": 256,
+                        "h": 256
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 109,
-                        "h": 95
+                        "w": 256,
+                        "h": 256
                     },
                     "frame": {
-                        "x": 218,
-                        "y": 0,
-                        "w": 109,
-                        "h": 95
+                        "x": 0,
+                        "y": 768,
+                        "w": 256,
+                        "h": 256
                     }
                 }
             ]
