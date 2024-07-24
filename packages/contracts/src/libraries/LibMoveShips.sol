@@ -54,10 +54,8 @@ library LibMoveShips {
 
     if (destinationPlanetId == bytes32(0)) return;
 
+    // todo: make it variable
     uint256 shipsToMove = planetData.shipCount;
-    uint256 arrivingShips = Arrivals.get(destinationPlanetId, planetData.empireId);
-
-    uint256 shipCount = arrivingShips + shipsToMove;
 
     // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
