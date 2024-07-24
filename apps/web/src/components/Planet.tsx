@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
+import { CurrencyYenIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
 import { bigIntMin } from "@latticexyz/common/utils";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -10,6 +10,7 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Hexagon } from "@/components/core/Hexagon";
+import { Marker } from "@/components/core/Marker";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
@@ -43,7 +44,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   }, [planet, tileSize, margin]);
 
   useEffect(() => {
-    const listener = tables.BattleNPCAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.PlanetBattleNPCAction.update$.subscribe(({ properties: { current } }) => {
       if (!current || current.planetId !== entity) return;
       const data = {
         planetId: current.planetId,
@@ -67,40 +68,33 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   if (!planet) return null;
 
   return (
-    <Hexagon
-      key={entity}
-      size={tileSize}
-      className="absolute -z-10 -translate-x-1/2 -translate-y-1/2"
-      fillClassName={planet?.empireId !== 0 ? EmpireEnumToColor[planetEmpire] : "fill-gray-600"}
-      stroke={conquered ? "yellow" : "none"}
-      style={{
-        top: `${top + 50}px`,
-        left: `${left}px`,
-      }}
-    >
-      <div className="flex flex-col items-center gap-2 text-white">
-        <div className="text-center">
-          <p className="absolute left-1/2 top-4 -translate-x-1/2 transform font-mono text-xs opacity-70">
-            ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
-          </p>
-          <Button
-            variant="ghost"
-            className="font-bold"
-            onClick={() => {
-              tables.SelectedPlanet.set({ value: entity });
-              utils.openPane("dashboard");
-            }}
-          >
-            {entityToPlanetName(entity)}
-          </Button>
+    <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }}>
+      <div className="absolute mt-14 -translate-x-1/2 -translate-y-1/2">
+        <div className="flex flex-col items-center gap-2 text-white">
+          <div className="text-center">
+            <p className="absolute left-1/2 top-4 -translate-x-1/2 transform font-mono text-xs opacity-70">
+              ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
+            </p>
+
+            <Button
+              variant="ghost"
+              className="font-bold"
+              onClick={() => {
+                tables.SelectedPlanet.set({ value: entity });
+                utils.openPane("dashboard");
+              }}
+            >
+              {entityToPlanetName(entity)}
+            </Button>
+          </div>
+          <div className="relative flex flex-row gap-1">
+            <Ships shipCount={planet.shipCount} planetId={entity} planetEmpire={planetEmpire} />
+            <Shields shieldCount={planet.shieldCount} planetId={entity} planetEmpire={planetEmpire} />
+          </div>
+          <GoldCount goldCount={planet.goldCount} entity={entity} />
         </div>
-        <div className="relative flex flex-row gap-1">
-          <Ships shipCount={planet.shipCount} planetId={entity} planetEmpire={planetEmpire} />
-          <Shields shieldCount={planet.shieldCount} planetId={entity} planetEmpire={planetEmpire} />
-        </div>
-        <GoldCount goldCount={planet.goldCount} entity={entity} />
       </div>
-    </Hexagon>
+    </Marker>
   );
 };
 
@@ -226,6 +220,8 @@ const Ships = ({
 
   const { gameOver } = useTimeLeft();
 
+  const reductionPct = Number(tables.P_ActionConfig.get()?.reductionPct ?? 0n) / 10000;
+
   return (
     <div className="relative z-50 rounded-lg bg-white/20 p-1">
       <p className="flex items-center justify-center gap-2">
@@ -243,15 +239,14 @@ const Ships = ({
       <div className="flex items-center gap-2">
         <TransactionQueueMask id={`${planetId}-kill-ship`}>
           <Button
-            tooltip={`Cost: ${killShipPriceUsd}`}
+            tooltip={`Reduction: ${reductionPct * Number(shipCount)}%\nCost: ${killShipPriceUsd}`}
             variant="neutral"
             size="xs"
-            shape="square"
             className="border-none"
             onClick={() => removeShip(planetId, killShipPriceWei)}
-            disabled={gameOver || Number(planetEmpire) === 0}
+            disabled={gameOver || Number(planetEmpire) === 0 || Number(shipCount) === 0}
           >
-            <MinusIcon className="size-4" />
+            -{reductionPct * Number(shipCount)}
           </Button>
         </TransactionQueueMask>
 
@@ -260,12 +255,11 @@ const Ships = ({
             tooltip={`Cost: ${createShipPriceUsd}`}
             variant="neutral"
             size="xs"
-            shape="square"
             className="border-none"
             onClick={() => createShip(planetId, createShipPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0}
           >
-            <PlusIcon className="size-4" />
+            +1
           </Button>
         </TransactionQueueMask>
       </div>
@@ -290,6 +284,7 @@ const Shields = ({
   const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
   const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
 
+  const reductionPct = Number(tables.P_ActionConfig.use()?.reductionPct ?? 0n) / 10000;
   const { gameOver } = useTimeLeft();
   const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: string }[]>([]);
   const [nextId, setNextId] = useState(0);
@@ -340,10 +335,9 @@ const Shields = ({
           <Button
             tooltip={`Cost: ${removeShieldPriceUsd}`}
             onClick={() => calls.removeShield(planetId, removeShieldPriceWei)}
-            className="btn btn-square btn-xs"
-            disabled={gameOver || Number(planetEmpire) === 0}
+            disabled={gameOver || Number(planetEmpire) === 0 || Number(shieldCount) === 0}
           >
-            <MinusIcon className="size-4" />
+            -{reductionPct * Number(shieldCount)}
           </Button>
         </TransactionQueueMask>
 
@@ -351,10 +345,9 @@ const Shields = ({
           <Button
             tooltip={`Cost: ${addShieldPriceUsd}`}
             onClick={() => calls.addShield(planetId, addShieldPriceWei)}
-            className="btn btn-square btn-xs"
             disabled={gameOver || Number(planetEmpire) === 0}
           >
-            <PlusIcon className="size-4" />
+            +1
           </Button>
         </TransactionQueueMask>
       </div>
