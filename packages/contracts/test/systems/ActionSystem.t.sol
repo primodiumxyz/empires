@@ -49,17 +49,8 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Planet.get(planetId).shipCount, 1);
 
     cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false, 1);
-    world.Empires__killShip{ value: cost }(planetId, 1);
+    world.Empires__killShip{ value: cost }(planetId);
     assertEq(Planet.get(planetId).shipCount, 0);
-  }
-
-  function testKillShipMultiple() public {
-    testCreateShipMultiple();
-    uint256 currentShips = Planet.get(planetId).shipCount;
-
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false, 6);
-    world.Empires__killShip{ value: cost }(planetId, 6);
-    assertEq(Planet.get(planetId).shipCount, currentShips - 6);
   }
 
   function testChargeShieldSingle() public {
@@ -87,39 +78,18 @@ contract ActionSystemTest is PrimodiumTest {
     }
 
     cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false, 1);
-    world.Empires__drainShield{ value: cost }(planetId, 1);
+    world.Empires__drainShield{ value: cost }(planetId);
     assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
   }
 
-  function testDrainShieldMultiple() public {
-    testChargeShieldMultiple();
-
-    uint256 currentShields = Planet.get(planetId).shieldCount;
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false, 6);
-    world.Empires__drainShield{ value: cost }(planetId, 6);
-    assertEq(Planet.get(planetId).shieldCount, currentShields - 6);
-  }
-
   function testKillShipFailNoShips() public {
-    vm.expectRevert("[ActionSystem] Not enough ships to kill");
-    world.Empires__killShip(planetId, 1);
-  }
-
-  function testKillShipFailNotEnoughShips() public {
-    testCreateShipSingle();
-    vm.expectRevert("[ActionSystem] Not enough ships to kill");
-    world.Empires__killShip(planetId, 2);
+    vm.expectRevert("[ActionSystem] No ships to kill");
+    world.Empires__killShip(planetId);
   }
 
   function testDrainShieldFailNoShield() public {
-    vm.expectRevert("[ActionSystem] Not enough shields to drain");
-    world.Empires__drainShield(planetId, 1);
-  }
-
-  function testDrainShieldFailNotEnoughShields() public {
-    testChargeShieldSingle();
-    vm.expectRevert("[ActionSystem] Not enough shields to drain");
-    world.Empires__drainShield(planetId, 2);
+    vm.expectRevert("[ActionSystem] No shields to drain");
+    world.Empires__drainShield(planetId);
   }
 
   function testCreateFailNotOwned() public {
@@ -180,7 +150,7 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
 
     vm.startPrank(bob);
-    world.Empires__killShip{ value: totalCost }(planetId, 1);
+    world.Empires__killShip{ value: totalCost }(planetId);
     assertGt(
       LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, 1),
       totalCost,
@@ -191,29 +161,6 @@ contract ActionSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
     assertEq(PointsMap.get(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
     assertEq(PointsMap.get(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
-  }
-
-  function testPurchaseActionRegressMultiple() public {
-    testPurchaseActionProgressMultiple();
-
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 actionCount = 5; 
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, actionCount);
-    uint256 actionCost = ActionCost.get(empire, EPlayerAction.KillShip);
-    uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
-
-    vm.startPrank(bob);
-    world.Empires__killShip{ value: totalCost }(planetId, actionCount);
-    assertGt(
-      LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, actionCount),
-      totalCost,
-      "Total Cost should have increased"
-    );
-    assertGt(ActionCost.get(empire, EPlayerAction.KillShip), actionCost, "Action Cost should have increased");
-    assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
-    assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), actionCount * pointUnit, "Player should have received blue points");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), actionCount * pointUnit, "Player should have received green points");
   }
 
   function testSellPoints() public {

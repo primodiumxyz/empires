@@ -48,26 +48,25 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player purchaseable action that kills a ship on a planet.
    * @param _planetId The ID of the planet.
-   * @param _actionCount The number of actions to purchase.
    */
-  function killShip(bytes32 _planetId, uint256 _actionCount) public payable _onlyNotGameOver _takeRake {
+  function killShip(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
-    require(planetData.shipCount >= _actionCount, "[ActionSystem] Not enough ships to kill");
+    require(planetData.shipCount > 0, "[ActionSystem] No ships to kill");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.empireId, false, _actionCount);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, planetData.empireId, false, 1);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.KillShip, planetData.empireId, false, _actionCount, _msgValue());
+    _purchaseAction(EPlayerAction.KillShip, planetData.empireId, false, 1, _msgValue());
 
-    Planet.setShipCount(_planetId, planetData.shipCount - _actionCount);
+    Planet.setShipCount(_planetId, planetData.shipCount - 1);
     KillShipPlayerAction.set(
       pseudorandomEntity(),
       KillShipPlayerActionData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
-        actionCount: _actionCount,
+        actionCount: 1,
         timestamp: block.timestamp
       })
     );
@@ -98,23 +97,22 @@ contract ActionSystem is EmpiresSystem {
   /**
    * @dev A player purchaseable action that decreases the shield on a planet.
    * @param _planetId The ID of the planet.
-   * @param _actionCount The number of actions to purchase.
    */
-  function drainShield(bytes32 _planetId, uint256 _actionCount) public payable _onlyNotGameOver _takeRake {
+  function drainShield(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[ActionSystem] Planet not found");
-    require(planetData.shieldCount >= _actionCount, "[ActionSystem] Not enough shields to drain");
+    require(planetData.shieldCount > 0, "[ActionSystem] No shields to drain");
     require(planetData.empireId != EEmpire.NULL, "[ActionSystem] Planet is not owned");
 
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false, _actionCount);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, planetData.empireId, false, 1);
     require(_msgValue() == cost, "[ActionSystem] Incorrect payment");
 
-    _purchaseAction(EPlayerAction.DrainShield, planetData.empireId, false, _actionCount, _msgValue());
+    _purchaseAction(EPlayerAction.DrainShield, planetData.empireId, false, 1, _msgValue());
 
-    Planet.setShieldCount(_planetId, planetData.shieldCount - _actionCount);
+    Planet.setShieldCount(_planetId, planetData.shieldCount - 1);
     DrainShieldsPlayerAction.set(
       pseudorandomEntity(),
-      DrainShieldsPlayerActionData({ planetId: _planetId, ethSpent: cost, actionCount: _actionCount, timestamp: block.timestamp })
+      DrainShieldsPlayerActionData({ planetId: _planetId, ethSpent: cost, actionCount: 1, timestamp: block.timestamp })
     );
   }
 
