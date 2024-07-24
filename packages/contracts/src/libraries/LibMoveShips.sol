@@ -59,7 +59,7 @@ library LibMoveShips {
 
     // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
-    Arrivals.set(destinationPlanetId, planetData.empireId, shipCount);
+    Arrivals.set(destinationPlanetId, planetData.empireId, shipsToMove);
 
     // Clear the pending move
     PendingMove.deleteRecord(planetId);
