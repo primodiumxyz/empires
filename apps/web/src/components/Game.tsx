@@ -51,9 +51,9 @@ const Game = () => {
   return (
     <GameProvider game={game}>
       <HUD pad>
-        <HUD.TopLeft>
+        <HUD.TopRight>
           <Account />
-        </HUD.TopLeft>
+        </HUD.TopRight>
 
         <HUD.TopMiddle>
           <TimeLeft />

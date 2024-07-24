@@ -25,6 +25,8 @@ export const Pot = () => {
   const { pot, rake } = usePot();
 
   return (
+    <div className="absolute right-2 top-56 w-48">
+
     <Card noDecor>
       <div className="flex flex-col justify-center gap-2 text-center">
         <div className="flex flex-col justify-center gap-1">
@@ -60,6 +62,7 @@ export const Pot = () => {
         </div>
       </div>
     </Card>
+    </div>
   );
 };
 
