@@ -1,8 +1,7 @@
 import { Key } from "@primodiumxyz/engine";
 import { KeybindActionKeys } from "@primodiumxyz/game";
 import { createLocalTable, Entity, Type } from "@primodiumxyz/reactive-tables";
-import { CreateNetworkResult } from "@core/lib/types";
-import { hashEntities } from "@core/utils";
+import { hashEntities, Core } from "@primodiumxyz/core";
 
 type Keybinds = Partial<{
   [key in KeybindActionKeys]: Set<Key>;
@@ -46,7 +45,10 @@ const defaultKeybinds: Keybinds = {
   HideAll: new Set(["H"]),
 };
 
-export function createKeybindTable({ world }: CreateNetworkResult) {
+export function createKeybindTable(core: Core) {
+  const {
+    network: { world },
+  } = core;
   const table = createLocalTable(
     world,
     {
@@ -56,7 +58,7 @@ export function createKeybindTable({ world }: CreateNetworkResult) {
       id: "Keybinds",
       persist: true,
       version: hashEntities(JSON.stringify(defaultKeybinds)),
-    },
+    }
   );
 
   function get(keybind: KeybindActionKeys) {

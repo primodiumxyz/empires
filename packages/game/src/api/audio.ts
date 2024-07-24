@@ -1,12 +1,10 @@
+import { GlobalApi } from "@game/api/global";
 import { Assets, Audio, AudioKeys } from "@primodiumxyz/assets";
-import { Core } from "@primodiumxyz/core";
 import { Scene } from "@primodiumxyz/engine";
 
 import { Channel } from "@primodiumxyz/engine";
 
-export const createAudioApi = (scene: Scene, core: Core) => {
-  const { Volume } = core.tables;
-
+export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
   function play(
     key: AudioKeys,
     channel: Channel,
@@ -18,7 +16,7 @@ export const createAudioApi = (scene: Scene, core: Core) => {
   }
 
   function initializeAudioVolume() {
-    const volume = Volume.get();
+    const volume = globalApi.tables.Volume.get();
 
     scene.audio.music.setVolume(volume?.master ?? 1 * (volume?.music ?? 1));
     scene.audio.sfx.setVolume(volume?.master ?? 1 * (volume?.sfx ?? 1));
@@ -35,7 +33,7 @@ export const createAudioApi = (scene: Scene, core: Core) => {
   }
 
   function setVolume(volume: number, channel: Channel | "master" = "master") {
-    const newVolume = Volume.set(volume, channel);
+    const newVolume = globalApi.tables.Volume.set(volume, channel);
 
     scene.audio.music.setVolume(newVolume.music ?? 1);
     scene.audio.sfx.setVolume(newVolume.sfx ?? 1);

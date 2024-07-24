@@ -13,7 +13,7 @@ export const initRootScene = async (
 ): Promise<PrimodiumScene> => {
   const scene = await game.createScene(rootSceneConfig, true);
 
-  const sceneApi = createSceneApi(scene, core);
+  const sceneApi = createSceneApi(scene, game);
   sceneApi.audio.setPauseOnBlur(false);
 
   scene.camera.phaserCamera.centerOn(0, 0);

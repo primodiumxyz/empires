@@ -11,7 +11,7 @@ export const initUIScene = async (
   core: Core
 ): Promise<PrimodiumScene> => {
   const scene = await game.createScene(uiSceneConfig, true);
-  const sceneApi = createSceneApi(scene, core);
+  const sceneApi = createSceneApi(scene, game);
   sceneApi.audio.setPauseOnBlur(false);
 
   const runSystems = () => runUISystems(sceneApi, core);

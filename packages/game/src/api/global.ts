@@ -1,10 +1,12 @@
 import { SceneKeys } from "@game/lib/constants/common";
+import { createGameTables } from "@game/lib/tables";
+import { Core } from "@primodiumxyz/core";
 import { Game, Scene } from "@primodiumxyz/engine";
 
 export type GlobalApi = ReturnType<typeof createGlobalApi>;
 
 //api pertaining
-export function createGlobalApi(game: Game) {
+export function createGlobalApi(game: Game, core: Core) {
   function setResolution(width: number, height: number) {
     const { phaserGame, sceneManager } = game;
 
@@ -85,6 +87,7 @@ export function createGlobalApi(game: Game) {
   return {
     dispose: game.dispose,
     createScene: game.sceneManager.createScene,
+    tables: createGameTables(core),
     setResolution,
     setTarget,
     getConfig,

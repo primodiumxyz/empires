@@ -10,11 +10,13 @@ import { initRootScene } from "@game/scenes/root/init";
 import { initUIScene } from "@game/scenes/ui/init";
 
 export type InitResult = Promise<
-  Record<SceneKeys, PrimodiumScene> & { GLOBAL: GlobalApi }
+  Record<SceneKeys, PrimodiumScene> & {
+    GLOBAL: GlobalApi;
+  }
 >;
 async function init(core: Core, calls: ContractCalls): InitResult {
   const game = await engine.createGame(gameConfig);
-  const globalApi = createGlobalApi(game);
+  const globalApi = createGlobalApi(game, core);
 
   return {
     ROOT: await initRootScene(globalApi, core),

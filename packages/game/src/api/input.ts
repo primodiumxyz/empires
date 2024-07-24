@@ -2,16 +2,13 @@ import { throttle } from "lodash";
 
 import { Key, Scene } from "@primodiumxyz/engine";
 import { KeybindActionKeys } from "@game/lib/constants/keybinds";
-import { Core } from "@primodiumxyz/core";
 
-export function createInputApi(scene: Scene, core: Core) {
-  const {
-    tables: { Keybinds },
-  } = core;
+import { GlobalApi } from "@game/api/global";
 
+export function createInputApi(scene: Scene, globalApi: GlobalApi) {
   function isDown(keybindAction: KeybindActionKeys) {
     const { input } = scene;
-    const keybinds = Keybinds.get(keybindAction);
+    const keybinds = globalApi.tables.Keybinds.get(keybindAction);
 
     if (!keybinds) return false;
 
@@ -38,7 +35,7 @@ export function createInputApi(scene: Scene, core: Core) {
 
   function isUp(keybindAction: KeybindActionKeys) {
     const { input } = scene;
-    const keybinds = Keybinds.get(keybindAction);
+    const keybinds = globalApi.tables.Keybinds.get(keybindAction);
 
     if (!keybinds) return false;
 
@@ -66,7 +63,7 @@ export function createInputApi(scene: Scene, core: Core) {
     wait = 0
   ) {
     const { input } = scene;
-    const keybinds = Keybinds.get(keybindAction);
+    const keybinds = globalApi.tables.Keybinds.get(keybindAction);
 
     if (!keybinds) return;
 

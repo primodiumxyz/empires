@@ -1,7 +1,6 @@
 import { Channel } from "@primodiumxyz/engine";
 import { createLocalTable, Type } from "@primodiumxyz/reactive-tables";
-import { CreateNetworkResult } from "@core/lib/types";
-import { hashEntities } from "@core/utils";
+import { hashEntities, Core } from "@primodiumxyz/core";
 
 const defaultVolume: Record<Channel | "master", number> = {
   master: 1,
@@ -10,7 +9,10 @@ const defaultVolume: Record<Channel | "master", number> = {
   ui: 0.5,
 };
 
-export function createVolumeTable({ world }: CreateNetworkResult) {
+export function createVolumeTable(core: Core) {
+  const {
+    network: { world },
+  } = core;
   const table = createLocalTable(
     world,
     {
@@ -23,7 +25,7 @@ export function createVolumeTable({ world }: CreateNetworkResult) {
       id: "Volume",
       persist: true,
       version: hashEntities(JSON.stringify(defaultVolume)),
-    },
+    }
   );
 
   function get() {
