@@ -1,4 +1,3 @@
-import Phaser from "phaser";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
 
