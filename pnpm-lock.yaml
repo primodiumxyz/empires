@@ -47,6 +47,9 @@ importers:
       '@primodiumxyz/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@primodiumxyz/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
       '@primodiumxyz/game':
         specifier: workspace:*
         version: link:../../packages/game

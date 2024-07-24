@@ -13,7 +13,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
 
   tables.Planet.watch({
     world: systemsWorld,
-    onChange: ({ entity, properties: { current } }) => {
+    onEnter: ({ entity, properties: { current } }) => {
       if (!current) return;
 
       const { q, r } = current;
@@ -24,6 +24,14 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
         coord: convertAxialToCartesian({ q: Number(q), r: Number(r) }, 110),
         empire: current.empireId,
       });
+    },
+    onUpdate: ({ entity, properties: { current } }) => {
+      if (!current) return;
+
+      const planet = scene.objects.planet.get(entity);
+      if (!planet) return;
+
+      planet.updateFaction(current.empireId);
     },
   });
 };

@@ -69,7 +69,7 @@ const App = () => {
             <CoreProvider {...core}>
               <div
                 className={cn(
-                  "flex h-screen w-screen cursor-default items-center justify-center bg-neutral",
+                  "flex h-screen w-screen cursor-default items-center justify-center bg-gray-950",
                   fontStyle,
                 )}
               >

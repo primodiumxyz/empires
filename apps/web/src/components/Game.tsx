@@ -7,7 +7,6 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
-import { Progress } from "@/components/core/Progress";
 import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { PlanetGrid } from "@/components/PlanetGrid";
@@ -102,7 +101,9 @@ export const GameHUD = () => {
       <HUD.TopRight>
         <Pot />
       </HUD.TopRight>
-      <HUD.Center>{/* <PlanetGrid tileSize={100} /> */}</HUD.Center>
+      <HUD.Center>
+        <PlanetGrid tileSize={100} />
+      </HUD.Center>
       <HUD.BottomLeft>
         <SellPoints />
       </HUD.BottomLeft>

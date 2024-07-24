@@ -46,6 +46,13 @@ export class Planet
     return this.spawned;
   }
 
+  updateFaction(faction: keyof typeof EmpireToEmpireSpriteKeys) {
+    this.setTexture(
+      Assets.SpriteAtlas,
+      Sprites[EmpireToEmpireSpriteKeys[faction] ?? "EmpireNeutral"]
+    );
+  }
+
   override destroy() {
     super.destroy();
   }
