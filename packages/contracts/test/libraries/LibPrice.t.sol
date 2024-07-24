@@ -94,21 +94,10 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetRegressPointCostSingle() public {
     uint256 initPointCost = config.startPointCost;
-    assertEq(
-      LibPrice.getRegressPointCost(EEmpire.Red, 1),
-      initPointCost * (EMPIRE_COUNT - 1),
-      "Red Empire point cost for 2 points incorrect"
-    );
-    assertEq(
-      LibPrice.getRegressPointCost(EEmpire.Blue, 1),
-      initPointCost * (EMPIRE_COUNT - 1),
-      "Blue Empire point cost for 2 points incorrect"
-    );
-    assertEq(
-      LibPrice.getRegressPointCost(EEmpire.Green, 1),
-      initPointCost * (EMPIRE_COUNT - 1),
-      "Green Empire point cost for 2 points incorrect"
-    );
+    uint256 points = initPointCost * (EMPIRE_COUNT - 1);
+    assertEq(LibPrice.getRegressPointCost(EEmpire.Red, 1), points, "Red Empire point cost for 2 points incorrect");
+    assertEq(LibPrice.getRegressPointCost(EEmpire.Blue, 1), points, "Blue Empire point cost for 2 points incorrect");
+    assertEq(LibPrice.getRegressPointCost(EEmpire.Green, 1), points, "Green Empire point cost for 2 points incorrect");
   }
 
   function testGetRegressPointCostMultiple() public {

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, PlanetData, Player, P_PointConfig, CreateShipPlayerAction, CreateShipPlayerActionData, KillShipPlayerAction, KillShipPlayerActionData, ChargeShieldsPlayerAction, ChargeShieldsPlayerActionData, DrainShieldsPlayerAction, DrainShieldsPlayerActionData } from "codegen/index.sol";
+import { P_ActionConfig, Planet, PlanetData, Player, P_PointConfig, CreateShipPlayerAction, CreateShipPlayerActionData, KillShipPlayerAction, KillShipPlayerActionData, ChargeShieldsPlayerAction, ChargeShieldsPlayerActionData, DrainShieldsPlayerAction, DrainShieldsPlayerActionData } from "codegen/index.sol";
 import { EEmpire, EPlayerAction } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -59,7 +59,8 @@ contract ActionSystem is EmpiresSystem {
 
     _purchaseAction(EPlayerAction.KillShip, planetData.empireId, false, 1, _msgValue());
 
-    Planet.setShipCount(_planetId, planetData.shipCount - 1);
+    uint256 newShipCount = (planetData.shipCount * P_ActionConfig.getReductionPct()) / 10000;
+    Planet.setShipCount(_planetId, newShipCount);
     KillShipPlayerAction.set(
       pseudorandomEntity(),
       KillShipPlayerActionData({
@@ -109,7 +110,8 @@ contract ActionSystem is EmpiresSystem {
 
     _purchaseAction(EPlayerAction.DrainShield, planetData.empireId, false, 1, _msgValue());
 
-    Planet.setShieldCount(_planetId, planetData.shieldCount - 1);
+    uint256 newShieldCount = (planetData.shieldCount * P_ActionConfig.getReductionPct()) / 10000;
+    Planet.setShieldCount(_planetId, newShieldCount);
     DrainShieldsPlayerAction.set(
       pseudorandomEntity(),
       DrainShieldsPlayerActionData({ planetId: _planetId, ethSpent: cost, actionCount: 1, timestamp: block.timestamp })

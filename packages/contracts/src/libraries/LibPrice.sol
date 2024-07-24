@@ -31,15 +31,20 @@ library LibPrice {
         "[LibPrice] Action type is not a progressive action"
       );
       totalCost = getProgressPointCost(_empireImpacted, _actionCount);
+      totalCost += ActionCost.get(_empireImpacted, _actionType);
+      // totalCost += getMarginalActionCost(_empireImpacted, _actionType, _actionCount);
+
     } else {
       require(
         _actionType == EPlayerAction.KillShip || _actionType == EPlayerAction.DrainShield,
         "[LibPrice] Action type is not a regressive action"
       );
       totalCost = getRegressPointCost(_empireImpacted, _actionCount);
+      totalCost += (ActionCost.get(_empireImpacted, _actionType) * P_ActionConfig.getRegressMultiplier()) / 10000;
+      // totalCost += getMarginalActionCost(_empireImpacted, _actionType, _actionCount);
+
     }
 
-    totalCost += getMarginalActionCost(_empireImpacted, _actionType, _actionCount);
     return totalCost;
   }
 
