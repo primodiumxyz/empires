@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { CurrencyYenIcon, MinusIcon, PlusIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
+import { CurrencyYenIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
 import { bigIntMin } from "@latticexyz/common/utils";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -245,15 +245,14 @@ const Ships = ({
       <div className="flex items-center gap-2">
         <TransactionQueueMask id={`${planetId}-kill-ship`}>
           <Button
-            tooltip={`Cost: ${killShipPriceUsd}`}
+            tooltip={`Reduction: ${reductionPct * Number(shipCount)}%\nCost: ${killShipPriceUsd}`}
             variant="neutral"
             size="xs"
-            shape="square"
             className="border-none"
             onClick={() => removeShip(planetId, killShipPriceWei)}
-            disabled={gameOver || Number(planetEmpire) === 0}
+            disabled={gameOver || Number(planetEmpire) === 0 || Number(shipCount) === 0}
           >
-            <MinusIcon className="size-4" /> {reductionPct * 100}%
+            -{reductionPct * Number(shipCount)}
           </Button>
         </TransactionQueueMask>
 
@@ -262,12 +261,11 @@ const Ships = ({
             tooltip={`Cost: ${createShipPriceUsd}`}
             variant="neutral"
             size="xs"
-            shape="square"
             className="border-none"
             onClick={() => createShip(planetId, createShipPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0}
           >
-            <PlusIcon className="size-4" />
+            +1
           </Button>
         </TransactionQueueMask>
       </div>
@@ -343,10 +341,9 @@ const Shields = ({
           <Button
             tooltip={`Cost: ${removeShieldPriceUsd}`}
             onClick={() => calls.removeShield(planetId, removeShieldPriceWei)}
-            className="btn btn-square btn-xs"
-            disabled={gameOver || Number(planetEmpire) === 0}
+            disabled={gameOver || Number(planetEmpire) === 0 || Number(shieldCount) === 0}
           >
-            <MinusIcon className="size-4" /> {reductionPct * 100}%
+            -{reductionPct * Number(shieldCount)}
           </Button>
         </TransactionQueueMask>
 
@@ -354,10 +351,9 @@ const Shields = ({
           <Button
             tooltip={`Cost: ${addShieldPriceUsd}`}
             onClick={() => calls.addShield(planetId, addShieldPriceWei)}
-            className="btn btn-square btn-xs"
             disabled={gameOver || Number(planetEmpire) === 0}
           >
-            <PlusIcon className="size-4" />
+            +1
           </Button>
         </TransactionQueueMask>
       </div>
