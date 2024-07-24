@@ -21,7 +21,8 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       new Planet({
         id: entity,
         scene,
-        coord: convertAxialToCartesian({ q: Number(q), r: Number(r) }, 100),
+        coord: convertAxialToCartesian({ q: Number(q), r: Number(r) }, 110),
+        empire: current.empireId,
       });
     },
   });
