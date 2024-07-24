@@ -20,12 +20,16 @@ import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { useGame } from "@/hooks/useGame";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { EmpireEnumToName } from "@/util/lookups";
 
 /* --------------------------------- PLANET --------------------------------- */
 export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) => {
   const { tables } = useCore();
+  const {
+    ROOT: { sprite },
+  } = useGame();
   const planet = tables.Planet.use(entity)!;
   const { empireId, goldCount, shieldCount, shipCount } = planet;
 
@@ -38,16 +42,19 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
           back
         </Button>
       </div>
-      {/* TODO: map to planet image */}
-      {/* <img src={EntityToPlanetSprites[planet.entity]} width={64} height={64} className="my-2 self-center" /> */}
-      <img src={undefined} width={64} height={64} className="my-2 self-center" />
+      <img
+        src={sprite.getSprite(EmpireToEmpireSprites[empireId as EEmpire])}
+        width={64}
+        height={64}
+        className="my-2 self-center"
+      />
       <div className="grid w-[80%] grid-cols-[1fr_auto_3rem] items-center gap-y-4 self-center">
         {empireId ? (
           <>
             <h3 className="font-semibold text-gray-300">controlled by</h3>
             <span className="justify-self-end">{EmpireEnumToName[empireId as EEmpire]} empire</span>
             <img
-              src={EmpireToEmpireSprites[empireId as EEmpire]}
+              src={sprite.getSprite(EmpireToEmpireSprites[empireId as EEmpire])}
               width={32}
               height={32}
               className="justify-self-center"

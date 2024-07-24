@@ -1,11 +1,17 @@
 {
   "extends": "../../.tsconfigs/bundler/dom/library-monorepo.json",
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "strict": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "emitDeclarationOnly": true,
     "paths": {
       "@game/*": ["./src/*"],
       "@client/*": ["../../apps/web/src/*"]
     }
   },
-  "references": [{ "path": "../../apps/web" }],
+  "references": [{ "path": "../../apps/web" }, { "path": "../../packages/engine" }],
   "exclude": ["node_modules", "dist"]
 }

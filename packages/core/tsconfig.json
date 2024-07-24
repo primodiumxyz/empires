@@ -8,5 +8,6 @@
     "jsxImportSource": "react"
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["./src/**/*", "./__tests__/**/*"],
+  "include": ["./src/**/*", "./__tests__/**/*", "../game/src/lib/tables/KeybindTable.ts", "../game/src/lib/tables/VolumeTable.ts"],
+  "references": [{ "path": "../engine" }, { "path": "../game" }]
 }

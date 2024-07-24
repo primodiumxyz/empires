@@ -3,7 +3,7 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { Address, EIP1193Provider } from "viem";
 
 import { AccountClientProvider, useCore } from "@primodiumxyz/core/react";
-import Loading from "@/components/Loading";
+import DripScreen from "@/components/DripScreen";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 
 function Core() {
@@ -46,7 +46,7 @@ function Core() {
 
   return (
     <AccountClientProvider playerAddress={playerAddress} playerPrivateKey={privateKey} provider={privyProvider}>
-      <Loading />
+      <DripScreen />
     </AccountClientProvider>
   );
 }

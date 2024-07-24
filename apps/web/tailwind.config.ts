@@ -12,6 +12,7 @@ import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  safelist: ["font-pixel", "font-mono"],
   theme: {
     heroPatternsOpacities: ["0", "10", "25", "50", "90", "100"],
     heroPatterns: {

@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { ToastContainer } from "react-toastify";
 import { defineChain } from "viem";
@@ -14,23 +14,36 @@ import { useSettings } from "@/hooks/useSettings";
 import Landing from "@/screens/Landing";
 import { cn } from "@/util/client";
 
-const fontStyle = "font-pixel text-sm";
-
 const App = () => {
   const settings = useSettings();
-  const fontStyle = useMemo(
-    () => `font-${settings.fontStyle.family} text-${settings.fontStyle.size}`,
-    [settings.fontStyle],
-  );
-  const coreRef = useRef<CoreType | null>(null);
+  const fontStyle = useMemo(() => {
+    const { family, size } = settings.fontStyle;
+    const fontFamily = {
+      pixel: "font-pixel",
+      mono: "font-mono",
+    }[family];
 
-  const core = useMemo(() => {
+    const fontSize = {
+      sm: "text-sm",
+      md: "text-md",
+    }[size];
+
+    return cn(fontFamily, fontSize);
+  }, [settings.fontStyle]);
+  const coreRef = useRef<CoreType | null>(null);
+  const [core, setCore] = useState<CoreType | null>(null);
+
+  useEffect(() => {
     if (coreRef.current) coreRef.current.network.world.dispose();
     const config = getCoreConfig();
-    const core = createCore(config);
-    coreRef.current = core;
-    return core;
+    coreRef.current = createCore(config);
+
+    setCore(coreRef.current);
   }, []);
+
+  if (!core) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

@@ -86,7 +86,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
               }
             : {})}
           className={cn(
-            "pixel-border card relative bg-neutral bg-opacity-90 p-3 transition-all duration-100 ease-linear",
+            "card relative bg-neutral bg-opacity-90 p-3 transition-all duration-100 ease-linear",
             props.noPointerEvents ? "pointer-events-none" : "pointer-events-auto",
             className,
           )}
