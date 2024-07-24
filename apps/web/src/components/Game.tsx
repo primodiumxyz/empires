@@ -41,6 +41,7 @@ const Game = memo(() => {
         setLoading(false);
       } catch (e) {
         console.log(e);
+        setLoading(true);
       }
     };
 
@@ -101,9 +102,7 @@ export const GameHUD = () => {
       <HUD.TopRight>
         <Pot />
       </HUD.TopRight>
-      <HUD.Center>
-        <PlanetGrid tileSize={100} />
-      </HUD.Center>
+      <HUD.Center>{/* <PlanetGrid tileSize={100} /> */}</HUD.Center>
       <HUD.BottomLeft>
         <SellPoints />
       </HUD.BottomLeft>

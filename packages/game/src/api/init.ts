@@ -8,6 +8,7 @@ import { engine } from "@primodiumxyz/engine";
 import gameConfig from "@game/lib/config/game";
 import { initRootScene } from "@game/scenes/root/init";
 import { initUIScene } from "@game/scenes/ui/init";
+import { initMainScene } from "@game/scenes/main/init";
 
 export type InitResult = Promise<
   Record<SceneKeys, PrimodiumScene> & {
@@ -22,6 +23,7 @@ async function init(core: Core, calls: ContractCalls): InitResult {
     ROOT: await initRootScene(globalApi, core),
     UI: await initUIScene(globalApi, core),
     GLOBAL: globalApi,
+    MAIN: await initMainScene(globalApi, core),
   };
 }
 

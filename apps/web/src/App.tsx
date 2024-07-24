@@ -27,8 +27,15 @@ const App = () => {
     if (!coreRef.current) {
       const config = getCoreConfig();
       coreRef.current = createCore(config);
+      setCore(coreRef.current);
     }
-    setCore(coreRef.current);
+
+    return () => {
+      coreRef.current?.network.world.dispose();
+      const config = getCoreConfig();
+      coreRef.current = createCore(config);
+      setCore(coreRef.current);
+    };
   }, []);
 
   if (!core) {

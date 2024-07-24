@@ -4,6 +4,7 @@ export const KEY = "MAIN";
 export const Scenes = {
   UI: "UI",
   Root: "ROOT",
+  Main: "MAIN",
 } as const;
 
 export type SceneKeys = (typeof Scenes)[keyof typeof Scenes];
