@@ -11,7 +11,8 @@
     "dev": "turbo dev",
     "lint": "pnpm eslint --cache --fix .",
     "prepare": "husky && husky install",
-    "sort-package-json": "npx sort-package-json package.json 'packages/*/package.json' 'apps/*/package.json'"
+    "sort-package-json": "npx sort-package-json package.json 'packages/*/package.json' 'apps/*/package.json'",
+    "test": "pnpm recursive run test"
   },
   "lint-staged": {
     "*.{ts,tsx,css,md,mdx,sol}": "prettier --write",
