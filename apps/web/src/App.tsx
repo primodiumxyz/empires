@@ -16,26 +16,29 @@ import { cn } from "@/util/client";
 
 const App = () => {
   const settings = useSettings();
-  const fontStyle = useMemo(
-    () => `font-${settings.fontStyle.family} text-${settings.fontStyle.size}`,
-    [settings.fontStyle],
-  );
+  const fontStyle = useMemo(() => {
+    const { family, size } = settings.fontStyle;
+    const fontFamily = {
+      pixel: "font-pixel",
+      mono: "font-mono",
+    }[family];
+
+    const fontSize = {
+      sm: "text-sm",
+      md: "text-md",
+    }[size];
+
+    return cn(fontFamily, fontSize);
+  }, [settings.fontStyle]);
   const coreRef = useRef<CoreType | null>(null);
   const [core, setCore] = useState<CoreType | null>(null);
 
   useEffect(() => {
-    if (!coreRef.current) {
-      const config = getCoreConfig();
-      coreRef.current = createCore(config);
-      setCore(coreRef.current);
-    }
+    if (coreRef.current) coreRef.current.network.world.dispose();
+    const config = getCoreConfig();
+    coreRef.current = createCore(config);
 
-    return () => {
-      coreRef.current?.network.world.dispose();
-      const config = getCoreConfig();
-      coreRef.current = createCore(config);
-      setCore(coreRef.current);
-    };
+    setCore(coreRef.current);
   }, []);
 
   if (!core) {
