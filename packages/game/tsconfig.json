@@ -1,6 +1,8 @@
 {
   "extends": "../../.tsconfigs/bundler/dom/library-monorepo.json",
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
     "paths": {
       "@game/*": ["./src/*"],
       "@client/*": ["../../apps/web/src/*"]

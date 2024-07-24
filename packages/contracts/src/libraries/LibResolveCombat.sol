@@ -36,7 +36,7 @@ library LibResolveCombat {
     );
 
     if (attackingEmpire == EEmpire.NULL) {
-      Planet.setShipCount(planetId, planetData.shipCount + defendingShips);
+      Planet.setShipCount(planetId, defendingShips);
       return;
     }
 

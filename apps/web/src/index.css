@@ -197,3 +197,18 @@
     transform: translate(90%, -30px);
   }
 }
+
+@keyframes moveAlongAngle {
+  0%,
+  100% {
+    transform: translate(0, -50%) rotate(var(--rotation));
+  }
+  50% {
+    transform: translate(calc(cos(var(--rotation)) * 10px), calc(sin(var(--rotation)) * 10px - 50%))
+      rotate(var(--rotation));
+  }
+}
+
+.animate-move-along-angle {
+  animation: moveAlongAngle 2s ease-in-out infinite;
+}

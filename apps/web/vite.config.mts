@@ -48,6 +48,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
       "@core": path.resolve(__dirname, "../../packages/core/src"),
       "@game": path.resolve(__dirname, "../../packages/game/src"),
+      "@assets": path.resolve(__dirname, "../../packages/assets/src"),
+      "@engine": path.resolve(__dirname, "../../packages/engine/src"),
     },
   },
 });

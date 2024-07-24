@@ -86,14 +86,12 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
               }
             : {})}
           className={cn(
-            "pixel-border card relative bg-neutral bg-opacity-90 p-3 transition-all duration-100 ease-linear",
+            "card relative rounded-box border border-secondary bg-neutral bg-opacity-90 p-3 transition-all duration-100 ease-linear",
             props.noPointerEvents ? "pointer-events-none" : "pointer-events-auto",
             className,
           )}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent to-neutral" />
-          <div className="pixel-border absolute inset-0" />
-          <div className="pixel-border absolute inset-0 opacity-50 bg-blend-screen blur-[2px]" />
+          <div className="absolute inset-0 rounded-box bg-gradient-to-br from-transparent to-neutral" />
           <div className="z-50 h-full w-full">{children}</div>
           {!noDecor && (
             <div className="pointer-events-none opacity-30">
