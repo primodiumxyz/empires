@@ -24,13 +24,13 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
 
-      - name: Build client bundle
+      - name: Build core bundle
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
-        run: pnpm --filter client run build
+        run: pnpm --filter core run build
 
       - name: Run tests in client
-        run: pnpm --filter client run test
+        run: pnpm --filter core run test
 
       - name: Build contracts
         run: pnpm --filter contracts run build
