@@ -226,6 +226,8 @@ const Ships = ({
 
   const { gameOver } = useTimeLeft();
 
+  const reductionPct = Number(tables.P_ActionConfig.get()?.reductionPct ?? 0n) / 10000;
+
   return (
     <div className="relative z-50 rounded-lg bg-white/20 p-1">
       <p className="flex items-center justify-center gap-2">
@@ -251,7 +253,7 @@ const Ships = ({
             onClick={() => removeShip(planetId, killShipPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0}
           >
-            <MinusIcon className="size-4" />
+            <MinusIcon className="size-4" /> {reductionPct * 100}%
           </Button>
         </TransactionQueueMask>
 
@@ -290,6 +292,7 @@ const Shields = ({
   const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
   const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
 
+  const reductionPct = Number(tables.P_ActionConfig.use()?.reductionPct ?? 0n) / 10000;
   const { gameOver } = useTimeLeft();
   const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: string }[]>([]);
   const [nextId, setNextId] = useState(0);
@@ -343,7 +346,7 @@ const Shields = ({
             className="btn btn-square btn-xs"
             disabled={gameOver || Number(planetEmpire) === 0}
           >
-            <MinusIcon className="size-4" />
+            <MinusIcon className="size-4" /> {reductionPct * 100}%
           </Button>
         </TransactionQueueMask>
 

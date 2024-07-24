@@ -11,11 +11,12 @@ export function createPriceUtils(tables: Tables) {
     let totalCost = 0n;
     if (progressAction) {
       totalCost = getProgressPointCost(_empireImpacted);
+      totalCost += tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
     } else {
       totalCost = getRegressPointCost(_empireImpacted);
+      totalCost += (totalCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
     }
 
-    totalCost += tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
     return totalCost;
   }
 
@@ -41,6 +42,7 @@ export function createPriceUtils(tables: Tables) {
       }
       pointCost += getPointCost(i, 1);
     }
+
     return pointCost;
   }
 
