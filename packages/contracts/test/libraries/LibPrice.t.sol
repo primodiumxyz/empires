@@ -22,37 +22,47 @@ contract LibPriceTest is PrimodiumTest {
 
   function testStartGetMarginalActionCost() public {
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, 1),
+      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, true, 1),
       actionConfig.startActionCost,
       "Starting Red Empire marginal action cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Blue, EPlayerAction.CreateShip, 1),
+      LibPrice.getMarginalActionCost(EEmpire.Blue, EPlayerAction.CreateShip, true, 1),
       actionConfig.startActionCost,
       "Starting Blue Empire marginal action cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Green, EPlayerAction.CreateShip, 1),
+      LibPrice.getMarginalActionCost(EEmpire.Green, EPlayerAction.CreateShip, true, 1),
       actionConfig.startActionCost,
       "Starting Green Empire marginal action cost incorrect"
+    );
+    assertEq(
+      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, false, 1),
+      (actionConfig.startActionCost * actionConfig.regressMultiplier) / 10000,
+      "Starting Red Empire regressive marginal action cost incorrect"
     );
   }
 
   function testGetTwoMarginalActionCost() public {
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, 2),
+      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, true, 2),
       actionConfig.startActionCost + (actionConfig.startActionCost + actionConfig.actionCostIncrease),
       "Red Empire marginal action cost for 2 actions incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Blue, EPlayerAction.CreateShip, 2),
+      LibPrice.getMarginalActionCost(EEmpire.Blue, EPlayerAction.CreateShip, true, 2),
       actionConfig.startActionCost + (actionConfig.startActionCost + actionConfig.actionCostIncrease),
       "Blue Empire marginal action cost for 2 actions incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Green, EPlayerAction.CreateShip, 2),
+      LibPrice.getMarginalActionCost(EEmpire.Green, EPlayerAction.CreateShip, true, 2),
       actionConfig.startActionCost + (actionConfig.startActionCost + actionConfig.actionCostIncrease),
       "Green Empire marginal action cost for 2 actions incorrect"
+    );
+    assertEq(
+      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, false, 2),
+      ((actionConfig.startActionCost + (actionConfig.startActionCost + actionConfig.actionCostIncrease)) * actionConfig.regressMultiplier) / 10000,
+      "Red Empire regressive marginal action cost for 2 actions incorrect"
     );
   }
 
@@ -147,7 +157,7 @@ contract LibPriceTest is PrimodiumTest {
   function testGetTotalCostProgressMultiple() public {
     assertEq(
       LibPrice.getTotalCost(EPlayerAction.CreateShip, EEmpire.Red, true, 2),
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, 2) +
+      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, true, 2) +
         LibPrice.getProgressPointCost(EEmpire.Red, 2),
       "Total cost for multiple actions Red Empire incorrect"
     );
@@ -156,7 +166,8 @@ contract LibPriceTest is PrimodiumTest {
   function testGetTotalCostRegressSingle() public {
     assertEq(
       LibPrice.getTotalCost(EPlayerAction.KillShip, EEmpire.Red, false, 1),
-      actionConfig.startActionCost + LibPrice.getRegressPointCost(EEmpire.Red, 1),
+      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.KillShip, false, 1) +
+        LibPrice.getRegressPointCost(EEmpire.Red, 1),
       "Total cost for single action Red Empire incorrect"
     );
   }
@@ -164,7 +175,7 @@ contract LibPriceTest is PrimodiumTest {
   function testGetTotalCostRegressMultiple() public {
     assertEq(
       LibPrice.getTotalCost(EPlayerAction.KillShip, EEmpire.Red, false, 2),
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.KillShip, 2) +
+      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.KillShip, false, 2) +
         LibPrice.getRegressPointCost(EEmpire.Red, 2),
       "Total cost for multiple actions Red Empire incorrect"
     );
@@ -225,7 +236,7 @@ contract LibPriceTest is PrimodiumTest {
       "Green Empire's other action costs should not change"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, 2),
+      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, true, 2),
       finalActionCost * 2 + actionConfig.actionCostIncrease,
       "Red Empire point cost for 2 points incorrect"
     );

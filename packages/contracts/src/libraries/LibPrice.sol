@@ -31,19 +31,15 @@ library LibPrice {
         "[LibPrice] Action type is not a progressive action"
       );
       totalCost = getProgressPointCost(_empireImpacted, _actionCount);
-      totalCost += ActionCost.get(_empireImpacted, _actionType);
-      // totalCost += getMarginalActionCost(_empireImpacted, _actionType, _actionCount);
-
     } else {
       require(
         _actionType == EPlayerAction.KillShip || _actionType == EPlayerAction.DrainShield,
         "[LibPrice] Action type is not a regressive action"
       );
       totalCost = getRegressPointCost(_empireImpacted, _actionCount);
-      totalCost += (ActionCost.get(_empireImpacted, _actionType) * P_ActionConfig.getRegressMultiplier()) / 10000;
-      // totalCost += getMarginalActionCost(_empireImpacted, _actionType, _actionCount);
-
     }
+
+    totalCost += getMarginalActionCost(_empireImpacted, _actionType, _progressAction, _actionCount);
 
     return totalCost;
   }
@@ -99,10 +95,11 @@ library LibPrice {
    * @dev Calculates the marginal cost of a specific number of actions for a specific empire.
    * @param _empire The empire being impacted.
    * @param _actionType The type of action.
+   * @param _progressAction Flag indicating whether the action is progressive or regressive to the impacted empire.
    * @param _actionCount The number of actions.
    * @return actionCost The marginal cost of the actions that impact a specific empire.
    */
-  function getMarginalActionCost(EEmpire _empire, EPlayerAction _actionType, uint256 _actionCount) internal view returns (uint256) {
+  function getMarginalActionCost(EEmpire _empire, EPlayerAction _actionType, bool _progressAction, uint256 _actionCount) internal view returns (uint256) {
     require(_actionCount > 0, "[LibPrice] Action count must be greater than 0");
 
     uint256 initActionCost = ActionCost.get(_empire, _actionType);
@@ -110,6 +107,10 @@ library LibPrice {
 
     uint256 triangleSumOBO = ((_actionCount - 1) * _actionCount) / 2;
     uint256 actionCost = initActionCost * _actionCount + actionCostIncrease * triangleSumOBO;
+
+    if (!_progressAction) {
+      actionCost = (actionCost * P_ActionConfig.getRegressMultiplier()) / 10000;
+    }
     return actionCost;
   }
 
