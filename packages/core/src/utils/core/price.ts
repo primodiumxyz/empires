@@ -9,12 +9,14 @@ export function createPriceUtils(tables: Tables) {
   function getTotalCost(_actionType: EPlayerAction, _empireImpacted: EEmpire): bigint {
     const progressAction = [EPlayerAction.CreateShip, EPlayerAction.ChargeShield].includes(_actionType);
     let totalCost = 0n;
+    const actionCost = tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
+
     if (progressAction) {
       totalCost = getProgressPointCost(_empireImpacted);
-      totalCost += tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
+      totalCost += actionCost;
     } else {
       totalCost = getRegressPointCost(_empireImpacted);
-      totalCost += (totalCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
+      totalCost += (actionCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
     }
 
     return totalCost;
