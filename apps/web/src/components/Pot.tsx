@@ -52,14 +52,6 @@ export const Pot = () => {
             </div>
           </SecondaryCard>
         </div>
-        <div className="flex flex-col justify-center gap-1">
-          <p className="text-left text-xs font-bold uppercase">Empire Points</p>
-          <div className="flex flex-col gap-1 text-center">
-            <EmpirePoints empire={EEmpire.Blue} />
-            <EmpirePoints empire={EEmpire.Green} />
-            <EmpirePoints empire={EEmpire.Red} />
-          </div>
-        </div>
       </div>
     </Card>
     </div>

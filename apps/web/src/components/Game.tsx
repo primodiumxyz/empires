@@ -12,6 +12,7 @@ import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModa
 import { PlanetGrid } from "@/components/PlanetGrid";
 import { Pot } from "@/components/Pot";
 import { SellPoints } from "@/components/SellPoints";
+import { PriceHistory } from "@/components/PriceHistory";
 import { TimeLeft } from "@/components/TimeLeft";
 import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
@@ -51,6 +52,10 @@ const Game = () => {
   return (
     <GameProvider game={game}>
       <HUD pad>
+        <HUD.TopLeft>
+          <PriceHistory />
+        </HUD.TopLeft>
+
         <HUD.TopRight>
           <Account />
         </HUD.TopRight>
@@ -78,7 +83,8 @@ const Game = () => {
         <HUD.BottomRight className="flex gap-2">
           <UserSettings />
           <ActionLog />
-          <HistoricalPointPriceModal />
+          <HistoricalPointPriceModal showIcon={true} />
+
           {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomRight>
 

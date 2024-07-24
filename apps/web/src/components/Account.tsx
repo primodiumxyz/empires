@@ -9,11 +9,11 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
-import { Divider } from "@/components/core/Divider";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { cn } from "@/util/client";
+import { usePointPrice } from "@/hooks/usePointPrice";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "bg-blue-600",
@@ -71,14 +71,15 @@ export const Account = () => {
 };
 
 const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
-  const { tables } = useCore();
+  const { tables, utils: { weiToUsd }} = useCore();
+  const { price: ethPrice} = useEthPrice();
+  const { price: sellPrice } = usePointPrice(empire, 1);
+  const sellPriceUsd = weiToUsd(sellPrice, ethPrice ?? 0);
 
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
-  const value = formatEther(playerPoints);
-
   
   return (
     <Badge
@@ -90,7 +91,7 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
       <p>
         {formatEther(playerPoints)} {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
       </p>
-      <p>{value}</p>
+      <p>{sellPriceUsd}</p>
     </Badge>
   );
 };
