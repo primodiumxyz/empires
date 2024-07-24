@@ -24,10 +24,10 @@ const App = () => {
   const [core, setCore] = useState<CoreType | null>(null);
 
   useEffect(() => {
-    if (!coreRef.current) {
-      const config = getCoreConfig();
-      coreRef.current = createCore(config);
-    }
+    if (coreRef.current) coreRef.current.network.world.dispose();
+    const config = getCoreConfig();
+    coreRef.current = createCore(config);
+
     setCore(coreRef.current);
   }, []);
 

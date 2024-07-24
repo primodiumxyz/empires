@@ -38,9 +38,10 @@ const Game = memo(() => {
         const pri = await initGame(core, contractCalls);
         gameRef.current = pri;
         pri.runSystems();
-        setLoading(false);
       } catch (e) {
         console.log(e);
+      } finally {
+        setLoading(false);
       }
     };
 
