@@ -6,6 +6,8 @@ import { AccumulateGoldNPCAction, AccumulateGoldNPCActionData, Planet, P_NPCActi
 import { ENPCAction } from "codegen/common.sol";
 import { Likelihoods } from "src/Types.sol";
 
+import { LibMoveShips } from "./LibMoveShips.sol";
+
 library LibNPCAction {
   function executeAction(bytes32 planetId, Likelihoods memory likelihoods) internal {
     uint256 goldCount = Planet.getGoldCount(planetId);
@@ -25,9 +27,9 @@ library LibNPCAction {
     } else if (value < likelihoods.buyShips) {
       _buyShips(likelihoods.planetId);
     } else if (value < likelihoods.supportAlly) {
-      _supportAlly(likelihoods.planetId, likelihoods.supportTargetId);
+      LibMoveShips.createPendingMove(likelihoods.planetId, likelihoods.supportTargetId);
     } else if (value < likelihoods.attackEnemy) {
-      _attackEnemy(likelihoods.planetId, likelihoods.attackTargetId);
+      LibMoveShips.createPendingMove(likelihoods.planetId, likelihoods.attackTargetId);
     } else {
       revert("Invalid likelihoods");
     }
@@ -83,13 +85,5 @@ library LibNPCAction {
         timestamp: block.timestamp
       })
     );
-  }
-
-  function _supportAlly(bytes32 planetId, bytes32 supportTargetId) internal {
-    revert("not implemented");
-  }
-
-  function _attackEnemy(bytes32 planetId, bytes32 attackTargetId) internal {
-    revert("not implemented");
   }
 }

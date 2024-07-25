@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { PendingMove, P_NPCMoveThresholds, Planet, PlanetData, Arrivals } from "codegen/index.sol";
+import { PendingMove, Planet, PlanetData, Arrivals } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
@@ -48,9 +48,8 @@ contract LibResolveCombatTest is PrimodiumTest {
 
   function testConquerClearPendingMoves() public {
     // create pending move
-    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
     Planet.setShipCount(planetId, 1);
-    bool moved = LibMoveShips.createPendingMove(planetId);
+    bool moved = LibMoveShips.createPendingMove(planetId, planetId);
 
     assertEq(moved, true, "should have moved");
     assertFalse(PendingMove.get(planetId).empireId == EEmpire.NULL);

@@ -155,16 +155,6 @@ export const worldInput = {
     // the total is out of 10000
 
     /* -------------------------------- Movement -------------------------------- */
-    P_NPCMoveThresholds: {
-      key: [],
-      schema: {
-        none: "uint256",
-        retreat: "uint256",
-        lateral: "uint256",
-        expand: "uint256",
-      },
-    },
-
     PendingMove: {
       key: ["planetId"],
       schema: {
