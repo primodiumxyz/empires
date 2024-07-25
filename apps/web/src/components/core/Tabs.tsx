@@ -74,8 +74,14 @@ const Button: FC<React.ComponentProps<typeof _Button> & { index: number; togglab
 );
 
 const IconButton: FC<
-  React.ComponentProps<typeof _Button> & { index: number; togglable?: boolean; icon: string; text: string }
-> = memo(({ togglable = false, index, icon, text, ...props }) => {
+  React.ComponentProps<typeof _Button> & {
+    index: number;
+    togglable?: boolean;
+    icon: string;
+    text: string;
+    hideOnSelected?: boolean;
+  }
+> = memo(({ togglable = false, index, icon, text, hideOnSelected = false, ...props }) => {
   const { index: currIndex, setIndex, persistIndexKey } = useIndex();
   const {
     tables: { SelectedTab },
@@ -93,7 +99,7 @@ const IconButton: FC<
         if (persistIndexKey) setIndex(_index);
       }}
     >
-      <IconLabel imageUri={icon} text={text} hideText={!selected} className="px-2" />
+      <IconLabel imageUri={icon} text={text} hideText={!selected && hideOnSelected} className="px-2" />
     </_Button>
   );
 });

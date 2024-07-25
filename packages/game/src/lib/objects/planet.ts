@@ -5,6 +5,7 @@ import { PrimodiumScene } from "@game/types";
 import { IPrimodiumGameObject } from "./interfaces";
 import { Assets, Sprites } from "@primodiumxyz/assets";
 import { EmpireToEmpireSpriteKeys } from "@game/lib/mappings";
+import { getRandomRange } from "@primodiumxyz/core";
 
 export class Planet
   extends Phaser.GameObjects.Sprite
@@ -32,6 +33,7 @@ export class Planet
 
     this._scene = scene;
     this.id = id;
+    this.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
 
     this._scene.objects.planet.add(id, this, false);
   }

@@ -112,7 +112,7 @@ export const Marker: React.FC<{
       obj.setOrigin(0.5, 0.5);
       obj.setScale(1 / _camera.phaserCamera.zoom);
       obj.setAlpha(camera.phaserCamera.scene.scene.isActive() ? 1 : 0);
-      obj.setDepth(depth - 100000);
+      obj.setDepth(depth);
 
       setMarker(obj);
       setContainer(container);
