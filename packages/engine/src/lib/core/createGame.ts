@@ -66,10 +66,11 @@ export const createGame = async (config: GameConfig) => {
   const context = {
     phaserGame,
     sceneManager,
-    dispose: () => {
+    dispose: async () => {
       console.log(config.key + ": Disposing");
       sceneManager.dispose();
-      phaserGame.destroy(true, false);
+      phaserGame.canvas.remove();
+      phaserGame.destroy(true);
     },
   };
 

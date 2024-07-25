@@ -367,15 +367,15 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
         <p className="pointer-events-auto flex items-center justify-center gap-1.5">
           <IconLabel imageUri={InterfaceIcons.Vault} text={goldCount.toLocaleString()} />
         </p>
-        {goldFloatingTexts.map((item) => (
-          <div
-            key={item.id}
-            className="floating-text absolute right-1 top-0 z-50 w-fit translate-x-full rounded bg-white p-2 text-xs text-black"
-          >
-            {item.text}
-          </div>
-        ))}
       </Tooltip>
+      {goldFloatingTexts.map((item) => (
+        <div
+          key={item.id}
+          className="floating-text absolute right-1 top-0 z-50 w-fit translate-x-full rounded bg-white p-2 text-xs text-black"
+        >
+          {item.text}
+        </div>
+      ))}
     </div>
   );
 };
@@ -459,11 +459,11 @@ const Ships = ({
 
   return (
     <div className="relative z-50">
-      <p className="flex items-center justify-center gap-2">
-        <Tooltip tooltipContent={`SHIPS`}>
+      <Tooltip tooltipContent={`SHIPS`}>
+        <p className="flex items-center justify-center gap-2">
           <IconLabel imageUri={InterfaceIcons.Fleet} text={shipCount.toLocaleString()} />
-        </Tooltip>
-      </p>
+        </p>
+      </Tooltip>
       {floatingTexts.map((item) => (
         <div
           key={item.id}
@@ -517,11 +517,11 @@ const Shields = ({
   }, [nextId]);
   return (
     <div className="relative z-50">
-      <p className="flex items-center justify-center">
-        <Tooltip tooltipContent={`SHIELDS`}>
+      <Tooltip tooltipContent={`SHIELDS`}>
+        <p className="flex items-center justify-center">
           <IconLabel imageUri={InterfaceIcons.Defense} text={shieldCount.toLocaleString()} />
-        </Tooltip>
-      </p>
+        </p>
+      </Tooltip>
 
       {floatingTexts.map((item) => (
         <div

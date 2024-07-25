@@ -51,10 +51,6 @@ const Game = memo(() => {
       hasInitialized.current = false;
       // await new Promise((resolve) => setTimeout(resolve, 100));
       const phaserContainer = document.getElementById("phaser-container");
-
-      for (const child of Array.from(phaserContainer?.children ?? [])) {
-        phaserContainer?.removeChild(child);
-      }
     };
 
     init();
