@@ -79,7 +79,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
       <div className="relative mt-14 flex flex-col items-center drop-shadow-2xl">
         <div className="group relative flex flex-col items-center">
-          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-secondary/50 text-center">
+          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-secondary/50 to-secondary/25 px-1 text-center">
             <p className="font-mono text-[10px] opacity-70">
               ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
             </p>
