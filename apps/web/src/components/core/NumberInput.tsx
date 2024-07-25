@@ -9,8 +9,7 @@ export const NumberInput: React.FC<{
   toFixed?: number;
   onChange?: (val: string) => void;
   count: string;
-  variant?: "default" | "arrows";
-}> = ({ count, min = 0, max = Infinity, onChange, toFixed = 0, variant = "default" }) => {
+}> = ({ count, min = 0, max = Infinity, onChange, toFixed = 0 }) => {
   const game = useGame();
 
   const handleUpdate = (newCount: string) => {
@@ -33,108 +32,58 @@ export const NumberInput: React.FC<{
   };
 
   return (
-    <div className={`relative mb-4 flex ${variant === "default" ? "items-center" : "flex-col"} justify-center gap-2`}>
-      {variant === "default" ? (
-        <>
-          <Button
-            size={"xs"}
-            variant={"ghost"}
-            disabled={Number(count) <= min}
-            onClick={(e) => {
-              e?.preventDefault();
-              handleUpdate(Math.max(min, count == "" ? 0 : Number(count) - 1).toString());
-            }}
-          >
-            -
-          </Button>
-          <input
-            type="number"
-            className={`w-24 border border-secondary bg-neutral px-2 text-center focus:outline-none ${Number(count) > max ? "text-error" : ""
-              }`}
-            value={count}
-            placeholder={min.toString()}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              e.preventDefault();
-              handleUpdate(e.target.value);
-            }}
-            onFocus={game.GLOBAL.disableGlobalInput}
-            onBlur={game.GLOBAL.enableGlobalInput}
-            min={0}
-            max={max}
-          />
-          <Button
-            size={"xs"}
-            variant={"ghost"}
-            disabled={Number(count) >= max}
-            onClick={(e) => {
-              e?.preventDefault();
-              handleUpdate(Math.min(max, count == "" ? min + 1 : Number(count) + 1).toString());
-            }}
-          >
-            +
-          </Button>
-          {max !== Infinity && (
-            <div className="absolute -bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2">
-              <Button
-                variant={"ghost"}
-                size={"xs"}
-                disabled={Number(count) >= max}
-                onClick={() => handleUpdate(max.toString())}
-              >
-                max
-              </Button>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="flex flex-row">
-          <input
-            type="number"
-            className={`w-16 border border-secondary bg-neutral px-2 text-center focus:outline-none ${Number(count) > max ? "text-error" : ""
-              }`}
-            value={count}
-            placeholder={min.toString()}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              e.preventDefault();
-              handleUpdate(e.target.value);
-            }}
-            onFocus={game.GLOBAL.disableGlobalInput}
-            onBlur={game.GLOBAL.enableGlobalInput}
-            min={0}
-            max={max}
-          />
-          <div className="flex flex-col px-2">
-            <button
-              onClick={() => handleUpdate(Math.min(max, count == "" ? min + 1 : Number(count) + 1).toString())}
-              disabled={Number(count) >= max}
-              className="arrow-button"
-              aria-label="Arrow up"
-            >
-              ↑
-            </button>
-            <button
-              onClick={() => handleUpdate(Math.max(min, count == "" ? 0 : Number(count) - 1).toString())}
-              disabled={Number(count) <= min}
-              className="arrow-button"
-              aria-label="Arrow down"
-            >
-              ↓
-            </button>
-          </div>
-          {max !== Infinity && (
-            <div className="absolute -bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2">
-              <button
-                className="arrow-button"
-                disabled={Number(count) >= max}
-                onClick={() => handleUpdate(max.toString())}
-              >
-                max
-              </button>
-            </div>
-          )}
-        </div>
+    <div className={`relative flex flex-col justify-center gap-2`}>
+      <div className="flex flex-row gap-2">
+        <Button
+          size={"xs"}
+          variant={"ghost"}
+          disabled={Number(count) <= min}
+          onClick={(e) => {
+            e?.preventDefault();
+            handleUpdate(Math.max(min, count == "" ? 0 : Number(count) - 1).toString());
+          }}
+        >
+          -
+        </Button>
+        <input
+          type="number"
+          className={`w-24 border border-secondary bg-neutral px-2 text-center focus:outline-none ${
+            Number(count) > max ? "text-error" : ""
+          }`}
+          value={count}
+          placeholder={min.toString()}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            handleUpdate(e.target.value);
+          }}
+          onFocus={game.GLOBAL.disableGlobalInput}
+          onBlur={game.GLOBAL.enableGlobalInput}
+          min={0}
+          max={max}
+        />
+        <Button
+          size={"xs"}
+          variant={"ghost"}
+          disabled={Number(count) >= max}
+          onClick={(e) => {
+            e?.preventDefault();
+            handleUpdate(Math.min(max, count == "" ? min + 1 : Number(count) + 1).toString());
+          }}
+        >
+          +
+        </Button>
+      </div>
+
+      {max !== Infinity && (
+        <Button
+          variant={"ghost"}
+          size={"xs"}
+          disabled={Number(count) >= max}
+          onClick={() => handleUpdate(max.toString())}
+        >
+          max
+        </Button>
       )}
     </div>
   );
 };
-

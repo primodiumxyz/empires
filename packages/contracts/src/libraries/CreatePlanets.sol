@@ -40,49 +40,49 @@ function createPlanets() {
   bytes32 planet4 = coordToId(0, -1);
   Planet.set(
     planet4,
-    PlanetData({ q: 0, r: -1, isPlanet: true, shipCount: 0, shieldCount: 0, empireId: EEmpire.NULL, goldCount: 0 })
+    PlanetData({ q: 0, r: -1, isPlanet: true, shipCount: 0, shieldCount: 4, empireId: EEmpire.NULL, goldCount: 0 })
   );
   PlanetsSet.add(planet4);
 
   bytes32 planet5 = coordToId(0, 1);
   Planet.set(
     planet5,
-    PlanetData({ q: 0, r: 1, isPlanet: true, shipCount: 0, shieldCount: 0, empireId: EEmpire.NULL, goldCount: 0 })
+    PlanetData({ q: 0, r: 1, isPlanet: true, shipCount: 0, shieldCount: 4, empireId: EEmpire.NULL, goldCount: 0 })
   );
   PlanetsSet.add(planet5);
 
   bytes32 planet6 = coordToId(-1, 0);
   Planet.set(
     planet6,
-    PlanetData({ q: -1, r: 0, isPlanet: true, shipCount: 0, shieldCount: 0, empireId: EEmpire.NULL, goldCount: 0 })
+    PlanetData({ q: -1, r: 0, isPlanet: true, shipCount: 0, shieldCount: 4, empireId: EEmpire.NULL, goldCount: 0 })
   );
   PlanetsSet.add(planet6);
 
   bytes32 planet7 = coordToId(0, 0);
   Planet.set(
     planet7,
-    PlanetData({ q: 0, r: 0, isPlanet: true, shipCount: 0, shieldCount: 0, empireId: EEmpire.NULL, goldCount: 0 })
+    PlanetData({ q: 0, r: 0, isPlanet: true, shipCount: 0, shieldCount: 4, empireId: EEmpire.NULL, goldCount: 0 })
   );
   PlanetsSet.add(planet7);
 
   bytes32 planet8 = coordToId(1, 0);
   Planet.set(
     planet8,
-    PlanetData({ q: 1, r: 0, isPlanet: true, shipCount: 0, shieldCount: 0, empireId: EEmpire.NULL, goldCount: 0 })
+    PlanetData({ q: 1, r: 0, isPlanet: true, shipCount: 0, shieldCount: 4, empireId: EEmpire.NULL, goldCount: 0 })
   );
   PlanetsSet.add(planet8);
 
   bytes32 planet9 = coordToId(-1, 1);
   Planet.set(
     planet9,
-    PlanetData({ q: -1, r: 1, isPlanet: true, shipCount: 0, shieldCount: 0, empireId: EEmpire.NULL, goldCount: 0 })
+    PlanetData({ q: -1, r: 1, isPlanet: true, shipCount: 0, shieldCount: 4, empireId: EEmpire.NULL, goldCount: 0 })
   );
   PlanetsSet.add(planet9);
 
   bytes32 planet10 = coordToId(1, -1);
   Planet.set(
     planet10,
-    PlanetData({ q: 1, r: -1, isPlanet: true, shipCount: 0, shieldCount: 0, empireId: EEmpire.NULL, goldCount: 0 })
+    PlanetData({ q: 1, r: -1, isPlanet: true, shipCount: 0, shieldCount: 4, empireId: EEmpire.NULL, goldCount: 0 })
   );
   PlanetsSet.add(planet10);
 }

@@ -36,7 +36,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const { tables, utils } = useCore();
   const planet = tables.Planet.use(entity);
   const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
-  const [conquered, setConquered] = useState(false);
+  // const [conquered, setConquered] = useState(false);
   const [isInteractPaneVisible, setIsInteractPaneVisible] = useState(false);
   const interactButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -57,14 +57,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         deaths: bigIntMin(current.attackingShipCount, current.defendingShipCount),
         conquered: current.conquer,
       };
-
-      // if conquered, flash the planet's stroke
-      if (data.conquered) {
-        setConquered(true);
-        setTimeout(() => {
-          setConquered(false);
-        }, 5000);
-      }
     });
     return () => {
       listener.unsubscribe();
@@ -136,11 +128,12 @@ const InteractButton = forwardRef<
   const { price } = useEthPrice();
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
+  const [inputValue, setInputValue] = useState("1");
 
-  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire);
-  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire);
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetEmpire);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetEmpire);
+  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire, BigInt(inputValue));
+  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire, BigInt(inputValue));
+  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetEmpire, BigInt(inputValue));
+  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetEmpire, BigInt(inputValue));
 
   const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
   const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
@@ -174,9 +167,6 @@ const InteractButton = forwardRef<
     };
   }, [isInteractPaneVisible]);
 
-  // NumberInput
-  const [inputValue, setInputValue] = useState("1");
-
   return (
     <div className={cn("relative")}>
       <Button ref={ref} className={cn(className)} size="sm" shape="default" onClick={handleInteractClick}>
@@ -196,7 +186,7 @@ const InteractButton = forwardRef<
                     inputValue={inputValue}
                     onInputChange={setInputValue}
                     onAttackClick={() => removeShip(planetId, killShipPriceWei)}
-                    onSupportClick={() => createShip(planetId, createShipPriceWei)}
+                    onSupportClick={() => createShip(planetId, BigInt(inputValue), createShipPriceWei)}
                     attackPrice={killShipPriceUsd}
                     supportPrice={createShipPriceUsd}
                     attackTxQueueId={`${planetId}-kill-ship`}
@@ -209,7 +199,7 @@ const InteractButton = forwardRef<
                     inputValue={inputValue}
                     onInputChange={setInputValue}
                     onAttackClick={() => removeShield(planetId, removeShieldPriceWei)}
-                    onSupportClick={() => addShield(planetId, addShieldPriceWei)}
+                    onSupportClick={() => addShield(planetId, BigInt(inputValue), addShieldPriceWei)}
                     attackPrice={removeShieldPriceUsd}
                     supportPrice={addShieldPriceUsd}
                     attackTxQueueId={`${planetId}-remove-shield`}
@@ -287,11 +277,11 @@ const Ships = ({
   useEffect(() => {
     const listener = tables.CreateShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
-      const data = { planetId: current.planetId, shipCount: 1n };
+      const data = { planetId: current.planetId, shipCount: current.actionCount };
       if (data.planetId !== planetId) return;
 
       // Add floating "+1" text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: "+1" }]);
+      setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
       setNextId((prev) => prev + 1);
 
       // Remove the floating text after 3 seconds
@@ -307,11 +297,11 @@ const Ships = ({
   useEffect(() => {
     const listener = tables.KillShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
-      const data = { planetId: current.planetId, shipCount: 1n };
+      const data = { planetId: current.planetId, shipCount: current.actionCount };
       if (data.planetId !== planetId) return;
 
       // Add floating "+1" text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: <>-1</> }]);
+      setFloatingTexts((prev) => [...prev, { id: nextId, text: <>-{data.shipCount}</> }]);
       setNextId((prev) => prev + 1);
 
       // Remove the floating text after 3 seconds
@@ -381,11 +371,11 @@ const Shields = ({
   const [nextId, setNextId] = useState(0);
   const callback = (current: any, negative?: boolean) => {
     if (!current) return;
-    const data = { planetId: current.planetId, shieldCount: current.shieldCount };
+    const data = { planetId: current.planetId, shieldCount: current.actionCount };
     if (data.planetId !== planetId) return;
 
     // Add floating text
-    setFloatingTexts((prev) => [...prev, { id: nextId, text: `${negative ? "-" : "+"}1` }]);
+    setFloatingTexts((prev) => [...prev, { id: nextId, text: `${negative ? "-" : "+"}${data.shieldCount}` }]);
     setNextId((prev) => prev + 1);
 
     // Remove the floating text after 3 seconds
