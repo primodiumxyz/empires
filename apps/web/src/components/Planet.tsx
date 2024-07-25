@@ -9,7 +9,6 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
-import { Hexagon } from "@/components/core/Hexagon";
 import { Marker } from "@/components/core/Marker";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
