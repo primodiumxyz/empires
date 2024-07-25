@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, PlanetData, P_NPCMoveThresholds, P_GameConfig } from "codegen/index.sol";
+import { Arrivals, PendingMove, Planet, PlanetData, P_NPCMoveThresholds, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
@@ -22,20 +22,6 @@ contract LibMoveShipsTest is PrimodiumTest {
     vm.roll(1);
     vm.warp(1);
     vm.prevrandao(bytes32("1"));
-  }
-
-  function testEarlyExit() public {
-    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
-    Planet.setEmpireId(planetId, EEmpire.NULL);
-    bool moved = LibMoveShips.moveShips(planetId);
-    assertFalse(moved, "shouldnt have moved");
-    moved = LibMoveShips.moveShips(planetId);
-    Planet.setEmpireId(planetId, EEmpire.Red);
-    moved = LibMoveShips.moveShips(planetId);
-    assertFalse(moved, "shouldnt have moved again");
-    Planet.setShipCount(planetId, 1);
-    moved = LibMoveShips.moveShips(planetId);
-    assertTrue(moved, "should have moved");
   }
 
   function testGetPlanetTargetNoMovement() public {
@@ -97,5 +83,50 @@ contract LibMoveShipsTest is PrimodiumTest {
     } else {
       assertEq(target, coordToId(planetData.q - 1, planetData.r + 1));
     }
+  }
+
+  function testCreatePendingMoveEarlyExit() public {
+    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
+    Planet.setEmpireId(planetId, EEmpire.NULL);
+    bool moved = LibMoveShips.createPendingMove(planetId);
+    assertFalse(moved, "shouldnt have moved");
+    moved = LibMoveShips.createPendingMove(planetId);
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    moved = LibMoveShips.createPendingMove(planetId);
+    assertFalse(moved, "shouldnt have moved again");
+    Planet.setShipCount(planetId, 1);
+    moved = LibMoveShips.createPendingMove(planetId);
+    assertTrue(moved, "should have moved");
+  }
+
+  function testCreatePendingMove() public {
+    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    Planet.setShipCount(planetId, 1);
+    bool moved = LibMoveShips.createPendingMove(planetId);
+    assertTrue(moved, "should have moved");
+
+    assertFalse(PendingMove.get(planetId).empireId == EEmpire.NULL);
+    assertFalse(PendingMove.get(planetId).destinationPlanetId == bytes32(0));
+  }
+
+  function testExecuteMove() public {
+    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
+    Planet.setEmpireId(planetId, EEmpire.Red);
+    Planet.setShipCount(planetId, 1);
+    bool moved = LibMoveShips.createPendingMove(planetId);
+    assertTrue(moved, "should have moved");
+
+    bytes32 destination = PendingMove.get(planetId).destinationPlanetId;
+
+    LibMoveShips.executePendingMoves(planetId);
+
+    assertEq(Planet.getShipCount(planetId), 0, "ship count should be 0");
+    assertEq(Arrivals.get(destination, EEmpire.Red), 1, "red should have 1 ship");
+    assertEq(Arrivals.get(destination, EEmpire.Blue), 0, "blue should have 0 ships");
+    assertEq(Arrivals.get(destination, EEmpire.Green), 0, "green should have 0 ships");
+
+    assertTrue(PendingMove.get(planetId).empireId == EEmpire.NULL);
+    assertTrue(PendingMove.get(planetId).destinationPlanetId == bytes32(0));
   }
 }

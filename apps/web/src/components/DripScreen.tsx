@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import { minEth } from "@primodiumxyz/core";
 import { useAccountClient } from "@primodiumxyz/core/react";
@@ -22,14 +22,14 @@ export default function DripScreen() {
     dripAccount(playerAccount.address);
   }, [playerAccount.address, playerBalance.value, dripAccount]);
 
-  const balanceReady = (playerBalance.value ?? 0n) >= minEth;
+  const balanceReady = useMemo(() => (playerBalance.value ?? 0n) >= minEth, [playerBalance.value]);
 
   return (
     <>
       {!balanceReady && (
         <div className="flex h-screen flex-col items-center justify-center gap-4 text-white">
           <p className="text-lg text-white">
-            <span className="animate-pulse">Dripping Eth </span>
+            <span className="animate-pulse">Dripping Eth</span>
           </p>
         </div>
       )}

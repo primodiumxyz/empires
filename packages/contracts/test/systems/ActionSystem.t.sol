@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, ActionCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
+import { P_ActionConfig, Planet, ActionCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
@@ -38,13 +38,23 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testKillShip() public {
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true);
-    world.Empires__createShip{ value: cost }(planetId);
-    assertEq(Planet.get(planetId).shipCount, 1);
+    vm.startPrank(creator);
+    P_ActionConfig.setReductionPct(5000);
+    Planet.setShipCount(planetId, 1);
 
-    cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false);
     world.Empires__killShip{ value: cost }(planetId);
     assertEq(Planet.get(planetId).shipCount, 0);
+  }
+
+  function testKillMultipleShips() public {
+    vm.startPrank(creator);
+    P_ActionConfig.setReductionPct(5000);
+    Planet.setShipCount(planetId, 10);
+
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false);
+    world.Empires__killShip{ value: cost }(planetId);
+    assertEq(Planet.get(planetId).shipCount, 5);
   }
 
   function testChargeShield() public {
@@ -56,17 +66,13 @@ contract ActionSystemTest is PrimodiumTest {
 
   function testDrainShield() public {
     uint256 cost = 0;
-    uint256 currentShields = Planet.get(planetId).shieldCount;
-    if (currentShields == 0) {
-      cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, Planet.getEmpireId(planetId), true);
-      world.Empires__chargeShield{ value: cost }(planetId);
-      currentShields = 1;
-      assertEq(Planet.get(planetId).shieldCount, currentShields);
-    }
+    vm.startPrank(creator);
+    P_ActionConfig.setReductionPct(5000);
+    Planet.setShieldCount(planetId, 10);
 
     cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false);
     world.Empires__drainShield{ value: cost }(planetId);
-    assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
+    assertEq(Planet.get(planetId).shieldCount, 5);
   }
 
   function testKillShipFailNoShips() public {

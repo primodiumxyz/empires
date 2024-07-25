@@ -73,11 +73,14 @@ contract PrimodiumTest is MudTest {
   function assertEq(EEmpire a, EEmpire b) internal {
     assertEq(uint8(a), uint8(b));
   }
+  function assertEq(EEmpire a, EEmpire b, string memory message) internal {
+    assertEq(uint8(a), uint8(b), message);
+  }
 
   function sendEther(address from, uint256 value) internal {
     vm.stopPrank();
 
     vm.prank(from);
-    bytes memory data = world.call{ value: value }(systemId, abi.encodeCall(system.echoValue, ()));
+    world.call{ value: value }(systemId, abi.encodeCall(system.echoValue, ()));
   }
 }
