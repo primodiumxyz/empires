@@ -77,7 +77,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   return (
     <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
-      <div className="relative mt-14 flex flex-col items-center drop-shadow-2xl">
+      <div className="relative mt-12 flex flex-col items-center drop-shadow-2xl">
         <div className="group relative flex flex-col items-center">
           <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-secondary/50 to-secondary/25 px-1 text-center">
             <p className="font-mono text-[10px] opacity-70">
@@ -103,7 +103,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
           <InteractButton
             className={cn(
-              "h-full scale-75 opacity-75 transition-all group-hover:scale-100 group-hover:opacity-100",
+              "scale-80 mt-1 h-full opacity-75 transition-all group-hover:scale-100 group-hover:opacity-100",
               !planet?.empireId ? "pointer-events-none !opacity-0" : "",
             )}
             ref={interactButtonRef}
@@ -180,7 +180,7 @@ const InteractButton = forwardRef<
 
   return (
     <div className={cn("relative")}>
-      <Button ref={ref} className={cn("p-3", className)} onClick={handleInteractClick}>
+      <Button ref={ref} className={cn(className)} size="sm" shape="default" onClick={handleInteractClick}>
         Interact
       </Button>
       {isInteractPaneVisible && (

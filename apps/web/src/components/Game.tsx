@@ -92,35 +92,39 @@ const Game = memo(() => {
 
 export const GameHUD = () => {
   return (
-    <HUD pad>
-      <HUD.TopLeft>
-        <Account />
-      </HUD.TopLeft>
-      <HUD.TopMiddle>
-        <TimeLeft />
-      </HUD.TopMiddle>
-      <HUD.TopRight>
-        <Pot />
-      </HUD.TopRight>
-      <HUD.Center>
-        <PlanetGrid tileSize={100} />
-      </HUD.Center>
-      <HUD.BottomLeft>
-        <SellPoints />
-      </HUD.BottomLeft>
-      <HUD.BottomMiddle>
-        <AdvanceTurn />
-      </HUD.BottomMiddle>
-      <HUD.BottomRight className="flex gap-2">
-        <UserSettings />
-        <ActionLog />
-        <HistoricalPointPriceModal />
-        {DEV && <Cheatcodes className="-mr-1" />}
-      </HUD.BottomRight>
-      <HUD.Right>
-        <Dashboard />
-      </HUD.Right>
-    </HUD>
+    <>
+      <HUD pad>
+        <HUD.TopLeft>
+          <Account />
+        </HUD.TopLeft>
+        <HUD.TopMiddle>
+          <TimeLeft />
+        </HUD.TopMiddle>
+        <HUD.TopRight>
+          <Pot />
+        </HUD.TopRight>
+        <HUD.Center>
+          <PlanetGrid tileSize={100} />
+        </HUD.Center>
+        <HUD.BottomLeft>
+          <SellPoints />
+        </HUD.BottomLeft>
+        <HUD.BottomMiddle>
+          <AdvanceTurn />
+        </HUD.BottomMiddle>
+        <HUD.BottomRight className="flex gap-2">
+          <UserSettings />
+          <ActionLog />
+          <HistoricalPointPriceModal />
+          {DEV && <Cheatcodes className="-mr-1" />}
+        </HUD.BottomRight>
+      </HUD>
+      <HUD>
+        <HUD.Right>
+          <Dashboard />
+        </HUD.Right>
+      </HUD>
+    </>
   );
 };
 
