@@ -63,5 +63,5 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  return { createShip, removeShip, addShield, removeShield };
+  return { createShip, removeShip, addShield, removeShield, sellPoints };
 };

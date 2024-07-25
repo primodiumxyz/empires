@@ -9,6 +9,7 @@ export function createPriceUtils(tables: Tables) {
   function getTotalCost(_actionType: EPlayerAction, _empireImpacted: EEmpire, _actionCount: bigint): bigint {
     const progressAction = [EPlayerAction.CreateShip, EPlayerAction.ChargeShield].includes(_actionType);
     let totalCost = 0n;
+
     if (progressAction) {
       totalCost = getProgressPointCost(_empireImpacted);
     } else {

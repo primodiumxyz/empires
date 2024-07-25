@@ -9,7 +9,6 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
-import { Hexagon } from "@/components/core/Hexagon";
 import { Marker } from "@/components/core/Marker";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
@@ -32,7 +31,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const { tables, utils } = useCore();
   const planet = tables.Planet.use(entity);
   const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
-  const [conquered, setConquered] = useState(false);
 
   const [left, top] = useMemo(() => {
     const cartesianCoord = convertAxialToCartesian(
@@ -51,14 +49,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         deaths: bigIntMin(current.attackingShipCount, current.defendingShipCount),
         conquered: current.conquer,
       };
-
-      // if conquered, flash the planet's stroke
-      if (data.conquered) {
-        setConquered(true);
-        setTimeout(() => {
-          setConquered(false);
-        }, 5000);
-      }
     });
     return () => {
       listener.unsubscribe();
@@ -246,7 +236,7 @@ const Ships = ({
             onClick={() => removeShip(planetId, killShipPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0 || Number(shipCount) === 0}
           >
-            -{reductionPct * Number(shipCount)}
+            -{Math.ceil(reductionPct * Number(shipCount))}
           </Button>
         </TransactionQueueMask>
 
@@ -337,7 +327,7 @@ const Shields = ({
             onClick={() => calls.removeShield(planetId, removeShieldPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0 || Number(shieldCount) === 0}
           >
-            -{reductionPct * Number(shieldCount)}
+            -{Math.ceil(reductionPct * Number(shieldCount))}
           </Button>
         </TransactionQueueMask>
 
