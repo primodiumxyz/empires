@@ -124,10 +124,11 @@ const InteractButton = forwardRef<
 >(({ onClick, isInteractPaneVisible, planetId, planetEmpire, className }, ref) => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
-  const { utils } = useCore();
+  const { utils, tables } = useCore();
   const { price } = useEthPrice();
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
+  const planet = tables.Planet.use(planetId);
   const [inputValue, setInputValue] = useState("1");
 
   const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire, BigInt(inputValue));
@@ -185,26 +186,32 @@ const InteractButton = forwardRef<
                   <ActionPane
                     inputValue={inputValue}
                     onInputChange={setInputValue}
-                    onAttackClick={() => removeShip(planetId, killShipPriceWei)}
+                    onAttackClick={() => removeShip(planetId, BigInt(inputValue), killShipPriceWei)}
                     onSupportClick={() => createShip(planetId, BigInt(inputValue), createShipPriceWei)}
                     attackPrice={killShipPriceUsd}
                     supportPrice={createShipPriceUsd}
                     attackTxQueueId={`${planetId}-kill-ship`}
                     supportTxQueueId={`${planetId}-create-ship`}
-                    isDisabled={gameOver || Number(planetEmpire) === 0}
+                    isSupportDisabled={gameOver || Number(planetEmpire) === 0}
+                    isAttackDisabled={
+                      (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
+                    }
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={1} className="w-full items-center gap-4">
                   <ActionPane
                     inputValue={inputValue}
                     onInputChange={setInputValue}
-                    onAttackClick={() => removeShield(planetId, removeShieldPriceWei)}
+                    onAttackClick={() => removeShield(planetId, BigInt(inputValue), removeShieldPriceWei)}
                     onSupportClick={() => addShield(planetId, BigInt(inputValue), addShieldPriceWei)}
                     attackPrice={removeShieldPriceUsd}
                     supportPrice={addShieldPriceUsd}
                     attackTxQueueId={`${planetId}-remove-shield`}
                     supportTxQueueId={`${planetId}-add-shield`}
-                    isDisabled={gameOver || Number(planetEmpire) === 0}
+                    isSupportDisabled={gameOver || Number(planetEmpire) === 0}
+                    isAttackDisabled={
+                      (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
+                    }
                   />
                 </Tabs.Pane>
               </Tabs>

@@ -11,9 +11,10 @@ interface ActionPaneProps {
   onSupportClick: () => void;
   attackPrice: string;
   supportPrice: string;
-  isDisabled: boolean;
+  isAttackDisabled?: boolean;
   supportTxQueueId: string;
   attackTxQueueId: string;
+  isSupportDisabled?: boolean;
 }
 
 export const ActionPane: React.FC<ActionPaneProps> = ({
@@ -23,9 +24,10 @@ export const ActionPane: React.FC<ActionPaneProps> = ({
   onSupportClick,
   attackPrice,
   supportPrice,
-  isDisabled,
+  isAttackDisabled = false,
   supportTxQueueId,
   attackTxQueueId,
+  isSupportDisabled = false,
 }) => {
   return (
     <div className="flex w-full flex-col items-center gap-4">
@@ -33,7 +35,7 @@ export const ActionPane: React.FC<ActionPaneProps> = ({
       <div className="flex gap-2">
         <div className="gap1 flex flex-col items-center">
           <TransactionQueueMask id={attackTxQueueId}>
-            <Button onClick={onAttackClick} disabled={isDisabled} size="xs" variant="error">
+            <Button onClick={onAttackClick} disabled={isAttackDisabled} size="xs" variant="error">
               - ATTACK
             </Button>
           </TransactionQueueMask>
@@ -42,7 +44,7 @@ export const ActionPane: React.FC<ActionPaneProps> = ({
 
         <div className="flex flex-col items-center">
           <TransactionQueueMask id={supportTxQueueId}>
-            <Button onClick={onSupportClick} disabled={isDisabled} size="xs" variant="secondary">
+            <Button onClick={onSupportClick} disabled={isSupportDisabled} size="xs" variant="secondary">
               + SUPPORT
             </Button>
           </TransactionQueueMask>
