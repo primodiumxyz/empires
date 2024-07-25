@@ -23,3 +23,5 @@ export const Sprites = {
   AddShield: ShieldIcon,
   SabotageShield: SabotageShieldIcon,
 };
+
+export type SpriteKeys = keyof typeof Sprites;

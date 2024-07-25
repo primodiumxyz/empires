@@ -8,14 +8,14 @@ import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core"
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
-import { SecondaryCard, Card } from "@/components/core/Card";
-import { Hexagon } from "@/components/core/Hexagon";
 import { IconLabel } from "@/components/core/IconLabel";
+import { Sprites } from "@primodiumxyz/assets/mappings/sprite";
+import { SecondaryCard, Card } from "@/components/core/Card";
+import { Marker } from "@/components/core/Marker";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
-import { Sprites } from "@primodiumxyz/assets";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "fill-blue-600",
@@ -46,7 +46,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   }, [planet, tileSize, margin]);
 
   useEffect(() => {
-    const listener = tables.BattleNPCAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.PlanetBattleNPCAction.update$.subscribe(({ properties: { current } }) => {
       if (!current || current.planetId !== entity) return;
       const data = {
         planetId: current.planetId,
@@ -74,33 +74,26 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   if (!planet) return null;
 
   return (
-    <Hexagon
-      key={entity}
-      size={tileSize}
-      className="absolute -z-10 -translate-x-1/2 -translate-y-1/2"
-      fillClassName={planet?.empireId !== 0 ? EmpireEnumToColor[planetEmpire] : "fill-gray-600"}
-      stroke={conquered ? "yellow" : "none"}
-      style={{
-        top: `${top + 50}px`,
-        left: `${left}px`,
-      }}
-    >
-      <div className="flex flex-col items-center gap-2 text-white">
-        <div className="text-center">
-          <p className="absolute left-1/2 top-4 -translate-x-1/2 transform font-mono text-xs opacity-70">
-            ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
-          </p>
-          {/* dashboard button */}
-          <Button
-            variant="ghost"
-            className="font-bold"
-            onClick={() => {
-              tables.SelectedPlanet.set({ value: entity });
-              utils.openPane("dashboard");
-            }}
-          >
-            {entityToPlanetName(entity)}
-          </Button>
+    <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }}>
+      <div className="absolute mt-8 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center gap-2 text-white">
+          <div className="text-center flex flex-row-reverse items-end">
+            <p className="font-mono text-[10px] opacity-70">
+              ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
+            </p>
+            {/* dashboard button */}
+            <Button
+              variant="ghost"
+              className="font-bold"
+              onClick={() => {
+                tables.SelectedPlanet.set({ value: entity });
+                utils.openPane("dashboard");
+              }}
+            >
+              {entityToPlanetName(entity)}
+            </Button>
+          </div>
+
         </div>
         <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
           <div className="relative flex flex-row gap-1">
@@ -117,35 +110,35 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           planetId={entity}
           planetEmpire={planetEmpire}
         />
+
       </div>
-    </Hexagon>
+    </Marker>
   );
 };
 
-const InteractButton = forwardRef<
-  HTMLButtonElement,
-  {
-    onClick: () => void;
-    isInteractPaneVisible: boolean;
-    planetId: Entity;
-    planetEmpire: EEmpire;
-  }
+const InteractButton = forwardRef<HTMLButtonElement, {
+  onClick: () => void;
+  isInteractPaneVisible: boolean;
+  planetId: Entity;
+  planetEmpire: EEmpire;
+}
 >(({ onClick, isInteractPaneVisible, planetId, planetEmpire }, ref) => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
   const { utils } = useCore();
   const { price } = useEthPrice();
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
+  const { gameOver } = useTimeLeft();
+
   const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire);
   const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire);
   const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetEmpire);
   const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetEmpire);
+
   const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
   const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
   const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
   const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
-
-  const { gameOver } = useTimeLeft();
 
   const handleInteractClick = () => {
     onClick();
@@ -182,18 +175,15 @@ const InteractButton = forwardRef<
 
   return (
     <>
-      <Button ref={ref} className="h-full p-3" onClick={handleInteractClick}>
+      <Button ref={ref} className="z-10 h-full p-3" onClick={handleInteractClick}>
         Interact
       </Button>
       {isInteractPaneVisible && (
-        <Card
-          noDecor
-          ref={InteractPaneRef}
+        <Card noDecor ref={InteractPaneRef}
           className="fixed z-50 flex-row items-center justify-center gap-2 bg-slate-900/85"
-          
         >
 
-          <div className="flex flex-col items-center justify-center gap-1 pr-2">
+          <div className="flex flex-col items-center justify-center gap-1">
             <style>
               {`
                  input[type=number]::-webkit-inner-spin-button, 
@@ -279,19 +269,19 @@ const InteractButton = forwardRef<
                   <Button
                     className="h-7"
                     onClick={() => removeShip(planetId, killShipPriceWei)}
-                      disabled={gameOver || Number(planetEmpire) === 0}>
-                      Buy
-                    </Button>
-                  </div>
-                  <p className="text-xs text-center bg-sky-950/50"> Total: {killShipPriceUsd}</p>
+                    disabled={gameOver || Number(planetEmpire) === 0}>
+                    Buy
+                  </Button>
+                </div>
+                <p className="text-xs text-center bg-sky-950/50"> Total: {killShipPriceUsd}</p>
               </div>
             </SecondaryCard>
 
             <SecondaryCard className="grid grid-cols-7 items-center justify-center w-96">
               <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={Sprites.SabotageShield} />
               <div className="col-span-4 flex flex-col items-start">
-              <p>Sabotage Shield</p>
-              <p className="block text-xs opacity-75">Decrease shield strength</p>
+                <p>Sabotage Shield</p>
+                <p className="block text-xs opacity-75">Decrease shield strength</p>
               </div>
               <div className="col-span-2 flex flex-col">
                 <div className="flex flex-row gap-2 justify-center">
@@ -307,11 +297,11 @@ const InteractButton = forwardRef<
                   <Button
                     className="h-7"
                     onClick={() => removeShield(planetId, removeShieldPriceWei)}
-                      disabled={gameOver || Number(planetEmpire) === 0}>
-                      Buy
-                    </Button>
-                  </div>
-                  <p className="text-xs text-center bg-sky-950/50"> Total: {removeShieldPriceUsd}</p>
+                    disabled={gameOver || Number(planetEmpire) === 0}>
+                    Buy
+                  </Button>
+                </div>
+                <p className="text-xs text-center bg-sky-950/50"> Total: {removeShieldPriceUsd}</p>
               </div>
             </SecondaryCard>
           </div>
@@ -437,9 +427,13 @@ const Ships = ({
     };
   }, [nextId]);
 
+  const { gameOver } = useTimeLeft();
+
+  const reductionPct = Number(tables.P_ActionConfig.get()?.reductionPct ?? 0n) / 10000;
+
   return (
     <div className="relative z-50">
-      <p className="flex items-center justify-center gap-1.5">
+      <p className="flex items-center justify-center gap-2">
         <RocketLaunchIcon className="size-4" /> {shipCount.toLocaleString()}
       </p>
       {floatingTexts.map((item) => (
@@ -495,7 +489,7 @@ const Shields = ({
   }, [nextId]);
   return (
     <div className="relative z-50">
-      <p className="flex items-center justify-center gap-1.5">
+      <p className="flex items-center justify-center gap-2">
         <ShieldCheckIcon className="size-4" /> {shieldCount.toLocaleString()}
       </p>
 

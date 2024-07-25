@@ -19,7 +19,7 @@ export const ActionLog = () => {
   const { tables, utils } = useCore();
 
   const moveActions = tables.MoveNPCAction.useAll();
-  const battleActions = tables.BattleNPCAction.useAll();
+  const battleActions = tables.PlanetBattleNPCAction.useAll();
   const buyActions = tables.BuyShipsNPCAction.useAll();
   const buyShieldActions = tables.BuyShieldsNPCAction.useAll();
   const createActions = tables.CreateShipPlayerAction.useAll();
@@ -40,7 +40,7 @@ export const ActionLog = () => {
     });
 
     const battleActionEntries = battleActions.map((actionEntity) => {
-      const action = tables.BattleNPCAction.get(actionEntity)!;
+      const action = tables.PlanetBattleNPCAction.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Battle",

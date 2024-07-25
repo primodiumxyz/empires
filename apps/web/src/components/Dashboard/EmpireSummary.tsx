@@ -1,14 +1,16 @@
 import { CurrencyYenIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
 import { formatEther } from "viem";
 
+import { SpriteKeys } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { Core } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { EmpireToEmpireSprites } from "@primodiumxyz/game";
+import { EmpireToEmpireSpriteKeys } from "@primodiumxyz/game";
 import { Entity, Properties } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Card } from "@/components/core/Card";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
@@ -28,6 +30,9 @@ export const EmpireSummary = ({ empireId, ownedPlanets }: { empireId: EEmpire; o
     tables,
     utils: { weiToUsd },
   } = useCore();
+  const {
+    ROOT: { sprite },
+  } = useGame();
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
   const { price: sellPrice } = usePointPrice(empireId, 1);
   const sellPriceUsd = weiToUsd(sellPrice, ethPrice ?? 0);
@@ -50,7 +55,7 @@ export const EmpireSummary = ({ empireId, ownedPlanets }: { empireId: EEmpire; o
   return (
     <Card noDecor className={cn(EmpireEnumToBg[empireId], "border-none")}>
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-x-8">
-        <img src={EmpireToEmpireSprites[empireId]} width={64} height={64} />
+        <img src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId])} width={64} height={64} />
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-semibold text-gray-300">{EmpireEnumToName[empireId]}</h3>
