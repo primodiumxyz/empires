@@ -153,6 +153,7 @@ const InteractButton = forwardRef<
       ref &&
       !(ref as React.RefObject<HTMLButtonElement>).current?.contains(event.target as Node)
     ) {
+      setInputValue("1");
       onClick();
     }
   };
@@ -186,8 +187,14 @@ const InteractButton = forwardRef<
                   <ActionPane
                     inputValue={inputValue}
                     onInputChange={setInputValue}
-                    onAttackClick={() => removeShip(planetId, BigInt(inputValue), killShipPriceWei)}
-                    onSupportClick={() => createShip(planetId, BigInt(inputValue), createShipPriceWei)}
+                    onAttackClick={() => {
+                      removeShip(planetId, BigInt(inputValue), killShipPriceWei);
+                      setInputValue("1");
+                    }}
+                    onSupportClick={() => {
+                      createShip(planetId, BigInt(inputValue), createShipPriceWei);
+                      setInputValue("1");
+                    }}
                     attackPrice={killShipPriceUsd}
                     supportPrice={createShipPriceUsd}
                     attackTxQueueId={`${planetId}-kill-ship`}
@@ -202,8 +209,14 @@ const InteractButton = forwardRef<
                   <ActionPane
                     inputValue={inputValue}
                     onInputChange={setInputValue}
-                    onAttackClick={() => removeShield(planetId, BigInt(inputValue), removeShieldPriceWei)}
-                    onSupportClick={() => addShield(planetId, BigInt(inputValue), addShieldPriceWei)}
+                    onAttackClick={() => {
+                      removeShield(planetId, BigInt(inputValue), removeShieldPriceWei);
+                      setInputValue("1");
+                    }}
+                    onSupportClick={() => {
+                      addShield(planetId, BigInt(inputValue), addShieldPriceWei);
+                      setInputValue("1");
+                    }}
                     attackPrice={removeShieldPriceUsd}
                     supportPrice={addShieldPriceUsd}
                     attackTxQueueId={`${planetId}-remove-shield`}
@@ -307,8 +320,10 @@ const Ships = ({
       const data = { planetId: current.planetId, shipCount: current.actionCount };
       if (data.planetId !== planetId) return;
 
+      console.log(current);
+
       // Add floating "+1" text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: <>-{data.shipCount}</> }]);
+      setFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.shipCount}` }]);
       setNextId((prev) => prev + 1);
 
       // Remove the floating text after 3 seconds
