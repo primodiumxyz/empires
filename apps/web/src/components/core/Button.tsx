@@ -20,7 +20,7 @@ const buttonVariants = cva(
         success: "btn-success",
         info: "btn-info border-white/50",
         warning: "btn-warning",
-        error: "btn-error border border-rose-300/50",
+        error: "btn-error border border-error",
         ghost: "btn-ghost",
       },
       size: {

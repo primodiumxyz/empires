@@ -90,7 +90,7 @@ export function createPriceUtils(tables: Tables) {
     let actionCost = initActionCost * _actionCount + triangleSumOBO * actionCostIncrease;
 
     if (!_progressAction) {
-      actionCost += (actionCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
+      actionCost = (actionCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
     }
     return actionCost;
   }
