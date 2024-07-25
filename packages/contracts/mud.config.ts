@@ -143,14 +143,6 @@ export const worldInput = {
     },
 
     /* ------------------------------- NPC Actions ------------------------------ */
-    P_NPCActionThresholds: {
-      key: [],
-      schema: {
-        none: "uint256",
-        buyShips: "uint256",
-        buyShields: "uint256",
-      },
-    },
 
     P_NPCActionCosts: {
       key: ["action"],

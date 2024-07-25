@@ -57,12 +57,6 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         lateral: 0.75 * 0.3,
         retreat: 0.75 * 0.2,
       }),
-      P_NPCActionThresholds: percentsToThresholds({
-        none: 0.2,
-        buyShips: 0.5,
-        buyShields: 0.3,
-      }),
-
       Turn: {
         nextTurnBlock: 0n,
         empire: EEmpire.Red,

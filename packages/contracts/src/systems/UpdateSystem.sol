@@ -4,13 +4,14 @@ pragma solidity >=0.8.24;
 import { System } from "@latticexyz/world/src/System.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
-import { LibGold } from "libraries/LibGold.sol";
+import { LibNPCAction } from "libraries/LibNPCAction.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { Planet, Turn, TurnData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
+import { Likelihoods } from "../Types.sol";
 
 contract UpdateSystem is EmpiresSystem {
   function _updateTurn() private returns (EEmpire) {
@@ -24,33 +25,21 @@ contract UpdateSystem is EmpiresSystem {
     return turn.empire;
   }
 
-  function updateWorld() public _onlyNotGameOver {
+  function updateWorld(Likelihoods[] memory likelihoods) public _onlyNotGameOver {
     EEmpire empire = _updateTurn();
 
     uint256 goldGenRate = P_GameConfig.getGoldGenRate();
 
-    // add gold to every planet
-    bytes32[] memory planets = PlanetsSet.getPlanetIds();
-    for (uint i = 0; i < planets.length; i++) {
-      Planet.setGoldCount(planets[i], Planet.getGoldCount(planets[i]) + goldGenRate);
-    }
-
     // spend gold and move ships for each empire planet
-    bytes32[] memory empirePlanets = EmpirePlanetsSet.getEmpirePlanetIds(empire);
-    for (uint i = 0; i < empirePlanets.length; i++) {
-      LibMoveShips.executePendingMoves(empirePlanets[i]);
-      LibGold.spendGold(empirePlanets[i]);
+    for (uint i = 0; i < likelihoods.length; i++) {
+      LibMoveShips.executePendingMoves(likelihoods[i].planetId);
+      LibNPCAction.executeAction(likelihoods[i].planetId, likelihoods[i]);
     }
 
     // resolve combat for each planet
+    bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint i = 0; i < planets.length; i++) {
       LibResolveCombat.resolveCombat(planets[i]);
-    }
-
-    // set new pending moves for each planet
-    empirePlanets = EmpirePlanetsSet.getEmpirePlanetIds(empire);
-    for (uint i = 0; i < empirePlanets.length; i++) {
-      LibMoveShips.createPendingMove(empirePlanets[i]);
     }
 
     // generate new actions and points for each empire and action
