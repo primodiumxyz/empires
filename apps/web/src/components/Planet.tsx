@@ -9,7 +9,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { IconLabel } from "@/components/core/IconLabel";
-import { Sprites } from "@primodiumxyz/assets/mappings/sprite";
+import { InterfaceIcons } from "@primodiumxyz/assets/mappings/icon";
 import { SecondaryCard, Card } from "@/components/core/Card";
 import { Marker } from "@/components/core/Marker";
 import { useActionCost } from "@/hooks/useActionCost";
@@ -194,7 +194,7 @@ const InteractButton = forwardRef<HTMLButtonElement, {
               `}
             </style>
             <SecondaryCard className="grid grid-cols-7 items-center justify-center w-96">
-              <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={Sprites.CreateShip} />
+              <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={InterfaceIcons.Fleet} />
               <div className="col-span-4 flex flex-col items-start">
                 <p>Purchase Ship</p>
                 <p className="block text-xs opacity-75">Increase the number of ships</p>
@@ -222,7 +222,7 @@ const InteractButton = forwardRef<HTMLButtonElement, {
             </SecondaryCard>
 
             <SecondaryCard className="grid grid-cols-7 items-center justify-center w-96">
-              <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={Sprites.AddShield} />
+              <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={InterfaceIcons.Defense} />
               <div className="col-span-4 flex flex-col items-start">
                 <p>Purchase Shield</p>
                 <p className="block text-xs opacity-75">Increase shield strength</p>
@@ -250,7 +250,7 @@ const InteractButton = forwardRef<HTMLButtonElement, {
             </SecondaryCard>
 
             <SecondaryCard className="grid grid-cols-7 items-center justify-center w-96">
-              <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={Sprites.RemoveShip} />
+              <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={InterfaceIcons.RemoveShip} />
               <div className="col-span-4 flex flex-col items-start">
                 <p>Remove Ship</p>
                 <p className="block text-xs opacity-75">Reduce the number of ships</p>
@@ -278,7 +278,7 @@ const InteractButton = forwardRef<HTMLButtonElement, {
             </SecondaryCard>
 
             <SecondaryCard className="grid grid-cols-7 items-center justify-center w-96">
-              <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={Sprites.SabotageShield} />
+              <IconLabel className="col-span-1 justify-center text-lg drop-shadow-lg" imageUri={InterfaceIcons.Attack2} />
               <div className="col-span-4 flex flex-col items-start">
                 <p>Sabotage Shield</p>
                 <p className="block text-xs opacity-75">Decrease shield strength</p>
