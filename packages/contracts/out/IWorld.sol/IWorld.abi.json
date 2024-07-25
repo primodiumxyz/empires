@@ -409,17 +409,12 @@
             "internalType": "bytes32"
           },
           {
-            "name": "buyShields",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "attackEnemy",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
             "name": "accumulateGold",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "buyShields",
             "type": "uint256",
             "internalType": "uint256"
           },
@@ -434,12 +429,17 @@
             "internalType": "uint256"
           },
           {
-            "name": "attackTargetId",
+            "name": "attackEnemy",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "supportTargetId",
             "type": "bytes32",
             "internalType": "bytes32"
           },
           {
-            "name": "supportTargetId",
+            "name": "attackTargetId",
             "type": "bytes32",
             "internalType": "bytes32"
           }

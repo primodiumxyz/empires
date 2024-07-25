@@ -80,4 +80,13 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
     },
   },
+  // this is the gold added to the planet when this action is triggered
+  AccumulateGold: {
+    keys: [{ [ENPCAction.AccumulateGold]: "uint8" }],
+    tables: {
+      P_NPCActionCosts: {
+        goldCost: 5n,
+      },
+    },
+  },
 };

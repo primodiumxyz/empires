@@ -232,6 +232,17 @@ export const worldInput = {
       type: "offchainTable",
     },
 
+    AccumulateGoldNPCAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        goldAdded: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
     BuyShipsNPCAction: {
       key: ["id"],
       schema: {

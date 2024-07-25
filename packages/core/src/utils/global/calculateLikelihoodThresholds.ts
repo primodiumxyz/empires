@@ -1,12 +1,13 @@
+// from least to most active
 type Likelihoods = {
-  buyShields: number;
-  attackEnemy: number;
   accumulateGold: number;
+  buyShields: number;
   buyShips: number;
   supportAlly: number;
+  attackEnemy: number;
 };
 
-export function calculateLikelihoods(
+export function calculateLikelihoodThresholds(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
@@ -104,6 +105,3 @@ const percentsToThresholds = <T extends Record<string, number>>(percents: T): T 
 
   return thresholds;
 };
-
-const values = calculateLikelihoods(0, 0, 0);
-console.log(values);

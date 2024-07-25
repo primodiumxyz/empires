@@ -38,7 +38,7 @@ contract LibNPCActionTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
 
-    LibNPCAction._executeAction(planetId, likelihoods.accumulateGold, likelihoods);
+    LibNPCAction._executeAction(likelihoods, likelihoods.accumulateGold - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
@@ -53,7 +53,7 @@ contract LibNPCActionTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
 
-    LibNPCAction._executeAction(planetId, likelihoods.buyShips - 1, likelihoods);
+    LibNPCAction._executeAction(likelihoods, likelihoods.buyShips - 1);
 
     assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count should be 0");
     assertEq(Planet.getShipCount(planetId), 1, "Planet ship count should be 1");
@@ -65,7 +65,7 @@ contract LibNPCActionTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 1, "Planet ship count should be 1");
     assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
 
-    LibNPCAction._executeAction(planetId, likelihoods.buyShips - 1, likelihoods);
+    LibNPCAction._executeAction(likelihoods, likelihoods.buyShips - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 5, "Planet ship count should be 5");
@@ -80,7 +80,7 @@ contract LibNPCActionTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
 
-    LibNPCAction._executeAction(planetId, likelihoods.buyShields - 1, likelihoods);
+    LibNPCAction._executeAction(likelihoods, likelihoods.buyShields - 1);
 
     assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count should be 0");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
@@ -92,7 +92,7 @@ contract LibNPCActionTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 1, "Planet shield count should be 1");
 
-    LibNPCAction._executeAction(planetId, likelihoods.buyShields - 1, likelihoods);
+    LibNPCAction._executeAction(likelihoods, likelihoods.buyShields - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");

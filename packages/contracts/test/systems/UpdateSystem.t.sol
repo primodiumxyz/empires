@@ -84,7 +84,7 @@ contract UpdateSystemTest is PrimodiumTest {
     uint256 expectedShips = gold / shipPrice;
     uint256 expectedRemainder = gold % shipPrice;
 
-    LibNPCAction._executeAction(planetId, shipsAction, likelihoods);
+    LibNPCAction._executeAction(likelihoods, shipsAction);
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
     assertEq(Planet.getShipCount(planetId), expectedShips, "ships wrong");

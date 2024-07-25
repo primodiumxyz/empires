@@ -1,7 +1,7 @@
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { Tables } from "@core/lib";
 
-import { calculateLikelihoodThresholds } from "../global/empireActions";
+import { calculateLikelihoodThresholds } from "../global/calculateLikelihoodThresholds";
 
 export const createNpcUtils = (tables: Tables) => {
   const getLikelihoods = (planetId: Entity) => {
