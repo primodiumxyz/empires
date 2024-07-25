@@ -2,7 +2,7 @@ import { forwardRef, ReactNode, useEffect, useMemo, useRef, useState } from "rea
 import { CurrencyYenIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
 import { bigIntMin } from "@latticexyz/common/utils";
 
-import { InterfaceIcons } from "@primodiumxyz/assets/mappings/icon";
+import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
@@ -12,10 +12,12 @@ import { Button } from "@/components/core/Button";
 import { Card, SecondaryCard } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
 import { Marker } from "@/components/core/Marker";
+import { Tooltip } from "@/components/core/Tooltip";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
+import { cn } from "@/util/client";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "fill-blue-600",
@@ -75,16 +77,16 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   return (
     <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
-      <div className="relative mt-8 flex flex-col items-center justify-center">
-        <div className="flex flex-col items-center gap-2 text-white">
-          <div className="flex flex-row-reverse items-end text-center">
+      <div className="relative mt-14 flex flex-col items-center drop-shadow-2xl">
+        <div className="group relative flex flex-col items-center">
+          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-secondary/50 text-center">
             <p className="font-mono text-[10px] opacity-70">
               ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
             </p>
             {/* dashboard button */}
             <Button
               variant="ghost"
-              className="font-bold"
+              className="p-0 font-bold text-amber-400"
               onClick={() => {
                 tables.SelectedPlanet.set({ value: entity });
                 utils.openPane("dashboard");
@@ -93,22 +95,24 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               {entityToPlanetName(entity)}
             </Button>
           </div>
-        </div>
-        <SecondaryCard className="relative flex flex-col gap-1 border-none bg-gray-50/20">
-          <div className="relative flex flex-row gap-1">
+          <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/25 px-2 text-[.8em]">
             <Ships shipCount={planet.shipCount} planetId={entity} planetEmpire={planetEmpire} />
             <Shields shieldCount={planet.shieldCount} planetId={entity} planetEmpire={planetEmpire} />
             <GoldCount goldCount={planet.goldCount} entity={entity} />
           </div>
-        </SecondaryCard>
 
-        <InteractButton
-          ref={interactButtonRef}
-          onClick={handleInteractClick}
-          isInteractPaneVisible={isInteractPaneVisible}
-          planetId={entity}
-          planetEmpire={planetEmpire}
-        />
+          <InteractButton
+            className={cn(
+              "h-full scale-75 opacity-75 transition-all group-hover:scale-100 group-hover:opacity-100",
+              !planet?.empireId ? "pointer-events-none !opacity-0" : "",
+            )}
+            ref={interactButtonRef}
+            onClick={handleInteractClick}
+            isInteractPaneVisible={isInteractPaneVisible}
+            planetId={entity}
+            planetEmpire={planetEmpire}
+          />
+        </div>
       </div>
     </Marker>
   );
@@ -121,8 +125,9 @@ const InteractButton = forwardRef<
     isInteractPaneVisible: boolean;
     planetId: Entity;
     planetEmpire: EEmpire;
+    className: string;
   }
->(({ onClick, isInteractPaneVisible, planetId, planetEmpire }, ref) => {
+>(({ onClick, isInteractPaneVisible, planetId, planetEmpire, className }, ref) => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
   const { utils } = useCore();
@@ -174,13 +179,17 @@ const InteractButton = forwardRef<
   const [inputValue4, setInputValue4] = useState("1");
 
   return (
-    <div className="relative">
-      <Button ref={ref} className="z-10 h-full p-3" onClick={handleInteractClick}>
+    <div className={cn("relative")}>
+      <Button ref={ref} className={cn("p-3", className)} onClick={handleInteractClick}>
         Interact
       </Button>
       {isInteractPaneVisible && (
         <div className="absolute left-1/2 top-12 -translate-x-1/2">
-          <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
+          <Card
+            noDecor
+            ref={InteractPaneRef}
+            className="flex-row items-center justify-center gap-2 bg-slate-900/85 backdrop-blur-md"
+          >
             <div className="flex flex-col items-center justify-center gap-1">
               <style>
                 {`
@@ -353,18 +362,20 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
   }, [nextId]);
 
   return (
-    <div className="relative z-50">
-      <p className="flex items-center justify-center gap-1.5">
-        <CurrencyYenIcon className="size-5" /> {goldCount.toLocaleString()}
-      </p>
-      {goldFloatingTexts.map((item) => (
-        <div
-          key={item.id}
-          className="floating-text absolute right-1 top-0 z-50 w-fit translate-x-full rounded bg-white p-2 text-xs text-black"
-        >
-          {item.text}
-        </div>
-      ))}
+    <div className="pointer-events-auto relative z-50">
+      <Tooltip tooltipContent={`GOLD`}>
+        <p className="pointer-events-auto flex items-center justify-center gap-1.5">
+          <IconLabel imageUri={InterfaceIcons.Vault} text={goldCount.toLocaleString()} />
+        </p>
+        {goldFloatingTexts.map((item) => (
+          <div
+            key={item.id}
+            className="floating-text absolute right-1 top-0 z-50 w-fit translate-x-full rounded bg-white p-2 text-xs text-black"
+          >
+            {item.text}
+          </div>
+        ))}
+      </Tooltip>
     </div>
   );
 };
@@ -449,7 +460,9 @@ const Ships = ({
   return (
     <div className="relative z-50">
       <p className="flex items-center justify-center gap-2">
-        <RocketLaunchIcon className="size-4" /> {shipCount.toLocaleString()}
+        <Tooltip tooltipContent={`SHIPS`}>
+          <IconLabel imageUri={InterfaceIcons.Fleet} text={shipCount.toLocaleString()} />
+        </Tooltip>
       </p>
       {floatingTexts.map((item) => (
         <div
@@ -504,8 +517,10 @@ const Shields = ({
   }, [nextId]);
   return (
     <div className="relative z-50">
-      <p className="flex items-center justify-center gap-2">
-        <ShieldCheckIcon className="size-4" /> {shieldCount.toLocaleString()}
+      <p className="flex items-center justify-center">
+        <Tooltip tooltipContent={`SHIELDS`}>
+          <IconLabel imageUri={InterfaceIcons.Defense} text={shieldCount.toLocaleString()} />
+        </Tooltip>
       </p>
 
       {floatingTexts.map((item) => (

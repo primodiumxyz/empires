@@ -76,14 +76,15 @@ const Game = memo(() => {
 
       {/* cannot unmount. needs to be visible for phaser to attach to DOM element */}
       <div id="game-container" className="screen-container">
-        <div id="phaser-container" className="screen-container pointer-events-auto absolute z-10 cursor-pointer"></div>
-        {!!gameRef.current && !loading && (
-          <GameProvider game={gameRef.current}>
-            <div className="pointer-events-none relative z-20">
-              <GameHUD />
-            </div>
-          </GameProvider>
-        )}
+        <div id="phaser-container" className="screen-container pointer-events-auto absolute cursor-pointer">
+          {!!gameRef.current && !loading && (
+            <GameProvider game={gameRef.current}>
+              <div className="pointer-events-none relative">
+                <GameHUD />
+              </div>
+            </GameProvider>
+          )}
+        </div>
       </div>
     </>
   );
