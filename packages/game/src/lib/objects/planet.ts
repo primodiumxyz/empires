@@ -98,6 +98,10 @@ export class Planet
       Assets.SpriteAtlas,
       Sprites[EmpireToHexSpriteKeys[faction] ?? "HexGrey"]
     );
+    this.hexFrameSprite.setTexture(
+      Assets.SpriteAtlas,
+      Sprites[EmpireToHexFrameSpriteKeys[faction] ?? "HexFrameGrey"]
+    );
   }
 
   override destroy() {

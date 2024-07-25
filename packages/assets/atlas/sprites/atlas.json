@@ -5,180 +5,33 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1721858972204",
+            "image": "atlas.png?timestamp=1721923519269",
             "format": "RGBA8888",
             "size": {
-                "w": 768,
-                "h": 768
+                "w": 1776,
+                "h": 198
             },
             "scale": 1,
             "frames": [
                 {
-                    "filename": "sprites/hex-frames/hex_frame_blue.png",
+                    "filename": "sprites/planet/planet_underglow.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 256,
-                        "h": 256
+                        "w": 96,
+                        "h": 96
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 256,
-                        "h": 256
+                        "w": 96,
+                        "h": 96
                     },
                     "frame": {
                         "x": 0,
                         "y": 0,
-                        "w": 256,
-                        "h": 256
-                    }
-                },
-                {
-                    "filename": "sprites/hex-frames/hex_frame_green.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 256,
-                        "h": 256
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    },
-                    "frame": {
-                        "x": 256,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    }
-                },
-                {
-                    "filename": "sprites/hex-frames/hex_frame_grey.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 256,
-                        "h": 256
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 256,
-                        "w": 256,
-                        "h": 256
-                    }
-                },
-                {
-                    "filename": "sprites/hex-frames/hex_frame_red.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 256,
-                        "h": 256
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    },
-                    "frame": {
-                        "x": 256,
-                        "y": 256,
-                        "w": 256,
-                        "h": 256
-                    }
-                },
-                {
-                    "filename": "sprites/hex/hex_blue.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 256,
-                        "h": 256
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    },
-                    "frame": {
-                        "x": 512,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    }
-                },
-                {
-                    "filename": "sprites/hex/hex_green.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 256,
-                        "h": 256
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    },
-                    "frame": {
-                        "x": 512,
-                        "y": 256,
-                        "w": 256,
-                        "h": 256
-                    }
-                },
-                {
-                    "filename": "sprites/hex/hex_grey.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 256,
-                        "h": 256
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 512,
-                        "w": 256,
-                        "h": 256
-                    }
-                },
-                {
-                    "filename": "sprites/hex/hex_red.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 256,
-                        "h": 256
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 256,
-                        "h": 256
-                    },
-                    "frame": {
-                        "x": 256,
-                        "y": 512,
-                        "w": 256,
-                        "h": 256
+                        "w": 96,
+                        "h": 96
                     }
                 },
                 {
@@ -196,8 +49,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 512,
-                        "y": 512,
+                        "x": 96,
+                        "y": 0,
                         "w": 76,
                         "h": 114
                     }
@@ -217,8 +70,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 512,
-                        "y": 626,
+                        "x": 172,
+                        "y": 0,
                         "w": 76,
                         "h": 114
                     }
@@ -238,8 +91,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 588,
-                        "y": 512,
+                        "x": 248,
+                        "y": 0,
                         "w": 76,
                         "h": 114
                     }
@@ -259,31 +112,178 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 588,
-                        "y": 626,
+                        "x": 324,
+                        "y": 0,
                         "w": 76,
                         "h": 114
                     }
                 },
                 {
-                    "filename": "sprites/planet/planet_underglow.png",
+                    "filename": "sprites/hex-frames/hex_frame_blue.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 96,
-                        "h": 96
+                        "w": 172,
+                        "h": 198
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 96,
-                        "h": 96
+                        "w": 172,
+                        "h": 198
                     },
                     "frame": {
-                        "x": 664,
-                        "y": 512,
-                        "w": 96,
-                        "h": 96
+                        "x": 400,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    }
+                },
+                {
+                    "filename": "sprites/hex-frames/hex_frame_green.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 198
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    },
+                    "frame": {
+                        "x": 572,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    }
+                },
+                {
+                    "filename": "sprites/hex-frames/hex_frame_grey.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 198
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    },
+                    "frame": {
+                        "x": 744,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    }
+                },
+                {
+                    "filename": "sprites/hex-frames/hex_frame_red.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 198
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    },
+                    "frame": {
+                        "x": 916,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_blue.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 198
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    },
+                    "frame": {
+                        "x": 1088,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_green.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 198
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    },
+                    "frame": {
+                        "x": 1260,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_grey.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 198
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    },
+                    "frame": {
+                        "x": 1432,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_red.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 198
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
+                    },
+                    "frame": {
+                        "x": 1604,
+                        "y": 0,
+                        "w": 172,
+                        "h": 198
                     }
                 }
             ]
