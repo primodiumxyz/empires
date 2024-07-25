@@ -1,5 +1,4 @@
 import { forwardRef, ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { CurrencyYenIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
 import { bigIntMin } from "@latticexyz/common/utils";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
@@ -10,11 +9,10 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { ActionPane } from "@/components/ActionPane";
 import { Button } from "@/components/core/Button";
-import { Card, SecondaryCard } from "@/components/core/Card";
+import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
 import { Join } from "@/components/core/Join";
 import { Marker } from "@/components/core/Marker";
-import { NumberInput } from "@/components/core/NumberInput";
 import { Tabs } from "@/components/core/Tabs";
 import { Tooltip } from "@/components/core/Tooltip";
 import { useActionCost } from "@/hooks/useActionCost";
