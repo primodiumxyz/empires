@@ -95,6 +95,7 @@ export const createFxApi = (scene: Scene) => {
       onFrameChange?: (frameNumber: number) => void;
       scale?: number;
       depth?: number;
+      blendMode?: Phaser.BlendModes;
       onComplete?: () => void;
     }
   ) {
@@ -103,11 +104,13 @@ export const createFxApi = (scene: Scene) => {
       depth = DepthLayers.Base,
       onComplete,
       onFrameChange,
+      blendMode = Phaser.BlendModes.NORMAL,
     } = options || {};
 
     const sprite = scene.phaserScene.add.sprite(coord.x, coord.y, "vfx-atlas");
     sprite.setScale(scale);
     sprite.setDepth(depth);
+    sprite.setBlendMode(blendMode);
 
     sprite.on(
       "animationupdate",

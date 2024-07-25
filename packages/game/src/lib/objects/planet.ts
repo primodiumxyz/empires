@@ -5,6 +5,7 @@ import { PrimodiumScene } from "@game/types";
 import { IPrimodiumGameObject } from "./interfaces";
 import { Assets, Sprites } from "@primodiumxyz/assets";
 import {
+  EmpireToConquerAnimationKeys,
   EmpireToHexSpriteKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
@@ -79,18 +80,22 @@ export class Planet
 
   updateFaction(faction: keyof typeof EmpireToPlanetSpriteKeys) {
     this._scene.audio.play("Blaster", "sfx");
-    this._scene.fx.emitVfx({ x: this.x, y: this.y - 27 }, "ConquerBlue", {
-      depth: DepthLayers.Marker,
-
-      onFrameChange: (frameNumber) => {
-        if (frameNumber === 6) {
-          this.planetSprite.setTexture(
-            Assets.SpriteAtlas,
-            Sprites[EmpireToPlanetSpriteKeys[faction] ?? "PlanetGrey"]
-          );
-        }
-      },
-    });
+    this._scene.fx.emitVfx(
+      { x: this.x, y: this.y - 29 },
+      EmpireToConquerAnimationKeys[faction] ?? "ConquerBlue",
+      {
+        depth: DepthLayers.Marker,
+        blendMode: Phaser.BlendModes.ADD,
+        onFrameChange: (frameNumber) => {
+          if (frameNumber === 6) {
+            this.planetSprite.setTexture(
+              Assets.SpriteAtlas,
+              Sprites[EmpireToPlanetSpriteKeys[faction] ?? "PlanetGrey"]
+            );
+          }
+        },
+      }
+    );
 
     this._scene.fx.flashSprite(this.hexSprite);
 

@@ -1,5 +1,5 @@
 import { EEmpire } from "@primodiumxyz/contracts";
-import { SpriteKeys } from "@primodiumxyz/assets";
+import { AnimationKeys, SpriteKeys } from "@primodiumxyz/assets";
 
 export const EmpireToPlanetSpriteKeys: Record<EEmpire, SpriteKeys | undefined> =
   {
@@ -13,5 +13,15 @@ export const EmpireToHexSpriteKeys: Record<EEmpire, SpriteKeys | undefined> = {
   [EEmpire.Red]: "HexRed",
   [EEmpire.Green]: "HexGreen",
   [EEmpire.Blue]: "HexBlue",
+  [EEmpire.LENGTH]: undefined,
+};
+
+export const EmpireToConquerAnimationKeys: Record<
+  EEmpire,
+  AnimationKeys | undefined
+> = {
+  [EEmpire.Red]: "ConquerRed",
+  [EEmpire.Green]: "ConquerGreen",
+  [EEmpire.Blue]: "ConquerBlue",
   [EEmpire.LENGTH]: undefined,
 };
