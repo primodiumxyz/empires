@@ -28,7 +28,7 @@ const buttonVariants = cva(
         sm: "btn-sm",
         md: "btn-md",
         lg: "btn-lg",
-        content: "h-fit p-2",
+        content: "h-fit",
       },
       modifier: {
         default: "",

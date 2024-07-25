@@ -8,10 +8,14 @@ import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { ActionPane } from "@/components/ActionPane";
 import { Button } from "@/components/core/Button";
 import { Card, SecondaryCard } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
+import { Join } from "@/components/core/Join";
 import { Marker } from "@/components/core/Marker";
+import { NumberInput } from "@/components/core/NumberInput";
+import { Tabs } from "@/components/core/Tabs";
 import { Tooltip } from "@/components/core/Tooltip";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
@@ -173,10 +177,7 @@ const InteractButton = forwardRef<
   }, [isInteractPaneVisible]);
 
   // NumberInput
-  const [inputValue1, setInputValue1] = useState("1");
-  const [inputValue2, setInputValue2] = useState("1");
-  const [inputValue3, setInputValue3] = useState("1");
-  const [inputValue4, setInputValue4] = useState("1");
+  const [inputValue, setInputValue] = useState("1");
 
   return (
     <div className={cn("relative")}>
@@ -184,149 +185,41 @@ const InteractButton = forwardRef<
         Interact
       </Button>
       {isInteractPaneVisible && (
-        <div className="absolute left-1/2 top-12 -translate-x-1/2">
-          <Card
-            noDecor
-            ref={InteractPaneRef}
-            className="flex-row items-center justify-center gap-2 bg-slate-900/85 backdrop-blur-md"
-          >
+        <div className="absolute left-1/2 top-12 -translate-x-1/2 backdrop-blur-2xl">
+          <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
             <div className="flex flex-col items-center justify-center gap-1">
-              <style>
-                {`
-                 input[type=number]::-webkit-inner-spin-button, 
-                 input[type=number]::-webkit-outer-spin-button { 
-                   opacity: 1;
-                   -webkit-appearance: auto;           
-                 }
-              `}
-              </style>
-              <SecondaryCard className="grid w-96 grid-cols-7 items-center justify-center">
-                <IconLabel
-                  className="col-span-1 justify-center text-lg drop-shadow-lg"
-                  imageUri={InterfaceIcons.Fleet}
-                />
-                <div className="col-span-4 flex flex-col items-start">
-                  <p>Purchase Ship</p>
-                  <p className="block text-xs opacity-75">Increase the number of ships</p>
-                </div>
-                <div className="col-span-2 flex flex-col">
-                  <div className="flex flex-row justify-center gap-2">
-                    <input
-                      type="number"
-                      min="1"
-                      max="100"
-                      value={inputValue1}
-                      onChange={(e) => setInputValue1(e.target.value)}
-                      className="w-14 rounded bg-gray-800 text-center text-white"
-                    />
-
-                    <Button
-                      className="h-7"
-                      onClick={() => createShip(planetId, createShipPriceWei)}
-                      disabled={gameOver || Number(planetEmpire) === 0}
-                    >
-                      Buy
-                    </Button>
-                  </div>
-                  <p className="bg-sky-950/50 text-center text-xs"> Total: {createShipPriceUsd}</p>
-                </div>
-              </SecondaryCard>
-
-              <SecondaryCard className="grid w-96 grid-cols-7 items-center justify-center">
-                <IconLabel
-                  className="col-span-1 justify-center text-lg drop-shadow-lg"
-                  imageUri={InterfaceIcons.Defense}
-                />
-                <div className="col-span-4 flex flex-col items-start">
-                  <p>Purchase Shield</p>
-                  <p className="block text-xs opacity-75">Increase shield strength</p>
-                </div>
-                <div className="col-span-2 flex flex-col">
-                  <div className="flex flex-row justify-center gap-2">
-                    <input
-                      type="number"
-                      min="1"
-                      max="100"
-                      value={inputValue2}
-                      onChange={(e) => setInputValue2(e.target.value)}
-                      className="w-14 rounded bg-gray-800 text-center text-white"
-                    />
-
-                    <Button
-                      className="h-7"
-                      onClick={() => addShield(planetId, addShieldPriceWei)}
-                      disabled={gameOver || Number(planetEmpire) === 0}
-                    >
-                      Buy
-                    </Button>
-                  </div>
-                  <p className="bg-sky-950/50 text-center text-xs"> Total: {addShieldPriceUsd}</p>
-                </div>
-              </SecondaryCard>
-
-              <SecondaryCard className="grid w-96 grid-cols-7 items-center justify-center">
-                <IconLabel
-                  className="col-span-1 justify-center text-lg drop-shadow-lg"
-                  imageUri={InterfaceIcons.RemoveShip}
-                />
-                <div className="col-span-4 flex flex-col items-start">
-                  <p>Remove Ship</p>
-                  <p className="block text-xs opacity-75">Reduce the number of ships</p>
-                </div>
-                <div className="col-span-2 flex flex-col">
-                  <div className="flex flex-row justify-center gap-2">
-                    <input
-                      type="number"
-                      min="1"
-                      max="100"
-                      value={inputValue3}
-                      onChange={(e) => setInputValue3(e.target.value)}
-                      className="w-14 rounded bg-gray-800 text-center text-white"
-                    />
-
-                    <Button
-                      className="h-7"
-                      onClick={() => removeShip(planetId, killShipPriceWei)}
-                      disabled={gameOver || Number(planetEmpire) === 0}
-                    >
-                      Buy
-                    </Button>
-                  </div>
-                  <p className="bg-sky-950/50 text-center text-xs"> Total: {killShipPriceUsd}</p>
-                </div>
-              </SecondaryCard>
-
-              <SecondaryCard className="grid w-96 grid-cols-7 items-center justify-center">
-                <IconLabel
-                  className="col-span-1 justify-center text-lg drop-shadow-lg"
-                  imageUri={InterfaceIcons.Attack2}
-                />
-                <div className="col-span-4 flex flex-col items-start">
-                  <p>Sabotage Shield</p>
-                  <p className="block text-xs opacity-75">Decrease shield strength</p>
-                </div>
-                <div className="col-span-2 flex flex-col">
-                  <div className="flex flex-row justify-center gap-2">
-                    <input
-                      type="number"
-                      min="1"
-                      max="100"
-                      value={inputValue4}
-                      onChange={(e) => setInputValue4(e.target.value)}
-                      className="w-14 rounded bg-gray-800 text-center text-white"
-                    />
-
-                    <Button
-                      className="h-7"
-                      onClick={() => removeShield(planetId, removeShieldPriceWei)}
-                      disabled={gameOver || Number(planetEmpire) === 0}
-                    >
-                      Buy
-                    </Button>
-                  </div>
-                  <p className="bg-sky-950/50 text-center text-xs"> Total: {removeShieldPriceUsd}</p>
-                </div>
-              </SecondaryCard>
+              <Tabs className="flex w-64 flex-col items-center gap-2">
+                <Join>
+                  <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
+                  <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
+                </Join>
+                <Tabs.Pane index={0} className="w-full items-center gap-4">
+                  <ActionPane
+                    inputValue={inputValue}
+                    onInputChange={setInputValue}
+                    onAttackClick={() => removeShip(planetId, killShipPriceWei)}
+                    onSupportClick={() => createShip(planetId, createShipPriceWei)}
+                    attackPrice={killShipPriceUsd}
+                    supportPrice={createShipPriceUsd}
+                    attackTxQueueId={`${planetId}-kill-ship`}
+                    supportTxQueueId={`${planetId}-create-ship`}
+                    isDisabled={gameOver || Number(planetEmpire) === 0}
+                  />
+                </Tabs.Pane>
+                <Tabs.Pane index={1} className="w-full items-center gap-4">
+                  <ActionPane
+                    inputValue={inputValue}
+                    onInputChange={setInputValue}
+                    onAttackClick={() => removeShield(planetId, removeShieldPriceWei)}
+                    onSupportClick={() => addShield(planetId, addShieldPriceWei)}
+                    attackPrice={removeShieldPriceUsd}
+                    supportPrice={addShieldPriceUsd}
+                    attackTxQueueId={`${planetId}-remove-shield`}
+                    supportTxQueueId={`${planetId}-add-shield`}
+                    isDisabled={gameOver || Number(planetEmpire) === 0}
+                  />
+                </Tabs.Pane>
+              </Tabs>
             </div>
           </Card>
         </div>
