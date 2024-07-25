@@ -143,8 +143,8 @@ const Ships = ({
   const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
   const [nextId, setNextId] = useState(0);
   const { createShip, removeShip } = useContractCalls();
-  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire);
-  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire);
+  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire, 1n);
+  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire, 1n);
   const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
   const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
 
@@ -246,7 +246,7 @@ const Ships = ({
             variant="neutral"
             size="xs"
             className="border-none"
-            onClick={() => createShip(planetId, createShipPriceWei)}
+            onClick={() => createShip(planetId, 1n, createShipPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0}
           >
             +1
@@ -269,8 +269,8 @@ const Shields = ({
   const { utils, tables } = useCore();
   const { price } = useEthPrice();
   const calls = useContractCalls();
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetEmpire);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetEmpire);
+  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetEmpire, 1n);
+  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetEmpire, 1n);
   const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
   const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
 
@@ -334,7 +334,8 @@ const Shields = ({
         <TransactionQueueMask id={`${planetId}-add-shield`}>
           <Button
             tooltip={`Cost: ${addShieldPriceUsd}`}
-            onClick={() => calls.addShield(planetId, addShieldPriceWei)}
+            onClick={() => calls.addShield(planetId, 1n, addShieldPriceWei)}
+            className="btn btn-square btn-xs"
             disabled={gameOver || Number(planetEmpire) === 0}
           >
             +1
