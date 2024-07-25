@@ -29,7 +29,7 @@ export const ActionPane: React.FC<ActionPaneProps> = ({
 }) => {
   return (
     <div className="flex w-full flex-col items-center gap-4">
-      <NumberInput min={1} max={100} count={inputValue} onChange={onInputChange} />
+      <NumberInput min={1} max={Infinity} count={inputValue} onChange={onInputChange} />
       <div className="flex gap-2">
         <div className="gap1 flex flex-col items-center">
           <TransactionQueueMask id={attackTxQueueId}>
