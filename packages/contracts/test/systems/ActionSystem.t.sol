@@ -48,7 +48,7 @@ contract ActionSystemTest is PrimodiumTest {
     P_ActionConfig.setReductionPct(5000);
     Planet.setShipCount(planetId, 1);
 
-    cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false, 1);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false, 1);
     world.Empires__killShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 0);
   }
@@ -77,12 +77,12 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testDrainShieldSingle() public {
-    uint256 cost = 0;
     vm.startPrank(creator);
     P_ActionConfig.setReductionPct(5000);
-    Planet.setShieldCount(planetId, 10);
+    uint256 currentShields = 10;
+    Planet.setShieldCount(planetId, currentShields);
 
-    cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false, 1);
+    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false, 1);
     world.Empires__drainShield{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
   }
