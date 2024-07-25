@@ -192,6 +192,7 @@ const InteractButton = forwardRef<
                     supportPrice={createShipPriceUsd}
                     attackTxQueueId={`${planetId}-kill-ship`}
                     supportTxQueueId={`${planetId}-create-ship`}
+                    isSupportDisabled={gameOver || Number(planetEmpire) === 0}
                     isAttackDisabled={
                       (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                     }
