@@ -5,7 +5,6 @@ import { PrimodiumScene } from "@game/types";
 import { IPrimodiumGameObject } from "./interfaces";
 import { Assets, Sprites } from "@primodiumxyz/assets";
 import {
-  EmpireToHexFrameSpriteKeys,
   EmpireToHexSpriteKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
@@ -20,7 +19,6 @@ export class Planet
   private planetUnderglowSprite: Phaser.GameObjects.Sprite;
   private planetSprite: Phaser.GameObjects.Sprite;
   private hexSprite: Phaser.GameObjects.Sprite;
-  private hexFrameSprite: Phaser.GameObjects.Sprite;
   private spawned = false;
 
   constructor(args: {
@@ -49,14 +47,6 @@ export class Planet
       Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]
     ).setScale(1);
 
-    this.hexFrameSprite = new Phaser.GameObjects.Sprite(
-      scene.phaserScene,
-      0,
-      0,
-      Assets.SpriteAtlas,
-      Sprites[EmpireToHexFrameSpriteKeys[empire] ?? "HexFrameGrey"]
-    );
-
     this.hexSprite = new Phaser.GameObjects.Sprite(
       scene.phaserScene,
       0,
@@ -67,12 +57,7 @@ export class Planet
 
     this._scene = scene;
     this.id = id;
-    this.add([
-      this.hexSprite,
-      this.hexFrameSprite,
-      this.planetUnderglowSprite,
-      this.planetSprite,
-    ]);
+    this.add([this.hexSprite, this.planetUnderglowSprite, this.planetSprite]);
 
     this.planetSprite.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
 

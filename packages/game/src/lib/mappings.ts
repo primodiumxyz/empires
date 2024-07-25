@@ -15,13 +15,3 @@ export const EmpireToHexSpriteKeys: Record<EEmpire, SpriteKeys | undefined> = {
   [EEmpire.Blue]: "HexBlue",
   [EEmpire.LENGTH]: undefined,
 };
-
-export const EmpireToHexFrameSpriteKeys: Record<
-  EEmpire,
-  SpriteKeys | undefined
-> = {
-  [EEmpire.Red]: "HexFrameRed",
-  [EEmpire.Green]: "HexFrameGreen",
-  [EEmpire.Blue]: "HexFrameBlue",
-  [EEmpire.LENGTH]: undefined,
-};

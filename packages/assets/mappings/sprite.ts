@@ -5,12 +5,6 @@ export const Sprites = {
   HexGreen: "sprites/hex/hex_green.png",
   HexGrey: "sprites/hex/hex_grey.png",
 
-  //HEX FRAMES
-  HexFrameRed: "sprites/hex-frames/hex_frame_red.png",
-  HexFrameBlue: "sprites/hex-frames/hex_frame_blue.png",
-  HexFrameGreen: "sprites/hex-frames/hex_frame_green.png",
-  HexFrameGrey: "sprites/hex-frames/hex_frame_grey.png",
-
   //PLANETS
   PlanetRed: "sprites/planet/planet_red.png",
   PlanetBlue: "sprites/planet/planet_blue.png",
