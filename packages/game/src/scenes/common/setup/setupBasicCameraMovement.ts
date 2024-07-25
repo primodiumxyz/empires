@@ -1,4 +1,4 @@
-import { Coord } from "@primodiumxyz/engine/types";
+import { Coord } from "@primodiumxyz/engine";
 import { World } from "@primodiumxyz/reactive-tables";
 import { PrimodiumScene } from "@game/types";
 
@@ -38,7 +38,9 @@ export const setupBasicCameraMovement = (
 
   function handleZoom(delta: number) {
     const zoom = scene.camera.phaserCamera.zoom;
-    const zoomSpeed = scene.input.isDown("Modifier") ? ZOOM_SPEED / 3 : ZOOM_SPEED;
+    const zoomSpeed = scene.input.isDown("Modifier")
+      ? ZOOM_SPEED / 3
+      : ZOOM_SPEED;
 
     const zoomAmount = zoomSpeed * (delta / 1000);
     if (scene.input.isDown("ZoomIn")) {
@@ -76,7 +78,9 @@ export const setupBasicCameraMovement = (
 
   function handleTranslate(delta: number) {
     // HANDLE CAMERA SCROLL MOVEMENT KEYS
-    const speed = (scene.input.isDown("Modifier") ? SPEED / 3 : SPEED) / scene.camera.phaserCamera.zoom;
+    const speed =
+      (scene.input.isDown("Modifier") ? SPEED / 3 : SPEED) /
+      scene.camera.phaserCamera.zoom;
     const moveDistance = speed * (delta / 1000);
     let scrollX = scene.camera.phaserCamera.scrollX;
     let scrollY = scene.camera.phaserCamera.scrollY;
@@ -88,7 +92,10 @@ export const setupBasicCameraMovement = (
     if (scene.input.isDown("Right")) moveX++;
 
     //only register movement when no tweens are running
-    if ((moveX !== 0 || moveY !== 0) && !scene.phaserScene.tweens.getTweensOf(scene.camera.phaserCamera).length) {
+    if (
+      (moveX !== 0 || moveY !== 0) &&
+      !scene.phaserScene.tweens.getTweensOf(scene.camera.phaserCamera).length
+    ) {
       const length = Math.sqrt(moveX * moveX + moveY * moveY);
       accumulatedX += (moveX / length) * moveDistance;
       accumulatedY += (moveY / length) * moveDistance;
@@ -137,7 +144,10 @@ export const setupBasicCameraMovement = (
     //check if scene is active
     if (!scene.phaserScene.scene.isActive()) return;
 
-    const { x, y } = scene.utils.pixelCoordToTileCoord({ x: event.worldX, y: event.worldY });
+    const { x, y } = scene.utils.pixelCoordToTileCoord({
+      x: event.worldX,
+      y: event.worldY,
+    });
 
     const gameCoord = { x, y: -y } as Coord;
 
@@ -150,7 +160,12 @@ export const setupBasicCameraMovement = (
   scene.phaserScene.input.on(
     "wheel",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (pointer: Phaser.Input.Pointer, _gameObjects: any, _deltaX: any, deltaY: number) => {
+    (
+      pointer: Phaser.Input.Pointer,
+      _gameObjects: any,
+      _deltaX: any,
+      deltaY: number
+    ) => {
       if (!wheel) return;
 
       let scale = 0.0002;

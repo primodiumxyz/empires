@@ -2,10 +2,10 @@ import { AccountClient, Core, ExecuteFunctions, TxQueueOptions } from "@primodiu
 import { Entity } from "@primodiumxyz/reactive-tables";
 
 export const createActionCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
-  const createShip = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const createShip = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__createShip",
-      args: [planetId],
+      args: [planetId, actionCount],
       options: { value: payment },
       txQueueOptions: {
         id: `${planetId}-create-ship`,
@@ -15,10 +15,10 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  const removeShip = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const removeShip = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__killShip",
-      args: [planetId],
+      args: [planetId, actionCount],
       options: { value: payment },
       txQueueOptions: {
         id: `${planetId}-kill-ship`,
@@ -28,10 +28,10 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  const addShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const addShield = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__chargeShield",
-      args: [planetId],
+      args: [planetId, actionCount],
       options: { value: payment },
       txQueueOptions: {
         id: `${planetId}-add-shield`,
@@ -50,10 +50,10 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  const removeShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const removeShield = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__drainShield",
-      args: [planetId],
+      args: [planetId, actionCount],
       options: { value: payment },
       txQueueOptions: {
         id: `${planetId}-remove-shield`,
@@ -63,5 +63,5 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  return { createShip, removeShip, addShield, removeShield };
+  return { createShip, removeShip, addShield, removeShield, sellPoints };
 };

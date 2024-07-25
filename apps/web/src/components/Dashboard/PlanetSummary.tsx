@@ -91,10 +91,10 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
   const planet = tables.Planet.use(entity)!;
   const { empireId, shipCount, shieldCount } = planet;
 
-  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId);
-  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId);
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId);
+  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId, 1n);
+  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId, 1n);
+  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId, 1n);
+  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId, 1n);
 
   const addShipPriceUsd = weiToUsd(addShipPriceWei, ethPrice ?? 0);
   const removeShipPriceUsd = weiToUsd(removeShipPriceWei, ethPrice ?? 0);
@@ -116,7 +116,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             {addShipPriceUsd} ({formatEther(addShipPriceWei)} ETH)
           </span>
           <TransactionQueueMask id={`${entity}-create-ship`}>
-            <Button variant="neutral" size="xs" onClick={() => createShip(entity, addShipPriceWei)} disabled={gameOver}>
+            <Button variant="neutral" size="xs" onClick={() => createShip(entity, 1n, addShipPriceWei)} disabled={gameOver}>
               Buy
             </Button>
           </TransactionQueueMask>
@@ -132,7 +132,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => removeShip(entity, removeShipPriceWei)}
+              onClick={() => removeShip(entity, 1n, removeShipPriceWei)}
               disabled={gameOver || !shipCount}
             >
               Buy
@@ -150,7 +150,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => addShield(entity, addShieldPriceWei)}
+              onClick={() => addShield(entity, 1n, addShieldPriceWei)}
               disabled={gameOver}
             >
               Buy
@@ -168,7 +168,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => removeShield(entity, removeShieldPriceWei)}
+              onClick={() => removeShield(entity, 1n, removeShieldPriceWei)}
               disabled={gameOver || !shieldCount}
             >
               Buy
