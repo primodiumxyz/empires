@@ -1,6 +1,7 @@
 import { Scene, Coord } from "@primodiumxyz/engine";
 
 import { DepthLayers } from "@game/lib/constants/common.ts";
+import { AnimationKeys, Animations } from "@primodiumxyz/assets";
 
 export const createFxApi = (scene: Scene) => {
   function outline(
@@ -11,7 +12,7 @@ export const createFxApi = (scene: Scene) => {
       knockout?: boolean;
     } = {}
   ) {
-    const { thickness = 3, color = 0xffff00, knockout } = options;
+    const { thickness = 1.5, color = 0x00ffff, knockout } = options;
 
     if (!(gameObject instanceof Phaser.GameObjects.Sprite)) return;
 
@@ -87,10 +88,80 @@ export const createFxApi = (scene: Scene) => {
     camera.phaserCamera.shake(700, 0.02 / camera.phaserCamera.zoom);
   }
 
+  function emitVfx(
+    coord: Coord,
+    animationKey: AnimationKeys,
+    options?: {
+      onFrameChange?: (frameNumber: number) => void;
+      scale?: number;
+      depth?: number;
+      onComplete?: () => void;
+    }
+  ) {
+    const {
+      scale = 1,
+      depth = DepthLayers.Base,
+      onComplete,
+      onFrameChange,
+    } = options || {};
+
+    const sprite = scene.phaserScene.add.sprite(coord.x, coord.y, "vfx-atlas");
+    sprite.setScale(scale);
+    sprite.setDepth(depth);
+
+    sprite.on(
+      "animationupdate",
+      (
+        animation: Phaser.Animations.Animation,
+        frame: Phaser.Animations.AnimationFrame
+      ) => {
+        if (onFrameChange) {
+          onFrameChange(frame.index);
+        }
+      }
+    );
+
+    sprite.on("animationcomplete", () => {
+      sprite.destroy();
+      if (onComplete) {
+        onComplete();
+      }
+    });
+
+    sprite.play(Animations[animationKey]);
+  }
+
+  function flashSprite(
+    sprite: Phaser.GameObjects.Sprite,
+    duration = 400,
+    wait = 100,
+    repeat = 3
+  ) {
+    //flash outline on sprite twice
+
+    let at = 0;
+    scene.phaserScene.add
+      .timeline(
+        Array.from({ length: repeat * 2 }).map((_, i) => {
+          const event = {
+            at: at,
+            run: () => (i % 2 === 0 ? outline(sprite) : removeOutline(sprite)),
+          };
+
+          at += i % 2 === 0 ? duration : wait;
+
+          return event;
+        })
+      )
+      .play();
+  }
+
   return {
     outline,
     removeOutline,
     emitFloatingText,
+    flashSprite,
     flashScreen,
+    emitVfx,
   };
 };

@@ -9,6 +9,7 @@ import {
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
 import { getRandomRange } from "@primodiumxyz/core";
+import { DepthLayers } from "@game/lib/constants/common";
 
 export class Planet
   extends Phaser.GameObjects.Container
@@ -20,6 +21,7 @@ export class Planet
   private planetSprite: Phaser.GameObjects.Sprite;
   private hexSprite: Phaser.GameObjects.Sprite;
   private spawned = false;
+  private coord: PixelCoord;
 
   constructor(args: {
     id: Entity;
@@ -45,7 +47,7 @@ export class Planet
       -25,
       Assets.SpriteAtlas,
       Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]
-    ).setScale(1);
+    );
 
     this.hexSprite = new Phaser.GameObjects.Sprite(
       scene.phaserScene,
@@ -57,6 +59,7 @@ export class Planet
 
     this._scene = scene;
     this.id = id;
+    this.coord = coord;
     this.add([this.hexSprite, this.planetUnderglowSprite, this.planetSprite]);
 
     this.planetSprite.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
@@ -75,17 +78,25 @@ export class Planet
   }
 
   updateFaction(faction: keyof typeof EmpireToPlanetSpriteKeys) {
-    this.planetSprite.setTexture(
-      Assets.SpriteAtlas,
-      Sprites[EmpireToPlanetSpriteKeys[faction] ?? "PlanetGrey"]
-    );
+    this._scene.audio.play("Blaster", "sfx");
+    this._scene.fx.emitVfx({ x: this.x, y: this.y - 27 }, "ConquerBlue", {
+      depth: DepthLayers.Marker,
+
+      onFrameChange: (frameNumber) => {
+        if (frameNumber === 6) {
+          this.planetSprite.setTexture(
+            Assets.SpriteAtlas,
+            Sprites[EmpireToPlanetSpriteKeys[faction] ?? "PlanetGrey"]
+          );
+        }
+      },
+    });
+
+    this._scene.fx.flashSprite(this.hexSprite);
+
     this.hexSprite.setTexture(
       Assets.SpriteAtlas,
       Sprites[EmpireToHexSpriteKeys[faction] ?? "HexGrey"]
-    );
-    this.hexFrameSprite.setTexture(
-      Assets.SpriteAtlas,
-      Sprites[EmpireToHexFrameSpriteKeys[faction] ?? "HexFrameGrey"]
     );
   }
 

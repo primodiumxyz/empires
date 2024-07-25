@@ -30,13 +30,15 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
         empire: current.empireId,
       });
     },
-    onUpdate: ({ entity, properties: { current } }) => {
+    onUpdate: ({ entity, properties: { current, prev } }) => {
       if (!current) return;
 
       const planet = scene.objects.planet.get(entity);
       if (!planet) return;
 
-      planet.updateFaction(current.empireId);
+      if (prev?.empireId !== current.empireId) {
+        planet.updateFaction(current.empireId);
+      }
     },
   });
 };
