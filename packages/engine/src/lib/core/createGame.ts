@@ -69,7 +69,8 @@ export const createGame = async (config: GameConfig) => {
     dispose: () => {
       console.log(config.key + ": Disposing");
       sceneManager.dispose();
-      phaserGame.destroy(true, false);
+      phaserGame.canvas.remove();
+      phaserGame.destroy(true);
     },
   };
 

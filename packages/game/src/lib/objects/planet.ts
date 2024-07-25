@@ -9,6 +9,7 @@ import {
   EmpireToHexSpriteKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
+import { getRandomRange } from "@primodiumxyz/core";
 
 export class Planet
   extends Phaser.GameObjects.Container
@@ -35,7 +36,7 @@ export class Planet
     this.planetUnderglowSprite = new Phaser.GameObjects.Sprite(
       scene.phaserScene,
       0,
-      -20,
+      -25,
       Assets.SpriteAtlas,
       Sprites.PlanetUnderglow
     ).setBlendMode(Phaser.BlendModes.SCREEN);
@@ -43,7 +44,7 @@ export class Planet
     this.planetSprite = new Phaser.GameObjects.Sprite(
       scene.phaserScene,
       0,
-      -20,
+      -25,
       Assets.SpriteAtlas,
       Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]
     ).setScale(1);
@@ -72,6 +73,8 @@ export class Planet
       this.planetUnderglowSprite,
       this.planetSprite,
     ]);
+
+    this.planetSprite.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
 
     this._scene.objects.planet.add(id, this, false);
   }

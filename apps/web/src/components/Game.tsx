@@ -51,10 +51,6 @@ const Game = memo(() => {
       hasInitialized.current = false;
       // await new Promise((resolve) => setTimeout(resolve, 100));
       const phaserContainer = document.getElementById("phaser-container");
-
-      for (const child of Array.from(phaserContainer?.children ?? [])) {
-        phaserContainer?.removeChild(child);
-      }
     };
 
     init();
@@ -76,14 +72,15 @@ const Game = memo(() => {
 
       {/* cannot unmount. needs to be visible for phaser to attach to DOM element */}
       <div id="game-container" className="screen-container">
-        <div id="phaser-container" className="screen-container pointer-events-auto absolute z-10 cursor-pointer"></div>
-        {!!gameRef.current && !loading && (
-          <GameProvider game={gameRef.current}>
-            <div className="pointer-events-none relative z-20">
-              <GameHUD />
-            </div>
-          </GameProvider>
-        )}
+        <div id="phaser-container" className="screen-container pointer-events-auto absolute cursor-pointer">
+          {!!gameRef.current && !loading && (
+            <GameProvider game={gameRef.current}>
+              <div className="pointer-events-none relative">
+                <GameHUD />
+              </div>
+            </GameProvider>
+          )}
+        </div>
       </div>
     </>
   );
@@ -91,33 +88,39 @@ const Game = memo(() => {
 
 export const GameHUD = () => {
   return (
-    <HUD pad>
-      <HUD.TopLeft>
-        <Account />
-      </HUD.TopLeft>
-      <HUD.TopMiddle>
-        <TimeLeft />
-      </HUD.TopMiddle>
-      <HUD.TopRight>
-        <Pot />
-      </HUD.TopRight>
-      <HUD.Center>{/* <PlanetGrid tileSize={100} margin={10} /> */}</HUD.Center>
-      <HUD.BottomLeft>
-        <SellPoints />
-      </HUD.BottomLeft>
-      <HUD.BottomMiddle>
-        <AdvanceTurn />
-      </HUD.BottomMiddle>
-      <HUD.BottomRight className="flex gap-2">
-        <UserSettings />
-        <ActionLog />
-        <HistoricalPointPriceModal />
-        {DEV && <Cheatcodes className="-mr-1" />}
-      </HUD.BottomRight>
-      <HUD.Right>
-        <Dashboard />
-      </HUD.Right>
-    </HUD>
+    <>
+      <HUD pad>
+        <HUD.TopLeft>
+          <Account />
+        </HUD.TopLeft>
+        <HUD.TopMiddle>
+          <TimeLeft />
+        </HUD.TopMiddle>
+        <HUD.TopRight>
+          <Pot />
+        </HUD.TopRight>
+        <HUD.Center>
+          <PlanetGrid tileSize={100} />
+        </HUD.Center>
+        <HUD.BottomLeft>
+          <SellPoints />
+        </HUD.BottomLeft>
+        <HUD.BottomMiddle>
+          <AdvanceTurn />
+        </HUD.BottomMiddle>
+        <HUD.BottomRight className="flex gap-2">
+          <UserSettings />
+          <ActionLog />
+          <HistoricalPointPriceModal />
+          {DEV && <Cheatcodes className="-mr-1" />}
+        </HUD.BottomRight>
+      </HUD>
+      <HUD>
+        <HUD.Right>
+          <Dashboard />
+        </HUD.Right>
+      </HUD>
+    </>
   );
 };
 

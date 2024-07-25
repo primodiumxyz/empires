@@ -1,21 +1,25 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
-import { CurrencyYenIcon, RocketLaunchIcon, ShieldCheckIcon } from "@heroicons/react/24/solid";
+import { forwardRef, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { bigIntMin } from "@latticexyz/common/utils";
 
+import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Badge } from "@/components/core/Badge";
+import { ActionPane } from "@/components/ActionPane";
 import { Button } from "@/components/core/Button";
-import { Hexagon } from "@/components/core/Hexagon";
+import { Card } from "@/components/core/Card";
+import { IconLabel } from "@/components/core/IconLabel";
+import { Join } from "@/components/core/Join";
 import { Marker } from "@/components/core/Marker";
-import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { Tabs } from "@/components/core/Tabs";
+import { Tooltip } from "@/components/core/Tooltip";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
+import { cn } from "@/util/client";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "fill-blue-600",
@@ -33,6 +37,8 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const planet = tables.Planet.use(entity);
   const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
   const [conquered, setConquered] = useState(false);
+  const [isInteractPaneVisible, setIsInteractPaneVisible] = useState(false);
+  const interactButtonRef = useRef<HTMLButtonElement>(null);
 
   const [left, top] = useMemo(() => {
     const cartesianCoord = convertAxialToCartesian(
@@ -65,20 +71,24 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     };
   }, [planet]);
 
+  const handleInteractClick = () => {
+    setIsInteractPaneVisible(!isInteractPaneVisible);
+  };
+
   if (!planet) return null;
 
   return (
-    <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }}>
-      <div className="absolute mt-14 -translate-x-1/2 -translate-y-1/2">
-        <div className="flex flex-col items-center gap-2 text-white">
-          <div className="text-center">
-            <p className="absolute left-1/2 top-4 -translate-x-1/2 transform font-mono text-xs opacity-70">
+    <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
+      <div className="relative mt-12 flex flex-col items-center drop-shadow-2xl">
+        <div className="group relative flex flex-col items-center">
+          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-secondary/50 to-secondary/25 px-1 text-center">
+            <p className="font-mono text-[10px] opacity-70">
               ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
             </p>
-
+            {/* dashboard button */}
             <Button
               variant="ghost"
-              className="font-bold"
+              className="p-0 font-bold text-amber-400"
               onClick={() => {
                 tables.SelectedPlanet.set({ value: entity });
                 utils.openPane("dashboard");
@@ -87,16 +97,134 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               {entityToPlanetName(entity)}
             </Button>
           </div>
-          <div className="relative flex flex-row gap-1">
+          <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/25 px-2 text-[.8em]">
             <Ships shipCount={planet.shipCount} planetId={entity} planetEmpire={planetEmpire} />
             <Shields shieldCount={planet.shieldCount} planetId={entity} planetEmpire={planetEmpire} />
+            <GoldCount goldCount={planet.goldCount} entity={entity} />
           </div>
-          <GoldCount goldCount={planet.goldCount} entity={entity} />
+
+          <InteractButton
+            className={cn(
+              "scale-80 mt-1 h-full opacity-75 transition-all group-hover:scale-100 group-hover:opacity-100",
+              !planet?.empireId ? "pointer-events-none !opacity-0" : "",
+            )}
+            ref={interactButtonRef}
+            onClick={handleInteractClick}
+            isInteractPaneVisible={isInteractPaneVisible}
+            planetId={entity}
+            planetEmpire={planetEmpire}
+          />
         </div>
       </div>
     </Marker>
   );
 };
+
+const InteractButton = forwardRef<
+  HTMLButtonElement,
+  {
+    onClick: () => void;
+    isInteractPaneVisible: boolean;
+    planetId: Entity;
+    planetEmpire: EEmpire;
+    className: string;
+  }
+>(({ onClick, isInteractPaneVisible, planetId, planetEmpire, className }, ref) => {
+  const InteractPaneRef = useRef<HTMLDivElement>(null);
+
+  const { utils } = useCore();
+  const { price } = useEthPrice();
+  const { createShip, removeShip, addShield, removeShield } = useContractCalls();
+  const { gameOver } = useTimeLeft();
+
+  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire);
+  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire);
+  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetEmpire);
+  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetEmpire);
+
+  const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
+  const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
+  const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
+  const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
+
+  const handleInteractClick = () => {
+    onClick();
+  };
+
+  // Close Interact Pane
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      InteractPaneRef.current &&
+      !InteractPaneRef.current.contains(event.target as Node) &&
+      ref &&
+      !(ref as React.RefObject<HTMLButtonElement>).current?.contains(event.target as Node)
+    ) {
+      onClick();
+    }
+  };
+
+  useEffect(() => {
+    if (isInteractPaneVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isInteractPaneVisible]);
+
+  // NumberInput
+  const [inputValue, setInputValue] = useState("1");
+
+  return (
+    <div className={cn("relative")}>
+      <Button ref={ref} className={cn(className)} size="sm" shape="default" onClick={handleInteractClick}>
+        Interact
+      </Button>
+      {isInteractPaneVisible && (
+        <div className="absolute left-1/2 top-12 -translate-x-1/2 backdrop-blur-2xl">
+          <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
+            <div className="flex flex-col items-center justify-center gap-1">
+              <Tabs className="flex w-64 flex-col items-center gap-2">
+                <Join>
+                  <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
+                  <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
+                </Join>
+                <Tabs.Pane index={0} className="w-full items-center gap-4">
+                  <ActionPane
+                    inputValue={inputValue}
+                    onInputChange={setInputValue}
+                    onAttackClick={() => removeShip(planetId, killShipPriceWei)}
+                    onSupportClick={() => createShip(planetId, createShipPriceWei)}
+                    attackPrice={killShipPriceUsd}
+                    supportPrice={createShipPriceUsd}
+                    attackTxQueueId={`${planetId}-kill-ship`}
+                    supportTxQueueId={`${planetId}-create-ship`}
+                    isDisabled={gameOver || Number(planetEmpire) === 0}
+                  />
+                </Tabs.Pane>
+                <Tabs.Pane index={1} className="w-full items-center gap-4">
+                  <ActionPane
+                    inputValue={inputValue}
+                    onInputChange={setInputValue}
+                    onAttackClick={() => removeShield(planetId, removeShieldPriceWei)}
+                    onSupportClick={() => addShield(planetId, addShieldPriceWei)}
+                    attackPrice={removeShieldPriceUsd}
+                    supportPrice={addShieldPriceUsd}
+                    attackTxQueueId={`${planetId}-remove-shield`}
+                    supportTxQueueId={`${planetId}-add-shield`}
+                    isDisabled={gameOver || Number(planetEmpire) === 0}
+                  />
+                </Tabs.Pane>
+              </Tabs>
+            </div>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+});
 
 const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity }) => {
   const { tables } = useCore();
@@ -125,8 +253,12 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
   }, [nextId]);
 
   return (
-    <Badge variant="glass" size="lg" className="relative flex items-center gap-1 border-none bg-gray-50/20">
-      <CurrencyYenIcon className="size-5" /> {goldCount.toLocaleString()}
+    <div className="pointer-events-auto relative z-50">
+      <Tooltip tooltipContent={`GOLD`}>
+        <p className="pointer-events-auto flex items-center justify-center gap-1.5">
+          <IconLabel imageUri={InterfaceIcons.Vault} text={goldCount.toLocaleString()} />
+        </p>
+      </Tooltip>
       {goldFloatingTexts.map((item) => (
         <div
           key={item.id}
@@ -135,7 +267,7 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
           {item.text}
         </div>
       ))}
-    </Badge>
+    </div>
   );
 };
 
@@ -148,15 +280,9 @@ const Ships = ({
   planetId: Entity;
   planetEmpire: EEmpire;
 }) => {
-  const { tables, utils } = useCore();
-  const { price } = useEthPrice();
+  const { tables } = useCore();
   const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
   const [nextId, setNextId] = useState(0);
-  const { createShip, removeShip } = useContractCalls();
-  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire);
-  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire);
-  const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
-  const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
 
   useEffect(() => {
     const listener = tables.CreateShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
@@ -223,10 +349,12 @@ const Ships = ({
   const reductionPct = Number(tables.P_ActionConfig.get()?.reductionPct ?? 0n) / 10000;
 
   return (
-    <div className="relative z-50 rounded-lg bg-white/20 p-1">
-      <p className="flex items-center justify-center gap-2">
-        <RocketLaunchIcon className="size-4" /> {shipCount.toLocaleString()}
-      </p>
+    <div className="relative z-50">
+      <Tooltip tooltipContent={`SHIPS`}>
+        <p className="flex items-center justify-center gap-2">
+          <IconLabel imageUri={InterfaceIcons.Fleet} text={shipCount.toLocaleString()} />
+        </p>
+      </Tooltip>
       {floatingTexts.map((item) => (
         <div
           key={item.id}
@@ -235,34 +363,6 @@ const Ships = ({
           {item.text}
         </div>
       ))}
-
-      <div className="flex items-center gap-2">
-        <TransactionQueueMask id={`${planetId}-kill-ship`}>
-          <Button
-            tooltip={`Reduction: ${reductionPct * Number(shipCount)}%\nCost: ${killShipPriceUsd}`}
-            variant="neutral"
-            size="xs"
-            className="border-none"
-            onClick={() => removeShip(planetId, killShipPriceWei)}
-            disabled={gameOver || Number(planetEmpire) === 0 || Number(shipCount) === 0}
-          >
-            -{reductionPct * Number(shipCount)}
-          </Button>
-        </TransactionQueueMask>
-
-        <TransactionQueueMask id={`${planetId}-create-ship`}>
-          <Button
-            tooltip={`Cost: ${createShipPriceUsd}`}
-            variant="neutral"
-            size="xs"
-            className="border-none"
-            onClick={() => createShip(planetId, createShipPriceWei)}
-            disabled={gameOver || Number(planetEmpire) === 0}
-          >
-            +1
-          </Button>
-        </TransactionQueueMask>
-      </div>
     </div>
   );
 };
@@ -276,16 +376,7 @@ const Shields = ({
   planetId: Entity;
   planetEmpire: EEmpire;
 }) => {
-  const { utils, tables } = useCore();
-  const { price } = useEthPrice();
-  const calls = useContractCalls();
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetEmpire);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetEmpire);
-  const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
-  const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
-
-  const reductionPct = Number(tables.P_ActionConfig.use()?.reductionPct ?? 0n) / 10000;
-  const { gameOver } = useTimeLeft();
+  const { tables } = useCore();
   const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: string }[]>([]);
   const [nextId, setNextId] = useState(0);
   const callback = (current: any, negative?: boolean) => {
@@ -316,10 +407,12 @@ const Shields = ({
     };
   }, [nextId]);
   return (
-    <div className="relative z-50 rounded-lg bg-white/20 p-1">
-      <p className="flex items-center justify-center gap-2">
-        <ShieldCheckIcon className="size-4" /> {shieldCount.toLocaleString()}
-      </p>
+    <div className="relative z-50">
+      <Tooltip tooltipContent={`SHIELDS`}>
+        <p className="flex items-center justify-center">
+          <IconLabel imageUri={InterfaceIcons.Defense} text={shieldCount.toLocaleString()} />
+        </p>
+      </Tooltip>
 
       {floatingTexts.map((item) => (
         <div
@@ -329,28 +422,6 @@ const Shields = ({
           {item.text}
         </div>
       ))}
-
-      <div className="flex items-center gap-2">
-        <TransactionQueueMask id={`${planetId}-remove-shield`}>
-          <Button
-            tooltip={`Cost: ${removeShieldPriceUsd}`}
-            onClick={() => calls.removeShield(planetId, removeShieldPriceWei)}
-            disabled={gameOver || Number(planetEmpire) === 0 || Number(shieldCount) === 0}
-          >
-            -{reductionPct * Number(shieldCount)}
-          </Button>
-        </TransactionQueueMask>
-
-        <TransactionQueueMask id={`${planetId}-add-shield`}>
-          <Button
-            tooltip={`Cost: ${addShieldPriceUsd}`}
-            onClick={() => calls.addShield(planetId, addShieldPriceWei)}
-            disabled={gameOver || Number(planetEmpire) === 0}
-          >
-            +1
-          </Button>
-        </TransactionQueueMask>
-      </div>
     </div>
   );
 };

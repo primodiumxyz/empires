@@ -25,8 +25,8 @@ export const Dashboard = () => {
       <Tabs.Button
         index={0}
         togglable
-        size={"sm"}
-        className="pointer-events-auto !z-0 !border-r-0 heropattern-topography-slate-500/10 animate-in fade-in zoom-in"
+        size={"content"}
+        className="pointer-events-auto !z-0 rounded-r-none border-r-0 heropattern-topography-slate-500/10 animate-in fade-in zoom-in"
         style={{
           writingMode: "vertical-rl",
         }}
