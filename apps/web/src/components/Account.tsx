@@ -73,14 +73,16 @@ export const Account = () => {
 const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
   const { tables, utils: { weiToUsd }} = useCore();
   const { price: ethPrice} = useEthPrice();
-  const { price: sellPrice } = usePointPrice(empire, 1);
-  const sellPriceUsd = weiToUsd(sellPrice, ethPrice ?? 0);
 
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
   
+  const { price: pointCostWei } = usePointPrice(empire, Number(formatEther(playerPoints)));
+  const pointCostUsd = weiToUsd(pointCostWei, ethPrice ?? 0);
+
+
   return (
     <Badge
       variant="glass"
@@ -91,7 +93,8 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
       <p>
         {formatEther(playerPoints)} {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
       </p>
-      <p>{sellPriceUsd}</p>
+      <p>{pointCostUsd}</p>
+      
     </Badge>
   );
 };
