@@ -101,9 +101,7 @@ export const GameHUD = () => {
       <HUD.TopRight>
         <Pot />
       </HUD.TopRight>
-      <HUD.Center>
-        <PlanetGrid tileSize={100} />
-      </HUD.Center>
+      <HUD.Center>{/* <PlanetGrid tileSize={100} margin={10} /> */}</HUD.Center>
       <HUD.BottomLeft>
         <SellPoints />
       </HUD.BottomLeft>

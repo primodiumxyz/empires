@@ -4,34 +4,74 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { PrimodiumScene } from "@game/types";
 import { IPrimodiumGameObject } from "./interfaces";
 import { Assets, Sprites } from "@primodiumxyz/assets";
-import { EmpireToEmpireSpriteKeys } from "@game/lib/mappings";
+import {
+  EmpireToHexFrameSpriteKeys,
+  EmpireToHexSpriteKeys,
+  EmpireToPlanetSpriteKeys,
+} from "@game/lib/mappings";
 
 export class Planet
-  extends Phaser.GameObjects.Sprite
+  extends Phaser.GameObjects.Container
   implements IPrimodiumGameObject
 {
   readonly id: Entity;
   protected _scene: PrimodiumScene;
+  private planetUnderglowSprite: Phaser.GameObjects.Sprite;
+  private planetSprite: Phaser.GameObjects.Sprite;
+  private hexSprite: Phaser.GameObjects.Sprite;
+  private hexFrameSprite: Phaser.GameObjects.Sprite;
   private spawned = false;
 
   constructor(args: {
     id: Entity;
     scene: PrimodiumScene;
     coord: PixelCoord;
-    empire: keyof typeof EmpireToEmpireSpriteKeys;
+    empire: keyof typeof EmpireToPlanetSpriteKeys;
   }) {
     const { id, scene, coord, empire } = args;
 
-    super(
+    super(scene.phaserScene, coord.x, coord.y);
+
+    this.planetUnderglowSprite = new Phaser.GameObjects.Sprite(
       scene.phaserScene,
-      coord.x,
-      coord.y,
+      0,
+      -20,
       Assets.SpriteAtlas,
-      Sprites[EmpireToEmpireSpriteKeys[empire] ?? "EmpireNeutral"]
+      Sprites.PlanetUnderglow
+    ).setBlendMode(Phaser.BlendModes.SCREEN);
+
+    this.planetSprite = new Phaser.GameObjects.Sprite(
+      scene.phaserScene,
+      0,
+      -20,
+      Assets.SpriteAtlas,
+      Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]
+    ).setScale(1);
+
+    this.hexFrameSprite = new Phaser.GameObjects.Sprite(
+      scene.phaserScene,
+      0,
+      0,
+      Assets.SpriteAtlas,
+      Sprites[EmpireToHexFrameSpriteKeys[empire] ?? "HexFrameGrey"]
+    );
+
+    this.hexSprite = new Phaser.GameObjects.Sprite(
+      scene.phaserScene,
+      0,
+      0,
+      Assets.SpriteAtlas,
+      Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]
     );
 
     this._scene = scene;
     this.id = id;
+    this.add([
+      this.hexSprite,
+      this.hexFrameSprite,
+      this.planetUnderglowSprite,
+      this.planetSprite,
+    ]);
 
     this._scene.objects.planet.add(id, this, false);
   }
@@ -46,10 +86,14 @@ export class Planet
     return this.spawned;
   }
 
-  updateFaction(faction: keyof typeof EmpireToEmpireSpriteKeys) {
-    this.setTexture(
+  updateFaction(faction: keyof typeof EmpireToPlanetSpriteKeys) {
+    this.planetSprite.setTexture(
       Assets.SpriteAtlas,
-      Sprites[EmpireToEmpireSpriteKeys[faction] ?? "EmpireNeutral"]
+      Sprites[EmpireToPlanetSpriteKeys[faction] ?? "PlanetGrey"]
+    );
+    this.hexSprite.setTexture(
+      Assets.SpriteAtlas,
+      Sprites[EmpireToHexSpriteKeys[faction] ?? "HexGrey"]
     );
   }
 

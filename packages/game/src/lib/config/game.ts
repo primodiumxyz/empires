@@ -15,9 +15,9 @@ const gameConfig: GameConfig = {
   },
   antialias: false,
   antialiasGL: false,
-  roundPixels: true,
+  // roundPixels: true,
   transparent: true,
-  pixelArt: true,
+  // pixelArt: true,
   assetPack: pack,
   fps: {
     target: 30,
