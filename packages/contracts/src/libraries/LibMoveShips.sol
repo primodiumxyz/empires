@@ -13,6 +13,7 @@ library LibMoveShips {
    */
   function createPendingMove(bytes32 planetId, bytes32 targetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
+    if (!Planet.getIsPlanet(targetId)) revert("[LibMoveShips] Target is not a planet");
     // Return false if the planet has no empire or no ships
     if (planetData.empireId == EEmpire.NULL || planetData.shipCount == 0) return false;
 

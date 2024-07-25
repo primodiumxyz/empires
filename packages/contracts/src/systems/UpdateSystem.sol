@@ -29,6 +29,11 @@ contract UpdateSystem is EmpiresSystem {
     EEmpire empire = _updateTurn();
 
     uint256 goldGenRate = P_GameConfig.getGoldGenRate();
+    // add gold to every planet
+    bytes32[] memory planets = PlanetsSet.getPlanetIds();
+    for (uint i = 0; i < planets.length; i++) {
+      Planet.setGoldCount(planets[i], Planet.getGoldCount(planets[i]) + goldGenRate);
+    }
 
     // spend gold and move ships for each empire planet
     for (uint i = 0; i < likelihoods.length; i++) {
@@ -36,8 +41,6 @@ contract UpdateSystem is EmpiresSystem {
       LibNPCAction.executeAction(likelihoods[i].planetId, likelihoods[i]);
     }
 
-    // resolve combat for each planet
-    bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint i = 0; i < planets.length; i++) {
       LibResolveCombat.resolveCombat(planets[i]);
     }

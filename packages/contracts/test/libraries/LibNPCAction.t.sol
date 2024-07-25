@@ -4,6 +4,8 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
+import { EEmpire } from "codegen/common.sol";
+import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { P_NPCActionCosts, Planet } from "codegen/index.sol";
 import { ENPCAction } from "codegen/common.sol";
 import { LibNPCAction } from "libraries/LibNPCAction.sol";
@@ -17,10 +19,10 @@ contract LibNPCActionTest is PrimodiumTest {
   Likelihoods likelihoods =
     Likelihoods({
       planetId: planetId,
-      buyShields: 2000,
-      attackEnemy: 4000,
-      accumulateGold: 6000,
-      buyShips: 8000,
+      accumulateGold: 2000,
+      buyShields: 4000,
+      buyShips: 6000,
+      attackEnemy: 8000,
       supportAlly: 10000,
       attackTargetId: bytes32(""),
       supportTargetId: bytes32("")
@@ -29,6 +31,13 @@ contract LibNPCActionTest is PrimodiumTest {
     super.setUp();
     aliceId = addressToId(alice);
     bobId = addressToId(bob);
+    vm.startPrank(creator);
+    uint i = 0;
+    do {
+      planetId = PlanetsSet.getPlanetIds()[i];
+      i++;
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
+    likelihoods.planetId = planetId;
   }
 
   function testAccumulateGold() public {
@@ -39,8 +48,9 @@ contract LibNPCActionTest is PrimodiumTest {
     assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
 
     LibNPCAction._executeAction(likelihoods, likelihoods.accumulateGold - 1);
+    uint256 goldAccumulation = P_NPCActionCosts.get(ENPCAction.AccumulateGold);
 
-    assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
+    assertEq(Planet.getGoldCount(planetId), 1 + goldAccumulation, "Planet gold count should be 1 + goldAccumulation");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
   }

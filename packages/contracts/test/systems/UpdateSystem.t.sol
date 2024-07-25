@@ -29,11 +29,11 @@ contract UpdateSystemTest is PrimodiumTest {
 
     Likelihoods memory _likelihoods = Likelihoods({
       planetId: planetId,
-      buyShields: 1,
-      attackEnemy: 1,
-      accumulateGold: 1,
-      buyShips: 1,
-      supportAlly: 1,
+      accumulateGold: 2000,
+      buyShields: 4000,
+      buyShips: 6000,
+      supportAlly: 8000,
+      attackEnemy: 10000,
       attackTargetId: bytes32(""),
       supportTargetId: bytes32("")
     });
