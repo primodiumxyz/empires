@@ -143,14 +143,6 @@ export const worldInput = {
     },
 
     /* ------------------------------- NPC Actions ------------------------------ */
-    P_NPCActionThresholds: {
-      key: [],
-      schema: {
-        none: "uint256",
-        buyShips: "uint256",
-        buyShields: "uint256",
-      },
-    },
 
     P_NPCActionCosts: {
       key: ["action"],
@@ -159,20 +151,8 @@ export const worldInput = {
         goldCost: "uint256",
       },
     },
-    // each value denotes a threshold for the likelihood of a move in that direction
-    // the total is out of 10000
 
     /* -------------------------------- Movement -------------------------------- */
-    P_NPCMoveThresholds: {
-      key: [],
-      schema: {
-        none: "uint256",
-        retreat: "uint256",
-        lateral: "uint256",
-        expand: "uint256",
-      },
-    },
-
     PendingMove: {
       key: ["planetId"],
       schema: {
@@ -235,6 +215,17 @@ export const worldInput = {
         defendingShipCount: "uint256",
         defendingShieldCount: "uint256",
         conquer: "bool",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    AccumulateGoldNPCAction: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        goldAdded: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
