@@ -76,8 +76,8 @@ export function calculateRoutinePcts(
     buyShields: 0.25,
     attackEnemy: 0.3,
     accumulateGold: 0.15,
-    buyShips: 0.2,
-    supportAlly: 0.1,
+    buyShips: 0.23,
+    supportAlly: 0.07,
   } as const;
 
   // Calculate likelihood adjustments
@@ -108,18 +108,11 @@ export function calculateRoutinePcts(
     const category = _category as keyof RoutineThresholds;
     finalLikelihoods[category] = Math.max(0, initialLikelihoods[category] + adjustments[category]);
   }
-  if (options?.noAttackTarget) {
-    finalLikelihoods.attackEnemy = 0;
-  }
-  if (options?.noSupportTarget) {
-    finalLikelihoods.supportAlly = 0;
-  }
-  if (options?.cantBuyShips) {
-    finalLikelihoods.buyShips = 0;
-  }
-  if (options?.cantBuyShields) {
-    finalLikelihoods.buyShields = 0;
-  }
+  if (options?.noAttackTarget) finalLikelihoods.attackEnemy = 0;
+  if (options?.noSupportTarget) finalLikelihoods.supportAlly = 0;
+  if (options?.cantBuyShips) finalLikelihoods.buyShips = 0;
+  if (options?.cantBuyShields) finalLikelihoods.buyShields = 0;
+
   // Normalize likelihoods
   const normalizedLikelihoods: RoutineThresholds = {
     buyShields: 0,

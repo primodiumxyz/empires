@@ -45,7 +45,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
         </Button>
       </div>
       <img
-        src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire])}
+        src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
         width={64}
         height={64}
         className="my-2 self-center"
@@ -56,7 +56,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
             <h3 className="font-semibold text-gray-300">controlled by</h3>
             <span className="justify-self-end">{EmpireEnumToName[empireId as EEmpire]} empire</span>
             <img
-              src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire])}
+              src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
               width={32}
               height={32}
               className="justify-self-center"
@@ -193,10 +193,8 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
 };
 
 const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
-  const { tables, utils } = useCore();
+  const { utils } = useCore();
   const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
-
-  const thresholds = utils.getRoutineThresholds(entity);
 
   const valToText = (val: number) => {
     if (val >= 1) return "High";

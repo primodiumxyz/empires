@@ -19,7 +19,6 @@ export const createNpcUtils = (tables: Tables) => {
     const shipCount = tables.Planet.get(planetId)?.shipCount ?? 0n;
     const goldCount = tables.Planet.get(planetId)?.goldCount ?? 0n;
 
-    console.log({ shipCount, goldCount, shipPrice, shieldPrice });
     const options = {
       noAttackTarget: !attackTargetId || shipCount === 0n,
       noSupportTarget: !supportTargetId || shipCount === 0n,
@@ -262,6 +261,23 @@ export const createNpcUtils = (tables: Tables) => {
     return currWeakest.planetId;
   };
 
+  /**
+   * Retrieves all neighboring planets for a given planet.
+   *
+   * @param {Entity} planetId - The ID of the planet to find neighbors for.
+   * @returns {Entity[]} An array of Entity IDs representing the neighboring planets.
+   *
+   * This function performs the following steps:
+   * 1. Retrieves the data for the given planet.
+   * 2. Gets all planets from the game state.
+   * 3. Checks all six directions (East, Southeast, Southwest, West, Northwest, Northeast) for neighbors.
+   * 4. For each direction, calculates the coordinates of the potential neighbor.
+   * 5. Finds the planet (if any) at those coordinates.
+   * 6. Returns an array of all found neighboring planet IDs.
+   *
+   * Note: This function should be moved to a more general utils file in the future,
+   * as it's not specific to NPC behavior and could be useful in other contexts.
+   */
   const getAllNeighbors = (planetId: Entity): Entity[] => {
     const planetData = tables.Planet.get(planetId);
     const allPlanets = tables.Keys_PlanetsSet.get()?.itemKeys.map((planet) => {
@@ -292,5 +308,6 @@ export const createNpcUtils = (tables: Tables) => {
     getVulnerability,
     getPlanetStrength,
     getEmpireStrength,
+    getAllNeighbors,
   };
 };
