@@ -25,3 +25,13 @@ export const EmpireToConquerAnimationKeys: Record<
   [EEmpire.Blue]: "ConquerBlue",
   [EEmpire.LENGTH]: undefined,
 };
+
+export const EmpireToPendingAnimationKeys: Record<
+  EEmpire,
+  AnimationKeys | undefined
+> = {
+  [EEmpire.Red]: "PendingRed",
+  [EEmpire.Green]: "PendingGreen",
+  [EEmpire.Blue]: "PendingBlue",
+  [EEmpire.LENGTH]: undefined,
+};

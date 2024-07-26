@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1721963575070",
+            "image": "atlas.png?timestamp=1721966795382",
             "format": "RGBA8888",
             "size": {
-                "w": 702,
-                "h": 669
+                "w": 813,
+                "h": 718
             },
             "scale": 1,
             "frames": [
@@ -217,8 +217,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 179,
-                        "y": 460,
+                        "x": 0,
+                        "y": 491,
                         "w": 179,
                         "h": 115
                     }
@@ -238,8 +238,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 491,
+                        "x": 179,
+                        "y": 460,
                         "w": 179,
                         "h": 115
                     }
@@ -259,8 +259,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 358,
-                        "y": 460,
+                        "x": 523,
+                        "y": 0,
                         "w": 179,
                         "h": 115
                     }
@@ -281,7 +281,7 @@
                     },
                     "frame": {
                         "x": 523,
-                        "y": 0,
+                        "y": 115,
                         "w": 179,
                         "h": 115
                     }
@@ -302,7 +302,7 @@
                     },
                     "frame": {
                         "x": 523,
-                        "y": 115,
+                        "y": 230,
                         "w": 179,
                         "h": 115
                     }
@@ -323,30 +323,9 @@
                     },
                     "frame": {
                         "x": 523,
-                        "y": 230,
+                        "y": 345,
                         "w": 179,
                         "h": 115
-                    }
-                },
-                {
-                    "filename": "sprites/planet/planet_underglow.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 96,
-                        "h": 96
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 96,
-                        "h": 96
-                    },
-                    "frame": {
-                        "x": 523,
-                        "y": 345,
-                        "w": 96,
-                        "h": 96
                     }
                 },
                 {
@@ -364,8 +343,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 619,
-                        "y": 345,
+                        "x": 358,
+                        "y": 460,
                         "w": 76,
                         "h": 114
                     }
@@ -385,8 +364,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 537,
-                        "y": 441,
+                        "x": 434,
+                        "y": 460,
                         "w": 76,
                         "h": 114
                     }
@@ -406,8 +385,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 613,
-                        "y": 459,
+                        "x": 510,
+                        "y": 460,
                         "w": 76,
                         "h": 114
                     }
@@ -427,10 +406,409 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 537,
-                        "y": 555,
+                        "x": 586,
+                        "y": 460,
                         "w": 76,
                         "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 179,
+                        "y": 376,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 606,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 111,
+                        "y": 606,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 222,
+                        "y": 575,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 333,
+                        "y": 575,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 444,
+                        "y": 574,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 574,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 662,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 111,
+                        "y": 662,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 222,
+                        "y": 631,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 333,
+                        "y": 631,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 444,
+                        "y": 630,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 630,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 702,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 702,
+                        "y": 56,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 702,
+                        "y": 112,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 702,
+                        "y": 168,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 702,
+                        "y": 224,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_underglow.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 96
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 96
+                    },
+                    "frame": {
+                        "x": 702,
+                        "y": 280,
+                        "w": 96,
+                        "h": 96
                     }
                 },
                 {
@@ -515,6 +893,69 @@
                         "y": 0,
                         "w": 179,
                         "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 179,
+                        "y": 376,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 574,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 630,
+                        "w": 111,
+                        "h": 56
                     }
                 }
             ]

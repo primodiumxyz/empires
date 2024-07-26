@@ -1,6 +1,6 @@
 import { Scene, Coord } from "@primodiumxyz/engine";
 
-import { DepthLayers } from "@game/lib/constants/common.ts";
+import { DepthLayers } from "@game/lib/constants/common";
 import { AnimationKeys, Animations } from "@primodiumxyz/assets";
 
 export const createFxApi = (scene: Scene) => {

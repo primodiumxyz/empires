@@ -44,18 +44,6 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
 
   return (
     <div className="relative">
-      {/* {pendingMoves.map((item) => {
-        return (
-          <Arrow
-            key={`pending-${item.originPlanetId}`}
-            originPlanetId={item.originPlanetId as Entity}
-            destinationPlanetId={item.destinationPlanetId as Entity}
-            tileSize={tileSize}
-            margin={margin}
-            pending
-          />
-        );
-      })} */}
       {arrivingShips.map((item) => {
         return (
           <Arrow

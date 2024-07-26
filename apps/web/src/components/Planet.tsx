@@ -71,9 +71,9 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   return (
     <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
-      <div className="relative mt-12 flex flex-col items-center drop-shadow-2xl">
+      <div className="relative mt-10 flex flex-col items-center drop-shadow-2xl">
         <div className="group relative flex flex-col items-center">
-          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-secondary/50 to-secondary/25 px-1 text-center">
+          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-slate-800/90 to-slate-900/75 px-1 text-center">
             <p className="font-mono text-[10px] opacity-70">
               ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
             </p>
@@ -89,7 +89,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               {entityToPlanetName(entity)}
             </Button>
           </div>
-          <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/25 px-2 text-[.8em]">
+          <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/75 px-2 text-[.8em]">
             <Ships shipCount={planet.shipCount} planetId={entity} planetEmpire={planetEmpire} />
             <Shields shieldCount={planet.shieldCount} planetId={entity} planetEmpire={planetEmpire} />
             <GoldCount goldCount={planet.goldCount} entity={entity} />
@@ -97,7 +97,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
           <InteractButton
             className={cn(
-              "scale-80 mt-1 h-full opacity-75 transition-all group-hover:scale-100 group-hover:opacity-100",
+              "h-full scale-75 opacity-50 transition-all group-hover:scale-100 group-hover:opacity-100",
               !planet?.empireId ? "pointer-events-none !opacity-0" : "",
             )}
             ref={interactButtonRef}

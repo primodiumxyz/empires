@@ -13,23 +13,24 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
 
+  tables.Planet.getAll().forEach((entity) => {
+    const planet = tables.Planet.get(entity);
+    if (!planet) return;
+
+    const { q, r } = planet;
+    new Planet({
+      id: entity,
+      scene,
+      coord: convertAxialToCartesian(
+        { q: Number(q), r: Number(r) },
+        100 + MARGIN
+      ),
+      empire: planet.empireId,
+    });
+  });
+
   tables.Planet.watch({
     world: systemsWorld,
-    onEnter: ({ entity, properties: { current } }) => {
-      if (!current) return;
-
-      const { q, r } = current;
-
-      new Planet({
-        id: entity,
-        scene,
-        coord: convertAxialToCartesian(
-          { q: Number(q), r: Number(r) },
-          100 + MARGIN
-        ),
-        empire: current.empireId,
-      });
-    },
     onUpdate: ({ entity, properties: { current, prev } }) => {
       if (!current) return;
 
