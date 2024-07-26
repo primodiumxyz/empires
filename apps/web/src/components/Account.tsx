@@ -71,14 +71,14 @@ export const Account = () => {
 };
 
 const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
-  const { tables, utils: { weiToUsd }} = useCore();
-  const { price: ethPrice} = useEthPrice();
+  const { tables, utils: { weiToUsd } } = useCore();
+  const { price: ethPrice } = useEthPrice();
 
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
-  
+
   const { price: pointCostWei } = usePointPrice(empire, Number(formatEther(playerPoints)));
   const pointCostUsd = weiToUsd(pointCostWei, ethPrice ?? 0);
 
@@ -87,14 +87,17 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
     <Badge
       variant="glass"
       size="md"
-      className={cn("flex h-6 w-full items-center justify-start gap-2 border-none", EmpireEnumToColor[empire])}
+      className={cn("flex h-full w-full justify-start gap-3 py-1 border-none", EmpireEnumToColor[empire])}
     >
-      <div className={cn("h-4 w-4 rounded-full", EmpireEnumToColor[empire])} />
-      <p>
-        {formatEther(playerPoints)} {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
-      </p>
-      <p>{pointCostUsd}</p>
-      
+      <div className={cn("mx-1 h-4 w-4 rounded-full", EmpireEnumToColor[empire])} />
+      <div className="flex flex-col">
+        <p className="flex justify-start items-end">
+          {formatEther(playerPoints)}
+          {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
+        </p>
+        <p className="flex text-[11px] justify-start -mt-1">{pointCostUsd}</p>
+      </div>
+
     </Badge>
   );
 };
