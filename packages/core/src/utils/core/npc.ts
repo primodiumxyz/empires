@@ -66,7 +66,10 @@ export const createNpcUtils = (tables: Tables) => {
     if (
       pendingMoves.find((move) => {
         const pendingMovePlanetData = tables.Planet.get(move)?.shipCount ?? 0;
-        return pendingMovePlanetData > planetData.shipCount + planetData.shieldCount;
+        return (
+          planetData.empireId !== pendingMovePlanetData &&
+          pendingMovePlanetData > planetData.shipCount + planetData.shieldCount
+        );
       })
     ) {
       return 1;
@@ -207,10 +210,18 @@ export const createNpcUtils = (tables: Tables) => {
     });
     // find weakest attack target
     const currWeakest = { planetId: enemyNeighbors[0], defense: 0n };
+    let end = false;
     enemyNeighbors.forEach((neighbor) => {
+      if (end) return;
+      if (currWeakest.planetId !== undefined) return;
       const neighborData = tables.Planet.get(neighbor);
       if (!neighborData) return;
       const enemyDefense = neighborData.shipCount + neighborData.shieldCount;
+      if (neighborData.empireId === 0) {
+        currWeakest.planetId = neighbor;
+        currWeakest.defense = enemyDefense;
+        end = true;
+      }
       if (enemyDefense < currWeakest.defense) {
         currWeakest.planetId = neighbor;
         currWeakest.defense = enemyDefense;

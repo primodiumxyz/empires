@@ -207,15 +207,15 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
       <div>
         <p>Decision Context</p>
         <div className="grid w-full grid-cols-2 gap-1 text-xs">
-          <Badge className="w-full gap-2 py-2">
+          <Badge className="w-full gap-2 py-2" tooltip="Is it Under attack?" tooltipDirection="top">
             <span>At Risk</span>
             <p className="rounded bg-accent px-1 text-neutral">{valToText(context.vulnerability)}</p>
           </Badge>
-          <Badge className="w-full gap-2 py-2">
+          <Badge className="w-full gap-2 py-2" tooltip="Does it own more ships than neighbors?" tooltipDirection="top">
             <span>Planet Strength</span>
             <p className="rounded bg-accent px-1 text-neutral">{valToText(context.planetStrength)}</p>
           </Badge>
-          <Badge className="w-full gap-2 py-2">
+          <Badge className="w-full gap-2 py-2" tooltip="Does empire control the most planets?">
             <span>Empire Strength</span>
             <p className="rounded bg-accent px-1 text-neutral">{valToText(context.empireStrength)}</p>
           </Badge>
