@@ -1,5 +1,7 @@
+import { ENPCAction } from "@primodiumxyz/contracts/config/enums";
+
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
-import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tables } from "@core/lib";
 import { getNeighbor } from "@core/utils/global/coord";
 
@@ -12,29 +14,34 @@ export const createNpcUtils = (tables: Tables) => {
     const empireStrength = getEmpireStrength(planetId);
     const attackTargetId = getAttackTarget(planetId);
     const supportTargetId = getSupportTarget(planetId);
+    const shipPrice = tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction.BuyShips })?.goldCost ?? 0n;
+    const shieldPrice = tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction.BuyShields })?.goldCost ?? 0n;
+    const shipCount = tables.Planet.get(planetId)?.shipCount ?? 0n;
+    const goldCount = tables.Planet.get(planetId)?.goldCount ?? 0n;
 
-    const probabilities = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, {
-      noAttackTarget: !attackTargetId,
-      noSupportTarget: !supportTargetId,
-    });
-    return { context: { vulnerability, planetStrength, empireStrength }, probabilities };
+    console.log({ shipCount, goldCount, shipPrice, shieldPrice });
+    const options = {
+      noAttackTarget: !attackTargetId || shipCount === 0n,
+      noSupportTarget: !supportTargetId || shipCount === 0n,
+      cantBuyShips: goldCount < shipPrice,
+      cantBuyShields: goldCount < shieldPrice,
+    };
+    const probabilities = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, options);
+    return {
+      context: { vulnerability, planetStrength, empireStrength },
+      probabilities,
+      attackTargetId,
+      supportTargetId,
+    };
   };
   const getRoutineThresholds = (planetId: Entity) => {
-    const vulnerability = getVulnerability(planetId);
-    const planetStrength = getPlanetStrength(planetId);
-    const empireStrength = getEmpireStrength(planetId);
-    const attackTargetId = getAttackTarget(planetId);
-    const supportTargetId = getSupportTarget(planetId);
-
-    const thresholds = calculateRoutineThresholds(vulnerability, planetStrength, empireStrength, {
-      noAttackTarget: !attackTargetId,
-      noSupportTarget: !supportTargetId,
-    });
+    const data = getRoutineProbabilities(planetId);
+    const thresholds = calculateRoutineThresholds(data.probabilities);
     return {
       ...thresholds,
       planetId,
-      attackTargetId: attackTargetId ?? defaultEntity,
-      supportTargetId: supportTargetId ?? defaultEntity,
+      attackTargetId: data.attackTargetId ?? planetId,
+      supportTargetId: data.supportTargetId ?? planetId,
     };
   };
 
@@ -60,7 +67,7 @@ export const createNpcUtils = (tables: Tables) => {
     if (
       pendingMoves.find((move) => {
         const pendingMovePlanetData = tables.Planet.get(move)?.shipCount ?? 0;
-        return pendingMovePlanetData > planetData?.shipCount;
+        return pendingMovePlanetData > planetData.shipCount + planetData.shieldCount;
       })
     ) {
       return 1;
@@ -190,7 +197,6 @@ export const createNpcUtils = (tables: Tables) => {
     if (!planetData || planetData.empireId === 0) return;
 
     const allNeighbors = getAllNeighbors(planetId);
-    console.log({ allNeighbors });
     if (allNeighbors.length === 0) return;
 
     const enemyNeighbors = allNeighbors.filter((neighbor) => {

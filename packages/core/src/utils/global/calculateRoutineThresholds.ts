@@ -15,24 +15,29 @@ type RoutineThresholdsBigInt = {
   attackEnemy: bigint;
 };
 
-export function calculateRoutineThresholds(
-  vulnerability: number,
-  planetStrength: number,
-  empireStrength: number,
-  options?: {
-    noAttackTarget?: boolean;
-    noSupportTarget?: boolean;
-  },
-): RoutineThresholdsBigInt {
-  const normalizedLikelihoods = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, options);
-  return percentsToThresholds(normalizedLikelihoods);
+export function calculateRoutineThresholds(probabilities: RoutineThresholds): RoutineThresholdsBigInt {
+  const goldThreshold = BigInt(Math.round(probabilities.accumulateGold * 10000));
+  const shieldThreshold = BigInt(Math.round(probabilities.buyShields * 10000)) + goldThreshold;
+  const shipThreshold = BigInt(Math.round(probabilities.buyShips * 10000)) + shieldThreshold;
+  const supportThreshold = BigInt(Math.round(probabilities.supportAlly * 10000)) + shipThreshold;
+  const attackThreshold = BigInt(Math.round(probabilities.attackEnemy * 10000)) + supportThreshold;
+  return {
+    accumulateGold: goldThreshold,
+    buyShields: shieldThreshold,
+    buyShips: shipThreshold,
+    attackEnemy: attackThreshold,
+    supportAlly: supportThreshold,
+  };
 }
 
 export function calculateRoutinePcts(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
-  options?: {
+  options: {
+    cantBuyShips?: boolean;
+    cantBuyShields?: boolean;
+
     noAttackTarget?: boolean;
     noSupportTarget?: boolean;
   },
@@ -109,6 +114,12 @@ export function calculateRoutinePcts(
   if (options?.noSupportTarget) {
     finalLikelihoods.supportAlly = 0;
   }
+  if (options?.cantBuyShips) {
+    finalLikelihoods.buyShips = 0;
+  }
+  if (options?.cantBuyShields) {
+    finalLikelihoods.buyShields = 0;
+  }
   // Normalize likelihoods
   const normalizedLikelihoods: RoutineThresholds = {
     buyShields: 0,
@@ -127,15 +138,3 @@ export function calculateRoutinePcts(
 
   return normalizedLikelihoods;
 }
-
-const percentsToThresholds = <T extends Record<string, number>>(percents: T): Record<keyof T, bigint> => {
-  let cumulative = 0;
-  const thresholds = {} as Record<keyof T, bigint>;
-
-  for (const [key, value] of Object.entries(percents)) {
-    cumulative += value;
-    thresholds[key as keyof T] = BigInt(Math.round(cumulative * 10000));
-  }
-
-  return thresholds;
-};

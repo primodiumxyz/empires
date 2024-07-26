@@ -194,10 +194,9 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
 
 const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { tables, utils } = useCore();
-  const {
-    context,
-    probabilities: { accumulateGold, buyShields, buyShips, supportAlly, attackEnemy },
-  } = utils.getRoutineProbabilities(entity);
+  const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
+
+  const thresholds = utils.getRoutineThresholds(entity);
 
   const valToText = (val: number) => {
     if (val >= 1) return "High";
@@ -227,21 +226,17 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
       <SecondaryCard className="bg-gray-900/40">
         <div className="grid grid-cols-2 gap-2 text-sm">
           {[
-            { label: "Accumulate Gold", value: accumulateGold },
-            { label: "Buy Shields", value: buyShields },
-            { label: "Buy Ships", value: buyShips },
-            { label: "Support Ally", value: supportAlly },
-            { label: "Attack Enemy", value: attackEnemy },
+            { label: "Accumulate Gold", value: p.accumulateGold },
+            { label: "Buy Shields", value: p.buyShields },
+            { label: "Buy Ships", value: p.buyShips },
+            { label: "Support Ally", value: p.supportAlly },
+            { label: "Attack Enemy", value: p.attackEnemy },
           ].map(({ label, value }) => (
             <Fragment key={label}>
               <span className="text-gray-200">{label}</span>
               <span className="text-right font-medium">{(value * 100).toFixed(1)}%</span>
             </Fragment>
           ))}
-          <span className="text-gray-200">Total</span>
-          <span className="text-right font-medium">
-            {(accumulateGold + buyShields + buyShips + supportAlly + attackEnemy) * 100}%
-          </span>
         </div>
       </SecondaryCard>
     </>

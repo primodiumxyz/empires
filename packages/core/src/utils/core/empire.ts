@@ -4,7 +4,7 @@ import { Tables } from "@core/lib";
 
 export const createEmpireUtils = (tables: Tables) => {
   const getEmpirePlanets = (empireId: EEmpire): Entity[] => {
-    return (tables.Keys_PlanetsSet.getWithKeys({ empireId })?.itemKeys as Entity[]) ?? [];
+    return (tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId })?.itemKeys as Entity[]) ?? [];
   };
 
   return {
