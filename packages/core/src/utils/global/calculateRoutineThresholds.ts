@@ -1,5 +1,5 @@
 // from least to most active
-type Likelihoods = {
+type RoutineThresholds = {
   accumulateGold: number;
   buyShields: number;
   buyShips: number;
@@ -7,13 +7,17 @@ type Likelihoods = {
   attackEnemy: number;
 };
 
-export function calculateLikelihoodThresholds(
+export function calculateRoutineThresholds(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
-): Likelihoods {
+): RoutineThresholds {
   // Input variables and their multipliers
-  const multipliers: { vulnerability: Likelihoods; planetStrength: Likelihoods; empireStrength: Likelihoods } = {
+  const multipliers: {
+    vulnerability: RoutineThresholds;
+    planetStrength: RoutineThresholds;
+    empireStrength: RoutineThresholds;
+  } = {
     vulnerability: {
       buyShields: 0.35,
       attackEnemy: -0.2,
@@ -38,7 +42,7 @@ export function calculateLikelihoodThresholds(
   } as const;
 
   // Initial likelihoods
-  const initialLikelihoods: Likelihoods = {
+  const initialLikelihoods: RoutineThresholds = {
     buyShields: 0.25,
     attackEnemy: 0.3,
     accumulateGold: 0.15,
@@ -47,7 +51,7 @@ export function calculateLikelihoodThresholds(
   } as const;
 
   // Calculate likelihood adjustments
-  const adjustments: Likelihoods = {
+  const adjustments: RoutineThresholds = {
     buyShields: 0,
     attackEnemy: 0,
     accumulateGold: 0,
@@ -55,7 +59,7 @@ export function calculateLikelihoodThresholds(
     supportAlly: 0,
   };
   for (const _category in initialLikelihoods) {
-    const category = _category as keyof Likelihoods;
+    const category = _category as keyof RoutineThresholds;
     adjustments[category] =
       vulnerability * multipliers.vulnerability[category] +
       planetStrength * multipliers.planetStrength[category] +
@@ -63,7 +67,7 @@ export function calculateLikelihoodThresholds(
   }
 
   // Calculate final likelihoods
-  const finalLikelihoods: Likelihoods = {
+  const finalLikelihoods: RoutineThresholds = {
     buyShields: 0,
     attackEnemy: 0,
     accumulateGold: 0,
@@ -71,12 +75,12 @@ export function calculateLikelihoodThresholds(
     supportAlly: 0,
   };
   for (const _category in initialLikelihoods) {
-    const category = _category as keyof Likelihoods;
+    const category = _category as keyof RoutineThresholds;
     finalLikelihoods[category] = Math.max(0, initialLikelihoods[category] + adjustments[category]);
   }
 
   // Normalize likelihoods
-  const normalizedLikelihoods: Likelihoods = {
+  const normalizedLikelihoods: RoutineThresholds = {
     buyShields: 0,
     attackEnemy: 0,
     accumulateGold: 0,
@@ -86,7 +90,7 @@ export function calculateLikelihoodThresholds(
   const totalPositive = Object.values(finalLikelihoods).reduce((sum, value) => sum + Math.max(0, value), 0);
 
   for (const _category in finalLikelihoods) {
-    const category = _category as keyof Likelihoods;
+    const category = _category as keyof RoutineThresholds;
     const positiveValue = Math.max(0, finalLikelihoods[category]);
     normalizedLikelihoods[category] = Number((positiveValue / totalPositive).toFixed(4));
   }

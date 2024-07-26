@@ -399,9 +399,9 @@
     "name": "Empires__updateWorld",
     "inputs": [
       {
-        "name": "likelihoods",
+        "name": "routineThresholds",
         "type": "tuple[]",
-        "internalType": "struct Likelihoods[]",
+        "internalType": "struct RoutineThresholds[]",
         "components": [
           {
             "name": "planetId",

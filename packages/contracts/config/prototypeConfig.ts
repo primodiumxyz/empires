@@ -3,21 +3,6 @@ import { PrototypesConfig } from "../ts/prototypes/types";
 import { POINTS_UNIT } from "./constants";
 import { EEmpire, ENPCAction } from "./enums";
 
-const percentsToThresholds = <T extends Record<string, number>>(percents: T): Record<keyof T, bigint> => {
-  const total = Object.values(percents).reduce((acc, val) => acc + val, 0);
-  if (total !== 1) throw new Error("percents must sum to 1");
-
-  let cumulative = 0;
-  const thresholds = {} as Record<keyof T, bigint>;
-
-  for (const [key, value] of Object.entries(percents)) {
-    cumulative += value;
-    thresholds[key as keyof T] = BigInt(Math.round(cumulative * 10000));
-  }
-
-  return thresholds;
-};
-
 const scaleMultiplier = (multiplier: number) => {
   if (multiplier < 0 || multiplier > 1) throw new Error("multiplier must be between 0 and 100");
   return BigInt(Math.round(multiplier * 10000));
@@ -51,12 +36,6 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         reductionPct: scaleMultiplier(0.5), // out of 1, scales to out of 10000
         regressMultiplier: scaleMultiplier(0.01), // out of 1, scales to out of 10000
       },
-      P_NPCMoveThresholds: percentsToThresholds({
-        none: 0.25,
-        expand: 0.75 * 0.5,
-        lateral: 0.75 * 0.3,
-        retreat: 0.75 * 0.2,
-      }),
       Turn: {
         nextTurnBlock: 0n,
         empire: EEmpire.Red,

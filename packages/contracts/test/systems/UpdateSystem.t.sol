@@ -6,14 +6,14 @@ import { Turn, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_Poi
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibNPCAction } from "libraries/LibNPCAction.sol";
 import { EEmpire, ENPCAction, EPlayerAction } from "codegen/common.sol";
-import { Likelihoods } from "src/Types.sol";
+import { RoutineThresholds } from "src/Types.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
   bytes32 planetId;
   uint256 turnLength = 100;
 
-  Likelihoods[] allLikelihoods;
-  Likelihoods likelihoods;
+  RoutineThresholds[] allRoutineThresholds;
+  RoutineThresholds routineThresholds;
 
   function setUp() public override {
     super.setUp();
@@ -27,7 +27,7 @@ contract UpdateSystemTest is PrimodiumTest {
       i++;
     } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
 
-    Likelihoods memory _likelihoods = Likelihoods({
+    RoutineThresholds memory _routineThresholds = RoutineThresholds({
       planetId: planetId,
       accumulateGold: 2000,
       buyShields: 4000,
@@ -37,32 +37,32 @@ contract UpdateSystemTest is PrimodiumTest {
       attackTargetId: bytes32(""),
       supportTargetId: bytes32("")
     });
-    likelihoods = _likelihoods;
-    allLikelihoods.push(_likelihoods);
+    routineThresholds = _routineThresholds;
+    allRoutineThresholds.push(_routineThresholds);
   }
 
   function testUpdateExecuted() public {
-    world.Empires__updateWorld(allLikelihoods);
+    world.Empires__updateWorld(allRoutineThresholds);
 
     vm.roll(block.number + turnLength - 1);
 
     vm.expectRevert("[UpdateSystem] Cannot update yet");
-    world.Empires__updateWorld(allLikelihoods);
+    world.Empires__updateWorld(allRoutineThresholds);
 
     vm.roll(block.number + 1);
 
-    world.Empires__updateWorld(allLikelihoods);
+    world.Empires__updateWorld(allRoutineThresholds);
   }
 
   function testUpdateNextTurnBlock() public {
-    world.Empires__updateWorld(allLikelihoods);
+    world.Empires__updateWorld(allRoutineThresholds);
     assertEq(Turn.getNextTurnBlock(), block.number + turnLength);
   }
 
   /* ---------------------------------- Gold ---------------------------------- */
 
   function testAddGoldToEveryPlanet() public {
-    world.Empires__updateWorld(allLikelihoods);
+    world.Empires__updateWorld(allRoutineThresholds);
     uint256 goldIncrease = P_GameConfig.getGoldGenRate();
 
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
@@ -73,7 +73,7 @@ contract UpdateSystemTest is PrimodiumTest {
   }
 
   function testSpendGoldBuyShipsAction() public {
-    uint256 shipsAction = likelihoods.buyShips - 1;
+    uint256 shipsAction = routineThresholds.buyShips - 1;
     uint256 gold = 9;
 
     Planet.setGoldCount(planetId, gold);
@@ -84,7 +84,7 @@ contract UpdateSystemTest is PrimodiumTest {
     uint256 expectedShips = gold / shipPrice;
     uint256 expectedRemainder = gold % shipPrice;
 
-    LibNPCAction._executeAction(likelihoods, shipsAction);
+    LibNPCAction._executeAction(routineThresholds, shipsAction);
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
     assertEq(Planet.getShipCount(planetId), expectedShips, "ships wrong");
@@ -107,7 +107,7 @@ contract UpdateSystemTest is PrimodiumTest {
     ActionCost.set(EEmpire.Green, EPlayerAction.KillShip, beginActionCost);
 
     vm.roll(block.number + turnLength);
-    world.Empires__updateWorld(allLikelihoods);
+    world.Empires__updateWorld(allRoutineThresholds);
 
     assertEq(Empire.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
     assertEq(Empire.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);

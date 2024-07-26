@@ -11,9 +11,13 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Likelihoods } from "../Types.sol";
+import { RoutineThresholds } from "../Types.sol";
 
 contract UpdateSystem is EmpiresSystem {
+  /**
+   * @dev Updates the current turn and returns the empire whose turn just ended.
+   * @return The empire whose turn just ended.
+   */
   function _updateTurn() private returns (EEmpire) {
     TurnData memory turn = Turn.get();
 
@@ -25,9 +29,11 @@ contract UpdateSystem is EmpiresSystem {
     return turn.empire;
   }
 
-  function updateWorld(Likelihoods[] memory likelihoods) public _onlyNotGameOver {
-    EEmpire empire = _updateTurn();
-
+  /**
+   * @dev Updates the game world state, including gold generation, ship movements, combat resolution, and empire actions.
+   * @param routineThresholds An array of RoutineThresholds structs containing information about planet actions.
+   */
+  function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver {
     uint256 goldGenRate = P_GameConfig.getGoldGenRate();
     // add gold to every planet
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
@@ -36,9 +42,9 @@ contract UpdateSystem is EmpiresSystem {
     }
 
     // spend gold and move ships for each empire planet
-    for (uint i = 0; i < likelihoods.length; i++) {
-      LibMoveShips.executePendingMoves(likelihoods[i].planetId);
-      LibNPCAction.executeAction(likelihoods[i].planetId, likelihoods[i]);
+    for (uint i = 0; i < routineThresholds.length; i++) {
+      LibMoveShips.executePendingMoves(routineThresholds[i].planetId);
+      LibNPCAction.executeAction(routineThresholds[i].planetId, routineThresholds[i]);
     }
 
     for (uint i = 0; i < planets.length; i++) {
@@ -50,5 +56,7 @@ contract UpdateSystem is EmpiresSystem {
       LibPrice.turnEmpirePointCostDown(EEmpire(i));
       LibPrice.empirePlayerActionsCostDown(EEmpire(i));
     }
+
+    _updateTurn();
   }
 }

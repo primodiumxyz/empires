@@ -9,6 +9,7 @@ library LibMoveShips {
   /**
    * @dev Creates a pending move for ships from a given planet.
    * @param planetId The ID of the planet from which ships will move.
+   * @param targetId The ID of the planet to which ships will move.
    * @return bool Returns true if a pending move was successfully created, false otherwise.
    */
   function createPendingMove(bytes32 planetId, bytes32 targetId) internal returns (bool) {

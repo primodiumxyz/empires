@@ -1,14 +1,14 @@
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { Tables } from "@core/lib";
 
-import { calculateLikelihoodThresholds } from "../global/calculateLikelihoodThresholds";
+import { calculateRoutineThresholds } from "../global/calculateRoutineThresholds";
 
 export const createNpcUtils = (tables: Tables) => {
   const getLikelihoods = (planetId: Entity) => {
     const vulnerability = getVulnerability(planetId);
     const planetStrength = getPlanetStrength(planetId);
     const empireStrength = getEmpireStrength(planetId);
-    const thresholds = calculateLikelihoodThresholds(vulnerability, planetStrength, empireStrength);
+    const thresholds = calculateRoutineThresholds(vulnerability, planetStrength, empireStrength);
     const attackTargetId = getAttackTarget(planetId);
     const supportTargetId = getSupportTarget(planetId);
     return {

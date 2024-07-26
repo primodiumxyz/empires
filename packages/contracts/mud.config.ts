@@ -151,8 +151,6 @@ export const worldInput = {
         goldCost: "uint256",
       },
     },
-    // each value denotes a threshold for the likelihood of a move in that direction
-    // the total is out of 10000
 
     /* -------------------------------- Movement -------------------------------- */
     PendingMove: {

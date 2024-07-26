@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-struct Likelihoods {
+struct RoutineThresholds {
   bytes32 planetId;
   // represented as thresholds up to 10000. Sorted from least to most active
   uint256 accumulateGold;

@@ -40,7 +40,7 @@ contract LibMoveShipsTest is PrimodiumTest {
   function testFailCreatePendingMoveTargetNotPlanet() public {
     Planet.setEmpireId(planetId, EEmpire.Red);
     Planet.setShipCount(planetId, 1);
-    bool moved = LibMoveShips.createPendingMove(planetId, bytes32("69"));
+    LibMoveShips.createPendingMove(planetId, bytes32("69"));
   }
 
   function testExecuteMove() public {
