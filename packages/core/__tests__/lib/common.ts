@@ -4,7 +4,6 @@ import { beforeAll, describe, expect, test } from "vitest";
 import { worldInput } from "@primodiumxyz/contracts/mud.config";
 import worldsJson from "@primodiumxyz/contracts/worlds.json";
 
-import { Entity } from "@primodiumxyz/reactive-tables";
 import { createLocalAccount } from "@core/account/createLocalAccount";
 import { createCore } from "@core/createCore";
 import { Core, CoreConfig, SyncStep } from "@core/index";
@@ -27,7 +26,6 @@ export const createTestConfig = () => {
     chain: chainConfigs.dev,
     worldAddress,
     initialBlockNumber: BigInt(0),
-    playerAddress: address,
     runSync: true,
     runSystems: true,
   };
@@ -60,9 +58,7 @@ export const commonTests = () => {
     test("core contains random utility", () => {
       const core = createCore(coreConfig);
 
-      const shardName = core.utils.getShardName(address as Entity);
-
-      expect(shardName).toEqual("UNKNOWN");
+      expect(core.utils).toEqual({});
     });
 
     test("core contains identical config", () => {
@@ -118,18 +114,14 @@ export const commonTests = () => {
         return pollForReceipt();
       };
 
-      test("spawn allowed is true", async () => {
-        const spawnAllowed = core.tables.SpawnAllowed.get()?.value ?? false;
-        expect(spawnAllowed).toEqual(true);
-      });
-
-      test("spawn player", async () => {
+      test("update counter", async () => {
         const account = createLocalAccount(coreConfig, privateKey);
 
-        const txHash = await account.worldContract.write.Pri_11__spawn();
+        const txHash = await account.worldContract.write.Primodium_Base__increment();
         await waitUntilTxExecution(txHash);
 
-        expect(core.tables.Spawned.get(account.entity)?.value).toEqual(true);
+        const counter = core.tables.Counter.get()?.value ?? 0n;
+        expect(counter).toEqual(1n);
       });
     });
   });

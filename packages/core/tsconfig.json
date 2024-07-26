@@ -4,6 +4,7 @@
     "paths": {
       "@core/*": ["./src/*"]
     },
+    "resolveJsonModule": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
