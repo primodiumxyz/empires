@@ -20,10 +20,10 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
 
 export const PriceHistory = () => {
     return (
-        <Card noDecor>
+        <Card noDecor className="absolute left-2">
             <div className="flex flex-col justify-center gap-1 text-center">
                 <p className="text-left text-xs font-bold uppercase mb-1">Price History</p>
-                <div className="grid grid-cols-2 text-xs">
+                <div className="grid grid-cols-2 text-xs w-48">
                     <p className="col-span-1">Empire</p>
                     <p className="col-span-1">Price</p>
                 </div>

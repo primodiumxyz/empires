@@ -17,7 +17,14 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.LENGTH]: "",
 };
 
-export const Pot = () => {
+interface PotProps {
+  showPot?: boolean;
+  showRake?: boolean;
+  className?: string;
+
+}
+
+export const Pot: React.FC<PotProps> = ({ showPot = true, showRake = true, className }) => {
   const { utils } = useCore();
   const { price, loading } = useEthPrice();
   const calls = useContractCalls();
@@ -25,35 +32,41 @@ export const Pot = () => {
   const { pot, rake } = usePot();
 
   return (
-    <div className="absolute right-2 top-72 w-48">
+    <div className={cn("absolute", className)}>
 
-    <Card noDecor>
-      <div className="flex flex-col justify-center gap-2 text-center">
-        <div className="flex flex-col justify-center gap-1">
-          <p className="text-left text-xs font-bold uppercase">Pot</p>
-          <SecondaryCard>
+      <Card noDecor>
+        <div className="flex flex-col justify-center gap-2 text-center">
+          {/* Pot */}
+          {showPot && (
+          <div className="flex flex-col justify-center gap-1">
+            <p className="text-left text-xs font-bold uppercase">Pot</p>
+            <SecondaryCard>
+              <div className="flex flex-col justify-center gap-1">
+                {loading && <p>Loading...</p>}
+                {!loading && price && <p>{utils.weiToUsd(pot, price)}</p>}
+                <p className="text-xs">{formatEther(pot)} ETH</p>
+              </div>
+            </SecondaryCard>
+          </div>
+          )}
+          {/* Rake */}
+          {showRake && (
             <div className="flex flex-col justify-center gap-1">
-              {loading && <p>Loading...</p>}
-              {!loading && price && <p>{utils.weiToUsd(pot, price)}</p>}
-              <p className="text-xs">{formatEther(pot)} ETH</p>
+              <p className="text-left text-xs font-bold uppercase">Rake</p>
+              <SecondaryCard>
+                <div className="flex flex-col justify-center gap-1 text-center">
+                  {loading && <p>Loading...</p>}
+                  {!loading && price && <p>{utils.weiToUsd(rake, price)}</p>}
+                  <p className="text-xs">{formatEther(rake)}ETH</p>
+                  <Button variant="info" size="xs" onClick={calls.withdrawRake}>
+                    Withdraw
+                  </Button>
+                </div>
+              </SecondaryCard>
             </div>
-          </SecondaryCard>
+          )}
         </div>
-        <div className="flex flex-col justify-center gap-1">
-          <p className="text-left text-xs font-bold uppercase">Rake</p>
-          <SecondaryCard>
-            <div className="flex flex-col justify-center gap-1 text-center">
-              {loading && <p>Loading...</p>}
-              {!loading && price && <p>{utils.weiToUsd(rake, price)}</p>}
-              <p className="text-xs">{formatEther(rake)}ETH</p>
-              <Button variant="info" size="xs" onClick={calls.withdrawRake}>
-                Withdraw
-              </Button>
-            </div>
-          </SecondaryCard>
-        </div>
-      </div>
-    </Card>
+      </Card>
     </div>
   );
 };

@@ -45,7 +45,7 @@ export const SellPoints = () => {
   const ethOut = formatEther(pointsToWei);
   const usdOut = utils.weiToUsd(pointsToWei, price ?? 0);
   return (
-    <div className="absolute bottom-4 left-4">
+    <div className="absolute bottom-36 left-2">
       <Card noDecor className="w-56 gap-2">
         <div className="flex flex-col gap-2">
           <p className="text-left text-xs font-bold uppercase">Sell Points</p>
