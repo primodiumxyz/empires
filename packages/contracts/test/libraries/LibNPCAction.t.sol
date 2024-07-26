@@ -45,14 +45,14 @@ contract LibNPCActionTest is PrimodiumTest {
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
-    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
     LibNPCAction._executeAction(routineThresholds, routineThresholds.accumulateGold - 1);
     uint256 goldAccumulation = P_NPCActionCosts.get(ENPCAction.AccumulateGold);
 
     assertEq(Planet.getGoldCount(planetId), 1 + goldAccumulation, "Planet gold count should be 1 + goldAccumulation");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
-    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
   }
 
   function testBuyShips() public {
@@ -61,25 +61,25 @@ contract LibNPCActionTest is PrimodiumTest {
 
     assertEq(Planet.getGoldCount(planetId), 2, "Planet gold count should be 2");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
-    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
     LibNPCAction._executeAction(routineThresholds, routineThresholds.buyShips - 1);
 
     assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count should be 0");
     assertEq(Planet.getShipCount(planetId), 1, "Planet ship count should be 1");
-    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
     Planet.setGoldCount(planetId, 9);
 
     assertEq(Planet.getGoldCount(planetId), 9, "Planet gold count should be 9");
     assertEq(Planet.getShipCount(planetId), 1, "Planet ship count should be 1");
-    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
     LibNPCAction._executeAction(routineThresholds, routineThresholds.buyShips - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 5, "Planet ship count should be 5");
-    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
   }
 
   function testBuyShields() public {
@@ -88,24 +88,24 @@ contract LibNPCActionTest is PrimodiumTest {
 
     assertEq(Planet.getGoldCount(planetId), 2, "Planet gold count should be 2");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
-    assertEq(Planet.getShieldCount(planetId), 0, "Planet shield count should be 0");
+    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
     LibNPCAction._executeAction(routineThresholds, routineThresholds.buyShields - 1);
 
     assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count should be 0");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
-    assertEq(Planet.getShieldCount(planetId), 1, "Planet shield count should be 1");
+    assertEq(Planet.getShieldCount(planetId), 5, "Planet shield count should be 5");
 
     Planet.setGoldCount(planetId, 7);
 
     assertEq(Planet.getGoldCount(planetId), 7, "Planet gold count should be 7");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
-    assertEq(Planet.getShieldCount(planetId), 1, "Planet shield count should be 1");
+    assertEq(Planet.getShieldCount(planetId), 5, "Planet shield count should be 5");
 
     LibNPCAction._executeAction(routineThresholds, routineThresholds.buyShields - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
-    assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
+    assertEq(Planet.getShieldCount(planetId), 8, "Planet shield count should be 8");
   }
 }

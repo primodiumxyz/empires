@@ -11,9 +11,9 @@ export function createPriceUtils(tables: Tables) {
     let totalCost = 0n;
 
     if (progressAction) {
-      totalCost = getProgressPointCost(_empireImpacted);
+      totalCost = getProgressPointCost(_empireImpacted, _actionCount);
     } else {
-      totalCost = getRegressPointCost(_empireImpacted);
+      totalCost = getRegressPointCost(_empireImpacted, _actionCount);
     }
 
     totalCost += getMarginalActionCost(_actionType, _empireImpacted, progressAction, _actionCount);
@@ -26,8 +26,11 @@ export function createPriceUtils(tables: Tables) {
    * @param _empireImpacted The empire impacted by the action.
    * @return pointCost The cost of all points related to the action.
    */
-  function getProgressPointCost(_empireImpacted: EEmpire): bigint {
-    return getPointCost(_empireImpacted, BigInt(OTHER_EMPIRE_COUNT) * (tables.P_PointConfig.get()?.pointUnit ?? 1n));
+  function getProgressPointCost(_empireImpacted: EEmpire, _actionCount: bigint): bigint {
+    return getPointCost(
+      _empireImpacted,
+      _actionCount * BigInt(OTHER_EMPIRE_COUNT) * (tables.P_PointConfig.get()?.pointUnit ?? 1n),
+    );
   }
 
   /**
@@ -35,13 +38,13 @@ export function createPriceUtils(tables: Tables) {
    * @param _empireImpacted The empire impacted by the action.
    * @return pointCost The cost of all points related to the action.
    */
-  function getRegressPointCost(_empireImpacted: EEmpire): bigint {
+  function getRegressPointCost(_empireImpacted: EEmpire, _actionCount: bigint): bigint {
     let pointCost = 0n;
     for (let i = 1; i < EEmpire.LENGTH; i++) {
       if (i == _empireImpacted) {
         continue;
       }
-      pointCost += getPointCost(i, tables.P_PointConfig.get()?.pointUnit ?? 1n);
+      pointCost += getPointCost(i, _actionCount * (tables.P_PointConfig.get()?.pointUnit ?? 1n));
     }
 
     return pointCost;
@@ -73,15 +76,21 @@ export function createPriceUtils(tables: Tables) {
    * @param _actionCount The number of actions.
    * @return actionCost The marginal cost of the actions that impact a specific empire.
    */
-  function getMarginalActionCost(_actionType: EPlayerAction, _empireImpacted: EEmpire, _progressAction: boolean, _actionCount: bigint): bigint {
-    const initActionCost = tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
+  function getMarginalActionCost(
+    _actionType: EPlayerAction,
+    _empireImpacted: EEmpire,
+    _progressAction: boolean,
+    _actionCount: bigint,
+  ): bigint {
+    const initActionCost =
+      tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
     const actionCostIncrease = tables.P_ActionConfig.get()?.actionCostIncrease ?? 0n;
 
     const triangleSumOBO = ((_actionCount - 1n) * _actionCount) / 2n;
-    let actionCost = initActionCost + (triangleSumOBO * actionCostIncrease);
+    let actionCost = initActionCost * _actionCount + triangleSumOBO * actionCostIncrease;
 
     if (!_progressAction) {
-      actionCost += actionCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n) / 10000n;
+      actionCost = (actionCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
     }
     return actionCost;
   }

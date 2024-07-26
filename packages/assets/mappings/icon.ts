@@ -21,6 +21,7 @@ import Navigator from "../icons/UI_Navigator.png?url";
 import NotAllowed from "../icons/UI_NotAllowed.png?url";
 import Objective from "../icons/UI_Objective.png?url";
 import Reinforcements from "../icons/UI_Reinforcements.png?url";
+import RemoveShip from "../icons/UI_RemoveShip.png?url";
 import Reports from "../icons/UI_Reports.png?url";
 import Return from "../icons/UI_Return.png?url";
 import Settings from "../icons/UI_Settings.png?url";
@@ -76,6 +77,7 @@ export const InterfaceIcons = {
   NotAllowed,
   Objective,
   Reinforcements,
+  RemoveShip,
   Reports,
   Return,
   Settings,

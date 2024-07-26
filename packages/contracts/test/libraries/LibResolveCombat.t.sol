@@ -151,6 +151,7 @@ contract LibResolveCombatTest is PrimodiumTest {
   }
 
   function testThreeAttackers() public {
+    Planet.setShieldCount(emptyPlanetId, 0);
     // should resolve to green 3 attackers because green (winner) has 3 more ships than blue (second place)
     Arrivals.set(emptyPlanetId, EEmpire.Blue, 5);
     Arrivals.set(emptyPlanetId, EEmpire.Green, 8);

@@ -116,7 +116,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             {addShipPriceUsd} ({formatEther(addShipPriceWei)} ETH)
           </span>
           <TransactionQueueMask id={`${entity}-create-ship`}>
-            <Button variant="neutral" size="xs" onClick={() => createShip(entity, addShipPriceWei)} disabled={gameOver}>
+            <Button variant="neutral" size="xs" onClick={() => createShip(entity, 1n, addShipPriceWei)} disabled={gameOver}>
               Buy
             </Button>
           </TransactionQueueMask>
@@ -132,7 +132,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => removeShip(entity, removeShipPriceWei)}
+              onClick={() => removeShip(entity, 1n, removeShipPriceWei)}
               disabled={gameOver || !shipCount}
             >
               Buy
@@ -150,7 +150,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => addShield(entity, addShieldPriceWei)}
+              onClick={() => addShield(entity, 1n, addShieldPriceWei)}
               disabled={gameOver}
             >
               Buy
@@ -168,7 +168,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => removeShield(entity, removeShieldPriceWei)}
+              onClick={() => removeShield(entity, 1n, removeShieldPriceWei)}
               disabled={gameOver || !shieldCount}
             >
               Buy

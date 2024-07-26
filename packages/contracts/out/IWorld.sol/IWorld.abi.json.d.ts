@@ -351,6 +351,11 @@ declare const abi: [
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_actionCount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -364,6 +369,11 @@ declare const abi: [
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_actionCount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
