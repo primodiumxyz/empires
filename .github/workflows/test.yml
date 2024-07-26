@@ -24,19 +24,16 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
 
+      - name: Create .env with anvil and wallet private keys
+        run: echo -e "PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80\nPRI_DEV_PKEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80" > packages/contracts/.env
+
       - name: Build core bundle
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: pnpm --filter core run build
 
-      - name: Run tests in client
-        run: pnpm --filter core run test
-
       - name: Build contracts
         run: pnpm --filter contracts run build
 
-      - name: Create .env with anvil and wallet private keys
-        run: echo -e "PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80\nPRI_DEV_PKEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80" > packages/contracts/.env
-
-      - name: Run tests in contracts
-        run: pnpm --filter contracts run test
+      - name: Run tests for both client and contracts
+        run: pnpm test
