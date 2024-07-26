@@ -8,5 +8,8 @@ export const useActionCost = (actionType: EPlayerAction, empireImpacted: EEmpire
 
   const time = tables.Time.use();
 
-  return useMemo(() => utils.getTotalCost(actionType, empireImpacted, actionCount), [actionType, empireImpacted, actionCount, time]);
+  return useMemo(
+    () => utils.getTotalCost(actionType, empireImpacted, actionCount),
+    [actionType, empireImpacted, actionCount, time],
+  );
 };
