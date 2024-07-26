@@ -44,7 +44,7 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
 
   return (
     <div className="relative">
-      {pendingMoves.map((item) => {
+      {/* {pendingMoves.map((item) => {
         return (
           <Arrow
             key={`pending-${item.originPlanetId}`}
@@ -55,7 +55,7 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
             pending
           />
         );
-      })}
+      })} */}
       {arrivingShips.map((item) => {
         return (
           <Arrow

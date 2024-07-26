@@ -3,7 +3,7 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 
 import { PrimodiumScene } from "@game/types";
 import { IPrimodiumGameObject } from "./interfaces";
-import { Assets, Sprites } from "@primodiumxyz/assets";
+import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
 import {
   EmpireToConquerAnimationKeys,
   EmpireToHexSpriteKeys,
@@ -21,6 +21,7 @@ export class Planet
   private planetUnderglowSprite: Phaser.GameObjects.Sprite;
   private planetSprite: Phaser.GameObjects.Sprite;
   private hexSprite: Phaser.GameObjects.Sprite;
+  private hexHoloSprite: Phaser.GameObjects.Sprite;
   private spawned = false;
   private coord: PixelCoord;
 
@@ -58,10 +59,25 @@ export class Planet
       Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]
     );
 
+    this.hexHoloSprite = new Phaser.GameObjects.Sprite(
+      scene.phaserScene,
+      0,
+      75,
+      Assets.SpriteAtlas
+    );
+
+    this.hexHoloSprite.play(Animations.Holo);
+
     this._scene = scene;
     this.id = id;
     this.coord = coord;
-    this.add([this.hexSprite, this.planetUnderglowSprite, this.planetSprite]);
+    this.add([
+      this.hexHoloSprite,
+      this.hexSprite,
+      this.planetUnderglowSprite,
+      this.planetSprite,
+    ]);
+    this.setDepth(DepthLayers.Planet + coord.y);
 
     this.planetSprite.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
 

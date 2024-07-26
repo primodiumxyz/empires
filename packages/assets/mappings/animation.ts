@@ -1,4 +1,6 @@
 export const Animations = {
+  Holo: "hex/holo",
+
   //VFX
   ConquerBlue: "conquer/blue",
   ConquerGreen: "conquer/green",

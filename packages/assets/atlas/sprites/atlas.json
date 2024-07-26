@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1721934394703",
+            "image": "atlas.png?timestamp=1721963575070",
             "format": "RGBA8888",
             "size": {
-                "w": 420,
-                "h": 472
+                "w": 702,
+                "h": 669
             },
             "scale": 1,
             "frames": [
@@ -98,6 +98,258 @@
                     }
                 },
                 {
+                    "filename": "sprites/hex/holo/Holo_Rough_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 344,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 344,
+                        "y": 115,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 344,
+                        "y": 230,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 344,
+                        "y": 345,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 376,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 179,
+                        "y": 460,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 491,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 358,
+                        "y": 460,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 523,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 523,
+                        "y": 115,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 523,
+                        "y": 230,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_underglow.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 96
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 96
+                    },
+                    "frame": {
+                        "x": 523,
+                        "y": 345,
+                        "w": 96,
+                        "h": 96
+                    }
+                },
+                {
                     "filename": "sprites/planet/planet_blue.png",
                     "rotated": false,
                     "trimmed": false,
@@ -112,8 +364,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 344,
-                        "y": 0,
+                        "x": 619,
+                        "y": 345,
                         "w": 76,
                         "h": 114
                     }
@@ -133,8 +385,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 344,
-                        "y": 114,
+                        "x": 537,
+                        "y": 441,
                         "w": 76,
                         "h": 114
                     }
@@ -154,8 +406,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 344,
-                        "y": 228,
+                        "x": 613,
+                        "y": 459,
                         "w": 76,
                         "h": 114
                     }
@@ -175,31 +427,94 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 344,
-                        "y": 342,
+                        "x": 537,
+                        "y": 555,
                         "w": 76,
                         "h": 114
                     }
                 },
                 {
-                    "filename": "sprites/planet/planet_underglow.png",
+                    "filename": "sprites/hex/holo/Holo_Rough_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 96,
-                        "h": 96
+                        "w": 179,
+                        "h": 115
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 96,
-                        "h": 96
+                        "w": 179,
+                        "h": 115
                     },
                     "frame": {
+                        "x": 344,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
                         "x": 0,
-                        "y": 376,
-                        "w": 96,
-                        "h": 96
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 344,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 344,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 344,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
                     }
                 }
             ]

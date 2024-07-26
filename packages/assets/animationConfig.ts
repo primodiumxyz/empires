@@ -1,8 +1,19 @@
 export const AnimationConfig = [
   {
+    key: "hex/holo",
+    assetKey: "sprite-atlas",
+    randomFrame: true,
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 14,
+    repeat: -1,
+    prefix: "sprites/hex/holo/Holo_Rough_",
+    suffix: ".png",
+  },
+  {
     key: "conquer/blue",
     assetKey: "vfx-atlas",
-    frameRate: 15,
+    frameRate: 10,
     startFrame: 0,
     endFrame: 14,
     prefix: "vfx/conquer/blue/Conquer_Blue_",
@@ -11,7 +22,7 @@ export const AnimationConfig = [
   {
     key: "conquer/green",
     assetKey: "vfx-atlas",
-    frameRate: 15,
+    frameRate: 10,
     startFrame: 0,
     endFrame: 14,
     prefix: "vfx/conquer/green/Conquer_Green_",
@@ -20,7 +31,7 @@ export const AnimationConfig = [
   {
     key: "conquer/red",
     assetKey: "vfx-atlas",
-    frameRate: 15,
+    frameRate: 10,
     startFrame: 0,
     endFrame: 14,
     prefix: "vfx/conquer/red/Conquer_Red_",
