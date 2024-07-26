@@ -11,6 +11,10 @@ export function calculateRoutineThresholds(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
+  options?: {
+    noAttackTarget?: boolean;
+    noSupportTarget?: boolean;
+  },
 ): RoutineThresholds {
   // Input variables and their multipliers
   const multipliers: {
@@ -93,6 +97,13 @@ export function calculateRoutineThresholds(
     const category = _category as keyof RoutineThresholds;
     const positiveValue = Math.max(0, finalLikelihoods[category]);
     normalizedLikelihoods[category] = Number((positiveValue / totalPositive).toFixed(4));
+  }
+
+  if (options?.noAttackTarget) {
+    normalizedLikelihoods.attackEnemy = 0;
+  }
+  if (options?.noSupportTarget) {
+    normalizedLikelihoods.supportAlly = 0;
   }
 
   return percentsToThresholds(normalizedLikelihoods);

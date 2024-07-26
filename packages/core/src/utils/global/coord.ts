@@ -1,3 +1,4 @@
+import { EDirection } from "@primodiumxyz/contracts";
 import { AxialCoord, CartesionCoord } from "@core/lib";
 
 /**
@@ -13,4 +14,22 @@ export function convertAxialToCartesian(axialCoord: AxialCoord, size: number): C
   const y = size * ((3 / 2) * r);
 
   return { x, y };
+}
+
+export function getNeighbor(q: number, r: number, direction: EDirection): AxialCoord {
+  if (direction == EDirection.East) {
+    return { q: q + 1, r };
+  } else if (direction == EDirection.Southeast) {
+    return { q, r: r + 1 };
+  } else if (direction == EDirection.Southwest) {
+    return { q: q - 1, r: r + 1 };
+  } else if (direction == EDirection.West) {
+    return { q: q - 1, r };
+  } else if (direction == EDirection.Northwest) {
+    return { q, r: r - 1 };
+  } else if (direction == EDirection.Northeast) {
+    return { q: q + 1, r: r - 1 };
+  } else {
+    return { q, r };
+  }
 }
