@@ -7,7 +7,28 @@ type RoutineThresholds = {
   attackEnemy: number;
 };
 
+type RoutineThresholdsBigInt = {
+  accumulateGold: bigint;
+  buyShields: bigint;
+  buyShips: bigint;
+  supportAlly: bigint;
+  attackEnemy: bigint;
+};
+
 export function calculateRoutineThresholds(
+  vulnerability: number,
+  planetStrength: number,
+  empireStrength: number,
+  options?: {
+    noAttackTarget?: boolean;
+    noSupportTarget?: boolean;
+  },
+): RoutineThresholdsBigInt {
+  const normalizedLikelihoods = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, options);
+  return percentsToThresholds(normalizedLikelihoods);
+}
+
+export function calculateRoutinePcts(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
@@ -82,7 +103,12 @@ export function calculateRoutineThresholds(
     const category = _category as keyof RoutineThresholds;
     finalLikelihoods[category] = Math.max(0, initialLikelihoods[category] + adjustments[category]);
   }
-
+  if (options?.noAttackTarget) {
+    finalLikelihoods.attackEnemy = 0;
+  }
+  if (options?.noSupportTarget) {
+    finalLikelihoods.supportAlly = 0;
+  }
   // Normalize likelihoods
   const normalizedLikelihoods: RoutineThresholds = {
     buyShields: 0,
@@ -99,23 +125,16 @@ export function calculateRoutineThresholds(
     normalizedLikelihoods[category] = Number((positiveValue / totalPositive).toFixed(4));
   }
 
-  if (options?.noAttackTarget) {
-    normalizedLikelihoods.attackEnemy = 0;
-  }
-  if (options?.noSupportTarget) {
-    normalizedLikelihoods.supportAlly = 0;
-  }
-
-  return percentsToThresholds(normalizedLikelihoods);
+  return normalizedLikelihoods;
 }
 
-const percentsToThresholds = <T extends Record<string, number>>(percents: T): T => {
+const percentsToThresholds = <T extends Record<string, number>>(percents: T): Record<keyof T, bigint> => {
   let cumulative = 0;
-  const thresholds = {} as T;
+  const thresholds = {} as Record<keyof T, bigint>;
 
   for (const [key, value] of Object.entries(percents)) {
     cumulative += value;
-    thresholds[key as keyof T] = Math.round(cumulative * 10000) as T[keyof T];
+    thresholds[key as keyof T] = BigInt(Math.round(cumulative * 10000));
   }
 
   return thresholds;

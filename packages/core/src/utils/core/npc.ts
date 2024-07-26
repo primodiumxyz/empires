@@ -3,9 +3,22 @@ import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { Tables } from "@core/lib";
 import { getNeighbor } from "@core/utils/global/coord";
 
-import { calculateRoutineThresholds } from "../global/calculateRoutineThresholds";
+import { calculateRoutinePcts, calculateRoutineThresholds } from "../global/calculateRoutineThresholds";
 
 export const createNpcUtils = (tables: Tables) => {
+  const getRoutineProbabilities = (planetId: Entity) => {
+    const vulnerability = getVulnerability(planetId);
+    const planetStrength = getPlanetStrength(planetId);
+    const empireStrength = getEmpireStrength(planetId);
+    const attackTargetId = getAttackTarget(planetId);
+    const supportTargetId = getSupportTarget(planetId);
+
+    const probabilities = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, {
+      noAttackTarget: !attackTargetId,
+      noSupportTarget: !supportTargetId,
+    });
+    return { context: { vulnerability, planetStrength, empireStrength }, probabilities };
+  };
   const getRoutineThresholds = (planetId: Entity) => {
     const vulnerability = getVulnerability(planetId);
     const planetStrength = getPlanetStrength(planetId);
@@ -133,10 +146,17 @@ export const createNpcUtils = (tables: Tables) => {
       if (a.planets !== b.planets) {
         return b.planets - a.planets;
       }
+      if (b.resources === a.resources) {
+        if (a.empire === empireId) return -1;
+        if (b.empire === empireId) return 1;
+      }
       return b.resources > a.resources ? 1 : -1;
     });
 
-    const myEmpireRank = empireResources.findIndex((resource) => resource.empire === empireId);
+    const ranks = empireResources.map((resource) => {
+      return { empire: resource.empire, rank: empireResources.findIndex((r) => r.empire === resource.empire) };
+    });
+    const myEmpireRank = ranks.find((rank) => rank.empire === empireId)?.rank;
 
     if (myEmpireRank === 0 && (empireResources[0]?.resources ?? 0) > (empireResources[1]?.resources ?? 0)) {
       return 2; // My empire is leading
@@ -170,6 +190,7 @@ export const createNpcUtils = (tables: Tables) => {
     if (!planetData || planetData.empireId === 0) return;
 
     const allNeighbors = getAllNeighbors(planetId);
+    console.log({ allNeighbors });
     if (allNeighbors.length === 0) return;
 
     const enemyNeighbors = allNeighbors.filter((neighbor) => {
@@ -237,10 +258,10 @@ export const createNpcUtils = (tables: Tables) => {
 
   const getAllNeighbors = (planetId: Entity): Entity[] => {
     const planetData = tables.Planet.get(planetId);
-    const allPlanets = tables.Keys_PlanetsSet.getAll().map((planet) => {
-      return { planetId: planet, ...tables.Planet.get(planet)! };
+    const allPlanets = tables.Keys_PlanetsSet.get()?.itemKeys.map((planet) => {
+      return { planetId: planet, ...tables.Planet.get(planet as Entity)! };
     });
-    if (!planetData) return [];
+    if (!planetData || !allPlanets) return [];
     return [
       EDirection.East,
       EDirection.Southeast,
@@ -260,6 +281,7 @@ export const createNpcUtils = (tables: Tables) => {
   };
 
   return {
+    getRoutineProbabilities,
     getRoutineThresholds,
     getVulnerability,
     getPlanetStrength,
