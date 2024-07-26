@@ -11,6 +11,9 @@ export const createUpdateCalls = (core: Core, { playerAccount }: AccountClient, 
     return await execute({
       functionName: "Empires__updateWorld",
       args: [routineThresholds],
+      options: {
+        gas: 15000000n,
+      },
       txQueueOptions: {
         id: `update-world`,
         ...options,
