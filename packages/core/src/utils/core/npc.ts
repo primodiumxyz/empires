@@ -6,7 +6,7 @@ import { getNeighbor } from "@core/utils/global/coord";
 import { calculateRoutineThresholds } from "../global/calculateRoutineThresholds";
 
 export const createNpcUtils = (tables: Tables) => {
-  const getLikelihoods = (planetId: Entity) => {
+  const getRoutineThresholds = (planetId: Entity) => {
     const vulnerability = getVulnerability(planetId);
     const planetStrength = getPlanetStrength(planetId);
     const empireStrength = getEmpireStrength(planetId);
@@ -260,7 +260,7 @@ export const createNpcUtils = (tables: Tables) => {
   };
 
   return {
-    getLikelihoods,
+    getRoutineThresholds,
     getVulnerability,
     getPlanetStrength,
     getEmpireStrength,
