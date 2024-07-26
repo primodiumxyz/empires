@@ -36,7 +36,7 @@ contract LibNPCActionTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) != EEmpire.NULL);
     routineThresholds.planetId = planetId;
   }
 
