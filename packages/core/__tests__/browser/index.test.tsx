@@ -19,7 +19,7 @@ describe("browser", () => {
 
         return (
           <div>
-            <p>{core.config.playerAddress}</p>
+            <p>{core.config.worldAddress}</p>
           </div>
         );
       };
@@ -33,7 +33,7 @@ describe("browser", () => {
         </CoreProvider>,
       );
 
-      expect(screen.getAllByText(address)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(coreConfig.worldAddress)[0]).toBeInTheDocument();
     });
 
     it("should contain account client in a hook", () => {

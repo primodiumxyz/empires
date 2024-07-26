@@ -14,7 +14,7 @@
     "src"
   ],
   "scripts": {
-    "test": "vitest"
+    "test": "vitest --run"
   },
   "dependencies": {
     "@latticexyz/block-logs-stream": "2.0.9",
