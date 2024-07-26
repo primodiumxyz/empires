@@ -7,10 +7,40 @@ type RoutineThresholds = {
   attackEnemy: number;
 };
 
-export function calculateRoutineThresholds(
+type RoutineThresholdsBigInt = {
+  accumulateGold: bigint;
+  buyShields: bigint;
+  buyShips: bigint;
+  supportAlly: bigint;
+  attackEnemy: bigint;
+};
+
+export function calculateRoutineThresholds(probabilities: RoutineThresholds): RoutineThresholdsBigInt {
+  const goldThreshold = BigInt(Math.round(probabilities.accumulateGold * 10000));
+  const shieldThreshold = BigInt(Math.round(probabilities.buyShields * 10000)) + goldThreshold;
+  const shipThreshold = BigInt(Math.round(probabilities.buyShips * 10000)) + shieldThreshold;
+  const supportThreshold = BigInt(Math.round(probabilities.supportAlly * 10000)) + shipThreshold;
+  const attackThreshold = BigInt(Math.round(probabilities.attackEnemy * 10000)) + supportThreshold;
+  return {
+    accumulateGold: goldThreshold,
+    buyShields: shieldThreshold,
+    buyShips: shipThreshold,
+    attackEnemy: attackThreshold,
+    supportAlly: supportThreshold,
+  };
+}
+
+export function calculateRoutinePcts(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
+  options: {
+    cantBuyShips?: boolean;
+    cantBuyShields?: boolean;
+
+    noAttackTarget?: boolean;
+    noSupportTarget?: boolean;
+  },
 ): RoutineThresholds {
   // Input variables and their multipliers
   const multipliers: {
@@ -46,8 +76,8 @@ export function calculateRoutineThresholds(
     buyShields: 0.25,
     attackEnemy: 0.3,
     accumulateGold: 0.15,
-    buyShips: 0.2,
-    supportAlly: 0.1,
+    buyShips: 0.23,
+    supportAlly: 0.07,
   } as const;
 
   // Calculate likelihood adjustments
@@ -78,6 +108,10 @@ export function calculateRoutineThresholds(
     const category = _category as keyof RoutineThresholds;
     finalLikelihoods[category] = Math.max(0, initialLikelihoods[category] + adjustments[category]);
   }
+  if (options?.noAttackTarget) finalLikelihoods.attackEnemy = 0;
+  if (options?.noSupportTarget) finalLikelihoods.supportAlly = 0;
+  if (options?.cantBuyShips) finalLikelihoods.buyShips = 0;
+  if (options?.cantBuyShields) finalLikelihoods.buyShields = 0;
 
   // Normalize likelihoods
   const normalizedLikelihoods: RoutineThresholds = {
@@ -95,17 +129,5 @@ export function calculateRoutineThresholds(
     normalizedLikelihoods[category] = Number((positiveValue / totalPositive).toFixed(4));
   }
 
-  return percentsToThresholds(normalizedLikelihoods);
+  return normalizedLikelihoods;
 }
-
-const percentsToThresholds = <T extends Record<string, number>>(percents: T): T => {
-  let cumulative = 0;
-  const thresholds = {} as T;
-
-  for (const [key, value] of Object.entries(percents)) {
-    cumulative += value;
-    thresholds[key as keyof T] = Math.round(cumulative * 10000) as T[keyof T];
-  }
-
-  return thresholds;
-};

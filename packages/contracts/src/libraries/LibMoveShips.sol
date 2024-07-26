@@ -39,6 +39,8 @@ library LibMoveShips {
   function executePendingMoves(bytes32 planetId) internal {
     PlanetData memory planetData = Planet.get(planetId);
     bytes32 destinationPlanetId = PendingMove.getDestinationPlanetId(planetId);
+    // Clear the pending move
+    PendingMove.deleteRecord(planetId);
 
     if (destinationPlanetId == bytes32(0)) return;
 
@@ -48,9 +50,6 @@ library LibMoveShips {
     // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
     Arrivals.set(destinationPlanetId, planetData.empireId, shipsToMove);
-
-    // Clear the pending move
-    PendingMove.deleteRecord(planetId);
 
     // Log the move
     MoveNPCAction.set(

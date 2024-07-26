@@ -7,10 +7,18 @@ export const resizePhaserGame = (game: Phaser.Game) => {
     for (const scene of game.scene.scenes) {
       if (scene.scene.settings.active) {
         // Re-adjust camera viewport
-        scene.cameras.main.setViewport(0, 0, game.scale.width, game.scale.height);
+        scene.cameras.main.setViewport(
+          0,
+          0,
+          game.scale.width,
+          game.scale.height
+        );
 
         // Re-center the camera
-        scene.cameras.main.setScroll(-game.scale.width / 2, -game.scale.height / 2);
+        scene.cameras.main.setScroll(
+          -game.scale.width / 2,
+          -game.scale.height / 2
+        );
       }
     }
   };
