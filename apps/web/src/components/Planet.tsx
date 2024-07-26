@@ -233,7 +233,7 @@ const Ships = ({
             variant="neutral"
             size="xs"
             className="border-none"
-            onClick={() => removeShip(planetId, killShipPriceWei)}
+            onClick={() => removeShip(planetId, 1n, killShipPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0 || Number(shipCount) === 0}
           >
             -{Math.ceil(reductionPct * Number(shipCount))}
@@ -324,7 +324,7 @@ const Shields = ({
         <TransactionQueueMask id={`${planetId}-remove-shield`}>
           <Button
             tooltip={`Cost: ${removeShieldPriceUsd}`}
-            onClick={() => calls.removeShield(planetId, removeShieldPriceWei)}
+            onClick={() => calls.removeShield(planetId, 1n, removeShieldPriceWei)}
             disabled={gameOver || Number(planetEmpire) === 0 || Number(shieldCount) === 0}
           >
             -{Math.ceil(reductionPct * Number(shieldCount))}

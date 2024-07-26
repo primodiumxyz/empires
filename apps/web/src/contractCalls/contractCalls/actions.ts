@@ -15,10 +15,10 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  const removeShip = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const removeShip = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__killShip",
-      args: [planetId],
+      args: [planetId, actionCount],
       options: { value: payment },
       txQueueOptions: {
         id: `${planetId}-kill-ship`,
@@ -50,10 +50,10 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
     });
   };
 
-  const removeShield = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const removeShield = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__drainShield",
-      args: [planetId],
+      args: [planetId, actionCount],
       options: { value: payment },
       txQueueOptions: {
         id: `${planetId}-remove-shield`,
