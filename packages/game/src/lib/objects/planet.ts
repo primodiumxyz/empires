@@ -85,7 +85,7 @@ export class Planet
           Assets.SpriteAtlas
         )
           .play(Animations.PendingBlue)
-          .setBlendMode(Phaser.BlendModes.ADD),
+          .setAlpha(0.75),
       ]
     )
       .setDepth(DepthLayers.PendingArrows)
