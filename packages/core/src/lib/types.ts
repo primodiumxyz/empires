@@ -1,5 +1,5 @@
 import { ContractWrite } from "@latticexyz/common";
-import CallWithSignatureAbi from "@latticexyz/world-modules/out/Unstable_CallWithSignatureSystem.sol/Unstable_CallWithSignatureSystem.abi.json";
+import type CallWithSignatureAbi from "@latticexyz/world-modules/out/Unstable_CallWithSignatureSystem.sol/Unstable_CallWithSignatureSystem.abi.json";
 import { ReplaySubject, Subject } from "rxjs";
 import {
   Account,
@@ -12,7 +12,7 @@ import {
   WalletClient,
 } from "viem";
 import mudConfig from "@primodiumxyz/contracts/mud.config";
-import IWorldAbi from "@primodiumxyz/contracts/out/IWorld.sol/IWorld.abi.json";
+import type IWorldAbi from "@primodiumxyz/contracts/out/IWorld.sol/IWorld.abi.json.d.ts";
 
 import { AllTableDefs, ContractTables, Entity, World, WrapperResult } from "@primodiumxyz/reactive-tables";
 import { ChainConfig } from "@core/network/config/chainConfigs";
