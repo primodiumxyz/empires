@@ -28,8 +28,8 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
 
-      - name: Create .env with anvil and wallet private keys
-        run: echo -e "PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80\nPRI_DEV_PKEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80" > packages/contracts/.env
+      - name: Create .env with production private keys
+        run: echo -e "PRIVATE_KEY=$PRIMODIUM_CALDERA_PROD\nPRI_DEV_PKEY=$PRIMODIUM_CALDERA_PROD" > packages/contracts/.env
 
       - name: Build contracts
         run: pnpm --filter contracts run build
