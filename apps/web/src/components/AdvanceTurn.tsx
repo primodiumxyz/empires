@@ -7,6 +7,7 @@ import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
+import { useTimeLeft } from "@/hooks/useTimeLeft";
 
 export const EmpireEnumToColor = {
   [EEmpire.Blue]: "bg-blue-600",
@@ -18,11 +19,12 @@ export const EmpireEnumToColor = {
 export const AdvanceTurn = () => {
   const { tables } = useCore();
   const { updateWorld } = useContractCalls();
+  const { gameOver } = useTimeLeft();
   const blockNumber = tables.BlockNumber.use()?.value ?? 0n;
 
   const turn = tables.Turn.use();
 
-  if (!turn) return null;
+  if (!turn|| gameOver) return null;
 
   return (
     <TransactionQueueMask id={`update-world`}>
