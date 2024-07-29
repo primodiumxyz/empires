@@ -37,48 +37,47 @@ library LibResolveCombat {
 
     if (attackingEmpire == EEmpire.NULL) {
       Planet.setShipCount(planetId, defendingShips);
-      return;
-    }
-
-    bool conquer = false;
-    uint256 defendingShields = Planet.get(planetId).shieldCount;
-    uint256 totalDefenses = defendingShips + defendingShields;
-
-    // attackers bounce off shields
-    if (attackingShips <= defendingShields) {
-      Planet.setShieldCount(planetId, defendingShields - attackingShips);
-    }
-    // attackers destroy shields and damage destroyers, but don't conquer
-    else if (attackingShips <= totalDefenses) {
-      Planet.setShieldCount(planetId, 0);
-      Planet.setShipCount(planetId, totalDefenses - attackingShips);
-    }
-    // attackers conquer planet
-    else if (attackingShips > totalDefenses) {
-      conquer = true;
-
-      Planet.setShieldCount(planetId, 0);
-      Planet.setShipCount(planetId, attackingShips - totalDefenses);
-
-      EmpirePlanetsSet.add(attackingEmpire, planetId);
-      EmpirePlanetsSet.remove(defendingEmpire, planetId);
-      Planet.setEmpireId(planetId, attackingEmpire);
-      PendingMove.deleteRecord(planetId);
     } else {
-      revert("[LibResolveCombat] Invalid combat resolution");
-    }
+      bool conquer = false;
+      uint256 defendingShields = Planet.get(planetId).shieldCount;
+      uint256 totalDefenses = defendingShips + defendingShields;
 
-    PlanetBattleNPCAction.set(
-      eventEntity,
-      PlanetBattleNPCActionData({
-        planetId: planetId,
-        attackingShipCount: attackingShips,
-        defendingShipCount: defendingShips,
-        defendingShieldCount: defendingShields,
-        conquer: conquer,
-        timestamp: block.timestamp
-      })
-    );
+      // attackers bounce off shields
+      if (attackingShips <= defendingShields) {
+        Planet.setShieldCount(planetId, defendingShields - attackingShips);
+      }
+      // attackers destroy shields and damage destroyers, but don't conquer
+      else if (attackingShips <= totalDefenses) {
+        Planet.setShieldCount(planetId, 0);
+        Planet.setShipCount(planetId, totalDefenses - attackingShips);
+      }
+      // attackers conquer planet
+      else if (attackingShips > totalDefenses) {
+        conquer = true;
+
+        Planet.setShieldCount(planetId, 0);
+        Planet.setShipCount(planetId, attackingShips - totalDefenses);
+
+        EmpirePlanetsSet.add(attackingEmpire, planetId);
+        EmpirePlanetsSet.remove(defendingEmpire, planetId);
+        Planet.setEmpireId(planetId, attackingEmpire);
+        PendingMove.deleteRecord(planetId);
+      } else {
+        revert("[LibResolveCombat] Invalid combat resolution");
+      }
+
+      PlanetBattleNPCAction.set(
+        eventEntity,
+        PlanetBattleNPCActionData({
+          planetId: planetId,
+          attackingShipCount: attackingShips,
+          defendingShipCount: defendingShips,
+          defendingShieldCount: defendingShields,
+          conquer: conquer,
+          timestamp: block.timestamp
+        })
+      );
+    }
 
     Arrivals.deleteRecord(planetId, EEmpire.Green);
     Arrivals.deleteRecord(planetId, EEmpire.Blue);

@@ -42,7 +42,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   const [left, top] = useMemo(() => {
     const cartesianCoord = convertAxialToCartesian(
-      { q: Number(planet?.q ?? 0n), r: Number(planet?.r ?? 0n) },
+      { q: Number(planet?.q ?? 0n) - 100, r: Number(planet?.r ?? 0n) },
       tileSize + margin,
     );
 

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { PendingMove, P_NPCMoveThresholds, Planet, PlanetData, Arrivals } from "codegen/index.sol";
+import { PendingMove, Planet, PlanetData, Arrivals } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
@@ -11,14 +11,23 @@ import { coordToId } from "src/utils.sol";
 
 contract LibResolveCombatTest is PrimodiumTest {
   bytes32 planetId;
+  bytes32 emptyPlanetId;
 
   function setUp() public override {
     super.setUp();
     uint256 i = 0;
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     do {
-      planetId = PlanetsSet.getPlanetIds()[i];
+      planetId = planetIds[i];
       i++;
     } while (Planet.getEmpireId(planetId) != EEmpire.Red);
+
+    for (i = 0; i < planetIds.length; i++) {
+      emptyPlanetId = planetIds[i];
+      if (Planet.getEmpireId(planetId) == EEmpire.NULL) {
+        break;
+      }
+    }
     vm.startPrank(creator);
   }
 
@@ -48,9 +57,8 @@ contract LibResolveCombatTest is PrimodiumTest {
 
   function testConquerClearPendingMoves() public {
     // create pending move
-    P_NPCMoveThresholds.set(0, 10000, 10000, 10000); // Thresholds to always move forward
     Planet.setShipCount(planetId, 1);
-    bool moved = LibMoveShips.createPendingMove(planetId);
+    bool moved = LibMoveShips.createPendingMove(planetId, emptyPlanetId);
 
     assertEq(moved, true, "should have moved");
     assertFalse(PendingMove.get(planetId).empireId == EEmpire.NULL);
@@ -143,19 +151,16 @@ contract LibResolveCombatTest is PrimodiumTest {
   }
 
   function testThreeAttackers() public {
-    bytes32 emptyPlanetId;
-    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    for (uint256 i = 0; i < planetIds.length; i++) {
-      emptyPlanetId = planetIds[i];
-      if (Planet.getEmpireId(planetId) == EEmpire.NULL) {
-        break;
-      }
-    }
     Planet.setShieldCount(emptyPlanetId, 0);
     // should resolve to green 3 attackers because green (winner) has 3 more ships than blue (second place)
     Arrivals.set(emptyPlanetId, EEmpire.Blue, 5);
     Arrivals.set(emptyPlanetId, EEmpire.Green, 8);
     Arrivals.set(emptyPlanetId, EEmpire.Red, 4);
+    Planet.setShipCount(emptyPlanetId, 0);
+    Planet.setShieldCount(emptyPlanetId, 0);
+    console.log(Planet.getShipCount(emptyPlanetId));
+    console.log(Planet.getShieldCount(emptyPlanetId));
+    console.log(uint8(Planet.getEmpireId(emptyPlanetId)));
     LibResolveCombat.resolveCombat(emptyPlanetId);
     assertEq(Planet.getShipCount(emptyPlanetId), 3, "should resolve to 3 ship defenders");
     assertEq(Planet.getShieldCount(emptyPlanetId), 0, "should resolve to 0 shield defenders");

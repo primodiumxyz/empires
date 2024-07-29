@@ -20,6 +20,8 @@ export const AdvanceTurn = () => {
   const { updateWorld } = useContractCalls();
   const blockNumber = tables.BlockNumber.use()?.value ?? 0n;
 
+  const avgBlockTime = tables.BlockNumber.use()?.avgBlockTime ?? 0;
+
   const turn = tables.Turn.use();
 
   if (!turn) return null;
@@ -29,7 +31,6 @@ export const AdvanceTurn = () => {
       <Button
         size="lg"
         shape="square"
-        variant="ghost"
         className={cn(EmpireEnumToColor[turn.empire as EEmpire], "w-fit px-4")}
         onClick={() => updateWorld()}
         disabled={turn.nextTurnBlock > blockNumber}
@@ -42,7 +43,10 @@ export const AdvanceTurn = () => {
             </p>
           )}
           {turn.nextTurnBlock > blockNumber && (
-            <p className="text-sm">{(turn.nextTurnBlock - blockNumber).toLocaleString()} blocks remaining</p>
+            <p className="text-sm">
+              {((Number(turn.nextTurnBlock) - Number(blockNumber)) * Number(avgBlockTime)).toLocaleString()} seconds
+              remaining
+            </p>
           )}
         </div>
       </Button>

@@ -4,15 +4,20 @@ pragma solidity >=0.8.24;
 import { System } from "@latticexyz/world/src/System.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
-import { LibGold } from "libraries/LibGold.sol";
+import { LibNPCAction } from "libraries/LibNPCAction.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { Planet, Turn, TurnData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
+import { RoutineThresholds } from "../Types.sol";
 
 contract UpdateSystem is EmpiresSystem {
+  /**
+   * @dev Updates the current turn and returns the empire whose turn just ended.
+   * @return The empire whose turn just ended.
+   */
   function _updateTurn() private returns (EEmpire) {
     TurnData memory turn = Turn.get();
 
@@ -24,11 +29,12 @@ contract UpdateSystem is EmpiresSystem {
     return turn.empire;
   }
 
-  function updateWorld() public _onlyNotGameOver {
-    EEmpire empire = _updateTurn();
-
+  /**
+   * @dev Updates the game world state, including gold generation, ship movements, combat resolution, and empire actions.
+   * @param routineThresholds An array of RoutineThresholds structs containing information about planet actions.
+   */
+  function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver {
     uint256 goldGenRate = P_GameConfig.getGoldGenRate();
-
     // add gold to every planet
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint i = 0; i < planets.length; i++) {
@@ -36,21 +42,13 @@ contract UpdateSystem is EmpiresSystem {
     }
 
     // spend gold and move ships for each empire planet
-    bytes32[] memory empirePlanets = EmpirePlanetsSet.getEmpirePlanetIds(empire);
-    for (uint i = 0; i < empirePlanets.length; i++) {
-      LibMoveShips.executePendingMoves(empirePlanets[i]);
-      LibGold.spendGold(empirePlanets[i]);
+    for (uint i = 0; i < routineThresholds.length; i++) {
+      LibMoveShips.executePendingMoves(routineThresholds[i].planetId);
+      LibNPCAction.executeAction(routineThresholds[i].planetId, routineThresholds[i]);
     }
 
-    // resolve combat for each planet
     for (uint i = 0; i < planets.length; i++) {
       LibResolveCombat.resolveCombat(planets[i]);
-    }
-
-    // set new pending moves for each planet
-    empirePlanets = EmpirePlanetsSet.getEmpirePlanetIds(empire);
-    for (uint i = 0; i < empirePlanets.length; i++) {
-      LibMoveShips.createPendingMove(empirePlanets[i]);
     }
 
     // generate new actions and points for each empire and action
@@ -58,5 +56,7 @@ contract UpdateSystem is EmpiresSystem {
       LibPrice.turnEmpirePointCostDown(EEmpire(i));
       LibPrice.empirePlayerActionsCostDown(EEmpire(i));
     }
+
+    _updateTurn();
   }
 }

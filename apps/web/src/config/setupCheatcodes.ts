@@ -29,8 +29,6 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   const gameConfig = tables.P_GameConfig.get();
   const pointConfig = tables.P_PointConfig.get();
   const actionConfig = tables.P_ActionConfig.get();
-  const npcActionThresholds = tables.P_NPCActionThresholds.get();
-  const npcMoveThresholds = tables.P_NPCMoveThresholds.get();
 
   /* ------------------------------- SHIPS ------------------------------- */
   // Set the amount of ships on a planet
@@ -641,92 +639,6 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
           return true;
         } else {
           notify("error", "Failed to update NPC action costs");
-          return false;
-        }
-      },
-    }),
-
-    P_NPCActionThresholds: createCheatcode({
-      title: "Update NPC action thresholds",
-      bg: CheatcodeToBg["config"],
-      caption: "P_NPCActionThresholds",
-      inputs: {
-        none: {
-          label: "None (0-100)",
-          inputType: "number",
-          defaultValue: Number(npcActionThresholds?.none ?? BigInt(0)) / 100,
-        },
-        buyShips: {
-          label: "Buy ships (0-100)",
-          inputType: "number",
-          defaultValue: Number(npcActionThresholds?.buyShips ?? BigInt(0)) / 100,
-        },
-      },
-      execute: async (properties) => {
-        if (Object.values(properties).reduce((acc, value) => acc + value.value, 0) !== 100) {
-          notify("error", "Thresholds must add up to 100% ");
-          return false;
-        }
-
-        const success = await setTableValue(
-          tables.P_NPCActionThresholds,
-          {},
-          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, value.value / 100])),
-        );
-
-        if (success) {
-          notify("success", "NPC action thresholds updated");
-          return true;
-        } else {
-          notify("error", "Failed to update NPC action thresholds");
-          return false;
-        }
-      },
-    }),
-
-    P_NPCMoveThresholds: createCheatcode({
-      title: "Update NPC move thresholds",
-      bg: CheatcodeToBg["config"],
-      caption: "P_NPCMoveThresholds",
-      inputs: {
-        none: {
-          label: "None (0-100)",
-          inputType: "number",
-          defaultValue: Number(npcMoveThresholds?.none ?? BigInt(0)) / 100,
-        },
-        expand: {
-          label: "Expand (0-100)",
-          inputType: "number",
-          defaultValue: Number(npcMoveThresholds?.expand ?? BigInt(0)) / 100,
-        },
-        lateral: {
-          label: "Lateral (0-100)",
-          inputType: "number",
-          defaultValue: Number(npcMoveThresholds?.lateral ?? BigInt(0)) / 100,
-        },
-        retreat: {
-          label: "Retreat (0-100)",
-          inputType: "number",
-          defaultValue: Number(npcMoveThresholds?.retreat ?? BigInt(0)) / 100,
-        },
-      },
-      execute: async (properties) => {
-        if (Object.values(properties).reduce((acc, value) => acc + value.value, 0) !== 100) {
-          notify("error", "Thresholds must add up to 100% ");
-          return false;
-        }
-
-        const success = await setTableValue(
-          tables.P_NPCMoveThresholds,
-          {},
-          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, value.value / 100])),
-        );
-
-        if (success) {
-          notify("success", "NPC move thresholds updated");
-          return true;
-        } else {
-          notify("error", "Failed to update NPC move thresholds");
           return false;
         }
       },

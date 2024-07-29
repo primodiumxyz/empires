@@ -2,14 +2,19 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Turn, P_NPCActionThresholds, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Empire } from "codegen/index.sol";
+import { Turn, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Empire } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-import { LibGold } from "libraries/LibGold.sol";
+import { LibNPCAction } from "libraries/LibNPCAction.sol";
 import { EEmpire, ENPCAction, EPlayerAction } from "codegen/common.sol";
+import { RoutineThresholds } from "src/Types.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
   bytes32 planetId;
   uint256 turnLength = 100;
+
+  RoutineThresholds[] allRoutineThresholds;
+  RoutineThresholds routineThresholds;
+
   function setUp() public override {
     super.setUp();
 
@@ -21,30 +26,43 @@ contract UpdateSystemTest is PrimodiumTest {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
     } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
+
+    RoutineThresholds memory _routineThresholds = RoutineThresholds({
+      planetId: planetId,
+      accumulateGold: 2000,
+      buyShields: 4000,
+      buyShips: 6000,
+      supportAlly: 8000,
+      attackEnemy: 10000,
+      attackTargetId: bytes32(""),
+      supportTargetId: bytes32("")
+    });
+    routineThresholds = _routineThresholds;
+    allRoutineThresholds.push(_routineThresholds);
   }
 
   function testUpdateExecuted() public {
-    world.Empires__updateWorld();
+    world.Empires__updateWorld(allRoutineThresholds);
 
     vm.roll(block.number + turnLength - 1);
 
     vm.expectRevert("[UpdateSystem] Cannot update yet");
-    world.Empires__updateWorld();
+    world.Empires__updateWorld(allRoutineThresholds);
 
     vm.roll(block.number + 1);
 
-    world.Empires__updateWorld();
+    world.Empires__updateWorld(allRoutineThresholds);
   }
 
   function testUpdateNextTurnBlock() public {
-    world.Empires__updateWorld();
+    world.Empires__updateWorld(allRoutineThresholds);
     assertEq(Turn.getNextTurnBlock(), block.number + turnLength);
   }
 
   /* ---------------------------------- Gold ---------------------------------- */
 
   function testAddGoldToEveryPlanet() public {
-    world.Empires__updateWorld();
+    world.Empires__updateWorld(allRoutineThresholds);
     uint256 goldIncrease = P_GameConfig.getGoldGenRate();
 
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
@@ -54,16 +72,8 @@ contract UpdateSystemTest is PrimodiumTest {
     }
   }
 
-  function testSpendGoldNoAction() public {
-    uint256 nonEPlayerAction = P_NPCActionThresholds.getNone() - 1;
-    Planet.setGoldCount(planetId, 100);
-    LibGold._spendGold(planetId, nonEPlayerAction);
-
-    assertEq(Planet.getGoldCount(planetId), 100);
-  }
-
   function testSpendGoldBuyShipsAction() public {
-    uint256 shipsAction = P_NPCActionThresholds.getBuyShips() - 1;
+    uint256 shipsAction = routineThresholds.buyShips - 1;
     uint256 gold = 9;
 
     Planet.setGoldCount(planetId, gold);
@@ -74,7 +84,7 @@ contract UpdateSystemTest is PrimodiumTest {
     uint256 expectedShips = gold / shipPrice;
     uint256 expectedRemainder = gold % shipPrice;
 
-    LibGold._spendGold(planetId, shipsAction);
+    LibNPCAction._executeAction(routineThresholds, shipsAction);
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
     assertEq(Planet.getShipCount(planetId), expectedShips, "ships wrong");
@@ -97,7 +107,7 @@ contract UpdateSystemTest is PrimodiumTest {
     ActionCost.set(EEmpire.Green, EPlayerAction.KillShip, beginActionCost);
 
     vm.roll(block.number + turnLength);
-    world.Empires__updateWorld();
+    world.Empires__updateWorld(allRoutineThresholds);
 
     assertEq(Empire.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
     assertEq(Empire.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
