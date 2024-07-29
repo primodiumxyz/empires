@@ -1,5 +1,6 @@
 import { adjustDecimals } from "@primodiumxyz/core";
 import { useGame } from "@/hooks/useGame";
+import { cn } from "@/util/client";
 
 import { Button } from "./Button";
 
@@ -9,7 +10,8 @@ export const NumberInput: React.FC<{
   toFixed?: number;
   onChange?: (val: string) => void;
   count: string;
-}> = ({ count, min = 0, max = Infinity, onChange, toFixed = 0 }) => {
+  className?: string;
+}> = ({ count, min = 0, max = Infinity, onChange, toFixed = 0, className }) => {
   const game = useGame();
 
   const handleUpdate = (newCount: string) => {
@@ -32,7 +34,7 @@ export const NumberInput: React.FC<{
   };
 
   return (
-    <div className={`relative flex flex-col justify-center gap-2`}>
+    <div className={cn("relative flex flex-col justify-center gap-2", className)}>
       <div className="flex flex-row gap-2">
         <Button
           size={"xs"}

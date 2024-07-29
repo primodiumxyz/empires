@@ -1,18 +1,16 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
-import CheatcodesButton, { CheatcodesCloseButton } from "@/components/CheatcodesButton";
+import { Button } from "@/components/core/Button";
+import { Dropdown } from "@/components/core/Dropdown";
+import { Modal } from "@/components/core/Modal";
+import { TextInput } from "@/components/core/TextInput";
 import { setupCheatcodes } from "@/config/setupCheatcodes";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 
 import "@/index.css";
-
-import { Badge } from "@/components/core/Badge";
-import { Button } from "@/components/core/Button";
-import { Modal } from "@/components/core/Modal";
-import { TextInput } from "@/components/core/TextInput";
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
@@ -119,33 +117,34 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
             console.error('Cheatcode input options must have unique "id" values', input);
             return;
           }
-          // default value will be either provided, or first option if any, or default value corresponding to the input type
-          const defaultValue = formatValue(inputType, input.defaultValue ?? options?.[0]?.value).toString();
+          // default value will be either provided or default value corresponding to the input type
+          const defaultValue = formatValue(inputType, input.defaultValue).toString();
 
           return (
             <div key={inputKey} className="flex flex-col gap-1 text-sm">
               <label className="text-gray-300">{label}</label>
               {options ? (
-                <select
-                  defaultValue={defaultValue}
-                  onChange={(e) => {
+                <Dropdown
+                  size="sm"
+                  value={inputValues[inputKey]?.id ?? options[0].id}
+                  onChange={(value) => {
                     setInputValues((prev) => ({
                       ...prev,
                       [inputKey]: {
                         ...input,
-                        id: e.target.value,
-                        value: formatValue(inputType, options.find((o) => o.id === e.target.value)?.value),
+                        id: value,
+                        value: formatValue(inputType, options.find((o) => o.id === value)?.value),
                       },
                     }));
                   }}
-                  className="max-h-8 bg-gray-800 p-2 text-gray-300"
+                  className="w-full"
                 >
                   {options?.map((option) => (
-                    <option key={option.id} value={option.id}>
+                    <Dropdown.Item key={option.id} value={option.id}>
                       {option.value.toString()}
-                    </option>
+                    </Dropdown.Item>
                   ))}
-                </select>
+                </Dropdown>
               ) : (
                 <TextInput
                   placeholder={defaultValue}
