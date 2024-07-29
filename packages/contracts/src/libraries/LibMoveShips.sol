@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveNPCAction, MoveNPCActionData, Arrivals } from "codegen/index.sol";
+import { PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveRoutine, MoveRoutineData, Arrivals } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 
@@ -52,9 +52,9 @@ library LibMoveShips {
     Arrivals.set(destinationPlanetId, planetData.empireId, shipsToMove);
 
     // Log the move
-    MoveNPCAction.set(
+    MoveRoutine.set(
       pseudorandomEntity(),
-      MoveNPCActionData({
+      MoveRoutineData({
         originPlanetId: planetId,
         destinationPlanetId: destinationPlanetId,
         shipCount: shipsToMove,

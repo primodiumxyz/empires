@@ -38,7 +38,7 @@ export enum EPlayerAction {
   LENGTH,
 }
 
-export enum ENPCAction {
+export enum ERoutine {
   BuyShips = 1,
   BuyShields,
   AccumulateGold,
@@ -51,7 +51,7 @@ export const MUDEnums = {
   EOrigin: enumToArray(EOrigin),
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
-  ENPCAction: enumToArray(ENPCAction),
+  ERoutine: enumToArray(ERoutine),
   EPlayerAction: enumToArray(EPlayerAction),
 };
 

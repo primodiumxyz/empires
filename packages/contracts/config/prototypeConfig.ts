@@ -1,7 +1,7 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
 import { POINTS_UNIT } from "./constants";
-import { EEmpire, ENPCAction } from "./enums";
+import { EEmpire, ERoutine } from "./enums";
 
 const scaleMultiplier = (multiplier: number) => {
   if (multiplier < 0 || multiplier > 1) throw new Error("multiplier must be between 0 and 100");
@@ -44,26 +44,26 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
   },
 
   BuyShips: {
-    keys: [{ [ENPCAction.BuyShips]: "uint8" }],
+    keys: [{ [ERoutine.BuyShips]: "uint8" }],
     tables: {
-      P_NPCActionCosts: {
+      P_RoutineCosts: {
         goldCost: 2n,
       },
     },
   },
   BuyShields: {
-    keys: [{ [ENPCAction.BuyShields]: "uint8" }],
+    keys: [{ [ERoutine.BuyShields]: "uint8" }],
     tables: {
-      P_NPCActionCosts: {
+      P_RoutineCosts: {
         goldCost: 2n,
       },
     },
   },
   // this is the gold added to the planet when this action is triggered
   AccumulateGold: {
-    keys: [{ [ENPCAction.AccumulateGold]: "uint8" }],
+    keys: [{ [ERoutine.AccumulateGold]: "uint8" }],
     tables: {
-      P_NPCActionCosts: {
+      P_RoutineCosts: {
         goldCost: 5n,
       },
     },

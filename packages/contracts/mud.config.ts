@@ -151,10 +151,10 @@ export const worldInput = {
 
     /* ------------------------------- NPC Routines ----------------------------- */
 
-    P_NPCActionCosts: {
+    P_RoutineCosts: {
       key: ["action"],
       schema: {
-        action: "ENPCAction",
+        action: "ERoutine",
         goldCost: "uint256",
       },
     },
@@ -188,7 +188,7 @@ export const worldInput = {
       },
     },
 
-    MoveNPCAction: {
+    MoveRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -200,7 +200,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    ShipBattleNPCAction: {
+    ShipBattleRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -213,7 +213,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    PlanetBattleNPCAction: {
+    PlanetBattleRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -227,7 +227,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    AccumulateGoldNPCAction: {
+    AccumulateGoldRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -238,7 +238,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyShipsNPCAction: {
+    BuyShipsRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -250,7 +250,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyShieldsNPCAction: {
+    BuyShieldsRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",

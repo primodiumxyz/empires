@@ -2,10 +2,10 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Turn, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Empire } from "codegen/index.sol";
+import { Turn, P_RoutineCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Empire } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-import { LibNPCAction } from "libraries/LibNPCAction.sol";
-import { EEmpire, ENPCAction, EPlayerAction } from "codegen/common.sol";
+import { LibRoutine } from "libraries/LibRoutine.sol";
+import { EEmpire, ERoutine, EPlayerAction } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
@@ -26,8 +26,9 @@ contract UpdateSystemTest is PrimodiumTest {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
     } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
+    console.logBytes32(planetId);
 
-    RoutineThresholds memory _routineThresholds = RoutineThresholds({
+    routineThresholds = RoutineThresholds({
       planetId: planetId,
       accumulateGold: 2000,
       buyShields: 4000,
@@ -37,8 +38,7 @@ contract UpdateSystemTest is PrimodiumTest {
       attackTargetId: bytes32(""),
       supportTargetId: bytes32("")
     });
-    routineThresholds = _routineThresholds;
-    allRoutineThresholds.push(_routineThresholds);
+    allRoutineThresholds.push(routineThresholds);
   }
 
   function testUpdateExecuted() public {
@@ -79,12 +79,12 @@ contract UpdateSystemTest is PrimodiumTest {
     Planet.setGoldCount(planetId, gold);
 
     uint256 shipPrice = 2;
-    P_NPCActionCosts.set(ENPCAction.BuyShips, shipPrice);
+    P_RoutineCosts.set(ERoutine.BuyShips, shipPrice);
 
     uint256 expectedShips = gold / shipPrice;
     uint256 expectedRemainder = gold % shipPrice;
 
-    LibNPCAction._executeAction(routineThresholds, shipsAction);
+    LibRoutine._executeAction(routineThresholds, shipsAction);
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
     assertEq(Planet.getShipCount(planetId), expectedShips, "ships wrong");

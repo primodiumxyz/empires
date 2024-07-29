@@ -50,7 +50,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   }, [planet, tileSize, margin]);
 
   useEffect(() => {
-    const listener = tables.PlanetBattleNPCAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.PlanetBattleRoutine.update$.subscribe(({ properties: { current } }) => {
       if (!current || current.planetId !== entity) return;
       const data = {
         planetId: current.planetId,
@@ -243,7 +243,7 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
   const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
-    const listener = tables.BuyShipsNPCAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.BuyShipsRoutine.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
       const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
       if (data.planetId !== entity) return;
@@ -337,7 +337,7 @@ const Ships = ({
   }, [nextId]);
 
   useEffect(() => {
-    const listener = tables.BuyShipsNPCAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.BuyShipsRoutine.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
       const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
       if (data.planetId !== planetId) return;

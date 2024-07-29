@@ -1,6 +1,6 @@
 import { Hex } from "viem";
 
-import { EEmpire, ENPCAction, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
+import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
@@ -616,29 +616,29 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       },
     }),
 
-    P_NPCActionCosts: createCheatcode({
-      title: "Update NPC action costs",
+    P_RoutineCosts: createCheatcode({
+      title: "Update Routine costs",
       bg: CheatcodeToBg["config"],
-      caption: "P_NPCActionCosts",
+      caption: "P_RoutineCosts",
       inputs: {
         buyShips: {
           label: "Buy ships (in gold)",
           inputType: "number",
-          defaultValue: tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction["BuyShips"] })?.goldCost ?? BigInt(2),
+          defaultValue: tables.P_RoutineCosts.getWithKeys({ action: ERoutine["BuyShips"] })?.goldCost ?? BigInt(2),
         },
       },
       execute: async ({ buyShips }) => {
         const success = await setTableValue(
-          tables.P_NPCActionCosts,
-          { action: ENPCAction["BuyShips"] },
+          tables.P_RoutineCosts,
+          { action: ERoutine["BuyShips"] },
           { goldCost: BigInt(buyShips.value) },
         );
 
         if (success) {
-          notify("success", "NPC action costs updated");
+          notify("success", "Routine costs updated");
           return true;
         } else {
-          notify("error", "Failed to update NPC action costs");
+          notify("error", "Failed to update routine costs");
           return false;
         }
       },

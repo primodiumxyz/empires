@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { System } from "@latticexyz/world/src/System.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
-import { LibNPCAction } from "libraries/LibNPCAction.sol";
+import { LibRoutine } from "libraries/LibRoutine.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { Planet, Turn, TurnData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
@@ -44,7 +44,7 @@ contract UpdateSystem is EmpiresSystem {
     // spend gold and move ships for each empire planet
     for (uint i = 0; i < routineThresholds.length; i++) {
       LibMoveShips.executePendingMoves(routineThresholds[i].planetId);
-      LibNPCAction.executeAction(routineThresholds[i].planetId, routineThresholds[i]);
+      LibRoutine.executeAction(routineThresholds[i].planetId, routineThresholds[i]);
     }
 
     for (uint i = 0; i < planets.length; i++) {

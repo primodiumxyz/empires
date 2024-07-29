@@ -1,4 +1,4 @@
-import { ENPCAction } from "@primodiumxyz/contracts/config/enums";
+import { ERoutine } from "@primodiumxyz/contracts/config/enums";
 
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -14,8 +14,8 @@ export const createNpcUtils = (tables: Tables) => {
     const empireStrength = getEmpireStrength(planetId);
     const attackTargetId = getAttackTarget(planetId);
     const supportTargetId = getSupportTarget(planetId);
-    const shipPrice = tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction.BuyShips })?.goldCost ?? 0n;
-    const shieldPrice = tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction.BuyShields })?.goldCost ?? 0n;
+    const shipPrice = tables.P_RoutineCosts.getWithKeys({ action: ERoutine.BuyShips })?.goldCost ?? 0n;
+    const shieldPrice = tables.P_RoutineCosts.getWithKeys({ action: ERoutine.BuyShields })?.goldCost ?? 0n;
     const shipCount = tables.Planet.get(planetId)?.shipCount ?? 0n;
     const goldCount = tables.Planet.get(planetId)?.goldCount ?? 0n;
 
