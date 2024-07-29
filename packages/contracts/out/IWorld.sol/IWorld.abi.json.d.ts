@@ -7,6 +7,11 @@ declare const abi: [
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_actionCount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -33,6 +38,11 @@ declare const abi: [
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_actionCount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -341,6 +351,11 @@ declare const abi: [
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_actionCount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -354,6 +369,11 @@ declare const abi: [
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_actionCount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -387,7 +407,55 @@ declare const abi: [
   {
     "type": "function",
     "name": "Empires__updateWorld",
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "routineThresholds",
+        "type": "tuple[]",
+        "internalType": "struct RoutineThresholds[]",
+        "components": [
+          {
+            "name": "planetId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "accumulateGold",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "buyShields",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "buyShips",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "supportAlly",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "attackEnemy",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "supportTargetId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "attackTargetId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          }
+        ]
+      }
+    ],
     "outputs": [],
     "stateMutability": "nonpayable"
   },

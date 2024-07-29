@@ -41,6 +41,8 @@ export enum EPlayerAction {
 export enum ENPCAction {
   BuyShips = 1,
   BuyShields,
+  AccumulateGold,
+
   LENGTH,
 }
 

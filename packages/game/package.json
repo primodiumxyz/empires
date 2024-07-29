@@ -16,8 +16,15 @@
   "license": "ISC",
   "dependencies": {
     "@primodiumxyz/assets": "workspace:*",
-    "@primodiumxyz/core": "workspace:*",
     "@primodiumxyz/contracts": "workspace:*",
-    "@primodiumxyz/reactive-tables": "^3.5.0"
+    "@primodiumxyz/core": "workspace:*",
+    "@primodiumxyz/engine": "workspace:*",
+    "@primodiumxyz/reactive-tables": "^3.5.0",
+    "lodash": "^4.17.21",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.7",
+    "@types/react": "^18.3.3"
   }
 }

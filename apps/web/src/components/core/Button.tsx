@@ -9,7 +9,7 @@ import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
 
 const buttonVariants = cva(
-  "btn min-h-fit join-item items-center justify-center whitespace-nowrap ring-offset-background focus-visible:outline-none relative",
+  "btn join-item items-center justify-center whitespace-nowrap ring-offset-background focus-visible:outline-none relative",
   {
     variants: {
       variant: {
@@ -20,7 +20,7 @@ const buttonVariants = cva(
         success: "btn-success",
         info: "btn-info border-white/50",
         warning: "btn-warning",
-        error: "btn-error border border-rose-300/50",
+        error: "btn-error border border-error",
         ghost: "btn-ghost",
       },
       size: {
@@ -28,7 +28,7 @@ const buttonVariants = cva(
         sm: "btn-sm",
         md: "btn-md",
         lg: "btn-lg",
-        content: "h-fit p-2",
+        content: "h-fit",
       },
       modifier: {
         default: "",
@@ -119,7 +119,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       const listener = api.input.addListener(keybind, () => handleClick(undefined!));
 
       return () => {
-        listener.dispose();
+        listener?.dispose();
       };
     }, [keybind, api, clickSound, mute, props.disabled, handleClick]);
 

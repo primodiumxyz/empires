@@ -1,3 +1,4 @@
+import { Fragment } from "react/jsx-runtime";
 import {
   ChevronLeftIcon,
   CurrencyYenIcon,
@@ -12,20 +13,25 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { EmpireToEmpireSprites } from "@primodiumxyz/game";
+import { EmpireToEmpireSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { useGame } from "@/hooks/useGame";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { EmpireEnumToName } from "@/util/lookups";
 
 /* --------------------------------- PLANET --------------------------------- */
 export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) => {
-  const { tables } = useCore();
+  const { tables, utils } = useCore();
+  const {
+    ROOT: { sprite },
+  } = useGame();
   const planet = tables.Planet.use(entity)!;
   const { empireId, goldCount, shieldCount, shipCount } = planet;
 
@@ -38,16 +44,19 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
           back
         </Button>
       </div>
-      {/* TODO: map to planet image */}
-      {/* <img src={EntityToPlanetSprites[planet.entity]} width={64} height={64} className="my-2 self-center" /> */}
-      <img src={undefined} width={64} height={64} className="my-2 self-center" />
+      <img
+        src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
+        width={64}
+        height={64}
+        className="my-2 self-center"
+      />
       <div className="grid w-[80%] grid-cols-[1fr_auto_3rem] items-center gap-y-4 self-center">
         {empireId ? (
           <>
             <h3 className="font-semibold text-gray-300">controlled by</h3>
             <span className="justify-self-end">{EmpireEnumToName[empireId as EEmpire]} empire</span>
             <img
-              src={EmpireToEmpireSprites[empireId as EEmpire]}
+              src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
               width={32}
               height={32}
               className="justify-self-center"
@@ -66,7 +75,12 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
         <span className="justify-self-end">{shieldCount.toLocaleString()}</span>
         <ShieldCheckIcon className="size-4 justify-self-center" />
       </div>
-      {!!empireId && <PlanetQuickActions entity={entity} />}
+      {!!empireId && (
+        <>
+          <PlanetQuickActions entity={entity} />
+          <RoutineProbabilities entity={entity} />
+        </>
+      )}
     </>
   );
 };
@@ -84,10 +98,10 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
   const planet = tables.Planet.use(entity)!;
   const { empireId, shipCount, shieldCount } = planet;
 
-  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId);
-  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId);
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId);
+  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId, 1n);
+  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId, 1n);
+  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId, 1n);
+  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId, 1n);
 
   const addShipPriceUsd = weiToUsd(addShipPriceWei, ethPrice ?? 0);
   const removeShipPriceUsd = weiToUsd(removeShipPriceWei, ethPrice ?? 0);
@@ -109,7 +123,12 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             {addShipPriceUsd} ({formatEther(addShipPriceWei)} ETH)
           </span>
           <TransactionQueueMask id={`${entity}-create-ship`}>
-            <Button variant="neutral" size="xs" onClick={() => createShip(entity, addShipPriceWei)} disabled={gameOver}>
+            <Button
+              variant="neutral"
+              size="xs"
+              onClick={() => createShip(entity, 1n, addShipPriceWei)}
+              disabled={gameOver}
+            >
               Buy
             </Button>
           </TransactionQueueMask>
@@ -125,7 +144,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => removeShip(entity, removeShipPriceWei)}
+              onClick={() => removeShip(entity, 1n, removeShipPriceWei)}
               disabled={gameOver || !shipCount}
             >
               Buy
@@ -143,7 +162,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => addShield(entity, addShieldPriceWei)}
+              onClick={() => addShield(entity, 1n, addShieldPriceWei)}
               disabled={gameOver}
             >
               Buy
@@ -161,12 +180,61 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <Button
               variant="neutral"
               size="xs"
-              onClick={() => removeShield(entity, removeShieldPriceWei)}
+              onClick={() => removeShield(entity, 1n, removeShieldPriceWei)}
               disabled={gameOver || !shieldCount}
             >
               Buy
             </Button>
           </TransactionQueueMask>
+        </div>
+      </SecondaryCard>
+    </>
+  );
+};
+
+const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
+  const { utils } = useCore();
+  const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
+
+  const valToText = (val: number) => {
+    if (val >= 1) return "High";
+    if (val >= 0) return "Med";
+    return "Low";
+  };
+  return (
+    <>
+      <h2 className="mt-2 text-sm font-semibold text-gray-300">Routine Probabilities</h2>
+      <div>
+        <p>Decision Context</p>
+        <div className="grid w-full grid-cols-2 gap-1 text-xs">
+          <Badge className="w-full gap-2 py-2" tooltip="Is it Under attack?" tooltipDirection="top">
+            <span>At Risk</span>
+            <p className="rounded bg-accent px-1 text-neutral">{valToText(context.vulnerability)}</p>
+          </Badge>
+          <Badge className="w-full gap-2 py-2" tooltip="Does it own more ships than neighbors?" tooltipDirection="top">
+            <span>Planet Strength</span>
+            <p className="rounded bg-accent px-1 text-neutral">{valToText(context.planetStrength)}</p>
+          </Badge>
+          <Badge className="w-full gap-2 py-2" tooltip="Does empire control the most planets?">
+            <span>Empire Strength</span>
+            <p className="rounded bg-accent px-1 text-neutral">{valToText(context.empireStrength)}</p>
+          </Badge>
+        </div>
+      </div>
+      <SecondaryCard className="bg-gray-900/40">
+        <div className="grid grid-cols-2 gap-2 text-sm">
+          {[
+            { label: "Accumulate Gold", value: p.accumulateGold },
+            { label: "Buy Shields", value: p.buyShields },
+            { label: "Buy Ships", value: p.buyShips },
+            { label: "Support Ally", value: p.supportAlly },
+            { label: "Attack Enemy", value: p.attackEnemy },
+          ].map(({ label, value }) => (
+            <Fragment key={label}>
+              <span className="text-gray-200">{label}</span>
+              <span className="text-right font-medium">{(value * 100).toFixed(1)}%</span>
+            </Fragment>
+          ))}
         </div>
       </SecondaryCard>
     </>

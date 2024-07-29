@@ -8,7 +8,9 @@ import { cn } from "@/util/client";
 type ArrowProps = {
   originPlanetId: Entity;
   destinationPlanetId: Entity;
-  shipCount: bigint;
+  pending?: boolean;
+  shipCount?: bigint;
+
   tileSize?: number;
   margin?: number;
 };
@@ -16,6 +18,7 @@ type ArrowProps = {
 export const Arrow: React.FC<ArrowProps> = ({
   originPlanetId,
   destinationPlanetId,
+  pending = false,
   shipCount,
   tileSize = 150,
   margin = 10,
@@ -26,11 +29,12 @@ export const Arrow: React.FC<ArrowProps> = ({
   if (!origin || !destination) return null;
   return (
     <_Arrow
-      origin={{ q: origin.q, r: origin.r }}
-      destination={{ q: destination.q, r: destination.r }}
+      origin={{ q: origin.q - 100n, r: origin.r }}
+      destination={{ q: destination.q - 100n, r: destination.r }}
       shipCount={shipCount}
       tileSize={tileSize}
       margin={margin}
+      pending={pending}
     />
   );
 };
@@ -38,12 +42,13 @@ export const Arrow: React.FC<ArrowProps> = ({
 type _ArrowProps = {
   origin: { q: bigint; r: bigint };
   destination: { q: bigint; r: bigint };
-  shipCount: bigint;
+  shipCount?: bigint;
+  pending?: boolean;
   tileSize?: number;
   margin?: number;
 };
 
-const _Arrow: React.FC<_ArrowProps> = ({ origin, destination, shipCount, tileSize = 150, margin = 10 }) => {
+const _Arrow: React.FC<_ArrowProps> = ({ origin, destination, shipCount, pending, tileSize = 150, margin = 10 }) => {
   const [originLeft, originTop, destinationLeft, destinationTop] = useMemo(() => {
     const originCartesianCoord = convertAxialToCartesian(
       { q: Number(origin.q ?? 0n), r: Number(origin.r ?? 0n) },
@@ -62,33 +67,42 @@ const _Arrow: React.FC<_ArrowProps> = ({ origin, destination, shipCount, tileSiz
   const antiRotation = angle < 90 || angle > 270 ? angle : angle;
   return (
     <div
-      className="z-100 pointer-events-none"
+      className="z-100 animate-move-along-angle pointer-events-none"
       style={{
         position: "absolute",
         left: originLeft,
         top: originTop + 50,
         width: length,
-        transform: `rotate(${angle}deg) translateY(-50%)`,
-        transformOrigin: "0 0",
+        // @ts-ignore
+        "--rotation": `${angle}deg`,
+        transformOrigin: "0 50%",
         zIndex: 100,
       }}
     >
-      <div
-        className={cn(
-          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded border-2 border-white bg-secondary p-1 text-xs text-white",
-        )}
-        style={{
-          transform: `rotate(-${antiRotation}deg) translateY(-50%) translateX(-50%)`,
-          transformOrigin: "top left",
-        }}
-      >
-        {formatNumber(shipCount)} ships
-      </div>
+      {shipCount !== undefined && shipCount !== 0n && (
+        <div
+          className={cn(
+            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded border-2 border-white bg-secondary p-1 text-xs text-white",
+          )}
+          style={{
+            transform: `rotate(-${antiRotation}deg) translateY(-50%) translateX(-50%)`,
+            transformOrigin: "top left",
+          }}
+        >
+          {formatNumber(shipCount)} ships
+        </div>
+      )}
       <svg height="40" width={length}>
-        <line x1="30" y1="20" x2={length - 59} y2="20" style={{ stroke: "white", strokeWidth: 20, opacity: 0.8 }} />
+        <line
+          x1="30"
+          y1="20"
+          x2={length - 59}
+          y2="20"
+          style={{ stroke: pending ? "yellow" : "white", strokeWidth: 20, opacity: pending ? 0.5 : 0.8 }}
+        />
         <polygon
-          points={`${length - 60},0 ${length - 30},20 ${length - 60},40`}
-          style={{ fill: "white", opacity: 0.8 }}
+          points={`${length - 59},0 ${length - 30},20 ${length - 59},40`}
+          style={{ fill: pending ? "yellow" : "white", opacity: pending ? 0.5 : 0.8 }}
         />
       </svg>
     </div>
