@@ -29,7 +29,7 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
 
       - name: Create .env with production private keys
-        run: echo -e "PRIVATE_KEY=$PRIMODIUM_CALDERA_PROD\nPRI_DEV_PKEY=$PRIMODIUM_CALDERA_PROD" > packages/contracts/.env
+        run: echo -e "PRIVATE_KEY=${{ secrets.PRIMODIUM_CALDERA_PROD }}\nPRI_DEV_PKEY=${{ secrets.PRIMODIUM_CALDERA_PROD }}" > packages/contracts/.env
 
       - name: Build contracts
         run: pnpm --filter contracts run build
