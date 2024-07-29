@@ -39,3 +39,14 @@ jobs:
 
       - name: Deploy to Caldera Sepolia
         run: pnpm deploy:caldera-sepolia
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Commit changes
+        run: |
+          git add packages/contracts/worlds.json
+          git commit -m "chore: update worlds.json with latest deployment"
+          git push origin ${{ github.ref }}
