@@ -26,6 +26,13 @@ export const worldInput = {
       },
     },
 
+    P_TacticalStrikeConfig: {
+      key: [],
+      schema: {
+        countdownLength: "uint256",
+      },
+    },
+
     P_PointConfig: {
       key: [],
       schema: {
@@ -142,7 +149,7 @@ export const worldInput = {
       schema: { id: "bytes32", stored: "bool", index: "uint256" },
     },
 
-    /* ------------------------------- NPC Actions ------------------------------ */
+    /* ------------------------------- NPC Routines ----------------------------- */
 
     P_NPCActionCosts: {
       key: ["action"],
