@@ -64,6 +64,7 @@ export const SellPoints = () => {
               onChange={handleInputChange}
               min={0}
               max={Number(formatEther(playerPoints))}
+              className="self-center"
             />
             <div className="flex justify-center gap-2 rounded-md bg-primary/50 px-2 py-1 text-xs font-bold uppercase">
               {message ? (
