@@ -1,0 +1,41 @@
+name: Merge to Release and Main
+
+on:
+  push:
+    branches:
+      - "release/v*"
+      - "main"
+
+jobs:
+  tests:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.12.2"
+
+      - name: Install pnpm
+        run: npm install -g pnpm@8.15.7
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Create .env with anvil and wallet private keys
+        run: echo -e "PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80\nPRI_DEV_PKEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80" > packages/contracts/.env
+
+      - name: Build contracts
+        run: pnpm --filter contracts run build
+
+      - name: Deploy to Caldera Sepolia
+        run: pnpm deploy:caldera-sepolia
+
+      - name: Deploy to Caldera Sepolia
+        run: pnpm deploy:caldera-sepolia
