@@ -26,6 +26,7 @@ export const AdvanceTurn = () => {
 
   return (
     <TransactionQueueMask id={`update-world`}>
+      <div className="flex justify-center">
       <Button
         size="lg"
         shape="square"
@@ -46,6 +47,7 @@ export const AdvanceTurn = () => {
           )}
         </div>
       </Button>
+      </div>
     </TransactionQueueMask>
   );
 };

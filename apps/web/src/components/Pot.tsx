@@ -32,22 +32,20 @@ export const Pot: React.FC<PotProps> = ({ showPot = true, showRake = true, class
   const { pot, rake } = usePot();
 
   return (
-    <div className={cn("absolute", className)}>
+    <div className={cn(className)}>
 
       <Card noDecor>
         <div className="flex flex-col justify-center gap-2 text-center">
           {/* Pot */}
           {showPot && (
-          <div className="flex flex-col justify-center gap-1">
-            <p className="text-left text-xs font-bold uppercase">Pot</p>
-            <SecondaryCard>
-              <div className="flex flex-col justify-center gap-1">
+            <div className="flex flex-col justify-center">
+              <div className="flex flex-row justify-center gap-3">
+                <p className="text-left text-sm font-bold uppercase">Pot </p>
                 {loading && <p>Loading...</p>}
-                {!loading && price && <p>{utils.weiToUsd(pot, price)}</p>}
-                <p className="text-xs">{formatEther(pot)} ETH</p>
+                {!loading && price && <p>{utils.weiToUsd(pot, price)} </p>}
               </div>
-            </SecondaryCard>
-          </div>
+              <p className="text-xs">{formatEther(pot)} ETH</p>
+            </div>
           )}
           {/* Rake */}
           {showRake && (

@@ -96,12 +96,11 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-          <TimeLeft />
+        <Pot showRake={false} showPot={true} className="w-48" />
         </HUD.TopMiddle>
 
         <HUD.TopRight>
           <Account />
-          <Pot showRake={false} showPot={true} className="right-2 top-72 w-48" />
         </HUD.TopRight>
 
         <HUD.Center>
@@ -110,10 +109,11 @@ export const GameHUD = () => {
 
         <HUD.BottomLeft>
           <SellPoints />
-          <Pot showRake={true} showPot={false} className="left-2 bottom-1 w-56" />
+          <Pot showRake={true} showPot={false} className="absolute left-2 bottom-1 w-56" />
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
+          <TimeLeft />
           <AdvanceTurn />
         </HUD.BottomMiddle>
 
