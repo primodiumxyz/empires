@@ -3,11 +3,10 @@ import { bigIntMin } from "@latticexyz/common/utils";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
-import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
+import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { ActionPane } from "@/components/ActionPane";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
@@ -15,9 +14,10 @@ import { Join } from "@/components/core/Join";
 import { Marker } from "@/components/core/Marker";
 import { Tabs } from "@/components/core/Tabs";
 import { Tooltip } from "@/components/core/Tooltip";
-import { useActionCost } from "@/hooks/useActionCost";
+import { OverridePane } from "@/components/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { cn } from "@/util/client";
 
@@ -131,10 +131,10 @@ const InteractButton = forwardRef<
   const planet = tables.Planet.use(planetId);
   const [inputValue, setInputValue] = useState("1");
 
-  const createShipPriceWei = useActionCost(EPlayerAction.CreateShip, planetEmpire, BigInt(inputValue));
-  const killShipPriceWei = useActionCost(EPlayerAction.KillShip, planetEmpire, BigInt(inputValue));
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, planetEmpire, BigInt(inputValue));
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, planetEmpire, BigInt(inputValue));
+  const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const killShipPriceWei = useOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
+  const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
   const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
   const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
@@ -184,7 +184,7 @@ const InteractButton = forwardRef<
                   <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
                 </Join>
                 <Tabs.Pane index={0} className="w-full items-center gap-4">
-                  <ActionPane
+                  <OverridePane
                     inputValue={inputValue}
                     onInputChange={setInputValue}
                     onAttackClick={() => {
@@ -206,7 +206,7 @@ const InteractButton = forwardRef<
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={1} className="w-full items-center gap-4">
-                  <ActionPane
+                  <OverridePane
                     inputValue={inputValue}
                     onInputChange={setInputValue}
                     onAttackClick={() => {
@@ -295,9 +295,9 @@ const Ships = ({
   const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
-    const listener = tables.CreateShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.CreateShipOverride.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.actionCount };
+      const data = { planetId: current.planetId, shipCount: current.overrideCount };
       if (data.planetId !== planetId) return;
 
       // Add floating "+1" text
@@ -315,9 +315,9 @@ const Ships = ({
   }, [nextId]);
 
   useEffect(() => {
-    const listener = tables.KillShipPlayerAction.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.KillShipOverride.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.actionCount };
+      const data = { planetId: current.planetId, shipCount: current.overrideCount };
       if (data.planetId !== planetId) return;
 
       console.log(current);
@@ -356,10 +356,6 @@ const Ships = ({
     };
   }, [nextId]);
 
-  const { gameOver } = useTimeLeft();
-
-  const reductionPct = Number(tables.P_ActionConfig.get()?.reductionPct ?? 0n) / 10000;
-
   return (
     <div className="relative z-50">
       <Tooltip tooltipContent={`SHIPS`}>
@@ -393,7 +389,7 @@ const Shields = ({
   const [nextId, setNextId] = useState(0);
   const callback = (current: any, negative?: boolean) => {
     if (!current) return;
-    const data = { planetId: current.planetId, shieldCount: current.actionCount };
+    const data = { planetId: current.planetId, shieldCount: current.overrideCount };
     if (data.planetId !== planetId) return;
 
     // Add floating text
@@ -406,10 +402,8 @@ const Shields = ({
     }, 5000);
   };
   useEffect(() => {
-    const listener = tables.ChargeShieldsPlayerAction.update$.subscribe(({ properties: { current } }) =>
-      callback(current),
-    );
-    const listener2 = tables.DrainShieldsPlayerAction.update$.subscribe(({ properties: { current } }) =>
+    const listener = tables.ChargeShieldsOverride.update$.subscribe(({ properties: { current } }) => callback(current));
+    const listener2 = tables.DrainShieldsOverride.update$.subscribe(({ properties: { current } }) =>
       callback(current, true),
     );
 

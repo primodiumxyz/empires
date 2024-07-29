@@ -83,15 +83,12 @@ export function createPriceUtils(tables: Tables) {
     _actionCount: bigint,
   ): bigint {
     const initActionCost =
-      tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
-    const actionCostIncrease = tables.P_ActionConfig.get()?.actionCostIncrease ?? 0n;
+      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ?? 0n;
+    const actionCostIncrease = tables.P_OverrideConfig.get()?.overrideCostIncrease ?? 0n;
 
     const triangleSumOBO = ((_actionCount - 1n) * _actionCount) / 2n;
-    let actionCost = initActionCost * _actionCount + triangleSumOBO * actionCostIncrease;
+    const actionCost = initActionCost * _actionCount + triangleSumOBO * actionCostIncrease;
 
-    if (!_progressAction) {
-      actionCost = (actionCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
-    }
     return actionCost;
   }
 
