@@ -55,13 +55,13 @@ export const createFxApi = (scene: Scene) => {
   ) {
     const {
       color = "#00ffff",
-      duration = 2000,
+      duration = 4000,
       icon: iconSpriteKey,
       fontSize = 14,
-      iconSize = 16,
+      iconSize = 20,
       delay = 0,
-      marginX = 10,
-      marginY = 0,
+      marginX = 5,
+      marginY = 5,
       borderStyle = {
         width: 1,
         color: 0x00ffff,
@@ -91,7 +91,7 @@ export const createFxApi = (scene: Scene) => {
     }
 
     const floatingText = scene.phaserScene.add
-      .text((icon?.displayWidth ?? 0) / 2, 0, text, {
+      .text((icon?.displayWidth ?? 0) / 2, -2, text, {
         fontFamily: "Silkscreen",
         fontSize,
         color,

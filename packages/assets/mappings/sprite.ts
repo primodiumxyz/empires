@@ -11,6 +11,11 @@ export const Sprites = {
   PlanetGreen: "sprites/planet/planet_green.png",
   PlanetGrey: "sprites/planet/planet_grey.png",
   PlanetUnderglow: "sprites/planet/planet_underglow.png",
+
+  //ICONS
+  Ship: "sprites/icons/ship.png",
+  Shield: "sprites/icons/shield.png",
+  Gold: "sprites/icons/gold.png",
 };
 
 export type SpriteKeys = keyof typeof Sprites;
