@@ -6,7 +6,7 @@ import { IWorld } from "codegen/world/IWorld.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { Planet, PlanetData, Empire } from "codegen/index.sol";
-import { EEmpire, EOrigin, EPlayerAction } from "codegen/common.sol";
+import { EEmpire, EOrigin, EOverride } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
 
 function createPlanets() {

@@ -30,7 +30,7 @@ export enum EMovement {
   LENGTH,
 }
 
-export enum EPlayerAction {
+export enum EOverride {
   CreateShip = 1,
   KillShip,
   ChargeShield,
@@ -52,7 +52,7 @@ export const MUDEnums = {
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
   ERoutine: enumToArray(ERoutine),
-  EPlayerAction: enumToArray(EPlayerAction),
+  EOverride: enumToArray(EOverride),
 };
 
 function enumToArray(enumObj: object): [string] {

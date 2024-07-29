@@ -46,15 +46,13 @@ export const worldInput = {
       },
     },
 
-    P_ActionConfig: {
+    P_OverrideConfig: {
       key: [],
       schema: {
-        actionGenRate: "uint256",
-        actionCostIncrease: "uint256",
-        startActionCost: "uint256",
-        minActionCost: "uint256",
-        reductionPct: "uint256",
-        regressMultiplier: "uint256",
+        overrideGenRate: "uint256",
+        overrideCostIncrease: "uint256",
+        startOverrideCost: "uint256",
+        minOverrideCost: "uint256",
       },
     },
 
@@ -118,11 +116,11 @@ export const worldInput = {
       },
     },
 
-    ActionCost: {
-      key: ["empireId", "action"],
+    OverrideCost: {
+      key: ["empireId", "overrideAction"],
       schema: {
         empireId: "EEmpire",
-        action: "EPlayerAction",
+        overrideAction: "EOverride",
         value: "uint256",
       },
     },
@@ -152,9 +150,9 @@ export const worldInput = {
     /* ------------------------------- NPC Routines ----------------------------- */
 
     P_RoutineCosts: {
-      key: ["action"],
+      key: ["routine"],
       schema: {
-        action: "ERoutine",
+        routine: "ERoutine",
         goldCost: "uint256",
       },
     },
@@ -262,51 +260,51 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    CreateShipPlayerAction: {
+    CreateShipOverride: {
       key: ["id"],
       schema: {
         id: "bytes32",
         playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
-        actionCount: "uint256",
+        overrideCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
     },
 
-    KillShipPlayerAction: {
+    KillShipOverride: {
       key: ["id"],
       schema: {
         id: "bytes32",
         playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
-        actionCount: "uint256",
+        overrideCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
     },
 
-    ChargeShieldsPlayerAction: {
+    ChargeShieldsOverride: {
       key: ["id"],
       schema: {
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
-        actionCount: "uint256",
+        overrideCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
     },
 
-    DrainShieldsPlayerAction: {
+    DrainShieldsOverride: {
       key: ["id"],
       schema: {
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
-        actionCount: "uint256",
+        overrideCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",

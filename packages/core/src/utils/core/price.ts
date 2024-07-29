@@ -1,13 +1,13 @@
 import { formatEther } from "viem";
-import { EEmpire, EPlayerAction } from "@primodiumxyz/contracts/config/enums";
+import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
 
 import { Tables } from "@core/lib";
 
 const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
 
 export function createPriceUtils(tables: Tables) {
-  function getTotalCost(_actionType: EPlayerAction, _empireImpacted: EEmpire, _actionCount: bigint): bigint {
-    const progressAction = [EPlayerAction.CreateShip, EPlayerAction.ChargeShield].includes(_actionType);
+  function getTotalCost(_actionType: EOverride, _empireImpacted: EEmpire, _actionCount: bigint): bigint {
+    const progressAction = [EOverride.CreateShip, EOverride.ChargeShield].includes(_actionType);
     let totalCost = 0n;
 
     if (progressAction) {
@@ -77,7 +77,7 @@ export function createPriceUtils(tables: Tables) {
    * @return actionCost The marginal cost of the actions that impact a specific empire.
    */
   function getMarginalActionCost(
-    _actionType: EPlayerAction,
+    _actionType: EOverride,
     _empireImpacted: EEmpire,
     _progressAction: boolean,
     _actionCount: bigint,

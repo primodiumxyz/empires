@@ -34,7 +34,7 @@ library LibMoveShips {
    * 3. Calculates the number of ships to move and the total ships arriving at the destination.
    * 4. Updates the ship count on the origin planet and the arrivals on the destination planet.
    * 5. Clears the pending move record.
-   * 6. Logs the move action for off-chain tracking.
+   * 6. Logs the move for off-chain tracking.
    */
   function executePendingMoves(bytes32 planetId) internal {
     PlanetData memory planetData = Planet.get(planetId);

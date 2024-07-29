@@ -11,28 +11,28 @@ import { LibMoveShips } from "./LibMoveShips.sol";
 library LibRoutine {
   /**
    * @dev Executes a routine for a given planet based on routineThresholds.
-   * @param planetId The ID of the planet for which to execute the action.
-   * @param routineThresholds A struct containing the routineThresholds of different actions.
+   * @param planetId The ID of the planet for which to execute the routine.
+   * @param routineThresholds A struct containing the routineThresholds of different overrides.
    *
    * This function performs the following steps:
    * 1. Checks if the planet has any gold. If not, it returns early.
    * 2. Generates a random value based on the planet ID.
-   * 3. Calls the internal _executeAction function with the routineThresholds and random value.
+   * 3. Calls the internal _executeRoutine function with the routineThresholds and random value.
    *
-   * The actual action performed is determined by the _executeAction function
+   * The actual routine performed is determined by the _executeRoutine function
    * based on the random value and the provided routineThresholds.
    */
-  function executeAction(bytes32 planetId, RoutineThresholds memory routineThresholds) internal {
+  function executeRoutine(bytes32 planetId, RoutineThresholds memory routineThresholds) internal {
     uint256 goldCount = Planet.getGoldCount(planetId);
     if (goldCount == 0) return;
 
     uint256 randomValue = pseudorandom(uint256(planetId) + 128, 10_000);
 
-    _executeAction(routineThresholds, randomValue);
+    _executeRoutine(routineThresholds, randomValue);
   }
 
   // separated for testing
-  function _executeAction(RoutineThresholds memory routineThresholds, uint256 value) internal {
+  function _executeRoutine(RoutineThresholds memory routineThresholds, uint256 value) internal {
     if (value < routineThresholds.accumulateGold) {
       _accumulateGold(routineThresholds.planetId);
     } else if (value < routineThresholds.buyShields) {

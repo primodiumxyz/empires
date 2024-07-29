@@ -47,7 +47,7 @@ contract LibRoutineTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
-    LibRoutine._executeAction(routineThresholds, routineThresholds.accumulateGold - 1);
+    LibRoutine._executeRoutine(routineThresholds, routineThresholds.accumulateGold - 1);
     uint256 goldAccumulation = P_RoutineCosts.get(ERoutine.AccumulateGold);
 
     assertEq(Planet.getGoldCount(planetId), 1 + goldAccumulation, "Planet gold count should be 1 + goldAccumulation");
@@ -63,7 +63,7 @@ contract LibRoutineTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
-    LibRoutine._executeAction(routineThresholds, routineThresholds.buyShips - 1);
+    LibRoutine._executeRoutine(routineThresholds, routineThresholds.buyShips - 1);
 
     assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count should be 0");
     assertEq(Planet.getShipCount(planetId), 1, "Planet ship count should be 1");
@@ -75,7 +75,7 @@ contract LibRoutineTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 1, "Planet ship count should be 1");
     assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
-    LibRoutine._executeAction(routineThresholds, routineThresholds.buyShips - 1);
+    LibRoutine._executeRoutine(routineThresholds, routineThresholds.buyShips - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 5, "Planet ship count should be 5");
@@ -90,7 +90,7 @@ contract LibRoutineTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 4, "Planet shield count should be 4");
 
-    LibRoutine._executeAction(routineThresholds, routineThresholds.buyShields - 1);
+    LibRoutine._executeRoutine(routineThresholds, routineThresholds.buyShields - 1);
 
     assertEq(Planet.getGoldCount(planetId), 0, "Planet gold count should be 0");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
@@ -102,7 +102,7 @@ contract LibRoutineTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");
     assertEq(Planet.getShieldCount(planetId), 5, "Planet shield count should be 5");
 
-    LibRoutine._executeAction(routineThresholds, routineThresholds.buyShields - 1);
+    LibRoutine._executeRoutine(routineThresholds, routineThresholds.buyShields - 1);
 
     assertEq(Planet.getGoldCount(planetId), 1, "Planet gold count should be 1");
     assertEq(Planet.getShipCount(planetId), 0, "Planet ship count should be 0");

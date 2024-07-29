@@ -2,16 +2,16 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_ActionConfig, Planet, ActionCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
+import { P_OverrideConfig, Planet, OverrideCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
-import { EEmpire, EPlayerAction } from "codegen/common.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, EMPIRE_COUNT } from "src/constants.sol";
 
-contract ActionSystemTest is PrimodiumTest {
+contract OverrideSystemTest is PrimodiumTest {
   bytes32 planetId;
   bytes32 aliceId;
   bytes32 bobId;
@@ -32,23 +32,22 @@ contract ActionSystemTest is PrimodiumTest {
   }
 
   function testCreateShipSingle() public {
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true, 1);
+    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), true, 1);
     world.Empires__createShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 1);
   }
 
   function testCreateShipMultiple() public {
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true, 10);
+    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), true, 10);
     world.Empires__createShip{ value: cost }(planetId, 10);
     assertEq(Planet.get(planetId).shipCount, 10);
   }
 
   function testKillShipSingle() public {
     vm.startPrank(creator);
-    P_ActionConfig.setReductionPct(5000);
     Planet.setShipCount(planetId, 1);
 
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false, 1);
+    uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), false, 1);
     world.Empires__killShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 0);
   }
@@ -57,32 +56,31 @@ contract ActionSystemTest is PrimodiumTest {
     testCreateShipMultiple();
     uint256 currentShips = Planet.get(planetId).shipCount;
 
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.KillShip, Planet.getEmpireId(planetId), false, 6);
+    uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), false, 6);
     world.Empires__killShip{ value: cost }(planetId, 6);
     assertEq(Planet.get(planetId).shipCount, currentShips - 6);
   }
 
   function testChargeShieldSingle() public {
     uint256 currentShields = Planet.get(planetId).shieldCount;
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, Planet.getEmpireId(planetId), true, 1);
+    uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, Planet.getEmpireId(planetId), true, 1);
     world.Empires__chargeShield{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shieldCount, currentShields + 1);
   }
 
   function testChargeShieldMultiple() public {
     uint256 currentShields = Planet.get(planetId).shieldCount;
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.ChargeShield, Planet.getEmpireId(planetId), true, 10);
+    uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, Planet.getEmpireId(planetId), true, 10);
     world.Empires__chargeShield{ value: cost }(planetId, 10);
     assertEq(Planet.get(planetId).shieldCount, currentShields + 10);
   }
 
   function testDrainShieldSingle() public {
     vm.startPrank(creator);
-    P_ActionConfig.setReductionPct(5000);
     uint256 currentShields = 10;
     Planet.setShieldCount(planetId, currentShields);
 
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false, 1);
+    uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), false, 1);
     world.Empires__drainShield{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
   }
@@ -91,30 +89,30 @@ contract ActionSystemTest is PrimodiumTest {
     testChargeShieldMultiple();
 
     uint256 currentShields = Planet.get(planetId).shieldCount;
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.DrainShield, Planet.getEmpireId(planetId), false, 6);
+    uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), false, 6);
     world.Empires__drainShield{ value: cost }(planetId, 6);
     assertEq(Planet.get(planetId).shieldCount, currentShields - 6);
   }
 
   function testKillShipFailNoShips() public {
-    vm.expectRevert("[ActionSystem] Not enough ships to kill");
+    vm.expectRevert("[OverrideSystem] Not enough ships to kill");
     world.Empires__killShip(planetId, 1);
   }
 
   function testKillShipFailNotEnoughShips() public {
     testCreateShipSingle();
-    vm.expectRevert("[ActionSystem] Not enough ships to kill");
+    vm.expectRevert("[OverrideSystem] Not enough ships to kill");
     world.Empires__killShip(planetId, 2);
   }
 
   function testDrainShieldFailNoShield() public {
-    vm.expectRevert("[ActionSystem] Not enough shields to drain");
+    vm.expectRevert("[OverrideSystem] Not enough shields to drain");
     world.Empires__drainShield(planetId, 1);
   }
 
   function testDrainShieldFailNotEnoughShields() public {
     testChargeShieldSingle();
-    vm.expectRevert("[ActionSystem] Not enough shields to drain");
+    vm.expectRevert("[OverrideSystem] Not enough shields to drain");
     world.Empires__drainShield(planetId, 2);
   }
 
@@ -126,98 +124,106 @@ contract ActionSystemTest is PrimodiumTest {
       i++;
     } while (Planet.getEmpireId(nonOwnedPlanetId) != EEmpire.NULL);
 
-    vm.expectRevert("[ActionSystem] Planet is not owned");
+    vm.expectRevert("[OverrideSystem] Planet is not owned");
     world.Empires__createShip(nonOwnedPlanetId, 1);
   }
 
-  function testPurchaseActionProgressSingle() public {
+  function testPurchaseOverrideProgressSingle() public {
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1);
-    uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateShip);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
+    uint256 overrideCost = OverrideCost.get(empire, EOverride.CreateShip);
 
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
     assertGt(
-      LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1),
+      LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1),
       totalCost,
       "Total Cost should have increased"
     );
-    assertGt(ActionCost.get(empire, EPlayerAction.CreateShip), actionCost, "Action Cost should have increased");
+    assertGt(OverrideCost.get(empire, EOverride.CreateShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(PointsMap.get(EEmpire.Red, aliceId), (EMPIRE_COUNT - 1) * pointUnit, "Player should have received points");
   }
 
-  function testPurchaseActionProgressMultiple() public {
+  function testPurchaseOverrideProgressMultiple() public {
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 actionCount = 5;
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, actionCount);
-    uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateShip);
+    uint256 overrideCount = 5;
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, overrideCount);
+    uint256 overrideCost = OverrideCost.get(empire, EOverride.CreateShip);
 
     vm.startPrank(alice);
-    world.Empires__createShip{ value: totalCost }(planetId, actionCount);
+    world.Empires__createShip{ value: totalCost }(planetId, overrideCount);
     assertGt(
-      LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, actionCount),
+      LibPrice.getTotalCost(EOverride.CreateShip, empire, true, overrideCount),
       totalCost,
       "Total Cost should have increased"
     );
-    assertGt(ActionCost.get(empire, EPlayerAction.CreateShip), actionCost, "Action Cost should have increased");
+    assertGt(OverrideCost.get(empire, EOverride.CreateShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), actionCount * (EMPIRE_COUNT - 1) * pointUnit, "Player should have received points");
+    assertEq(
+      PointsMap.get(EEmpire.Red, aliceId),
+      overrideCount * (EMPIRE_COUNT - 1) * pointUnit,
+      "Player should have received points"
+    );
   }
 
-  function testPurchaseActionRegressSingle() public {
-    testPurchaseActionProgressSingle();
+  function testPurchaseOverrideRegressSingle() public {
+    testPurchaseOverrideProgressSingle();
 
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, 1);
-    uint256 actionCost = ActionCost.get(empire, EPlayerAction.KillShip);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.KillShip, empire, false, 1);
+    uint256 overrideCost = OverrideCost.get(empire, EOverride.KillShip);
     uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
 
     vm.startPrank(bob);
     world.Empires__killShip{ value: totalCost }(planetId, 1);
     assertGt(
-      LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, 1),
+      LibPrice.getTotalCost(EOverride.KillShip, empire, false, 1),
       totalCost,
       "Total Cost should have increased"
     );
-    assertGt(ActionCost.get(empire, EPlayerAction.KillShip), actionCost, "Action Cost should have increased");
+    assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
     assertEq(PointsMap.get(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
     assertEq(PointsMap.get(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
   }
 
-  function testPurchaseActionRegressMultiple() public {
-    testPurchaseActionProgressMultiple();
+  function testPurchaseOverrideRegressMultiple() public {
+    testPurchaseOverrideProgressMultiple();
 
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 actionCount = 5; 
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, actionCount);
-    uint256 actionCost = ActionCost.get(empire, EPlayerAction.KillShip);
+    uint256 overrideCount = 5;
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.KillShip, empire, false, overrideCount);
+    uint256 overrideCost = OverrideCost.get(empire, EOverride.KillShip);
     uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
 
     vm.startPrank(bob);
-    world.Empires__killShip{ value: totalCost }(planetId, actionCount);
+    world.Empires__killShip{ value: totalCost }(planetId, overrideCount);
     assertGt(
-      LibPrice.getTotalCost(EPlayerAction.KillShip, empire, false, actionCount),
+      LibPrice.getTotalCost(EOverride.KillShip, empire, false, overrideCount),
       totalCost,
       "Total Cost should have increased"
     );
-    assertGt(ActionCost.get(empire, EPlayerAction.KillShip), actionCost, "Action Cost should have increased");
+    assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), actionCount * pointUnit, "Player should have received blue points");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), actionCount * pointUnit, "Player should have received green points");
+    assertEq(PointsMap.get(EEmpire.Blue, bobId), overrideCount * pointUnit, "Player should have received blue points");
+    assertEq(
+      PointsMap.get(EEmpire.Green, bobId),
+      overrideCount * pointUnit,
+      "Player should have received green points"
+    );
   }
 
   function testSellPoints() public {
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
 
     console.log("alice balance before createShip", alice.balance);
-    console.log("marginal action cost before createShip", ActionCost.get(empire, EPlayerAction.CreateShip));
+    console.log("marginal cost before createShip", OverrideCost.get(empire, EOverride.CreateShip));
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
     console.log("alice points after createShip", PointsMap.get(empire, aliceId));
@@ -227,7 +233,7 @@ contract ActionSystemTest is PrimodiumTest {
     uint256 aliceInitBalance = alice.balance;
     uint256 gameInitBalance = Balances.get(EMPIRES_NAMESPACE_ID);
     uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, 1 * pointUnit);
-    uint256 actionCost = ActionCost.get(empire, EPlayerAction.CreateShip);
+    uint256 overrideCost = OverrideCost.get(empire, EOverride.CreateShip);
     uint256 empirePointsIssued = Empire.getPointsIssued(empire);
 
     world.Empires__sellPoints(empire, 1 * pointUnit);
@@ -244,7 +250,7 @@ contract ActionSystemTest is PrimodiumTest {
       pointSaleValue - P_PointConfig.getPointCostIncrease(),
       "Point Sale Value should have decreased"
     );
-    assertEq(actionCost, ActionCost.get(empire, EPlayerAction.CreateShip), "Action Cost should not have changed");
+    assertEq(overrideCost, OverrideCost.get(empire, EOverride.CreateShip), "Override Cost should not have changed");
     assertEq(
       Empire.getPointsIssued(empire),
       empirePointsIssued - (1 * pointUnit),
@@ -258,34 +264,34 @@ contract ActionSystemTest is PrimodiumTest {
   function testSellPointsFailNoPointsOwned() public {
     EEmpire empire = Planet.getEmpireId(planetId);
     vm.startPrank(alice);
-    vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
+    vm.expectRevert("[OverrideSystem] Player does not have enough points to remove");
     world.Empires__sellPoints(empire, 1);
   }
 
   function testSellPointsFailNotEnoughPoints() public {
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
 
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
 
-    vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
+    vm.expectRevert("[OverrideSystem] Player does not have enough points to remove");
     world.Empires__sellPoints(empire, EMPIRE_COUNT * pointUnit);
   }
 
   function testSellPointsFailNotEnoughPointsWrongEmpire() public {
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
 
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
-    vm.expectRevert("[ActionSystem] Player does not have enough points to remove");
+    vm.expectRevert("[OverrideSystem] Player does not have enough points to remove");
     world.Empires__sellPoints(EEmpire.Green, 1 * pointUnit);
   }
 
   function testSellPointsFailGameBalanceInsufficient() public {
     EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 totalCost = LibPrice.getTotalCost(EPlayerAction.CreateShip, empire, true, 1);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
 
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
@@ -298,7 +304,7 @@ contract ActionSystemTest is PrimodiumTest {
     world.transferBalanceToNamespace(EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, transferUnderSale);
 
     vm.startPrank(alice);
-    vm.expectRevert("[ActionSystem] Insufficient funds for point sale");
+    vm.expectRevert("[OverrideSystem] Insufficient funds for point sale");
     world.Empires__sellPoints(empire, (EMPIRE_COUNT - 1) * pointUnit);
   }
 }
