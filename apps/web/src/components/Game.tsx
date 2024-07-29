@@ -80,15 +80,6 @@ const Game = memo(() => {
             <BackgroundNebula />
             <div className="pointer-events-none relative z-20">
               <GameHUD />
-              <Button
-                onClick={() =>
-                  gameRef.current.MAIN.fx.emitFloatingText({ x: 0, y: 0 }, "+300", {
-                    icon: "PlanetGreen",
-                  })
-                }
-              >
-                test
-              </Button>
             </div>
           </GameProvider>
         )}
