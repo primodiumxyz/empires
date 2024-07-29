@@ -1,8 +1,8 @@
 import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
 import { namespaceWorld } from "@primodiumxyz/reactive-tables";
 
-import { PrimodiumScene } from "@game/types";
 import { Planet } from "@game/lib/objects/planet";
+import { PrimodiumScene } from "@game/types";
 
 export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
   const {
@@ -21,7 +21,10 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       new Planet({
         id: entity,
         scene,
-        coord: convertAxialToCartesian({ q: Number(q), r: Number(r) }, 110),
+        coord: convertAxialToCartesian(
+          { q: Number(q) - 100, r: Number(r) },
+          110
+        ),
         empire: current.empireId,
       });
     },

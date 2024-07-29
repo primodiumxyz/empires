@@ -29,8 +29,8 @@ export const Arrow: React.FC<ArrowProps> = ({
   if (!origin || !destination) return null;
   return (
     <_Arrow
-      origin={{ q: origin.q, r: origin.r }}
-      destination={{ q: destination.q, r: destination.r }}
+      origin={{ q: origin.q - 100n, r: origin.r }}
+      destination={{ q: destination.q - 100n, r: destination.r }}
       shipCount={shipCount}
       tileSize={tileSize}
       margin={margin}
