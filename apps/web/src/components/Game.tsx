@@ -7,6 +7,7 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { BackgroundNebula } from "@/components/BackgroundNebula";
 import { Cheatcodes } from "@/components/Cheatcodes";
+import { Button } from "@/components/core/Button";
 import { HUD } from "@/components/core/HUD";
 import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
@@ -79,6 +80,15 @@ const Game = memo(() => {
             <BackgroundNebula />
             <div className="pointer-events-none relative z-20">
               <GameHUD />
+              <Button
+                onClick={() =>
+                  gameRef.current.MAIN.fx.emitFloatingText({ x: 0, y: 0 }, "+300", {
+                    icon: "PlanetGreen",
+                  })
+                }
+              >
+                test
+              </Button>
             </div>
           </GameProvider>
         )}

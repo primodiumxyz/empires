@@ -1,7 +1,14 @@
 import { Scene, Coord } from "@primodiumxyz/engine";
 
 import { DepthLayers } from "@game/lib/constants/common";
-import { AnimationKeys, Animations } from "@primodiumxyz/assets";
+import {
+  AnimationKeys,
+  Animations,
+  Assets,
+  SpriteKeys,
+  Sprites,
+} from "@primodiumxyz/assets";
+import { getRandomRange } from "@primodiumxyz/core";
 
 export const createFxApi = (scene: Scene) => {
   function outline(
@@ -26,45 +33,148 @@ export const createFxApi = (scene: Scene) => {
   function emitFloatingText(
     coord: Coord,
     text: string,
-    options?: { color?: number; duration?: number }
+    options: {
+      color?: string;
+      duration?: number;
+      icon?: SpriteKeys;
+      fontSize?: number;
+      iconSize?: number;
+      delay?: number;
+      marginX?: number;
+      marginY?: number;
+      borderStyle?: {
+        width: number;
+        color: number;
+        alpha: number;
+      };
+      fillStyle?: {
+        color: number;
+        alpha: number;
+      };
+    } = {}
   ) {
-    const color = options?.color ?? 0x00ffff;
-    const duration = options?.duration ?? 1000;
+    const {
+      color = "#00ffff",
+      duration = 2000,
+      icon: iconSpriteKey,
+      fontSize = 14,
+      iconSize = 16,
+      delay = 0,
+      marginX = 10,
+      marginY = 0,
+      borderStyle = {
+        width: 1,
+        color: 0x00ffff,
+        alpha: 0.25,
+      },
+      fillStyle = {
+        color: 0x000000,
+        alpha: 0.75,
+      },
+    } = options;
+    let icon: Phaser.GameObjects.Image | undefined;
+    const container = scene.phaserScene.add
+      .container(coord.x, coord.y)
+      .setScale(0)
+      .setDepth(DepthLayers.Marker);
+
+    if (iconSpriteKey) {
+      icon = scene.phaserScene.add.image(
+        0,
+        0,
+        Assets.SpriteAtlas,
+        Sprites[iconSpriteKey]
+      );
+
+      icon.displayWidth = iconSize;
+      icon.scaleY = icon.scaleX;
+    }
 
     const floatingText = scene.phaserScene.add
-      .bitmapText(coord.x, coord.y, "teletactile", text, 4)
-      .setDepth(DepthLayers.Marker)
-      .setOrigin(0.5, 0)
-      .setTintFill(color);
+      .text((icon?.displayWidth ?? 0) / 2, 0, text, {
+        fontFamily: "Silkscreen",
+        fontSize,
+        color,
+        align: "center",
+      })
+      .setStroke("#000000", 5)
+      .setOrigin(0.5, 0.5);
+
+    if (icon) icon.setX(-(floatingText.displayWidth / 2));
+
+    const graphics = scene.phaserScene.add.graphics();
+
+    graphics
+      .fillStyle(fillStyle.color, fillStyle.alpha)
+      .lineStyle(borderStyle.width, borderStyle.color, borderStyle.alpha);
+
+    graphics.fillRoundedRect(
+      -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) /
+        2,
+      (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) -
+        marginY * 2) /
+        2,
+      (icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2,
+      Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) +
+        marginY * 2,
+      6
+    );
+
+    graphics.strokeRoundedRect(
+      -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) /
+        2,
+      (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) -
+        marginY * 2) /
+        2,
+      (icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2,
+      Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) +
+        marginY * 2,
+      6
+    );
+
+    container.add(
+      [graphics, floatingText, icon].filter(
+        Boolean
+      ) as Phaser.GameObjects.GameObject[]
+    );
 
     scene.phaserScene.add
       .timeline([
         {
-          at: 0,
+          at: 0 + delay,
           run: () => {
             scene.phaserScene.tweens.add({
-              targets: floatingText,
-              y: "-=20",
-              ease: Phaser.Math.Easing.Quintic.In,
+              targets: container,
+              y: "-=40",
+              x: `+=${getRandomRange(-20, 20)}`,
+              ease: Phaser.Math.Easing.Expo.Out,
               duration,
+            });
+
+            scene.phaserScene.tweens.add({
+              targets: container,
+              scale: [0.5, 1.5, 1],
+              ease: Phaser.Math.Easing.Quintic.InOut,
+              duration: 300,
             });
           },
         },
 
         {
-          at: duration / 2,
+          at: duration / 4 + delay,
           run: () => {
             scene.phaserScene.tweens.add({
-              targets: floatingText,
+              targets: container,
               alpha: 0,
+              scale: 0,
               ease: Phaser.Math.Easing.Quintic.In,
-              duration: duration / 2,
+              duration: duration / 4,
             });
           },
         },
         {
-          at: duration,
-          run: () => floatingText.destroy(true),
+          at: duration + delay,
+          run: () => container.destroy(),
         },
       ])
       .play();

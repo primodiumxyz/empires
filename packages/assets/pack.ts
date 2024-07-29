@@ -15,6 +15,10 @@ import audioOgg from "./atlas/audio/atlas.ogg?url";
 import audioM4a from "./atlas/audio/atlas.m4a?url";
 import audioAc3 from "./atlas/audio/atlas.ac3?url";
 
+//fonts
+import teletactile from "./fonts/bitmap/teletactile/teletactile.png?url";
+import teletactileXML from "./fonts/bitmap/teletactile/teletactile.xml?url";
+
 import { PackConfig } from "@primodiumxyz/engine";
 
 export const pack: PackConfig = {
@@ -35,6 +39,13 @@ export const pack: PackConfig = {
       key: "vfx-atlas",
       textureURL: vfxAtlasTexture,
       atlasURL: vfxAtlas,
+    },
+  ],
+  bitmapFont: [
+    {
+      key: "teletactile",
+      textureURL: teletactile,
+      fontDataURL: teletactileXML,
     },
   ],
 };
