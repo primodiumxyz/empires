@@ -1,4 +1,4 @@
-name: Merge to Release and Main
+name: Auto-deploy on merge to release/v* and main branches
 
 on:
   push:
@@ -33,9 +33,6 @@ jobs:
 
       - name: Build contracts
         run: pnpm --filter contracts run build
-
-      - name: Deploy to Caldera Sepolia
-        run: pnpm deploy:caldera-sepolia
 
       - name: Deploy to Caldera Sepolia
         run: pnpm deploy:caldera-sepolia
