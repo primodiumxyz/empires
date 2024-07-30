@@ -1,6 +1,6 @@
 import { Abi, ContractFunctionName } from "viem";
 
-import { RevertMessageToUserError } from "@core/lib/lookups";
+import { getFriendlyErrorMessage } from "@core/lib";
 import { AccountClient, Core, TxReceipt, WorldAbiType } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { TxQueueOptions } from "@core/tables/types";
@@ -54,8 +54,8 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
     receipt = await run();
   }
 
-  if (receipt.error && receipt.error in RevertMessageToUserError) {
-    receipt.error = RevertMessageToUserError[receipt.error as keyof typeof RevertMessageToUserError];
+  if (receipt.error) {
+    receipt.error = getFriendlyErrorMessage(receipt.error);
   }
 
   onComplete?.(receipt);
