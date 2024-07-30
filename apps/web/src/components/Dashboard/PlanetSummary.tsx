@@ -77,7 +77,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
       </div>
       {!!empireId && (
         <>
-          <PlanetQuickActions entity={entity} />
+          <PlanetQuickOverrides entity={entity} />
           <RoutineProbabilities entity={entity} />
         </>
       )}
@@ -86,7 +86,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
 };
 
 /* --------------------------------- ACTIONS -------------------------------- */
-const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
+const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
   const {
     tables,
     utils: { weiToUsd },
