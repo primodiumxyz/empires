@@ -30,6 +30,7 @@ export const worldInput = {
       key: [],
       schema: {
         maxCharge: "uint256",
+        boostChargeIncrease: "uint256",
       },
     },
 
@@ -315,6 +316,18 @@ export const worldInput = {
         planetId: "bytes32",
         ethSpent: "uint256",
         overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    BoostChargeOverride: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        boostCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",

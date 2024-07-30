@@ -35,6 +35,7 @@ export enum EOverride {
   KillShip,
   ChargeShield,
   DrainShield,
+  BoostCharge,
   LENGTH,
 }
 

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet_TacticalStrikeData, Planet_TacticalStrike, TacticalStrikeOverride, TacticalStrikeOverrideData, P_TacticalStrikeConfig, Planet, PlanetData, Player, P_PointConfig, CreateShipOverride, CreateShipOverrideData, KillShipOverride, KillShipOverrideData, ChargeShieldsOverride, ChargeShieldsOverrideData, DrainShieldsOverride, DrainShieldsOverrideData } from "codegen/index.sol";
+import { BoostChargeOverride, BoostChargeOverrideData, Planet_TacticalStrikeData, Planet_TacticalStrike, TacticalStrikeOverride, TacticalStrikeOverrideData, P_TacticalStrikeConfig, Planet, PlanetData, Player, P_PointConfig, CreateShipOverride, CreateShipOverrideData, KillShipOverride, KillShipOverrideData, ChargeShieldsOverride, ChargeShieldsOverrideData, DrainShieldsOverride, DrainShieldsOverrideData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -192,6 +192,7 @@ contract OverrideSystem is EmpiresSystem {
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
   }
 
+  /* ----------------------------- Tactical Strike ---------------------------- */
   /**
    * @dev Updates the tactical strike countdown for a given planet.
    * @param _planetId The ID of the planet to update.
@@ -200,13 +201,37 @@ contract OverrideSystem is EmpiresSystem {
    *  - Increases the charge based on the time passed and the planet's charge rate.
    *  - Updates the lastUpdated timestamp to the current block number.
    */
-  modifier _updateCountdown(bytes32 _planetId) {
+  modifier _updateTacticalStrikeCharge(bytes32 _planetId) {
     Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
     uint256 blocksElapsed = block.number - planetTacticalStrikeData.lastUpdated;
     planetTacticalStrikeData.charge += (blocksElapsed * planetTacticalStrikeData.chargeRate) / 100;
     planetTacticalStrikeData.lastUpdated = block.number;
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
     _;
+  }
+
+  function boostCharge(bytes32 _planetId, uint256 _boostCount) public payable _onlyNotGameOver _takeRake {
+    PlanetData memory planetData = Planet.get(_planetId);
+    require(planetData.isPlanet, "[OverrideSystem] Planet not found");
+    require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
+
+    uint256 cost = LibPrice.getTotalCost(EOverride.BoostCharge, planetData.empireId, false, 1);
+    require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
+
+    _purchaseOverride(EOverride.BoostCharge, planetData.empireId, false, _boostCount, _msgValue());
+
+    Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
+    planetTacticalStrikeData.charge += P_TacticalStrikeConfig.getBoostChargeIncrease() * _boostCount;
+    Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
+    BoostChargeOverride.set(
+      pseudorandomEntity(),
+      BoostChargeOverrideData({
+        planetId: _planetId,
+        ethSpent: cost,
+        boostCount: _boostCount,
+        timestamp: block.timestamp
+      })
+    );
   }
 
   /**
@@ -216,7 +241,7 @@ contract OverrideSystem is EmpiresSystem {
    * @custom:requirements The planet must exist and be in a valid tactical strike state.
    * @custom:effects Sets the planet's ship count to 0, resets the countdown, and logs the strike.
    */
-  function tacticalStrike(bytes32 _planetId) public _updateCountdown(_planetId) {
+  function tacticalStrike(bytes32 _planetId) public _updateTacticalStrikeCharge(_planetId) {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(
