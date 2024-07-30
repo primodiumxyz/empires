@@ -20,8 +20,8 @@ contract InitTest is PrimodiumTest {
     assertEq(planetData.q, 101);
     assertEq(planetData.r, -2);
     Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(redPlanetId);
-    assertEq(planetTacticalStrikeData.strikeReloadRate, 1);
-    assertEq(planetTacticalStrikeData.strikeReloadCount, 0);
+    assertEq(planetTacticalStrikeData.chargeRate, 100);
+    assertEq(planetTacticalStrikeData.charge, 0);
   }
 
   function testNonOwnedPlanetInit() public {

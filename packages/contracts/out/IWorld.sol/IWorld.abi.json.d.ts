@@ -406,6 +406,19 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__tacticalStrike",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__updateWorld",
     "inputs": [
       {

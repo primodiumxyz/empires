@@ -29,7 +29,7 @@ export const worldInput = {
     P_TacticalStrikeConfig: {
       key: [],
       schema: {
-        maxStrikeReload: "uint256",
+        maxCharge: "uint256",
       },
     },
 
@@ -110,8 +110,9 @@ export const worldInput = {
       key: ["planetId"],
       schema: {
         planetId: "bytes32",
-        strikeReloadRate: "uint256",
-        strikeReloadCount: "uint256",
+        lastUpdated: "uint256",
+        chargeRate: "uint256",
+        charge: "uint256",
       },
     },
 

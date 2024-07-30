@@ -39,7 +39,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         empire: EEmpire.Red,
       },
       P_TacticalStrikeConfig: {
-        maxStrikeReload: 60n,
+        maxCharge: 60n,
       },
     },
   },

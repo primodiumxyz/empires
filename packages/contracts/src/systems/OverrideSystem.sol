@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { TacticalStrikeOverride, TacticalStrikeOverrideData, P_TacticalStrikeConfig, Planet, PlanetData, Player, P_PointConfig, CreateShipOverride, CreateShipOverrideData, KillShipOverride, KillShipOverrideData, ChargeShieldsOverride, ChargeShieldsOverrideData, DrainShieldsOverride, DrainShieldsOverrideData } from "codegen/index.sol";
+import { Planet_TacticalStrikeData, Planet_TacticalStrike, TacticalStrikeOverride, TacticalStrikeOverrideData, P_TacticalStrikeConfig, Planet, PlanetData, Player, P_PointConfig, CreateShipOverride, CreateShipOverrideData, KillShipOverride, KillShipOverrideData, ChargeShieldsOverride, ChargeShieldsOverrideData, DrainShieldsOverride, DrainShieldsOverrideData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -193,26 +193,45 @@ contract OverrideSystem is EmpiresSystem {
   }
 
   /**
+   * @dev Updates the tactical strike countdown for a given planet.
+   * @param _planetId The ID of the planet to update.
+   * @notice This function calculates the progress of the tactical strike countdown based on the number of blocks elapsed since the last update.
+   * @custom:effects
+   *  - Increases the charge based on the time passed and the planet's charge rate.
+   *  - Updates the lastUpdated timestamp to the current block number.
+   */
+  modifier _updateCountdown(bytes32 _planetId) {
+    Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
+    uint256 blocksElapsed = block.number - planetTacticalStrikeData.lastUpdated;
+    planetTacticalStrikeData.charge += (blocksElapsed * planetTacticalStrikeData.chargeRate) / 100;
+    planetTacticalStrikeData.lastUpdated = block.number;
+    Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
+    _;
+  }
+
+  /**
    * @dev Executes a tactical strike on a planet, setting its ship count to 0.
    * @notice This override is free and designed to be called by the keeper automatically when the countdown ends.
    * @param _planetId The ID of the planet to strike.
    * @custom:requirements The planet must exist and be in a valid tactical strike state.
    * @custom:effects Sets the planet's ship count to 0, resets the countdown, and logs the strike.
    */
-  function tacticalStrike(bytes32 _planetId) public {
+  function tacticalStrike(bytes32 _planetId) public _updateCountdown(_planetId) {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
-    // require(
-    //   planetData.countdownEnd != 0 && planetData.countdownEnd <= block.number,
-    //   "[OverrideSystem] Planet is not ready for a tactical strike"
-    // );
+    require(
+      Planet_TacticalStrike.get(_planetId).charge >= P_TacticalStrikeConfig.getMaxCharge(),
+      "[OverrideSystem] Planet is not ready for a tactical strike"
+    );
 
     // Reset ship count to 0
     Planet.setShipCount(_planetId, 0);
 
-    // // Set new countdown end
-    // Planet.setCountdownEnd(_planetId, block.number + P_TacticalStrikeConfig.getCountdownLength());
-
+    // Reset the tactical strike charge
+    Planet_TacticalStrike.set(
+      _planetId,
+      Planet_TacticalStrikeData({ charge: 0, chargeRate: 100, lastUpdated: block.number })
+    );
     // Log the tactical strike
     TacticalStrikeOverride.set(
       pseudorandomEntity(),

@@ -21,8 +21,9 @@ function createPlanets() {
     goldCount: 0
   });
   Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrikeData({
-    strikeReloadRate: 100, // out of 100
-    strikeReloadCount: 0
+    lastUpdated: block.number,
+    chargeRate: 100, // out of 100
+    charge: 0
   });
   Planet.set(redPlanetId, planetData);
   Planet_TacticalStrike.set(redPlanetId, planetTacticalStrikeData);
@@ -53,8 +54,8 @@ function createPlanets() {
   EmpirePlanetsSet.add(EEmpire.Green, greenPlanetId);
   Empire.set(EEmpire.Green, EOrigin.Southeast, 0, 0);
 
-  // neutral planets have no strike reload rate
-  planetTacticalStrikeData.strikeReloadRate = 0;
+  // neutral planets have no strike charge rate
+  planetTacticalStrikeData.chargeRate = 0;
   planetData.shieldCount = 4;
 
   bytes32 planet4 = coordToId(100, -1);
