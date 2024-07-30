@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { Keys_PointsMap, Value_PointsMap, Meta_PointsMap, Empire } from "codegen/index.sol";
-import { EEmpire, EPlayerAction } from "codegen/common.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 
 /**
  * @title empireMap

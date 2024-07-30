@@ -18,19 +18,19 @@ type ActionLogEntry = {
 export const ActionLog = () => {
   const { tables, utils } = useCore();
 
-  const moveActions = tables.MoveNPCAction.useAll();
-  const battleActions = tables.PlanetBattleNPCAction.useAll();
-  const buyActions = tables.BuyShipsNPCAction.useAll();
-  const buyShieldActions = tables.BuyShieldsNPCAction.useAll();
-  const createActions = tables.CreateShipPlayerAction.useAll();
-  const killActions = tables.KillShipPlayerAction.useAll();
-  const chargeShieldActions = tables.ChargeShieldsPlayerAction.useAll();
-  const drainShieldActions = tables.DrainShieldsPlayerAction.useAll();
+  const moveActions = tables.MoveRoutine.useAll();
+  const battleActions = tables.PlanetBattleRoutine.useAll();
+  const buyActions = tables.BuyShipsRoutine.useAll();
+  const buyShieldActions = tables.BuyShieldsRoutine.useAll();
+  const createActions = tables.CreateShipOverride.useAll();
+  const killActions = tables.KillShipOverride.useAll();
+  const chargeShieldActions = tables.ChargeShieldsOverride.useAll();
+  const drainShieldActions = tables.DrainShieldsOverride.useAll();
   const { price } = useEthPrice();
 
   const actions = useMemo(() => {
     const moveActionEntries = moveActions.map((actionEntity) => {
-      const action = tables.MoveNPCAction.get(actionEntity)!;
+      const action = tables.MoveRoutine.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.originPlanetId as Entity),
         type: "Move",
@@ -40,7 +40,7 @@ export const ActionLog = () => {
     });
 
     const battleActionEntries = battleActions.map((actionEntity) => {
-      const action = tables.PlanetBattleNPCAction.get(actionEntity)!;
+      const action = tables.PlanetBattleRoutine.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Battle",
@@ -50,7 +50,7 @@ export const ActionLog = () => {
     });
 
     const buyActionEntries = buyActions.map((actionEntity) => {
-      const action = tables.BuyShipsNPCAction.get(actionEntity)!;
+      const action = tables.BuyShipsRoutine.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Buy Ships",
@@ -60,7 +60,7 @@ export const ActionLog = () => {
     });
 
     const createActionEntries = createActions.map((actionEntity) => {
-      const action = tables.CreateShipPlayerAction.get(actionEntity)!;
+      const action = tables.CreateShipOverride.get(actionEntity)!;
       return {
         actor: formatAddress(action.playerId, true),
         type: "Create Ships",
@@ -70,7 +70,7 @@ export const ActionLog = () => {
     });
 
     const killActionEntries = killActions.map((actionEntity) => {
-      const action = tables.KillShipPlayerAction.get(actionEntity)!;
+      const action = tables.KillShipOverride.get(actionEntity)!;
       return {
         actor: formatAddress(action.playerId, true),
         type: "Kill Ships",
@@ -80,7 +80,7 @@ export const ActionLog = () => {
     });
 
     const chargeShieldActionEntries = chargeShieldActions.map((actionEntity) => {
-      const action = tables.ChargeShieldsPlayerAction.get(actionEntity)!;
+      const action = tables.ChargeShieldsOverride.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Charge Shield",
@@ -90,7 +90,7 @@ export const ActionLog = () => {
     });
 
     const drainShieldActionEntries = drainShieldActions.map((actionEntity) => {
-      const action = tables.DrainShieldsPlayerAction.get(actionEntity)!;
+      const action = tables.DrainShieldsOverride.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Drain Shield",
@@ -100,7 +100,7 @@ export const ActionLog = () => {
     });
 
     const buyShieldActionEntries = buyShieldActions.map((actionEntity) => {
-      const action = tables.BuyShieldsNPCAction.get(actionEntity)!;
+      const action = tables.BuyShieldsRoutine.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Buy Shield",

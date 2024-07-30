@@ -6,16 +6,16 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { EmpireEnumToName } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
-export const createActionCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
+export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
   const createShip = async (
     planetId: Entity,
-    actionCount: bigint,
+    overrideCount: bigint,
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
     return await execute({
       functionName: "Empires__createShip",
-      args: [planetId, actionCount],
+      args: [planetId, overrideCount],
       options: { value: payment, gas: 552401n * 2n },
       txQueueOptions: {
         id: `${planetId}-create-ship`,
@@ -25,7 +25,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         if (success) {
           notify(
             "success",
-            `Supported with ${actionCount} ship${actionCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
+            `Supported with ${overrideCount} ship${overrideCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
           );
         } else {
           notify("error", error ?? "Unknown error");
@@ -36,13 +36,13 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
 
   const removeShip = async (
     planetId: Entity,
-    actionCount: bigint,
+    overrideCount: bigint,
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
     return await execute({
       functionName: "Empires__killShip",
-      args: [planetId, actionCount],
+      args: [planetId, overrideCount],
       options: { value: payment, gas: 739007n * 2n },
       txQueueOptions: {
         id: `${planetId}-kill-ship`,
@@ -52,7 +52,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         if (success) {
           notify(
             "success",
-            `Removed ${actionCount} ship${actionCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
+            `Removed ${overrideCount} ship${overrideCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
           );
         } else {
           notify("error", error ?? "Unknown error");
@@ -63,13 +63,13 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
 
   const addShield = async (
     planetId: Entity,
-    actionCount: bigint,
+    overrideCount: bigint,
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
     return await execute({
       functionName: "Empires__chargeShield",
-      args: [planetId, actionCount],
+      args: [planetId, overrideCount],
       options: { value: payment, gas: 546063n * 2n },
       txQueueOptions: {
         id: `${planetId}-add-shield`,
@@ -79,7 +79,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         if (success) {
           notify(
             "success",
-            `Added ${actionCount} shield${actionCount > 1 ? "s" : ""} to ${entityToPlanetName(planetId)}`,
+            `Added ${overrideCount} shield${overrideCount > 1 ? "s" : ""} to ${entityToPlanetName(planetId)}`,
           );
         } else {
           notify("error", error ?? "Unknown error");
@@ -90,13 +90,13 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
 
   const removeShield = async (
     planetId: Entity,
-    actionCount: bigint,
+    overrideCount: bigint,
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
     return await execute({
       functionName: "Empires__drainShield",
-      args: [planetId, actionCount],
+      args: [planetId, overrideCount],
       options: { value: payment, gas: 738649n * 2n },
       txQueueOptions: {
         id: `${planetId}-remove-shield`,
@@ -106,7 +106,7 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         if (success) {
           notify(
             "success",
-            `Removed ${actionCount} shield${actionCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
+            `Removed ${overrideCount} shield${overrideCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
           );
         } else {
           notify("error", error ?? "Unknown error");

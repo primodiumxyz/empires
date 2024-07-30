@@ -26,7 +26,7 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
     };
   });
   useEffect(() => {
-    const listener = tables.MoveNPCAction.update$.subscribe(({ entity, properties: { current } }) => {
+    const listener = tables.MoveRoutine.update$.subscribe(({ entity, properties: { current } }) => {
       if (!current) return;
       const { originPlanetId, destinationPlanetId, shipCount } = current;
 

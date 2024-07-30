@@ -1,6 +1,6 @@
 import { Hex } from "viem";
 
-import { EEmpire, ENPCAction, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
+import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
@@ -28,7 +28,7 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
   // config
   const gameConfig = tables.P_GameConfig.get();
   const pointConfig = tables.P_PointConfig.get();
-  const actionConfig = tables.P_ActionConfig.get();
+  const overrideConfig = tables.P_OverrideConfig.get();
 
   /* ------------------------------- SHIPS ------------------------------- */
   // Set the amount of ships on a planet
@@ -573,72 +573,72 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
       },
     }),
 
-    P_ActionConfig: createCheatcode({
-      title: "Update action config",
+    P_OverrideConfig: createCheatcode({
+      title: "Update override config",
       bg: CheatcodeToBg["config"],
-      caption: "P_ActionConfig",
+      caption: "P_OverrideConfig",
       inputs: {
-        actionGenRate: {
-          label: "Action generation rate",
+        overrideGenRate: {
+          label: "Override generation rate",
           inputType: "number",
-          defaultValue: actionConfig?.actionGenRate ?? BigInt(POINTS_UNIT / 2),
+          defaultValue: overrideConfig?.overrideGenRate ?? BigInt(POINTS_UNIT / 2),
         },
-        actionCostIncrease: {
-          label: "Action cost increase",
+        overrideCostIncrease: {
+          label: "Override cost increase",
           inputType: "number",
-          defaultValue: actionConfig?.actionCostIncrease ?? BigInt(POINTS_UNIT / 2),
+          defaultValue: overrideConfig?.overrideCostIncrease ?? BigInt(POINTS_UNIT / 2),
         },
-        startActionCost: {
-          label: "Start action cost",
+        startOverrideCost: {
+          label: "Start override cost",
           inputType: "number",
-          defaultValue: actionConfig?.startActionCost ?? BigInt(POINTS_UNIT / 2),
+          defaultValue: overrideConfig?.startOverrideCost ?? BigInt(POINTS_UNIT / 2),
         },
-        minActionCost: {
-          label: "Min action cost",
+        minOverrideCost: {
+          label: "Min override cost",
           inputType: "number",
-          defaultValue: actionConfig?.minActionCost ?? BigInt(0),
+          defaultValue: overrideConfig?.minOverrideCost ?? BigInt(0),
         },
       },
       execute: async (properties) => {
         const success = await setTableValue(
-          tables.P_ActionConfig,
+          tables.P_OverrideConfig,
           {},
           Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
         );
 
         if (success) {
-          notify("success", "Action config updated");
+          notify("success", "Override config updated");
           return true;
         } else {
-          notify("error", "Failed to update action config");
+          notify("error", "Failed to update override config");
           return false;
         }
       },
     }),
 
-    P_NPCActionCosts: createCheatcode({
-      title: "Update NPC action costs",
+    P_RoutineCosts: createCheatcode({
+      title: "Update routine costs",
       bg: CheatcodeToBg["config"],
-      caption: "P_NPCActionCosts",
+      caption: "P_RoutineCosts",
       inputs: {
         buyShips: {
           label: "Buy ships (in gold)",
           inputType: "number",
-          defaultValue: tables.P_NPCActionCosts.getWithKeys({ action: ENPCAction["BuyShips"] })?.goldCost ?? BigInt(2),
+          defaultValue: tables.P_RoutineCosts.getWithKeys({ routine: ERoutine["BuyShips"] })?.goldCost ?? BigInt(2),
         },
       },
       execute: async ({ buyShips }) => {
         const success = await setTableValue(
-          tables.P_NPCActionCosts,
-          { action: ENPCAction["BuyShips"] },
+          tables.P_RoutineCosts,
+          { routine: ERoutine["BuyShips"] },
           { goldCost: BigInt(buyShips.value) },
         );
 
         if (success) {
-          notify("success", "NPC action costs updated");
+          notify("success", "Routine costs updated");
           return true;
         } else {
-          notify("error", "Failed to update NPC action costs");
+          notify("error", "Failed to update routine costs");
           return false;
         }
       },
