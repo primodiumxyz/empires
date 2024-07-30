@@ -37,22 +37,23 @@ export const worldInput = {
       key: [],
       schema: {
         pointUnit: "uint256",
+        pointRake: "uint256", // times 10_000
+        pointSellTax: "uint256",
         minPointCost: "uint256",
         startPointCost: "uint256",
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
-        pointRake: "uint256", // times 10_000
-        pointSellTax: "uint256",
       },
     },
 
     P_OverrideConfig: {
       key: [],
       schema: {
+        progressBool: "bool",
+        minOverrideCost: "uint256",
+        startOverrideCost: "uint256",
         overrideGenRate: "uint256",
         overrideCostIncrease: "uint256",
-        startOverrideCost: "uint256",
-        minOverrideCost: "uint256",
       },
     },
 
