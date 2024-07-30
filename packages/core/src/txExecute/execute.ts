@@ -1,6 +1,6 @@
 import { Abi, ContractFunctionName } from "viem";
 
-import { TX_TIMEOUT } from "@core/lib";
+import { RevertMessageToUserError } from "@core/lib/lookups";
 import { AccountClient, Core, TxReceipt, WorldAbiType } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { TxQueueOptions } from "@core/tables/types";
@@ -51,12 +51,11 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
     // TransactionQueue already handles timeout if the receipt can't be found in TX_TIMEOUT time
     receipt = await core.tables.TransactionQueue.enqueue(run, txQueueOptions);
   } else {
-    receipt = await Promise.race([
-      run(),
-      new Promise<TxReceipt>((resolve) =>
-        setTimeout(() => resolve({ success: false, error: "Transaction timed out" }), TX_TIMEOUT),
-      ),
-    ]);
+    receipt = await run();
+  }
+
+  if (receipt.error && receipt.error in RevertMessageToUserError) {
+    receipt.error = RevertMessageToUserError[receipt.error as keyof typeof RevertMessageToUserError];
   }
 
   onComplete?.(receipt);
