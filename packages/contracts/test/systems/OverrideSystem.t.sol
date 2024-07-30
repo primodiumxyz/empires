@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_OverrideConfig, Planet, OverrideCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
+import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, P_OverrideConfig, Planet, OverrideCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
@@ -218,6 +218,7 @@ contract OverrideSystemTest is PrimodiumTest {
     );
   }
 
+  /* ------------------------------- Sell Points ------------------------------ */
   function testSellPoints() public {
     EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
@@ -306,5 +307,55 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.startPrank(alice);
     vm.expectRevert("[OverrideSystem] Insufficient funds for point sale");
     world.Empires__sellPoints(empire, (EMPIRE_COUNT - 1) * pointUnit);
+  }
+
+  function testTacticalStrikeFailTooEarly() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
+
+    vm.startPrank(alice);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
+    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
+    uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
+    assertEq(data.charge, 0, "Charge should be 0");
+    assertEq(data.chargeRate, 100, "Charge Rate should be 100");
+
+    // end block will be when charge >= maxCharge
+    // current charge = data.charge + pending charge
+    // pending charge = (block.number - data.lastUpdated) * data.chargeRate / 100
+    // charge = current charge + pending charge
+    // remaining charge = maxCharge - charge
+    // remaining blocks = remaining charge / data.chargeRate
+
+    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
+    uint256 remainingCharge = maxCharge - currentCharge;
+    uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
+    uint256 expectedEndBlock = block.number + remainingBlocks;
+    assertLt(block.number, expectedEndBlock, "Block number should be less than the expected end block");
+    vm.expectRevert("[OverrideSystem] Planet is not ready for a tactical strike");
+    world.Empires__tacticalStrike(planetId);
+  }
+
+  function testTacticalStrike() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
+
+    vm.startPrank(alice);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
+
+    uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
+    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
+
+    assertEq(data.charge, 0);
+    assertEq(data.chargeRate, 100);
+
+    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
+    uint256 remainingCharge = maxCharge - currentCharge;
+    uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
+    uint256 expectedEndBlock = block.number + remainingBlocks;
+
+    vm.roll(expectedEndBlock);
+    world.Empires__tacticalStrike(planetId);
+    assertEq(Planet.get(planetId).shipCount, 0);
   }
 }

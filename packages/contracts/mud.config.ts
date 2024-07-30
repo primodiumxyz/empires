@@ -29,7 +29,7 @@ export const worldInput = {
     P_TacticalStrikeConfig: {
       key: [],
       schema: {
-        countdownLength: "uint256",
+        maxCharge: "uint256",
       },
     },
 
@@ -103,6 +103,16 @@ export const worldInput = {
         shieldCount: "uint256",
         goldCount: "uint256",
         empireId: "EEmpire",
+      },
+    },
+
+    Planet_TacticalStrike: {
+      key: ["planetId"],
+      schema: {
+        planetId: "bytes32",
+        lastUpdated: "uint256",
+        chargeRate: "uint256",
+        charge: "uint256",
       },
     },
 
@@ -305,6 +315,16 @@ export const worldInput = {
         planetId: "bytes32",
         ethSpent: "uint256",
         overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    TacticalStrikeOverride: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
         timestamp: "uint256",
       },
       type: "offchainTable",

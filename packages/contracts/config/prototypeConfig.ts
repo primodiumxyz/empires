@@ -38,6 +38,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         nextTurnBlock: 0n,
         empire: EEmpire.Red,
       },
+      P_TacticalStrikeConfig: {
+        maxCharge: 60n,
+      },
     },
   },
 
