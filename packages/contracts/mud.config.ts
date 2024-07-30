@@ -260,7 +260,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    CreateShipOverrideLog: {
+    CreateShipOverride: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -273,7 +273,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    KillShipOverrideLog: {
+    KillShipOverride: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -286,7 +286,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    ChargeShieldsOverrideLog: {
+    ChargeShieldsOverride: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -298,7 +298,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    DrainShieldsOverrideLog: {
+    DrainShieldsOverride: {
       key: ["id"],
       schema: {
         id: "bytes32",

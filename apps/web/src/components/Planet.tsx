@@ -295,7 +295,7 @@ const Ships = ({
   const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
-    const listener = tables.CreateShipOverrideLog.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.CreateShipOverride.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
       const data = { planetId: current.planetId, shipCount: current.overrideCount };
       if (data.planetId !== planetId) return;
@@ -315,7 +315,7 @@ const Ships = ({
   }, [nextId]);
 
   useEffect(() => {
-    const listener = tables.KillShipOverrideLog.update$.subscribe(({ properties: { current } }) => {
+    const listener = tables.KillShipOverride.update$.subscribe(({ properties: { current } }) => {
       if (!current) return;
       const data = { planetId: current.planetId, shipCount: current.overrideCount };
       if (data.planetId !== planetId) return;
@@ -402,8 +402,8 @@ const Shields = ({
     }, 5000);
   };
   useEffect(() => {
-    const listener = tables.ChargeShieldsOverrideLog.update$.subscribe(({ properties: { current } }) => callback(current));
-    const listener2 = tables.DrainShieldsOverrideLog.update$.subscribe(({ properties: { current } }) =>
+    const listener = tables.ChargeShieldsOverride.update$.subscribe(({ properties: { current } }) => callback(current));
+    const listener2 = tables.DrainShieldsOverride.update$.subscribe(({ properties: { current } }) =>
       callback(current, true),
     );
 
