@@ -44,8 +44,7 @@ export const AdvanceTurn = () => {
           )}
           {turn.nextTurnBlock > blockNumber && (
             <p className="text-sm">
-              {((Number(turn.nextTurnBlock) - Number(blockNumber)) * Number(avgBlockTime)).toLocaleString()} seconds
-              remaining
+              {Math.max(0, Number(turn.nextTurnBlock - blockNumber) * avgBlockTime).toFixed()} seconds remaining
             </p>
           )}
         </div>
