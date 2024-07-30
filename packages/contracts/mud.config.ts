@@ -103,6 +103,7 @@ export const worldInput = {
         shieldCount: "uint256",
         goldCount: "uint256",
         empireId: "EEmpire",
+        countdownEnd: "uint256",
       },
     },
 
