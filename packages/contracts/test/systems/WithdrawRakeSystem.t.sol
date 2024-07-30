@@ -40,7 +40,7 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
   function testWithdrawRake() public {
     P_PointConfig.setPointRake(5000);
     switchPrank(alice);
-    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), true, 1);
+    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
     world.Empires__createShip{ value: cost }(planetId, 1);
     assertEq(Balances.get(ADMIN_NAMESPACE_ID), cost / 2, "rake value correct");
 

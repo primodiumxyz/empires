@@ -1,6 +1,24 @@
 declare const abi: [
   {
     "type": "function",
+    "name": "Empires__boostCharge",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "_boostCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__chargeShield",
     "inputs": [
       {
