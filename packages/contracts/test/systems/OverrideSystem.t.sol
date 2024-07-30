@@ -218,6 +218,7 @@ contract OverrideSystemTest is PrimodiumTest {
     );
   }
 
+  /* ------------------------------- Sell Points ------------------------------ */
   function testSellPoints() public {
     EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
@@ -306,5 +307,30 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.startPrank(alice);
     vm.expectRevert("[OverrideSystem] Insufficient funds for point sale");
     world.Empires__sellPoints(empire, (EMPIRE_COUNT - 1) * pointUnit);
+  }
+
+  function testTacticalStrikeFailTooEarly() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
+
+    vm.startPrank(alice);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
+
+    vm.roll(Planet.getCountdownEnd(planetId) - 1);
+
+    vm.expectRevert("[OverrideSystem] Planet is not ready for a tactical strike");
+    world.Empires__tacticalStrike(planetId);
+  }
+
+  function testTacticalStrike() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, true, 1);
+
+    vm.startPrank(alice);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
+
+    vm.roll(Planet.getCountdownEnd(planetId));
+    world.Empires__tacticalStrike(planetId);
+    assertEq(Planet.get(planetId).shipCount, 0);
   }
 }

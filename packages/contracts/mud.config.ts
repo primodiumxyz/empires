@@ -310,6 +310,16 @@ export const worldInput = {
       },
       type: "offchainTable",
     },
+
+    TacticalStrikeOverride: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {
