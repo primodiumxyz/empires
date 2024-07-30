@@ -47,8 +47,9 @@ export const worldInput = {
     },
 
     P_OverrideConfig: {
-      key: [],
+      key: ["overrideAction"],
       schema: {
+        overrideAction: "EOverride",
         progressBool: "bool",
         minOverrideCost: "uint256",
         startOverrideCost: "uint256",
