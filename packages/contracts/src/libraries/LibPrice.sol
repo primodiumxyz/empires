@@ -106,7 +106,7 @@ library LibPrice {
     require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");
 
     uint256 initOverrideCost = OverrideCost.get(_empire, _overrideType);
-    uint256 overrideCostIncrease = P_OverrideConfig.getOverrideCostIncrease();
+    uint256 overrideCostIncrease = P_OverrideConfig.getOverrideCostIncrease(_overrideType);
 
     uint256 triangleSumOBO = ((_overrideCount - 1) * _overrideCount) / 2;
     uint256 overrideCost = initOverrideCost * _overrideCount + overrideCostIncrease * triangleSumOBO;
@@ -139,7 +139,7 @@ library LibPrice {
   function overrideCostUp(EEmpire _empire, EOverride _overrideType, uint256 _overrideCount) internal {
     require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");
     uint256 newOverrideCost = OverrideCost.get(_empire, _overrideType) +
-      P_OverrideConfig.getOverrideCostIncrease() *
+      P_OverrideConfig.getOverrideCostIncrease(_overrideType) *
       _overrideCount;
     OverrideCost.set(_empire, _overrideType, newOverrideCost);
   }
@@ -165,8 +165,8 @@ library LibPrice {
    * @param _empireImpacted The empire to decrease the override costs for.
    */
   function empireOverridesCostDown(EEmpire _empireImpacted) internal {
-    P_OverrideConfigData memory config = P_OverrideConfig.get();
     for (uint256 i = 1; i < uint256(EOverride.LENGTH); i++) {
+      P_OverrideConfigData memory config = P_OverrideConfig.get(EOverride(i));
       uint256 newOverrideCost = OverrideCost.get(_empireImpacted, EOverride(i));
       if (newOverrideCost > config.minOverrideCost + config.overrideGenRate) {
         newOverrideCost -= config.overrideGenRate;
