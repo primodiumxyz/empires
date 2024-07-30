@@ -23,7 +23,11 @@ library LibPrice {
     uint256 _overrideCount
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
-    if (_overrideType == EOverride.CreateShip || _overrideType == EOverride.ChargeShield) {
+    if (
+      _overrideType == EOverride.CreateShip ||
+      _overrideType == EOverride.ChargeShield ||
+      _overrideType == EOverride.StunCharge
+    ) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
     } else if (
       _overrideType == EOverride.KillShip ||

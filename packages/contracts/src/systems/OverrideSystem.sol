@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { BoostChargeOverride, BoostChargeOverrideData, Planet_TacticalStrikeData, Planet_TacticalStrike, TacticalStrikeOverride, TacticalStrikeOverrideData, P_TacticalStrikeConfig, Planet, PlanetData, Player, P_PointConfig, CreateShipOverride, CreateShipOverrideData, KillShipOverride, KillShipOverrideData, ChargeShieldsOverride, ChargeShieldsOverrideData, DrainShieldsOverride, DrainShieldsOverrideData } from "codegen/index.sol";
+import { StunChargeOverride, StunChargeOverrideData, BoostChargeOverride, BoostChargeOverrideData, Planet_TacticalStrikeData, Planet_TacticalStrike, TacticalStrikeOverride, TacticalStrikeOverrideData, P_TacticalStrikeConfig, Planet, PlanetData, Player, P_PointConfig, CreateShipOverride, CreateShipOverrideData, KillShipOverride, KillShipOverrideData, ChargeShieldsOverride, ChargeShieldsOverrideData, DrainShieldsOverride, DrainShieldsOverrideData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -237,6 +237,30 @@ contract OverrideSystem is EmpiresSystem {
     );
   }
 
+  function stunCharge(
+    bytes32 _planetId,
+    uint256 _stunCount
+  ) public payable _onlyNotGameOver _takeRake _updateTacticalStrikeCharge(_planetId) {
+    PlanetData memory planetData = Planet.get(_planetId);
+    require(planetData.isPlanet, "[OverrideSystem] Planet not found");
+    require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
+
+    uint256 cost = LibPrice.getTotalCost(EOverride.StunCharge, planetData.empireId, _stunCount);
+    require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
+
+    _purchaseOverride(EOverride.StunCharge, planetData.empireId, false, _stunCount, _msgValue());
+
+    Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
+    uint256 stunDecrease = P_TacticalStrikeConfig.getStunChargeDecrease() * _stunCount;
+    planetTacticalStrikeData.charge = planetTacticalStrikeData.charge > stunDecrease
+      ? planetTacticalStrikeData.charge - stunDecrease
+      : 0;
+    Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
+    StunChargeOverride.set(
+      pseudorandomEntity(),
+      StunChargeOverrideData({ planetId: _planetId, ethSpent: cost, stunCount: _stunCount, timestamp: block.timestamp })
+    );
+  }
   /**
    * @dev Executes a tactical strike on a planet, setting its ship count to 0.
    * @notice This override is free and designed to be called by the keeper automatically when the countdown ends.
