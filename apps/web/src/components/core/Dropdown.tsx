@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { cva, VariantProps } from "class-variance-authority";
 
@@ -45,12 +45,14 @@ export const Dropdown = <T extends DropdownValue>({
 }: DropdownProps<T>) => {
   const ref = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         if (!menuRef.current) return;
-        menuRef.current.dataset.state = "close";
+        closeMenu();
       }
     };
 
@@ -63,14 +65,33 @@ export const Dropdown = <T extends DropdownValue>({
     };
   }, []);
 
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    } else {
+      const timer = setTimeout(() => setIsVisible(false), 300); // Adjust this value to match your animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   if (!children) return null;
 
   const toggleMenu = () => {
     if (!menuRef.current) return;
-
-    const currentState = menuRef.current.dataset.state;
-    menuRef.current.dataset.state = currentState === "open" ? "close" : "open";
+    if (isOpen) {
+      closeMenu();
+    } else {
+      menuRef.current.dataset.state = "open";
+      setIsOpen(true);
+    }
   };
+
+  const closeMenu = () => {
+    if (!menuRef.current) return;
+    menuRef.current.dataset.state = "close";
+    setIsOpen(false);
+  };
+
   const selectedChild = children.find((child) => child.props.value === value);
 
   return (
@@ -86,17 +107,19 @@ export const Dropdown = <T extends DropdownValue>({
           {selectedChild} <ChevronDownIcon className="size-4 opacity-50" />
         </div>
       </Button>
-      <SecondaryCard ref={menuRef} className={cn(dropdownVariants({ variant }))}>
+      <SecondaryCard
+        ref={menuRef}
+        data-state={isOpen ? "open" : "close"}
+        className={cn(dropdownVariants({ variant }), isVisible ? "visible" : "invisible")}
+      >
         {children.map((child, i) => (
           <Button
             key={i}
             variant="ghost"
             shape="block"
             onClick={() => {
-              if (!menuRef.current) return;
-              menuRef.current.dataset.state = "close";
+              closeMenu();
               const value = child.props.value as T;
-
               onChange && onChange(value);
             }}
           >

@@ -5,6 +5,7 @@ import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Card, SecondaryCard } from "@/components/core/Card";
+import { Dropdown } from "@/components/core/Dropdown";
 import { NumberInput } from "@/components/core/NumberInput";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
@@ -51,15 +52,11 @@ export const SellPoints = () => {
           <p className="text-left text-xs font-bold uppercase">Sell Points</p>
           <SecondaryCard>
             <p className="text-left text-xs opacity-50">EMPIRE</p>
-            <select
-              value={empire}
-              onChange={(e) => setEmpire(e.target.value as unknown as EEmpire)}
-              className="w-full bg-base-100 text-white/90"
-            >
-              <option value={EEmpire.Green}>Green</option>
-              <option value={EEmpire.Red}>Red</option>
-              <option value={EEmpire.Blue}>Blue</option>
-            </select>
+            <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-full">
+              <Dropdown.Item value={EEmpire.Green}>Green</Dropdown.Item>
+              <Dropdown.Item value={EEmpire.Red}>Red</Dropdown.Item>
+              <Dropdown.Item value={EEmpire.Blue}>Blue</Dropdown.Item>
+            </Dropdown>
           </SecondaryCard>
           <SecondaryCard className="flex flex-col gap-2">
             <NumberInput
@@ -67,6 +64,7 @@ export const SellPoints = () => {
               onChange={handleInputChange}
               min={0}
               max={Number(formatEther(playerPoints))}
+              className="self-center"
             />
             <div className="flex justify-center gap-2 rounded-md bg-primary/50 px-2 py-1 text-xs font-bold uppercase">
               {message ? (
