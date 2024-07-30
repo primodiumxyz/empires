@@ -51,10 +51,12 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
       );
 
       if (progress === 1) {
-        tables.SyncStatus.update(
+        tables.SyncStatus.set(
           {
             step: SyncStep.Complete,
+            progress: 1,
             message: `DONE`,
+            lastBlockNumberProcessed: blockNumber,
           },
           syncId,
         );
@@ -129,10 +131,12 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
         );
 
         if (progress === 1) {
-          tables.SyncStatus.update(
+          tables.SyncStatus.set(
             {
               step: SyncStep.Complete,
+              progress: 1,
               message: message.complete,
+              lastBlockNumberProcessed: blockNumber,
             },
             syncId,
           );
