@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveNPCAction, MoveNPCActionData, Arrivals } from "codegen/index.sol";
+import { PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveRoutine, MoveRoutineData, Arrivals } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 
@@ -34,7 +34,7 @@ library LibMoveShips {
    * 3. Calculates the number of ships to move and the total ships arriving at the destination.
    * 4. Updates the ship count on the origin planet and the arrivals on the destination planet.
    * 5. Clears the pending move record.
-   * 6. Logs the move action for off-chain tracking.
+   * 6. Logs the move for off-chain tracking.
    */
   function executePendingMoves(bytes32 planetId) internal {
     PlanetData memory planetData = Planet.get(planetId);
@@ -52,9 +52,9 @@ library LibMoveShips {
     Arrivals.set(destinationPlanetId, planetData.empireId, shipsToMove);
 
     // Log the move
-    MoveNPCAction.set(
+    MoveRoutine.set(
       pseudorandomEntity(),
-      MoveNPCActionData({
+      MoveRoutineData({
         originPlanetId: planetId,
         destinationPlanetId: destinationPlanetId,
         shipCount: shipsToMove,

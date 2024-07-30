@@ -4,7 +4,7 @@ import { Button } from "@/components/core/Button";
 import { NumberInput } from "@/components/core/NumberInput";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 
-interface ActionPaneProps {
+interface OverridePaneProps {
   inputValue: string;
   onInputChange: (value: string) => void;
   onAttackClick: () => void;
@@ -17,7 +17,7 @@ interface ActionPaneProps {
   isSupportDisabled?: boolean;
 }
 
-export const ActionPane: React.FC<ActionPaneProps> = ({
+export const OverridePane: React.FC<OverridePaneProps> = ({
   inputValue,
   onInputChange,
   onAttackClick,

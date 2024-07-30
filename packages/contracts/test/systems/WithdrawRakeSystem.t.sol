@@ -14,7 +14,7 @@ import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { P_GameConfig, WinningEmpire, Empire, P_PointConfig, Planet } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-import { EEmpire, EPlayerAction } from "codegen/common.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
 
@@ -40,7 +40,7 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
   function testWithdrawRake() public {
     P_PointConfig.setPointRake(5000);
     switchPrank(alice);
-    uint256 cost = LibPrice.getTotalCost(EPlayerAction.CreateShip, Planet.getEmpireId(planetId), true, 1);
+    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), true, 1);
     world.Empires__createShip{ value: cost }(planetId, 1);
     assertEq(Balances.get(ADMIN_NAMESPACE_ID), cost / 2, "rake value correct");
 

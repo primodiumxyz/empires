@@ -2,14 +2,15 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Turn, P_NPCActionCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost, Empire } from "codegen/index.sol";
+import { Turn, P_RoutineCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData, OverrideCost, Empire } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-import { LibNPCAction } from "libraries/LibNPCAction.sol";
-import { EEmpire, ENPCAction, EPlayerAction } from "codegen/common.sol";
+import { LibRoutine } from "libraries/LibRoutine.sol";
+import { EEmpire, ERoutine, EOverride } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
   bytes32 planetId;
+  bytes32 targetPlanetId;
   uint256 turnLength = 100;
 
   RoutineThresholds[] allRoutineThresholds;
@@ -26,19 +27,21 @@ contract UpdateSystemTest is PrimodiumTest {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
     } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
+    console.logBytes32(planetId);
 
-    RoutineThresholds memory _routineThresholds = RoutineThresholds({
+    targetPlanetId = PlanetsSet.getPlanetIds()[1];
+
+    routineThresholds = RoutineThresholds({
       planetId: planetId,
       accumulateGold: 2000,
       buyShields: 4000,
       buyShips: 6000,
       supportAlly: 8000,
       attackEnemy: 10000,
-      attackTargetId: bytes32(""),
-      supportTargetId: bytes32("")
+      attackTargetId: targetPlanetId,
+      supportTargetId: targetPlanetId
     });
-    routineThresholds = _routineThresholds;
-    allRoutineThresholds.push(_routineThresholds);
+    allRoutineThresholds.push(routineThresholds);
   }
 
   function testUpdateExecuted() public {
@@ -72,39 +75,39 @@ contract UpdateSystemTest is PrimodiumTest {
     }
   }
 
-  function testSpendGoldBuyShipsAction() public {
-    uint256 shipsAction = routineThresholds.buyShips - 1;
+  function testSpendGoldBuyShipsRoutine() public {
+    uint256 shipsRoutine = routineThresholds.buyShips - 1;
     uint256 gold = 9;
 
     Planet.setGoldCount(planetId, gold);
 
     uint256 shipPrice = 2;
-    P_NPCActionCosts.set(ENPCAction.BuyShips, shipPrice);
+    P_RoutineCosts.set(ERoutine.BuyShips, shipPrice);
 
     uint256 expectedShips = gold / shipPrice;
     uint256 expectedRemainder = gold % shipPrice;
 
-    LibNPCAction._executeAction(routineThresholds, shipsAction);
+    LibRoutine._executeRoutine(routineThresholds, shipsRoutine);
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
     assertEq(Planet.getShipCount(planetId), expectedShips, "ships wrong");
   }
 
-  function testGeneratePointsAndPlayerActions() public {
+  function testGeneratePointsAndOverrides() public {
     P_PointConfigData memory pointCfg = P_PointConfig.get();
     uint256 beginPointCost = pointCfg.minPointCost + pointCfg.pointGenRate;
     Empire.setPointCost(EEmpire.Red, beginPointCost);
     Empire.setPointCost(EEmpire.Blue, beginPointCost);
     Empire.setPointCost(EEmpire.Green, beginPointCost);
 
-    P_ActionConfigData memory actionCfg = P_ActionConfig.get();
-    uint256 beginActionCost = actionCfg.minActionCost + actionCfg.actionGenRate;
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, beginActionCost);
-    ActionCost.set(EEmpire.Red, EPlayerAction.KillShip, beginActionCost);
-    ActionCost.set(EEmpire.Blue, EPlayerAction.CreateShip, beginActionCost);
-    ActionCost.set(EEmpire.Blue, EPlayerAction.KillShip, beginActionCost);
-    ActionCost.set(EEmpire.Green, EPlayerAction.CreateShip, beginActionCost);
-    ActionCost.set(EEmpire.Green, EPlayerAction.KillShip, beginActionCost);
+    P_OverrideConfigData memory overrideCfg = P_OverrideConfig.get();
+    uint256 beginOverrideCost = overrideCfg.minOverrideCost + overrideCfg.overrideGenRate;
+    OverrideCost.set(EEmpire.Red, EOverride.CreateShip, beginOverrideCost);
+    OverrideCost.set(EEmpire.Red, EOverride.KillShip, beginOverrideCost);
+    OverrideCost.set(EEmpire.Blue, EOverride.CreateShip, beginOverrideCost);
+    OverrideCost.set(EEmpire.Blue, EOverride.KillShip, beginOverrideCost);
+    OverrideCost.set(EEmpire.Green, EOverride.CreateShip, beginOverrideCost);
+    OverrideCost.set(EEmpire.Green, EOverride.KillShip, beginOverrideCost);
 
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld(allRoutineThresholds);
@@ -113,11 +116,11 @@ contract UpdateSystemTest is PrimodiumTest {
     assertEq(Empire.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
     assertEq(Empire.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
 
-    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Red, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Blue, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip), beginActionCost - actionCfg.actionGenRate);
-    assertEq(ActionCost.get(EEmpire.Green, EPlayerAction.KillShip), beginActionCost - actionCfg.actionGenRate);
+    assertEq(OverrideCost.get(EEmpire.Red, EOverride.CreateShip), beginOverrideCost - overrideCfg.overrideGenRate);
+    assertEq(OverrideCost.get(EEmpire.Red, EOverride.KillShip), beginOverrideCost - overrideCfg.overrideGenRate);
+    assertEq(OverrideCost.get(EEmpire.Blue, EOverride.CreateShip), beginOverrideCost - overrideCfg.overrideGenRate);
+    assertEq(OverrideCost.get(EEmpire.Blue, EOverride.KillShip), beginOverrideCost - overrideCfg.overrideGenRate);
+    assertEq(OverrideCost.get(EEmpire.Green, EOverride.CreateShip), beginOverrideCost - overrideCfg.overrideGenRate);
+    assertEq(OverrideCost.get(EEmpire.Green, EOverride.KillShip), beginOverrideCost - overrideCfg.overrideGenRate);
   }
 }
