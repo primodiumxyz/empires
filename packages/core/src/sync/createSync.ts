@@ -95,6 +95,9 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
 
     sync.start((_, blockNumber) => {
       console.log("syncing updates on block:", blockNumber);
+      tables.SyncStatus.update({
+        lastBlockNumberProcessed: blockNumber,
+      });
     });
 
     world.registerDisposer(sync.unsubscribe);

@@ -1,8 +1,18 @@
-import { AccountClient, Core, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
+import { formatEther } from "viem";
+
+import { EEmpire } from "@primodiumxyz/contracts";
+import { AccountClient, Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { EmpireEnumToName } from "@/util/lookups";
+import { notify } from "@/util/notify";
 
 export const createActionCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
-  const createShip = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const createShip = async (
+    planetId: Entity,
+    actionCount: bigint,
+    payment: bigint,
+    options?: Partial<TxQueueOptions>,
+  ) => {
     return await execute({
       functionName: "Empires__createShip",
       args: [planetId, actionCount],
@@ -11,11 +21,25 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         id: `${planetId}-create-ship`,
         ...options,
       },
-      onComplete: (receipt) => {},
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify(
+            "success",
+            `Supported with ${actionCount} ship${actionCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
+          );
+        } else {
+          notify("error", error ?? "Unknown error");
+        }
+      },
     });
   };
 
-  const removeShip = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const removeShip = async (
+    planetId: Entity,
+    actionCount: bigint,
+    payment: bigint,
+    options?: Partial<TxQueueOptions>,
+  ) => {
     return await execute({
       functionName: "Empires__killShip",
       args: [planetId, actionCount],
@@ -24,11 +48,25 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         id: `${planetId}-kill-ship`,
         ...options,
       },
-      onComplete: (receipt) => {},
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify(
+            "success",
+            `Removed ${actionCount} ship${actionCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
+          );
+        } else {
+          notify("error", error ?? "Unknown error");
+        }
+      },
     });
   };
 
-  const addShield = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const addShield = async (
+    planetId: Entity,
+    actionCount: bigint,
+    payment: bigint,
+    options?: Partial<TxQueueOptions>,
+  ) => {
     return await execute({
       functionName: "Empires__chargeShield",
       args: [planetId, actionCount],
@@ -37,8 +75,46 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         id: `${planetId}-add-shield`,
         ...options,
       },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify(
+            "success",
+            `Added ${actionCount} shield${actionCount > 1 ? "s" : ""} to ${entityToPlanetName(planetId)}`,
+          );
+        } else {
+          notify("error", error ?? "Unknown error");
+        }
+      },
     });
   };
+
+  const removeShield = async (
+    planetId: Entity,
+    actionCount: bigint,
+    payment: bigint,
+    options?: Partial<TxQueueOptions>,
+  ) => {
+    return await execute({
+      functionName: "Empires__drainShield",
+      args: [planetId, actionCount],
+      options: { value: payment, gas: 738649n * 2n },
+      txQueueOptions: {
+        id: `${planetId}-remove-shield`,
+        ...options,
+      },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify(
+            "success",
+            `Removed ${actionCount} shield${actionCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
+          );
+        } else {
+          notify("error", error ?? "Unknown error");
+        }
+      },
+    });
+  };
+
   const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__sellPoints",
@@ -48,19 +124,13 @@ export const createActionCalls = (core: Core, { playerAccount }: AccountClient, 
         id: "sell-points",
         ...options,
       },
-    });
-  };
-
-  const removeShield = async (planetId: Entity, actionCount: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
-    return await execute({
-      functionName: "Empires__drainShield",
-      args: [planetId, actionCount],
-      options: { value: payment, gas: 738649n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-remove-shield`,
-        ...options,
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Sold ${formatEther(amount)} points from ${EmpireEnumToName[empire as EEmpire]} empire`);
+        } else {
+          notify("error", error ?? "Unknown error");
+        }
       },
-      onComplete: (receipt) => {},
     });
   };
 
