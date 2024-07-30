@@ -14,29 +14,25 @@ library LibPrice {
    * @dev Calculates the total cost of an override that is to be purchased.
    * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the override.
-   * @param _progressOverride Flag indicating whether the override is progressive or regressive to the impacted empire.
    * @param _overrideCount The number of overrides to be purchased.
    * @return totalCost The total cost of the override.
    */
   function getTotalCost(
     EOverride _overrideType,
     EEmpire _empireImpacted,
-    bool _progressOverride,
     uint256 _overrideCount
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
-    if (_progressOverride) {
-      require(
-        _overrideType == EOverride.CreateShip || _overrideType == EOverride.ChargeShield,
-        "[LibPrice] Override type is not a progressive override"
-      );
+    if (_overrideType == EOverride.CreateShip || _overrideType == EOverride.ChargeShield) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
-    } else {
-      require(
-        _overrideType == EOverride.KillShip || _overrideType == EOverride.DrainShield,
-        "[LibPrice] Override type is not a regressive override"
-      );
+    } else if (
+      _overrideType == EOverride.KillShip ||
+      _overrideType == EOverride.DrainShield ||
+      _overrideType == EOverride.BoostCharge
+    ) {
       totalCost = getRegressPointCost(_empireImpacted, _overrideCount);
+    } else {
+      revert("[LibPrice] Invalid override type");
     }
 
     totalCost += getMarginalOverrideCost(_empireImpacted, _overrideType, _overrideCount);
