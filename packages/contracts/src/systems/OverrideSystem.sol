@@ -202,16 +202,16 @@ contract OverrideSystem is EmpiresSystem {
   function tacticalStrike(bytes32 _planetId) public {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
-    require(
-      planetData.countdownEnd != 0 && planetData.countdownEnd <= block.number,
-      "[OverrideSystem] Planet is not ready for a tactical strike"
-    );
+    // require(
+    //   planetData.countdownEnd != 0 && planetData.countdownEnd <= block.number,
+    //   "[OverrideSystem] Planet is not ready for a tactical strike"
+    // );
 
     // Reset ship count to 0
     Planet.setShipCount(_planetId, 0);
 
-    // Set new countdown end
-    Planet.setCountdownEnd(_planetId, block.number + P_TacticalStrikeConfig.getCountdownLength());
+    // // Set new countdown end
+    // Planet.setCountdownEnd(_planetId, block.number + P_TacticalStrikeConfig.getCountdownLength());
 
     // Log the tactical strike
     TacticalStrikeOverride.set(

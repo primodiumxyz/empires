@@ -29,7 +29,7 @@ export const worldInput = {
     P_TacticalStrikeConfig: {
       key: [],
       schema: {
-        countdownLength: "uint256",
+        maxStrikeReload: "uint256",
       },
     },
 
@@ -103,7 +103,15 @@ export const worldInput = {
         shieldCount: "uint256",
         goldCount: "uint256",
         empireId: "EEmpire",
-        countdownEnd: "uint256",
+      },
+    },
+
+    Planet_TacticalStrike: {
+      key: ["planetId"],
+      schema: {
+        planetId: "bytes32",
+        strikeReloadRate: "uint256",
+        strikeReloadCount: "uint256",
       },
     },
 

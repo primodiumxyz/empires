@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { coordToId } from "src/utils.sol";
-import { Planet, PlanetData, P_TacticalStrikeConfig } from "codegen/index.sol";
+import { Planet, PlanetData, P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 
 contract InitTest is PrimodiumTest {
@@ -19,7 +19,9 @@ contract InitTest is PrimodiumTest {
     assertEq(planetData.empireId, EEmpire.Red);
     assertEq(planetData.q, 101);
     assertEq(planetData.r, -2);
-    assertGt(planetData.countdownEnd, block.number);
+    Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(redPlanetId);
+    assertEq(planetTacticalStrikeData.strikeReloadRate, 1);
+    assertEq(planetTacticalStrikeData.strikeReloadCount, 0);
   }
 
   function testNonOwnedPlanetInit() public {
