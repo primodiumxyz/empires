@@ -77,7 +77,8 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
         const blockNumber = log.blockNumber ?? tables.SyncStatus.get()?.lastBlockNumberProcessed ?? BigInt(0);
         const progress = index / pendingLogs.length;
 
-        tables.SyncStatus.update({
+        tables.SyncStatus.set({
+          step: SyncStep.Syncing,
           message: "Processing pending logs",
           progress,
           lastBlockNumberProcessed: blockNumber,
@@ -95,7 +96,10 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
 
     sync.start((_, blockNumber) => {
       console.log("syncing updates on block:", blockNumber);
-      tables.SyncStatus.update({
+      tables.SyncStatus.set({
+        step: SyncStep.Live,
+        progress: 1,
+        message: "Subscribed to live updates",
         lastBlockNumberProcessed: blockNumber,
       });
     });
