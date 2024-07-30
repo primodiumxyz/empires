@@ -320,8 +320,6 @@ const Ships = ({
       const data = { planetId: current.planetId, shipCount: current.actionCount };
       if (data.planetId !== planetId) return;
 
-      console.log(current);
-
       // Add floating "+1" text
       setFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.shipCount}` }]);
       setNextId((prev) => prev + 1);
