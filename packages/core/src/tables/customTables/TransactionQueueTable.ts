@@ -76,24 +76,15 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
     // listen to the table and resolve when it changes
     return new Promise<boolean>((resolve, reject) => {
       const timeoutId = setTimeout(() => {
-        reject(new Error("Timed out"));
+        reject(new Error("[TransactionQueueTable] Transaction timed out"));
       }, options.timeout ?? TX_TIMEOUT);
       run();
 
-      // TODO(TEMP): replace when reactive-tables merged & updated
-      // table.once({
-      //   filter: ({entity}) => entity === options.id,
-      //   do: () => {
-      //     clearTimeout(timeoutId);
-      //     resolve(txSuccess.get(options.id) ?? false);
-      //   }
-      // });
-      table.watch({
-        onExit: ({ entity }) => {
-          if (entity === options.id) {
-            clearTimeout(timeoutId);
-            resolve(txSuccess.get(options.id) ?? false);
-          }
+      table.once({
+        filter: ({ entity }) => entity === options.id,
+        do: () => {
+          clearTimeout(timeoutId);
+          resolve(txSuccess.get(options.id) ?? false);
         },
       });
     });
