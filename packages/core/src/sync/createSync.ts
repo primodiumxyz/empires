@@ -25,7 +25,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
   const syncFromRPC = (
     fromBlock: bigint,
     toBlock: bigint,
-    onComplete?: () => void,
+    onComplete?: (blockNumber: bigint) => void,
     onError?: (err: unknown) => void,
     syncId?: Entity,
   ) => {
@@ -39,27 +39,27 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
       writer: storageAdapter,
     });
 
-    sync.start((_, __, progress) => {
+    sync.start((_, blockNumber, progress) => {
       tables.SyncStatus.set(
         {
           step: SyncStep.Syncing,
           progress,
           message: `Hydrating from RPC`,
+          lastBlockNumberProcessed: blockNumber,
         },
         syncId,
       );
 
       if (progress === 1) {
-        tables.SyncStatus.set(
+        tables.SyncStatus.update(
           {
             step: SyncStep.Complete,
-            progress: 1,
             message: `DONE`,
           },
           syncId,
         );
 
-        onComplete?.();
+        onComplete?.(blockNumber);
       }
     }, onError);
 
@@ -74,9 +74,13 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
     const processPendingLogs = () =>
       pendingLogs.forEach((log, index) => {
         storageAdapter(log);
+        const blockNumber = log.blockNumber ?? tables.SyncStatus.get()?.lastBlockNumberProcessed ?? BigInt(0);
+        const progress = index / pendingLogs.length;
+
         tables.SyncStatus.update({
           message: "Processing pending logs",
-          progress: index / pendingLogs.length,
+          progress,
+          lastBlockNumberProcessed: blockNumber,
         });
       });
 
@@ -106,21 +110,21 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
     },
   ) {
     return [
-      (_: number, ___: bigint, progress: number) => {
+      (_: number, blockNumber: bigint, progress: number) => {
         tables.SyncStatus.set(
           {
             step: SyncStep.Syncing,
             progress,
             message: message.progress,
+            lastBlockNumberProcessed: blockNumber,
           },
           syncId,
         );
 
         if (progress === 1) {
-          tables.SyncStatus.set(
+          tables.SyncStatus.update(
             {
               step: SyncStep.Complete,
-              progress,
               message: message.complete,
             },
             syncId,
@@ -135,6 +139,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
             step: SyncStep.Error,
             progress: 0,
             message: message.error,
+            lastBlockNumberProcessed: tables.SyncStatus.get()?.lastBlockNumberProcessed ?? BigInt(0),
           },
           syncId,
         );
@@ -142,7 +147,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
     ];
   }
 
-  const syncInitialGameState = (onComplete: () => void, onError: (err: unknown) => void) => {
+  const syncInitialGameState = (onComplete: (blockNumber: bigint) => void, onError: (err: unknown) => void) => {
     // if we're already syncing from RPC, don't sync from indexer
     if (tables.SyncSource.get()?.value === SyncSourceType.RPC) return;
 
@@ -164,10 +169,11 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
         step: SyncStep.Syncing,
         progress,
         message: `Hydrating from Indexer`,
+        lastBlockNumberProcessed: blockNumber,
       });
 
       if (progress === 1) {
-        onComplete();
+        onComplete(blockNumber);
         fromBlock = blockNumber;
       }
     }, onError);
@@ -193,12 +199,13 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
       writer: storageAdapter,
     });
 
-    sync.start(async (_, __, progress) => {
+    sync.start(async (_, blockNumber, progress) => {
       tables.SyncStatus.set(
         {
           step: SyncStep.Syncing,
           progress,
           message: `Hydrating from Indexer`,
+          lastBlockNumberProcessed: blockNumber,
         },
         syncId,
       );
