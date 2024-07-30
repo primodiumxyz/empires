@@ -54,8 +54,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/game
       '@primodiumxyz/reactive-tables':
-        specifier: ^3.5.2
-        version: 3.5.2(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        specifier: ^3.5.3
+        version: 3.5.3(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@privy-io/react-auth':
         specifier: ^1.72.0
         version: 1.73.0(@babel/core@7.25.2)(@types/react@18.3.3)(react-dom@18.3.1)(react-is@18.3.1)(react@18.3.1)(typescript@5.5.2)
@@ -323,8 +323,8 @@ importers:
         specifier: workspace:*
         version: link:../engine
       '@primodiumxyz/reactive-tables':
-        specifier: ^3.5.2
-        version: 3.5.2(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        specifier: ^3.5.3
+        version: 3.5.3(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@primodiumxyz/sync-stack':
         specifier: ^0.6.9
         version: 0.6.9(typescript@5.5.2)
@@ -430,8 +430,8 @@ importers:
         specifier: workspace:*
         version: link:../engine
       '@primodiumxyz/reactive-tables':
-        specifier: ^3.5.2
-        version: 3.5.2(prettier@3.2.5)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8)
+        specifier: ^3.5.3
+        version: 3.5.3(prettier@3.2.5)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -3685,8 +3685,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@primodiumxyz/reactive-tables@3.5.2(prettier@3.2.5)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8):
-    resolution: {integrity: sha512-qEGmeax3F3yiS7qJMJOp7do0uQWQ4s9WmSnpCQTHNvAGb2652fnJxR287cYxRxaVLedWL6cMEUJV+M6E+ABojQ==}
+  /@primodiumxyz/reactive-tables@3.5.3(prettier@3.2.5)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8):
+    resolution: {integrity: sha512-YViWczF0tbIssg4v8NrGwDVP0W+ObxMaKkCywnBkdjO3ejNIADyQ4uFdIm6G2NXYJes6lO4/fPLiM8n/JNlZ0Q==}
     engines: {node: 20.x, pnpm: 8.x}
     dependencies:
       '@latticexyz/protocol-parser': 2.0.9(typescript@5.5.3)(zod@3.23.8)
@@ -3723,8 +3723,8 @@ packages:
       - zod
     dev: false
 
-  /@primodiumxyz/reactive-tables@3.5.2(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
-    resolution: {integrity: sha512-qEGmeax3F3yiS7qJMJOp7do0uQWQ4s9WmSnpCQTHNvAGb2652fnJxR287cYxRxaVLedWL6cMEUJV+M6E+ABojQ==}
+  /@primodiumxyz/reactive-tables@3.5.3(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
+    resolution: {integrity: sha512-YViWczF0tbIssg4v8NrGwDVP0W+ObxMaKkCywnBkdjO3ejNIADyQ4uFdIm6G2NXYJes6lO4/fPLiM8n/JNlZ0Q==}
     engines: {node: 20.x, pnpm: 8.x}
     dependencies:
       '@latticexyz/protocol-parser': 2.0.9(typescript@5.5.2)(zod@3.23.8)
