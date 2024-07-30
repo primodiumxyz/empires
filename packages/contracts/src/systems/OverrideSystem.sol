@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, PlanetData, Player, P_PointConfig, CreateShipOverride, CreateShipOverrideData, KillShipOverride, KillShipOverrideData, ChargeShieldsOverride, ChargeShieldsOverrideData, DrainShieldsOverride, DrainShieldsOverrideData } from "codegen/index.sol";
+import { Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -33,9 +33,9 @@ contract OverrideSystem is EmpiresSystem {
 
     Planet.setShipCount(_planetId, planetData.shipCount + _overrideCount);
 
-    CreateShipOverride.set(
+    CreateShipOverrideLog.set(
       pseudorandomEntity(),
-      CreateShipOverrideData({
+      CreateShipOverrideLogData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
@@ -61,9 +61,9 @@ contract OverrideSystem is EmpiresSystem {
     _purchaseOverride(EOverride.KillShip, planetData.empireId, false, _overrideCount, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount - _overrideCount);
-    KillShipOverride.set(
+    KillShipOverrideLog.set(
       pseudorandomEntity(),
-      KillShipOverrideData({
+      KillShipOverrideLogData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
@@ -89,9 +89,9 @@ contract OverrideSystem is EmpiresSystem {
 
     Planet.setShieldCount(_planetId, planetData.shieldCount + _overrideCount);
 
-    ChargeShieldsOverride.set(
+    ChargeShieldsOverrideLog.set(
       pseudorandomEntity(),
-      ChargeShieldsOverrideData({
+      ChargeShieldsOverrideLogData({
         planetId: _planetId,
         ethSpent: cost,
         overrideCount: _overrideCount,
@@ -117,9 +117,9 @@ contract OverrideSystem is EmpiresSystem {
     _purchaseOverride(EOverride.DrainShield, planetData.empireId, false, _overrideCount, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount - _overrideCount);
-    DrainShieldsOverride.set(
+    DrainShieldsOverrideLog.set(
       pseudorandomEntity(),
-      DrainShieldsOverrideData({
+      DrainShieldsOverrideLogData({
         planetId: _planetId,
         ethSpent: cost,
         overrideCount: _overrideCount,
