@@ -4,7 +4,7 @@ import { TX_TIMEOUT } from "@core/lib";
 import { Core, TxReceipt } from "@core/lib/types";
 
 export async function _execute(
-  { network: { /* waitForTransaction, */ publicClient }, tables }: Core,
+  { network: { publicClient }, tables }: Core,
   txPromise: Promise<Hex>,
 ): Promise<TxReceipt> {
   const waitForTransaction = async (hash: Hex): Promise<TxReceipt> => {
@@ -25,10 +25,7 @@ export async function _execute(
           unsubscribe = tables.SyncStatus.once({
             filter: ({ properties: { current } }) =>
               (current?.lastBlockNumberProcessed || BigInt(0)) >= txReceipt.blockNumber,
-            do: () => {
-              console.log("reached", { txReceipt });
-              resolve({ ...txReceipt, success: txReceipt.status === "success" });
-            },
+            do: () => resolve({ ...txReceipt, success: txReceipt.status === "success" }),
           });
         })
         .catch((err) => {
@@ -54,7 +51,6 @@ export async function _execute(
     const txHash = await txPromise;
     receipt = await waitForTransaction(txHash);
     console.log("[Tx] hash: ", txHash);
-    console.log({ receipt });
 
     if (!receipt.success) {
       // Force a CallExecutionError such that we can get the revert reason
