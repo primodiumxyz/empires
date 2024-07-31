@@ -10,6 +10,7 @@ import { RadioGroup } from "@/components/core/Radio";
 import { Tooltip } from "@/components/core/Tooltip";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
@@ -64,6 +65,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     utils: { weiToUsd },
   } = useCore();
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
+  const { showBlockchainUnits } = useSettings();
   const fixedSvgRef = useRef<SVGSVGElement>(null);
   const scrollSvgRef = useRef<SVGSVGElement>(null);
 
@@ -362,6 +364,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                             tooltipContent={`${formatEther(sellPrice)} ETH`}
                             className="text-gray-300"
                             containerClassName={cn("w-min cursor-pointer")}
+                            enabled={showBlockchainUnits.enabled}
                           >
                             {weiToUsd(sellPrice, ethPrice)}
                           </Tooltip>

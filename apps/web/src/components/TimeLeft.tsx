@@ -8,6 +8,7 @@ import { Card } from "@/components/core/Card";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePot } from "@/hooks/usePot";
+import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 
 export const TimeLeft = () => {
@@ -77,6 +78,7 @@ const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
   } = useAccountClient();
   const { pot } = usePot();
   const { price } = useEthPrice();
+  const { showBlockchainUnits } = useSettings();
 
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const playerEmpirePoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
@@ -94,7 +96,8 @@ const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
       {playerPot > 0n && (
         <div className="flex flex-col gap-1">
           <p>
-            You earned {playerPotUSD} ({formatEther(playerPot)} ETH)!
+            You earned {playerPotUSD}
+            {showBlockchainUnits.enabled && <span> ({formatEther(playerPot)} ETH)</span>}!
           </p>
           <Button variant="primary" size="sm" onClick={calls.withdrawEarnings}>
             Withdraw

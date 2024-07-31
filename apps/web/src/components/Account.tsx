@@ -13,6 +13,7 @@ import { Divider } from "@/components/core/Divider";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
@@ -29,6 +30,7 @@ export const Account = () => {
     utils: { weiToUsd },
   } = useCore();
   const { price, loading } = useEthPrice();
+  const { showBlockchainUnits } = useSettings();
 
   const {
     playerAccount: { address, entity },
@@ -55,7 +57,7 @@ export const Account = () => {
           <Divider className="my-1 w-16 self-center" />
           {loading && <p>Loading...</p>}
           {!loading && price && <p>{weiToUsd(balance, price)}</p>}
-          <p className="text-xs">{formatEther(balance)}ETH</p>
+          {showBlockchainUnits.enabled && <p className="text-xs">{formatEther(balance)}ETH</p>}
           <Divider className="my-1 w-16 self-center" />
           <div className="flex flex-col gap-1">
             <EmpirePoints empire={EEmpire.Red} playerId={entity} />

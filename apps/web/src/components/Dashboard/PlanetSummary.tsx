@@ -23,6 +23,7 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useGame } from "@/hooks/useGame";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { EmpireEnumToName } from "@/util/lookups";
 
@@ -94,6 +95,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
+  const { showBlockchainUnits } = useSettings();
 
   const planet = tables.Planet.use(entity)!;
   const { empireId, shipCount, shieldCount } = planet;
@@ -120,7 +122,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">deploy ship</span>
           <span className="flex items-center">
-            {addShipPriceUsd} ({formatEther(addShipPriceWei)} ETH)
+            {addShipPriceUsd} {showBlockchainUnits.enabled && <span>({formatEther(addShipPriceWei)} ETH)</span>}
           </span>
           <TransactionQueueMask id={`${entity}-create-ship`}>
             <Button
@@ -138,7 +140,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">withdraw ship</span>
           <span className="flex items-center">
-            {removeShipPriceUsd} ({formatEther(removeShipPriceWei)} ETH)
+            {removeShipPriceUsd} {showBlockchainUnits.enabled && <span>({formatEther(removeShipPriceWei)} ETH)</span>}
           </span>
           <TransactionQueueMask id={`${entity}-kill-ship`}>
             <Button
@@ -156,7 +158,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">charge shield</span>
           <span className="flex items-center">
-            {addShieldPriceUsd} ({formatEther(addShieldPriceWei)} ETH)
+            {addShieldPriceUsd} {showBlockchainUnits.enabled && <span>({formatEther(addShieldPriceWei)} ETH)</span>}
           </span>
           <TransactionQueueMask id={`${entity}-add-shield`}>
             <Button
@@ -174,7 +176,8 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">drain shield</span>
           <span className="flex items-center">
-            {removeShieldPriceUsd} ({formatEther(removeShieldPriceWei)} ETH)
+            {removeShieldPriceUsd}{" "}
+            {showBlockchainUnits.enabled && <span>({formatEther(removeShieldPriceWei)} ETH)</span>}
           </span>
           <TransactionQueueMask id={`${entity}-remove-shield`}>
             <Button

@@ -11,6 +11,7 @@ import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { useSettings } from "@/hooks/useSettings";
 
 export const SellPoints = () => {
   const {
@@ -19,6 +20,7 @@ export const SellPoints = () => {
   const calls = useContractCalls();
   const { tables, utils } = useCore();
   const { price } = useEthPrice();
+  const { showBlockchainUnits } = useSettings();
 
   const [amountToSell, setAmountToSell] = useState("0");
   const [empire, setEmpire] = useState<EEmpire>(EEmpire.Green);
@@ -72,7 +74,7 @@ export const SellPoints = () => {
               ) : (
                 <>
                   <span className="text-white">{usdOut}</span>
-                  <span>{ethOut}ETH</span>
+                  {showBlockchainUnits.enabled && <span>{ethOut}ETH</span>}
                 </>
               )}
             </div>
