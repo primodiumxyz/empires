@@ -22,10 +22,10 @@ export const ActionLog = () => {
   const battleActions = tables.PlanetBattleRoutine.useAll();
   const buyActions = tables.BuyShipsRoutine.useAll();
   const buyShieldActions = tables.BuyShieldsRoutine.useAll();
-  const createActions = tables.CreateShipOverride.useAll();
-  const killActions = tables.KillShipOverride.useAll();
-  const chargeShieldActions = tables.ChargeShieldsOverride.useAll();
-  const drainShieldActions = tables.DrainShieldsOverride.useAll();
+  const createActions = tables.CreateShipOverrideLog.useAll();
+  const killActions = tables.KillShipOverrideLog.useAll();
+  const chargeShieldActions = tables.ChargeShieldsOverrideLog.useAll();
+  const drainShieldActions = tables.DrainShieldsOverrideLog.useAll();
   const { price } = useEthPrice();
 
   const actions = useMemo(() => {
@@ -60,7 +60,7 @@ export const ActionLog = () => {
     });
 
     const createActionEntries = createActions.map((actionEntity) => {
-      const action = tables.CreateShipOverride.get(actionEntity)!;
+      const action = tables.CreateShipOverrideLog.get(actionEntity)!;
       return {
         actor: formatAddress(action.playerId, true),
         type: "Create Ships",
@@ -70,7 +70,7 @@ export const ActionLog = () => {
     });
 
     const killActionEntries = killActions.map((actionEntity) => {
-      const action = tables.KillShipOverride.get(actionEntity)!;
+      const action = tables.KillShipOverrideLog.get(actionEntity)!;
       return {
         actor: formatAddress(action.playerId, true),
         type: "Kill Ships",
@@ -80,7 +80,7 @@ export const ActionLog = () => {
     });
 
     const chargeShieldActionEntries = chargeShieldActions.map((actionEntity) => {
-      const action = tables.ChargeShieldsOverride.get(actionEntity)!;
+      const action = tables.ChargeShieldsOverrideLog.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Charge Shield",
@@ -90,7 +90,7 @@ export const ActionLog = () => {
     });
 
     const drainShieldActionEntries = drainShieldActions.map((actionEntity) => {
-      const action = tables.DrainShieldsOverride.get(actionEntity)!;
+      const action = tables.DrainShieldsOverrideLog.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Drain Shield",

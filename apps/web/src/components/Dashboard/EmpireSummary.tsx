@@ -9,7 +9,7 @@ import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity, Properties } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Card } from "@/components/core/Card";
-import { useEthPrice } from "@/hooks/useEthPrice";
+import { Price } from "@/components/shared/Price";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
@@ -26,16 +26,11 @@ export const EmpireEnumToBg: Record<EEmpire, string> = {
 
 // TODO: display the number of wallets holding points?
 export const EmpireSummary = ({ empireId, ownedPlanets }: { empireId: EEmpire; ownedPlanets: Planet[] }) => {
-  const {
-    tables,
-    utils: { weiToUsd },
-  } = useCore();
+  const { tables } = useCore();
   const {
     ROOT: { sprite },
   } = useGame();
-  const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
-  const { price: sellPrice } = usePointPrice(empireId, 1);
-  const sellPriceUsd = weiToUsd(sellPrice, ethPrice ?? 0);
+  const { price: sellPrice, message } = usePointPrice(empireId, 1);
   const empire = tables.Empire.useWithKeys({ id: empireId })!;
 
   const totalOwnedAssets = ownedPlanets.reduce(
@@ -51,7 +46,6 @@ export const EmpireSummary = ({ empireId, ownedPlanets }: { empireId: EEmpire; o
     { gold: BigInt(0), ships: BigInt(0), shields: BigInt(0) },
   );
 
-  if (loadingEthPrice) return <span>loading...</span>;
   return (
     <Card noDecor className={cn(EmpireEnumToBg[empireId], "border-none")}>
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-x-8">
@@ -62,7 +56,13 @@ export const EmpireSummary = ({ empireId, ownedPlanets }: { empireId: EEmpire; o
             <Badge variant="glass">{formatEther(empire.pointsIssued ?? 0n)} points issued</Badge>
           </div>
           <Badge variant={sellPrice ? "secondary" : "warning"} className="flex items-center gap-2">
-            {sellPrice ? `sell ${sellPriceUsd} (${formatEther(sellPrice)} ETH)` : "can't sell"}
+            {sellPrice ? (
+              <div>
+                sell <Price wei={sellPrice} />
+              </div>
+            ) : (
+              <span>{message}</span>
+            )}
           </Badge>
         </div>
         <div className="flex flex-col gap-2">
