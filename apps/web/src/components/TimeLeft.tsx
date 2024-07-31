@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -5,6 +6,7 @@ import { formatTime } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
+import { Tooltip } from "@/components/core/Tooltip";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePot } from "@/hooks/usePot";
@@ -14,6 +16,9 @@ import { useTimeLeft } from "@/hooks/useTimeLeft";
 export const TimeLeft = () => {
   const { timeLeftMs, blocksLeft, gameOver } = useTimeLeft();
   const { showBlockchainUnits } = useSettings();
+  const endTime = useMemo(() => {
+    return new Date(Date.now() + (timeLeftMs ?? 0));
+  }, [timeLeftMs]);
 
   return (
     <div className="flex w-72 flex-col justify-center gap-1 rounded text-center">
@@ -21,7 +26,9 @@ export const TimeLeft = () => {
       {!gameOver && (
         <Card className="py-2 text-sm" noDecor>
           <div className="flex flex-col">
-            <span>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}</span>
+            <Tooltip tooltipContent={endTime.toLocaleString()} direction="bottom">
+              <span>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}</span>
+            </Tooltip>
             {showBlockchainUnits.enabled && !!blocksLeft && (
               <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
             )}
