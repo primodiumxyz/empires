@@ -3,6 +3,7 @@ name: Auto-deploy on merge to release/v* and main branches
 on:
   push:
     branches:
+      - "sprint/v*"
       - "release/v*"
       - "main"
 
