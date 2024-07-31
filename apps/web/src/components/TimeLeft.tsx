@@ -21,7 +21,7 @@ export const TimeLeft = () => {
   }, [timeLeftMs]);
 
   return (
-    <div className="flex w-72 flex-col justify-center gap-1 rounded text-center">
+    <div className="flex w-72 flex-col justify-center gap-1 rounded text-center p-4">
       {gameOver && <GameOver />}
       {!gameOver && (
         <Card className="py-2 text-sm" noDecor>

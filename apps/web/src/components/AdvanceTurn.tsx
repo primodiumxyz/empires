@@ -6,6 +6,7 @@ import { Button } from "@/components/core/Button";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useSettings } from "@/hooks/useSettings";
+import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
@@ -20,45 +21,48 @@ export const AdvanceTurn = () => {
   const { tables } = useCore();
   const { updateWorld } = useContractCalls();
   const { showBlockchainUnits } = useSettings();
+  const { gameOver } = useTimeLeft();
   const blockNumber = tables.BlockNumber.use()?.value ?? 0n;
 
   const avgBlockTime = tables.BlockNumber.use()?.avgBlockTime ?? 0;
 
   const turn = tables.Turn.use();
 
-  if (!turn) return null;
+  if (!turn || gameOver) return null;
 
   return (
     <TransactionQueueMask id={`update-world`}>
-      <Button
-        size="lg"
-        shape="square"
-        className={cn(EmpireEnumToColor[turn.empire as EEmpire], "w-fit px-4")}
-        onClick={() => updateWorld()}
-        disabled={turn.nextTurnBlock > blockNumber}
-      >
-        <div className="flex flex-col gap-2 text-white">
-          <p className="text-md font-bold">{EmpireEnumToName[turn.empire as EEmpire]}'s Turn</p>
-          {turn.nextTurnBlock <= blockNumber && (
-            <p className="flex items-center gap-2 text-sm">
-              ADVANCE TURN <ArrowRightIcon className="size-4" />
-            </p>
-          )}
-          {turn.nextTurnBlock > blockNumber && (
-            <div className="flex flex-col">
-              <p className="text-sm">
-                {((Number(turn.nextTurnBlock) - Number(blockNumber)) * Number(avgBlockTime)).toLocaleString()} seconds
-                remaining
+      <div className="flex justify-center">
+        <Button
+          size="lg"
+          shape="square"
+          className={cn(EmpireEnumToColor[turn.empire as EEmpire], "w-fit px-4")}
+          onClick={() => updateWorld()}
+          disabled={turn.nextTurnBlock > blockNumber}
+        >
+          <div className="flex flex-col gap-2 text-white">
+            <p className="text-md font-bold">{EmpireEnumToName[turn.empire as EEmpire]}'s Turn</p>
+            {turn.nextTurnBlock <= blockNumber && (
+              <p className="flex items-center gap-2 text-sm">
+                ADVANCE TURN <ArrowRightIcon className="size-4" />
               </p>
-              {showBlockchainUnits.enabled && (
-                <p className="text-xs">
-                  ({(Number(turn.nextTurnBlock) - Number(blockNumber)).toLocaleString()} blocks)
+            )}
+            {turn.nextTurnBlock > blockNumber && (
+              <div className="flex flex-col">
+                <p className="text-sm">
+                  {((Number(turn.nextTurnBlock) - Number(blockNumber)) * Number(avgBlockTime)).toLocaleString()} seconds
+                  remaining
                 </p>
-              )}
-            </div>
-          )}
-        </div>
-      </Button>
+                {showBlockchainUnits.enabled && (
+                  <p className="text-xs">
+                    ({(Number(turn.nextTurnBlock) - Number(blockNumber)).toLocaleString()} blocks)
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        </Button>
+      </div>
     </TransactionQueueMask>
   );
 };

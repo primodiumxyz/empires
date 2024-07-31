@@ -31,14 +31,25 @@ export const EmpireEnumToTextColor: Record<EEmpire, string> = {
   [EEmpire.LENGTH]: "",
 };
 
-export const HistoricalPointPriceModal = () => {
+interface HistoricalPointPriceModalProps {
+  showIcon: boolean;
+}
+
+
+export const HistoricalPointPriceModal = ({ showIcon }: HistoricalPointPriceModalProps) => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
 
   return (
     <Modal title="Points Price History">
-      <Modal.Button className="btn-md h-[58px] w-fit" variant="info">
-        <PresentationChartLineIcon className="size-8" />
-      </Modal.Button>
+      {showIcon ? (
+        <Modal.Button className="btn-md h-[58px] w-fit" variant="info">
+          <PresentationChartLineIcon className="size-8" />
+        </Modal.Button>
+      ) : (
+        <Modal.Button className="btn-xs border-none">
+          <span>+Expand</span>
+        </Modal.Button>
+      )}
       <Modal.Content>
         <RadioGroup
           name="select-empire-chart"
