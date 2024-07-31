@@ -73,7 +73,8 @@ export class Planet
       scene.phaserScene,
       coord.x,
       coord.y + 75,
-      Assets.SpriteAtlas
+      Assets.SpriteAtlas,
+      "sprites/hex/holo/Holo_Rough_0.png"
     ).setDepth(DepthLayers.Base + coord.y - 1);
 
     this.pendingArrow = new Phaser.GameObjects.Container(
@@ -95,7 +96,7 @@ export class Planet
       .setActive(false)
       .setVisible(false);
 
-    this.hexHoloSprite.play(Animations.Holo);
+    // this.hexHoloSprite.play(Animations.Holo);
 
     this._scene = scene;
     this.id = id;
@@ -199,6 +200,7 @@ export class Planet
         depth: DepthLayers.Planet + 1,
         originX: 0,
         originY: 1,
+        blendMode: Phaser.BlendModes.ADD,
         offset: {
           x: -12,
           y: 10,
@@ -212,7 +214,7 @@ export class Planet
       EmpireToDestroyerArcAnimationKeys[this.empireId][1] ??
         "DestroyerArcUpperRed",
       {
-        rotation: angle.radian,
+        rotation: angle.radian + 2 * Math.PI,
         depth: DepthLayers.Planet + 2,
         originX: 0,
         originY: 1,

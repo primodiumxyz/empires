@@ -16,6 +16,10 @@ export const Sprites = {
   Ship: "sprites/icons/ship.png",
   Shield: "sprites/icons/shield.png",
   Gold: "sprites/icons/gold.png",
+
+  //Background
+  StarBg: "sprites/background/star.png",
+  Nebula: "sprites/background/nebula.png",
 };
 
 export type SpriteKeys = keyof typeof Sprites;

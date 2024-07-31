@@ -13,7 +13,6 @@ const gameConfig: GameConfig = {
     mode: Phaser.Scale.ENVELOP,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  transparent: true,
   pixelArt: true,
   assetPack: pack,
   fps: {
