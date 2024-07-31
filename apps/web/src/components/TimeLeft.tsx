@@ -12,13 +12,20 @@ import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 
 export const TimeLeft = () => {
-  const { timeLeftMs, gameOver } = useTimeLeft();
+  const { timeLeftMs, blocksLeft, gameOver } = useTimeLeft();
+  const { showBlockchainUnits } = useSettings();
+
   return (
     <div className="flex w-72 flex-col justify-center gap-1 rounded text-center">
       {gameOver && <GameOver />}
       {!gameOver && (
         <Card className="py-2 text-sm" noDecor>
-          Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}{" "}
+          <div className="flex flex-col">
+            <span>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}</span>
+            {showBlockchainUnits.enabled && !!blocksLeft && (
+              <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
+            )}
+          </div>
         </Card>
       )}
     </div>

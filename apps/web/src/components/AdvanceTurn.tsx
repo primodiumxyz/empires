@@ -5,6 +5,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
@@ -18,6 +19,7 @@ export const EmpireEnumToColor = {
 export const AdvanceTurn = () => {
   const { tables } = useCore();
   const { updateWorld } = useContractCalls();
+  const { showBlockchainUnits } = useSettings();
   const blockNumber = tables.BlockNumber.use()?.value ?? 0n;
 
   const avgBlockTime = tables.BlockNumber.use()?.avgBlockTime ?? 0;
@@ -43,10 +45,17 @@ export const AdvanceTurn = () => {
             </p>
           )}
           {turn.nextTurnBlock > blockNumber && (
-            <p className="text-sm">
-              {((Number(turn.nextTurnBlock) - Number(blockNumber)) * Number(avgBlockTime)).toLocaleString()} seconds
-              remaining
-            </p>
+            <div className="flex flex-col">
+              <p className="text-sm">
+                {((Number(turn.nextTurnBlock) - Number(blockNumber)) * Number(avgBlockTime)).toLocaleString()} seconds
+                remaining
+              </p>
+              {showBlockchainUnits.enabled && (
+                <p className="text-xs">
+                  ({(Number(turn.nextTurnBlock) - Number(blockNumber)).toLocaleString()} blocks)
+                </p>
+              )}
+            </div>
           )}
         </div>
       </Button>
