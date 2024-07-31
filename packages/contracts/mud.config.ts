@@ -32,6 +32,8 @@ export const worldInput = {
         maxCharge: "uint256",
         boostChargeIncrease: "uint256",
         stunChargeDecrease: "uint256",
+        createShipBoostIncrease: "uint256", // per ship created
+        killShipBoostCostDecrease: "uint256", // per ship killed
       },
     },
 

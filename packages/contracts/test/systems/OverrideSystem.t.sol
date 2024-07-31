@@ -31,34 +31,48 @@ contract OverrideSystemTest is PrimodiumTest {
     pointUnit = P_PointConfig.getPointUnit();
   }
 
+  function _getCurrentCharge(bytes32 _planetId) internal view returns (uint256) {
+    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(_planetId);
+    return data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
+  }
+
   function testCreateShipSingle() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
+    uint256 currentCharge = _getCurrentCharge(planetId);
     world.Empires__createShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 1);
+    assertEq(_getCurrentCharge(planetId), currentCharge + P_TacticalStrikeConfig.getCreateShipBoostIncrease());
   }
 
   function testCreateShipMultiple() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 10);
+    uint256 currentCharge = _getCurrentCharge(planetId);
     world.Empires__createShip{ value: cost }(planetId, 10);
     assertEq(Planet.get(planetId).shipCount, 10);
+    assertEq(_getCurrentCharge(planetId), currentCharge + (P_TacticalStrikeConfig.getCreateShipBoostIncrease() * 10));
   }
 
   function testKillShipSingle() public {
+    testCreateShipSingle();
+    uint256 currentCharge = _getCurrentCharge(planetId);
     vm.startPrank(creator);
     Planet.setShipCount(planetId, 1);
 
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 1);
     world.Empires__killShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 0);
+    assertEq(_getCurrentCharge(planetId), currentCharge - P_TacticalStrikeConfig.getKillShipBoostCostDecrease());
   }
 
   function testKillShipMultiple() public {
     testCreateShipMultiple();
+    uint256 currentCharge = _getCurrentCharge(planetId);
     uint256 currentShips = Planet.get(planetId).shipCount;
 
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 6);
     world.Empires__killShip{ value: cost }(planetId, 6);
     assertEq(Planet.get(planetId).shipCount, currentShips - 6);
+    assertEq(_getCurrentCharge(planetId), currentCharge - (P_TacticalStrikeConfig.getKillShipBoostCostDecrease() * 6));
   }
 
   function testChargeShieldSingle() public {
@@ -309,17 +323,10 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__createShip{ value: totalCost }(planetId, 1);
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
     uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
-    assertEq(data.charge, 0, "Charge should be 0");
+
     assertEq(data.chargeRate, 100, "Charge Rate should be 100");
 
-    // end block will be when charge >= maxCharge
-    // current charge = data.charge + pending charge
-    // pending charge = (block.number - data.lastUpdated) * data.chargeRate / 100
-    // charge = current charge + pending charge
-    // remaining charge = maxCharge - charge
-    // remaining blocks = remaining charge / data.chargeRate
-
-    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
+    uint256 currentCharge = _getCurrentCharge(planetId);
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
     uint256 expectedEndBlock = block.number + remainingBlocks;
@@ -338,10 +345,9 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
 
-    assertEq(data.charge, 0);
     assertEq(data.chargeRate, 100);
 
-    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
+    uint256 currentCharge = _getCurrentCharge(planetId);
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
     uint256 expectedEndBlock = block.number + remainingBlocks;
