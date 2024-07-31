@@ -7,9 +7,10 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
-import { Tooltip } from "@/components/core/Tooltip";
+import { Price } from "@/components/shared/Price";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 import { EmpireEnumToName } from "@/util/lookups";
 
@@ -33,7 +34,6 @@ export const EmpireEnumToTextColor: Record<EEmpire, string> = {
 interface HistoricalPointPriceModalProps {
   showIcon: boolean;
 }
-
 
 export const HistoricalPointPriceModal = ({ showIcon }: HistoricalPointPriceModalProps) => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
@@ -75,19 +75,25 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
     utils: { weiToUsd },
   } = useCore();
   const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
+  const { showBlockchainUnits } = useSettings();
   const fixedSvgRef = useRef<SVGSVGElement>(null);
   const scrollSvgRef = useRef<SVGSVGElement>(null);
 
   const historicalPriceEntities = tables.HistoricalPointCost.useAll();
   const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? BigInt(0);
 
-  const { price: blueSellPrice } = usePointPrice(EEmpire.Blue, 1);
-  const { price: greenSellPrice } = usePointPrice(EEmpire.Green, 1);
-  const { price: redSellPrice } = usePointPrice(EEmpire.Red, 1);
+  const { price: blueSellPrice, message: blueMessage } = usePointPrice(EEmpire.Blue, 1);
+  const { price: greenSellPrice, message: greenMessage } = usePointPrice(EEmpire.Green, 1);
+  const { price: redSellPrice, message: redMessage } = usePointPrice(EEmpire.Red, 1);
   const prices = {
     [EEmpire.Blue]: blueSellPrice,
     [EEmpire.Green]: greenSellPrice,
     [EEmpire.Red]: redSellPrice,
+  };
+  const messages = {
+    [EEmpire.Blue]: blueMessage,
+    [EEmpire.Green]: greenMessage,
+    [EEmpire.Red]: redMessage,
   };
 
   const historicalPriceData = useMemo(() => {
@@ -188,7 +194,11 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .call(
         axisLeft(yScale)
           .tickValues(yScale.ticks(5))
-          .tickFormat((d) => weiToUsd(BigInt(d.toString()), ethPrice ?? 0) ?? ""),
+          .tickFormat((d) =>
+            showBlockchainUnits.enabled
+              ? formatEther(BigInt(d.toString()))
+              : weiToUsd(BigInt(d.toString()), ethPrice ?? 0) ?? "",
+          ),
       )
       .selectAll("line")
       .style("stroke", "#706f6f")
@@ -265,7 +275,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
       .attr("x", -height / 2)
       .attr("y", margin.left - 60)
       .attr("transform", "rotate(-90)")
-      .text("Cost (Usd)")
+      .text(`Cost (${showBlockchainUnits.enabled ? "ETH" : "Usd"})`)
       .attr("fill", "#706f6f")
       .style("font-size", "14px");
 
@@ -352,7 +362,7 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                   Empire
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider text-gray-500">
-                  Sell Price (Usd)
+                  Sell Price ({showBlockchainUnits.enabled ? "ETH" : "Usd"})
                 </th>
               </tr>
             </thead>
@@ -369,16 +379,10 @@ const HistoricalPointPriceChart = ({ selectedEmpire }: { selectedEmpire: EEmpire
                     <td className={cn("whitespace-nowrap px-4 py-2", color)}>
                       {!!sellPrice ? (
                         <div className="flex items-center gap-2">
-                          <Tooltip
-                            tooltipContent={`${formatEther(sellPrice)} ETH`}
-                            className="text-gray-300"
-                            containerClassName={cn("w-min cursor-pointer")}
-                          >
-                            {weiToUsd(sellPrice, ethPrice)}
-                          </Tooltip>
+                          <Price wei={sellPrice} />
                         </div>
                       ) : (
-                        "can't sell"
+                        <span className="text-gray-300">{messages[empire]}</span>
                       )}
                     </td>
                   </tr>

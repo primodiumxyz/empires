@@ -2,10 +2,11 @@ import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
+import { Toggle } from "@/components/core/Toggle";
 import { fontStyleOptions, useSettings } from "@/hooks/useSettings";
 
 export const UserSettings = () => {
-  const { fontStyle } = useSettings();
+  const { fontStyle, showBlockchainUnits } = useSettings();
 
   return (
     <Modal title="Settings">
@@ -40,6 +41,16 @@ export const UserSettings = () => {
               ]}
               onChange={(value) => fontStyle.setSize(value as (typeof fontStyleOptions.size)[number])}
               className="grid grid-cols-[8rem_8rem]"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold text-gray-400">Blockchain units</h2>
+              <span className="text-xs text-gray-400">Display values in blockchain units (ETH, blocks)</span>
+            </div>
+            <Toggle
+              defaultChecked={showBlockchainUnits.enabled}
+              onToggle={() => showBlockchainUnits.setEnabled(!showBlockchainUnits.enabled)}
             />
           </div>
         </div>

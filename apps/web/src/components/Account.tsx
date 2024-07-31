@@ -10,9 +10,9 @@ import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { Tooltip } from "@/components/core/Tooltip";
+import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
-import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 
@@ -26,10 +26,6 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
 export const Account = () => {
   const { logout } = usePrivy();
   const { cancelBurner, usingBurner } = useBurnerAccount();
-  const {
-    utils: { weiToUsd },
-  } = useCore();
-  const { price, loading } = useEthPrice();
 
   const {
     playerAccount: { address, entity },
@@ -54,9 +50,7 @@ export const Account = () => {
             </Button>
           </p>
           <div className="flex flex-col justify-center rounded border border-gray-600 p-2 text-center text-white">
-            {loading && <p>Loading...</p>}
-            {!loading && price && <p>{weiToUsd(balance, price)}</p>}
-            <p className="text-xs">{formatEther(balance)}ETH</p>
+            <Price wei={balance} />
           </div>
 
           <div className="flex flex-col gap-1">
@@ -71,11 +65,7 @@ export const Account = () => {
 };
 
 const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
-  const {
-    tables,
-    utils: { weiToUsd },
-  } = useCore();
-  const { price: ethPrice } = useEthPrice();
+  const { tables } = useCore();
 
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
@@ -83,7 +73,6 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
   const pct = Number(pctTimes10000) / 100;
 
   const { price: pointCostWei, message } = usePointPrice(empire, Number(formatEther(playerPoints)));
-  const pointCostUsd = weiToUsd(pointCostWei, ethPrice ?? 0);
 
   return (
     <Badge
@@ -93,13 +82,13 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
     >
       <div className={cn("mx-1 h-4 w-4 rounded-full", EmpireEnumToColor[empire])} />
       <div className="pointer-events-auto flex flex-col">
-        <p className="flex items-end justify-start">
+        <p className="flex items-end justify-start gap-1">
           {formatEther(playerPoints)}
           {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
         </p>
         <Tooltip tooltipContent={message} className="w-44 text-xs">
           <p className="-mt-1 flex items-center justify-start gap-2 text-[11px]">
-            {pointCostUsd}
+            <Price wei={pointCostWei} />
             {message ? <ExclamationCircleIcon className="size-3" /> : ""}
           </p>
         </Tooltip>

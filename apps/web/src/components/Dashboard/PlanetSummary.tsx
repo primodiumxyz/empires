@@ -7,7 +7,6 @@ import {
   RocketLaunchIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/24/solid";
-import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
@@ -18,9 +17,9 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
+import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
 import { useGame } from "@/hooks/useGame";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
@@ -87,11 +86,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
 
 /* --------------------------------- ACTIONS -------------------------------- */
 const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
-  const {
-    tables,
-    utils: { weiToUsd },
-  } = useCore();
-  const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
+  const { tables } = useCore();
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
 
@@ -103,12 +98,6 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
   const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, empireId, 1n);
   const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, empireId, 1n);
 
-  const addShipPriceUsd = weiToUsd(addShipPriceWei, ethPrice ?? 0);
-  const removeShipPriceUsd = weiToUsd(removeShipPriceWei, ethPrice ?? 0);
-  const addShieldPriceUsd = weiToUsd(addShieldPriceWei, ethPrice ?? 0);
-  const removeShieldPriceUsd = weiToUsd(removeShieldPriceWei, ethPrice ?? 0);
-
-  if (loadingEthPrice) return <span>loading...</span>;
   return (
     <>
       <h2 className="mt-2 text-sm font-semibold text-gray-300">Actions</h2>
@@ -119,8 +108,8 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
             <PlusIcon className="size-4" />
           </div>
           <span className="flex items-center">deploy ship</span>
-          <span className="flex items-center">
-            {addShipPriceUsd} ({formatEther(addShipPriceWei)} ETH)
+          <span className="flex items-center gap-1">
+            <Price wei={addShipPriceWei} />
           </span>
           <TransactionQueueMask id={`${entity}-create-ship`}>
             <Button
@@ -138,7 +127,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">withdraw ship</span>
           <span className="flex items-center">
-            {removeShipPriceUsd} ({formatEther(removeShipPriceWei)} ETH)
+            <Price wei={removeShipPriceWei} />
           </span>
           <TransactionQueueMask id={`${entity}-kill-ship`}>
             <Button
@@ -156,7 +145,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">charge shield</span>
           <span className="flex items-center">
-            {addShieldPriceUsd} ({formatEther(addShieldPriceWei)} ETH)
+            <Price wei={addShieldPriceWei} />
           </span>
           <TransactionQueueMask id={`${entity}-add-shield`}>
             <Button
@@ -174,7 +163,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">drain shield</span>
           <span className="flex items-center">
-            {removeShieldPriceUsd} ({formatEther(removeShieldPriceWei)} ETH)
+            <Price wei={removeShieldPriceWei} />
           </span>
           <TransactionQueueMask id={`${entity}-remove-shield`}>
             <Button
