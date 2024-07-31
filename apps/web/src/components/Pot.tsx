@@ -39,7 +39,7 @@ export const Pot: React.FC<PotProps> = ({ showPot = true, showRake = true, class
           {/* Pot */}
           {showPot && (
             <div className="flex flex-col justify-center">
-              <div className="flex flex-row justify-center gap-3">
+              <div className="flex flex-row items-center justify-center gap-3">
                 <p className="text-left text-sm font-bold uppercase">Pot </p>
                 <Price wei={pot} className="text-xs" />
               </div>
