@@ -224,6 +224,8 @@ export class Planet
         scale: 1.3,
       }
     );
+
+    this._scene.audio.play("Execute2", "sfx", { volume: 0.1 });
   }
 
   override destroy() {
