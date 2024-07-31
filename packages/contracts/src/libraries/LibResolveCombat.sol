@@ -55,6 +55,10 @@ library LibResolveCombat {
       else if (attackingShips > totalDefenses) {
         conquer = true;
 
+        if (defendingEmpire == 0) {
+          Planet_TacticalStrike.setChargeRate(planetId, 1);
+        }
+
         Planet.setShieldCount(planetId, 0);
         Planet.setShipCount(planetId, attackingShips - totalDefenses);
 
