@@ -121,7 +121,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
             <PlusIcon className="size-4" />
           </div>
           <span className="flex items-center">deploy ship</span>
-          <span className="flex items-center">
+          <span className="flex items-center gap-1">
             {addShipPriceUsd} {showBlockchainUnits.enabled && <span>({formatEther(addShipPriceWei)} ETH)</span>}
           </span>
           <TransactionQueueMask id={`${entity}-create-ship`}>
