@@ -9,7 +9,8 @@ import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
 import { Tabs } from "@/components/core/Tabs";
-import { OverridePane } from "@/components/OverridePane";
+import { ChargeOverridePane } from "@/components/Planet/ChargeOverridePane";
+import { OverridePane } from "@/components/Planet/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
@@ -86,7 +87,7 @@ export const InteractButton = forwardRef<
         <div className="absolute left-1/2 top-12 -translate-x-1/2 backdrop-blur-2xl">
           <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
             <div className="flex flex-col items-center justify-center gap-1">
-              <Tabs className="flex w-64 flex-col items-center gap-2">
+              <Tabs className="flex w-[350px] flex-col items-center gap-2">
                 <Join>
                   <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
                   <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
@@ -97,7 +98,7 @@ export const InteractButton = forwardRef<
                     inputValue={inputValue}
                     onInputChange={setInputValue}
                     onAttackClick={() => {
-                      boostCharge(planetId, BigInt(inputValue), boostChargePriceWei);
+                      removeShip(planetId, BigInt(inputValue), boostChargePriceWei);
                       setInputValue("1");
                     }}
                     onSupportClick={() => {
@@ -137,25 +138,23 @@ export const InteractButton = forwardRef<
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={2} className="w-full items-center gap-4">
-                  <OverridePane
+                  <ChargeOverridePane
                     inputValue={inputValue}
                     onInputChange={setInputValue}
-                    onAttackClick={() => {
+                    onBoostClick={() => {
                       boostCharge(planetId, BigInt(inputValue), boostChargePriceWei);
                       setInputValue("1");
                     }}
-                    onSupportClick={() => {
+                    onStunClick={() => {
                       stunCharge(planetId, BigInt(inputValue), stunChargePriceWei);
                       setInputValue("1");
                     }}
-                    attackPrice={boostChargePriceUsd}
-                    supportPrice={stunChargePriceUsd}
-                    attackTxQueueId={`${planetId}-boost-charge`}
-                    supportTxQueueId={`${planetId}-stun-charge`}
-                    isSupportDisabled={gameOver || Number(planetEmpire) === 0}
-                    isAttackDisabled={
-                      (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
-                    }
+                    boostPrice={boostChargePriceUsd}
+                    stunPrice={stunChargePriceUsd}
+                    boostTxQueueId={`${planetId}-boost-charge`}
+                    stunTxQueueId={`${planetId}-stun-charge`}
+                    isBoostDisabled={gameOver || Number(planetEmpire) === 0}
+                    isStunDisabled={gameOver || Number(planetEmpire) === 0}
                   />
                 </Tabs.Pane>
               </Tabs>
