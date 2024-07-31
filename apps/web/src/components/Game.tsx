@@ -112,10 +112,10 @@ export const GameHUD = () => {
           <Pot showRake={true} showPot={false} className="absolute left-2 bottom-1 w-56" />
         </HUD.BottomLeft>
 
-        <HUD.BottomMiddle>
+        <HUD.BottomLeft>
           <TimeLeft />
           <AdvanceTurn />
-        </HUD.BottomMiddle>
+        </HUD.BottomLeft>
 
         <HUD.BottomRight className="flex gap-2">
           <UserSettings />
