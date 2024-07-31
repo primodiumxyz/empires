@@ -5,11 +5,10 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
 import { Card } from "@/components/core/Card";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
-import { useEthPrice } from "@/hooks/useEthPrice";
+import { Price } from "@/components/shared/Price";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
-import { EmpireEnumToName } from "@/util/lookups";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "bg-blue-600",
@@ -40,14 +39,9 @@ export const PriceHistory = () => {
 };
 
 const EmpireDetails = ({ empire }: { empire: EEmpire }) => {
-  const {
-    tables,
-    utils: { weiToUsd },
-  } = useCore();
-  const { price: ethPrice } = useEthPrice();
+  const { tables } = useCore();
   const { price: sellPrice } = usePointPrice(empire, 1);
   const { showBlockchainUnits } = useSettings();
-  const sellPriceUsd = weiToUsd(sellPrice, ethPrice ?? 0);
   const points = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
 
   return (
@@ -59,12 +53,9 @@ const EmpireDetails = ({ empire }: { empire: EEmpire }) => {
           </div>
 
           {/* Price, Empire Points*/}
-          <div className="grid w-32 grid-cols-2 gap-x-2">
+          <div className={cn("grid w-32 grid-cols-2 gap-x-2", showBlockchainUnits.enabled && "text-[11px]")}>
             <p>{formatEther(points)}Pts</p>
-            <p className="justify-self-end">{sellPriceUsd}</p>
-            {showBlockchainUnits.enabled && (
-              <p className="col-span-2 justify-self-end text-xs">{formatEther(sellPrice)}ETH</p>
-            )}
+            <Price wei={sellPrice} />
           </div>
         </Badge>
       </div>

@@ -7,20 +7,17 @@ import { Button } from "@/components/core/Button";
 import { Card, SecondaryCard } from "@/components/core/Card";
 import { Dropdown } from "@/components/core/Dropdown";
 import { NumberInput } from "@/components/core/NumberInput";
+import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePointPrice } from "@/hooks/usePointPrice";
-import { useSettings } from "@/hooks/useSettings";
 
 export const SellPoints = () => {
   const {
     playerAccount: { entity },
   } = useAccountClient();
   const calls = useContractCalls();
-  const { tables, utils } = useCore();
-  const { price } = useEthPrice();
-  const { showBlockchainUnits } = useSettings();
+  const { tables } = useCore();
 
   const [amountToSell, setAmountToSell] = useState("0");
   const [empire, setEmpire] = useState<EEmpire>(EEmpire.Green);
@@ -45,8 +42,7 @@ export const SellPoints = () => {
   };
 
   const { price: pointsToWei, message } = usePointPrice(empire, Number(amountToSell));
-  const ethOut = formatEther(pointsToWei);
-  const usdOut = utils.weiToUsd(pointsToWei, price ?? 0);
+
   return (
     <div className="absolute bottom-36 left-2">
       <Card noDecor className="w-56 gap-2">
@@ -72,10 +68,7 @@ export const SellPoints = () => {
               {message ? (
                 <span className="text-[0.6rem] text-white">{message}</span>
               ) : (
-                <>
-                  <span className="text-white">{usdOut}</span>
-                  {showBlockchainUnits.enabled && <span>{ethOut}ETH</span>}
-                </>
+                <Price wei={pointsToWei} className="text-white" />
               )}
             </div>
             <TransactionQueueMask id="sell-points">

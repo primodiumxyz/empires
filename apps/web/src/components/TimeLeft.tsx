@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatTime } from "@primodiumxyz/core";
@@ -7,8 +6,8 @@ import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { Tooltip } from "@/components/core/Tooltip";
+import { Price } from "@/components/shared/Price";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePot } from "@/hooks/usePot";
 import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
@@ -21,7 +20,7 @@ export const TimeLeft = () => {
   }, [timeLeftMs]);
 
   return (
-    <div className="flex w-72 flex-col justify-center gap-1 rounded text-center p-4">
+    <div className="flex w-72 flex-col justify-center gap-1 rounded p-4 text-center">
       {gameOver && <GameOver />}
       {!gameOver && (
         <Card className="py-2 text-sm" noDecor>
@@ -86,19 +85,16 @@ const ClaimVictoryButtons = () => {
 
 const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
   const calls = useContractCalls();
-  const { tables, utils } = useCore();
+  const { tables } = useCore();
   const {
     playerAccount: { entity },
   } = useAccountClient();
   const { pot } = usePot();
-  const { price } = useEthPrice();
-  const { showBlockchainUnits } = useSettings();
 
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const playerEmpirePoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
   const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
-  const playerPotUSD = price ? utils.weiToUsd(playerPot, price) : "loading...";
 
   const empireName = empire == EEmpire.Blue ? "Blue" : empire == EEmpire.Green ? "Green" : "Red";
 
@@ -110,8 +106,7 @@ const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
       {playerPot > 0n && (
         <div className="flex flex-col gap-1">
           <p>
-            You earned {playerPotUSD}
-            {showBlockchainUnits.enabled && <span> ({formatEther(playerPot)} ETH)</span>}!
+            You earned <Price wei={playerPot} />!
           </p>
           <Button variant="primary" size="sm" onClick={calls.withdrawEarnings}>
             Withdraw

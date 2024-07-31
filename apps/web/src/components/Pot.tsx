@@ -5,6 +5,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Card, SecondaryCard } from "@/components/core/Card";
+import { Price } from "@/components/shared/Price";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { usePot } from "@/hooks/usePot";
@@ -28,7 +29,6 @@ export const Pot: React.FC<PotProps> = ({ showPot = true, showRake = true, class
   const { utils } = useCore();
   const { price, loading } = useEthPrice();
   const calls = useContractCalls();
-  const { showBlockchainUnits } = useSettings();
 
   const { pot, rake } = usePot();
 
@@ -41,10 +41,8 @@ export const Pot: React.FC<PotProps> = ({ showPot = true, showRake = true, class
             <div className="flex flex-col justify-center">
               <div className="flex flex-row justify-center gap-3">
                 <p className="text-left text-sm font-bold uppercase">Pot </p>
-                {loading && <p>Loading...</p>}
-                {!loading && price && <p>{utils.weiToUsd(pot, price)} </p>}
+                <Price wei={pot} className="text-xs" />
               </div>
-              {showBlockchainUnits.enabled && <p className="text-xs">{formatEther(pot)} ETH</p>}
             </div>
           )}
           {/* Rake */}
@@ -53,9 +51,7 @@ export const Pot: React.FC<PotProps> = ({ showPot = true, showRake = true, class
               <p className="text-left text-xs font-bold uppercase">Rake</p>
               <SecondaryCard>
                 <div className="flex flex-col justify-center gap-1 text-center">
-                  {loading && <p>Loading...</p>}
-                  {!loading && price && <p>{utils.weiToUsd(rake, price)}</p>}
-                  {showBlockchainUnits.enabled && <p className="text-xs">{formatEther(rake)}ETH</p>}
+                  <Price wei={rake} className="text-xs" />
                   <Button variant="info" size="xs" onClick={calls.withdrawRake}>
                     Withdraw
                   </Button>
