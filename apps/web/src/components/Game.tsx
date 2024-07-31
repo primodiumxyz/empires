@@ -9,6 +9,7 @@ import { BackgroundNebula } from "@/components/BackgroundNebula";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { Button } from "@/components/core/Button";
 import { HUD } from "@/components/core/HUD";
+import { NumberInput } from "@/components/core/NumberInput";
 import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { PlanetGrid } from "@/components/PlanetGrid";
@@ -27,6 +28,7 @@ const Game = memo(() => {
   const [loading, setLoading] = useState<boolean>(true);
   const gameRef = useRef<PrimodiumGame | null>(null);
   const hasInitialized = useRef(false);
+  const [count, setCount] = useState("1");
 
   useEffect(() => {
     const init = async () => {
@@ -78,8 +80,37 @@ const Game = memo(() => {
         {!!gameRef.current && !loading && (
           <GameProvider game={gameRef.current}>
             <BackgroundNebula />
-            <div className="pointer-events-none relative z-20">
+            <div className="pointer-events-auto relative z-20">
               <GameHUD />
+              <NumberInput count={count} onChange={(val) => setCount(val)} />
+              <Button
+                onClick={() => {
+                  gameRef.current?.MAIN.fx.emitVfx({ x: 0, y: -25 }, "DestroyerArcUpperBlue", {
+                    originX: 0,
+                    originY: 1,
+                    depth: 1000000,
+                    offset: {
+                      x: -12,
+                      y: 15,
+                    },
+                    scale: 1.3,
+                    rotation: Phaser.Math.DegToRad(Number(count)),
+                  });
+                  gameRef.current?.MAIN.fx.emitVfx({ x: 0, y: -25 }, "DestroyerArcLowerBlue", {
+                    originX: 0,
+                    originY: 1,
+                    depth: 1000000,
+                    offset: {
+                      x: -12,
+                      y: 10,
+                    },
+                    scale: 1.3,
+                    rotation: Phaser.Math.DegToRad(Number(count)),
+                  });
+                }}
+              >
+                test
+              </Button>
             </div>
           </GameProvider>
         )}

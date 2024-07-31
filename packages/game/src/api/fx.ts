@@ -206,6 +206,10 @@ export const createFxApi = (scene: Scene) => {
       scale?: number;
       depth?: number;
       blendMode?: Phaser.BlendModes;
+      rotation?: number;
+      originX?: number;
+      originY?: number;
+      offset?: Coord;
       onComplete?: () => void;
     }
   ) {
@@ -215,12 +219,27 @@ export const createFxApi = (scene: Scene) => {
       onComplete,
       onFrameChange,
       blendMode = Phaser.BlendModes.NORMAL,
+      rotation,
+      originX = 0.5,
+      originY = 0.5,
+      offset,
     } = options || {};
 
-    const sprite = scene.phaserScene.add.sprite(coord.x, coord.y, "vfx-atlas");
-    sprite.setScale(scale);
-    sprite.setDepth(depth);
+    const sprite = scene.phaserScene.add.sprite(
+      offset ? offset.x : coord.x,
+      offset ? offset.y : coord.y,
+      "vfx-atlas"
+    );
+
+    const vfx = offset
+      ? scene.phaserScene.add.container(coord.x, coord.y, [sprite])
+      : sprite;
+
+    vfx.setScale(scale);
+    vfx.setDepth(depth);
+    vfx.setRotation(rotation);
     sprite.setBlendMode(blendMode);
+    sprite.setOrigin(originX, originY);
 
     sprite.on(
       "animationupdate",
@@ -235,7 +254,7 @@ export const createFxApi = (scene: Scene) => {
     );
 
     sprite.on("animationcomplete", () => {
-      sprite.destroy();
+      vfx.destroy();
       if (onComplete) {
         onComplete();
       }
@@ -250,8 +269,6 @@ export const createFxApi = (scene: Scene) => {
     wait = 100,
     repeat = 3
   ) {
-    //flash outline on sprite twice
-
     let at = 0;
     scene.phaserScene.add
       .timeline(

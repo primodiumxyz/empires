@@ -79,4 +79,22 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
     },
     { runOnInit: false }
   );
+
+  tables.MoveNPCAction.watch(
+    {
+      world: systemsWorld,
+      onEnter: ({ properties: { current } }) => {
+        if (!current) return;
+
+        const planet = scene.objects.planet.get(
+          current.originPlanetId as Entity
+        );
+
+        if (!planet) return;
+
+        planet.moveDestroyers(current.destinationPlanetId as Entity);
+      },
+    },
+    { runOnInit: false }
+  );
 };

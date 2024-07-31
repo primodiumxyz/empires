@@ -35,3 +35,13 @@ export const EmpireToPendingAnimationKeys: Record<
   [EEmpire.Blue]: "PendingBlue",
   [EEmpire.LENGTH]: undefined,
 };
+
+export const EmpireToDestroyerArcAnimationKeys: Record<
+  EEmpire,
+  [lower: AnimationKeys | undefined, upper: AnimationKeys | undefined]
+> = {
+  [EEmpire.Red]: ["DestroyerArcLowerRed", "DestroyerArcUpperRed"],
+  [EEmpire.Green]: ["DestroyerArcLowerGreen", "DestroyerArcUpperGreen"],
+  [EEmpire.Blue]: ["DestroyerArcLowerBlue", "DestroyerArcUpperBlue"],
+  [EEmpire.LENGTH]: [undefined, undefined],
+};

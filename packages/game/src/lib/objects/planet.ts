@@ -6,6 +6,7 @@ import { IPrimodiumGameObject } from "./interfaces";
 import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
 import {
   EmpireToConquerAnimationKeys,
+  EmpireToDestroyerArcAnimationKeys,
   EmpireToHexSpriteKeys,
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
@@ -15,6 +16,7 @@ import {
   getRandomRange,
 } from "@primodiumxyz/core";
 import { DepthLayers } from "@game/lib/constants/common";
+import { EEmpire } from "@primodiumxyz/contracts";
 
 export class Planet
   extends Phaser.GameObjects.Zone
@@ -28,13 +30,14 @@ export class Planet
   private hexSprite: Phaser.GameObjects.Sprite;
   private hexHoloSprite: Phaser.GameObjects.Sprite;
   private pendingArrow: Phaser.GameObjects.Container;
+  private empireId: EEmpire;
   private spawned = false;
 
   constructor(args: {
     id: Entity;
     scene: PrimodiumScene;
     coord: PixelCoord;
-    empire: keyof typeof EmpireToPlanetSpriteKeys;
+    empire: EEmpire;
   }) {
     const { id, scene, coord, empire } = args;
 
@@ -97,6 +100,7 @@ export class Planet
     this._scene = scene;
     this.id = id;
     this.coord = coord;
+    this.empireId = empire;
 
     this.setDepth(DepthLayers.Planet + coord.y - coord.x);
 
@@ -120,11 +124,11 @@ export class Planet
     return this.spawned;
   }
 
-  updateFaction(faction: keyof typeof EmpireToPlanetSpriteKeys) {
+  updateFaction(empire: EEmpire) {
     this._scene.audio.play("Blaster", "sfx");
     this._scene.fx.emitVfx(
-      { x: this.x, y: this.y - 29 },
-      EmpireToConquerAnimationKeys[faction] ?? "ConquerBlue",
+      { x: this.coord.x, y: this.coord.y - 29 },
+      EmpireToConquerAnimationKeys[empire] ?? "ConquerBlue",
       {
         depth: DepthLayers.Marker,
         blendMode: Phaser.BlendModes.ADD,
@@ -132,7 +136,7 @@ export class Planet
           if (frameNumber === 6) {
             this.planetSprite.setTexture(
               Assets.SpriteAtlas,
-              Sprites[EmpireToPlanetSpriteKeys[faction] ?? "PlanetGrey"]
+              Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]
             );
           }
         },
@@ -143,14 +147,13 @@ export class Planet
 
     this.hexSprite.setTexture(
       Assets.SpriteAtlas,
-      Sprites[EmpireToHexSpriteKeys[faction] ?? "HexGrey"]
+      Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]
     );
+
+    this.empireId = empire;
   }
 
-  setPendingMove(
-    empireId: keyof typeof EmpireToPendingAnimationKeys,
-    destinationPlanetId: Entity
-  ) {
+  setPendingMove(destinationPlanetId: Entity) {
     const destinationPlanet =
       this._scene.objects.planet.get(destinationPlanetId);
 
@@ -165,12 +168,60 @@ export class Planet
 
     this.pendingArrow.setVisible(true).setActive(true);
     (this.pendingArrow.getAt(0) as Phaser.GameObjects.Sprite).play(
-      Animations[EmpireToPendingAnimationKeys[empireId] ?? "PendingBlue"]
+      Animations[EmpireToPendingAnimationKeys[this.empireId] ?? "PendingBlue"]
     );
   }
 
   removePendingMove() {
     this.pendingArrow.setVisible(false).setActive(false);
+  }
+
+  moveDestroyers(destinationPlanetId: Entity) {
+    const destinationPlanet =
+      this._scene.objects.planet.get(destinationPlanetId);
+
+    if (!destinationPlanet) return;
+
+    const angle = calculateAngleBetweenPoints(
+      this.coord,
+      destinationPlanet.coord
+    );
+
+    //lower
+    this._scene.fx.emitVfx(
+      { x: this.coord.x, y: this.coord.y - 25 },
+      EmpireToDestroyerArcAnimationKeys[this.empireId][0] ??
+        "DestroyerArcLowerRed",
+      {
+        rotation: angle.radian,
+        blendMode: Phaser.BlendModes.ADD,
+        depth: DepthLayers.Planet + 1,
+        originX: 0,
+        originY: 1,
+        offset: {
+          x: -12,
+          y: 10,
+        },
+        scale: 1.3,
+      }
+    );
+    //upper
+    this._scene.fx.emitVfx(
+      { x: this.coord.x, y: this.coord.y - 25 },
+      EmpireToDestroyerArcAnimationKeys[this.empireId][1] ??
+        "DestroyerArcUpperRed",
+      {
+        rotation: angle.radian,
+        depth: DepthLayers.Planet + 2,
+        originX: 0,
+        originY: 1,
+        offset: {
+          x: -12,
+          y: 15,
+        },
+        scale: 1.3,
+      }
+    );
   }
 
   override destroy() {

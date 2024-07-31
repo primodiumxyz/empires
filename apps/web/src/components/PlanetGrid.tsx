@@ -31,7 +31,6 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
       const { originPlanetId, destinationPlanetId, shipCount } = current;
 
       setArrivingShips((prevData) => [...prevData, { id: entity, originPlanetId, destinationPlanetId, shipCount }]);
-
       setTimeout(() => {
         setArrivingShips((prevData) => prevData.filter((item) => item.id !== entity));
       }, 5000);
@@ -44,7 +43,7 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
 
   return (
     <div className="relative">
-      {arrivingShips.map((item) => {
+      {/* {arrivingShips.map((item) => {
         return (
           <Arrow
             key={item.id}
@@ -55,7 +54,7 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
             margin={margin}
           />
         );
-      })}
+      })} */}
       {entities.map((entity) => {
         return <Planet key={entity} entity={entity} tileSize={tileSize} margin={margin} />;
       })}

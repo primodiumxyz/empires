@@ -6,10 +6,20 @@ export const Animations = {
   PendingGreen: "pending/green",
   PendingRed: "pending/red",
 
-  //VFX
+  //VFX --------------------------
+
+  //CONQUER
   ConquerBlue: "conquer/blue",
   ConquerGreen: "conquer/green",
   ConquerRed: "conquer/red",
+
+  //DESTROYER ARC
+  DestroyerArcUpperRed: "destroyer/upper/red",
+  DestroyerArcUpperGreen: "destroyer/upper/green",
+  DestroyerArcUpperBlue: "destroyer/upper/blue",
+  DestroyerArcLowerRed: "destroyer/lower/red",
+  DestroyerArcLowerBlue: "destroyer/lower/blue",
+  DestroyerArcLowerGreen: "destroyer/lower/green",
 };
 
 export type AnimationKeys = keyof typeof Animations;

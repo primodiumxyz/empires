@@ -19,10 +19,7 @@ export const renderPendingMoves = (scene: PrimodiumScene, core: Core) => {
 
       if (!planet) return;
 
-      planet.setPendingMove(
-        current.empireId,
-        current.destinationPlanetId as Entity
-      );
+      planet.setPendingMove(current.destinationPlanetId as Entity);
     },
     onUpdate: ({ entity, properties: { current } }) => {
       if (!current) return;
@@ -31,10 +28,7 @@ export const renderPendingMoves = (scene: PrimodiumScene, core: Core) => {
 
       if (!planet) return;
 
-      planet.setPendingMove(
-        current.empireId,
-        current.destinationPlanetId as Entity
-      );
+      planet.setPendingMove(current.destinationPlanetId as Entity);
     },
     onExit: ({ entity }) => {
       const planet = scene.objects.planet.get(entity);

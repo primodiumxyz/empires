@@ -71,7 +71,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   return (
     <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
-      <div className="relative mt-10 flex flex-col items-center drop-shadow-2xl">
+      <div className="relative mt-10 flex select-none flex-col items-center opacity-75 drop-shadow-2xl transition-all hover:opacity-100">
         <div className="group relative flex flex-col items-center">
           <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-slate-800/90 to-slate-900/75 px-1 text-center">
             <p className="font-mono text-[10px] opacity-70">

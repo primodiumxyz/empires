@@ -1,4 +1,6 @@
-export const AnimationConfig = [
+import { Animation } from "@primodiumxyz/engine";
+
+export const AnimationConfig: Animation[] = [
   {
     key: "hex/holo",
     assetKey: "sprite-atlas",
@@ -68,6 +70,62 @@ export const AnimationConfig = [
     startFrame: 0,
     endFrame: 14,
     prefix: "vfx/conquer/red/Conquer_Red_",
+    suffix: ".png",
+  },
+  {
+    key: "destroyer/upper/red",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 19,
+    prefix: "vfx/destroyer/red/upper/Arc_Upper_Red_",
+    suffix: ".png",
+  },
+  {
+    key: "destroyer/upper/green",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 19,
+    prefix: "vfx/destroyer/green/upper/Arc_Upper_Green_",
+    suffix: ".png",
+  },
+  {
+    key: "destroyer/upper/blue",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    zeroPad: 3,
+    endFrame: 19,
+    prefix: "vfx/destroyer/blue/upper/Arc_Upper_Blue_",
+    suffix: ".png",
+  },
+  {
+    key: "destroyer/lower/red",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    zeroPad: 3,
+    endFrame: 19,
+    prefix: "vfx/destroyer/red/lower/Arc_Lower_Red_",
+    suffix: ".png",
+  },
+  {
+    key: "destroyer/lower/green",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 19,
+    prefix: "vfx/destroyer/green/lower/Arc_Lower_Green_",
+    suffix: ".png",
+  },
+  {
+    key: "destroyer/lower/blue",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 19,
+    prefix: "vfx/destroyer/blue/lower/Arc_Lower_Blue_",
     suffix: ".png",
   },
 ];
