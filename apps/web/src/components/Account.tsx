@@ -78,6 +78,7 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
     utils: { weiToUsd },
   } = useCore();
   const { price: ethPrice } = useEthPrice();
+  const { showBlockchainUnits } = useSettings();
 
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
@@ -95,7 +96,7 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
     >
       <div className={cn("mx-1 h-4 w-4 rounded-full", EmpireEnumToColor[empire])} />
       <div className="pointer-events-auto flex flex-col">
-        <p className="flex items-end justify-start">
+        <p className="flex items-end justify-start gap-1">
           {formatEther(playerPoints)}
           {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
         </p>
@@ -105,6 +106,11 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
             {message ? <ExclamationCircleIcon className="size-3" /> : ""}
           </p>
         </Tooltip>
+        {showBlockchainUnits.enabled && (
+          <span className="flex items-center justify-start text-[11px] leading-none">
+            {formatEther(pointCostWei)}ETH
+          </span>
+        )}
       </div>
     </Badge>
   );
