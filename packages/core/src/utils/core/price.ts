@@ -10,18 +10,18 @@ export function createPriceUtils(tables: Tables) {
     _actionType: EOverride,
     _empireImpacted: EEmpire,
     _actionCount: bigint,
-    _overrideCost?: bigint,
+    nextTurn = false,
   ): bigint {
     const progressAction = [EOverride.CreateShip, EOverride.ChargeShield].includes(_actionType);
     let totalCost = 0n;
 
     if (progressAction) {
-      totalCost = getProgressPointCost(_empireImpacted, _actionCount);
+      totalCost = getProgressPointCost(_empireImpacted, _actionCount, nextTurn);
     } else {
-      totalCost = getRegressPointCost(_empireImpacted, _actionCount);
+      totalCost = getRegressPointCost(_empireImpacted, _actionCount, nextTurn);
     }
 
-    totalCost += getMarginalActionCost(_actionType, _empireImpacted, progressAction, _actionCount, _overrideCost);
+    totalCost += getMarginalActionCost(_actionType, _empireImpacted, progressAction, _actionCount, nextTurn);
 
     return totalCost;
   }
@@ -31,10 +31,11 @@ export function createPriceUtils(tables: Tables) {
    * @param _empireImpacted The empire impacted by the action.
    * @return pointCost The cost of all points related to the action.
    */
-  function getProgressPointCost(_empireImpacted: EEmpire, _actionCount: bigint): bigint {
+  function getProgressPointCost(_empireImpacted: EEmpire, _actionCount: bigint, nextTurn = false): bigint {
     return getPointCost(
       _empireImpacted,
       _actionCount * BigInt(OTHER_EMPIRE_COUNT) * (tables.P_PointConfig.get()?.pointUnit ?? 1n),
+      nextTurn,
     );
   }
 
@@ -43,13 +44,13 @@ export function createPriceUtils(tables: Tables) {
    * @param _empireImpacted The empire impacted by the action.
    * @return pointCost The cost of all points related to the action.
    */
-  function getRegressPointCost(_empireImpacted: EEmpire, _actionCount: bigint): bigint {
+  function getRegressPointCost(_empireImpacted: EEmpire, _actionCount: bigint, nextTurn = false): bigint {
     let pointCost = 0n;
     for (let i = 1; i < EEmpire.LENGTH; i++) {
       if (i == _empireImpacted) {
         continue;
       }
-      pointCost += getPointCost(i, _actionCount * (tables.P_PointConfig.get()?.pointUnit ?? 1n));
+      pointCost += getPointCost(i, _actionCount * (tables.P_PointConfig.get()?.pointUnit ?? 1n), nextTurn);
     }
 
     return pointCost;
@@ -61,7 +62,9 @@ export function createPriceUtils(tables: Tables) {
    * @param _points The number of points.
    * @return pointCost The cost of the points from the specific empire.
    */
-  function getPointCost(_empire: EEmpire, _points: bigint): bigint {
+  function getPointCost(_empire: EEmpire, _points: bigint, nextTurn = false): bigint {
+    if (nextTurn) return getNextTurnPointCost(_empire, _points);
+
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
 
     const initPointCost = tables.Empire.getWithKeys({ id: _empire })?.pointCost ?? 0n;
@@ -70,6 +73,28 @@ export function createPriceUtils(tables: Tables) {
 
     const triangleSumOBO = ((wholePoints - 1n) * wholePoints) / 2n;
     const pointCost = initPointCost * wholePoints + pointCostIncrease * triangleSumOBO;
+    return pointCost;
+  }
+
+  function getNextTurnPointCost(_empire: EEmpire, _points: bigint): bigint {
+    const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
+    const config = tables.P_PointConfig.get();
+    const currentPointCost = tables.Empire.getWithKeys({ id: _empire })?.pointCost ?? 0n;
+    const minPointCost = config?.minPointCost ?? 0n;
+    const pointGenRate = config?.pointGenRate ?? 0n;
+
+    let nextTurnPointCost = currentPointCost;
+    if (nextTurnPointCost >= minPointCost + pointGenRate) {
+      nextTurnPointCost -= pointGenRate;
+    } else {
+      nextTurnPointCost = minPointCost;
+    }
+
+    const pointCostIncrease = config?.pointCostIncrease ?? 0n;
+    const wholePoints = _points / pointUnit;
+
+    const triangleSumOBO = ((wholePoints - 1n) * wholePoints) / 2n;
+    const pointCost = nextTurnPointCost * wholePoints + pointCostIncrease * triangleSumOBO;
     return pointCost;
   }
 
@@ -86,16 +111,41 @@ export function createPriceUtils(tables: Tables) {
     _empireImpacted: EEmpire,
     _progressAction: boolean,
     _actionCount: bigint,
-    _overrideCost?: bigint,
+    nextTurn = false,
   ): bigint {
+    if (nextTurn) return getNextTurnMarginalActionCost(_actionType, _empireImpacted, _actionCount);
+
     const initActionCost =
-      _overrideCost ??
-      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ??
-      0n;
+      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ?? 0n;
     const actionCostIncrease = tables.P_OverrideConfig.get()?.overrideCostIncrease ?? 0n;
 
     const triangleSumOBO = ((_actionCount - 1n) * _actionCount) / 2n;
     const actionCost = initActionCost * _actionCount + triangleSumOBO * actionCostIncrease;
+
+    return actionCost;
+  }
+
+  function getNextTurnMarginalActionCost(
+    _actionType: EOverride,
+    _empireImpacted: EEmpire,
+    _actionCount: bigint,
+  ): bigint {
+    const config = tables.P_OverrideConfig.get();
+    let currentOverrideCost =
+      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ?? 0n;
+    const minOverrideCost = config?.minOverrideCost ?? 0n;
+    const overrideGenRate = config?.overrideGenRate ?? 0n;
+
+    if (currentOverrideCost > minOverrideCost + overrideGenRate) {
+      currentOverrideCost -= overrideGenRate;
+    } else {
+      currentOverrideCost = minOverrideCost;
+    }
+
+    const overrideCostIncrease = config?.overrideCostIncrease ?? 0n;
+
+    const triangleSumOBO = ((_actionCount - 1n) * _actionCount) / 2n;
+    const actionCost = currentOverrideCost * _actionCount + overrideCostIncrease * triangleSumOBO;
 
     return actionCost;
   }
@@ -124,6 +174,8 @@ export function createPriceUtils(tables: Tables) {
     getProgressPointCost,
     getRegressPointCost,
     getPointCost,
+    getNextTurnPointCost,
+    getNextTurnMarginalActionCost,
     weiToUsd,
     usdToWei,
   };

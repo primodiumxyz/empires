@@ -16,7 +16,7 @@ import { Tabs } from "@/components/core/Tabs";
 import { Tooltip } from "@/components/core/Tooltip";
 import { OverridePane } from "@/components/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useNextDecreaseOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
+import { useNextTurnOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { cn } from "@/util/client";
 
@@ -156,10 +156,10 @@ const InteractButton = forwardRef<
   const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
   const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
-  const nextCreateShipPriceWei = useNextDecreaseOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
-  const nextKillShipPriceWei = useNextDecreaseOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
-  const nextAddShieldPriceWei = useNextDecreaseOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
-  const nextRemoveShieldPriceWei = useNextDecreaseOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
+  const nextCreateShipPriceWei = useNextTurnOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const nextKillShipPriceWei = useNextTurnOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
+  const nextAddShieldPriceWei = useNextTurnOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const nextRemoveShieldPriceWei = useNextTurnOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
   const handleInteractClick = () => {
     onClick();
