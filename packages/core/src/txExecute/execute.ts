@@ -48,7 +48,6 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
 
   let receipt: TxReceipt | undefined = undefined;
   if (txQueueOptions) {
-    // TransactionQueue already handles timeout if the receipt can't be found in TX_TIMEOUT time
     receipt = await core.tables.TransactionQueue.enqueue(run, txQueueOptions);
   } else {
     receipt = await run();
