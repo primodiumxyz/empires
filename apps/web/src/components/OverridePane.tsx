@@ -4,6 +4,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Divider } from "@/components/core/Divider";
 import { NumberInput } from "@/components/core/NumberInput";
+import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 
 interface OverridePaneProps {
@@ -11,10 +12,10 @@ interface OverridePaneProps {
   onInputChange: (value: string) => void;
   onAttackClick: () => void;
   onSupportClick: () => void;
-  attackPrice: string;
-  supportPrice: string;
-  nextAttackPrice: string;
-  nextSupportPrice: string;
+  attackPrice: bigint;
+  supportPrice: bigint;
+  nextAttackPrice: bigint;
+  nextSupportPrice: bigint;
   isAttackDisabled?: boolean;
   supportTxQueueId: string;
   attackTxQueueId: string;
@@ -48,7 +49,9 @@ export const OverridePane: React.FC<OverridePaneProps> = ({
               - ATTACK
             </Button>
           </TransactionQueueMask>
-          <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">{attackPrice}</p>
+          <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
+            <Price wei={attackPrice} />
+          </p>
         </div>
 
         <div className="flex flex-col items-center gap-1">
@@ -58,7 +61,7 @@ export const OverridePane: React.FC<OverridePaneProps> = ({
             </Button>
           </TransactionQueueMask>
           <p className="rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
-            {supportPrice}
+            <Price wei={supportPrice} />
           </p>
         </div>
       </div>
@@ -70,12 +73,12 @@ export const OverridePane: React.FC<OverridePaneProps> = ({
             <div className="grid grid-cols-2 gap-2">
               <div className="flex justify-center">
                 <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
-                  {nextAttackPrice}
+                  <Price wei={nextAttackPrice} />
                 </p>
               </div>
               <div className="flex justify-center">
                 <p className="rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
-                  {nextSupportPrice}
+                  <Price wei={nextSupportPrice} />
                 </p>
               </div>
             </div>

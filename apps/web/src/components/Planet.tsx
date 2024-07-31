@@ -16,7 +16,6 @@ import { Tabs } from "@/components/core/Tabs";
 import { Tooltip } from "@/components/core/Tooltip";
 import { OverridePane } from "@/components/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
 import { useNextDecreaseOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { cn } from "@/util/client";
@@ -145,8 +144,7 @@ const InteractButton = forwardRef<
 >(({ onClick, isInteractPaneVisible, planetId, planetEmpire, className }, ref) => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
-  const { utils, tables } = useCore();
-  const { price } = useEthPrice();
+  const { tables } = useCore();
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
   const planet = tables.Planet.use(planetId);
@@ -162,16 +160,6 @@ const InteractButton = forwardRef<
   const nextKillShipPriceWei = useNextDecreaseOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
   const nextAddShieldPriceWei = useNextDecreaseOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
   const nextRemoveShieldPriceWei = useNextDecreaseOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
-
-  const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
-  const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
-  const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
-  const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
-
-  const nextCreateShipPriceUsd = utils.weiToUsd(nextCreateShipPriceWei, price ?? 0);
-  const nextKillShipPriceUsd = utils.weiToUsd(nextKillShipPriceWei, price ?? 0);
-  const nextAddShieldPriceUsd = utils.weiToUsd(nextAddShieldPriceWei, price ?? 0);
-  const nextRemoveShieldPriceUsd = utils.weiToUsd(nextRemoveShieldPriceWei, price ?? 0);
 
   const handleInteractClick = () => {
     onClick();
@@ -231,10 +219,10 @@ const InteractButton = forwardRef<
                       createShip(planetId, BigInt(inputValue), createShipPriceWei);
                       setInputValue("1");
                     }}
-                    attackPrice={killShipPriceUsd}
-                    supportPrice={createShipPriceUsd}
-                    nextAttackPrice={nextKillShipPriceUsd}
-                    nextSupportPrice={nextCreateShipPriceUsd}
+                    attackPrice={killShipPriceWei}
+                    supportPrice={createShipPriceWei}
+                    nextAttackPrice={nextKillShipPriceWei}
+                    nextSupportPrice={nextCreateShipPriceWei}
                     attackTxQueueId={`${planetId}-kill-ship`}
                     supportTxQueueId={`${planetId}-create-ship`}
                     isSupportDisabled={gameOver || Number(planetEmpire) === 0}
@@ -255,10 +243,10 @@ const InteractButton = forwardRef<
                       addShield(planetId, BigInt(inputValue), addShieldPriceWei);
                       setInputValue("1");
                     }}
-                    attackPrice={removeShieldPriceUsd}
-                    supportPrice={addShieldPriceUsd}
-                    nextAttackPrice={nextRemoveShieldPriceUsd}
-                    nextSupportPrice={nextAddShieldPriceUsd}
+                    attackPrice={removeShieldPriceWei}
+                    supportPrice={addShieldPriceWei}
+                    nextAttackPrice={nextRemoveShieldPriceWei}
+                    nextSupportPrice={nextAddShieldPriceWei}
                     attackTxQueueId={`${planetId}-remove-shield`}
                     supportTxQueueId={`${planetId}-add-shield`}
                     isSupportDisabled={gameOver || Number(planetEmpire) === 0}
@@ -274,7 +262,7 @@ const InteractButton = forwardRef<
                 size="xs"
                 className="self-end"
               >
-                {expanded ? "- collapse" : "+ expand"}
+                {expanded ? "-collapse" : "+expand"}
               </Button>
             </div>
           </Card>
