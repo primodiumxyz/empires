@@ -19,6 +19,7 @@ export const initMainScene = async (
 
   scene.camera.phaserCamera.centerOn(0, -50);
   scene.camera.phaserCamera.fadeIn();
+  scene.camera.phaserCamera.postFX?.addVignette(0.5, 0.5, 0.8);
 
   //setup background here since using transparent phaser background breaks blend modes and some shaders. Idk y and can't find anything in regards to this
   scene.phaserScene.add
@@ -30,7 +31,8 @@ export const initMainScene = async (
       Assets.SpriteAtlas,
       Sprites.StarBg
     )
-    .setDepth(-10_000_000);
+    .setDepth(-10_000_000)
+    .postFX.addShine();
   scene.phaserScene.add
     .image(0, 0, Assets.SpriteAtlas, Sprites.Nebula)
     .setScale(1.75)
