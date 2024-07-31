@@ -1,4 +1,4 @@
-import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid";
+import { ArrowLeftEndOnRectangleIcon, ExclamationCircleIcon } from "@heroicons/react/24/solid";
 import { usePrivy } from "@privy-io/react-auth";
 import { formatEther } from "viem";
 
@@ -9,11 +9,12 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
+import { Tooltip } from "@/components/core/Tooltip";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useEthPrice } from "@/hooks/useEthPrice";
-import { cn } from "@/util/client";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { cn } from "@/util/client";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "bg-blue-600",
@@ -63,7 +64,6 @@ export const Account = () => {
             <EmpirePoints empire={EEmpire.Green} playerId={entity} />
             <EmpirePoints empire={EEmpire.Blue} playerId={entity} />
           </div>
-
         </div>
       </Card>
     </div>
@@ -71,7 +71,10 @@ export const Account = () => {
 };
 
 const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
-  const { tables, utils: { weiToUsd } } = useCore();
+  const {
+    tables,
+    utils: { weiToUsd },
+  } = useCore();
   const { price: ethPrice } = useEthPrice();
 
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
@@ -79,25 +82,28 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
 
-  const { price: pointCostWei } = usePointPrice(empire, Number(formatEther(playerPoints)));
+  const { price: pointCostWei, message } = usePointPrice(empire, Number(formatEther(playerPoints)));
   const pointCostUsd = weiToUsd(pointCostWei, ethPrice ?? 0);
-
 
   return (
     <Badge
       variant="glass"
       size="md"
-      className={cn("flex h-full w-full justify-start gap-3 py-1 border-none", EmpireEnumToColor[empire])}
+      className={cn("flex h-full w-full justify-start gap-3 border-none py-1", EmpireEnumToColor[empire])}
     >
       <div className={cn("mx-1 h-4 w-4 rounded-full", EmpireEnumToColor[empire])} />
-      <div className="flex flex-col">
-        <p className="flex justify-start items-end">
+      <div className="pointer-events-auto flex flex-col">
+        <p className="flex items-end justify-start">
           {formatEther(playerPoints)}
           {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
         </p>
-        <p className="flex text-[11px] justify-start -mt-1">{pointCostUsd}</p>
+        <Tooltip tooltipContent={message} className="w-44 text-xs">
+          <p className="-mt-1 flex items-center justify-start gap-2 text-[11px]">
+            {pointCostUsd}
+            {message ? <ExclamationCircleIcon className="size-3" /> : ""}
+          </p>
+        </Tooltip>
       </div>
-
     </Badge>
   );
 };
