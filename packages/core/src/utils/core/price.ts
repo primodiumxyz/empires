@@ -6,7 +6,12 @@ import { Tables } from "@core/lib";
 const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
 
 export function createPriceUtils(tables: Tables) {
-  function getTotalCost(_actionType: EOverride, _empireImpacted: EEmpire, _actionCount: bigint): bigint {
+  function getTotalCost(
+    _actionType: EOverride,
+    _empireImpacted: EEmpire,
+    _actionCount: bigint,
+    _overrideCost?: bigint,
+  ): bigint {
     const progressAction = [EOverride.CreateShip, EOverride.ChargeShield].includes(_actionType);
     let totalCost = 0n;
 
@@ -16,7 +21,7 @@ export function createPriceUtils(tables: Tables) {
       totalCost = getRegressPointCost(_empireImpacted, _actionCount);
     }
 
-    totalCost += getMarginalActionCost(_actionType, _empireImpacted, progressAction, _actionCount);
+    totalCost += getMarginalActionCost(_actionType, _empireImpacted, progressAction, _actionCount, _overrideCost);
 
     return totalCost;
   }
@@ -81,9 +86,12 @@ export function createPriceUtils(tables: Tables) {
     _empireImpacted: EEmpire,
     _progressAction: boolean,
     _actionCount: bigint,
+    _overrideCost?: bigint,
   ): bigint {
     const initActionCost =
-      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ?? 0n;
+      _overrideCost ??
+      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ??
+      0n;
     const actionCostIncrease = tables.P_OverrideConfig.get()?.overrideCostIncrease ?? 0n;
 
     const triangleSumOBO = ((_actionCount - 1n) * _actionCount) / 2n;

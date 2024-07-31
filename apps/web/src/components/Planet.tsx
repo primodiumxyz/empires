@@ -17,7 +17,7 @@ import { Tooltip } from "@/components/core/Tooltip";
 import { OverridePane } from "@/components/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
-import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { useNextDecreaseOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { cn } from "@/util/client";
 
@@ -150,6 +150,7 @@ const InteractButton = forwardRef<
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
   const planet = tables.Planet.use(planetId);
+  const expanded = tables.OverridePaneExpanded.use()?.value ?? false;
   const [inputValue, setInputValue] = useState("1");
 
   const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
@@ -157,10 +158,20 @@ const InteractButton = forwardRef<
   const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
   const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
+  const nextCreateShipPriceWei = useNextDecreaseOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const nextKillShipPriceWei = useNextDecreaseOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
+  const nextAddShieldPriceWei = useNextDecreaseOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const nextRemoveShieldPriceWei = useNextDecreaseOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
+
   const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
   const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
   const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
   const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
+
+  const nextCreateShipPriceUsd = utils.weiToUsd(nextCreateShipPriceWei, price ?? 0);
+  const nextKillShipPriceUsd = utils.weiToUsd(nextKillShipPriceWei, price ?? 0);
+  const nextAddShieldPriceUsd = utils.weiToUsd(nextAddShieldPriceWei, price ?? 0);
+  const nextRemoveShieldPriceUsd = utils.weiToUsd(nextRemoveShieldPriceWei, price ?? 0);
 
   const handleInteractClick = () => {
     onClick();
@@ -197,7 +208,11 @@ const InteractButton = forwardRef<
       </Button>
       {isInteractPaneVisible && (
         <div className="absolute left-1/2 top-12 -translate-x-1/2 backdrop-blur-2xl">
-          <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
+          <Card
+            noDecor
+            ref={InteractPaneRef}
+            className="flex-row items-center justify-center gap-2 bg-slate-900/85 pb-1"
+          >
             <div className="flex flex-col items-center justify-center gap-1">
               <Tabs className="flex w-64 flex-col items-center gap-2">
                 <Join>
@@ -218,6 +233,8 @@ const InteractButton = forwardRef<
                     }}
                     attackPrice={killShipPriceUsd}
                     supportPrice={createShipPriceUsd}
+                    nextAttackPrice={nextKillShipPriceUsd}
+                    nextSupportPrice={nextCreateShipPriceUsd}
                     attackTxQueueId={`${planetId}-kill-ship`}
                     supportTxQueueId={`${planetId}-create-ship`}
                     isSupportDisabled={gameOver || Number(planetEmpire) === 0}
@@ -240,6 +257,8 @@ const InteractButton = forwardRef<
                     }}
                     attackPrice={removeShieldPriceUsd}
                     supportPrice={addShieldPriceUsd}
+                    nextAttackPrice={nextRemoveShieldPriceUsd}
+                    nextSupportPrice={nextAddShieldPriceUsd}
                     attackTxQueueId={`${planetId}-remove-shield`}
                     supportTxQueueId={`${planetId}-add-shield`}
                     isSupportDisabled={gameOver || Number(planetEmpire) === 0}
@@ -249,6 +268,14 @@ const InteractButton = forwardRef<
                   />
                 </Tabs.Pane>
               </Tabs>
+              <Button
+                onClick={() => tables.OverridePaneExpanded.set({ value: !expanded })}
+                variant="ghost"
+                size="xs"
+                className="self-end"
+              >
+                {expanded ? "- collapse" : "+ expand"}
+              </Button>
             </div>
           </Card>
         </div>
