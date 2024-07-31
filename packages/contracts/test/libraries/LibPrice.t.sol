@@ -20,6 +20,20 @@ contract LibPriceTest is PrimodiumTest {
     pointUnit = config.pointUnit;
     createShipConfig = P_OverrideConfig.get(EOverride.CreateShip);
     killShipConfig = P_OverrideConfig.get(EOverride.KillShip);
+
+    // Let's make the kill ship cost different than create ship
+    killShipConfig.minOverrideCost = createShipConfig.minOverrideCost * 3;
+    killShipConfig.startOverrideCost = createShipConfig.startOverrideCost * 3;
+    killShipConfig.overrideGenRate = createShipConfig.overrideGenRate * 3;
+    killShipConfig.overrideCostIncrease = createShipConfig.overrideCostIncrease * 3;
+    vm.startPrank(creator);
+    P_OverrideConfig.set(EOverride.KillShip, killShipConfig);
+
+    // We need to reinitialize price for KillShip, as InitPrice.sol already ran
+    OverrideCost.set(EEmpire.Red, EOverride.KillShip, killShipConfig.startOverrideCost);
+    OverrideCost.set(EEmpire.Blue, EOverride.KillShip, killShipConfig.startOverrideCost);
+    OverrideCost.set(EEmpire.Green, EOverride.KillShip, killShipConfig.startOverrideCost);
+    vm.stopPrank();
   }
 
   function testStartGetMarginalOverrideCost() public {
@@ -39,8 +53,8 @@ contract LibPriceTest is PrimodiumTest {
       "Starting Green Empire marginal override cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 1),
-      createShipConfig.startOverrideCost,
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.KillShip, 1),
+      killShipConfig.startOverrideCost,
       "Starting Red Empire regressive marginal override cost incorrect"
     );
   }
@@ -62,8 +76,8 @@ contract LibPriceTest is PrimodiumTest {
       "Green Empire marginal override cost for 2 overrides incorrect"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 2),
-      createShipConfig.startOverrideCost + (createShipConfig.startOverrideCost + createShipConfig.overrideCostIncrease),
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.KillShip, 2),
+      killShipConfig.startOverrideCost + (killShipConfig.startOverrideCost + killShipConfig.overrideCostIncrease),
       "Red Empire regressive marginal override cost for 2 overrides incorrect"
     );
   }
