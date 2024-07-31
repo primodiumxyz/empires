@@ -38,22 +38,22 @@ contract LibPriceTest is PrimodiumTest {
 
   function testStartGetMarginalOverrideCost() public {
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 1),
+      LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Red, 1),
       createShipConfig.startOverrideCost,
       "Starting Red Empire marginal override cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Blue, EOverride.CreateShip, 1),
+      LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Blue, 1),
       createShipConfig.startOverrideCost,
       "Starting Blue Empire marginal override cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Green, EOverride.CreateShip, 1),
+      LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Green, 1),
       createShipConfig.startOverrideCost,
       "Starting Green Empire marginal override cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.KillShip, 1),
+      LibPrice.getMarginalOverrideCost(EOverride.KillShip, EEmpire.Red, 1),
       killShipConfig.startOverrideCost,
       "Starting Red Empire regressive marginal override cost incorrect"
     );
@@ -61,22 +61,22 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetTwoMarginalOverrideCost() public {
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 2),
+      LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Red, 2),
       createShipConfig.startOverrideCost + (createShipConfig.startOverrideCost + createShipConfig.overrideCostIncrease),
       "Red Empire marginal override cost for 2 overrides incorrect"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Blue, EOverride.CreateShip, 2),
+      LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Blue, 2),
       createShipConfig.startOverrideCost + (createShipConfig.startOverrideCost + createShipConfig.overrideCostIncrease),
       "Blue Empire marginal override cost for 2 overrides incorrect"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Green, EOverride.CreateShip, 2),
+      LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Green, 2),
       createShipConfig.startOverrideCost + (createShipConfig.startOverrideCost + createShipConfig.overrideCostIncrease),
       "Green Empire marginal override cost for 2 overrides incorrect"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.KillShip, 2),
+      LibPrice.getMarginalOverrideCost(EOverride.KillShip, EEmpire.Red, 2),
       killShipConfig.startOverrideCost + (killShipConfig.startOverrideCost + killShipConfig.overrideCostIncrease),
       "Red Empire regressive marginal override cost for 2 overrides incorrect"
     );
@@ -164,7 +164,7 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetTotalCostProgressSingle() public {
     assertEq(
-      LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, true, 1),
+      LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, 1),
       createShipConfig.startOverrideCost + LibPrice.getProgressPointCost(EEmpire.Red, 1),
       "Total cost for single override Red Empire incorrect"
     );
@@ -172,8 +172,8 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetTotalCostProgressMultiple() public {
     assertEq(
-      LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, true, 2),
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 2) +
+      LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, 2),
+      LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Red, 2) +
         LibPrice.getProgressPointCost(EEmpire.Red, 2),
       "Total cost for multiple overrides Red Empire incorrect"
     );
@@ -181,8 +181,8 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetTotalCostRegressSingle() public {
     assertEq(
-      LibPrice.getTotalCost(EOverride.KillShip, EEmpire.Red, false, 1),
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.KillShip, 1) +
+      LibPrice.getTotalCost(EOverride.KillShip, EEmpire.Red, 1),
+      LibPrice.getMarginalOverrideCost(EOverride.KillShip, EEmpire.Red, 1) +
         LibPrice.getRegressPointCost(EEmpire.Red, 1),
       "Total cost for single override Red Empire incorrect"
     );
@@ -190,8 +190,8 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetTotalCostRegressMultiple() public {
     assertEq(
-      LibPrice.getTotalCost(EOverride.KillShip, EEmpire.Red, false, 2),
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.KillShip, 2) +
+      LibPrice.getTotalCost(EOverride.KillShip, EEmpire.Red, 2),
+      LibPrice.getMarginalOverrideCost(EOverride.KillShip, EEmpire.Red, 2) +
         LibPrice.getRegressPointCost(EEmpire.Red, 2),
       "Total cost for multiple overrides Red Empire incorrect"
     );
@@ -256,7 +256,7 @@ contract LibPriceTest is PrimodiumTest {
       "Green Empire's override costs should not change"
     );
     assertEq(
-      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 2),
+      LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Red, 2),
       finalOverrideCost * 2 + createShipConfig.overrideCostIncrease,
       "Red Empire point cost for 2 points incorrect"
     );

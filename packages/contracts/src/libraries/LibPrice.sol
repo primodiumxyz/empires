@@ -14,32 +14,22 @@ library LibPrice {
    * @dev Calculates the total cost of an override that is to be purchased.
    * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the override.
-   * @param _progressOverride Flag indicating whether the override is progressive or regressive to the impacted empire.
    * @param _overrideCount The number of overrides to be purchased.
    * @return totalCost The total cost of the override.
    */
   function getTotalCost(
     EOverride _overrideType,
     EEmpire _empireImpacted,
-    bool _progressOverride,
     uint256 _overrideCount
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
-    if (_progressOverride) {
-      require(
-        _overrideType == EOverride.CreateShip || _overrideType == EOverride.ChargeShield,
-        "[LibPrice] Override type is not a progressive override"
-      );
+    if (P_OverrideConfig.getProgressBool(_overrideType)) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
     } else {
-      require(
-        _overrideType == EOverride.KillShip || _overrideType == EOverride.DrainShield,
-        "[LibPrice] Override type is not a regressive override"
-      );
       totalCost = getRegressPointCost(_empireImpacted, _overrideCount);
     }
 
-    totalCost += getMarginalOverrideCost(_empireImpacted, _overrideType, _overrideCount);
+    totalCost += getMarginalOverrideCost(_overrideType, _empireImpacted, _overrideCount);
 
     return totalCost;
   }
@@ -93,14 +83,14 @@ library LibPrice {
 
   /**
    * @dev Calculates the marginal cost of a specific number of overrides for a specific empire.
-   * @param _empire The empire being impacted.
    * @param _overrideType The type of override.
+   * @param _empire The empire being impacted.
    * @param _overrideCount The number of overrides.
    * @return overrideCost The marginal cost of the overrides that impact a specific empire.
    */
   function getMarginalOverrideCost(
-    EEmpire _empire,
     EOverride _overrideType,
+    EEmpire _empire,
     uint256 _overrideCount
   ) internal view returns (uint256) {
     require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");

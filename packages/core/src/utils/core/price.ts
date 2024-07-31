@@ -7,10 +7,9 @@ const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
 
 export function createPriceUtils(tables: Tables) {
   function getTotalCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint): bigint {
-    const progressAction = [EOverride.CreateShip, EOverride.ChargeShield].includes(_overrideType);
     let totalCost = 0n;
 
-    if (progressAction) {
+    if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.progressBool ?? undefined) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
     } else {
       totalCost = getRegressPointCost(_empireImpacted, _overrideCount);
