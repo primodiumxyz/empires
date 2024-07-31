@@ -22,7 +22,11 @@ contract OverrideSystem is EmpiresSystem {
    * @param _planetId The ID of the planet.
    * @param _overrideCount The number of overrides to purchase.
    */
-  function createShip(bytes32 _planetId, uint256 _overrideCount) public payable _onlyNotGameOver _takeRake {
+  function createShip(
+    bytes32 _planetId,
+    uint256 _overrideCount
+  ) public payable _onlyNotGameOver _takeRake _updateTacticalStrikeCharge(_planetId) {
+    // increase ships
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
@@ -32,6 +36,11 @@ contract OverrideSystem is EmpiresSystem {
     _purchaseOverride(EOverride.CreateShip, planetData.empireId, true, _overrideCount, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount + _overrideCount);
+
+    // increase tactical strike charge
+    Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
+    planetTacticalStrikeData.charge += P_TacticalStrikeConfig.getCreateShipBoostIncrease() * _overrideCount;
+    Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
 
     CreateShipOverride.set(
       pseudorandomEntity(),
@@ -50,7 +59,11 @@ contract OverrideSystem is EmpiresSystem {
    * @param _planetId The ID of the planet.
    * @param _overrideCount The number of overrides to purchase.
    */
-  function killShip(bytes32 _planetId, uint256 _overrideCount) public payable _onlyNotGameOver _takeRake {
+  function killShip(
+    bytes32 _planetId,
+    uint256 _overrideCount
+  ) public payable _onlyNotGameOver _takeRake _updateTacticalStrikeCharge(_planetId) {
+    // decrease ship count
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.shipCount >= _overrideCount, "[OverrideSystem] Not enough ships to kill");
@@ -61,6 +74,15 @@ contract OverrideSystem is EmpiresSystem {
     _purchaseOverride(EOverride.KillShip, planetData.empireId, false, _overrideCount, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount - _overrideCount);
+
+    // decrease tactical strike charge
+    Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
+    uint256 killShipBoostCostDecrease = P_TacticalStrikeConfig.getKillShipBoostCostDecrease() * _overrideCount;
+    planetTacticalStrikeData.charge = planetTacticalStrikeData.charge > killShipBoostCostDecrease
+      ? planetTacticalStrikeData.charge - killShipBoostCostDecrease
+      : 0;
+    Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
+
     KillShipOverride.set(
       pseudorandomEntity(),
       KillShipOverrideData({

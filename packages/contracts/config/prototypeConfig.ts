@@ -42,6 +42,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         maxCharge: 100n,
         boostChargeIncrease: 10n,
         stunChargeDecrease: 10n,
+        createShipBoostIncrease: 1n,
+        killShipBoostCostDecrease: 1n,
       },
     },
   },
