@@ -8,7 +8,7 @@ export const useCharge = (planetId: Entity): { charge: bigint; maxCharge: bigint
 
   const maxCharge = tables.P_TacticalStrikeConfig.use()?.maxCharge ?? 0n;
   const planetTacticalStrikeData = tables.Planet_TacticalStrike.useWithKeys({ planetId });
-  const { value: blockNumber, avgBlockTime } = tables.BlockNumber.use() ?? { value: 0n, avgBlockTime: 0 };
+  const { value: blockNumber } = tables.BlockNumber.use() ?? { value: 0n };
   const [currentCharge, setCurrentCharge] = useState(0n);
 
   useEffect(() => {

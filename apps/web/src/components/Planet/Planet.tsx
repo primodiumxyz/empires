@@ -15,6 +15,7 @@ import { Marker } from "@/components/core/Marker";
 import { Tabs } from "@/components/core/Tabs";
 import { Tooltip } from "@/components/core/Tooltip";
 import { OverridePane } from "@/components/OverridePane";
+import { PlanetCharge } from "@/components/Planet/PlanetCharge";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
@@ -89,6 +90,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               {entityToPlanetName(entity)}
             </Button>
           </div>
+          <PlanetCharge planetId={entity} />
           <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/25 px-2 text-[.8em]">
             <Ships shipCount={planet.shipCount} planetId={entity} planetEmpire={planetEmpire} />
             <Shields shieldCount={planet.shieldCount} planetId={entity} planetEmpire={planetEmpire} />
