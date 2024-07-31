@@ -28,7 +28,7 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
             `Supported with ${overrideCount} ship${overrideCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
           );
         } else {
-          notify("error", error ?? "Unknown error");
+          notify("error", error || "Unknown error");
         }
       },
     });
@@ -55,7 +55,7 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
             `Removed ${overrideCount} ship${overrideCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
           );
         } else {
-          notify("error", error ?? "Unknown error");
+          notify("error", error || "Unknown error");
         }
       },
     });
@@ -82,7 +82,7 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
             `Added ${overrideCount} shield${overrideCount > 1 ? "s" : ""} to ${entityToPlanetName(planetId)}`,
           );
         } else {
-          notify("error", error ?? "Unknown error");
+          notify("error", error || "Unknown error");
         }
       },
     });
@@ -109,7 +109,7 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
             `Removed ${overrideCount} shield${overrideCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
           );
         } else {
-          notify("error", error ?? "Unknown error");
+          notify("error", error || "Unknown error");
         }
       },
     });
@@ -128,7 +128,7 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
         if (success) {
           notify("success", `Sold ${formatEther(amount)} points from ${EmpireEnumToName[empire as EEmpire]} empire`);
         } else {
-          notify("error", error ?? "Unknown error");
+          notify("error", error || "Unknown error");
         }
       },
     });

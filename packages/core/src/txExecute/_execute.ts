@@ -76,13 +76,13 @@ export async function _execute(
         console.error(`${error}`);
       }
     } catch (error) {
-      console.error(error);
       // As of MUDv1, this would most likely be a gas error. i.e.:
       //     TypeError: Cannot set properties of null (setting 'gasPrice')
       // so we told the user to try again.
       // However, this is not the case for MUDv2, as network.waitForTransaction no longer
       // throws an error if the transaction fails.
       // We should be on the lookout for other errors that could be thrown here.
+      receipt.error = "Unknown error";
       console.error(`${error}`);
     }
   }
