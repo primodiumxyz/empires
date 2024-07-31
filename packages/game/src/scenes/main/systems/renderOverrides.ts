@@ -10,7 +10,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
 
-  tables.ChargeShieldsPlayerAction.watch(
+  tables.ChargeShieldsOverride.watch(
     {
       world: systemsWorld,
       onEnter: ({ properties: { current } }) => {
@@ -23,7 +23,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
         scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 25 },
-          `+${current.actionCount}`,
+          `+${current.overrideCount}`,
           {
             icon: "Shield",
             delay: 500,
@@ -36,7 +36,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
     }
   );
 
-  tables.CreateShipPlayerAction.watch(
+  tables.CreateShipOverride.watch(
     {
       world: systemsWorld,
       onEnter: ({ properties: { current } }) => {
@@ -49,7 +49,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
         scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
-          `+${current.actionCount}`,
+          `+${current.overrideCount}`,
           {
             icon: "Ship",
             delay: 500,
@@ -60,7 +60,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
     { runOnInit: false }
   );
 
-  tables.DrainShieldsPlayerAction.watch(
+  tables.DrainShieldsOverride.watch(
     {
       world: systemsWorld,
       onEnter: ({ properties: { current } }) => {
@@ -73,7 +73,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
         scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
-          `-${current.actionCount}`,
+          `-${current.overrideCount}`,
           {
             icon: "Shield",
             color: "#ff0000",
@@ -84,7 +84,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
     { runOnInit: false }
   );
 
-  tables.KillShipPlayerAction.watch(
+  tables.KillShipOverride.watch(
     {
       world: systemsWorld,
       onEnter: ({ properties: { current } }) => {
@@ -97,7 +97,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
         scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
-          `-${current.actionCount}`,
+          `-${current.overrideCount}`,
           {
             icon: "Ship",
             color: "#ff0000",

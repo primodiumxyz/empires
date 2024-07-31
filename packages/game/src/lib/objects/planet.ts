@@ -125,6 +125,8 @@ export class Planet
   }
 
   updateFaction(empire: EEmpire) {
+    if (empire === this.empireId) return;
+
     this._scene.audio.play("Blaster", "sfx");
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 29 },

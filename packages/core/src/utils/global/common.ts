@@ -117,3 +117,7 @@ export function calculateAngleBetweenPoints(point1: Coord, point2: Coord) {
   if (degree < 0) degree = 360 + degree;
   return { radian, degree };
 }
+
+export function calculateMidpoint(point1: Coord, point2: Coord) {
+  return { x: (point1.x + point2.x) / 2, y: (point1.y + point2.y) / 2 };
+}
