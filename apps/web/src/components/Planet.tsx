@@ -73,6 +73,21 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     };
   }, [planet]);
 
+  // close interact pane on turn change (which happens when gold could for any planet increases)
+  useEffect(() => {
+    const unsubscribe = tables.Planet.watch({
+      onChange: ({ properties: { current, prev } }) => {
+        if (!current || !prev) return;
+        if (current.goldCount <= prev.goldCount) return;
+        setIsInteractPaneVisible(false);
+      },
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   if (!planet) return null;
 
   return (
