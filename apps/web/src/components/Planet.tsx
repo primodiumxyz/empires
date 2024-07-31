@@ -49,23 +49,29 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     return [cartesianCoord.x, cartesianCoord.y];
   }, [planet, tileSize, margin]);
 
-  useEffect(() => {
-    const listener = tables.PlanetBattleRoutine.update$.subscribe(({ properties: { current } }) => {
-      if (!current || current.planetId !== entity) return;
-      const data = {
-        planetId: current.planetId,
-        deaths: bigIntMin(current.attackingShipCount, current.defendingShipCount),
-        conquered: current.conquer,
-      };
-    });
-    return () => {
-      listener.unsubscribe();
-    };
-  }, [planet]);
-
   const handleInteractClick = () => {
     setIsInteractPaneVisible(!isInteractPaneVisible);
   };
+
+  useEffect(() => {
+    const unsubscribe = tables.PlanetBattleRoutine.watch(
+      {
+        onChange: ({ properties: { current } }) => {
+          if (!current || current.planetId !== entity) return;
+          const data = {
+            planetId: current.planetId,
+            deaths: bigIntMin(current.attackingShipCount, current.defendingShipCount),
+            conquered: current.conquer,
+          };
+        },
+      },
+      { runOnInit: false },
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [planet]);
 
   if (!planet) return null;
 
@@ -243,22 +249,28 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
   const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
-    const listener = tables.BuyShipsRoutine.update$.subscribe(({ properties: { current } }) => {
-      if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
-      if (data.planetId !== entity) return;
+    const unsubscribe = tables.BuyShipsRoutine.watch(
+      {
+        onChange: ({ properties: { current } }) => {
+          if (!current) return;
+          const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
+          if (data.planetId !== entity) return;
 
-      // Add floating text
-      setGoldFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.goldSpent}` }]);
-      setNextId((prev) => prev + 1);
+          // Add floating text
+          setGoldFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.goldSpent}` }]);
+          setNextId((prev) => prev + 1);
 
-      // Remove the floating text after 3 seconds
-      setTimeout(() => {
-        setGoldFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 5000);
-    });
+          // Remove the floating text after 3 seconds
+          setTimeout(() => {
+            setGoldFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
+          }, 5000);
+        },
+      },
+      { runOnInit: false },
+    );
+
     return () => {
-      listener.unsubscribe();
+      unsubscribe();
     };
   }, [nextId]);
 
@@ -295,64 +307,81 @@ const Ships = ({
   const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
-    const listener = tables.CreateShipOverride.update$.subscribe(({ properties: { current } }) => {
-      if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.overrideCount };
-      if (data.planetId !== planetId) return;
+    const unsubscribe = tables.CreateShipOverride.watch(
+      {
+        onChange: ({ properties: { current } }) => {
+          if (!current) return;
+          const data = { planetId: current.planetId, shipCount: current.overrideCount };
+          if (data.planetId !== planetId) return;
 
-      // Add floating "+1" text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
-      setNextId((prev) => prev + 1);
+          // Add floating "+1" text
+          setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
+          setNextId((prev) => prev + 1);
 
-      // Remove the floating text after 3 seconds
-      setTimeout(() => {
-        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 5000);
-    });
+          // Remove the floating text after 3 seconds
+          setTimeout(() => {
+            setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
+          }, 5000);
+        },
+      },
+      { runOnInit: false },
+    );
+
     return () => {
-      listener.unsubscribe();
+      unsubscribe();
     };
   }, [nextId]);
 
   useEffect(() => {
-    const listener = tables.KillShipOverride.update$.subscribe(({ properties: { current } }) => {
-      if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.overrideCount };
-      if (data.planetId !== planetId) return;
+    const unsubscribe = tables.KillShipOverride.watch(
+      {
+        onChange: ({ properties: { current } }) => {
+          if (!current) return;
+          const data = { planetId: current.planetId, shipCount: current.overrideCount };
+          if (data.planetId !== planetId) return;
 
-      console.log(current);
+          // Add floating "+1" text
+          setFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.shipCount}` }]);
+          setNextId((prev) => prev + 1);
 
-      // Add floating "+1" text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.shipCount}` }]);
-      setNextId((prev) => prev + 1);
+          // Remove the floating text after 3 seconds
+          setTimeout(() => {
+            setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
+          }, 5000);
+        },
+      },
+      { runOnInit: false },
+    );
 
-      // Remove the floating text after 3 seconds
-      setTimeout(() => {
-        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 5000);
-    });
     return () => {
-      listener.unsubscribe();
+      unsubscribe();
     };
   }, [nextId]);
 
   useEffect(() => {
-    const listener = tables.BuyShipsRoutine.update$.subscribe(({ properties: { current } }) => {
-      if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
-      if (data.planetId !== planetId) return;
+    const unsubscribe = tables.BuyShipsRoutine.watch(
+      {
+        onChange: ({ properties: { current } }) => {
+          console.log({ current });
+          if (!current) return;
+          const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
+          if (data.planetId !== planetId) return;
 
-      // Add floating text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
-      setNextId((prev) => prev + 1);
+          // Add floating text
+          setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
+          setNextId((prev) => prev + 1);
 
-      // Remove the floating text after 3 seconds
-      setTimeout(() => {
-        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 5000);
-    });
+          // Remove the floating text after 3 seconds
+          setTimeout(() => {
+            setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
+          }, 5000);
+        },
+      },
+      { runOnInit: false },
+    );
+
     return () => {
-      listener.unsubscribe();
+      unsubscribe();
     };
   }, [nextId]);
 
@@ -402,16 +431,25 @@ const Shields = ({
     }, 5000);
   };
   useEffect(() => {
-    const listener = tables.ChargeShieldsOverride.update$.subscribe(({ properties: { current } }) => callback(current));
-    const listener2 = tables.DrainShieldsOverride.update$.subscribe(({ properties: { current } }) =>
-      callback(current, true),
+    const unsubscribe1 = tables.ChargeShieldsOverride.watch(
+      {
+        onChange: ({ properties: { current } }) => callback(current),
+      },
+      { runOnInit: false },
+    );
+    const unsubscribe2 = tables.DrainShieldsOverride.watch(
+      {
+        onChange: ({ properties: { current } }) => callback(current, true),
+      },
+      { runOnInit: false },
     );
 
     return () => {
-      listener.unsubscribe();
-      listener2.unsubscribe();
+      unsubscribe1();
+      unsubscribe2();
     };
   }, [nextId]);
+
   return (
     <div className="relative z-50">
       <Tooltip tooltipContent={`SHIELDS`}>

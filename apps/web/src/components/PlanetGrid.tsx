@@ -26,19 +26,24 @@ export const PlanetGrid: React.FC<{ tileSize?: number; margin?: number }> = ({ t
     };
   });
   useEffect(() => {
-    const listener = tables.MoveRoutine.update$.subscribe(({ entity, properties: { current } }) => {
-      if (!current) return;
-      const { originPlanetId, destinationPlanetId, shipCount } = current;
+    const unsubscribe = tables.MoveRoutine.watch(
+      {
+        onChange: ({ entity, properties: { current } }) => {
+          if (!current) return;
+          const { originPlanetId, destinationPlanetId, shipCount } = current;
 
-      setArrivingShips((prevData) => [...prevData, { id: entity, originPlanetId, destinationPlanetId, shipCount }]);
+          setArrivingShips((prevData) => [...prevData, { id: entity, originPlanetId, destinationPlanetId, shipCount }]);
 
-      setTimeout(() => {
-        setArrivingShips((prevData) => prevData.filter((item) => item.id !== entity));
-      }, 5000);
-    });
+          setTimeout(() => {
+            setArrivingShips((prevData) => prevData.filter((item) => item.id !== entity));
+          }, 5000);
+        },
+      },
+      { runOnInit: false },
+    );
 
     return () => {
-      listener.unsubscribe();
+      unsubscribe();
     };
   }, []);
 
