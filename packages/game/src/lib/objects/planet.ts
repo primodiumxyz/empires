@@ -196,7 +196,6 @@ export class Planet
         "DestroyerArcLowerRed",
       {
         rotation: angle.radian,
-        blendMode: Phaser.BlendModes.ADD,
         depth: DepthLayers.Planet + 1,
         originX: 0,
         originY: 1,

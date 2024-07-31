@@ -1,4 +1,4 @@
-import { Core } from "@primodiumxyz/core";
+import { Core, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 
 import { PrimodiumScene } from "@game/types";
@@ -37,7 +37,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
     callback();
 
     //sleep duration
-    await new Promise((resolve) => setTimeout(resolve, duration));
+    await sleep(duration);
 
     await _executeQueue();
   }
@@ -52,7 +52,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
-        await queue(() => {
+        queue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.25 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
@@ -97,7 +97,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
-        await queue(() => {
+        queue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.25 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
@@ -145,7 +145,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
-        await queue(() => {
+        queue(async () => {
           //move destroyers
           planet.moveDestroyers(current.destinationPlanetId as Entity);
 
@@ -164,12 +164,14 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
             }
           );
 
+          await sleep(750);
+
           //update factions if it changed
           const faction = tables.Planet.get(
             current.destinationPlanetId as Entity
           )?.empireId;
 
-          if (faction !== undefined && destinationPlanet)
+          if (faction && destinationPlanet)
             destinationPlanet.updateFaction(faction);
         }, 2000);
       },
@@ -187,7 +189,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
-        await queue(() => {
+        queue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.25 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },

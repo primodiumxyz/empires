@@ -77,41 +77,11 @@ const Game = memo(() => {
 
       {/* cannot unmount. needs to be visible for phaser to attach to DOM element */}
       <div id="game-container" className="screen-container">
-        <div id="phaser-container" className="screen-container pointer-events-auto absolute z-10 cursor-pointer"></div>
+        <div id="phaser-container" className="screen-container pointer-events-auto absolute cursor-pointer"></div>
         {!!gameRef.current && !loading && (
           <GameProvider game={gameRef.current}>
-            <BackgroundNebula />
-            <div className="pointer-events-auto relative z-20">
+            <div className="pointer-events-auto relative">
               <GameHUD />
-              <NumberInput count={count} onChange={(val) => setCount(val)} />
-              <Button
-                onClick={() => {
-                  gameRef.current?.MAIN.fx.emitVfx({ x: 0, y: -25 }, "DestroyerArcUpperBlue", {
-                    originX: 0,
-                    originY: 1,
-                    depth: 1000000,
-                    offset: {
-                      x: -12,
-                      y: 15,
-                    },
-                    scale: 1.3,
-                    rotation: Phaser.Math.DegToRad(Number(count)),
-                  });
-                  gameRef.current?.MAIN.fx.emitVfx({ x: 0, y: -25 }, "DestroyerArcLowerBlue", {
-                    originX: 0,
-                    originY: 1,
-                    depth: 1000000,
-                    offset: {
-                      x: -12,
-                      y: 10,
-                    },
-                    scale: 1.3,
-                    rotation: Phaser.Math.DegToRad(Number(count)),
-                  });
-                }}
-              >
-                test
-              </Button>
             </div>
           </GameProvider>
         )}
@@ -129,7 +99,7 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-        <Pot showRake={false} showPot={true} className="w-48" />
+          <Pot showRake={false} showPot={true} className="w-48" />
         </HUD.TopMiddle>
 
         <HUD.TopRight>
@@ -142,7 +112,7 @@ export const GameHUD = () => {
 
         <HUD.BottomLeft>
           <SellPoints />
-          <Pot showRake={true} showPot={false} className="absolute left-2 bottom-1 w-56" />
+          <Pot showRake={true} showPot={false} className="absolute bottom-1 left-2 w-56" />
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>

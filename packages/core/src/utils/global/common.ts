@@ -121,3 +121,8 @@ export function calculateAngleBetweenPoints(point1: Coord, point2: Coord) {
 export function calculateMidpoint(point1: Coord, point2: Coord) {
   return { x: (point1.x + point2.x) / 2, y: (point1.y + point2.y) / 2 };
 }
+
+export async function sleep(duration: number) {
+  //sleep duration
+  await new Promise((resolve) => setTimeout(resolve, duration));
+}

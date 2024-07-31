@@ -75,7 +75,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
         <div className="group relative flex flex-col items-center">
           <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-slate-800/90 to-slate-900/75 px-1 text-center">
             <p className="font-mono text-[10px] opacity-70">
-              ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
+              ({(planet.q - 100n ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
             </p>
             {/* dashboard button */}
             <Button
