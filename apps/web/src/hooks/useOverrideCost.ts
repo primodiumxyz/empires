@@ -16,19 +16,21 @@ export const useOverrideCost = (actionType: EOverride, empireImpacted: EEmpire, 
 export const useNextDecreaseOverrideCost = (actionType: EOverride, empireImpacted: EEmpire, actionCount: bigint) => {
   const { tables, utils } = useCore();
   const time = tables.Time.use();
+  const overrideConfig = tables.P_OverrideConfig.use();
+  const currentOverrideCost =
+    tables.OverrideCost.useWithKeys({ empireId: empireImpacted, overrideAction: actionType })?.value ?? 0n;
 
   return useMemo(() => {
-    const overrideConfig = tables.P_OverrideConfig.get();
-    const currentOverrideCost =
-      tables.OverrideCost.getWithKeys({ empireId: empireImpacted, overrideAction: actionType })?.value ?? 0n;
+    const minOverrideCost = overrideConfig?.minOverrideCost ?? 0n;
+    const overrideGenRate = overrideConfig?.overrideGenRate ?? 0n;
 
     let newOverrideCost = currentOverrideCost;
-    if (newOverrideCost > (overrideConfig?.minOverrideCost ?? 0n) + (overrideConfig?.overrideGenRate ?? 0n)) {
-      newOverrideCost -= overrideConfig?.overrideGenRate ?? 0n;
+    if (newOverrideCost > minOverrideCost + overrideGenRate) {
+      newOverrideCost -= overrideGenRate;
     } else {
-      newOverrideCost = overrideConfig?.minOverrideCost ?? 0n;
+      newOverrideCost = minOverrideCost;
     }
 
     return utils.getTotalCost(actionType, empireImpacted, actionCount, newOverrideCost);
-  }, [actionType, empireImpacted, actionCount, time, tables.P_OverrideConfig, tables.OverrideCost]);
+  }, [actionType, empireImpacted, actionCount, time, overrideConfig, currentOverrideCost]);
 };
