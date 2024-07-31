@@ -39,7 +39,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [{ [EOverride.CreateShip]: "uint8" }],
     tables: {
       P_OverrideConfig: {
-        progressBool: true,
+        isProgressOverride: true,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
@@ -52,7 +52,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [{ [EOverride.KillShip]: "uint8" }],
     tables: {
       P_OverrideConfig: {
-        progressBool: false,
+        isProgressOverride: false,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
@@ -65,7 +65,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [{ [EOverride.ChargeShield]: "uint8" }],
     tables: {
       P_OverrideConfig: {
-        progressBool: true,
+        isProgressOverride: true,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
@@ -78,7 +78,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [{ [EOverride.DrainShield]: "uint8" }],
     tables: {
       P_OverrideConfig: {
-        progressBool: false,
+        isProgressOverride: false,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00002),

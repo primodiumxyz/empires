@@ -23,7 +23,7 @@ library LibPrice {
     uint256 _overrideCount
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
-    if (P_OverrideConfig.getProgressBool(_overrideType)) {
+    if (P_OverrideConfig.getIsProgressOverride(_overrideType)) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
     } else {
       totalCost = getRegressPointCost(_empireImpacted, _overrideCount);

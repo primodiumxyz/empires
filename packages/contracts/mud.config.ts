@@ -50,7 +50,7 @@ export const worldInput = {
       key: ["overrideAction"],
       schema: {
         overrideAction: "EOverride",
-        progressBool: "bool",
+        isProgressOverride: "bool",
         minOverrideCost: "uint256",
         startOverrideCost: "uint256",
         overrideGenRate: "uint256",

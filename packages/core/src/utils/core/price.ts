@@ -9,7 +9,7 @@ export function createPriceUtils(tables: Tables) {
   function getTotalCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint): bigint {
     let totalCost = 0n;
 
-    if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.progressBool ?? undefined) {
+    if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.isProgressOverride ?? undefined) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
     } else {
       totalCost = getRegressPointCost(_empireImpacted, _overrideCount);
