@@ -9,7 +9,7 @@
         "internalType": "bytes32"
       },
       {
-        "name": "_actionCount",
+        "name": "_overrideCount",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -40,7 +40,7 @@
         "internalType": "bytes32"
       },
       {
-        "name": "_actionCount",
+        "name": "_overrideCount",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -353,7 +353,7 @@
         "internalType": "bytes32"
       },
       {
-        "name": "_actionCount",
+        "name": "_overrideCount",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -371,7 +371,7 @@
         "internalType": "bytes32"
       },
       {
-        "name": "_actionCount",
+        "name": "_overrideCount",
         "type": "uint256",
         "internalType": "uint256"
       }

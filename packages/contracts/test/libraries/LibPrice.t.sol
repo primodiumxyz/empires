@@ -4,65 +4,65 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Empire, Player, ActionCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData } from "codegen/index.sol";
-import { EEmpire, EPlayerAction } from "codegen/common.sol";
+import { Empire, Player, OverrideCost, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData } from "codegen/index.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 
 contract LibPriceTest is PrimodiumTest {
   P_PointConfigData config;
-  P_ActionConfigData actionConfig;
+  P_OverrideConfigData overrideConfig;
   uint256 pointUnit;
   function setUp() public override {
     super.setUp();
     config = P_PointConfig.get();
-    actionConfig = P_ActionConfig.get();
+    overrideConfig = P_OverrideConfig.get();
     pointUnit = config.pointUnit;
   }
 
-  function testStartGetMarginalActionCost() public {
+  function testStartGetMarginalOverrideCost() public {
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, true, 1),
-      actionConfig.startActionCost,
-      "Starting Red Empire marginal action cost incorrect"
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 1),
+      overrideConfig.startOverrideCost,
+      "Starting Red Empire marginal override cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Blue, EPlayerAction.CreateShip, true, 1),
-      actionConfig.startActionCost,
-      "Starting Blue Empire marginal action cost incorrect"
+      LibPrice.getMarginalOverrideCost(EEmpire.Blue, EOverride.CreateShip, 1),
+      overrideConfig.startOverrideCost,
+      "Starting Blue Empire marginal override cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Green, EPlayerAction.CreateShip, true, 1),
-      actionConfig.startActionCost,
-      "Starting Green Empire marginal action cost incorrect"
+      LibPrice.getMarginalOverrideCost(EEmpire.Green, EOverride.CreateShip, 1),
+      overrideConfig.startOverrideCost,
+      "Starting Green Empire marginal override cost incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, false, 1),
-      (actionConfig.startActionCost * actionConfig.regressMultiplier) / 10000,
-      "Starting Red Empire regressive marginal action cost incorrect"
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 1),
+      overrideConfig.startOverrideCost,
+      "Starting Red Empire regressive marginal override cost incorrect"
     );
   }
 
-  function testGetTwoMarginalActionCost() public {
+  function testGetTwoMarginalOverrideCost() public {
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, true, 2),
-      actionConfig.startActionCost + (actionConfig.startActionCost + actionConfig.actionCostIncrease),
-      "Red Empire marginal action cost for 2 actions incorrect"
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 2),
+      overrideConfig.startOverrideCost + (overrideConfig.startOverrideCost + overrideConfig.overrideCostIncrease),
+      "Red Empire marginal override cost for 2 overrides incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Blue, EPlayerAction.CreateShip, true, 2),
-      actionConfig.startActionCost + (actionConfig.startActionCost + actionConfig.actionCostIncrease),
-      "Blue Empire marginal action cost for 2 actions incorrect"
+      LibPrice.getMarginalOverrideCost(EEmpire.Blue, EOverride.CreateShip, 2),
+      overrideConfig.startOverrideCost + (overrideConfig.startOverrideCost + overrideConfig.overrideCostIncrease),
+      "Blue Empire marginal override cost for 2 overrides incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Green, EPlayerAction.CreateShip, true, 2),
-      actionConfig.startActionCost + (actionConfig.startActionCost + actionConfig.actionCostIncrease),
-      "Green Empire marginal action cost for 2 actions incorrect"
+      LibPrice.getMarginalOverrideCost(EEmpire.Green, EOverride.CreateShip, 2),
+      overrideConfig.startOverrideCost + (overrideConfig.startOverrideCost + overrideConfig.overrideCostIncrease),
+      "Green Empire marginal override cost for 2 overrides incorrect"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, false, 2),
-      ((actionConfig.startActionCost + (actionConfig.startActionCost + actionConfig.actionCostIncrease)) * actionConfig.regressMultiplier) / 10000,
-      "Red Empire regressive marginal action cost for 2 actions incorrect"
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 2),
+      overrideConfig.startOverrideCost + (overrideConfig.startOverrideCost + overrideConfig.overrideCostIncrease),
+      "Red Empire regressive marginal override cost for 2 overrides incorrect"
     );
   }
 
@@ -114,7 +114,7 @@ contract LibPriceTest is PrimodiumTest {
     assertEq(
       LibPrice.getRegressPointCost(EEmpire.Red, 2),
       LibPrice.getPointCost(EEmpire.Red, 2 * pointUnit) * (EMPIRE_COUNT - 1),
-      "Red Empire point cost for 2 bulk actions incorrect"
+      "Red Empire point cost for 2 bulk overrides incorrect"
     );
   }
 
@@ -142,42 +142,42 @@ contract LibPriceTest is PrimodiumTest {
     assertEq(
       LibPrice.getProgressPointCost(EEmpire.Red, 2),
       2 * (EMPIRE_COUNT - 1) * (initPointCost + ((2 * EMPIRE_COUNT - 3) * config.pointCostIncrease) / 2),
-      "Red Empire point cost for 2 bulk actions incorrect"
+      "Red Empire point cost for 2 bulk overrides incorrect"
     );
   }
 
   function testGetTotalCostProgressSingle() public {
     assertEq(
-      LibPrice.getTotalCost(EPlayerAction.CreateShip, EEmpire.Red, true, 1),
-      actionConfig.startActionCost + LibPrice.getProgressPointCost(EEmpire.Red, 1),
-      "Total cost for single action Red Empire incorrect"
+      LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, true, 1),
+      overrideConfig.startOverrideCost + LibPrice.getProgressPointCost(EEmpire.Red, 1),
+      "Total cost for single override Red Empire incorrect"
     );
   }
 
   function testGetTotalCostProgressMultiple() public {
     assertEq(
-      LibPrice.getTotalCost(EPlayerAction.CreateShip, EEmpire.Red, true, 2),
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, true, 2) +
+      LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, true, 2),
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 2) +
         LibPrice.getProgressPointCost(EEmpire.Red, 2),
-      "Total cost for multiple actions Red Empire incorrect"
+      "Total cost for multiple overrides Red Empire incorrect"
     );
   }
 
   function testGetTotalCostRegressSingle() public {
     assertEq(
-      LibPrice.getTotalCost(EPlayerAction.KillShip, EEmpire.Red, false, 1),
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.KillShip, false, 1) +
+      LibPrice.getTotalCost(EOverride.KillShip, EEmpire.Red, false, 1),
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.KillShip, 1) +
         LibPrice.getRegressPointCost(EEmpire.Red, 1),
-      "Total cost for single action Red Empire incorrect"
+      "Total cost for single override Red Empire incorrect"
     );
   }
 
   function testGetTotalCostRegressMultiple() public {
     assertEq(
-      LibPrice.getTotalCost(EPlayerAction.KillShip, EEmpire.Red, false, 2),
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.KillShip, false, 2) +
+      LibPrice.getTotalCost(EOverride.KillShip, EEmpire.Red, false, 2),
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.KillShip, 2) +
         LibPrice.getRegressPointCost(EEmpire.Red, 2),
-      "Total cost for multiple actions Red Empire incorrect"
+      "Total cost for multiple overrides Red Empire incorrect"
     );
   }
 
@@ -207,37 +207,41 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
-  function testActionCostUp() public {
+  function testOverrideCostUp() public {
     vm.startPrank(creator);
-    uint256 beginActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip);
-    LibPrice.actionCostUp(EEmpire.Red, EPlayerAction.CreateShip, 1);
-    uint256 nextActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip);
-    assertEq(nextActionCost, beginActionCost + actionConfig.actionCostIncrease, "First action cost increase incorrect");
-    LibPrice.actionCostUp(EEmpire.Red, EPlayerAction.CreateShip, 1);
-    uint256 finalActionCost = ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip);
+    uint256 beginOverrideCost = OverrideCost.get(EEmpire.Red, EOverride.CreateShip);
+    LibPrice.overrideCostUp(EEmpire.Red, EOverride.CreateShip, 1);
+    uint256 nextOverrideCost = OverrideCost.get(EEmpire.Red, EOverride.CreateShip);
     assertEq(
-      finalActionCost,
-      nextActionCost + actionConfig.actionCostIncrease,
-      "Second action cost increase incorrect"
+      nextOverrideCost,
+      beginOverrideCost + overrideConfig.overrideCostIncrease,
+      "First override cost increase incorrect"
+    );
+    LibPrice.overrideCostUp(EEmpire.Red, EOverride.CreateShip, 1);
+    uint256 finalOverrideCost = OverrideCost.get(EEmpire.Red, EOverride.CreateShip);
+    assertEq(
+      finalOverrideCost,
+      nextOverrideCost + overrideConfig.overrideCostIncrease,
+      "Second override cost increase incorrect"
     );
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.KillShip),
-      actionConfig.startActionCost,
-      "Red Empire's other action costs should not change"
+      OverrideCost.get(EEmpire.Red, EOverride.KillShip),
+      overrideConfig.startOverrideCost,
+      "Red Empire's other override costs should not change"
     );
     assertEq(
-      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip),
-      actionConfig.startActionCost,
-      "Blue Empire's other action costs should not change"
+      OverrideCost.get(EEmpire.Blue, EOverride.CreateShip),
+      overrideConfig.startOverrideCost,
+      "Blue Empire's other override costs should not change"
     );
     assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip),
-      actionConfig.startActionCost,
-      "Green Empire's other action costs should not change"
+      OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
+      overrideConfig.startOverrideCost,
+      "Green Empire's other override costs should not change"
     );
     assertEq(
-      LibPrice.getMarginalActionCost(EEmpire.Red, EPlayerAction.CreateShip, true, 2),
-      finalActionCost * 2 + actionConfig.actionCostIncrease,
+      LibPrice.getMarginalOverrideCost(EEmpire.Red, EOverride.CreateShip, 2),
+      finalOverrideCost * 2 + overrideConfig.overrideCostIncrease,
       "Red Empire point cost for 2 points incorrect"
     );
   }
@@ -322,110 +326,134 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
-  function testEmpirePlayerActionsCostDown() public {
+  function testEmpireOverridesCostDown() public {
     vm.startPrank(creator);
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate);
-    ActionCost.set(EEmpire.Red, EPlayerAction.KillShip, actionConfig.minActionCost + actionConfig.actionGenRate);
-    ActionCost.set(EEmpire.Blue, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate);
-    ActionCost.set(EEmpire.Blue, EPlayerAction.KillShip, actionConfig.minActionCost + actionConfig.actionGenRate);
-    ActionCost.set(EEmpire.Green, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate);
-    ActionCost.set(EEmpire.Green, EPlayerAction.KillShip, actionConfig.minActionCost + actionConfig.actionGenRate);
-
-    LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
-    assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
-      actionConfig.minActionCost,
-      "Red Empire action cost down incorrect when matching gen rate"
-    );
-    assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.KillShip),
-      actionConfig.minActionCost,
-      "Red Empire action cost down should affect all actions of the empire"
-    );
-    assertEq(
-      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip),
-      actionConfig.minActionCost + actionConfig.actionGenRate,
-      "Blue Empire action cost should not change"
-    );
-    assertEq(
-      ActionCost.get(EEmpire.Blue, EPlayerAction.KillShip),
-      actionConfig.minActionCost + actionConfig.actionGenRate,
-      "Blue Empire action cost should not change"
-    );
-    assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip),
-      actionConfig.minActionCost + actionConfig.actionGenRate,
-      "Green Empire action cost should not change"
-    );
-    assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.KillShip),
-      actionConfig.minActionCost + actionConfig.actionGenRate,
-      "Green Empire action cost should not change"
-    );
-
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate - 1);
-    LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
-    assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
-      actionConfig.minActionCost,
-      "Red Empire action cost down incorrect when less than gen rate"
-    );
-
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, actionConfig.minActionCost);
-    LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
-    assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
-      actionConfig.minActionCost,
-      "Red Empire action cost down incorrect when at min cost"
-    );
-
-    ActionCost.set(EEmpire.Red, EPlayerAction.CreateShip, actionConfig.minActionCost + actionConfig.actionGenRate + 1);
-    LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
-    assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
-      actionConfig.minActionCost + 1,
-      "Red Empire action cost down incorrect when greater than gen rate"
-    );
-
-    ActionCost.set(
+    OverrideCost.set(
       EEmpire.Red,
-      EPlayerAction.CreateShip,
-      actionConfig.minActionCost + actionConfig.actionGenRate * 2 + 1
+      EOverride.CreateShip,
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate
     );
-    LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
-    assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
-      actionConfig.minActionCost + actionConfig.actionGenRate + 1,
-      "Red Empire action cost down incorrect when much greater than gen rate"
+    OverrideCost.set(EEmpire.Red, EOverride.KillShip, overrideConfig.minOverrideCost + overrideConfig.overrideGenRate);
+    OverrideCost.set(
+      EEmpire.Blue,
+      EOverride.CreateShip,
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate
     );
-    LibPrice.empirePlayerActionsCostDown(EEmpire.Red);
+    OverrideCost.set(EEmpire.Blue, EOverride.KillShip, overrideConfig.minOverrideCost + overrideConfig.overrideGenRate);
+    OverrideCost.set(
+      EEmpire.Green,
+      EOverride.CreateShip,
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate
+    );
+    OverrideCost.set(
+      EEmpire.Green,
+      EOverride.KillShip,
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate
+    );
+
+    LibPrice.empireOverridesCostDown(EEmpire.Red);
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
-      actionConfig.minActionCost + 1,
-      "Sequential Action cost down not working"
+      OverrideCost.get(EEmpire.Red, EOverride.CreateShip),
+      overrideConfig.minOverrideCost,
+      "Red Empire override cost down incorrect when matching gen rate"
+    );
+    assertEq(
+      OverrideCost.get(EEmpire.Red, EOverride.KillShip),
+      overrideConfig.minOverrideCost,
+      "Red Empire override cost down should affect all overrides of the empire"
+    );
+    assertEq(
+      OverrideCost.get(EEmpire.Blue, EOverride.CreateShip),
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate,
+      "Blue Empire override cost should not change"
+    );
+    assertEq(
+      OverrideCost.get(EEmpire.Blue, EOverride.KillShip),
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate,
+      "Blue Empire override cost should not change"
+    );
+    assertEq(
+      OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate,
+      "Green Empire override cost should not change"
+    );
+    assertEq(
+      OverrideCost.get(EEmpire.Green, EOverride.KillShip),
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate,
+      "Green Empire override cost should not change"
+    );
+
+    OverrideCost.set(
+      EEmpire.Red,
+      EOverride.CreateShip,
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate - 1
+    );
+    LibPrice.empireOverridesCostDown(EEmpire.Red);
+    assertEq(
+      OverrideCost.get(EEmpire.Red, EOverride.CreateShip),
+      overrideConfig.minOverrideCost,
+      "Red Empire override cost down incorrect when less than gen rate"
+    );
+
+    OverrideCost.set(EEmpire.Red, EOverride.CreateShip, overrideConfig.minOverrideCost);
+    LibPrice.empireOverridesCostDown(EEmpire.Red);
+    assertEq(
+      OverrideCost.get(EEmpire.Red, EOverride.CreateShip),
+      overrideConfig.minOverrideCost,
+      "Red Empire override cost down incorrect when at min cost"
+    );
+
+    OverrideCost.set(
+      EEmpire.Red,
+      EOverride.CreateShip,
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate + 1
+    );
+    LibPrice.empireOverridesCostDown(EEmpire.Red);
+    assertEq(
+      OverrideCost.get(EEmpire.Red, EOverride.CreateShip),
+      overrideConfig.minOverrideCost + 1,
+      "Red Empire override cost down incorrect when greater than gen rate"
+    );
+
+    OverrideCost.set(
+      EEmpire.Red,
+      EOverride.CreateShip,
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate * 2 + 1
+    );
+    LibPrice.empireOverridesCostDown(EEmpire.Red);
+    assertEq(
+      OverrideCost.get(EEmpire.Red, EOverride.CreateShip),
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate + 1,
+      "Red Empire override cost down incorrect when much greater than gen rate"
+    );
+    LibPrice.empireOverridesCostDown(EEmpire.Red);
+    assertEq(
+      OverrideCost.get(EEmpire.Red, EOverride.CreateShip),
+      overrideConfig.minOverrideCost + 1,
+      "Sequential Override cost down not working"
     );
 
     assertEq(
-      ActionCost.get(EEmpire.Blue, EPlayerAction.CreateShip),
-      actionConfig.minActionCost + actionConfig.actionGenRate,
-      "Blue Empire action cost should remain unchanged"
+      OverrideCost.get(EEmpire.Blue, EOverride.CreateShip),
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate,
+      "Blue Empire override cost should remain unchanged"
     );
     assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip),
-      actionConfig.minActionCost + actionConfig.actionGenRate,
-      "Green Empire action cost should remain unchanged"
+      OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
+      overrideConfig.minOverrideCost + overrideConfig.overrideGenRate,
+      "Green Empire override cost should remain unchanged"
     );
 
-    LibPrice.empirePlayerActionsCostDown(EEmpire.Green);
+    LibPrice.empireOverridesCostDown(EEmpire.Green);
     assertEq(
-      ActionCost.get(EEmpire.Green, EPlayerAction.CreateShip),
-      actionConfig.minActionCost,
-      "Empire action cost down incorrect when different empire"
+      OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
+      overrideConfig.minOverrideCost,
+      "Empire override cost down incorrect when different empire"
     );
     assertEq(
-      ActionCost.get(EEmpire.Red, EPlayerAction.CreateShip),
-      actionConfig.minActionCost + 1,
-      "Red Empire action cost should remain unchanged"
+      OverrideCost.get(EEmpire.Red, EOverride.CreateShip),
+      overrideConfig.minOverrideCost + 1,
+      "Red Empire override cost should remain unchanged"
     );
   }
 

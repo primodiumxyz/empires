@@ -10,7 +10,7 @@ import {
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
+import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
@@ -19,10 +19,10 @@ import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
-import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useGame } from "@/hooks/useGame";
+import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { EmpireEnumToName } from "@/util/lookups";
 
@@ -77,7 +77,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
       </div>
       {!!empireId && (
         <>
-          <PlanetQuickActions entity={entity} />
+          <PlanetQuickOverrides entity={entity} />
           <RoutineProbabilities entity={entity} />
         </>
       )}
@@ -86,7 +86,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
 };
 
 /* --------------------------------- ACTIONS -------------------------------- */
-const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
+const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
   const {
     tables,
     utils: { weiToUsd },
@@ -98,10 +98,10 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
   const planet = tables.Planet.use(entity)!;
   const { empireId, shipCount, shieldCount } = planet;
 
-  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId, 1n);
-  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId, 1n);
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId, 1n);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId, 1n);
+  const addShipPriceWei = useOverrideCost(EOverride.CreateShip, empireId, 1n);
+  const removeShipPriceWei = useOverrideCost(EOverride.KillShip, empireId, 1n);
+  const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, empireId, 1n);
+  const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, empireId, 1n);
 
   const addShipPriceUsd = weiToUsd(addShipPriceWei, ethPrice ?? 0);
   const removeShipPriceUsd = weiToUsd(removeShipPriceWei, ethPrice ?? 0);

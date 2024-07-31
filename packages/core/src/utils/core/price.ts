@@ -1,13 +1,13 @@
 import { formatEther } from "viem";
-import { EEmpire, EPlayerAction } from "@primodiumxyz/contracts/config/enums";
+import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
 
 import { Tables } from "@core/lib";
 
 const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
 
 export function createPriceUtils(tables: Tables) {
-  function getTotalCost(_actionType: EPlayerAction, _empireImpacted: EEmpire, _actionCount: bigint): bigint {
-    const progressAction = [EPlayerAction.CreateShip, EPlayerAction.ChargeShield].includes(_actionType);
+  function getTotalCost(_actionType: EOverride, _empireImpacted: EEmpire, _actionCount: bigint): bigint {
+    const progressAction = [EOverride.CreateShip, EOverride.ChargeShield].includes(_actionType);
     let totalCost = 0n;
 
     if (progressAction) {
@@ -77,21 +77,18 @@ export function createPriceUtils(tables: Tables) {
    * @return actionCost The marginal cost of the actions that impact a specific empire.
    */
   function getMarginalActionCost(
-    _actionType: EPlayerAction,
+    _actionType: EOverride,
     _empireImpacted: EEmpire,
     _progressAction: boolean,
     _actionCount: bigint,
   ): bigint {
     const initActionCost =
-      tables.ActionCost.getWithKeys({ empireId: _empireImpacted, action: _actionType })?.value ?? 0n;
-    const actionCostIncrease = tables.P_ActionConfig.get()?.actionCostIncrease ?? 0n;
+      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ?? 0n;
+    const actionCostIncrease = tables.P_OverrideConfig.get()?.overrideCostIncrease ?? 0n;
 
     const triangleSumOBO = ((_actionCount - 1n) * _actionCount) / 2n;
-    let actionCost = initActionCost * _actionCount + triangleSumOBO * actionCostIncrease;
+    const actionCost = initActionCost * _actionCount + triangleSumOBO * actionCostIncrease;
 
-    if (!_progressAction) {
-      actionCost = (actionCost * (tables.P_ActionConfig.get()?.regressMultiplier ?? 0n)) / 10000n;
-    }
     return actionCost;
   }
 

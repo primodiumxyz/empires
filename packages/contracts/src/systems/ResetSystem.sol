@@ -31,6 +31,6 @@ contract ResetSystem is System {
     P_GameConfig.setGameOverBlock(block.number + 1_000);
     P_GameConfig.setGameStartTimestamp(block.timestamp);
     createPlanets(); // Planet and Empire tables are reset to default values
-    initPrice(); // Empire.setPointCost and ActionCost tables are reset to default values
+    initPrice(); // Empire.setPointCost and OverrideCost tables are reset to default values
   }
 }

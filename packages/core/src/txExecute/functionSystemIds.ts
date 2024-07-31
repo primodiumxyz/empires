@@ -12,11 +12,11 @@ export const functionSystemIds: {
   unregisterDelegation: getSystemId("Registration", "CORE"),
 
   /* -------------------------------- Gameplay -------------------------------- */
-  Empires__createShip: getSystemId("ActionSystem"),
-  Empires__killShip: getSystemId("ActionSystem"),
-  Empires__chargeShield: getSystemId("ActionSystem"),
-  Empires__drainShield: getSystemId("ActionSystem"),
-  Empires__sellPoints: getSystemId("ActionSystem"),
+  Empires__createShip: getSystemId("OverrideSystem"),
+  Empires__killShip: getSystemId("OverrideSystem"),
+  Empires__chargeShield: getSystemId("OverrideSystem"),
+  Empires__drainShield: getSystemId("OverrideSystem"),
+  Empires__sellPoints: getSystemId("OverrideSystem"),
 
   Empires__updateWorld: getSystemId("UpdateSystem"),
 

@@ -14,6 +14,7 @@ import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { PlanetGrid } from "@/components/PlanetGrid";
 import { Pot } from "@/components/Pot";
+import { PriceHistory } from "@/components/PriceHistory";
 import { SellPoints } from "@/components/SellPoints";
 import { TimeLeft } from "@/components/TimeLeft";
 import { UserSettings } from "@/components/UserSettings";
@@ -124,27 +125,35 @@ export const GameHUD = () => {
     <>
       <HUD pad>
         <HUD.TopLeft>
-          <Account />
+          <PriceHistory />
         </HUD.TopLeft>
+
         <HUD.TopMiddle>
-          <TimeLeft />
+        <Pot showRake={false} showPot={true} className="w-48" />
         </HUD.TopMiddle>
+
         <HUD.TopRight>
-          <Pot />
+          <Account />
         </HUD.TopRight>
+
         <HUD.Center>
           <PlanetGrid tileSize={100} />
         </HUD.Center>
+
         <HUD.BottomLeft>
           <SellPoints />
+          <Pot showRake={true} showPot={false} className="absolute left-2 bottom-1 w-56" />
         </HUD.BottomLeft>
+
         <HUD.BottomMiddle>
+          <TimeLeft />
           <AdvanceTurn />
         </HUD.BottomMiddle>
+
         <HUD.BottomRight className="flex gap-2">
           <UserSettings />
           <ActionLog />
-          <HistoricalPointPriceModal />
+          <HistoricalPointPriceModal showIcon={true} />
           {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomRight>
       </HUD>

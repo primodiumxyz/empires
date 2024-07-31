@@ -11,7 +11,7 @@ import { coordToId } from "src/utils.sol";
 contract LibMoveShipsTest is PrimodiumTest {
   bytes32 planetId;
 
-  bytes32 targetPlanet = coordToId(0, -1);
+  bytes32 targetPlanet = coordToId(100, -1);
 
   function setUp() public override {
     super.setUp();
