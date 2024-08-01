@@ -15,6 +15,7 @@ import { Marker } from "@/components/core/Marker";
 import { Tabs } from "@/components/core/Tabs";
 import { Tooltip } from "@/components/core/Tooltip";
 import { OverridePane } from "@/components/OverridePane";
+import { PlaceMagnetOverridePane } from "@/components/PlaceMagnetOverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
@@ -178,10 +179,11 @@ const InteractButton = forwardRef<
         <div className="absolute left-1/2 top-12 -translate-x-1/2 backdrop-blur-2xl">
           <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
             <div className="flex flex-col items-center justify-center gap-1">
-              <Tabs className="flex w-64 flex-col items-center gap-2">
+              <Tabs className="flex w-[350px] flex-col items-center gap-2">
                 <Join>
                   <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
                   <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
+                  <Tabs.IconButton icon={InterfaceIcons.Crosshairs} text="MAGNET" index={2} />
                 </Join>
                 <Tabs.Pane index={0} className="w-full items-center gap-4">
                   <OverridePane
@@ -226,6 +228,9 @@ const InteractButton = forwardRef<
                       (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                     }
                   />
+                </Tabs.Pane>
+                <Tabs.Pane index={2} className="w-full items-center gap-4">
+                  <PlaceMagnetOverridePane planetId={planetId} />
                 </Tabs.Pane>
               </Tabs>
             </div>
@@ -400,7 +405,9 @@ const Shields = ({
     }, 5000);
   };
   useEffect(() => {
-    const listener = tables.ChargeShieldsOverrideLog.update$.subscribe(({ properties: { current } }) => callback(current));
+    const listener = tables.ChargeShieldsOverrideLog.update$.subscribe(({ properties: { current } }) =>
+      callback(current),
+    );
     const listener2 = tables.DrainShieldsOverrideLog.update$.subscribe(({ properties: { current } }) =>
       callback(current, true),
     );
