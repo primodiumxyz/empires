@@ -1,7 +1,7 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
 import { POINTS_UNIT } from "./constants";
-import { EEmpire, EOverride, ERoutine } from "./enums";
+import { EEmpire, ERoutine, EOverride } from "./enums";
 
 const scaleMultiplier = (multiplier: number) => {
   if (multiplier < 0 || multiplier > 1) throw new Error("multiplier must be between 0 and 100");
@@ -87,19 +87,6 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     },
   },
 
-  PlaceMagnetOverride: {
-    keys: [{ [EOverride.PlaceMagnet]: "uint8" }],
-    tables: {
-      P_OverrideConfig: {
-        isProgressOverride: true,
-        minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
-      },
-    },
-  },
-
   BuyShips: {
     keys: [{ [ERoutine.BuyShips]: "uint8" }],
     tables: {
@@ -114,6 +101,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_RoutineCosts: {
         goldCost: 1n,
       },
+
     },
   },
   // this is the gold added to the planet when this routine is triggered

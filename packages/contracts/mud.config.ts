@@ -80,7 +80,7 @@ export const worldInput = {
     // Used in the mbuilding utilities Map data structure
     Value_PointsMap: {
       key: ["empireId", "playerId"],
-      schema: { playerId: "bytes32", empireId: "EEmpire", value: "uint256", lockedPoints: "uint256" },
+      schema: { playerId: "bytes32", empireId: "EEmpire", value: "uint256" },
     },
 
     Meta_PointsMap: {
@@ -175,19 +175,6 @@ export const worldInput = {
         planetId: "bytes32",
         empireId: "EEmpire",
         shipCount: "uint256",
-      },
-    },
-
-    /* ----------------------------- Magnet ---------------------------- */
-
-    Magnet: {
-      key: ["empireId", "planetId"],
-      schema: {
-        planetId: "bytes32",
-        empireId: "EEmpire",
-        isMagnet: "bool",
-        lockedPoints: "uint256",
-        playerId: "bytes32",
       },
     },
 
@@ -314,18 +301,6 @@ export const worldInput = {
     },
 
     DrainShieldsOverrideLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        planetId: "bytes32",
-        ethSpent: "uint256",
-        overrideCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
-    PlaceMagnetOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
