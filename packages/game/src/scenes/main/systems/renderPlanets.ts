@@ -13,6 +13,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
     if (!planet) return;
 
     const { q, r } = planet;
+
     new Planet({
       id: entity,
       scene,

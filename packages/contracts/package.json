@@ -9,7 +9,7 @@
     "build": "pnpm run build:lib && pnpm run build:mud && pnpm run build:abi-ts",
     "build:abi-ts": "mud abi-ts",
     "build:lib": "rm -rf src/codegen",
-    "build:mud": "pnpm run build:prototype && pnpm mud build",
+    "build:mud": "pnpm run build:prototype && pnpm run build:map && pnpm mud build",
     "build:prototype": "tsx ./ts/prototypes/commands/prototypegen.ts",
     "build:map": "tsx ./ts/map/commands/mapgen.ts",
     "deploy:caldera": "pnpm mud deploy --profile=caldera",

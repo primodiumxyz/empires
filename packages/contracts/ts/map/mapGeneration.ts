@@ -10,6 +10,12 @@ export async function generateMap(outputBaseDirectory: string) {
 }
 
 const EmpireNames = ["NULL", "Red", "Blue", "Green"];
+const OFFSET = 100;
+function oddrToAxial(hex: { row: number; col: number }) {
+  const q = hex.col - (hex.row - (hex.row & 1)) / 2;
+  const r = hex.row;
+  return { q, r };
+}
 
 function generateContent() {
   const center = { q: Math.floor((planetMap.width - 1) / 2), r: Math.floor((planetMap.height - 1) / 2) };
@@ -20,7 +26,9 @@ function generateContent() {
     .map((_empire, i) => {
       const empire = _empire - 1;
       if (empire === -1) return "";
-      const coord = { q: (i % planetMap.width) - center.q, r: Math.floor(i / planetMap.width) - center.r };
+      const r = Math.floor(i / planetMap.width) - center.r;
+      const q = (i % planetMap.width) - center.q + OFFSET;
+      const coord = oddrToAxial({ row: r, col: q });
 
       const planetName = `planet${count++}`;
       const empireName = EmpireNames[empire] ?? "NULL";

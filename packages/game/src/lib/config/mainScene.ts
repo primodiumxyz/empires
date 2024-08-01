@@ -5,9 +5,9 @@ import { Scenes } from "@game/lib/constants/common";
 export const mainSceneConfig: SceneConfig = {
   key: Scenes.Main,
   camera: {
-    minZoom: 1,
+    minZoom: 0.75,
     maxZoom: 1,
-    defaultZoom: 1,
+    defaultZoom: 0.75,
     pinchSpeed: 0.01,
     wheelSpeed: 1,
   },
