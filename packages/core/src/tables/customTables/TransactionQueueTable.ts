@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { TransactionReceipt } from "viem";
 
 import { BaseTableMetadata, createLocalTable, Entity, TableOptions, Type } from "@primodiumxyz/reactive-tables";
-import { TX_TIMEOUT } from "@core/lib";
+import { TxReceipt } from "@core/lib";
 import { CreateNetworkResult } from "@core/lib/types";
 import { TxQueueOptions } from "@core/tables/types";
 
@@ -10,8 +9,8 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
   { world }: CreateNetworkResult,
   options?: TableOptions<M>,
 ) {
-  const queue: { id: string; fn: () => Promise<TransactionReceipt | undefined> }[] = [];
-  const txSuccess = new Map<string, boolean>();
+  const queue: { id: string; fn: () => Promise<TxReceipt> }[] = [];
+  const txReceipts = new Map<string, TxReceipt>();
   let isRunning = false;
 
   const table = createLocalTable(
@@ -24,7 +23,7 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
   );
 
   // Add a function to the queue
-  async function enqueue(fn: () => Promise<TransactionReceipt | undefined>, options: TxQueueOptions): Promise<boolean> {
+  async function enqueue(fn: () => Promise<TxReceipt>, options: TxQueueOptions): Promise<TxReceipt> {
     if (!options.force && table.has(options.id as Entity)) return waitForTx(options);
 
     queue.push({
@@ -49,7 +48,6 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
 
     while (queue.length) {
       const tx = queue[0];
-
       if (!tx) continue;
 
       const { id, fn } = tx;
@@ -57,11 +55,10 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
       if (fn) {
         try {
           const receipt = await fn();
-          if (receipt) {
-            txSuccess.set(id, receipt.status === "success");
-          }
+          txReceipts.set(id, receipt);
         } catch (error) {
           console.error("Error executing function:", error);
+          txReceipts.set(id, { success: false, error: error instanceof Error ? error.message : String(error) });
         } finally {
           queue.shift();
           table.remove(id as Entity);
@@ -72,30 +69,17 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
     isRunning = false;
   }
 
-  async function waitForTx(options: TxQueueOptions): Promise<boolean> {
-    // listen to the table and resolve when it changes
-    return new Promise<boolean>((resolve, reject) => {
-      const timeoutId = setTimeout(() => {
-        reject(new Error("Timed out"));
-      }, options.timeout ?? TX_TIMEOUT);
-      run();
+  async function waitForTx(options: TxQueueOptions): Promise<TxReceipt> {
+    run();
 
-      // TODO(TEMP): replace when reactive-tables merged & updated
-      // table.once({
-      //   filter: ({entity}) => entity === options.id,
-      //   do: () => {
-      //     clearTimeout(timeoutId);
-      //     resolve(txSuccess.get(options.id) ?? false);
-      //   }
-      // });
-      table.watch({
-        onExit: ({ entity }) => {
-          if (entity === options.id) {
-            clearTimeout(timeoutId);
-            resolve(txSuccess.get(options.id) ?? false);
-          }
+    return new Promise<TxReceipt>((resolve) => {
+      table.once(
+        {
+          filter: ({ entity }) => entity === options.id,
+          do: () => resolve(txReceipts.get(options.id) ?? { success: false, error: "Transaction not found" }),
         },
-      });
+        { runOnInit: false },
+      );
     });
   }
 

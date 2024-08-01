@@ -19,12 +19,17 @@ export const runInitialSync = async (core: Core) => {
   const fromBlock = config.initialBlockNumber ?? 0n;
 
   // Once historical sync (indexer > rpc) is complete
-  const onSyncComplete = (processPendingLogs?: () => void) => {
+  const onSyncComplete = (blockNumber: bigint, processPendingLogs?: () => void) => {
     // process logs that came in the meantime
     processPendingLogs?.();
 
     // set sync status to live so it processed incoming blocks immediately
-    tables.SyncStatus.set({ step: SyncStep.Live, progress: 1, message: "Subscribed to live updates" });
+    tables.SyncStatus.set({
+      step: SyncStep.Live,
+      progress: 1,
+      message: "Subscribed to live updates",
+      lastBlockNumberProcessed: blockNumber,
+    });
   };
 
   if (!config.chain.indexerUrl) {
@@ -40,13 +45,14 @@ export const runInitialSync = async (core: Core) => {
       fromBlock,
       toBlock,
       //on complete
-      () => onSyncComplete(processPendingLogs),
+      (blockNumber: bigint) => onSyncComplete(blockNumber, processPendingLogs),
       //on error
       (err: unknown) => {
         tables.SyncStatus.set({
           step: SyncStep.Error,
           progress: 0,
           message: `Failed to sync from RPC`,
+          lastBlockNumberProcessed: tables.SyncStatus.get()?.lastBlockNumberProcessed ?? BigInt(0),
         });
 
         console.warn("Failed to sync from RPC");
@@ -66,13 +72,14 @@ export const runInitialSync = async (core: Core) => {
       fromBlock,
       toBlock,
       //on complete
-      () => onSyncComplete(processPendingLogs),
+      (blockNumber: bigint) => onSyncComplete(blockNumber, processPendingLogs),
       //on error
       (err: unknown) => {
         tables.SyncStatus.set({
           step: SyncStep.Error,
           progress: 0,
           message: `Failed to sync from RPC. Please try again.`,
+          lastBlockNumberProcessed: tables.SyncStatus.get()?.lastBlockNumberProcessed ?? BigInt(0),
         });
         console.warn("Failed to sync from RPC ", err);
       },
@@ -83,11 +90,12 @@ export const runInitialSync = async (core: Core) => {
   // sync initial game state from indexer
   syncInitialGameState(
     // on complete
-    () => {
+    (blockNumber: bigint) => {
       tables.SyncStatus.set({
         step: SyncStep.Complete,
         progress: 1,
         message: `DONE`,
+        lastBlockNumberProcessed: blockNumber,
       });
     },
     onError,
