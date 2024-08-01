@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { MagnetTurnPlanets, Empire, P_MagnetConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, Magnet, MagnetData, Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
+import { P_OverrideConfig, MagnetTurnPlanets, Empire, P_MagnetConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, Magnet, MagnetData, Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -22,22 +22,21 @@ contract OverrideSystem is EmpiresSystem {
    * @dev Internal function to purchase a number of overrides.
    * @param _overrideType The type of override to purchase.
    * @param _empireImpacted The empire impacted by the override.
-   * @param _progressOverride Flag indicating if the override progressively or regressively impacts the empire.
    * @param _overrideCount The number of overrides to purchase.
    * @param _spend The amount spent on the override.
    */
   function _purchaseOverride(
     EOverride _overrideType,
     EEmpire _empireImpacted,
-    bool _progressOverride,
     uint256 _overrideCount,
     uint256 _spend
   ) private {
     bytes32 playerId = addressToId(_msgSender());
     Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
     uint256 pointUnit = P_PointConfig.getPointUnit();
+    bool progressOverride = P_OverrideConfig.getIsProgressOverride(_overrideType);
 
-    if (_progressOverride) {
+    if (progressOverride) {
       uint256 numPoints = _overrideCount * (EMPIRE_COUNT - 1) * pointUnit;
       LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
       LibPrice.pointCostUp(_empireImpacted, numPoints);
@@ -67,7 +66,7 @@ contract OverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    _purchaseOverride(EOverride.CreateShip, planetData.empireId, true, _overrideCount, _msgValue());
+    _purchaseOverride(EOverride.CreateShip, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount + _overrideCount);
 
@@ -96,7 +95,7 @@ contract OverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    _purchaseOverride(EOverride.KillShip, planetData.empireId, false, _overrideCount, _msgValue());
+    _purchaseOverride(EOverride.KillShip, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount - _overrideCount);
     KillShipOverrideLog.set(
@@ -123,7 +122,7 @@ contract OverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    _purchaseOverride(EOverride.ChargeShield, planetData.empireId, true, _overrideCount, _msgValue());
+    _purchaseOverride(EOverride.ChargeShield, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount + _overrideCount);
 
@@ -152,7 +151,7 @@ contract OverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    _purchaseOverride(EOverride.DrainShield, planetData.empireId, false, _overrideCount, _msgValue());
+    _purchaseOverride(EOverride.DrainShield, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount - _overrideCount);
     DrainShieldsOverrideLog.set(
@@ -199,14 +198,13 @@ contract OverrideSystem is EmpiresSystem {
     uint256 turnDuration
   ) public payable _onlyNotGameOver _takeRake {
     bytes32 playerId = addressToId(_msgSender());
-    PlanetData memory planetData = Planet.get(_planetId);
 
     require(Magnet.get(_empire, _planetId).isMagnet == false, "[OverrideSystem] Planet already has a magnet");
-    uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, planetData.empireId, turnDuration);
+    uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, _empire, turnDuration);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    _purchaseOverride(EOverride.PlaceMagnet, planetData.empireId, false, turnDuration, _msgValue());
     LibMagnet.addMagnet(_empire, _planetId, playerId, turnDuration);
+    _purchaseOverride(EOverride.PlaceMagnet, _empire, turnDuration, _msgValue());
 
     PlaceMagnetOverrideLog.set(
       pseudorandomEntity(),

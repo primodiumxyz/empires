@@ -51,12 +51,6 @@ library PointsMap {
    */
   function setLockedPoints(EEmpire empire, bytes32 playerId, uint256 lockedPoints) internal {
     if (has(empire, playerId)) {
-      uint256 prevValue = getLockedPoints(empire, playerId);
-
-      if (lockedPoints < prevValue)
-        Empire.setPointsIssued(empire, Empire.getPointsIssued(empire) - (prevValue - lockedPoints));
-      else Empire.setPointsIssued(empire, Empire.getPointsIssued(empire) + (lockedPoints - prevValue));
-
       Value_PointsMap.setLockedPoints(empire, playerId, lockedPoints);
     } else {
       Keys_PointsMap.push(empire, playerId);

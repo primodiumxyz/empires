@@ -13,6 +13,7 @@ import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { RoutineThresholds } from "../Types.sol";
+import { EMPIRE_COUNT } from "src/constants.sol";
 
 contract UpdateSystem is EmpiresSystem {
   /**
@@ -25,7 +26,7 @@ contract UpdateSystem is EmpiresSystem {
     bool canUpdate = block.number >= turn.nextTurnBlock;
     if (!canUpdate) revert("[UpdateSystem] Cannot update yet");
     uint256 newNextTurnBlock = block.number + P_GameConfig.getTurnLengthBlocks();
-    EEmpire newEmpire = EEmpire(((uint256(turn.empire) + 1) % 3) + 1);
+    EEmpire newEmpire = EEmpire(((uint256(turn.empire) % 3) + 1));
     Turn.set(newNextTurnBlock, newEmpire, turn.value + 1);
     return turn.empire;
   }
@@ -55,14 +56,15 @@ contract UpdateSystem is EmpiresSystem {
       LibResolveCombat.resolveCombat(planets[i]);
     }
 
-    // clear magnets
     TurnData memory turn = Turn.get();
-    bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(turn.empire, turn.value);
+    uint256 globalTurn = (turn.value - 1) / EMPIRE_COUNT;
+
+    bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(turn.empire, globalTurn);
     for (uint i = 0; i < magnetEmpireTurnPlanets.length; i++) {
       // clear magnet
       LibMagnet.removeMagnet(turn.empire, magnetEmpireTurnPlanets[i]);
     }
-    MagnetTurnPlanets.deleteRecord(turn.empire, turn.value);
+    MagnetTurnPlanets.deleteRecord(turn.empire, globalTurn);
 
     // update empire point costs
     for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {

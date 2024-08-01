@@ -14,7 +14,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 10n,
+        turnLengthBlocks: 1n,
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
@@ -34,7 +34,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       Turn: {
         nextTurnBlock: 0n,
         empire: EEmpire.Red,
-        value: 0n,
+        value: 1n,
       },
     },
   },
