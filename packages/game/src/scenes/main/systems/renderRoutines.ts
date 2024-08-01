@@ -125,6 +125,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
               icon: "Ship",
               iconSize: 20,
               fontSize: 16,
+              delay: 750,
               borderStyle: {
                 color: 0x800080,
                 alpha: 0.75,
@@ -142,7 +143,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
           if (faction && destinationPlanet)
             destinationPlanet.updateFaction(faction);
-        }, 2000);
+        }, 2250);
       },
     },
     { runOnInit: false }
