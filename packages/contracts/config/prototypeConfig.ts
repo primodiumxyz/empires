@@ -14,19 +14,19 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 15n,
+        turnLengthBlocks: 10n,
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
       },
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),
-        pointRake: scaleMultiplier(0.01), // out of 1, scales to out of 10000
+        pointRake: scaleMultiplier(0.05), // out of 1, scales to out of 10000
         pointSellTax: BigInt(POINTS_UNIT * 0),
         minPointCost: BigInt(POINTS_UNIT * 0.00002),
-        startPointCost: BigInt(POINTS_UNIT * 0.00004),
-        pointGenRate: BigInt(POINTS_UNIT * 0.00002),
-        pointCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        startPointCost: BigInt(POINTS_UNIT * 0.0002),
+        pointGenRate: BigInt(POINTS_UNIT * 0.000015),
+        pointCostIncrease: BigInt(POINTS_UNIT * 0.00001),
       },
       Turn: {
         nextTurnBlock: 0n,
@@ -42,7 +42,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         isProgressOverride: true,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
       },
     },
@@ -55,7 +55,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         isProgressOverride: false,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
       },
     },
@@ -68,8 +68,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         isProgressOverride: true,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
       },
     },
   },
@@ -81,8 +81,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         isProgressOverride: false,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
       },
     },
   },
@@ -99,7 +99,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [{ [ERoutine.BuyShields]: "uint8" }],
     tables: {
       P_RoutineCosts: {
-        goldCost: 2n,
+        goldCost: 1n,
       },
 
     },
