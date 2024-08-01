@@ -66,7 +66,7 @@ export const worldInput = {
     },
     Turn: {
       key: [],
-      schema: { nextTurnBlock: "uint256", empire: "EEmpire" },
+      schema: { nextTurnBlock: "uint256", empire: "EEmpire", value: "uint256" },
     },
 
     Player: {
@@ -193,6 +193,7 @@ export const worldInput = {
         empireId: "EEmpire",
         isMagnet: "bool",
         lockedPoints: "uint256",
+        endTurn: "uint256",
         playerId: "bytes32",
       },
     },

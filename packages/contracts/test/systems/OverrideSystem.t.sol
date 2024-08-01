@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Planet, OverrideCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
+import { Turn, P_GameConfig, Planet, OverrideCost, Player, P_PointConfig, P_MagnetConfig, Magnet, Empire } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
@@ -334,5 +334,77 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__sellPoints(empire, points / 2);
     assertEq(PointsMap.getLockedPoints(empire, aliceId), points / 2, "Locked Points should be 50");
     assertEq(PointsMap.getValue(empire, aliceId), points - (points / 2), "Player Points should be 80");
+  }
+
+  function testPlaceMagnet() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+    uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+    assertEq(Magnet.getIsMagnet(empire, planetId), true, "Magnet should be placed");
+    assertEq(Magnet.getLockedPoints(empire, planetId), pointsToStake, "Magnet should have locked points");
+    assertEq(Magnet.getPlayerId(empire, planetId), aliceId, "Magnet should have player id");
+    assertEq(Magnet.getEndTurn(empire, planetId), 3 + Turn.getValue(), "Magnet should have end turn");
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
+  }
+
+  function testPlaceMagnetFailExistingMagnet() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+
+    vm.prank(bob);
+    vm.expectRevert("[OverrideSystem] Planet already has a magnet");
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+  }
+
+  function testPlaceMagnetFailInsufficientPayment() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+
+    vm.prank(alice);
+    vm.expectRevert("[OverrideSystem] Incorrect payment");
+    world.Empires__placeMagnet{ value: totalCost - 1 }(empire, planetId, 1);
+  }
+
+  function testPlaceMagnetFailInsufficientPoints() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+
+    // Set player points to 0
+    vm.startPrank(creator);
+    Empire.setPointsIssued(empire, 100 * pointUnit);
+    PointsMap.setValue(empire, aliceId, 0);
+
+    switchPrank(alice);
+    vm.expectRevert("[OverrideSystem] Player does not have enough points to place magnet");
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+  }
+
+  function testPlaceMagnetCostDeduction() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+    uint256 initialBalance = alice.balance;
+
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+
+    assertEq(alice.balance, initialBalance - totalCost, "Incorrect amount deducted from player's balance");
+  }
+
+  function testPlaceMagnetPointLocking() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+    uint256 initialPoints = PointsMap.getValue(empire, aliceId);
+    uint256 expectedLockedPoints = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
+
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), expectedLockedPoints, "Incorrect amount of points locked");
+    assertEq(PointsMap.getValue(empire, aliceId), initialPoints, "Total points should not change");
   }
 }

@@ -197,15 +197,6 @@ contract OverrideSystem is EmpiresSystem {
     bytes32 _planetId,
     uint256 turnDuration
   ) public payable _onlyNotGameOver _takeRake {
-    /*
-     0. checks
-       - planet doesn't have a magnet of this color already
-     1. figure out how many points to stake
-     2. stake point count required
-     3. Require payment in addition to points staked
-     4. Set the magnet
-     */
-
     bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
 
@@ -221,11 +212,21 @@ contract OverrideSystem is EmpiresSystem {
       "[OverrideSystem] Player does not have enough points to place magnet"
     );
 
-    Magnet.set(_empire, _planetId, MagnetData({ isMagnet: true, lockedPoints: requiredPoints, playerId: playerId }));
+    uint256 scaledTurnDuration = turnDuration * EMPIRE_COUNT;
+    Magnet.set(
+      _empire,
+      _planetId,
+      MagnetData({ isMagnet: true, lockedPoints: requiredPoints, playerId: playerId, endTurn: scaledTurnDuration })
+    );
     PointsMap.setLockedPoints(_empire, playerId, PointsMap.getLockedPoints(_empire, playerId) + requiredPoints);
     PlaceMagnetOverrideLog.set(
       pseudorandomEntity(),
-      PlaceMagnetOverrideLogData({ planetId: _planetId, ethSpent: cost, overrideCount: 1, timestamp: block.timestamp })
+      PlaceMagnetOverrideLogData({
+        planetId: _planetId,
+        ethSpent: cost,
+        overrideCount: turnDuration,
+        timestamp: block.timestamp
+      })
     );
   }
 }
