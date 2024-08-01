@@ -37,22 +37,24 @@ export const worldInput = {
       key: [],
       schema: {
         pointUnit: "uint256",
+        pointRake: "uint256", // times 10_000
+        pointSellTax: "uint256",
         minPointCost: "uint256",
         startPointCost: "uint256",
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
-        pointRake: "uint256", // times 10_000
-        pointSellTax: "uint256",
       },
     },
 
     P_OverrideConfig: {
-      key: [],
+      key: ["overrideAction"],
       schema: {
+        overrideAction: "EOverride",
+        isProgressOverride: "bool",
+        minOverrideCost: "uint256",
+        startOverrideCost: "uint256",
         overrideGenRate: "uint256",
         overrideCostIncrease: "uint256",
-        startOverrideCost: "uint256",
-        minOverrideCost: "uint256",
       },
     },
 
@@ -260,7 +262,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    CreateShipOverride: {
+    CreateShipOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -273,7 +275,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    KillShipOverride: {
+    KillShipOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -286,7 +288,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    ChargeShieldsOverride: {
+    ChargeShieldsOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -298,7 +300,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    DrainShieldsOverride: {
+    DrainShieldsOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",

@@ -14,32 +14,22 @@ library LibPrice {
    * @dev Calculates the total cost of an override that is to be purchased.
    * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the override.
-   * @param _progressOverride Flag indicating whether the override is progressive or regressive to the impacted empire.
    * @param _overrideCount The number of overrides to be purchased.
    * @return totalCost The total cost of the override.
    */
   function getTotalCost(
     EOverride _overrideType,
     EEmpire _empireImpacted,
-    bool _progressOverride,
     uint256 _overrideCount
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
-    if (_progressOverride) {
-      require(
-        _overrideType == EOverride.CreateShip || _overrideType == EOverride.ChargeShield,
-        "[LibPrice] Override type is not a progressive override"
-      );
+    if (P_OverrideConfig.getIsProgressOverride(_overrideType)) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
     } else {
-      require(
-        _overrideType == EOverride.KillShip || _overrideType == EOverride.DrainShield,
-        "[LibPrice] Override type is not a regressive override"
-      );
       totalCost = getRegressPointCost(_empireImpacted, _overrideCount);
     }
 
-    totalCost += getMarginalOverrideCost(_empireImpacted, _overrideType, _overrideCount);
+    totalCost += getMarginalOverrideCost(_overrideType, _empireImpacted, _overrideCount);
 
     return totalCost;
   }
@@ -93,20 +83,20 @@ library LibPrice {
 
   /**
    * @dev Calculates the marginal cost of a specific number of overrides for a specific empire.
-   * @param _empire The empire being impacted.
    * @param _overrideType The type of override.
+   * @param _empire The empire being impacted.
    * @param _overrideCount The number of overrides.
    * @return overrideCost The marginal cost of the overrides that impact a specific empire.
    */
   function getMarginalOverrideCost(
-    EEmpire _empire,
     EOverride _overrideType,
+    EEmpire _empire,
     uint256 _overrideCount
   ) internal view returns (uint256) {
     require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");
 
     uint256 initOverrideCost = OverrideCost.get(_empire, _overrideType);
-    uint256 overrideCostIncrease = P_OverrideConfig.getOverrideCostIncrease();
+    uint256 overrideCostIncrease = P_OverrideConfig.getOverrideCostIncrease(_overrideType);
 
     uint256 triangleSumOBO = ((_overrideCount - 1) * _overrideCount) / 2;
     uint256 overrideCost = initOverrideCost * _overrideCount + overrideCostIncrease * triangleSumOBO;
@@ -139,7 +129,7 @@ library LibPrice {
   function overrideCostUp(EEmpire _empire, EOverride _overrideType, uint256 _overrideCount) internal {
     require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");
     uint256 newOverrideCost = OverrideCost.get(_empire, _overrideType) +
-      P_OverrideConfig.getOverrideCostIncrease() *
+      P_OverrideConfig.getOverrideCostIncrease(_overrideType) *
       _overrideCount;
     OverrideCost.set(_empire, _overrideType, newOverrideCost);
   }
@@ -165,8 +155,8 @@ library LibPrice {
    * @param _empireImpacted The empire to decrease the override costs for.
    */
   function empireOverridesCostDown(EEmpire _empireImpacted) internal {
-    P_OverrideConfigData memory config = P_OverrideConfig.get();
     for (uint256 i = 1; i < uint256(EOverride.LENGTH); i++) {
+      P_OverrideConfigData memory config = P_OverrideConfig.get(EOverride(i));
       uint256 newOverrideCost = OverrideCost.get(_empireImpacted, EOverride(i));
       if (newOverrideCost > config.minOverrideCost + config.overrideGenRate) {
         newOverrideCost -= config.overrideGenRate;

@@ -337,7 +337,7 @@ const Ships = ({
   const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
-    const unsubscribe = tables.CreateShipOverride.watch(
+    const unsubscribe = tables.CreateShipOverrideLog.watch(
       {
         onChange: ({ properties: { current } }) => {
           if (!current) return;
@@ -363,7 +363,7 @@ const Ships = ({
   }, [nextId]);
 
   useEffect(() => {
-    const unsubscribe = tables.KillShipOverride.watch(
+    const unsubscribe = tables.KillShipOverrideLog.watch(
       {
         onChange: ({ properties: { current } }) => {
           if (!current) return;
@@ -461,13 +461,13 @@ const Shields = ({
     }, 5000);
   };
   useEffect(() => {
-    const unsubscribe1 = tables.ChargeShieldsOverride.watch(
+    const unsubscribe1 = tables.ChargeShieldsOverrideLog.watch(
       {
         onChange: ({ properties: { current } }) => callback(current),
       },
       { runOnInit: false },
     );
-    const unsubscribe2 = tables.DrainShieldsOverride.watch(
+    const unsubscribe2 = tables.DrainShieldsOverrideLog.watch(
       {
         onChange: ({ properties: { current } }) => callback(current, true),
       },

@@ -7,21 +7,20 @@ const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
 
 export function createPriceUtils(tables: Tables) {
   function getTotalCost(
-    _actionType: EOverride,
+    _overrideType: EOverride,
     _empireImpacted: EEmpire,
-    _actionCount: bigint,
+    _overrideCount: bigint,
     nextTurn = false,
   ): bigint {
-    const progressAction = [EOverride.CreateShip, EOverride.ChargeShield].includes(_actionType);
     let totalCost = 0n;
 
-    if (progressAction) {
-      totalCost = getProgressPointCost(_empireImpacted, _actionCount, nextTurn);
+    if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.isProgressOverride ?? undefined) {
+      totalCost = getProgressPointCost(_empireImpacted, _overrideCount, nextTurn);
     } else {
-      totalCost = getRegressPointCost(_empireImpacted, _actionCount, nextTurn);
+      totalCost = getRegressPointCost(_empireImpacted, _overrideCount, nextTurn);
     }
 
-    totalCost += getMarginalActionCost(_actionType, _empireImpacted, progressAction, _actionCount, nextTurn);
+    totalCost += getMarginalOverrideCost(_overrideType, _empireImpacted, _overrideCount, nextTurn);
 
     return totalCost;
   }
@@ -29,12 +28,14 @@ export function createPriceUtils(tables: Tables) {
   /**
    * @dev Calculates the cost of purchasing multiple points related to a progressive action that aids an empire.
    * @param _empireImpacted The empire impacted by the action.
+   * @param _overrideCount The number of actions.
+   * @param nextTurn Whether to calculate the cost for the next turn.
    * @return pointCost The cost of all points related to the action.
    */
-  function getProgressPointCost(_empireImpacted: EEmpire, _actionCount: bigint, nextTurn = false): bigint {
+  function getProgressPointCost(_empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
     return getPointCost(
       _empireImpacted,
-      _actionCount * BigInt(OTHER_EMPIRE_COUNT) * (tables.P_PointConfig.get()?.pointUnit ?? 1n),
+      _overrideCount * BigInt(OTHER_EMPIRE_COUNT) * (tables.P_PointConfig.get()?.pointUnit ?? 1n),
       nextTurn,
     );
   }
@@ -42,15 +43,17 @@ export function createPriceUtils(tables: Tables) {
   /**
    * @dev Calculates the cost of purchasing points related to a regressive action. Points are purchased for all empires except the impacted empire.
    * @param _empireImpacted The empire impacted by the action.
+   * @param _overrideCount The number of actions.
+   * @param nextTurn Whether to calculate the cost for the next turn.
    * @return pointCost The cost of all points related to the action.
    */
-  function getRegressPointCost(_empireImpacted: EEmpire, _actionCount: bigint, nextTurn = false): bigint {
+  function getRegressPointCost(_empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
     let pointCost = 0n;
     for (let i = 1; i < EEmpire.LENGTH; i++) {
       if (i == _empireImpacted) {
         continue;
       }
-      pointCost += getPointCost(i, _actionCount * (tables.P_PointConfig.get()?.pointUnit ?? 1n), nextTurn);
+      pointCost += getPointCost(i, _overrideCount * (tables.P_PointConfig.get()?.pointUnit ?? 1n), nextTurn);
     }
 
     return pointCost;
@@ -60,6 +63,7 @@ export function createPriceUtils(tables: Tables) {
    * @dev Calculates the cost of a specific number of points for a specific empire.
    * @param _empire The empire to purchase points from.
    * @param _points The number of points.
+   * @param nextTurn Whether to calculate the cost for the next turn.
    * @return pointCost The cost of the points from the specific empire.
    */
   function getPointCost(_empire: EEmpire, _points: bigint, nextTurn = false): bigint {
@@ -101,40 +105,41 @@ export function createPriceUtils(tables: Tables) {
   /**
    * @dev Calculates the marginal cost of a specific number of actions for a specific empire.
    * @param _empire The empire being impacted.
-   * @param _actionType The type of action.
-   * @param _progressAction Flag indicating whether the action is progressive or regressive to the impacted empire.
-   * @param _actionCount The number of actions.
-   * @return actionCost The marginal cost of the actions that impact a specific empire.
+   * @param _overrideType The type of action.
+   * @param _overrideCount The number of actions.
+   * @param nextTurn Whether to calculate the cost for the next turn.
+   * @return overrideCost The marginal cost of the actions that impact a specific empire.
    */
-  function getMarginalActionCost(
-    _actionType: EOverride,
+  function getMarginalOverrideCost(
+    _overrideType: EOverride,
     _empireImpacted: EEmpire,
-    _progressAction: boolean,
-    _actionCount: bigint,
+    _overrideCount: bigint,
     nextTurn = false,
   ): bigint {
-    if (nextTurn) return getNextTurnMarginalActionCost(_actionType, _empireImpacted, _actionCount);
+    if (nextTurn) return getNextTurnMarginalOverrideCost(_overrideType, _empireImpacted, _overrideCount);
 
-    const initActionCost =
-      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ?? 0n;
-    const actionCostIncrease = tables.P_OverrideConfig.get()?.overrideCostIncrease ?? 0n;
+    const initOverrideCost =
+      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _overrideType })?.value ?? 0n;
+    const overrideCostIncrease =
+      tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.overrideCostIncrease ?? 0n;
 
-    const triangleSumOBO = ((_actionCount - 1n) * _actionCount) / 2n;
-    const actionCost = initActionCost * _actionCount + triangleSumOBO * actionCostIncrease;
+    const triangleSumOBO = ((_overrideCount - 1n) * _overrideCount) / 2n;
+    const overrideCost = initOverrideCost * _overrideCount + triangleSumOBO * overrideCostIncrease;
 
-    return actionCost;
+    return overrideCost;
   }
 
-  function getNextTurnMarginalActionCost(
-    _actionType: EOverride,
+  function getNextTurnMarginalOverrideCost(
+    _overrideType: EOverride,
     _empireImpacted: EEmpire,
-    _actionCount: bigint,
+    _overrideCount: bigint,
   ): bigint {
-    const config = tables.P_OverrideConfig.get();
     let currentOverrideCost =
-      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _actionType })?.value ?? 0n;
-    const minOverrideCost = config?.minOverrideCost ?? 0n;
-    const overrideGenRate = config?.overrideGenRate ?? 0n;
+      tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _overrideType })?.value ?? 0n;
+    const overrideConfig = tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType });
+    const minOverrideCost = overrideConfig?.minOverrideCost ?? 0n;
+    const overrideGenRate = overrideConfig?.overrideGenRate ?? 0n;
+    const overrideCostIncrease = overrideConfig?.overrideCostIncrease ?? 0n;
 
     if (currentOverrideCost > minOverrideCost + overrideGenRate) {
       currentOverrideCost -= overrideGenRate;
@@ -142,12 +147,10 @@ export function createPriceUtils(tables: Tables) {
       currentOverrideCost = minOverrideCost;
     }
 
-    const overrideCostIncrease = config?.overrideCostIncrease ?? 0n;
+    const triangleSumOBO = ((_overrideCount - 1n) * _overrideCount) / 2n;
+    const overrideCost = currentOverrideCost * _overrideCount + overrideCostIncrease * triangleSumOBO;
 
-    const triangleSumOBO = ((_actionCount - 1n) * _actionCount) / 2n;
-    const actionCost = currentOverrideCost * _actionCount + overrideCostIncrease * triangleSumOBO;
-
-    return actionCost;
+    return overrideCost;
   }
 
   function weiToUsd<N extends boolean = false>(
@@ -175,7 +178,7 @@ export function createPriceUtils(tables: Tables) {
     getRegressPointCost,
     getPointCost,
     getNextTurnPointCost,
-    getNextTurnMarginalActionCost,
+    getNextTurnMarginalOverrideCost,
     weiToUsd,
     usdToWei,
   };
