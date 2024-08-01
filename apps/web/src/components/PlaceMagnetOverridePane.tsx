@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -23,9 +23,10 @@ export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planet
 
   const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
 
-  const onPlaceMagnet = () => {
+  const onPlaceMagnet = useCallback(() => {
+    console.log({ empire, planetId, inputValue, placeMagnetPriceWei });
     placeMagnet(empire, planetId, BigInt(inputValue), placeMagnetPriceWei);
-  };
+  }, [empire, planetId, inputValue, placeMagnetPriceWei, placeMagnet]);
 
   const pointLockPct = tables.P_MagnetConfig.useWithKeys()?.lockedPointsPercent ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
@@ -33,7 +34,6 @@ export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planet
   const {
     playerAccount: { address, entity },
   } = useAccountClient();
-
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
   const playerBalance = useBalance(address).value ?? 0n;
   const magnetExists = tables.Magnet.useWithKeys({ planetId, empireId: empire }) !== undefined;
@@ -42,7 +42,7 @@ export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planet
     if (playerPoints < pointsLocked) return { disabled: true, message: "Not enough points" };
     if (magnetExists) return { disabled: true, message: "Magnet already exists" };
     return { disabled: false, message: "" };
-  }, [placeMagnetPriceWei, price, pointsLocked, magnetExists]);
+  }, [placeMagnetPriceWei, price, pointsLocked, magnetExists, playerBalance, playerPoints]);
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
@@ -51,7 +51,10 @@ export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planet
         <Dropdown.Item value={EEmpire.Red}>Red</Dropdown.Item>
         <Dropdown.Item value={EEmpire.Blue}>Blue</Dropdown.Item>
       </Dropdown>
-      <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
+      <div className="flex flex-col items-center">
+        <p className="text-xs">Turns</p>
+        <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
+      </div>
       <div className="flex gap-2">
         <div className="gap1 flex flex-col items-center">
           {message && <p className="px-2 text-xs text-error">{message}</p>}
