@@ -6,7 +6,7 @@ export function createStaggerQueue() {
   const _queue: [QueuedCallback, number][] = [];
   let executing = false;
 
-  async function queue(callback: QueuedCallback, duration = 100) {
+  async function enqueue(callback: QueuedCallback, duration = 100) {
     _queue.push([callback, duration]);
     await executeQueue();
   }
@@ -34,5 +34,5 @@ export function createStaggerQueue() {
     await _executeQueue();
   }
 
-  return { queue };
+  return { enqueue };
 }

@@ -9,7 +9,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
     network: { world },
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
-  const { queue } = createStaggerQueue();
+  const { enqueue } = createStaggerQueue();
 
   tables.BuyShieldsRoutine.watch(
     {
@@ -21,7 +21,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
-        queue(() => {
+        enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.25 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
@@ -66,7 +66,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
-        queue(() => {
+        enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.25 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
@@ -114,7 +114,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
-        queue(async () => {
+        enqueue(async () => {
           //move destroyers
           planet.moveDestroyers(current.destinationPlanetId as Entity);
 
@@ -158,7 +158,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
-        queue(() => {
+        enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.25 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
@@ -195,7 +195,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
           if (!planet) continue;
 
-          await queue(() => {
+          enqueue(() => {
             scene.audio.play("Complete", "sfx", {
               volume: 0.1,
               detune: Math.min(20 * i, 500),

@@ -26,7 +26,6 @@ const Game = memo(() => {
   const [loading, setLoading] = useState<boolean>(true);
   const gameRef = useRef<PrimodiumGame | null>(null);
   const hasInitialized = useRef(false);
-  const [count, setCount] = useState("1");
 
   useEffect(() => {
     const init = async () => {

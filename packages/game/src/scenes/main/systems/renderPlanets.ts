@@ -1,6 +1,6 @@
 import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
 
-import { Planet } from "@game/lib/objects/planet";
+import { Planet } from "@game/lib/objects/Planet";
 import { PrimodiumScene } from "@game/types";
 
 const MARGIN = 10;

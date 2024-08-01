@@ -36,7 +36,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const { tables, utils } = useCore();
   const planet = tables.Planet.use(entity);
   const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
-  // const [conquered, setConquered] = useState(false);
   const [isInteractPaneVisible, setIsInteractPaneVisible] = useState(false);
   const interactButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -90,9 +89,9 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
             </Button>
           </div>
           <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/75 px-2 text-[.8em]">
-            <Ships shipCount={planet.shipCount} planetId={entity} planetEmpire={planetEmpire} />
-            <Shields shieldCount={planet.shieldCount} planetId={entity} planetEmpire={planetEmpire} />
-            <GoldCount goldCount={planet.goldCount} entity={entity} />
+            <Ships shipCount={planet.shipCount} />
+            <Shields shieldCount={planet.shieldCount} />
+            <GoldCount goldCount={planet.goldCount} />
           </div>
 
           <InteractButton
@@ -236,32 +235,7 @@ const InteractButton = forwardRef<
   );
 });
 
-const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity }) => {
-  const { tables } = useCore();
-
-  const [goldFloatingTexts, setGoldFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
-  const [nextId, setNextId] = useState(0);
-
-  useEffect(() => {
-    const listener = tables.BuyShipsRoutine.update$.subscribe(({ properties: { current } }) => {
-      if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
-      if (data.planetId !== entity) return;
-
-      // Add floating text
-      setGoldFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.goldSpent}` }]);
-      setNextId((prev) => prev + 1);
-
-      // Remove the floating text after 3 seconds
-      setTimeout(() => {
-        setGoldFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 5000);
-    });
-    return () => {
-      listener.unsubscribe();
-    };
-  }, [nextId]);
-
+const GoldCount = ({ goldCount }: { goldCount: bigint }) => {
   return (
     <div className="pointer-events-auto relative z-50">
       <Tooltip tooltipContent={`GOLD`}>
@@ -273,79 +247,7 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
   );
 };
 
-const Ships = ({
-  shipCount,
-  planetId,
-  planetEmpire,
-}: {
-  shipCount: bigint;
-  planetId: Entity;
-  planetEmpire: EEmpire;
-}) => {
-  const { tables } = useCore();
-  const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
-  const [nextId, setNextId] = useState(0);
-
-  useEffect(() => {
-    const listener = tables.CreateShipOverrideLog.update$.subscribe(({ properties: { current } }) => {
-      if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.overrideCount };
-      if (data.planetId !== planetId) return;
-
-      // Add floating "+1" text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
-      setNextId((prev) => prev + 1);
-
-      // Remove the floating text after 3 seconds
-      setTimeout(() => {
-        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 5000);
-    });
-    return () => {
-      listener.unsubscribe();
-    };
-  }, [nextId]);
-
-  useEffect(() => {
-    const listener = tables.KillShipOverrideLog.update$.subscribe(({ properties: { current } }) => {
-      if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.overrideCount };
-      if (data.planetId !== planetId) return;
-
-      // Add floating "+1" text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.shipCount}` }]);
-      setNextId((prev) => prev + 1);
-
-      // Remove the floating text after 3 seconds
-      setTimeout(() => {
-        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 5000);
-    });
-    return () => {
-      listener.unsubscribe();
-    };
-  }, [nextId]);
-
-  useEffect(() => {
-    const listener = tables.BuyShipsRoutine.update$.subscribe(({ properties: { current } }) => {
-      if (!current) return;
-      const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
-      if (data.planetId !== planetId) return;
-
-      // Add floating text
-      setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
-      setNextId((prev) => prev + 1);
-
-      // Remove the floating text after 3 seconds
-      setTimeout(() => {
-        setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-      }, 5000);
-    });
-    return () => {
-      listener.unsubscribe();
-    };
-  }, [nextId]);
-
+const Ships = ({ shipCount }: { shipCount: bigint }) => {
   return (
     <div className="relative z-50">
       <Tooltip tooltipContent={`SHIPS`}>
@@ -357,43 +259,7 @@ const Ships = ({
   );
 };
 
-const Shields = ({
-  shieldCount,
-  planetId,
-  planetEmpire,
-}: {
-  shieldCount: bigint;
-  planetId: Entity;
-  planetEmpire: EEmpire;
-}) => {
-  const { tables } = useCore();
-  const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: string }[]>([]);
-  const [nextId, setNextId] = useState(0);
-  const callback = (current: any, negative?: boolean) => {
-    if (!current) return;
-    const data = { planetId: current.planetId, shieldCount: current.overrideCount };
-    if (data.planetId !== planetId) return;
-
-    // Add floating text
-    setFloatingTexts((prev) => [...prev, { id: nextId, text: `${negative ? "-" : "+"}${data.shieldCount}` }]);
-    setNextId((prev) => prev + 1);
-
-    // Remove the floating text after 3 seconds
-    setTimeout(() => {
-      setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-    }, 5000);
-  };
-  useEffect(() => {
-    const listener = tables.ChargeShieldsOverrideLog.update$.subscribe(({ properties: { current } }) => callback(current));
-    const listener2 = tables.DrainShieldsOverrideLog.update$.subscribe(({ properties: { current } }) =>
-      callback(current, true),
-    );
-
-    return () => {
-      listener.unsubscribe();
-      listener2.unsubscribe();
-    };
-  }, [nextId]);
+const Shields = ({ shieldCount }: { shieldCount: bigint }) => {
   return (
     <div className="relative z-50">
       <Tooltip tooltipContent={`SHIELDS`}>
