@@ -6,7 +6,8 @@ import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
 import { LibRoutine } from "libraries/LibRoutine.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
-import { Planet, Turn, TurnData, P_GameConfig } from "codegen/index.sol";
+import { LibMagnet } from "libraries/LibMagnet.sol";
+import { Planet, Turn, TurnData, P_GameConfig, MagnetEmpireEndTurnPlanets } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
@@ -36,21 +37,34 @@ contract UpdateSystem is EmpiresSystem {
   function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver {
     uint256 goldGenRate = P_GameConfig.getGoldGenRate();
     // add gold to every planet
-    bytes32[] memory planets = PlanetsSet.getPlanetIds();
-    for (uint i = 0; i < planets.length; i++) {
-      Planet.setGoldCount(planets[i], Planet.getGoldCount(planets[i]) + goldGenRate);
-    }
 
     // spend gold and move ships for each empire planet
     for (uint i = 0; i < routineThresholds.length; i++) {
       LibMoveShips.executePendingMoves(routineThresholds[i].planetId);
       LibRoutine.executeRoutine(routineThresholds[i].planetId, routineThresholds[i]);
+      Planet.setGoldCount(
+        routineThresholds[i].planetId,
+        Planet.getGoldCount(routineThresholds[i].planetId) + goldGenRate
+      );
     }
 
+    // resolve combat on all planets
+    // todo: only resolve combat on planets that have pending arrivals
+    bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint i = 0; i < planets.length; i++) {
       LibResolveCombat.resolveCombat(planets[i]);
     }
 
+    // clear magnets
+    TurnData memory turn = Turn.get();
+    bytes32[] memory magnetEmpireTurnPlanets = MagnetEmpireEndTurnPlanets.get(turn.empire, turn.value);
+    for (uint i = 0; i < magnetEmpireTurnPlanets.length; i++) {
+      // clear magnet
+      LibMagnet.removeMagnet(turn.empire, magnetEmpireTurnPlanets[i]);
+    }
+    MagnetEmpireEndTurnPlanets.deleteRecord(turn.empire, turn.value);
+
+    // update empire point costs
     for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {
       LibPrice.turnEmpirePointCostDown(EEmpire(i));
       LibPrice.empireOverridesCostDown(EEmpire(i));

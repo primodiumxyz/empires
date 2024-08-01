@@ -2,10 +2,11 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Empire, P_MagnetConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, Magnet, MagnetData, Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
+import { MagnetEmpireEndTurnPlanets, Empire, P_MagnetConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, Magnet, MagnetData, Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
+import { LibMagnet } from "libraries/LibMagnet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EMPIRE_COUNT, EMPIRES_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId, pseudorandomEntity } from "src/utils.sol";
@@ -205,20 +206,8 @@ contract OverrideSystem is EmpiresSystem {
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
     _purchaseOverride(EOverride.PlaceMagnet, planetData.empireId, false, turnDuration, _msgValue());
+    LibMagnet.addMagnet(_empire, _planetId, playerId, turnDuration);
 
-    uint256 requiredPoints = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(_empire)) / 10000;
-    require(
-      requiredPoints <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
-      "[OverrideSystem] Player does not have enough points to place magnet"
-    );
-
-    uint256 scaledTurnDuration = turnDuration * EMPIRE_COUNT;
-    Magnet.set(
-      _empire,
-      _planetId,
-      MagnetData({ isMagnet: true, lockedPoints: requiredPoints, playerId: playerId, endTurn: scaledTurnDuration })
-    );
-    PointsMap.setLockedPoints(_empire, playerId, PointsMap.getLockedPoints(_empire, playerId) + requiredPoints);
     PlaceMagnetOverrideLog.set(
       pseudorandomEntity(),
       PlaceMagnetOverrideLogData({

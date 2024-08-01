@@ -198,6 +198,15 @@ export const worldInput = {
       },
     },
 
+    MagnetEmpireEndTurnPlanets: {
+      key: ["empireId", "endTurn"],
+      schema: {
+        empireId: "EEmpire",
+        endTurn: "uint256",
+        planetIds: "bytes32[]",
+      },
+    },
+
     /* ----------------------------- Offchain Tables ---------------------------- */
 
     // used to generate random ids for offchain tables
