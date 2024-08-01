@@ -198,7 +198,7 @@ export const worldInput = {
       },
     },
 
-    MagnetEmpireEndTurnPlanets: {
+    MagnetTurnPlanets: {
       key: ["empireId", "endTurn"],
       schema: {
         empireId: "EEmpire",

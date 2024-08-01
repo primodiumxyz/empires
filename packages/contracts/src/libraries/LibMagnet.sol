@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, Player, P_MagnetConfig, Magnet, MagnetData, MagnetEmpireEndTurnPlanets } from "codegen/index.sol";
+import { Turn, Empire, Player, P_MagnetConfig, Magnet, MagnetData, MagnetTurnPlanets } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 import { PointsMap } from "adts/PointsMap.sol";
+import { console } from "forge-std/console.sol";
 
 /**
  * @title LibMagnet
@@ -32,13 +33,14 @@ library LibMagnet {
       "[OverrideSystem] Player does not have enough points to place magnet"
     );
 
-    uint256 scaledTurnDuration = _turnDuration * EMPIRE_COUNT;
+    uint256 endTurn = _turnDuration * EMPIRE_COUNT + Turn.getValue();
+
     Magnet.set(
       _empire,
       _planetId,
-      MagnetData({ isMagnet: true, lockedPoints: requiredPoints, playerId: _playerId, endTurn: scaledTurnDuration })
+      MagnetData({ isMagnet: true, lockedPoints: requiredPoints, playerId: _playerId, endTurn: endTurn })
     );
     PointsMap.setLockedPoints(_empire, _playerId, PointsMap.getLockedPoints(_empire, _playerId) + requiredPoints);
-    MagnetEmpireEndTurnPlanets.push(_empire, scaledTurnDuration, _planetId);
+    MagnetTurnPlanets.push(_empire, endTurn, _planetId);
   }
 }

@@ -7,7 +7,7 @@ import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
 import { LibRoutine } from "libraries/LibRoutine.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
-import { Planet, Turn, TurnData, P_GameConfig, MagnetEmpireEndTurnPlanets } from "codegen/index.sol";
+import { Planet, Turn, TurnData, P_GameConfig, MagnetTurnPlanets } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
@@ -57,12 +57,12 @@ contract UpdateSystem is EmpiresSystem {
 
     // clear magnets
     TurnData memory turn = Turn.get();
-    bytes32[] memory magnetEmpireTurnPlanets = MagnetEmpireEndTurnPlanets.get(turn.empire, turn.value);
+    bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(turn.empire, turn.value);
     for (uint i = 0; i < magnetEmpireTurnPlanets.length; i++) {
       // clear magnet
       LibMagnet.removeMagnet(turn.empire, magnetEmpireTurnPlanets[i]);
     }
-    MagnetEmpireEndTurnPlanets.deleteRecord(turn.empire, turn.value);
+    MagnetTurnPlanets.deleteRecord(turn.empire, turn.value);
 
     // update empire point costs
     for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {
