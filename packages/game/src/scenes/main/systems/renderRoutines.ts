@@ -1,7 +1,7 @@
 import { Core, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
-
 import { PrimodiumScene } from "@game/types";
+import { createStaggerQueue } from "@game/lib/utils/createStaggerQueue";
 
 export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
   const {
@@ -9,38 +9,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
     network: { world },
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
-  const _queue: [() => void, duration: number][] = [];
-  let executing = false;
-
-  async function queue(callback: () => void, duration = 100) {
-    _queue.push([callback, duration]);
-    await executeQueue();
-  }
-
-  async function executeQueue() {
-    if (executing) return;
-
-    await _executeQueue();
-  }
-
-  async function _executeQueue() {
-    if (!_queue || _queue.length === 0) {
-      executing = false;
-      return;
-    }
-    executing = true;
-
-    const cb = _queue.shift();
-    if (!cb) throw new Error("Attempted to execute on empty queue");
-
-    const [callback, duration] = cb;
-    callback();
-
-    //sleep duration
-    await sleep(duration);
-
-    await _executeQueue();
-  }
+  const { queue } = createStaggerQueue();
 
   tables.BuyShieldsRoutine.watch(
     {

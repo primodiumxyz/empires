@@ -31,13 +31,13 @@ export const initMainScene = async (
       Assets.SpriteAtlas,
       Sprites.StarBg
     )
-    .setDepth(-10_000_000)
+    .setDepth(-Infinity)
     .postFX.addShine();
   scene.phaserScene.add
     .image(0, 0, Assets.SpriteAtlas, Sprites.Nebula)
     .setScale(1.75)
     .setAlpha(0.35)
-    .setDepth(-10_000_000);
+    .setDepth(-Infinity);
 
   const runSystems = () => runMainSystems(sceneApi, game, core);
   return { ...sceneApi, runSystems };

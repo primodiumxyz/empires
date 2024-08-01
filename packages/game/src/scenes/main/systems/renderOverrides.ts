@@ -10,7 +10,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
 
-  tables.ChargeShieldsOverride.watch(
+  tables.ChargeShieldsOverrideLog.watch(
     {
       world: systemsWorld,
       onEnter: ({ properties: { current } }) => {
@@ -36,7 +36,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
     }
   );
 
-  tables.CreateShipOverride.watch(
+  tables.CreateShipOverrideLog.watch(
     {
       world: systemsWorld,
       onEnter: ({ properties: { current } }) => {
@@ -60,7 +60,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
     { runOnInit: false }
   );
 
-  tables.DrainShieldsOverride.watch(
+  tables.DrainShieldsOverrideLog.watch(
     {
       world: systemsWorld,
       onEnter: ({ properties: { current } }) => {
@@ -84,7 +84,7 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
     { runOnInit: false }
   );
 
-  tables.KillShipOverride.watch(
+  tables.KillShipOverrideLog.watch(
     {
       world: systemsWorld,
       onEnter: ({ properties: { current } }) => {
