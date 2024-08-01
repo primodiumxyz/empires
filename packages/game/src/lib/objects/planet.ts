@@ -1,11 +1,11 @@
-import { PixelCoord } from "@primodiumxyz/engine";
-import { Entity } from "@primodiumxyz/reactive-tables";
+import { PixelCoord } from '@primodiumxyz/engine';
+import { Entity } from '@primodiumxyz/reactive-tables';
 
-import { PrimodiumScene } from "@game/types";
-import { IPrimodiumGameObject } from "./interfaces";
-import { Assets, Sprites } from "@primodiumxyz/assets";
-import { EmpireToEmpireSpriteKeys } from "@game/lib/mappings";
-import { getRandomRange } from "@primodiumxyz/core";
+import { PrimodiumScene } from '@game/types';
+import { IPrimodiumGameObject } from './interfaces';
+import { Assets, Sprites } from '@primodiumxyz/assets';
+import { EmpireToEmpireSpriteKeys } from '@game/lib/mappings';
+import { getRandomRange } from '@primodiumxyz/core';
 
 export class Planet
   extends Phaser.GameObjects.Sprite
@@ -14,6 +14,7 @@ export class Planet
   readonly id: Entity;
   protected _scene: PrimodiumScene;
   private spawned = false;
+  private lastPercent: number = 0;
 
   constructor(args: {
     id: Entity;
@@ -28,7 +29,7 @@ export class Planet
       coord.x,
       coord.y,
       Assets.SpriteAtlas,
-      Sprites[EmpireToEmpireSpriteKeys[empire] ?? "EmpireNeutral"]
+      Sprites[EmpireToEmpireSpriteKeys[empire] ?? 'EmpireNeutral'],
     );
 
     this._scene = scene;
@@ -51,8 +52,14 @@ export class Planet
   updateFaction(faction: keyof typeof EmpireToEmpireSpriteKeys) {
     this.setTexture(
       Assets.SpriteAtlas,
-      Sprites[EmpireToEmpireSpriteKeys[faction] ?? "EmpireNeutral"]
+      Sprites[EmpireToEmpireSpriteKeys[faction] ?? 'EmpireNeutral'],
     );
+
+    this.updateCharge(this.lastPercent ?? 0);
+  }
+
+  updateCharge(percent: number) {
+    this.lastPercent = percent;
   }
 
   override destroy() {
