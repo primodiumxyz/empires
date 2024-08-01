@@ -21,7 +21,7 @@ export const useCharge = (planetId: Entity): { charge: bigint; maxCharge: bigint
     };
 
     updateCharge();
-    const interval = setInterval(updateCharge, 100);
+    const interval = setInterval(updateCharge, 1000);
 
     return () => clearInterval(interval);
   }, [planetTacticalStrikeData, blockNumber]);
