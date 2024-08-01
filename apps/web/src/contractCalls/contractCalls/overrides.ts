@@ -1,6 +1,10 @@
+import { formatEther } from "viem";
+
 import { EEmpire } from "@primodiumxyz/contracts";
-import { AccountClient, Core, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
+import { AccountClient, Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { EmpireEnumToName } from "@/util/lookups";
+import { notify } from "@/util/notify";
 
 export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
   const createShip = async (
@@ -17,7 +21,16 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
         id: `${planetId}-create-ship`,
         ...options,
       },
-      onComplete: (receipt) => {},
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify(
+            "success",
+            `Supported with ${overrideCount} ship${overrideCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
+          );
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
     });
   };
 
@@ -35,7 +48,16 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
         id: `${planetId}-kill-ship`,
         ...options,
       },
-      onComplete: (receipt) => {},
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify(
+            "success",
+            `Removed ${overrideCount} ship${overrideCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
+          );
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
     });
   };
 
@@ -53,16 +75,15 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
         id: `${planetId}-add-shield`,
         ...options,
       },
-    });
-  };
-  const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
-    return await execute({
-      functionName: "Empires__sellPoints",
-      args: [empire, amount],
-      options: { gas: 151271n * 2n },
-      txQueueOptions: {
-        id: "sell-points",
-        ...options,
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify(
+            "success",
+            `Added ${overrideCount} shield${overrideCount > 1 ? "s" : ""} to ${entityToPlanetName(planetId)}`,
+          );
+        } else {
+          notify("error", error || "Unknown error");
+        }
       },
     });
   };
@@ -81,7 +102,35 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
         id: `${planetId}-remove-shield`,
         ...options,
       },
-      onComplete: (receipt) => {},
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify(
+            "success",
+            `Removed ${overrideCount} shield${overrideCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
+          );
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
+    });
+  };
+
+  const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__sellPoints",
+      args: [empire, amount],
+      options: { gas: 151271n * 2n },
+      txQueueOptions: {
+        id: "sell-points",
+        ...options,
+      },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Sold ${formatEther(amount)} points from ${EmpireEnumToName[empire as EEmpire]} empire`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
     });
   };
 
