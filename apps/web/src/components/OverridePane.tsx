@@ -1,6 +1,5 @@
 import React from "react";
 
-import { useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Divider } from "@/components/core/Divider";
 import { NumberInput } from "@/components/core/NumberInput";
@@ -20,6 +19,7 @@ interface OverridePaneProps {
   supportTxQueueId: string;
   attackTxQueueId: string;
   isSupportDisabled?: boolean;
+  expanded?: boolean;
 }
 
 export const OverridePane: React.FC<OverridePaneProps> = ({
@@ -35,10 +35,8 @@ export const OverridePane: React.FC<OverridePaneProps> = ({
   supportTxQueueId,
   attackTxQueueId,
   isSupportDisabled = false,
+  expanded = false,
 }) => {
-  const { tables } = useCore();
-  const expanded = tables.OverridePaneExpanded.use()?.value ?? false;
-
   return (
     <div className="flex w-full flex-col items-center gap-3">
       <NumberInput min={1} max={Infinity} count={inputValue} onChange={onInputChange} />

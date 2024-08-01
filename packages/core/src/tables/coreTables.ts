@@ -43,12 +43,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     version: "1",
   });
 
-  const OverridePaneExpanded = createLocalBoolTable(world, {
-    id: "OverridePaneExpanded",
-    persist: true,
-    version: "1",
-  });
-
   return {
     DoubleCounter,
     BlockNumber,
@@ -58,6 +52,5 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     TransactionQueue,
     SelectedPlanet,
     SelectedTab,
-    OverridePaneExpanded,
   };
 }

@@ -6,7 +6,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { Entity } from "@primodiumxyz/reactive-tables";
+import { createLocalBoolTable, createWorld, Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
@@ -26,6 +26,12 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Red]: "fill-red-600",
   [EEmpire.LENGTH]: "",
 };
+
+const OverridePaneExpanded = createLocalBoolTable(createWorld(), {
+  id: "OverridePaneExpanded",
+  persist: true,
+  version: "1",
+});
 
 export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number }> = ({
   entity,
@@ -148,7 +154,7 @@ const InteractButton = forwardRef<
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
   const planet = tables.Planet.use(planetId);
-  const expanded = tables.OverridePaneExpanded.use()?.value ?? false;
+  const expanded = OverridePaneExpanded.use()?.value ?? false;
   const [inputValue, setInputValue] = useState("1");
 
   const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
@@ -229,6 +235,7 @@ const InteractButton = forwardRef<
                     isAttackDisabled={
                       (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                     }
+                    expanded={expanded}
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={1} className="w-full items-center gap-4">
@@ -253,11 +260,12 @@ const InteractButton = forwardRef<
                     isAttackDisabled={
                       (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                     }
+                    expanded={expanded}
                   />
                 </Tabs.Pane>
               </Tabs>
               <Button
-                onClick={() => tables.OverridePaneExpanded.set({ value: !expanded })}
+                onClick={() => OverridePaneExpanded.set({ value: !expanded })}
                 variant="ghost"
                 size="xs"
                 className="self-end"
