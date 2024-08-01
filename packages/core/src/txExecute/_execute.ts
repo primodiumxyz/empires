@@ -6,6 +6,7 @@ import { Core, TxReceipt } from "@core/lib/types";
 export async function _execute(
   { network: { publicClient }, tables }: Core,
   txPromise: Promise<Hex>,
+  simulateTxPromise: () => Promise<void>,
 ): Promise<TxReceipt> {
   const waitForTransaction = async (hash: Hex): Promise<TxReceipt> => {
     let unsubscribe: (() => void) | undefined = undefined;
@@ -48,6 +49,7 @@ export async function _execute(
   let receipt: TxReceipt = { success: false, error: "" };
 
   try {
+    await simulateTxPromise();
     const txHash = await txPromise;
     receipt = await waitForTransaction(txHash);
     console.log("[Tx] hash: ", txHash);

@@ -42,7 +42,10 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
       args: args as any,
     });
     const tx = playerAccount.worldContract.write.call(params, callOptions);
-    return await _execute(core, tx);
+    const simulateTx = async () => {
+      await playerAccount.worldContract.simulate.call(params, callOptions);
+    };
+    return await _execute(core, tx, simulateTx);
   };
 
   let receipt: TxReceipt | undefined = undefined;
@@ -50,11 +53,6 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
     receipt = await core.tables.TransactionQueue.enqueue(run, txQueueOptions);
   } else {
     receipt = await run();
-  }
-
-  if (receipt.error) {
-    // remove prefix if present
-    receipt.error = receipt.error.replace("Execution reverted with reason: ", "");
   }
 
   onComplete?.(receipt);

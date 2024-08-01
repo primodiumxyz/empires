@@ -33,7 +33,10 @@ export async function executeBatch<functionName extends ContractFunctionName<Wor
       callData,
     }));
     const tx = playerAccount.worldContract.write.batchCall([params]);
-    return await _execute(core, tx);
+    const simulateTx = async () => {
+      await playerAccount.worldContract.simulate.batchCall([params]);
+    };
+    return await _execute(core, tx, simulateTx);
   };
 
   let receipt: TxReceipt | undefined = undefined;
@@ -41,11 +44,6 @@ export async function executeBatch<functionName extends ContractFunctionName<Wor
     receipt = await core.tables.TransactionQueue.enqueue(run, txQueueOptions);
   } else {
     receipt = await run();
-  }
-
-  if (receipt.error) {
-    // remove prefix if present
-    receipt.error = receipt.error.replace("Execution reverted with reason: ", "");
   }
 
   onComplete?.(receipt);
