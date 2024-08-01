@@ -207,6 +207,28 @@ contract UpdateSystemTest is PrimodiumTest {
     }
 
     // Verify points
+    assertFalse(Magnet.get(empire, planetId).isMagnet, "Magnet should not be present");
+    assertEq(PointsMap.getValue(empire, addressToId(alice)), 100 * pointUnit, "Total points should remain the same");
+    assertEq(PointsMap.getLockedPoints(empire, addressToId(alice)), 0, "Locked points should be zero");
+  }
+
+  function testMagnetRemovalNotPlacedOnCurrTurn() public {
+    EEmpire empire = EEmpire(((uint8(Turn.getEmpire()) - 1) % EMPIRE_COUNT) + 1);
+    uint256 turnDuration = 1;
+    Empire.setPointsIssued(empire, 100 * pointUnit);
+    PointsMap.setValue(empire, aliceId, 100 * pointUnit);
+
+    LibMagnet.addMagnet(empire, planetId, addressToId(alice), turnDuration);
+
+    // Simulate the end of the turn
+    do {
+      vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
+      assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
+      world.Empires__updateWorld(allRoutineThresholds);
+    } while (Turn.getValue() < turnDuration * EMPIRE_COUNT + 1);
+
+    // Verify points
+    assertFalse(Magnet.get(empire, planetId).isMagnet, "Magnet should not be present");
     assertEq(PointsMap.getValue(empire, addressToId(alice)), 100 * pointUnit, "Total points should remain the same");
     assertEq(PointsMap.getLockedPoints(empire, addressToId(alice)), 0, "Locked points should be zero");
   }

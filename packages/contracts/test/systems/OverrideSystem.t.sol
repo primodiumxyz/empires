@@ -340,12 +340,29 @@ contract OverrideSystemTest is PrimodiumTest {
     EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
     uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
+
+    vm.prank(creator);
+    Turn.setValue(32);
     vm.prank(alice);
     world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
     assertEq(Magnet.getIsMagnet(empire, planetId), true, "Magnet should be placed");
     assertEq(Magnet.getLockedPoints(empire, planetId), pointsToStake, "Magnet should have locked points");
     assertEq(Magnet.getPlayerId(empire, planetId), aliceId, "Magnet should have player id");
-    assertEq(Magnet.getEndTurn(empire, planetId), 3 + Turn.getValue(), "Magnet should have end turn");
+    assertEq(Magnet.getEndTurn(empire, planetId), Turn.getValue() / EMPIRE_COUNT + 1, "Magnet should have end turn");
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
+  }
+
+  function testPlaceMagnetMultipleTurns() public {
+    uint256 turns = 3;
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, turns);
+    uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, turns);
+    assertEq(Magnet.getIsMagnet(empire, planetId), true, "Magnet should be placed");
+    assertEq(Magnet.getLockedPoints(empire, planetId), pointsToStake, "Magnet should have locked points");
+    assertEq(Magnet.getPlayerId(empire, planetId), aliceId, "Magnet should have player id");
+    assertEq(Magnet.getEndTurn(empire, planetId), Turn.getValue() + turns, "Magnet should have end turn");
     assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
   }
 
@@ -405,6 +422,10 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
 
     assertEq(PointsMap.getLockedPoints(empire, aliceId), expectedLockedPoints, "Incorrect amount of points locked");
-    assertEq(PointsMap.getValue(empire, aliceId), initialPoints, "Total points should not change");
+    assertEq(
+      PointsMap.getValue(empire, aliceId),
+      initialPoints + ((EMPIRE_COUNT - 1) * pointUnit),
+      "Total points should not change"
+    );
   }
 }

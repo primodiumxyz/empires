@@ -33,7 +33,13 @@ library LibMagnet {
       "[OverrideSystem] Player does not have enough points to place magnet"
     );
 
-    uint256 endTurn = _turnDuration * EMPIRE_COUNT + Turn.getValue();
+    // the game starts on turn 1 (which is red) so we subtract 1 to get the global turn.
+    uint256 turn = Turn.getValue();
+    uint256 globalTurn = (turn - 1) / EMPIRE_COUNT;
+    uint256 endTurn = _turnDuration + globalTurn;
+
+    // empire still has to play this turn so subtract one from the end turn because current turn should be counted
+    if ((turn % EMPIRE_COUNT) <= uint8(_empire)) endTurn -= 1;
 
     Magnet.set(
       _empire,
