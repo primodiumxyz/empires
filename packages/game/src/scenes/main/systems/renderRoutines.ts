@@ -198,8 +198,8 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
           enqueue(() => {
             scene.audio.play("Complete", "sfx", {
-              volume: 0.1,
-              detune: Math.min(20 * i, 500),
+              volume: 0.025,
+              detune: Math.min(20 * i, 500000000000),
             });
             scene.fx.emitFloatingText(
               { x: planet.coord.x, y: planet.coord.y - 25 },
@@ -210,7 +210,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
                 iconSize: 16,
               }
             );
-          }, 150);
+          }, 50);
         }
       },
     },

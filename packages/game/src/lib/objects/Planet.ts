@@ -11,10 +11,7 @@ import {
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
-import {
-  calculateAngleBetweenPoints,
-  getRandomRange,
-} from "@primodiumxyz/core";
+import { calculateAngleBetweenPoints } from "@primodiumxyz/core";
 import { DepthLayers } from "@game/lib/constants/common";
 import { EEmpire } from "@primodiumxyz/contracts";
 
@@ -96,8 +93,6 @@ export class Planet
       .setActive(false)
       .setVisible(false);
 
-    // this.hexHoloSprite.play(Animations.Holo);
-
     this._scene = scene;
     this.id = id;
     this.coord = coord;
@@ -105,7 +100,8 @@ export class Planet
 
     this.setDepth(DepthLayers.Planet + coord.y - coord.x);
 
-    this.planetSprite.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
+    //TODO: disabled for perf
+    // this.planetSprite.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
 
     this._scene.objects.planet.add(id, this, false);
   }

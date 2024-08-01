@@ -7,8 +7,9 @@
       "persistent": true
     },
     "build": {
-      "outputs": ["dist/**", "out/**"],
-      "dependsOn": ["^build"]
+      "outputs": ["dist/**", "out/**", "src/codegen/**"],
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "../assets/maps/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
