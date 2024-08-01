@@ -13596,7 +13596,10 @@ packages:
     dev: true
 
   /phaser@3.85.0-beta.2:
-    resolution: {integrity: sha512-1x19QUcDVRHhySydypIIjLnRdKybeUZAOkB7GNRJj1++5EMSn3pTlSCfvwBeJydbHoSZWAj1PJMkCDeHRIwE6g==}
+    resolution:
+      {
+        integrity: sha512-1x19QUcDVRHhySydypIIjLnRdKybeUZAOkB7GNRJj1++5EMSn3pTlSCfvwBeJydbHoSZWAj1PJMkCDeHRIwE6g==,
+      }
     dependencies:
       eventemitter3: 5.0.1
     dev: false
