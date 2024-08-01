@@ -1,6 +1,5 @@
 import { ContractFunctionName } from "viem";
 
-import { getFriendlyErrorMessage } from "@core/lib";
 import { AccountClient, Core, TxReceipt, WorldAbiType } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { TxQueueOptions } from "@core/tables/types";
@@ -45,7 +44,8 @@ export async function executeBatch<functionName extends ContractFunctionName<Wor
   }
 
   if (receipt.error) {
-    receipt.error = getFriendlyErrorMessage(receipt.error);
+    // remove prefix if present
+    receipt.error = receipt.error.replace("Execution reverted with reason: ", "");
   }
 
   onComplete?.(receipt);
