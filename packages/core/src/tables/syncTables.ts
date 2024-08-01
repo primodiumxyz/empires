@@ -9,6 +9,7 @@ export function setupSyncTables(world: World) {
       step: Type.Number,
       message: Type.String,
       progress: Type.Number,
+      lastBlockNumberProcessed: Type.BigInt,
     },
     {
       id: "SyncStatus",
