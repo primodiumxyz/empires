@@ -60,6 +60,7 @@ export const createScene = async (
         frames: generateFrames(scene.anims, anim),
         frameRate: anim.frameRate,
         repeat: anim.repeat,
+        randomFrame: anim.randomFrame,
       });
     }
   }

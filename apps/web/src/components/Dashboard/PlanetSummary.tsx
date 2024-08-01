@@ -12,7 +12,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { EmpireToEmpireSpriteKeys } from "@primodiumxyz/game";
+import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
@@ -44,7 +44,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
         </Button>
       </div>
       <img
-        src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
+        src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
         width={64}
         height={64}
         className="my-2 self-center"
@@ -55,7 +55,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
             <h3 className="font-semibold text-gray-300">controlled by</h3>
             <span className="justify-self-end">{EmpireEnumToName[empireId as EEmpire]} empire</span>
             <img
-              src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
+              src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
               width={32}
               height={32}
               className="justify-self-center"
