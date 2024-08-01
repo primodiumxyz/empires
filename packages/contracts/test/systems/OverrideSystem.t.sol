@@ -307,4 +307,32 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.expectRevert("[OverrideSystem] Insufficient funds for point sale");
     world.Empires__sellPoints(empire, (EMPIRE_COUNT - 1) * pointUnit);
   }
+
+  function testSellPointsFailLockedPoints() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+
+    vm.startPrank(creator);
+    PointsMap.setValue(empire, aliceId, 100 * pointUnit);
+    PointsMap.setLockedPoints(empire, aliceId, 50 * pointUnit);
+
+    switchPrank(alice);
+    vm.expectRevert("[OverrideSystem] Player does not have enough points to remove");
+    world.Empires__sellPoints(empire, 100 * pointUnit);
+  }
+
+  function testSellPointsLockedPoints() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, 1);
+
+    vm.startPrank(alice);
+    world.Empires__createShip{ value: totalCost }(planetId, 1);
+    uint256 points = PointsMap.getValue(empire, aliceId);
+    vm.startPrank(creator);
+    PointsMap.setLockedPoints(empire, aliceId, points / 2);
+
+    switchPrank(alice);
+    world.Empires__sellPoints(empire, points / 2);
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), points / 2, "Locked Points should be 50");
+    assertEq(PointsMap.getValue(empire, aliceId), points - (points / 2), "Player Points should be 80");
+  }
 }
