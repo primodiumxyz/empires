@@ -135,15 +135,15 @@ contract OverrideSystemTest is PrimodiumTest {
 
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
-    assertGt(
-      LibPrice.getTotalCost(EOverride.CreateShip, empire, 1),
-      totalCost,
-      "Total Cost should have increased"
-    );
+    assertGt(LibPrice.getTotalCost(EOverride.CreateShip, empire, 1), totalCost, "Total Cost should have increased");
     assertGt(OverrideCost.get(empire, EOverride.CreateShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), (EMPIRE_COUNT - 1) * pointUnit, "Player should have received points");
+    assertEq(
+      PointsMap.getValue(EEmpire.Red, aliceId),
+      (EMPIRE_COUNT - 1) * pointUnit,
+      "Player should have received points"
+    );
   }
 
   function testPurchaseOverrideProgressMultiple() public {
@@ -163,7 +163,7 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
-      PointsMap.get(EEmpire.Red, aliceId),
+      PointsMap.getValue(EEmpire.Red, aliceId),
       overrideCount * (EMPIRE_COUNT - 1) * pointUnit,
       "Player should have received points"
     );
@@ -179,16 +179,12 @@ contract OverrideSystemTest is PrimodiumTest {
 
     vm.startPrank(bob);
     world.Empires__killShip{ value: totalCost }(planetId, 1);
-    assertGt(
-      LibPrice.getTotalCost(EOverride.KillShip, empire, 1),
-      totalCost,
-      "Total Cost should have increased"
-    );
+    assertGt(LibPrice.getTotalCost(EOverride.KillShip, empire, 1), totalCost, "Total Cost should have increased");
     assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
+    assertEq(PointsMap.getValue(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
+    assertEq(PointsMap.getValue(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
   }
 
   function testPurchaseOverrideRegressMultiple() public {
@@ -210,9 +206,13 @@ contract OverrideSystemTest is PrimodiumTest {
     assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), overrideCount * pointUnit, "Player should have received blue points");
     assertEq(
-      PointsMap.get(EEmpire.Green, bobId),
+      PointsMap.getValue(EEmpire.Blue, bobId),
+      overrideCount * pointUnit,
+      "Player should have received blue points"
+    );
+    assertEq(
+      PointsMap.getValue(EEmpire.Green, bobId),
       overrideCount * pointUnit,
       "Player should have received green points"
     );
@@ -226,10 +226,10 @@ contract OverrideSystemTest is PrimodiumTest {
     console.log("marginal cost before createShip", OverrideCost.get(empire, EOverride.CreateShip));
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
-    console.log("alice points after createShip", PointsMap.get(empire, aliceId));
+    console.log("alice points after createShip", PointsMap.getValue(empire, aliceId));
     console.log("alice balance after createShip", alice.balance);
 
-    uint256 aliceInitPoints = PointsMap.get(empire, aliceId);
+    uint256 aliceInitPoints = PointsMap.getValue(empire, aliceId);
     uint256 aliceInitBalance = alice.balance;
     uint256 gameInitBalance = Balances.get(EMPIRES_NAMESPACE_ID);
     uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, 1 * pointUnit);
@@ -238,7 +238,7 @@ contract OverrideSystemTest is PrimodiumTest {
 
     world.Empires__sellPoints(empire, 1 * pointUnit);
 
-    assertEq(PointsMap.get(empire, aliceId), aliceInitPoints - (1 * pointUnit), "Player should have lost points");
+    assertEq(PointsMap.getValue(empire, aliceId), aliceInitPoints - (1 * pointUnit), "Player should have lost points");
     assertEq(alice.balance, aliceInitBalance + pointSaleValue, "Player should have gained balance");
     assertEq(
       Balances.get(EMPIRES_NAMESPACE_ID),
@@ -257,7 +257,7 @@ contract OverrideSystemTest is PrimodiumTest {
       "Empire should have reduced points issued"
     );
 
-    console.log("alice points after sellPoints", PointsMap.get(empire, aliceId));
+    console.log("alice points after sellPoints", PointsMap.getValue(empire, aliceId));
     console.log("alice balance after sellPoints", alice.balance);
   }
 
