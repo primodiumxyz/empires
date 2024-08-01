@@ -11,6 +11,7 @@
     "build:lib": "rm -rf src/codegen",
     "build:mud": "pnpm run build:prototype && pnpm mud build",
     "build:prototype": "tsx ./ts/prototypes/commands/prototypegen.ts",
+    "build:map": "tsx ./ts/map/commands/mapgen.ts",
     "deploy:caldera": "pnpm mud deploy --profile=caldera",
     "deploy:caldera-sepolia": "pnpm mud deploy --profile=caldera-sepolia",
     "deploy:local": "pnpm mud deploy --skipBuild",
