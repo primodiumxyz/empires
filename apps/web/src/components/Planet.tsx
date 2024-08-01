@@ -41,7 +41,6 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   const { tables, utils } = useCore();
   const planet = tables.Planet.use(entity);
   const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
-  // const [conquered, setConquered] = useState(false);
   const [isInteractPaneVisible, setIsInteractPaneVisible] = useState(false);
   const interactButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -97,11 +96,11 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   return (
     <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
-      <div className="relative mt-12 flex flex-col items-center drop-shadow-2xl">
+      <div className="relative mt-10 flex select-none flex-col items-center opacity-75 drop-shadow-2xl transition-all hover:opacity-100">
         <div className="group relative flex flex-col items-center">
-          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-secondary/50 to-secondary/25 px-1 text-center">
+          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-slate-800/90 to-slate-900/75 px-1 text-center">
             <p className="font-mono text-[10px] opacity-70">
-              ({(planet.q ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
+              ({(planet.q - 100n ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
             </p>
             {/* dashboard button */}
             <Button
@@ -115,15 +114,15 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
               {entityToPlanetName(entity)}
             </Button>
           </div>
-          <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/25 px-2 text-[.8em]">
-            <Ships shipCount={planet.shipCount} planetId={entity} planetEmpire={planetEmpire} />
-            <Shields shieldCount={planet.shieldCount} planetId={entity} planetEmpire={planetEmpire} />
-            <GoldCount goldCount={planet.goldCount} entity={entity} />
+          <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/75 px-2 text-[.8em]">
+            <Ships shipCount={planet.shipCount} />
+            <Shields shieldCount={planet.shieldCount} />
+            <GoldCount goldCount={planet.goldCount} />
           </div>
 
           <InteractButton
             className={cn(
-              "scale-80 mt-1 h-full opacity-75 transition-all group-hover:scale-100 group-hover:opacity-100",
+              "h-full scale-75 opacity-50 transition-all group-hover:scale-100 group-hover:opacity-100",
               !planet?.empireId ? "pointer-events-none !opacity-0" : "",
             )}
             ref={interactButtonRef}
@@ -280,38 +279,7 @@ const InteractButton = forwardRef<
   );
 });
 
-const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity }) => {
-  const { tables } = useCore();
-
-  const [goldFloatingTexts, setGoldFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
-  const [nextId, setNextId] = useState(0);
-
-  useEffect(() => {
-    const unsubscribe = tables.BuyShipsRoutine.watch(
-      {
-        onChange: ({ properties: { current } }) => {
-          if (!current) return;
-          const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
-          if (data.planetId !== entity) return;
-
-          // Add floating text
-          setGoldFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.goldSpent}` }]);
-          setNextId((prev) => prev + 1);
-
-          // Remove the floating text after 3 seconds
-          setTimeout(() => {
-            setGoldFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-          }, 5000);
-        },
-      },
-      { runOnInit: false },
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, [nextId]);
-
+const GoldCount = ({ goldCount }: { goldCount: bigint }) => {
   return (
     <div className="pointer-events-auto relative z-50">
       <Tooltip tooltipContent={`GOLD`}>
@@ -319,110 +287,11 @@ const GoldCount = ({ goldCount, entity }: { goldCount: bigint; entity: Entity })
           <IconLabel imageUri={InterfaceIcons.Vault} text={goldCount.toLocaleString()} />
         </p>
       </Tooltip>
-      {goldFloatingTexts.map((item) => (
-        <div
-          key={item.id}
-          className="floating-text absolute right-1 top-0 z-50 w-fit translate-x-full rounded bg-white p-2 text-xs text-black"
-        >
-          {item.text}
-        </div>
-      ))}
     </div>
   );
 };
 
-const Ships = ({
-  shipCount,
-  planetId,
-  planetEmpire,
-}: {
-  shipCount: bigint;
-  planetId: Entity;
-  planetEmpire: EEmpire;
-}) => {
-  const { tables } = useCore();
-  const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: ReactNode }[]>([]);
-  const [nextId, setNextId] = useState(0);
-
-  useEffect(() => {
-    const unsubscribe = tables.CreateShipOverrideLog.watch(
-      {
-        onChange: ({ properties: { current } }) => {
-          if (!current) return;
-          const data = { planetId: current.planetId, shipCount: current.overrideCount };
-          if (data.planetId !== planetId) return;
-
-          // Add floating "+1" text
-          setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
-          setNextId((prev) => prev + 1);
-
-          // Remove the floating text after 3 seconds
-          setTimeout(() => {
-            setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-          }, 5000);
-        },
-      },
-      { runOnInit: false },
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, [nextId]);
-
-  useEffect(() => {
-    const unsubscribe = tables.KillShipOverrideLog.watch(
-      {
-        onChange: ({ properties: { current } }) => {
-          if (!current) return;
-          const data = { planetId: current.planetId, shipCount: current.overrideCount };
-          if (data.planetId !== planetId) return;
-
-          // Add floating "+1" text
-          setFloatingTexts((prev) => [...prev, { id: nextId, text: `-${data.shipCount}` }]);
-          setNextId((prev) => prev + 1);
-
-          // Remove the floating text after 3 seconds
-          setTimeout(() => {
-            setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-          }, 5000);
-        },
-      },
-      { runOnInit: false },
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, [nextId]);
-
-  useEffect(() => {
-    const unsubscribe = tables.BuyShipsRoutine.watch(
-      {
-        onChange: ({ properties: { current } }) => {
-          console.log({ current });
-          if (!current) return;
-          const data = { planetId: current.planetId, shipCount: current.shipBought, goldSpent: current.goldSpent };
-          if (data.planetId !== planetId) return;
-
-          // Add floating text
-          setFloatingTexts((prev) => [...prev, { id: nextId, text: `+${data.shipCount}` }]);
-          setNextId((prev) => prev + 1);
-
-          // Remove the floating text after 3 seconds
-          setTimeout(() => {
-            setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-          }, 5000);
-        },
-      },
-      { runOnInit: false },
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, [nextId]);
-
+const Ships = ({ shipCount }: { shipCount: bigint }) => {
   return (
     <div className="relative z-50">
       <Tooltip tooltipContent={`SHIPS`}>
@@ -430,64 +299,11 @@ const Ships = ({
           <IconLabel imageUri={InterfaceIcons.Fleet} text={shipCount.toLocaleString()} />
         </p>
       </Tooltip>
-      {floatingTexts.map((item) => (
-        <div
-          key={item.id}
-          className="floating-text pointer-events-none absolute left-1 top-0 z-50 w-fit -translate-x-full rounded bg-white p-2 text-xs text-black"
-        >
-          {item.text}
-        </div>
-      ))}
     </div>
   );
 };
 
-const Shields = ({
-  shieldCount,
-  planetId,
-  planetEmpire,
-}: {
-  shieldCount: bigint;
-  planetId: Entity;
-  planetEmpire: EEmpire;
-}) => {
-  const { tables } = useCore();
-  const [floatingTexts, setFloatingTexts] = useState<{ id: number; text: string }[]>([]);
-  const [nextId, setNextId] = useState(0);
-  const callback = (current: any, negative?: boolean) => {
-    if (!current) return;
-    const data = { planetId: current.planetId, shieldCount: current.overrideCount };
-    if (data.planetId !== planetId) return;
-
-    // Add floating text
-    setFloatingTexts((prev) => [...prev, { id: nextId, text: `${negative ? "-" : "+"}${data.shieldCount}` }]);
-    setNextId((prev) => prev + 1);
-
-    // Remove the floating text after 3 seconds
-    setTimeout(() => {
-      setFloatingTexts((prev) => prev.filter((item) => item.id !== nextId));
-    }, 5000);
-  };
-  useEffect(() => {
-    const unsubscribe1 = tables.ChargeShieldsOverrideLog.watch(
-      {
-        onChange: ({ properties: { current } }) => callback(current),
-      },
-      { runOnInit: false },
-    );
-    const unsubscribe2 = tables.DrainShieldsOverrideLog.watch(
-      {
-        onChange: ({ properties: { current } }) => callback(current, true),
-      },
-      { runOnInit: false },
-    );
-
-    return () => {
-      unsubscribe1();
-      unsubscribe2();
-    };
-  }, [nextId]);
-
+const Shields = ({ shieldCount }: { shieldCount: bigint }) => {
   return (
     <div className="relative z-50">
       <Tooltip tooltipContent={`SHIELDS`}>
@@ -495,15 +311,6 @@ const Shields = ({
           <IconLabel imageUri={InterfaceIcons.Defense} text={shieldCount.toLocaleString()} />
         </p>
       </Tooltip>
-
-      {floatingTexts.map((item) => (
-        <div
-          key={item.id}
-          className="floating-text pointer-events-none absolute right-1 top-0 z-50 w-fit translate-x-full rounded bg-white p-2 text-xs text-black"
-        >
-          {item.text}
-        </div>
-      ))}
     </div>
   );
 };

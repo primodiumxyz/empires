@@ -44,6 +44,12 @@
     image-rendering: crisp-edges;
   }
 
+  .star-background {
+    background-image: url("/img/backgrounds/star.png");
+    background-repeat: repeat;
+    background-size: 256px;
+  }
+
   .pixel-border {
     border-image: url("/img/ui/frame3.png") 8; /* The number 16 corresponds to the slice value */
     border-image-width: 16px;

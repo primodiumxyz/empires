@@ -392,8 +392,8 @@ importers:
   packages/engine:
     dependencies:
       phaser:
-        specifier: ^3.80.1
-        version: 3.80.1
+        specifier: ^3.85.0-beta.2
+        version: 3.85.0-beta.2
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
@@ -13595,11 +13595,8 @@ packages:
       }
     dev: true
 
-  /phaser@3.80.1:
-    resolution:
-      {
-        integrity: sha512-VQGAWoDOkEpAWYkI+PUADv5Ql+SM0xpLuAMBJHz9tBcOLqjJ2wd8bUhxJgOqclQlLTg97NmMd9MhS75w16x1Cw==,
-      }
+  /phaser@3.85.0-beta.2:
+    resolution: {integrity: sha512-1x19QUcDVRHhySydypIIjLnRdKybeUZAOkB7GNRJj1++5EMSn3pTlSCfvwBeJydbHoSZWAj1PJMkCDeHRIwE6g==}
     dependencies:
       eventemitter3: 5.0.1
     dev: false
