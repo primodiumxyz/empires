@@ -149,6 +149,13 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
         id: `${planetId}-place-magnet`,
         ...options,
       },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Placed magnet on ${entityToPlanetName(planetId)}`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
     });
   };
 

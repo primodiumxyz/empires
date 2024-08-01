@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import { formatNumber } from "@primodiumxyz/core";
-import { useCore } from "@primodiumxyz/core/react";
+import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
 import { NumberInput } from "@/components/core/NumberInput";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
@@ -20,14 +21,28 @@ export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planet
   const { utils, tables } = useCore();
   const { placeMagnet } = useContractCalls();
 
+  const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
+
   const onPlaceMagnet = () => {
-    placeMagnet(empire, planetId, BigInt(inputValue), 1n);
+    placeMagnet(empire, planetId, BigInt(inputValue), placeMagnetPriceWei);
   };
 
-  const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
   const pointLockPct = tables.P_MagnetConfig.useWithKeys()?.lockedPointsPercent ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pointsLocked = (empirePoints * pointLockPct) / 10000n;
+  const {
+    playerAccount: { address, entity },
+  } = useAccountClient();
+
+  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
+  const playerBalance = useBalance(address).value ?? 0n;
+  const magnetExists = tables.Magnet.useWithKeys({ planetId, empireId: empire }) !== undefined;
+  const { disabled, message } = useMemo(() => {
+    if (playerBalance < placeMagnetPriceWei) return { disabled: true, message: "Not enough money" };
+    if (playerPoints < pointsLocked) return { disabled: true, message: "Not enough points" };
+    if (magnetExists) return { disabled: true, message: "Magnet already exists" };
+    return { disabled: false, message: "" };
+  }, [placeMagnetPriceWei, price, pointsLocked, magnetExists]);
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
@@ -39,17 +54,20 @@ export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planet
       <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
       <div className="flex gap-2">
         <div className="gap1 flex flex-col items-center">
-          <TransactionQueueMask id={`${planetId}-place-magnet`} className="w-full">
-            <Button onClick={onPlaceMagnet} size="xs" variant="error" className="w-full">
-              PLACE MAGNET
-            </Button>
-          </TransactionQueueMask>
+          {message && <p className="px-2 text-xs text-error">{message}</p>}
+          {!message && (
+            <TransactionQueueMask id={`${planetId}-place-magnet`} className="w-full">
+              <Button onClick={onPlaceMagnet} size="xs" variant="accent" className="w-full" disabled={disabled}>
+                PLACE MAGNET
+              </Button>
+            </TransactionQueueMask>
+          )}
           <div className="flex flex-row items-center gap-2">
             <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
               {utils.weiToUsd(placeMagnetPriceWei, price ?? 0)}
             </p>
             <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
-              Lock {formatNumber(pointsLocked)}pts
+              Lock {formatEther(pointsLocked)}pts
             </p>
           </div>
         </div>

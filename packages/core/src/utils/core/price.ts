@@ -9,7 +9,7 @@ export function createPriceUtils(tables: Tables) {
   function getTotalCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint): bigint {
     let totalCost = 0n;
 
-    if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.isProgressOverride ?? undefined) {
+    if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.isProgressOverride) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
     } else {
       totalCost = getRegressPointCost(_empireImpacted, _overrideCount);
@@ -74,14 +74,11 @@ export function createPriceUtils(tables: Tables) {
    * @param _overrideCount The number of actions.
    * @return actionCost The marginal cost of the actions that impact a specific empire.
    */
-  function getMarginalOverrideCost(
-    _overrideType: EOverride,
-    _empireImpacted: EEmpire,
-    _overrideCount: bigint,
-  ): bigint {
+  function getMarginalOverrideCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint): bigint {
     const initOverrideCost =
       tables.OverrideCost.getWithKeys({ empireId: _empireImpacted, overrideAction: _overrideType })?.value ?? 0n;
-    const overrideCostIncrease = tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.overrideCostIncrease ?? 0n;
+    const overrideCostIncrease =
+      tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.overrideCostIncrease ?? 0n;
 
     const triangleSumOBO = ((_overrideCount - 1n) * _overrideCount) / 2n;
     const overrideCost = initOverrideCost * _overrideCount + triangleSumOBO * overrideCostIncrease;
