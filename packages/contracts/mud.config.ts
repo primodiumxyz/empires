@@ -58,6 +58,12 @@ export const worldInput = {
       },
     },
 
+    P_MagnetConfig: {
+      key: [],
+      schema: {
+        lockedPointsPercent: "uint256", // out of 10000
+      },
+    },
     Turn: {
       key: [],
       schema: { nextTurnBlock: "uint256", empire: "EEmpire" },

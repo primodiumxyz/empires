@@ -28,6 +28,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointGenRate: BigInt(POINTS_UNIT * 0.000015),
         pointCostIncrease: BigInt(POINTS_UNIT * 0.00001),
       },
+      P_MagnetConfig: {
+        lockedPointsPercent: scaleMultiplier(0.05),
+      },
       Turn: {
         nextTurnBlock: 0n,
         empire: EEmpire.Red,

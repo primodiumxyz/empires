@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, Magnet, MagnetData, Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
+import { Empire, P_MagnetConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, Magnet, MagnetData, Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -192,7 +192,11 @@ contract OverrideSystem is EmpiresSystem {
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
   }
 
-  function placeMagnet(EEmpire _empire, bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
+  function placeMagnet(
+    EEmpire _empire,
+    bytes32 _planetId,
+    uint256 turnDuration
+  ) public payable _onlyNotGameOver _takeRake {
     /*
      0. checks
        - planet doesn't have a magnet of this color already
@@ -206,12 +210,12 @@ contract OverrideSystem is EmpiresSystem {
     PlanetData memory planetData = Planet.get(_planetId);
 
     require(Magnet.get(_empire, _planetId).isMagnet == false, "[OverrideSystem] Planet already has a magnet");
-    uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, planetData.empireId, 1);
+    uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, planetData.empireId, turnDuration);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    _purchaseOverride(EOverride.PlaceMagnet, planetData.empireId, false, 1, _msgValue());
+    _purchaseOverride(EOverride.PlaceMagnet, planetData.empireId, false, turnDuration, _msgValue());
 
-    uint256 requiredPoints = 5;
+    uint256 requiredPoints = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(_empire)) / 10000;
     require(
       requiredPoints <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
       "[OverrideSystem] Player does not have enough points to place magnet"

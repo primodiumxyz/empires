@@ -392,6 +392,11 @@
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "turnDuration",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
