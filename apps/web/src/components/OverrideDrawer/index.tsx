@@ -5,7 +5,7 @@ import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
-import { createLocalBoolTable, createWorld, defaultEntity } from "@primodiumxyz/reactive-tables";
+import { createLocalBoolTable, createWorld, defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
@@ -13,6 +13,7 @@ import { IconLabel } from "@/components/core/IconLabel";
 import { Join } from "@/components/core/Join";
 import { Marker } from "@/components/core/Marker";
 import { Tabs } from "@/components/core/Tabs";
+import { ChargeOverridePane } from "@/components/OverrideDrawer/ChargeOverridePane";
 import { OverridePane } from "@/components/OverrideDrawer/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
@@ -34,7 +35,7 @@ export const OverrideDrawer = () => {
     MAIN: { sprite, objects },
   } = useGame();
   const { price } = useEthPrice();
-  const { createShip, removeShip, addShield, removeShield } = useContractCalls();
+  const { createShip, removeShip, addShield, removeShield, boostCharge, stunCharge } = useContractCalls();
   const { gameOver } = useTimeLeft();
   const selectedPlanet = tables.SelectedPlanet.use()?.value;
   const planet = tables.Planet.use(selectedPlanet ?? defaultEntity);
@@ -46,6 +47,8 @@ export const OverrideDrawer = () => {
   const killShipPriceWei = useOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
   const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
   const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
+  const boostChargePriceWei = useOverrideCost(EOverride.BoostCharge, planetEmpire, BigInt(inputValue));
+  const stunChargePriceWei = useOverrideCost(EOverride.StunCharge, planetEmpire, BigInt(inputValue));
 
   const nextCreateShipPriceWei = useNextTurnOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
   const nextKillShipPriceWei = useNextTurnOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
@@ -83,8 +86,6 @@ export const OverrideDrawer = () => {
           coord={{ x: planetObj?.coord.x ?? 0, y: (planetObj?.coord.y ?? 0) - 25 }}
           noPointerEvents
         >
-          {/* <div className="absolute size-16 animate-bounce bg-black/50 blur-md" /> */}
-          {/* <ChevronDoubleDownIcon className="absolute size-16 animate-bounce text-error" /> */}
           <img src={InterfaceIcons.Crosshairs} className="pixel-images w-14 animate-pulse text-error" />
         </Marker>
 
@@ -101,10 +102,11 @@ export const OverrideDrawer = () => {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-1">
-          <Tabs className="flex w-64 flex-col items-center gap-2">
+          <Tabs className="flex w-fit flex-col items-center gap-2">
             <Join>
               <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
               <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
+              <Tabs.IconButton icon={InterfaceIcons.Shard} text="CHARGE" index={2} />
             </Join>
             <Tabs.Pane index={0} className="w-full items-center gap-4">
               <OverridePane
@@ -154,6 +156,26 @@ export const OverrideDrawer = () => {
                   (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                 }
                 expanded={expanded}
+              />
+            </Tabs.Pane>
+            <Tabs.Pane index={2} className="w-full items-center gap-4">
+              <ChargeOverridePane
+                inputValue={inputValue}
+                onInputChange={setInputValue}
+                onBoostClick={() => {
+                  boostCharge(selectedPlanet, BigInt(inputValue), boostChargePriceWei);
+                  setInputValue("1");
+                }}
+                onStunClick={() => {
+                  stunCharge(selectedPlanet, BigInt(inputValue), stunChargePriceWei);
+                  setInputValue("1");
+                }}
+                boostPrice={boostChargePriceWei}
+                stunPrice={stunChargePriceWei}
+                boostTxQueueId={`${selectedPlanet}-boost-charge`}
+                stunTxQueueId={`${selectedPlanet}-stun-charge`}
+                isBoostDisabled={gameOver || Number(planetEmpire) === 0}
+                isStunDisabled={gameOver || Number(planetEmpire) === 0}
               />
             </Tabs.Pane>
           </Tabs>

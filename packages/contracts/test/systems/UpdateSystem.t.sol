@@ -65,6 +65,17 @@ contract UpdateSystemTest is PrimodiumTest {
   /* ---------------------------------- Gold ---------------------------------- */
 
   function testAddGoldToEveryPlanet() public {
+    RoutineThresholds memory _routineThresholds = RoutineThresholds({
+      planetId: planetId,
+      accumulateGold: 0,
+      buyShields: 10000,
+      buyShips: 10000,
+      supportAlly: 10000,
+      attackEnemy: 10000,
+      attackTargetId: targetPlanetId,
+      supportTargetId: targetPlanetId
+    });
+    allRoutineThresholds[0] = _routineThresholds;
     world.Empires__updateWorld(allRoutineThresholds);
     uint256 goldIncrease = P_GameConfig.getGoldGenRate();
 
