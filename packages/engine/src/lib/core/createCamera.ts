@@ -5,10 +5,7 @@ export function createCamera(
   phaserCamera: Phaser.Cameras.Scene2D.Camera,
   options: CameraConfig
 ) {
-  // Stop default gesture events to not collide with use-gesture
-  // https://github.com/pmndrs/use-gesture/blob/404e2b2ac145a45aff179c1faf5097b97414731c/documentation/pages/docs/gestures.mdx#about-the-pinch-gesture
-  document.addEventListener("gesturestart", (e) => e.preventDefault());
-  document.addEventListener("gesturechange", (e) => e.preventDefault());
+  let controlsDisabled = false;
 
   const worldView$ = new BehaviorSubject<
     Phaser.Cameras.Scene2D.Camera["worldView"]
@@ -23,9 +20,18 @@ export function createCamera(
     requestAnimationFrame(() => worldView$.next(phaserCamera.worldView));
   };
 
+  const disableControls = () => {
+    controlsDisabled = true;
+  };
+
+  const enableControls = () => {
+    controlsDisabled = false;
+  };
+
   phaserCamera.scene.scale.addListener("resize", onResize);
 
   function setZoom(zoom: number) {
+    if (controlsDisabled) return;
     const { minZoom, maxZoom } = options;
     const _zoom = Phaser.Math.Clamp(zoom, minZoom, maxZoom);
     phaserCamera.setZoom(_zoom);
@@ -40,6 +46,7 @@ export function createCamera(
   }
 
   function setScroll(x: number, y: number) {
+    if (controlsDisabled) return;
     phaserCamera.setScroll(x, y);
     requestAnimationFrame(() => worldView$.next(phaserCamera.worldView));
   }
@@ -55,5 +62,7 @@ export function createCamera(
     },
     setScroll,
     setZoom,
+    disableControls,
+    enableControls,
   };
 }

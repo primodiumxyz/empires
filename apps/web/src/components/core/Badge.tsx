@@ -4,7 +4,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { Tooltip } from "@/components/core/Tooltip";
 import { cn } from "@/util/client";
 
-const badgeVariants = cva("badge flex pointer-events-auto shadow-inner", {
+const badgeVariants = cva("badge rounded-badge flex pointer-events-auto shadow-inner", {
   variants: {
     variant: {
       neutral: "badge-neutral",

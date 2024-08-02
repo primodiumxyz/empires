@@ -16,13 +16,15 @@ export const PlanetCharge = ({ planetId }: { planetId: Entity }) => {
     calls.tacticalStrike(planetId);
   };
   return (
-    <>
-      <Progress value={percent} max={100} />
+    <div className="relative w-24">
+      <Progress value={percent} max={100} variant="secondary" />
       {percent >= 100 && (
-        <Button size="xs" onClick={handleStrike}>
-          DO IT
-        </Button>
+        <div className="absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2">
+          <Button size="xs" variant="error" onClick={handleStrike}>
+            STRIKE
+          </Button>
+        </div>
       )}
-    </>
+    </div>
   );
 };

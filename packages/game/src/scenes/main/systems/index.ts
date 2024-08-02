@@ -5,7 +5,8 @@ import { PrimodiumScene } from "@game/types";
 import { renderPlanets } from "@game/scenes/main/systems/renderPlanets";
 import { renderPendingMoves } from "@game/scenes/main/systems/renderPendingMoves";
 import { renderRoutines } from "@game/scenes/main/systems/renderRoutines";
-import { renderOverrides } from "@game/scenes/main/systems/renderOverrides";
+import { renderOverrideFloatingText } from "@game/scenes/main/systems/renderOverrideFloatingText";
+import { renderChargeProgress } from "@game/scenes/main/systems/renderChargeProgress";
 
 export const runSystems = (
   scene: PrimodiumScene,
@@ -15,5 +16,6 @@ export const runSystems = (
   renderPlanets(scene, core);
   renderPendingMoves(scene, core);
   renderRoutines(scene, core);
-  renderOverrides(scene, core);
+  renderOverrideFloatingText(scene, core);
+  renderChargeProgress(scene, core);
 };

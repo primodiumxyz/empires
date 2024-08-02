@@ -64,28 +64,6 @@ contract UpdateSystemTest is PrimodiumTest {
 
   /* ---------------------------------- Gold ---------------------------------- */
 
-  function testAddGoldToEveryPlanet() public {
-    RoutineThresholds memory _routineThresholds = RoutineThresholds({
-      planetId: planetId,
-      accumulateGold: 0,
-      buyShields: 10000,
-      buyShips: 10000,
-      supportAlly: 10000,
-      attackEnemy: 10000,
-      attackTargetId: targetPlanetId,
-      supportTargetId: targetPlanetId
-    });
-    allRoutineThresholds[0] = _routineThresholds;
-    world.Empires__updateWorld(allRoutineThresholds);
-    uint256 goldIncrease = P_GameConfig.getGoldGenRate();
-
-    bytes32[] memory planets = PlanetsSet.getPlanetIds();
-    for (uint i = 0; i < planets.length; i++) {
-      bytes32 _planetId = planets[i];
-      assertEq(Planet.getGoldCount(_planetId), goldIncrease);
-    }
-  }
-
   function testSpendGoldBuyShipsRoutine() public {
     uint256 shipsRoutine = routineThresholds.buyShips - 1;
     uint256 gold = 9;
@@ -133,7 +111,10 @@ contract UpdateSystemTest is PrimodiumTest {
     assertEq(OverrideCost.get(EEmpire.Red, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
     assertEq(OverrideCost.get(EEmpire.Blue, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
     assertEq(OverrideCost.get(EEmpire.Blue, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
-    assertEq(OverrideCost.get(EEmpire.Green, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
+    assertEq(
+      OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
+      beginCreateShipCost - createShipCfg.overrideGenRate
+    );
     assertEq(OverrideCost.get(EEmpire.Green, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
   }
 }

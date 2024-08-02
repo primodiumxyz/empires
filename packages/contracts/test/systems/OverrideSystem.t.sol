@@ -317,6 +317,8 @@ contract OverrideSystemTest is PrimodiumTest {
 
   function testTacticalStrikeFailTooEarly() public {
     EEmpire empire = Planet.getEmpireId(planetId);
+    vm.prank(creator);
+    P_TacticalStrikeConfig.setMaxCharge(10000);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, 1);
 
     vm.startPrank(alice);
@@ -337,6 +339,8 @@ contract OverrideSystemTest is PrimodiumTest {
 
   function testTacticalStrike() public {
     EEmpire empire = Planet.getEmpireId(planetId);
+    vm.prank(creator);
+    P_TacticalStrikeConfig.setMaxCharge(10000);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, 1);
 
     vm.startPrank(alice);
@@ -348,6 +352,7 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(data.chargeRate, 100);
 
     uint256 currentCharge = _getCurrentCharge(planetId);
+    console.log(currentCharge, maxCharge);
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
     uint256 expectedEndBlock = block.number + remainingBlocks;
@@ -427,10 +432,20 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 cost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 1);
 
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
+
+    // update charge to current value
     world.Empires__boostCharge{ value: cost }(planetId, 1);
+    vm.prank(creator);
+    console.log("charge before boostCharge", data.charge);
+    Planet_TacticalStrike.setCharge(planetId, 0);
+    console.log("charge after setCharge", Planet_TacticalStrike.get(planetId).charge);
+    cost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 1);
+    world.Empires__boostCharge{ value: cost }(planetId, 1);
+    console.log("charge after boostCharge", Planet_TacticalStrike.get(planetId).charge);
 
     cost = LibPrice.getTotalCost(EOverride.StunCharge, empire, 5);
     world.Empires__stunCharge{ value: cost }(planetId, 5);
+    console.log("charge after stunCharge", Planet_TacticalStrike.get(planetId).charge);
     assertEq(Planet_TacticalStrike.get(planetId).charge, 0);
   }
 }
