@@ -142,7 +142,13 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
         id: `${planetId}-tactical-strike`,
         ...options,
       },
-      onComplete: (receipt) => {},
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Tactical strike on ${entityToPlanetName(planetId)}`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
     });
   };
 
@@ -155,6 +161,13 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
         id: `${planetId}-boost-charge`,
         ...options,
       },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Boosted ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
     });
   };
 
@@ -166,6 +179,13 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
       txQueueOptions: {
         id: `${planetId}-stun-charge`,
         ...options,
+      },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Stunned ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
       },
     });
   };

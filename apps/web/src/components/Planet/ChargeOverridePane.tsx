@@ -3,6 +3,7 @@ import React from "react";
 import { useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { NumberInput } from "@/components/core/NumberInput";
+import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useEthPrice } from "@/hooks/useEthPrice";
 
@@ -46,7 +47,9 @@ export const ChargeOverridePane: React.FC<ChargeOverridePaneProps> = ({
             </Button>
           </TransactionQueueMask>
           <p className="rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
-            {stunPriceUsd}
+            <p className="rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
+              <Price wei={stunPrice} />
+            </p>
           </p>
         </div>
         <div className="gap1 flex flex-col items-center">
@@ -55,7 +58,9 @@ export const ChargeOverridePane: React.FC<ChargeOverridePaneProps> = ({
               + BOOST
             </Button>
           </TransactionQueueMask>
-          <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">{boostPriceUsd}</p>
+          <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
+            <Price wei={boostPrice} />
+          </p>
         </div>
       </div>
     </div>
