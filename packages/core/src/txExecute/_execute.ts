@@ -5,7 +5,7 @@ import { Core, TxReceipt } from "@core/lib/types";
 
 export async function _execute(
   { network: { publicClient }, tables }: Core,
-  txPromise: Promise<Hex>,
+  txPromise: () => Promise<Hex>,
   simulateTxPromise: () => Promise<void>,
 ): Promise<TxReceipt> {
   const waitForTransaction = async (hash: Hex): Promise<TxReceipt> => {
@@ -50,7 +50,7 @@ export async function _execute(
 
   try {
     await simulateTxPromise();
-    const txHash = await txPromise;
+    const txHash = await txPromise();
     receipt = await waitForTransaction(txHash);
     console.log("[Tx] hash: ", txHash);
 
