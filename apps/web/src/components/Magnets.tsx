@@ -12,7 +12,7 @@ const MagnetBadge: React.FC<{ turnsLeft: number; className: string }> = ({ turns
 );
 
 const calculateTurnsLeft = (endTurn: bigint | undefined, globalTurn: bigint, beforeEmpire: boolean) => {
-  if (!endTurn) return 0;
+  if (endTurn == undefined) return 0;
   const turnsLeft = Number(endTurn - globalTurn);
   return beforeEmpire ? turnsLeft + 1 : turnsLeft;
 };
@@ -26,13 +26,23 @@ export const Magnets: React.FC<{ planetId: Entity }> = ({ planetId }) => {
   const currTurn = tables.Turn.use()?.value ?? 0n;
   if (!redMagnet && !blueMagnet && !greenMagnet) return null;
 
-  const globalTurn = (currTurn - 1n) / 3n;
+  const currFullTurn = (currTurn - 1n) / 3n;
   const turnModulo = Number(currTurn - 1n) % 3;
-  console.log({ currTurn, globalTurn, turnModulo, redMagnet, blueMagnet, greenMagnet });
 
-  const redTurnsLeft = calculateTurnsLeft(redMagnet?.endTurn, globalTurn, turnModulo < EEmpire.Red);
-  const blueTurnsLeft = calculateTurnsLeft(blueMagnet?.endTurn, globalTurn, turnModulo < EEmpire.Blue);
-  const greenTurnsLeft = calculateTurnsLeft(greenMagnet?.endTurn, globalTurn, turnModulo < EEmpire.Green);
+  const redTurnsLeft = calculateTurnsLeft(redMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Red);
+  const blueTurnsLeft = calculateTurnsLeft(blueMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Blue);
+  const greenTurnsLeft = calculateTurnsLeft(greenMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Green);
+  console.log({
+    redTurnsLeft,
+    blueTurnsLeft,
+    greenTurnsLeft,
+    currTurn,
+    currFullTurn,
+    turnModulo,
+    redMagnet,
+    blueMagnet,
+    greenMagnet,
+  });
 
   return (
     <div className="absolute right-0 top-0 text-xs text-white">
