@@ -7,7 +7,7 @@ const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
 
 export function createPriceUtils(tables: Tables) {
   function getTotalCost(_actionType: EOverride, _empireImpacted: EEmpire, _actionCount: bigint): bigint {
-    const progressAction = [EOverride.CreateShip, EOverride.ChargeShield].includes(_actionType);
+    const progressAction = [EOverride.CreateShip, EOverride.ChargeShield, EOverride.StunCharge].includes(_actionType);
     let totalCost = 0n;
 
     if (progressAction) {

@@ -83,6 +83,42 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
       onComplete: (receipt) => {},
     });
   };
+  const tacticalStrike = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__tacticalStrike",
+      args: [planetId],
+      options: { gas: 738649n * 2n },
+      txQueueOptions: {
+        id: `${planetId}-tactical-strike`,
+        ...options,
+      },
+      onComplete: (receipt) => {},
+    });
+  };
 
-  return { createShip, removeShip, addShield, removeShield, sellPoints };
+  const boostCharge = async (planetId: Entity, count: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__boostCharge",
+      args: [planetId, count],
+      options: { value: payment, gas: 738649n * 2n },
+      txQueueOptions: {
+        id: `${planetId}-boost-charge`,
+        ...options,
+      },
+    });
+  };
+
+  const stunCharge = async (planetId: Entity, count: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__stunCharge",
+      args: [planetId, count],
+      options: { value: payment, gas: 738649n * 2n },
+      txQueueOptions: {
+        id: `${planetId}-stun-charge`,
+        ...options,
+      },
+    });
+  };
+
+  return { createShip, removeShip, addShield, removeShield, sellPoints, tacticalStrike, boostCharge, stunCharge };
 };
