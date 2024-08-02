@@ -8,23 +8,21 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
 import { NumberInput } from "@/components/core/NumberInput";
+import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 
 export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planetId }) => {
   const [inputValue, setInputValue] = useState("1");
   const [empire, setEmpire] = useState<EEmpire>(EEmpire.Red);
-  const { price } = useEthPrice();
-  const { utils, tables } = useCore();
+  const { tables } = useCore();
   const { placeMagnet } = useContractCalls();
 
   const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
 
   const onPlaceMagnet = useCallback(() => {
-    console.log({ empire, planetId, inputValue, placeMagnetPriceWei });
     placeMagnet(empire, planetId, BigInt(inputValue), placeMagnetPriceWei);
   }, [empire, planetId, inputValue, placeMagnetPriceWei, placeMagnet]);
 
@@ -36,13 +34,14 @@ export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planet
   } = useAccountClient();
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
   const playerBalance = useBalance(address).value ?? 0n;
+
   const magnetExists = tables.Magnet.useWithKeys({ planetId, empireId: empire }) !== undefined;
   const { disabled, message } = useMemo(() => {
     if (playerBalance < placeMagnetPriceWei) return { disabled: true, message: "Not enough money" };
     if (playerPoints < pointsLocked) return { disabled: true, message: "Not enough points" };
     if (magnetExists) return { disabled: true, message: "Magnet already exists" };
     return { disabled: false, message: "" };
-  }, [placeMagnetPriceWei, price, pointsLocked, magnetExists, playerBalance, playerPoints]);
+  }, [placeMagnetPriceWei, pointsLocked, magnetExists, playerBalance, playerPoints]);
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
@@ -67,7 +66,7 @@ export const PlaceMagnetOverridePane: React.FC<{ planetId: Entity }> = ({ planet
           )}
           <div className="flex flex-row items-center gap-2">
             <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
-              {utils.weiToUsd(placeMagnetPriceWei, price ?? 0)}
+              <Price wei={placeMagnetPriceWei} />
             </p>
             <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
               Lock {formatEther(pointsLocked)}pts
