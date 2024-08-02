@@ -3,7 +3,10 @@ import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 
 import { PrimodiumScene } from "@game/types";
 
-export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
+export const renderOverrideFloatingText = (
+  scene: PrimodiumScene,
+  core: Core
+) => {
   const {
     tables,
     network: { world },
@@ -50,6 +53,30 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `+${current.overrideCount}`,
+          {
+            icon: "Ship",
+            delay: 500,
+          }
+        );
+      },
+    },
+    { runOnInit: false }
+  );
+
+  tables.BoostChargeOverrideLog.watch(
+    {
+      world: systemsWorld,
+      onEnter: ({ properties: { current } }) => {
+        if (!current) return;
+
+        const planet = scene.objects.planet.get(current.planetId as Entity);
+
+        if (!planet) return;
+
+        scene.audio.play("Build", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText(
+          { x: planet.coord.x, y: planet.coord.y - 20 },
+          `+${current.boostCount}`,
           {
             icon: "Ship",
             delay: 500,
@@ -107,6 +134,55 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
     },
     { runOnInit: false }
   );
+
+  tables.StunChargeOverrideLog.watch(
+    {
+      world: systemsWorld,
+      onEnter: ({ properties: { current } }) => {
+        if (!current) return;
+
+        const planet = scene.objects.planet.get(current.planetId as Entity);
+
+        if (!planet) return;
+
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText(
+          { x: planet.coord.x, y: planet.coord.y - 20 },
+          `-${current.stunCount}`,
+          {
+            icon: "Ship",
+            color: "#ff0000",
+          }
+        );
+      },
+    },
+    { runOnInit: false }
+  );
+
+  tables.TacticalStrikeOverrideLog.watch(
+    {
+      world: systemsWorld,
+      onEnter: ({ properties: { current } }) => {
+        if (!current) return;
+
+        const planet = scene.objects.planet.get(current.planetId as Entity);
+
+        if (!planet) return;
+
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText(
+          { x: planet.coord.x, y: planet.coord.y - 20 },
+          `ALL SHIPS DESTROYED`,
+          {
+            icon: "Ship",
+            color: "#ff0000",
+          }
+        );
+      },
+    },
+    { runOnInit: false }
+  );
+
   tables.PlaceMagnetOverrideLog.watch(
     {
       world: systemsWorld,
@@ -122,7 +198,8 @@ export const renderOverrides = (scene: PrimodiumScene, core: Core) => {
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `+${current.overrideCount}`,
           {
-            icon: "Crosshairs",
+            icon: "Attack",
+            color: "#ff0000",
           }
         );
       },

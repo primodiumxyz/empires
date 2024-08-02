@@ -22,7 +22,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
         if (!planet) return;
 
         enqueue(() => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.25 });
+          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `-${current.goldSpent}`,
@@ -32,7 +32,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
             }
           );
 
-          scene.audio.play("Build", "sfx", { volume: 0.25 });
+          scene.audio.play("Build", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `+${current.shieldBought}`,
@@ -67,7 +67,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
         if (!planet) return;
 
         enqueue(() => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.25 });
+          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `-${current.goldSpent}`,
@@ -77,7 +77,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
             }
           );
 
-          scene.audio.play("Build", "sfx", { volume: 0.25 });
+          scene.audio.play("Build", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `+${current.shipBought}`,
@@ -160,7 +160,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
         if (!planet) return;
 
         enqueue(() => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.25 });
+          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `+${current.goldAdded}`,
@@ -198,8 +198,8 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
           enqueue(() => {
             scene.audio.play("Complete", "sfx", {
-              volume: 0.1,
-              detune: Math.min(20 * i, 500),
+              volume: 0.01,
+              detune: 20 * i,
             });
             scene.fx.emitFloatingText(
               { x: planet.coord.x, y: planet.coord.y - 25 },
@@ -210,7 +210,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
                 iconSize: 16,
               }
             );
-          }, 150);
+          }, 50);
         }
       },
     },

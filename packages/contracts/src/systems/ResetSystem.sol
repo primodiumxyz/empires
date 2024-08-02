@@ -6,7 +6,7 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
-import { createPlanets } from "libraries/CreatePlanets.sol";
+import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { initPrice } from "libraries/InitPrice.sol";
 import { PendingMove, WinningEmpire, HistoricalPointCost, P_GameConfig } from "codegen/index.sol";
 

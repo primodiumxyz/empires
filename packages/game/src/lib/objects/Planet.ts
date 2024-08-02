@@ -13,10 +13,15 @@ import {
 } from "@game/lib/mappings";
 import {
   calculateAngleBetweenPoints,
-  getRandomRange,
+  entityToPlanetName,
+  formatNumber,
+  lerp,
 } from "@primodiumxyz/core";
 import { DepthLayers } from "@game/lib/constants/common";
 import { EEmpire } from "@primodiumxyz/contracts";
+import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
+import { IconLabel } from "@game/lib/objects/IconLabel";
+import { Progress } from "@game/lib/objects/Progress";
 
 export class Planet
   extends Phaser.GameObjects.Zone
@@ -25,11 +30,17 @@ export class Planet
   readonly id: Entity;
   readonly coord: PixelCoord;
   protected _scene: PrimodiumScene;
-  private planetUnderglowSprite: Phaser.GameObjects.Sprite;
+  private planetUnderglowSprite: Phaser.GameObjects.Image;
   private planetSprite: Phaser.GameObjects.Sprite;
   private hexSprite: Phaser.GameObjects.Sprite;
   private hexHoloSprite: Phaser.GameObjects.Sprite;
+  private planetName: Phaser.GameObjects.Text;
   private pendingArrow: Phaser.GameObjects.Container;
+  private chargeProgress: Progress;
+  private shields: IconLabel;
+  private ships: IconLabel;
+  private gold: IconLabel;
+  private magnets: [red: IconLabel, blue: IconLabel, green: IconLabel];
   private empireId: EEmpire;
   private spawned = false;
 
@@ -69,6 +80,54 @@ export class Planet
       Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]
     ).setDepth(DepthLayers.Base + coord.y);
 
+    this.planetName = new Phaser.GameObjects.Text(
+      scene.phaserScene,
+      coord.x,
+      coord.y + 25,
+      entityToPlanetName(id),
+      {
+        fontSize: 25,
+        color: "rgba(255,255,255,0.5)",
+        fontFamily: "Silkscreen",
+        backgroundColor: "rgba(0,0,0,0.5)",
+        padding: { x: 10 },
+      }
+    )
+      .setOrigin(0.5, 0.5)
+      .setAlpha(0.25)
+      .setDepth(DepthLayers.Planet - 1);
+
+    this.shields = new IconLabel(
+      scene,
+      {
+        x: coord.x - 45,
+        y: coord.y + 35,
+      },
+      "0",
+      "Shield"
+    ).setDepth(DepthLayers.Planet - 1);
+
+    this.ships = new IconLabel(
+      scene,
+
+      {
+        x: coord.x + 45,
+        y: coord.y + 35,
+      },
+      "0",
+      "Ship"
+    ).setDepth(DepthLayers.Planet - 1);
+
+    this.gold = new IconLabel(
+      scene,
+      {
+        x: coord.x,
+        y: coord.y + 60,
+      },
+      "0",
+      "Gold"
+    ).setDepth(DepthLayers.Planet - 1);
+
     this.hexHoloSprite = new Phaser.GameObjects.Sprite(
       scene.phaserScene,
       coord.x,
@@ -96,16 +155,41 @@ export class Planet
       .setActive(false)
       .setVisible(false);
 
-    // this.hexHoloSprite.play(Animations.Holo);
+    this.chargeProgress = new Progress(scene, {
+      x: coord.x,
+      y: coord.y + 5,
+    }).setDepth(DepthLayers.Planet + 1);
+
+    this.magnets = [
+      new IconLabel(
+        scene,
+        { x: coord.x + 75, y: coord.y - 60 },
+        "0",
+        "Attack",
+        { color: "red" }
+      )
+        .setDepth(DepthLayers.Planet - 1)
+        .setVisible(false),
+      new IconLabel(
+        scene,
+        { x: coord.x + 75, y: coord.y - 30 },
+        "0",
+        "Attack",
+        { color: "blue" }
+      )
+        .setDepth(DepthLayers.Planet - 1)
+        .setVisible(false),
+      new IconLabel(scene, { x: coord.x + 75, y: coord.y - 0 }, "0", "Attack", {
+        color: "green",
+      })
+        .setDepth(DepthLayers.Planet - 1)
+        .setVisible(false),
+    ];
 
     this._scene = scene;
     this.id = id;
     this.coord = coord;
     this.empireId = empire;
-
-    this.setDepth(DepthLayers.Planet + coord.y - coord.x);
-
-    this.planetSprite.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
 
     this._scene.objects.planet.add(id, this, false);
   }
@@ -113,16 +197,66 @@ export class Planet
   spawn() {
     this.spawned = true;
     this.scene.add.existing(this);
+    this.scene.add.existing(this.planetName);
     this.scene.add.existing(this.planetUnderglowSprite);
     this.scene.add.existing(this.planetSprite);
     this.scene.add.existing(this.hexHoloSprite);
     this.scene.add.existing(this.hexSprite);
     this.scene.add.existing(this.pendingArrow);
+    this.scene.add.existing(this.shields);
+    this.scene.add.existing(this.ships);
+    this.scene.add.existing(this.gold);
+    this.scene.add.existing(this.chargeProgress);
+    this.magnets.forEach((magnet) => {
+      this.scene.add.existing(magnet);
+    });
     return this;
   }
 
   isSpawned() {
     return this.spawned;
+  }
+
+  override setScale(scale: number) {
+    this.planetSprite.setScale(scale);
+    this.planetUnderglowSprite.setScale(scale);
+    this.hexSprite.setScale(scale);
+    this.hexHoloSprite.setScale(scale);
+    this.planetName.setScale(scale);
+    this.shields.setScale(scale);
+    this.ships.setScale(scale);
+    this.gold.setScale(scale);
+    this.chargeProgress.setScale(scale);
+    this.magnets.forEach((magnet) => {
+      magnet.setScale(scale);
+    });
+    return this;
+  }
+
+  override update(): void {
+    const alpha = lerp(
+      this._scene.camera.phaserCamera.zoom,
+      this._scene.config.camera.minZoom,
+      this._scene.config.camera.defaultZoom,
+      0,
+      1
+    );
+    const nameAlpha = lerp(
+      this._scene.camera.phaserCamera.zoom,
+      this._scene.config.camera.minZoom,
+      this._scene.config.camera.defaultZoom,
+      0.5,
+      0
+    );
+
+    this.shields.setAlpha(alpha);
+    this.ships.setAlpha(alpha);
+    this.gold.setAlpha(alpha);
+    this.chargeProgress.setAlpha(alpha);
+    this.magnets.forEach((magnet) => {
+      magnet.setAlpha(alpha);
+    });
+    this.planetName.setAlpha(nameAlpha);
   }
 
   updateFaction(empire: EEmpire) {
@@ -227,6 +361,85 @@ export class Planet
     );
 
     this._scene.audio.play("Execute2", "sfx", { volume: 0.1 });
+  }
+
+  onClick(fn: (e: Phaser.Input.Pointer) => void) {
+    const obj = this.hexSprite.setInteractive();
+    obj.on(Phaser.Input.Events.POINTER_UP, (e: Phaser.Input.Pointer) => {
+      if (!isValidClick(e)) return;
+
+      fn(e);
+    });
+    return this;
+  }
+
+  onHoverEnter(fn: (e: Phaser.Input.Pointer) => void) {
+    const obj = this.hexSprite.setInteractive();
+    obj.on(
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
+      (e: Phaser.Input.Pointer) => {
+        if (!isValidHover(e)) return;
+        fn(e);
+      }
+    );
+    return this;
+  }
+
+  onHoverExit(fn: (e: Phaser.Input.Pointer) => void) {
+    const obj = this.hexSprite.setInteractive();
+    obj.on(
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
+      (e: Phaser.Input.Pointer) => {
+        fn(e);
+      }
+    );
+    return this;
+  }
+
+  flashPlanet() {
+    this._scene.fx.flashSprite(this.planetSprite);
+  }
+
+  setShieldCount(count: bigint) {
+    this.shields.setText(
+      formatNumber(count, {
+        short: true,
+        showZero: true,
+        fractionDigits: 2,
+      })
+    );
+  }
+
+  setShipCount(count: bigint) {
+    this.ships.setText(
+      formatNumber(count, {
+        short: true,
+        showZero: true,
+        fractionDigits: 2,
+      })
+    );
+  }
+
+  setGoldCount(count: bigint) {
+    this.gold.setText(
+      formatNumber(count, {
+        short: true,
+        showZero: true,
+        fractionDigits: 2,
+      })
+    );
+  }
+
+  setChargeProgress(progress: number) {
+    this.chargeProgress.setProgress(progress);
+  }
+
+  setMagnet(empire: EEmpire, turns: number) {
+    this.magnets[empire - 1]
+      ?.setText(formatNumber(turns))
+      .setVisible(turns > 0);
+
+    return this;
   }
 
   override destroy() {
