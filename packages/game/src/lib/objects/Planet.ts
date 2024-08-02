@@ -198,15 +198,22 @@ export class Planet
     const alpha = lerp(
       this._scene.camera.phaserCamera.zoom,
       this._scene.config.camera.minZoom,
-      this._scene.config.camera.maxZoom,
+      this._scene.config.camera.defaultZoom,
       0,
       1
+    );
+    const nameAlpha = lerp(
+      this._scene.camera.phaserCamera.zoom,
+      this._scene.config.camera.minZoom,
+      this._scene.config.camera.defaultZoom,
+      0.5,
+      0
     );
 
     this.shields.setAlpha(alpha);
     this.ships.setAlpha(alpha);
     this.gold.setAlpha(alpha);
-    this.planetName.setAlpha((1 - alpha) / 2);
+    this.planetName.setAlpha(nameAlpha);
   }
 
   updateFaction(empire: EEmpire) {
