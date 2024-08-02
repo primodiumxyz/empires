@@ -124,6 +124,15 @@ export function calculateRoutinePcts(
     supportAlly: 0,
   };
   const totalPositive = Object.values(finalLikelihoods).reduce((sum, value) => sum + Math.max(0, value), 0);
+  if (totalPositive == 0) {
+    return {
+      accumulateGold: 1,
+      buyShields: 0,
+      attackEnemy: 0,
+      buyShips: 0,
+      supportAlly: 0,
+    };
+  }
 
   for (const _category in finalLikelihoods) {
     const category = _category as keyof RoutineThresholds;
