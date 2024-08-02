@@ -1,31 +1,20 @@
-import { forwardRef, ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { bigIntMin } from "@latticexyz/common/utils";
+import { forwardRef, useEffect, useRef, useState } from "react";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { createLocalBoolTable, createWorld, Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
-import { IconLabel } from "@/components/core/IconLabel";
 import { Join } from "@/components/core/Join";
-import { Marker } from "@/components/core/Marker";
 import { Tabs } from "@/components/core/Tabs";
-import { Tooltip } from "@/components/core/Tooltip";
-import { OverridePane } from "@/components/OverridePane";
+import { ChargeOverridePane } from "@/components/Planet/ChargeOverridePane";
+import { OverridePane } from "@/components/Planet/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useNextTurnOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { cn } from "@/util/client";
-
-export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "fill-blue-600",
-  [EEmpire.Green]: "fill-green-600",
-  [EEmpire.Red]: "fill-red-600",
-  [EEmpire.LENGTH]: "",
-};
 
 const OverridePaneExpanded = createLocalBoolTable(createWorld(), {
   id: "OverridePaneExpanded",
@@ -33,111 +22,7 @@ const OverridePaneExpanded = createLocalBoolTable(createWorld(), {
   version: "1",
 });
 
-export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number }> = ({
-  entity,
-  tileSize,
-  margin,
-}) => {
-  const { tables, utils } = useCore();
-  const planet = tables.Planet.use(entity);
-  const planetEmpire = (planet?.empireId ?? 0) as EEmpire;
-  const [isInteractPaneVisible, setIsInteractPaneVisible] = useState(false);
-  const interactButtonRef = useRef<HTMLButtonElement>(null);
-
-  const [left, top] = useMemo(() => {
-    const cartesianCoord = convertAxialToCartesian(
-      { q: Number(planet?.q ?? 0n) - 100, r: Number(planet?.r ?? 0n) },
-      tileSize + margin,
-    );
-
-    return [cartesianCoord.x, cartesianCoord.y];
-  }, [planet, tileSize, margin]);
-
-  const handleInteractClick = () => {
-    setIsInteractPaneVisible(!isInteractPaneVisible);
-  };
-
-  useEffect(() => {
-    const unsubscribe = tables.PlanetBattleRoutine.watch(
-      {
-        onChange: ({ properties: { current } }) => {
-          if (!current || current.planetId !== entity) return;
-          const data = {
-            planetId: current.planetId,
-            deaths: bigIntMin(current.attackingShipCount, current.defendingShipCount),
-            conquered: current.conquer,
-          };
-        },
-      },
-      { runOnInit: false },
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, [planet]);
-
-  // close interact pane on turn change (which happens when gold could for any planet increases)
-  useEffect(() => {
-    const unsubscribe = tables.Planet.watch({
-      onChange: ({ properties: { current, prev } }) => {
-        if (!current || !prev) return;
-        if (current.goldCount <= prev.goldCount) return;
-        setIsInteractPaneVisible(false);
-      },
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  if (!planet) return null;
-
-  return (
-    <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
-      <div className="relative mt-10 flex select-none flex-col items-center opacity-75 drop-shadow-2xl transition-all hover:opacity-100">
-        <div className="group relative flex flex-col items-center">
-          <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-slate-800/90 to-slate-900/75 px-1 text-center">
-            <p className="font-mono text-[10px] opacity-70">
-              ({(planet.q - 100n ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
-            </p>
-            {/* dashboard button */}
-            <Button
-              variant="ghost"
-              className="p-0 font-bold text-amber-400"
-              onClick={() => {
-                tables.SelectedPlanet.set({ value: entity });
-                utils.openPane("dashboard");
-              }}
-            >
-              {entityToPlanetName(entity)}
-            </Button>
-          </div>
-          <div className="flex flex-row gap-1 rounded-box border border-secondary/25 bg-neutral/75 px-2 text-[.8em]">
-            <Ships shipCount={planet.shipCount} />
-            <Shields shieldCount={planet.shieldCount} />
-            <GoldCount goldCount={planet.goldCount} />
-          </div>
-
-          <InteractButton
-            className={cn(
-              "h-full scale-75 opacity-50 transition-all group-hover:scale-100 group-hover:opacity-100",
-              !planet?.empireId ? "pointer-events-none !opacity-0" : "",
-            )}
-            ref={interactButtonRef}
-            onClick={handleInteractClick}
-            isInteractPaneVisible={isInteractPaneVisible}
-            planetId={entity}
-            planetEmpire={planetEmpire}
-          />
-        </div>
-      </div>
-    </Marker>
-  );
-};
-
-const InteractButton = forwardRef<
+export const InteractButton = forwardRef<
   HTMLButtonElement,
   {
     onClick: () => void;
@@ -150,7 +35,7 @@ const InteractButton = forwardRef<
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
   const { tables } = useCore();
-  const { createShip, removeShip, addShield, removeShield } = useContractCalls();
+  const { createShip, removeShip, addShield, removeShield, boostCharge, stunCharge } = useContractCalls();
   const { gameOver } = useTimeLeft();
   const planet = tables.Planet.use(planetId);
   const expanded = OverridePaneExpanded.use()?.value ?? false;
@@ -160,6 +45,8 @@ const InteractButton = forwardRef<
   const killShipPriceWei = useOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
   const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
   const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
+  const boostChargePriceWei = useOverrideCost(EOverride.BoostCharge, planetEmpire, BigInt(inputValue));
+  const stunChargePriceWei = useOverrideCost(EOverride.StunCharge, planetEmpire, BigInt(inputValue));
 
   const nextCreateShipPriceWei = useNextTurnOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
   const nextKillShipPriceWei = useNextTurnOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
@@ -201,16 +88,13 @@ const InteractButton = forwardRef<
       </Button>
       {isInteractPaneVisible && (
         <div className="absolute left-1/2 top-12 -translate-x-1/2 backdrop-blur-2xl">
-          <Card
-            noDecor
-            ref={InteractPaneRef}
-            className="flex-row items-center justify-center gap-2 bg-slate-900/85 pb-1"
-          >
+          <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
             <div className="flex flex-col items-center justify-center gap-1">
-              <Tabs className="flex w-64 flex-col items-center gap-2">
+              <Tabs className="flex w-[350px] flex-col items-center gap-2">
                 <Join>
                   <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
                   <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
+                  <Tabs.IconButton icon={InterfaceIcons.Shard} text="CHARGE" index={2} />
                 </Join>
                 <Tabs.Pane index={0} className="w-full items-center gap-4">
                   <OverridePane
@@ -262,6 +146,26 @@ const InteractButton = forwardRef<
                     expanded={expanded}
                   />
                 </Tabs.Pane>
+                <Tabs.Pane index={2} className="w-full items-center gap-4">
+                  <ChargeOverridePane
+                    inputValue={inputValue}
+                    onInputChange={setInputValue}
+                    onBoostClick={() => {
+                      boostCharge(planetId, BigInt(inputValue), boostChargePriceWei);
+                      setInputValue("1");
+                    }}
+                    onStunClick={() => {
+                      stunCharge(planetId, BigInt(inputValue), stunChargePriceWei);
+                      setInputValue("1");
+                    }}
+                    boostPrice={boostChargePriceWei}
+                    stunPrice={stunChargePriceWei}
+                    boostTxQueueId={`${planetId}-boost-charge`}
+                    stunTxQueueId={`${planetId}-stun-charge`}
+                    isBoostDisabled={gameOver || Number(planetEmpire) === 0}
+                    isStunDisabled={gameOver || Number(planetEmpire) === 0}
+                  />
+                </Tabs.Pane>
               </Tabs>
               <Button
                 onClick={() => OverridePaneExpanded.set({ value: !expanded })}
@@ -278,39 +182,3 @@ const InteractButton = forwardRef<
     </div>
   );
 });
-
-const GoldCount = ({ goldCount }: { goldCount: bigint }) => {
-  return (
-    <div className="pointer-events-auto relative z-50">
-      <Tooltip tooltipContent={`GOLD`}>
-        <p className="pointer-events-auto flex items-center justify-center gap-1.5">
-          <IconLabel imageUri={InterfaceIcons.Vault} text={goldCount.toLocaleString()} />
-        </p>
-      </Tooltip>
-    </div>
-  );
-};
-
-const Ships = ({ shipCount }: { shipCount: bigint }) => {
-  return (
-    <div className="relative z-50">
-      <Tooltip tooltipContent={`SHIPS`}>
-        <p className="flex items-center justify-center gap-2">
-          <IconLabel imageUri={InterfaceIcons.Fleet} text={shipCount.toLocaleString()} />
-        </p>
-      </Tooltip>
-    </div>
-  );
-};
-
-const Shields = ({ shieldCount }: { shieldCount: bigint }) => {
-  return (
-    <div className="relative z-50">
-      <Tooltip tooltipContent={`SHIELDS`}>
-        <p className="flex items-center justify-center">
-          <IconLabel imageUri={InterfaceIcons.Defense} text={shieldCount.toLocaleString()} />
-        </p>
-      </Tooltip>
-    </div>
-  );
-};
