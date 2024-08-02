@@ -9,6 +9,7 @@ import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
 import { Tabs } from "@/components/core/Tabs";
+import { PlaceMagnetOverridePane } from "@/components/PlaceMagnetOverridePane";
 import { ChargeOverridePane } from "@/components/Planet/ChargeOverridePane";
 import { OverridePane } from "@/components/Planet/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
@@ -90,11 +91,12 @@ export const InteractButton = forwardRef<
         <div className="absolute left-1/2 top-12 -translate-x-1/2 backdrop-blur-2xl">
           <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
             <div className="flex flex-col items-center justify-center gap-1">
-              <Tabs className="flex w-[350px] flex-col items-center gap-2">
+              <Tabs className="flex w-[450px] flex-col items-center gap-2" defaultIndex={!planetEmpire ? 0 : 2}>
                 <Join>
-                  <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
-                  <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
-                  <Tabs.IconButton icon={InterfaceIcons.Shard} text="CHARGE" index={2} />
+                  <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} disabled={!planetEmpire} />
+                  <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} disabled={!planetEmpire} />
+                  <Tabs.IconButton icon={InterfaceIcons.Crosshairs} text="MAGNET" index={2} />
+                  <Tabs.IconButton icon={InterfaceIcons.Shard} text="CHARGE" index={3} />
                 </Join>
                 <Tabs.Pane index={0} className="w-full items-center gap-4">
                   <OverridePane
@@ -147,6 +149,9 @@ export const InteractButton = forwardRef<
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={2} className="w-full items-center gap-4">
+                  <PlaceMagnetOverridePane planetId={planetId} />
+                </Tabs.Pane>
+                <Tabs.Pane index={3} className="w-full items-center gap-4">
                   <ChargeOverridePane
                     inputValue={inputValue}
                     onInputChange={setInputValue}
