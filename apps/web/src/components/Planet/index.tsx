@@ -6,6 +6,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Marker } from "@/components/core/Marker";
+import { Magnets } from "@/components/Magnets";
 import { GoldCount } from "@/components/Planet/GoldCount";
 import { InteractButton } from "@/components/Planet/InteractButton";
 import { PlanetCharge } from "@/components/Planet/PlanetCharge";
@@ -40,8 +41,9 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
   if (!planet) return null;
   return (
     <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
-      <div className="relative mt-10 flex select-none flex-col items-center opacity-75 drop-shadow-2xl transition-all hover:opacity-100">
-        <div className="group relative flex flex-col items-center">
+      <div className="relative flex w-[220px] select-none flex-col items-center opacity-75 drop-shadow-2xl transition-all hover:opacity-100">
+        <Magnets planetId={entity} />
+        <div className="group relative mt-20 flex flex-col items-center">
           <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-slate-800/90 to-slate-900/75 px-1 text-center">
             <p className="font-mono text-[10px] opacity-70">
               ({(planet.q - 100n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
