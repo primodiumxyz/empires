@@ -17,6 +17,9 @@ export const functionSystemIds: {
   Empires__chargeShield: getSystemId("OverrideSystem"),
   Empires__drainShield: getSystemId("OverrideSystem"),
   Empires__sellPoints: getSystemId("OverrideSystem"),
+  Empires__tacticalStrike: getSystemId("OverrideSystem"),
+  Empires__boostCharge: getSystemId("OverrideSystem"),
+  Empires__stunCharge: getSystemId("OverrideSystem"),
 
   Empires__updateWorld: getSystemId("UpdateSystem"),
 

@@ -102,7 +102,7 @@ contract UpdateSystemTest is PrimodiumTest {
     bytes32[] memory planets = EmpirePlanetsSet.getEmpirePlanetIds(turn);
     for (uint i = 0; i < planets.length; i++) {
       bytes32 _planetId = planets[i];
-      assertEq(Planet.getGoldCount(_planetId), goldIncrease);
+      assertEq(Planet.getGoldCount(_planetId), goldIncrease * EMPIRE_COUNT);
     }
   }
 

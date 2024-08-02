@@ -36,6 +36,8 @@ export enum EOverride {
   ChargeShield,
   DrainShield,
   PlaceMagnet,
+  BoostCharge,
+  StunCharge,
   LENGTH,
 }
 

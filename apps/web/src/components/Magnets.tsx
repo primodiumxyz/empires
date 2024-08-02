@@ -24,10 +24,11 @@ export const Magnets: React.FC<{ planetId: Entity }> = ({ planetId }) => {
   const greenMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Green, planetId });
 
   const currTurn = tables.Turn.use()?.value ?? 0n;
+  if (!redMagnet && !blueMagnet && !greenMagnet) return null;
+
   const globalTurn = (currTurn - 1n) / 3n;
   const turnModulo = Number(currTurn - 1n) % 3;
-
-  if (!redMagnet && !blueMagnet && !greenMagnet) return null;
+  console.log({ currTurn, globalTurn, turnModulo, redMagnet, blueMagnet, greenMagnet });
 
   const redTurnsLeft = calculateTurnsLeft(redMagnet?.endTurn, globalTurn, turnModulo < EEmpire.Red);
   const blueTurnsLeft = calculateTurnsLeft(blueMagnet?.endTurn, globalTurn, turnModulo < EEmpire.Blue);
