@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { StunChargeOverride, StunChargeOverrideData, BoostChargeOverride, BoostChargeOverrideData, Planet_TacticalStrikeData, Planet_TacticalStrike, TacticalStrikeOverride, TacticalStrikeOverrideData, P_TacticalStrikeConfig, Planet, PlanetData, Player, P_PointConfig, CreateShipOverride, CreateShipOverrideData, KillShipOverride, KillShipOverrideData, ChargeShieldsOverride, ChargeShieldsOverrideData, DrainShieldsOverride, DrainShieldsOverrideData } from "codegen/index.sol";
+import { TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, Planet, PlanetData, Player, P_PointConfig, P_OverrideConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -42,9 +42,9 @@ contract OverrideSystem is EmpiresSystem {
     planetTacticalStrikeData.charge += P_TacticalStrikeConfig.getCreateShipBoostIncrease() * _overrideCount;
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
 
-    CreateShipOverride.set(
+    CreateShipOverrideLog.set(
       pseudorandomEntity(),
-      CreateShipOverrideData({
+      CreateShipOverrideLogData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
@@ -83,9 +83,9 @@ contract OverrideSystem is EmpiresSystem {
       : 0;
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
 
-    KillShipOverride.set(
+    KillShipOverrideLog.set(
       pseudorandomEntity(),
-      KillShipOverrideData({
+      KillShipOverrideLogData({
         playerId: addressToId(_msgSender()),
         planetId: _planetId,
         ethSpent: cost,
@@ -111,9 +111,9 @@ contract OverrideSystem is EmpiresSystem {
 
     Planet.setShieldCount(_planetId, planetData.shieldCount + _overrideCount);
 
-    ChargeShieldsOverride.set(
+    ChargeShieldsOverrideLog.set(
       pseudorandomEntity(),
-      ChargeShieldsOverrideData({
+      ChargeShieldsOverrideLogData({
         planetId: _planetId,
         ethSpent: cost,
         overrideCount: _overrideCount,
@@ -139,9 +139,9 @@ contract OverrideSystem is EmpiresSystem {
     _purchaseOverride(EOverride.DrainShield, planetData.empireId, false, _overrideCount, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount - _overrideCount);
-    DrainShieldsOverride.set(
+    DrainShieldsOverrideLog.set(
       pseudorandomEntity(),
-      DrainShieldsOverrideData({
+      DrainShieldsOverrideLogData({
         planetId: _planetId,
         ethSpent: cost,
         overrideCount: _overrideCount,
@@ -248,9 +248,9 @@ contract OverrideSystem is EmpiresSystem {
     Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
     planetTacticalStrikeData.charge += P_TacticalStrikeConfig.getBoostChargeIncrease() * _boostCount;
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
-    BoostChargeOverride.set(
+    BoostChargeOverrideLog.set(
       pseudorandomEntity(),
-      BoostChargeOverrideData({
+      BoostChargeOverrideLogData({
         planetId: _planetId,
         ethSpent: cost,
         boostCount: _boostCount,
@@ -278,9 +278,14 @@ contract OverrideSystem is EmpiresSystem {
       ? planetTacticalStrikeData.charge - stunDecrease
       : 0;
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
-    StunChargeOverride.set(
+    StunChargeOverrideLog.set(
       pseudorandomEntity(),
-      StunChargeOverrideData({ planetId: _planetId, ethSpent: cost, stunCount: _stunCount, timestamp: block.timestamp })
+      StunChargeOverrideLogData({
+        planetId: _planetId,
+        ethSpent: cost,
+        stunCount: _stunCount,
+        timestamp: block.timestamp
+      })
     );
   }
   /**
@@ -307,9 +312,9 @@ contract OverrideSystem is EmpiresSystem {
       Planet_TacticalStrikeData({ charge: 0, chargeRate: 100, lastUpdated: block.number })
     );
     // Log the tactical strike
-    TacticalStrikeOverride.set(
+    TacticalStrikeOverrideLog.set(
       pseudorandomEntity(),
-      TacticalStrikeOverrideData({ planetId: _planetId, timestamp: block.timestamp })
+      TacticalStrikeOverrideLogData({ planetId: _planetId, timestamp: block.timestamp })
     );
   }
 }

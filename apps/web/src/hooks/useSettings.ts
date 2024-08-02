@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 
-import { createLocalTable, createWorld, Type } from "@primodiumxyz/reactive-tables";
+import { createLocalBoolTable, createLocalTable, createWorld, Type } from "@primodiumxyz/reactive-tables";
 
 const settingsWorld = createWorld();
 
@@ -31,6 +31,13 @@ FontStyle.set({
   size: fontStyleOptions.size[0],
 });
 
+/* -------------------------------- Advanced -------------------------------- */
+const ShowBlockchainUnits = createLocalBoolTable(settingsWorld, {
+  id: "ShowBlockchainUnits",
+  persist: true,
+});
+
+ShowBlockchainUnits.set({ value: false });
 /* -------------------------------------------------------------------------- */
 /*                                  SETTINGS                                  */
 /* -------------------------------------------------------------------------- */
@@ -53,6 +60,10 @@ export const useSettings = () => {
       size: fontStyle?.size ?? fontStyleOptions.size[0],
       setFamily: setFontStyleFamily,
       setSize: setFontStyleSize,
+    },
+    showBlockchainUnits: {
+      enabled: ShowBlockchainUnits.use()?.value ?? false,
+      setEnabled: (enabled: boolean) => ShowBlockchainUnits.update({ value: enabled }),
     },
   };
 };

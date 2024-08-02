@@ -9,6 +9,7 @@ import {
   GetContractReturnType,
   Hex,
   PublicClient,
+  TransactionReceipt,
   WalletClient,
 } from "viem";
 
@@ -189,3 +190,13 @@ export type AxialCoord = {
   q: number;
   r: number;
 };
+
+export type TxReceipt =
+  | (TransactionReceipt & {
+      success: boolean;
+      error?: string;
+    })
+  | {
+      success: false;
+      error: string;
+    };
