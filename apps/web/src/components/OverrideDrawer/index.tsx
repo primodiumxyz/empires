@@ -161,6 +161,7 @@ export const OverrideDrawer = () => {
             <Tabs.Pane index={2} className="w-full items-center gap-4">
               <ChargeOverridePane
                 inputValue={inputValue}
+                planetId={selectedPlanet}
                 onInputChange={setInputValue}
                 onBoostClick={() => {
                   boostCharge(selectedPlanet, BigInt(inputValue), boostChargePriceWei);
