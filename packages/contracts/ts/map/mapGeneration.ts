@@ -21,7 +21,6 @@ function generateContent() {
   const center = { q: Math.floor((planetMap.width - 1) / 2), r: Math.floor((planetMap.height - 1) / 2) };
   const planets = planetMap.layers[0].data;
 
-  let count = 0;
   return planets
     .map((_empire, i) => {
       const empire = _empire - 1;
@@ -30,24 +29,23 @@ function generateContent() {
       const q = (i % planetMap.width) - center.q + OFFSET;
       const coord = oddrToAxial({ row: r, col: q });
 
-      const planetName = `planet${count++}`;
       const empireName = EmpireNames[empire] ?? "NULL";
 
       return `
-            bytes32 ${planetName} = coordToId(${coord.q}, ${coord.r});
+            planetId = coordToId(${coord.q}, ${coord.r});
             ${
               empireName === "NULL"
                 ? ""
-                : `EmpirePlanetsSet.add(EEmpire.${empireName}, ${planetName}); 
+                : `EmpirePlanetsSet.add(EEmpire.${empireName}, planetId); 
                   Empire.set(EEmpire.${empireName}, EOrigin.North, 0, 0);
                   planetData.empireId = EEmpire.${empireName};
                   `
             }
             planetData.q = ${coord.q};
             planetData.r = ${coord.r};
-            PlanetsSet.add(${planetName});
-            Planet.set(${planetName}, planetData);
-            Planet_TacticalStrike.set(${planetName}, planetTacticalStrikeData);
+            PlanetsSet.add(planetId);
+            Planet.set(planetId, planetData);
+            createTacticalCharge(planetId, ${empireName === "NULL" ? 0 : 1});
             `;
     })
     .join("");
@@ -66,11 +64,8 @@ import { EEmpire, EOrigin, EOverride } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
 
 function createPlanets() {
-  Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrikeData({
-    lastUpdated: block.number,
-    chargeRate: 100, // out of 100
-    charge: 0
-  });
+
+  bytes32 planetId;
 
   PlanetData memory planetData = PlanetData({
     q: 0,
@@ -83,6 +78,14 @@ function createPlanets() {
   });
 
   ${str}
+}
+
+function createTacticalCharge(bytes32 planetId, uint256 charge) {
+  Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrikeData({
+    lastUpdated: block.number,
+    chargeRate: 100, // out of 100
+    charge: charge 
+  });
 }
 `;
 }
