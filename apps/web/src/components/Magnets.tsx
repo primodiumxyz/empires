@@ -32,17 +32,6 @@ export const Magnets: React.FC<{ planetId: Entity }> = ({ planetId }) => {
   const redTurnsLeft = calculateTurnsLeft(redMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Red);
   const blueTurnsLeft = calculateTurnsLeft(blueMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Blue);
   const greenTurnsLeft = calculateTurnsLeft(greenMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Green);
-  console.log({
-    redTurnsLeft,
-    blueTurnsLeft,
-    greenTurnsLeft,
-    currTurn,
-    currFullTurn,
-    turnModulo,
-    redMagnet,
-    blueMagnet,
-    greenMagnet,
-  });
 
   return (
     <div className="absolute right-0 top-0 text-xs text-white">
