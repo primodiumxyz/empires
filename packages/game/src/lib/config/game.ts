@@ -10,19 +10,15 @@ const gameConfig: GameConfig = {
   width: window.innerWidth,
   height: window.innerHeight,
   scale: {
-    mode: Phaser.Scale.RESIZE,
+    mode: Phaser.Scale.ENVELOP,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  antialias: false,
-  antialiasGL: false,
-  roundPixels: true,
-  transparent: true,
   pixelArt: true,
   assetPack: pack,
   fps: {
-    target: 30,
-    min: 30,
-    limit: 30,
+    target: 60,
+    min: 60,
+    limit: 60,
   },
   dom: {
     createContainer: true,

@@ -1,40 +1,26 @@
 import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
-import { namespaceWorld } from "@primodiumxyz/reactive-tables";
 
-import { Planet } from "@game/lib/objects/planet";
+import { Planet } from "@game/lib/objects/Planet";
 import { PrimodiumScene } from "@game/types";
 
+const MARGIN = 10;
+
 export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
-  const {
-    tables,
-    network: { world },
-  } = core;
-  const systemsWorld = namespaceWorld(world, "systems");
+  const { tables } = core;
 
-  tables.Planet.watch({
-    world: systemsWorld,
-    onEnter: ({ entity, properties: { current } }) => {
-      if (!current) return;
+  tables.Planet.getAll().forEach((entity) => {
+    const planet = tables.Planet.get(entity);
+    if (!planet) return;
 
-      const { q, r } = current;
-
-      new Planet({
-        id: entity,
-        scene,
-        coord: convertAxialToCartesian(
-          { q: Number(q) - 100, r: Number(r) },
-          110
-        ),
-        empire: current.empireId,
-      });
-    },
-    onUpdate: ({ entity, properties: { current } }) => {
-      if (!current) return;
-
-      const planet = scene.objects.planet.get(entity);
-      if (!planet) return;
-
-      planet.updateFaction(current.empireId);
-    },
+    const { q, r } = planet;
+    new Planet({
+      id: entity,
+      scene,
+      coord: convertAxialToCartesian(
+        { q: Number(q) - 100, r: Number(r) },
+        100 + MARGIN
+      ),
+      empire: planet.empireId,
+    });
   });
 };
