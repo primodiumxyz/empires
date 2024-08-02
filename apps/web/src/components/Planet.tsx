@@ -6,7 +6,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { convertAxialToCartesian, entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { Entity } from "@primodiumxyz/reactive-tables";
+import { createLocalBoolTable, createWorld, Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
@@ -18,8 +18,7 @@ import { Magnets } from "@/components/Magnets";
 import { OverridePane } from "@/components/OverridePane";
 import { PlaceMagnetOverridePane } from "@/components/PlaceMagnetOverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
-import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { useNextTurnOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { cn } from "@/util/client";
 
@@ -29,6 +28,12 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Red]: "fill-red-600",
   [EEmpire.LENGTH]: "",
 };
+
+const OverridePaneExpanded = createLocalBoolTable(createWorld(), {
+  id: "OverridePaneExpanded",
+  persist: true,
+  version: "1",
+});
 
 export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number }> = ({
   entity,
@@ -50,23 +55,44 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
     return [cartesianCoord.x, cartesianCoord.y];
   }, [planet, tileSize, margin]);
 
-  useEffect(() => {
-    const listener = tables.PlanetBattleRoutine.update$.subscribe(({ properties: { current } }) => {
-      if (!current || current.planetId !== entity) return;
-      const data = {
-        planetId: current.planetId,
-        deaths: bigIntMin(current.attackingShipCount, current.defendingShipCount),
-        conquered: current.conquer,
-      };
-    });
-    return () => {
-      listener.unsubscribe();
-    };
-  }, [planet]);
-
   const handleInteractClick = () => {
     setIsInteractPaneVisible(!isInteractPaneVisible);
   };
+
+  useEffect(() => {
+    const unsubscribe = tables.PlanetBattleRoutine.watch(
+      {
+        onChange: ({ properties: { current } }) => {
+          if (!current || current.planetId !== entity) return;
+          const data = {
+            planetId: current.planetId,
+            deaths: bigIntMin(current.attackingShipCount, current.defendingShipCount),
+            conquered: current.conquer,
+          };
+        },
+      },
+      { runOnInit: false },
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [planet]);
+
+  // close interact pane on turn change (which happens when gold could for any planet increases)
+  useEffect(() => {
+    const unsubscribe = tables.Planet.watch({
+      onChange: ({ properties: { current, prev } }) => {
+        if (!current || !prev) return;
+        if (current.goldCount <= prev.goldCount) return;
+        setIsInteractPaneVisible(false);
+      },
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   if (!planet) return null;
 
@@ -126,11 +152,11 @@ const InteractButton = forwardRef<
 >(({ onClick, isInteractPaneVisible, planetId, planetEmpire, className }, ref) => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
-  const { utils, tables } = useCore();
-  const { price } = useEthPrice();
+  const { tables } = useCore();
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
   const planet = tables.Planet.use(planetId);
+  const expanded = OverridePaneExpanded.use()?.value ?? false;
   const [inputValue, setInputValue] = useState("1");
 
   const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
@@ -138,10 +164,10 @@ const InteractButton = forwardRef<
   const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
   const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
-  const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
-  const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
-  const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
-  const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
+  const nextCreateShipPriceWei = useNextTurnOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const nextKillShipPriceWei = useNextTurnOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
+  const nextAddShieldPriceWei = useNextTurnOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const nextRemoveShieldPriceWei = useNextTurnOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
   const handleInteractClick = () => {
     onClick();
@@ -178,7 +204,11 @@ const InteractButton = forwardRef<
       </Button>
       {isInteractPaneVisible && (
         <div className="absolute left-1/2 top-12 -translate-x-1/2 backdrop-blur-2xl">
-          <Card noDecor ref={InteractPaneRef} className="flex-row items-center justify-center gap-2 bg-slate-900/85">
+          <Card
+            noDecor
+            ref={InteractPaneRef}
+            className="flex-row items-center justify-center gap-2 bg-slate-900/85 pb-1"
+          >
             <div className="flex flex-col items-center justify-center gap-1">
               <Tabs className="flex w-[350px] flex-col items-center gap-2">
                 <Join>
@@ -198,14 +228,17 @@ const InteractButton = forwardRef<
                       createShip(planetId, BigInt(inputValue), createShipPriceWei);
                       setInputValue("1");
                     }}
-                    attackPrice={killShipPriceUsd}
-                    supportPrice={createShipPriceUsd}
+                    attackPrice={killShipPriceWei}
+                    supportPrice={createShipPriceWei}
+                    nextAttackPrice={nextKillShipPriceWei}
+                    nextSupportPrice={nextCreateShipPriceWei}
                     attackTxQueueId={`${planetId}-kill-ship`}
                     supportTxQueueId={`${planetId}-create-ship`}
                     isSupportDisabled={gameOver || Number(planetEmpire) === 0}
                     isAttackDisabled={
                       (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                     }
+                    expanded={expanded}
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={1} className="w-full items-center gap-4">
@@ -220,20 +253,31 @@ const InteractButton = forwardRef<
                       addShield(planetId, BigInt(inputValue), addShieldPriceWei);
                       setInputValue("1");
                     }}
-                    attackPrice={removeShieldPriceUsd}
-                    supportPrice={addShieldPriceUsd}
+                    attackPrice={removeShieldPriceWei}
+                    supportPrice={addShieldPriceWei}
+                    nextAttackPrice={nextRemoveShieldPriceWei}
+                    nextSupportPrice={nextAddShieldPriceWei}
                     attackTxQueueId={`${planetId}-remove-shield`}
                     supportTxQueueId={`${planetId}-add-shield`}
                     isSupportDisabled={gameOver || Number(planetEmpire) === 0}
                     isAttackDisabled={
                       (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                     }
+                    expanded={expanded}
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={2} className="w-full items-center gap-4">
                   <PlaceMagnetOverridePane planetId={planetId} />
                 </Tabs.Pane>
               </Tabs>
+              <Button
+                onClick={() => OverridePaneExpanded.set({ value: !expanded })}
+                variant="ghost"
+                size="xs"
+                className="self-end"
+              >
+                {expanded ? "-collapse" : "+expand"}
+              </Button>
             </div>
           </Card>
         </div>

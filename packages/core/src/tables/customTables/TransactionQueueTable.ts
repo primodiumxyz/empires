@@ -101,13 +101,18 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
     const [position, setPosition] = useState<number>(getIndex(id));
 
     useEffect(() => {
-      const sub = table.update$.subscribe(() => {
-        const position = getIndex(id);
-        setPosition(position);
-      });
+      const unsubscribe = table.watch(
+        {
+          onChange: () => {
+            const position = getIndex(id);
+            setPosition(position);
+          },
+        },
+        { runOnInit: false },
+      );
 
       return () => {
-        sub.unsubscribe();
+        unsubscribe();
       };
     }, [id]);
 
@@ -118,13 +123,18 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
     const [size, setSize] = useState<number>(getSize());
 
     useEffect(() => {
-      const sub = table.update$.subscribe(() => {
-        const size = getSize();
-        setSize(size);
-      });
+      const unsubscribe = table.watch(
+        {
+          onChange: () => {
+            const size = getSize();
+            setSize(size);
+          },
+        },
+        { runOnInit: false },
+      );
 
       return () => {
-        sub.unsubscribe();
+        unsubscribe();
       };
     }, []);
 
