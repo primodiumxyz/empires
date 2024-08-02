@@ -33,17 +33,3 @@ export function getNeighbor(q: number, r: number, direction: EDirection): AxialC
     return { q, r };
   }
 }
-
-export function getDirection(fromPlanet: { q: bigint; r: bigint }, toPlanet: { q: bigint; r: bigint }): EDirection {
-  const dq = Number(toPlanet.q) - Number(fromPlanet.q);
-  const dr = Number(toPlanet.r) - Number(fromPlanet.r);
-
-  if (dq === 1 && dr === 0) return EDirection.East;
-  if (dq === 0 && dr === 1) return EDirection.Southeast;
-  if (dq === -1 && dr === 1) return EDirection.Southwest;
-  if (dq === -1 && dr === 0) return EDirection.West;
-  if (dq === 0 && dr === -1) return EDirection.Northwest;
-  if (dq === 1 && dr === -1) return EDirection.Northeast;
-
-  return EDirection.East; // Default direction if not found
-}

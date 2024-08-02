@@ -183,7 +183,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
 
 const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { utils } = useCore();
-  const { context, probabilities: p, attackTargetId, supportTargetId } = utils.getRoutineProbabilities(entity);
+  const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
 
   const valToText = (val: number) => {
     if (val >= 1) return "High";
@@ -216,19 +216,12 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
             { label: "Accumulate Gold", value: p.accumulateGold },
             { label: "Buy Shields", value: p.buyShields },
             { label: "Buy Ships", value: p.buyShips },
-            { label: "Support Ally", value: p.supportAlly, data: supportTargetId },
-            { label: "Attack Enemy", value: p.attackEnemy, data: attackTargetId },
-          ].map(({ label, value, data }) => (
+            { label: "Support Ally", value: p.supportAlly },
+            { label: "Attack Enemy", value: p.attackEnemy },
+          ].map(({ label, value }) => (
             <Fragment key={label}>
               <span className="text-gray-200">{label}</span>
-              <p className="text-right font-medium">
-                {(value * 100).toFixed(1)}%
-                {data && data.target && (
-                  <span className="text-right text-xs text-gray-400">
-                    {entityToPlanetName(data.target)} ({data.multiplier}x)
-                  </span>
-                )}
-              </p>
+              <span className="text-right font-medium">{(value * 100).toFixed(1)}%</span>
             </Fragment>
           ))}
         </div>

@@ -58,7 +58,7 @@ contract RewardsSystem is EmpiresSystem {
       return;
     }
 
-    uint256 playerEmpirePoints = PointsMap.getValue(empire, playerId) - PointsMap.getLockedPoints(empire, playerId);
+    uint256 playerEmpirePoints = PointsMap.get(empire, playerId);
     if (playerEmpirePoints == 0) return;
 
     uint256 pot = (Balances.get(EMPIRES_NAMESPACE_ID));

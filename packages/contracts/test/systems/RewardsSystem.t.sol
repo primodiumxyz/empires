@@ -63,7 +63,7 @@ contract RewardsSystemTest is PrimodiumTest {
 
     P_PointConfig.setPointRake(0); // out of 10_000
 
-    PointsMap.setValue(EEmpire.Red, addressToId(alice), alicePoints);
+    PointsMap.set(EEmpire.Red, addressToId(alice), alicePoints);
     Empire.setPointsIssued(EEmpire.Red, totalPoints);
 
     uint256 alicePrevBalance = alice.balance;
@@ -75,7 +75,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(alice.balance, aliceTotal + alicePrevBalance, "alice balance");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), value - aliceTotal, "empire balance");
 
-    assertEq(PointsMap.getValue(EEmpire.Red, addressToId(alice)), 0, "alice points");
+    assertEq(PointsMap.get(EEmpire.Red, addressToId(alice)), 0, "alice points");
 
     // should be 0 because all points were withdrawn (or not issued in the first place)
     assertEq(Empire.getPointsIssued(EEmpire.Red), alicePoints == 0 ? totalPoints : 0, "empire points");
@@ -102,9 +102,9 @@ contract RewardsSystemTest is PrimodiumTest {
 
     Empire.setPointsIssued(EEmpire.Red, 100 ether);
 
-    PointsMap.setValue(EEmpire.Red, addressToId(alice), playerPoints);
-    PointsMap.setValue(EEmpire.Red, addressToId(bob), playerPoints);
-    PointsMap.setValue(EEmpire.Red, addressToId(eve), playerPoints);
+    PointsMap.set(EEmpire.Red, addressToId(alice), playerPoints);
+    PointsMap.set(EEmpire.Red, addressToId(bob), playerPoints);
+    PointsMap.set(EEmpire.Red, addressToId(eve), playerPoints);
     Empire.setPointsIssued(EEmpire.Red, totalPoints);
     vm.stopPrank();
     vm.prank(alice);
