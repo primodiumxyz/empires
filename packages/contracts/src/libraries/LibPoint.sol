@@ -18,7 +18,7 @@ library LibPoint {
    */
   function issuePoints(EEmpire _empire, bytes32 _playerId, uint256 _points) internal {
     require(_empire != EEmpire.NULL && _empire != EEmpire.LENGTH, "[LibPoint] Invalid empire");
-    PointsMap.set(_empire, _playerId, PointsMap.get(_empire, _playerId) + _points);
+    PointsMap.setValue(_empire, _playerId, PointsMap.getValue(_empire, _playerId) + _points);
   }
 
   /**
@@ -28,9 +28,12 @@ library LibPoint {
    * @param _points The number of points to remove.
    */
   function removePoints(EEmpire _empire, bytes32 _playerId, uint256 _points) internal {
-    require(_points <= PointsMap.get(_empire, _playerId), "[LibPoint] Player does not have enough points to remove");
+    require(
+      _points <= PointsMap.getValue(_empire, _playerId) - PointsMap.getLockedPoints(_empire, _playerId),
+      "[LibPoint] Player does not have enough unlocked points to remove"
+    );
     // Requires ordered in reverse of issuePoints() for clearer error message paths
     require(_points <= Empire.getPointsIssued(_empire), "[LibPoint] Empire has not issued enough points to remove");
-    PointsMap.set(_empire, _playerId, PointsMap.get(_empire, _playerId) - _points);
+    PointsMap.setValue(_empire, _playerId, PointsMap.getValue(_empire, _playerId) - _points);
   }
 }

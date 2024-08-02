@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
+import { Empire, P_MagnetConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, Magnet, MagnetData, Planet, PlanetData, Player, P_PointConfig, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -17,6 +17,43 @@ import { Balances } from "@latticexyz/world/src/codegen/index.sol";
  * @dev A contract that handles overrides related to creating and killing ships on a planet.
  */
 contract OverrideSystem is EmpiresSystem {
+  /**
+   * @dev Internal function to purchase a number of overrides.
+   * @param _overrideType The type of override to purchase.
+   * @param _empireImpacted The empire impacted by the override.
+   * @param _progressOverride Flag indicating if the override progressively or regressively impacts the empire.
+   * @param _overrideCount The number of overrides to purchase.
+   * @param _spend The amount spent on the override.
+   */
+  function _purchaseOverride(
+    EOverride _overrideType,
+    EEmpire _empireImpacted,
+    bool _progressOverride,
+    uint256 _overrideCount,
+    uint256 _spend
+  ) private {
+    bytes32 playerId = addressToId(_msgSender());
+    Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
+    uint256 pointUnit = P_PointConfig.getPointUnit();
+
+    if (_progressOverride) {
+      uint256 numPoints = _overrideCount * (EMPIRE_COUNT - 1) * pointUnit;
+      LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
+      LibPrice.pointCostUp(_empireImpacted, numPoints);
+    } else {
+      uint256 numPoints = _overrideCount * pointUnit;
+      // Iterate through each empire except the impacted one
+      for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
+        if (i == uint256(_empireImpacted)) {
+          continue;
+        }
+        LibPoint.issuePoints(EEmpire(i), playerId, numPoints);
+        LibPrice.pointCostUp(_empireImpacted, numPoints);
+      }
+    }
+    LibPrice.overrideCostUp(_empireImpacted, _overrideType, _overrideCount);
+  }
+
   /**
    * @dev A player purchaseable override that creates a ship on a planet.
    * @param _planetId The ID of the planet.
@@ -129,43 +166,6 @@ contract OverrideSystem is EmpiresSystem {
   }
 
   /**
-   * @dev Internal function to purchase a number of overrides.
-   * @param _overrideType The type of override to purchase.
-   * @param _empireImpacted The empire impacted by the override.
-   * @param _progressOverride Flag indicating if the override progressively or regressively impacts the empire.
-   * @param _overrideCount The number of overrides to purchase.
-   * @param _spend The amount spent on the override.
-   */
-  function _purchaseOverride(
-    EOverride _overrideType,
-    EEmpire _empireImpacted,
-    bool _progressOverride,
-    uint256 _overrideCount,
-    uint256 _spend
-  ) private {
-    bytes32 playerId = addressToId(_msgSender());
-    Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
-    uint256 pointUnit = P_PointConfig.getPointUnit();
-
-    if (_progressOverride) {
-      uint256 numPoints = _overrideCount * (EMPIRE_COUNT - 1) * pointUnit;
-      LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
-      LibPrice.pointCostUp(_empireImpacted, numPoints);
-    } else {
-      uint256 numPoints = _overrideCount * pointUnit;
-      // Iterate through each empire except the impacted one
-      for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
-        if (i == uint256(_empireImpacted)) {
-          continue;
-        }
-        LibPoint.issuePoints(EEmpire(i), playerId, numPoints);
-        LibPrice.pointCostUp(_empireImpacted, numPoints);
-      }
-    }
-    LibPrice.overrideCostUp(_empireImpacted, _overrideType, _overrideCount);
-  }
-
-  /**
    * @dev A player override to sell some points of an empire that they currently own.
    * @param _empire The empire to sell points from.
    * @param _points The number of points to sell.
@@ -173,7 +173,7 @@ contract OverrideSystem is EmpiresSystem {
   function sellPoints(EEmpire _empire, uint256 _points) public {
     bytes32 playerId = addressToId(_msgSender());
     require(
-      _points <= PointsMap.get(_empire, playerId),
+      _points <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
       "[OverrideSystem] Player does not have enough points to remove"
     );
 
@@ -190,5 +190,43 @@ contract OverrideSystem is EmpiresSystem {
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
+  }
+
+  function placeMagnet(
+    EEmpire _empire,
+    bytes32 _planetId,
+    uint256 turnDuration
+  ) public payable _onlyNotGameOver _takeRake {
+    bytes32 playerId = addressToId(_msgSender());
+    PlanetData memory planetData = Planet.get(_planetId);
+
+    require(Magnet.get(_empire, _planetId).isMagnet == false, "[OverrideSystem] Planet already has a magnet");
+    uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, planetData.empireId, turnDuration);
+    require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
+
+    _purchaseOverride(EOverride.PlaceMagnet, planetData.empireId, false, turnDuration, _msgValue());
+
+    uint256 requiredPoints = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(_empire)) / 10000;
+    require(
+      requiredPoints <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
+      "[OverrideSystem] Player does not have enough points to place magnet"
+    );
+
+    uint256 scaledTurnDuration = turnDuration * EMPIRE_COUNT;
+    Magnet.set(
+      _empire,
+      _planetId,
+      MagnetData({ isMagnet: true, lockedPoints: requiredPoints, playerId: playerId, endTurn: scaledTurnDuration })
+    );
+    PointsMap.setLockedPoints(_empire, playerId, PointsMap.getLockedPoints(_empire, playerId) + requiredPoints);
+    PlaceMagnetOverrideLog.set(
+      pseudorandomEntity(),
+      PlaceMagnetOverrideLogData({
+        planetId: _planetId,
+        ethSpent: cost,
+        overrideCount: turnDuration,
+        timestamp: block.timestamp
+      })
+    );
   }
 }
