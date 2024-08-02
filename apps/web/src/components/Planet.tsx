@@ -124,10 +124,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           </div>
 
           <InteractButton
-            className={cn(
-              "h-full scale-75 opacity-50 transition-all group-hover:scale-100 group-hover:opacity-100",
-              !planet?.empireId ? "pointer-events-none !opacity-0" : "",
-            )}
+            className={cn("h-full scale-75 opacity-50 transition-all group-hover:scale-100 group-hover:opacity-100")}
             ref={interactButtonRef}
             onClick={handleInteractClick}
             isInteractPaneVisible={isInteractPaneVisible}
@@ -210,10 +207,10 @@ const InteractButton = forwardRef<
             className="flex-row items-center justify-center gap-2 bg-slate-900/85 pb-1"
           >
             <div className="flex flex-col items-center justify-center gap-1">
-              <Tabs className="flex w-[350px] flex-col items-center gap-2">
+              <Tabs className="flex w-[350px] flex-col items-center gap-2" defaultIndex={!planetEmpire ? 0 : 2}>
                 <Join>
-                  <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
-                  <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
+                  <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} disabled={!planetEmpire} />
+                  <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} disabled={!planetEmpire} />
                   <Tabs.IconButton icon={InterfaceIcons.Crosshairs} text="MAGNET" index={2} />
                 </Join>
                 <Tabs.Pane index={0} className="w-full items-center gap-4">

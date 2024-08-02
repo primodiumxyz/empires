@@ -59,7 +59,9 @@ export const createNpcUtils = (tables: Tables) => {
     const allPendingMoves = tables.PendingMove.getAll();
     const pendingMoves = allPendingMoves.filter((move) => {
       const movePlanetId = tables.PendingMove.get(move)?.destinationPlanetId;
-      return movePlanetId === planetId;
+      if (!movePlanetId) return false;
+      const movePlanetEmpire = tables.Planet.get(movePlanetId as Entity)?.empireId;
+      return movePlanetId === planetId && movePlanetEmpire !== planetData.empireId;
     });
     if (pendingMoves.length === 0) return -1;
 
@@ -261,7 +263,7 @@ export const createNpcUtils = (tables: Tables) => {
 
     const allyNeighbors = allNeighbors.filter((neighbor) => {
       const neighborData = tables.Planet.get(neighbor);
-      return neighborData?.empireId === planetData.empireId;
+      return neighborData?.empireId === planetData.empireId && neighbor !== planetId;
     });
     // check for magnets and select random one
     const magnetizedPlanets = allyNeighbors.filter((neighbor) =>
@@ -269,7 +271,7 @@ export const createNpcUtils = (tables: Tables) => {
     );
     if (magnetizedPlanets.length > 0) {
       const randomIndex = Math.floor(Math.random() * magnetizedPlanets.length);
-      return { target: magnetizedPlanets[randomIndex], multiplier: 1.5 };
+      return { target: magnetizedPlanets[randomIndex], multiplier: 3 };
     }
     const multiplier = allyNeighbors.length > 4 ? 2 : 1;
     // Get direction weights
@@ -351,11 +353,17 @@ export const createNpcUtils = (tables: Tables) => {
       EDirection.Northeast,
     ];
 
+    const allPlanets =
+      tables.Keys_PlanetsSet.get()?.itemKeys.map((planet) => {
+        return { planetId: planet, ...tables.Planet.get(planet as Entity)! };
+      }) ?? [];
+
     const countEnemyPlanets = (q: number, r: number, steps: number): number => {
       if (steps === 0) return 0;
 
       const neighbor = allPlanets.find((planet) => Number(planet.q) === q && Number(planet.r) === r);
-      const isEnemy = neighbor && neighbor.empireId !== planetData.empireId && neighbor.empireId !== 0 ? 1 : 0;
+      if (!neighbor) return 0;
+      const isEnemy = neighbor.empireId !== planetData.empireId ? 1 : 0;
 
       return (
         isEnemy +
@@ -365,11 +373,6 @@ export const createNpcUtils = (tables: Tables) => {
         }, 0)
       );
     };
-
-    const allPlanets =
-      tables.Keys_PlanetsSet.get()?.itemKeys.map((planet) => {
-        return { planetId: planet, ...tables.Planet.get(planet as Entity)! };
-      }) ?? [];
 
     const enemyCounts = directions.map((dir) => {
       const coords = getNeighbor(Number(planetData.q), Number(planetData.r), dir);

@@ -75,10 +75,10 @@ export function calculateRoutinePcts(
   // Initial likelihoods
   const initialLikelihoods: RoutineThresholds = {
     buyShields: 0.2,
-    attackEnemy: 0.4,
-    accumulateGold: 0.15,
-    buyShips: 0.18,
-    supportAlly: 0.07,
+    attackEnemy: 0.35,
+    accumulateGold: 0.1,
+    buyShips: 0.2,
+    supportAlly: 0.15,
   } as const;
 
   // Calculate likelihood adjustments

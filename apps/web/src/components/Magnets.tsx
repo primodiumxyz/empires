@@ -6,7 +6,7 @@ import { Badge } from "@/components/core/Badge";
 import { cn } from "@/util/client";
 
 const MagnetBadge: React.FC<{ turnsLeft: number; className: string }> = ({ turnsLeft, className }) => (
-  <Badge className={cn("gap-1 py-4", className)}>
+  <Badge className={cn("gap-1 rounded-md py-4", className)}>
     <img src={InterfaceIcons.Crosshairs} className="w-6 rounded-full bg-white/70" /> ({turnsLeft})
   </Badge>
 );

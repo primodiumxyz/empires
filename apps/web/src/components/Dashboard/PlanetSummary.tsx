@@ -221,12 +221,14 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
           ].map(({ label, value, data }) => (
             <Fragment key={label}>
               <span className="text-gray-200">{label}</span>
-              <span className="text-right font-medium">{(value * 100).toFixed(1)}%</span>
-              {data && data.target && (
-                <span className="text-right text-xs text-gray-400">
-                  {entityToPlanetName(data.target)} ({data.multiplier}x)
-                </span>
-              )}
+              <p className="text-right font-medium">
+                {(value * 100).toFixed(1)}%
+                {data && data.target && (
+                  <span className="text-right text-xs text-gray-400">
+                    {entityToPlanetName(data.target)} ({data.multiplier}x)
+                  </span>
+                )}
+              </p>
             </Fragment>
           ))}
         </div>
