@@ -5,7 +5,7 @@ import {
   PrimodiumGameObject,
 } from "@primodiumxyz/engine/src/lib/core/StaticObjectManager";
 
-import { Planet } from "@game/lib/objects/planet";
+import { Planet } from "@game/lib/objects/Planet";
 
 export type PrimodiumObjectApi<T extends PrimodiumGameObject> = {
   has: (entity: Entity) => boolean;

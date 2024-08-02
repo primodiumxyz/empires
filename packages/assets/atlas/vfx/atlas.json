@@ -5,33 +5,3477 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1721747619463",
+            "image": "atlas.png?timestamp=1722362706953",
             "format": "RGBA8888",
             "size": {
-                "w": 96,
-                "h": 69
+                "w": 1324,
+                "h": 1330
             },
             "scale": 1,
             "frames": [
                 {
-                    "filename": "vfx/upgrade/1x1/Upgrade1x1_1.png",
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_000.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 96,
-                        "h": 69
+                        "w": 185,
+                        "h": 79
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 96,
-                        "h": 69
+                        "w": 185,
+                        "h": 79
                     },
                     "frame": {
                         "x": 0,
                         "y": 0,
-                        "w": 96,
-                        "h": 69
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_002.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 79,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_003.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_005.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_006.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 79,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_007.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_008.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 237,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_010.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 237,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_011.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 316,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_012.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 316,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_013.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_015.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 79,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_016.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 237,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 316,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 395,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 395,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 395,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 474,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 474,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 474,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 553,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 553,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 553,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 79,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 237,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 316,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 395,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 474,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 553,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 632,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 632,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 632,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 632,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 711,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 185,
+                        "y": 711,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 356,
+                        "y": 711,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 527,
+                        "y": 711,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 65,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 130,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 195,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 260,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 325,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 390,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 455,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 520,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 585,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 650,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 698,
+                        "y": 715,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 790,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 790,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 342,
+                        "y": 780,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 513,
+                        "y": 780,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 684,
+                        "y": 780,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 855,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 855,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 342,
+                        "y": 845,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 513,
+                        "y": 845,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 684,
+                        "y": 845,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 65,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 130,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 195,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 260,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_000.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 325,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_001.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 390,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_002.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 455,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_003.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 520,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_004.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 585,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_005.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 911,
+                        "y": 650,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_006.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 869,
+                        "y": 715,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_007.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 780,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_008.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 845,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_009.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 920,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_010.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 920,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_011.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 342,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_012.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 513,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_013.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 684,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_014.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 985,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 121,
+                        "y": 985,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 242,
+                        "y": 985,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 363,
+                        "y": 975,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 975,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 605,
+                        "y": 975,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 726,
+                        "y": 975,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 847,
+                        "y": 975,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1082,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1082,
+                        "y": 115,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1082,
+                        "y": 230,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1082,
+                        "y": 345,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1082,
+                        "y": 460,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1082,
+                        "y": 575,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1082,
+                        "y": 690,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 968,
+                        "y": 975,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1026,
+                        "y": 805,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1100,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 121,
+                        "y": 1100,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 242,
+                        "y": 1100,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 363,
+                        "y": 1090,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 1090,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 605,
+                        "y": 1090,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 726,
+                        "y": 1090,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 847,
+                        "y": 1090,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 968,
+                        "y": 1090,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1203,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1203,
+                        "y": 115,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1203,
+                        "y": 230,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1203,
+                        "y": 345,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1203,
+                        "y": 460,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1203,
+                        "y": 575,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1203,
+                        "y": 690,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1147,
+                        "y": 805,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1089,
+                        "y": 920,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1089,
+                        "y": 1035,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1215,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 121,
+                        "y": 1215,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 242,
+                        "y": 1215,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 363,
+                        "y": 1205,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 1205,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 605,
+                        "y": 1205,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 726,
+                        "y": 1205,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 847,
+                        "y": 1205,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 968,
+                        "y": 1205,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 195,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_16.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 195,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_17.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 195,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_18.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 195,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_19.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 740,
+                        "y": 195,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_001.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_004.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_009.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 237,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_014.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_017.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_018.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_019.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_16.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_17.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_18.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_19.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_16.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_17.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_18.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_19.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 158,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 855,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_16.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 855,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_17.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 855,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_18.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 855,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_19.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 855,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 237,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 395,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 370,
+                        "y": 474,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/upper/Arc_Upper_Green_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_015.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_016.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_017.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_018.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_019.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 910,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 79,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 555,
+                        "y": 395,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 632,
+                        "w": 185,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/upper/Arc_Upper_Red_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 185,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 185,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 711,
+                        "w": 185,
+                        "h": 79
                     }
                 }
             ]

@@ -1,6 +1,7 @@
 import { SceneConfig } from "@primodiumxyz/engine";
 
 import { Scenes } from "@game/lib/constants/common";
+import { AnimationConfig } from "@primodiumxyz/assets";
 
 export const rootSceneConfig: SceneConfig = {
   key: Scenes.Root,
@@ -11,6 +12,7 @@ export const rootSceneConfig: SceneConfig = {
     pinchSpeed: 0.01,
     wheelSpeed: 1,
   },
+  animations: AnimationConfig,
   cullingChunkSize: 128,
   tilemap: {
     tileWidth: 1,

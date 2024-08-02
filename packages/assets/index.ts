@@ -1,5 +1,6 @@
 export * from "./mappings/index";
 export { pack } from "./pack.ts";
+export { AnimationConfig } from "./animationConfig.ts";
 
 export const Assets = {
   SpriteAtlas: "sprite-atlas",
