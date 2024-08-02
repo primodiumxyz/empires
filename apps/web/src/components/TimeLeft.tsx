@@ -25,7 +25,7 @@ export const TimeLeft = () => {
       {!gameOver && (
         <Card className="py-2 text-sm" noDecor>
           <div className="flex flex-col">
-            <Tooltip tooltipContent={endTime.toLocaleString()} direction="bottom">
+            <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
               <span>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}</span>
             </Tooltip>
             {showBlockchainUnits.enabled && !!blocksLeft && (
