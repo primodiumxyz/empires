@@ -134,5 +134,30 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
     });
   };
 
-  return { createShip, removeShip, addShield, removeShield, sellPoints };
+  const placeMagnet = async (
+    empire: EEmpire,
+    planetId: Entity,
+    turnCount: bigint,
+    payment: bigint,
+    options?: Partial<TxQueueOptions>,
+  ) => {
+    return await execute({
+      functionName: "Empires__placeMagnet",
+      args: [empire, planetId, turnCount],
+      options: { value: payment, gas: 546063n * 2n },
+      txQueueOptions: {
+        id: `${planetId}-place-magnet`,
+        ...options,
+      },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Placed magnet on ${entityToPlanetName(planetId)}`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
+    });
+  };
+
+  return { createShip, removeShip, addShield, removeShield, sellPoints, placeMagnet };
 };

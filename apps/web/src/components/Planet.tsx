@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { bigIntMin } from "@latticexyz/common/utils";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
@@ -14,7 +14,9 @@ import { Join } from "@/components/core/Join";
 import { Marker } from "@/components/core/Marker";
 import { Tabs } from "@/components/core/Tabs";
 import { Tooltip } from "@/components/core/Tooltip";
+import { Magnets } from "@/components/Magnets";
 import { OverridePane } from "@/components/OverridePane";
+import { PlaceMagnetOverridePane } from "@/components/PlaceMagnetOverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useNextTurnOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
@@ -96,11 +98,12 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
 
   return (
     <Marker id={entity} scene="MAIN" coord={{ x: left, y: top }} depth={-top}>
-      <div className="relative mt-10 flex select-none flex-col items-center opacity-75 drop-shadow-2xl transition-all hover:opacity-100">
-        <div className="group relative flex flex-col items-center">
+      <div className="relative flex w-[220px] select-none flex-col items-center opacity-75 drop-shadow-2xl transition-all hover:opacity-100">
+        <Magnets planetId={entity} />
+        <div className="group relative mt-20 flex flex-col items-center">
           <div className="flex flex-row-reverse items-end rounded-box rounded-b-none border border-secondary/25 bg-gradient-to-r from-slate-800/90 to-slate-900/75 px-1 text-center">
             <p className="font-mono text-[10px] opacity-70">
-              ({(planet.q - 100n ?? 0n).toLocaleString()},{(planet.r ?? 0n).toLocaleString()})
+              ({(planet.q - 100n).toLocaleString()},{planet.r.toLocaleString()})
             </p>
             {/* dashboard button */}
             <Button
@@ -121,10 +124,7 @@ export const Planet: React.FC<{ entity: Entity; tileSize: number; margin: number
           </div>
 
           <InteractButton
-            className={cn(
-              "h-full scale-75 opacity-50 transition-all group-hover:scale-100 group-hover:opacity-100",
-              !planet?.empireId ? "pointer-events-none !opacity-0" : "",
-            )}
+            className={cn("h-full scale-75 opacity-50 transition-all group-hover:scale-100 group-hover:opacity-100")}
             ref={interactButtonRef}
             onClick={handleInteractClick}
             isInteractPaneVisible={isInteractPaneVisible}
@@ -207,10 +207,11 @@ const InteractButton = forwardRef<
             className="flex-row items-center justify-center gap-2 bg-slate-900/85 pb-1"
           >
             <div className="flex flex-col items-center justify-center gap-1">
-              <Tabs className="flex w-64 flex-col items-center gap-2">
+              <Tabs className="flex w-[350px] flex-col items-center gap-2" defaultIndex={!planetEmpire ? 0 : 2}>
                 <Join>
-                  <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
-                  <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
+                  <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} disabled={!planetEmpire} />
+                  <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} disabled={!planetEmpire} />
+                  <Tabs.IconButton icon={InterfaceIcons.Crosshairs} text="MAGNET" index={2} />
                 </Join>
                 <Tabs.Pane index={0} className="w-full items-center gap-4">
                   <OverridePane
@@ -261,6 +262,9 @@ const InteractButton = forwardRef<
                     }
                     expanded={expanded}
                   />
+                </Tabs.Pane>
+                <Tabs.Pane index={2} className="w-full items-center gap-4">
+                  <PlaceMagnetOverridePane planetId={planetId} />
                 </Tabs.Pane>
               </Tabs>
               <Button

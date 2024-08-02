@@ -45,7 +45,7 @@ contract UpdateSystem is EmpiresSystem {
       LibRoutine.executeRoutine(routineThresholds[i].planetId, routineThresholds[i]);
       Planet.setGoldCount(
         routineThresholds[i].planetId,
-        Planet.getGoldCount(routineThresholds[i].planetId) + goldGenRate
+        Planet.getGoldCount(routineThresholds[i].planetId) + goldGenRate * EMPIRE_COUNT
       );
     }
 

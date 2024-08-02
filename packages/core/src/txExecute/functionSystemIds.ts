@@ -25,6 +25,8 @@ export const functionSystemIds: {
   Empires__claimVictory: getSystemId("RewardsSystem"),
   Empires__withdrawEarnings: getSystemId("RewardsSystem"),
 
+  Empires__placeMagnet: getSystemId("OverrideSystem"),
+
   Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
 
   /* ----------------------------------- Dev ---------------------------------- */

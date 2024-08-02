@@ -14,7 +14,7 @@ export function createPriceUtils(tables: Tables) {
   ): bigint {
     let totalCost = 0n;
 
-    if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.isProgressOverride ?? undefined) {
+    if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.isProgressOverride) {
       totalCost = getProgressPointCost(_empireImpacted, _overrideCount, nextTurn);
     } else {
       totalCost = getRegressPointCost(_empireImpacted, _overrideCount, nextTurn);
