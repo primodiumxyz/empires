@@ -4,7 +4,7 @@ import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { useCore } from "@primodiumxyz/core/react";
-import { Entity } from "@primodiumxyz/reactive-tables";
+import { createLocalBoolTable, createWorld, Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
@@ -12,10 +12,15 @@ import { Tabs } from "@/components/core/Tabs";
 import { ChargeOverridePane } from "@/components/Planet/ChargeOverridePane";
 import { OverridePane } from "@/components/Planet/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
-import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { useNextTurnOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { cn } from "@/util/client";
+
+const OverridePaneExpanded = createLocalBoolTable(createWorld(), {
+  id: "OverridePaneExpanded",
+  persist: true,
+  version: "1",
+});
 
 export const InteractButton = forwardRef<
   HTMLButtonElement,
@@ -29,11 +34,11 @@ export const InteractButton = forwardRef<
 >(({ onClick, isInteractPaneVisible, planetId, planetEmpire, className }, ref) => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
-  const { utils, tables } = useCore();
-  const { price } = useEthPrice();
+  const { tables } = useCore();
   const { createShip, removeShip, addShield, removeShield, boostCharge, stunCharge } = useContractCalls();
   const { gameOver } = useTimeLeft();
   const planet = tables.Planet.use(planetId);
+  const expanded = OverridePaneExpanded.use()?.value ?? false;
   const [inputValue, setInputValue] = useState("1");
 
   const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
@@ -43,12 +48,10 @@ export const InteractButton = forwardRef<
   const boostChargePriceWei = useOverrideCost(EOverride.BoostCharge, planetEmpire, BigInt(inputValue));
   const stunChargePriceWei = useOverrideCost(EOverride.StunCharge, planetEmpire, BigInt(inputValue));
 
-  const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
-  const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
-  const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
-  const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
-  const boostChargePriceUsd = utils.weiToUsd(boostChargePriceWei, price ?? 0);
-  const stunChargePriceUsd = utils.weiToUsd(stunChargePriceWei, price ?? 0);
+  const nextCreateShipPriceWei = useNextTurnOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const nextKillShipPriceWei = useNextTurnOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
+  const nextAddShieldPriceWei = useNextTurnOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const nextRemoveShieldPriceWei = useNextTurnOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
   const handleInteractClick = () => {
     onClick();
@@ -98,21 +101,24 @@ export const InteractButton = forwardRef<
                     inputValue={inputValue}
                     onInputChange={setInputValue}
                     onAttackClick={() => {
-                      removeShip(planetId, BigInt(inputValue), boostChargePriceWei);
+                      removeShip(planetId, BigInt(inputValue), killShipPriceWei);
                       setInputValue("1");
                     }}
                     onSupportClick={() => {
                       createShip(planetId, BigInt(inputValue), createShipPriceWei);
                       setInputValue("1");
                     }}
-                    attackPrice={killShipPriceUsd}
-                    supportPrice={createShipPriceUsd}
+                    attackPrice={killShipPriceWei}
+                    supportPrice={createShipPriceWei}
+                    nextAttackPrice={nextKillShipPriceWei}
+                    nextSupportPrice={nextCreateShipPriceWei}
                     attackTxQueueId={`${planetId}-kill-ship`}
                     supportTxQueueId={`${planetId}-create-ship`}
                     isSupportDisabled={gameOver || Number(planetEmpire) === 0}
                     isAttackDisabled={
                       (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                     }
+                    expanded={expanded}
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={1} className="w-full items-center gap-4">
@@ -127,14 +133,17 @@ export const InteractButton = forwardRef<
                       addShield(planetId, BigInt(inputValue), addShieldPriceWei);
                       setInputValue("1");
                     }}
-                    attackPrice={removeShieldPriceUsd}
-                    supportPrice={addShieldPriceUsd}
+                    attackPrice={removeShieldPriceWei}
+                    supportPrice={addShieldPriceWei}
+                    nextAttackPrice={nextRemoveShieldPriceWei}
+                    nextSupportPrice={nextAddShieldPriceWei}
                     attackTxQueueId={`${planetId}-remove-shield`}
                     supportTxQueueId={`${planetId}-add-shield`}
                     isSupportDisabled={gameOver || Number(planetEmpire) === 0}
                     isAttackDisabled={
                       (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                     }
+                    expanded={expanded}
                   />
                 </Tabs.Pane>
                 <Tabs.Pane index={2} className="w-full items-center gap-4">
@@ -149,8 +158,8 @@ export const InteractButton = forwardRef<
                       stunCharge(planetId, BigInt(inputValue), stunChargePriceWei);
                       setInputValue("1");
                     }}
-                    boostPrice={boostChargePriceUsd}
-                    stunPrice={stunChargePriceUsd}
+                    boostPrice={boostChargePriceWei}
+                    stunPrice={stunChargePriceWei}
                     boostTxQueueId={`${planetId}-boost-charge`}
                     stunTxQueueId={`${planetId}-stun-charge`}
                     isBoostDisabled={gameOver || Number(planetEmpire) === 0}
@@ -158,6 +167,14 @@ export const InteractButton = forwardRef<
                   />
                 </Tabs.Pane>
               </Tabs>
+              <Button
+                onClick={() => OverridePaneExpanded.set({ value: !expanded })}
+                variant="ghost"
+                size="xs"
+                className="self-end"
+              >
+                {expanded ? "-collapse" : "+expand"}
+              </Button>
             </div>
           </Card>
         </div>
