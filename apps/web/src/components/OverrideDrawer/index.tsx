@@ -29,7 +29,7 @@ const OverridePaneExpanded = createLocalBoolTable(createWorld(), {
 export const OverrideDrawer = () => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
 
-  const { utils, tables } = useCore();
+  const { tables } = useCore();
   const {
     MAIN: { sprite, objects },
   } = useGame();
@@ -68,8 +68,8 @@ export const OverrideDrawer = () => {
       >
         <Badge
           size="lg"
-          variant="primary"
-          className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-full rounded-b-none"
+          variant="neutral"
+          className="absolute left-1/2 top-0 !w-56 -translate-x-1/2 -translate-y-full rounded-b-none border-secondary"
         >
           <IconLabel
             imageUri={sprite.getSprite(EmpireToPlanetSpriteKeys[planet.empireId as EEmpire] ?? "PlanetGrey")}

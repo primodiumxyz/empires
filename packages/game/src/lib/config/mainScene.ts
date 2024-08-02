@@ -9,7 +9,7 @@ export const mainSceneConfig: SceneConfig = {
     maxZoom: 1.25,
     defaultZoom: 1,
     pinchSpeed: 0.01,
-    wheelSpeed: 1,
+    wheelSpeed: 2,
   },
   cullingChunkSize: 128,
   tilemap: {

@@ -8,6 +8,7 @@ import { runSystems as runMainSystems } from "@game/scenes/main/systems";
 import { mainSceneConfig } from "@game/lib/config/mainScene";
 import { Assets, Sprites } from "@primodiumxyz/assets";
 import { setupBasicCameraMovement } from "@game/scenes/common/setup/setupBasicCameraMovement";
+import { isDragging } from "@game/lib/utils/inputGuards";
 
 export const initMainScene = async (
   game: GlobalApi,
@@ -54,16 +55,16 @@ export const initMainScene = async (
 
   //LOCK CAMERA WHEN SELECTING A PLANET
   tables.SelectedPlanet.watch({
-    onChange: ({ properties: { current } }) => {
+    onChange: async ({ properties: { current } }) => {
       if (current?.value) {
         const planet = sceneApi.objects.planet.get(current.value);
         if (planet) {
           cameraMovement.pause();
-          sceneApi.camera.focusCamera(planet.coord);
+          await sceneApi.camera.focusCamera(planet.coord);
         }
         return;
       } else {
-        sceneApi.camera.unfocusCamera();
+        await sceneApi.camera.unfocusCamera();
       }
       cameraMovement.resume();
     },
@@ -75,8 +76,32 @@ export const initMainScene = async (
     tables.SelectedPlanet.remove();
   });
 
+  //while dragging and having a selected planet, remove the planet from the selection
+  const pointerMoveSub = scene.input.pointermove$.subscribe((pointer) => {
+    if (isDragging(pointer) && tables.SelectedPlanet.get()?.value) {
+      tables.SelectedPlanet.remove();
+    }
+  });
+  //same for wheel
+  const wheelSub = scene.phaserScene.input.on(
+    "wheel",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (
+      pointer: Phaser.Input.Pointer,
+      _gameObjects: Phaser.GameObjects.GameObject[],
+      _deltaX: number,
+      deltaY: number
+    ) => {
+      if (deltaY && tables.SelectedPlanet.get()?.value) {
+        tables.SelectedPlanet.remove();
+      }
+    }
+  );
+
   core.network.world.registerDisposer(() => {
     clickSub.unsubscribe();
+    pointerMoveSub.unsubscribe();
+    wheelSub.destroy();
   });
 
   const runSystems = () => runMainSystems(sceneApi, game, core);

@@ -41,9 +41,6 @@ export class Planet
   private empireId: EEmpire;
   private spawned = false;
 
-  private lastClickTime = 0;
-  private singleClickTimeout?: Phaser.Time.TimerEvent;
-
   constructor(args: {
     id: Entity;
     scene: PrimodiumScene;
@@ -325,36 +322,7 @@ export class Planet
     obj.on(Phaser.Input.Events.POINTER_UP, (e: Phaser.Input.Pointer) => {
       if (!isValidClick(e)) return;
 
-      // Clear any existing timeout
-      if (this.singleClickTimeout) {
-        this.singleClickTimeout.destroy();
-        this.singleClickTimeout = undefined;
-      }
-
-      // Set a new timeout for single-click
-      this.singleClickTimeout = this.scene.time.delayedCall(200, () => {
-        fn(e);
-        this.singleClickTimeout = undefined;
-      });
-    });
-    return this;
-  }
-
-  onDoubleClick(fn: (e: Phaser.Input.Pointer) => void) {
-    const obj = this.hexSprite.setInteractive();
-    obj.on(Phaser.Input.Events.POINTER_UP, (e: Phaser.Input.Pointer) => {
-      if (!isValidClick(e)) return;
-
-      const clickDelay = this.scene.time.now - this.lastClickTime;
-      this.lastClickTime = this.scene.time.now;
-      if (clickDelay < 200) {
-        // If double-click, clear the single-click timeout
-        if (this.singleClickTimeout) {
-          this.singleClickTimeout.destroy();
-          this.singleClickTimeout = undefined;
-        }
-        fn(e);
-      }
+      fn(e);
     });
     return this;
   }

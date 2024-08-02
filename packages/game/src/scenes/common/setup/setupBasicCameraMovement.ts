@@ -167,8 +167,8 @@ export const setupBasicCameraMovement = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (
       pointer: Phaser.Input.Pointer,
-      _gameObjects: any,
-      _deltaX: any,
+      _gameObjects: Phaser.GameObjects.GameObject[],
+      _deltaX: number,
       deltaY: number
     ) => {
       if (paused) return;

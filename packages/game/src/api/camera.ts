@@ -146,51 +146,70 @@ export const createCameraApi = (scene: Scene) => {
   function focusCamera(coord: Coord) {
     focusSequence.stop();
     focusSequence.events = [];
+    return new Promise<void>((resolve) => {
+      focusSequence
+        .add([
+          {
+            at: 0,
+            run: () => {
+              pan(coord, { duration: 300 });
 
-    focusSequence
-      .add([
-        {
-          at: 0,
-          run: () => {
-            pan(coord, { duration: 300 });
-
-            if (blurFx) return;
-            blurFx = scene.camera.phaserCamera.postFX.addTiltShift(
-              0.1,
-              10,
-              0,
-              2,
-              2,
-              1
-            );
+              if (blurFx) return;
+              blurFx = scene.camera.phaserCamera.postFX.addTiltShift(
+                0.1,
+                10,
+                0,
+                2,
+                2,
+                1
+              );
+            },
           },
-        },
-        {
-          at: 300,
-          run: () => zoomTo(scene.config.camera.maxZoom, 500),
-        },
-      ])
-      .play();
+          {
+            at: 300,
+            run: () => {
+              zoomTo(scene.config.camera.maxZoom, 500);
+            },
+          },
+          {
+            at: 800,
+            run: () => {
+              resolve();
+            },
+          },
+        ])
+        .play();
+    });
   }
 
-  function unfocusCamera() {
+  async function unfocusCamera() {
     focusSequence.stop();
     focusSequence.events = [];
 
-    focusSequence
-      .add([
-        {
-          at: 0,
-          run: () => {
-            if (blurFx) {
-              scene.camera.phaserCamera.postFX.remove(blurFx);
-              blurFx = undefined;
-            }
-            zoomTo(scene.config.camera.minZoom, 500);
+    const promise = new Promise<void>((resolve) => {
+      focusSequence
+        .add([
+          {
+            at: 0,
+            run: () => {
+              if (blurFx) {
+                scene.camera.phaserCamera.postFX.remove(blurFx);
+                blurFx = undefined;
+              }
+              zoomTo(scene.config.camera.defaultZoom, 500);
+            },
           },
-        },
-      ])
-      .play();
+          {
+            at: 500,
+            run: () => {
+              resolve();
+            },
+          },
+        ])
+        .play();
+    });
+
+    return promise;
   }
 
   return {
