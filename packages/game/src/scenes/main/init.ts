@@ -14,13 +14,14 @@ export const initMainScene = async (
   core: Core
 ): Promise<PrimodiumScene> => {
   const scene = await game.createScene(mainSceneConfig, true);
+  const { tables } = core;
 
   const sceneApi = createSceneApi(scene, game);
   sceneApi.audio.setPauseOnBlur(false);
 
   scene.camera.phaserCamera.centerOn(0, -50);
   scene.camera.phaserCamera.fadeIn();
-  scene.camera.phaserCamera.postFX?.addVignette(0.5, 0.5, 0.8);
+  scene.camera.phaserCamera.postFX?.addVignette(0.5, 0.5, 0.65);
 
   //setup background here since using transparent phaser background breaks blend modes and some shaders. Idk y and can't find anything in regards to this
   scene.phaserScene.add
@@ -42,9 +43,44 @@ export const initMainScene = async (
     .setScrollFactor(0.5, 0.5)
     .setDepth(-Infinity);
 
-  setupBasicCameraMovement(sceneApi, core.network.world, {
-    doubleClickZoom: true,
+  const cameraMovement = setupBasicCameraMovement(
+    sceneApi,
+    core.network.world,
+    {
+      doubleClickZoom: false,
+      zoomKeybind: false,
+    }
+  );
+
+  //LOCK CAMERA WHEN SELECTING A PLANET
+  tables.SelectedPlanet.watch({
+    onChange: ({ properties: { current } }) => {
+      if (current?.value) {
+        console.log(current);
+        cameraMovement.pause();
+        const planet = sceneApi.objects.planet.get(current.value);
+        if (planet) {
+          sceneApi.camera.focusCamera(planet.coord);
+        }
+
+        return;
+      } else {
+        sceneApi.camera.unfocusCamera();
+        cameraMovement.resume();
+      }
+    },
   });
+
+  const clickSub = scene.input.click$.subscribe(([, objects]) => {
+    if (objects.length !== 0) return;
+    tables.HoveredPlanet.remove();
+    tables.SelectedPlanet.remove();
+  });
+
+  core.network.world.registerDisposer(() => {
+    clickSub.unsubscribe();
+  });
+
   const runSystems = () => runMainSystems(sceneApi, game, core);
   return { ...sceneApi, runSystems };
 };

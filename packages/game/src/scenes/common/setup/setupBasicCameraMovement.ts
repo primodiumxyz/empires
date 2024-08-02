@@ -27,6 +27,7 @@ export const setupBasicCameraMovement = (
     wheel = true,
     center = true,
   } = options;
+  let paused = false;
 
   //accumalate sub-pixel movement during a gametick and add to next game tick.
   let accumulatedX = 0;
@@ -126,6 +127,8 @@ export const setupBasicCameraMovement = (
   }
 
   const handleGameTickMovement = (_: number, delta: number) => {
+    if (paused) return;
+
     if (zoomKeybind) handleZoom(delta);
 
     if (center) handleCenter();
@@ -139,6 +142,8 @@ export const setupBasicCameraMovement = (
 
   //handle double click events and zoom to mouse position
   const doubleClickSub = scene.input.doubleClick$.subscribe((event) => {
+    if (paused) return;
+
     if (!doubleClickZoom) return;
 
     //check if scene is active
@@ -166,6 +171,8 @@ export const setupBasicCameraMovement = (
       _deltaX: any,
       deltaY: number
     ) => {
+      if (paused) return;
+
       if (!wheel) return;
 
       let scale = 0.0002;
@@ -189,9 +196,19 @@ export const setupBasicCameraMovement = (
     }
   );
 
+  function pause() {
+    paused = true;
+  }
+
+  function resume() {
+    paused = false;
+  }
+
   world.registerDisposer(() => {
     doubleClickSub.unsubscribe();
     scene.input.phaserInput.off("wheel");
     scene.phaserScene.events.removeListener("update", handleGameTickMovement);
   }, "game");
+
+  return { pause, resume };
 };

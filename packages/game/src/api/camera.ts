@@ -3,26 +3,20 @@ import {
   tileCoordToPixelCoord,
   pixelCoordToTileCoord,
 } from "@primodiumxyz/engine/src/lib/util/coords";
-import { Scene, Coord } from "@primodiumxyz/engine";
+import { Scene, Coord, PixelCoord } from "@primodiumxyz/engine";
 
-// const anchorMap =
-export const createCameraApi = (targetScene: Scene) => {
+export const createCameraApi = (scene: Scene) => {
   function pan(
-    coord: Coord,
+    coord: PixelCoord,
     options: {
       duration?: number;
-      pixel?: boolean;
       ease?: string;
     } = {}
   ) {
-    const { phaserScene, camera, tiled: tilemap } = targetScene;
-    const { pixel = false, ease = "Power2", duration = 1000 } = options;
+    const { phaserScene, camera } = scene;
+    const { ease = "Power2", duration = 1000 } = options;
 
-    const pixelCoord = pixel
-      ? coord
-      : tileCoordToPixelCoord(coord, tilemap.tileWidth, tilemap.tileHeight);
-
-    const scroll = camera.phaserCamera.getScroll(pixelCoord.x, -pixelCoord.y);
+    const scroll = camera.phaserCamera.getScroll(coord.x, coord.y);
 
     //we want new tween to be active for responsive behavior. New tween are created if on new end coord.
     if (phaserScene.tweens.getTweensOf(camera.phaserCamera).length) {
@@ -57,10 +51,10 @@ export const createCameraApi = (targetScene: Scene) => {
   }
 
   function zoomTo(zoom: number, duration = 1000, ease = "Power2") {
-    const { camera } = targetScene;
+    const { camera } = scene;
 
     camera.phaserCamera.zoomTo(zoom, duration, ease, false, () => {
-      targetScene.input.phaserInput.activePointer.updateWorldPoint(
+      scene.input.phaserInput.activePointer.updateWorldPoint(
         camera.phaserCamera
       );
       updateWorldView();
@@ -68,7 +62,7 @@ export const createCameraApi = (targetScene: Scene) => {
   }
 
   function getPosition() {
-    const { camera, tiled: tilemap } = targetScene;
+    const { camera, tiled: tilemap } = scene;
 
     const coord = camera?.phaserCamera.worldView;
     if (!coord) throw new Error("Camera not found.");
@@ -86,7 +80,7 @@ export const createCameraApi = (targetScene: Scene) => {
   }
 
   function updateWorldView() {
-    const { camera } = targetScene;
+    const { camera } = scene;
 
     requestAnimationFrame(() => {
       camera.zoom$.next(camera.phaserCamera.zoom);
@@ -95,7 +89,7 @@ export const createCameraApi = (targetScene: Scene) => {
   }
 
   function screenCoordToWorldCoord(screenCoord: Coord) {
-    const { camera } = targetScene;
+    const { camera } = scene;
 
     const pixelCoord = camera.phaserCamera.getWorldPoint(
       screenCoord.x,
@@ -106,7 +100,7 @@ export const createCameraApi = (targetScene: Scene) => {
   }
 
   function worldCoordToScreenCoord(worldCoord: Coord) {
-    const { camera } = targetScene;
+    const { camera } = scene;
 
     //convert canvas screen coord to phaser screen coord
     // Convert world coord to phaser screen coord
@@ -121,9 +115,9 @@ export const createCameraApi = (targetScene: Scene) => {
   }
 
   const shake = () => {
-    const { camera } = targetScene;
+    const { camera } = scene;
 
-    if (!targetScene.phaserScene.scene.isActive()) return;
+    if (!scene.phaserScene.scene.isActive()) return;
 
     camera.phaserCamera.shake(300, 0.01 / camera.phaserCamera.zoom);
   };
@@ -131,7 +125,7 @@ export const createCameraApi = (targetScene: Scene) => {
   function createDOMContainer(id: string, coord: Coord, raw = false) {
     const {
       tiled: { tileHeight, tileWidth },
-    } = targetScene;
+    } = scene;
     const pixelCoord = raw
       ? coord
       : tileCoordToPixelCoord(coord, tileWidth, tileHeight);
@@ -140,19 +134,64 @@ export const createCameraApi = (targetScene: Scene) => {
     const div = document.createElement("div");
     div.id = id;
 
-    const obj = targetScene.phaserScene.add.dom(
-      pixelCoord.x,
-      pixelCoord.y,
-      div
-    );
+    const obj = scene.phaserScene.add.dom(pixelCoord.x, pixelCoord.y, div);
 
-    targetScene.phaserScene.data.set(id, { obj, container: div });
+    scene.phaserScene.data.set(id, { obj, container: div });
 
     return { obj, container: div };
   }
 
+  const focusSequence = scene.phaserScene.add.timeline([]);
+  let blurFx: Phaser.FX.Bokeh | undefined;
+  function focusCamera(coord: Coord) {
+    focusSequence.stop();
+    focusSequence.events = [];
+
+    focusSequence
+      .add([
+        {
+          at: 0,
+          run: () => {
+            pan(coord, { duration: 300 });
+            blurFx = scene.camera.phaserCamera.postFX.addTiltShift(
+              0.2,
+              5,
+              0,
+              2,
+              2,
+              1
+            );
+          },
+        },
+        {
+          at: 300,
+          run: () => zoomTo(scene.config.camera.maxZoom, 500),
+        },
+      ])
+      .play();
+  }
+
+  function unfocusCamera() {
+    focusSequence.stop();
+    focusSequence.events = [];
+
+    focusSequence
+      .add([
+        {
+          at: 0,
+          run: () => {
+            if (blurFx) {
+              scene.camera.phaserCamera.postFX.remove(blurFx);
+            }
+            zoomTo(scene.config.camera.minZoom, 500);
+          },
+        },
+      ])
+      .play();
+  }
+
   return {
-    ...targetScene.camera,
+    ...scene.camera,
     pan,
     zoomTo,
     getPosition,
@@ -161,5 +200,7 @@ export const createCameraApi = (targetScene: Scene) => {
     updateWorldView,
     shake,
     createDOMContainer,
+    focusCamera,
+    unfocusCamera,
   };
 };

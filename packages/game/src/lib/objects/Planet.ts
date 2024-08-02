@@ -14,6 +14,7 @@ import {
 import { calculateAngleBetweenPoints } from "@primodiumxyz/core";
 import { DepthLayers } from "@game/lib/constants/common";
 import { EEmpire } from "@primodiumxyz/contracts";
+import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 
 export class Planet
   extends Phaser.GameObjects.Zone
@@ -29,6 +30,9 @@ export class Planet
   private pendingArrow: Phaser.GameObjects.Container;
   private empireId: EEmpire;
   private spawned = false;
+
+  private lastClickTime = 0;
+  private singleClickTimeout?: Phaser.Time.TimerEvent;
 
   constructor(args: {
     id: Entity;
@@ -119,6 +123,14 @@ export class Planet
 
   isSpawned() {
     return this.spawned;
+  }
+
+  override setScale(scale: number) {
+    this.planetSprite.setScale(scale);
+    this.planetUnderglowSprite.setScale(scale);
+    this.hexSprite.setScale(scale);
+    this.hexHoloSprite.setScale(scale);
+    return this;
   }
 
   updateFaction(empire: EEmpire) {
@@ -223,6 +235,72 @@ export class Planet
     );
 
     this._scene.audio.play("Execute2", "sfx", { volume: 0.1 });
+  }
+
+  onClick(fn: (e: Phaser.Input.Pointer) => void) {
+    const obj = this.hexSprite.setInteractive();
+    obj.on(Phaser.Input.Events.POINTER_UP, (e: Phaser.Input.Pointer) => {
+      if (!isValidClick(e)) return;
+
+      // Clear any existing timeout
+      if (this.singleClickTimeout) {
+        this.singleClickTimeout.destroy();
+        this.singleClickTimeout = undefined;
+      }
+
+      // Set a new timeout for single-click
+      this.singleClickTimeout = this.scene.time.delayedCall(200, () => {
+        fn(e);
+        this.singleClickTimeout = undefined;
+      });
+    });
+    return this;
+  }
+
+  onDoubleClick(fn: (e: Phaser.Input.Pointer) => void) {
+    const obj = this.hexSprite.setInteractive();
+    obj.on(Phaser.Input.Events.POINTER_UP, (e: Phaser.Input.Pointer) => {
+      if (!isValidClick(e)) return;
+
+      const clickDelay = this.scene.time.now - this.lastClickTime;
+      this.lastClickTime = this.scene.time.now;
+      if (clickDelay < 200) {
+        // If double-click, clear the single-click timeout
+        if (this.singleClickTimeout) {
+          this.singleClickTimeout.destroy();
+          this.singleClickTimeout = undefined;
+        }
+        fn(e);
+      }
+    });
+    return this;
+  }
+
+  onHoverEnter(fn: (e: Phaser.Input.Pointer) => void) {
+    const obj = this.hexSprite.setInteractive();
+    obj.on(
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
+      (e: Phaser.Input.Pointer) => {
+        if (!isValidHover(e)) return;
+        fn(e);
+      }
+    );
+    return this;
+  }
+
+  onHoverExit(fn: (e: Phaser.Input.Pointer) => void) {
+    const obj = this.hexSprite.setInteractive();
+    obj.on(
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
+      (e: Phaser.Input.Pointer) => {
+        fn(e);
+      }
+    );
+    return this;
+  }
+
+  flashPlanet() {
+    this._scene.fx.flashSprite(this.planetSprite);
   }
 
   override destroy() {
