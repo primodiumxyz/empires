@@ -198,7 +198,7 @@ export const renderOverrideFloatingText = (
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `+${current.overrideCount}`,
           {
-            icon: "Ship",
+            icon: "Attack",
             color: "#ff0000",
           }
         );

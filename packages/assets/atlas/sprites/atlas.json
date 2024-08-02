@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1722468427829",
+            "image": "atlas.png?timestamp=1722625636438",
             "format": "RGBA8888",
             "size": {
                 "w": 1119,
@@ -854,7 +854,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/gold.png",
+                    "filename": "sprites/icons/attack.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -875,7 +875,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/shield.png",
+                    "filename": "sprites/icons/gold.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -896,7 +896,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/ship.png",
+                    "filename": "sprites/icons/shield.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -911,6 +911,27 @@
                     },
                     "frame": {
                         "x": 772,
+                        "y": 763,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/ship.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 804,
                         "y": 763,
                         "w": 32,
                         "h": 32

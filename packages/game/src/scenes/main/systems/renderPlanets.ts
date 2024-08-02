@@ -3,6 +3,7 @@ import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
 import { Planet } from "@game/lib/objects/Planet";
 import { PrimodiumScene } from "@game/types";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
+import { EEmpire } from "@primodiumxyz/contracts";
 
 const MARGIN = 10;
 
@@ -38,17 +39,14 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
           tables.SelectedPlanet.remove();
         }
 
-        if (!tables.Planet.get(entity)?.empireId) return;
         tables.SelectedPlanet.set({ value: entity });
         planetObj.flashPlanet();
         scene.audio.play("Click2", "ui");
       })
       .onHoverEnter(() => {
-        if (!tables.Planet.get(entity)?.empireId) return;
         tables.HoveredPlanet.set({ value: entity });
       })
       .onHoverExit(() => {
-        if (!tables.Planet.get(entity)?.empireId) return;
         tables.HoveredPlanet.remove();
       });
   });
