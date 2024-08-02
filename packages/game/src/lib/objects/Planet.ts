@@ -21,6 +21,7 @@ import { DepthLayers } from "@game/lib/constants/common";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 import { IconLabel } from "@game/lib/objects/IconLabel";
+import { Progress } from "@game/lib/objects/Progress";
 
 export class Planet
   extends Phaser.GameObjects.Zone
@@ -35,6 +36,7 @@ export class Planet
   private hexHoloSprite: Phaser.GameObjects.Sprite;
   private planetName: Phaser.GameObjects.Text;
   private pendingArrow: Phaser.GameObjects.Container;
+  private chargeProgress: Progress;
   private shields: IconLabel;
   private ships: IconLabel;
   private gold: IconLabel;
@@ -152,6 +154,11 @@ export class Planet
       .setActive(false)
       .setVisible(false);
 
+    this.chargeProgress = new Progress(scene, {
+      x: coord.x,
+      y: coord.y + 5,
+    }).setDepth(DepthLayers.Planet + 1);
+
     this._scene = scene;
     this.id = id;
     this.coord = coord;
@@ -172,6 +179,7 @@ export class Planet
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
+    this.scene.add.existing(this.chargeProgress);
     return this;
   }
 
@@ -188,6 +196,7 @@ export class Planet
     this.shields.setScale(scale);
     this.ships.setScale(scale);
     this.gold.setScale(scale);
+    this.chargeProgress.setScale(scale);
     return this;
   }
 
@@ -210,6 +219,7 @@ export class Planet
     this.shields.setAlpha(alpha);
     this.ships.setAlpha(alpha);
     this.gold.setAlpha(alpha);
+    this.chargeProgress.setAlpha(alpha);
     this.planetName.setAlpha(nameAlpha);
   }
 
@@ -382,6 +392,10 @@ export class Planet
         fractionDigits: 2,
       })
     );
+  }
+
+  setChargeProgress(progress: number) {
+    this.chargeProgress.setProgress(progress);
   }
 
   override destroy() {

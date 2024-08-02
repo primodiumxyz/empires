@@ -35,20 +35,20 @@ function generateContent() {
 
       return `
             bytes32 ${planetName} = coordToId(${coord.q}, ${coord.r});
-            Planet.set(
-              ${planetName},
-              PlanetData({ q: ${coord.q}, r: ${
-        coord.r
-      }, isPlanet: true, shipCount: 0, shieldCount: 0, empireId: EEmpire.${empireName}, goldCount: 0 })
-            );
-            PlanetsSet.add(${planetName});
             ${
               empireName === "NULL"
                 ? ""
                 : `EmpirePlanetsSet.add(EEmpire.${empireName}, ${planetName}); 
                   Empire.set(EEmpire.${empireName}, EOrigin.North, 0, 0);
+                  planetData.empireId = EEmpire.${empireName};
                   `
-            }`;
+            }
+            planetData.q = ${coord.q};
+            planetData.r = ${coord.r};
+            PlanetsSet.add(${planetName});
+            Planet.set(${planetName}, planetData);
+            Planet_TacticalStrike.set(${planetName}, planetTacticalStrikeData);
+            `;
     })
     .join("");
 }
@@ -61,11 +61,27 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
-import { Planet, PlanetData, Empire } from "codegen/index.sol";
+import { Planet, PlanetData, Empire, Planet_TacticalStrikeData, Planet_TacticalStrike } from "codegen/index.sol";
 import { EEmpire, EOrigin, EOverride } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
 
 function createPlanets() {
+  Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrikeData({
+    lastUpdated: block.number,
+    chargeRate: 100, // out of 100
+    charge: 0
+  });
+
+  PlanetData memory planetData = PlanetData({
+    q: 0,
+    r: 0,
+    isPlanet: true,
+    shipCount: 0,
+    shieldCount: 0,
+    empireId: EEmpire.Red,
+    goldCount: 0
+  });
+
   ${str}
 }
 `;
