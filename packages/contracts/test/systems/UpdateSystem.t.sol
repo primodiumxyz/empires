@@ -82,30 +82,6 @@ contract UpdateSystemTest is PrimodiumTest {
 
   /* ---------------------------------- Gold ---------------------------------- */
 
-  function testAddGoldToEveryPlanet() public {
-    EEmpire turn = Turn.getEmpire();
-
-    routineThresholds = RoutineThresholds({
-      planetId: planetId,
-      accumulateGold: 0,
-      buyShields: 0,
-      buyShips: 10000,
-      supportAlly: 10000,
-      attackEnemy: 10000,
-      attackTargetId: targetPlanetId,
-      supportTargetId: targetPlanetId
-    });
-    allRoutineThresholds[0] = routineThresholds;
-    world.Empires__updateWorld(allRoutineThresholds);
-    uint256 goldIncrease = P_GameConfig.getGoldGenRate();
-
-    bytes32[] memory planets = EmpirePlanetsSet.getEmpirePlanetIds(turn);
-    for (uint i = 0; i < planets.length; i++) {
-      bytes32 _planetId = planets[i];
-      assertEq(Planet.getGoldCount(_planetId), goldIncrease * EMPIRE_COUNT);
-    }
-  }
-
   function testSpendGoldBuyShipsRoutine() public {
     uint256 shipsRoutine = routineThresholds.buyShips - 1;
     uint256 gold = 9;

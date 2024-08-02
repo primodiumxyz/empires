@@ -15,6 +15,8 @@ import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { RoutineThresholds } from "../Types.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 
+import { console } from "forge-std/console.sol";
+
 contract UpdateSystem is EmpiresSystem {
   /**
    * @dev Updates the current turn and returns the empire whose turn just ended.
