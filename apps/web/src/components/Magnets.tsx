@@ -3,9 +3,10 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
+import { cn } from "@/util/client";
 
 const MagnetBadge: React.FC<{ turnsLeft: number; className: string }> = ({ turnsLeft, className }) => (
-  <Badge className={`gap-1 py-4 ${className}`}>
+  <Badge className={cn("gap-1 py-4", className)}>
     <img src={InterfaceIcons.Crosshairs} className="w-6 rounded-full bg-white/70" /> ({turnsLeft})
   </Badge>
 );
