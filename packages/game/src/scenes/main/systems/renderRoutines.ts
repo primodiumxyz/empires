@@ -199,7 +199,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
           enqueue(() => {
             scene.audio.play("Complete", "sfx", {
               volume: 0.01,
-              detune: Math.min(20 * i, 500000000000),
+              detune: 20 * i,
             });
             scene.fx.emitFloatingText(
               { x: planet.coord.x, y: planet.coord.y - 25 },

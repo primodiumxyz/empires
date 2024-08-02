@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDoubleDownIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
-import { defaultEntity } from "@primodiumxyz/reactive-tables";
+import { createLocalBoolTable, createWorld, defaultEntity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
@@ -18,8 +17,14 @@ import { OverridePane } from "@/components/OverrideDrawer/OverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useGame } from "@/hooks/useGame";
-import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { useNextTurnOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
+
+const OverridePaneExpanded = createLocalBoolTable(createWorld(), {
+  id: "OverridePaneExpanded",
+  persist: true,
+  version: "1",
+});
 
 export const OverrideDrawer = () => {
   const InteractPaneRef = useRef<HTMLDivElement>(null);
@@ -33,29 +38,19 @@ export const OverrideDrawer = () => {
   const { gameOver } = useTimeLeft();
   const selectedPlanet = tables.SelectedPlanet.use()?.value;
   const planet = tables.Planet.use(selectedPlanet ?? defaultEntity);
+  const planetEmpire = planet?.empireId ?? (0 as EEmpire);
+  const expanded = OverridePaneExpanded.use()?.value ?? false;
   const [inputValue, setInputValue] = useState("1");
 
-  const createShipPriceWei = useOverrideCost(
-    EOverride.CreateShip,
-    planet?.empireId ?? (0 as EEmpire),
-    BigInt(inputValue),
-  );
-  const killShipPriceWei = useOverrideCost(EOverride.KillShip, planet?.empireId ?? (0 as EEmpire), BigInt(inputValue));
-  const addShieldPriceWei = useOverrideCost(
-    EOverride.ChargeShield,
-    planet?.empireId ?? (0 as EEmpire),
-    BigInt(inputValue),
-  );
-  const removeShieldPriceWei = useOverrideCost(
-    EOverride.DrainShield,
-    planet?.empireId ?? (0 as EEmpire),
-    BigInt(inputValue),
-  );
+  const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const killShipPriceWei = useOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
+  const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
-  const createShipPriceUsd = utils.weiToUsd(createShipPriceWei, price ?? 0);
-  const killShipPriceUsd = utils.weiToUsd(killShipPriceWei, price ?? 0);
-  const addShieldPriceUsd = utils.weiToUsd(addShieldPriceWei, price ?? 0);
-  const removeShieldPriceUsd = utils.weiToUsd(removeShieldPriceWei, price ?? 0);
+  const nextCreateShipPriceWei = useNextTurnOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const nextKillShipPriceWei = useNextTurnOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
+  const nextAddShieldPriceWei = useNextTurnOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const nextRemoveShieldPriceWei = useNextTurnOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
   const planetObj = useMemo(() => {
     if (!selectedPlanet) return;
@@ -78,7 +73,7 @@ export const OverrideDrawer = () => {
   if (!selectedPlanet || !planet) return null;
 
   return (
-    <div className="origin-bottom scale-150">
+    <div className="origin-bottom scale-125">
       <Card
         noDecor
         ref={InteractPaneRef}
@@ -119,7 +114,7 @@ export const OverrideDrawer = () => {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-1">
-          <Tabs className="flex w-72 flex-col items-center gap-2">
+          <Tabs className="flex w-64 flex-col items-center gap-2">
             <Join>
               <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
               <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
@@ -136,14 +131,17 @@ export const OverrideDrawer = () => {
                   createShip(selectedPlanet, BigInt(inputValue), createShipPriceWei);
                   setInputValue("1");
                 }}
-                attackPrice={killShipPriceUsd}
-                supportPrice={createShipPriceUsd}
+                attackPrice={killShipPriceWei}
+                supportPrice={createShipPriceWei}
+                nextAttackPrice={nextKillShipPriceWei}
+                nextSupportPrice={nextCreateShipPriceWei}
                 attackTxQueueId={`${selectedPlanet}-kill-ship`}
                 supportTxQueueId={`${selectedPlanet}-create-ship`}
-                isSupportDisabled={gameOver || Number(selectedPlanet) === 0}
+                isSupportDisabled={gameOver || Number(planetEmpire) === 0}
                 isAttackDisabled={
-                  (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(selectedPlanet) === 0
+                  (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                 }
+                expanded={expanded}
               />
             </Tabs.Pane>
             <Tabs.Pane index={1} className="w-full items-center gap-4">
@@ -158,17 +156,28 @@ export const OverrideDrawer = () => {
                   addShield(selectedPlanet, BigInt(inputValue), addShieldPriceWei);
                   setInputValue("1");
                 }}
-                attackPrice={removeShieldPriceUsd}
-                supportPrice={addShieldPriceUsd}
+                attackPrice={removeShieldPriceWei}
+                supportPrice={addShieldPriceWei}
+                nextAttackPrice={nextRemoveShieldPriceWei}
+                nextSupportPrice={nextAddShieldPriceWei}
                 attackTxQueueId={`${selectedPlanet}-remove-shield`}
                 supportTxQueueId={`${selectedPlanet}-add-shield`}
-                isSupportDisabled={gameOver || Number(selectedPlanet) === 0}
+                isSupportDisabled={gameOver || Number(planetEmpire) === 0}
                 isAttackDisabled={
-                  (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planet?.empireId) === 0
+                  (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0
                 }
+                expanded={expanded}
               />
             </Tabs.Pane>
           </Tabs>
+          <Button
+            onClick={() => OverridePaneExpanded.set({ value: !expanded })}
+            variant="ghost"
+            size="xs"
+            className="self-end"
+          >
+            {expanded ? "-collapse" : "+expand"}
+          </Button>
         </div>
       </Card>
     </div>
