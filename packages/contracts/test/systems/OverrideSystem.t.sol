@@ -359,10 +359,13 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
     vm.prank(alice);
     world.Empires__placeMagnet{ value: totalCost }(empire, planetId, turns);
+    uint256 currTurn = Turn.getValue();
+    uint256 fullTurn = (currTurn - 1) / EMPIRE_COUNT;
     assertEq(Magnet.getIsMagnet(empire, planetId), true, "Magnet should be placed");
     assertEq(Magnet.getLockedPoints(empire, planetId), pointsToStake, "Magnet should have locked points");
     assertEq(Magnet.getPlayerId(empire, planetId), aliceId, "Magnet should have player id");
-    assertEq(Magnet.getEndTurn(empire, planetId), Turn.getValue() + turns, "Magnet should have end turn");
+    // should be minus one because the magnet is placed before the empire's turn has occurred in the current full turn
+    assertEq(Magnet.getEndTurn(empire, planetId), fullTurn + turns - 1, "Magnet should have end turn");
     assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
   }
 

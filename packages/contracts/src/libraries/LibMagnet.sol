@@ -26,7 +26,7 @@ library LibMagnet {
     PointsMap.setLockedPoints(_empire, playerId, PointsMap.getLockedPoints(_empire, playerId) - lockedPoints);
   }
 
-  function addMagnet(EEmpire _empire, bytes32 _planetId, bytes32 _playerId, uint256 _turnDuration) internal {
+  function addMagnet(EEmpire _empire, bytes32 _planetId, bytes32 _playerId, uint256 _fullTurnDuration) internal {
     uint256 requiredPoints = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(_empire)) / 10000;
     require(
       requiredPoints <= PointsMap.getValue(_empire, _playerId) - PointsMap.getLockedPoints(_empire, _playerId),
@@ -34,12 +34,12 @@ library LibMagnet {
     );
 
     // the game starts on turn 1 (which is red) so we subtract 1 to get the global turn.
-    uint256 turn = Turn.getValue();
-    uint256 globalTurn = (turn - 1) / EMPIRE_COUNT;
-    uint256 endTurn = _turnDuration + globalTurn;
+    uint256 currTurn = Turn.getValue();
+    uint256 currFullTurn = (currTurn - 1) / EMPIRE_COUNT;
+    uint256 endTurn = currFullTurn + _fullTurnDuration;
 
     // empire still has to play this turn so subtract one from the end turn because current turn should be counted
-    if ((turn % EMPIRE_COUNT) <= uint8(_empire)) endTurn -= 1;
+    if ((currTurn % EMPIRE_COUNT) <= uint8(_empire)) endTurn -= 1;
 
     Magnet.set(
       _empire,
