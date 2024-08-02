@@ -29,14 +29,19 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
 
     planetObj
       .onClick(() => {
+        if (tables.SelectedPlanet.get()?.value === entity) return;
+
+        if (!tables.Planet.get(entity)?.empireId) return;
         tables.SelectedPlanet.set({ value: entity });
         planetObj.flashPlanet();
         scene.audio.play("Click2", "ui");
       })
       .onHoverEnter(() => {
+        if (!tables.Planet.get(entity)?.empireId) return;
         tables.HoveredPlanet.set({ value: entity });
       })
       .onHoverExit(() => {
+        if (!tables.Planet.get(entity)?.empireId) return;
         tables.HoveredPlanet.remove();
       });
   });

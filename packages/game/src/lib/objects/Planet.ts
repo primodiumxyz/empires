@@ -83,7 +83,7 @@ export class Planet
     this.planetName = new Phaser.GameObjects.Text(
       scene.phaserScene,
       coord.x,
-      coord.y + 10,
+      coord.y + 25,
       entityToPlanetName(id),
       {
         fontSize: 25,
@@ -206,6 +206,7 @@ export class Planet
     this.shields.setAlpha(alpha);
     this.ships.setAlpha(alpha);
     this.gold.setAlpha(alpha);
+    this.planetName.setAlpha((1 - alpha) / 2);
   }
 
   updateFaction(empire: EEmpire) {
