@@ -153,9 +153,11 @@ export const createCameraApi = (scene: Scene) => {
           at: 0,
           run: () => {
             pan(coord, { duration: 300 });
+
+            if (blurFx) return;
             blurFx = scene.camera.phaserCamera.postFX.addTiltShift(
-              0.2,
-              5,
+              0.1,
+              10,
               0,
               2,
               2,
@@ -182,6 +184,7 @@ export const createCameraApi = (scene: Scene) => {
           run: () => {
             if (blurFx) {
               scene.camera.phaserCamera.postFX.remove(blurFx);
+              blurFx = undefined;
             }
             zoomTo(scene.config.camera.minZoom, 500);
           },

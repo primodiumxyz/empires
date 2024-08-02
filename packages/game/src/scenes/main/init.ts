@@ -56,18 +56,16 @@ export const initMainScene = async (
   tables.SelectedPlanet.watch({
     onChange: ({ properties: { current } }) => {
       if (current?.value) {
-        console.log(current);
-        cameraMovement.pause();
         const planet = sceneApi.objects.planet.get(current.value);
         if (planet) {
+          cameraMovement.pause();
           sceneApi.camera.focusCamera(planet.coord);
         }
-
         return;
       } else {
         sceneApi.camera.unfocusCamera();
-        cameraMovement.resume();
       }
+      cameraMovement.resume();
     },
   });
 

@@ -93,4 +93,16 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       }
     },
   });
+
+  tables.Planet.watch({
+    world: systemsWorld,
+    onChange: ({ entity, properties: { current } }) => {
+      const planet = scene.objects.planet.get(entity);
+      if (planet) {
+        planet.setShieldCount(current?.shieldCount ?? 0n);
+        planet.setShipCount(current?.shipCount ?? 0n);
+        planet.setGoldCount(current?.goldCount ?? 0n);
+      }
+    },
+  });
 };

@@ -11,10 +11,16 @@ import {
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
-import { calculateAngleBetweenPoints } from "@primodiumxyz/core";
+import {
+  calculateAngleBetweenPoints,
+  entityToPlanetName,
+  formatNumber,
+  lerp,
+} from "@primodiumxyz/core";
 import { DepthLayers } from "@game/lib/constants/common";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
+import { IconLabel } from "@game/lib/objects/IconLabel";
 
 export class Planet
   extends Phaser.GameObjects.Zone
@@ -23,11 +29,15 @@ export class Planet
   readonly id: Entity;
   readonly coord: PixelCoord;
   protected _scene: PrimodiumScene;
-  private planetUnderglowSprite: Phaser.GameObjects.Sprite;
+  private planetUnderglowSprite: Phaser.GameObjects.Image;
   private planetSprite: Phaser.GameObjects.Sprite;
   private hexSprite: Phaser.GameObjects.Sprite;
   private hexHoloSprite: Phaser.GameObjects.Sprite;
+  private planetName: Phaser.GameObjects.Text;
   private pendingArrow: Phaser.GameObjects.Container;
+  private shields: IconLabel;
+  private ships: IconLabel;
+  private gold: IconLabel;
   private empireId: EEmpire;
   private spawned = false;
 
@@ -70,6 +80,54 @@ export class Planet
       Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]
     ).setDepth(DepthLayers.Base + coord.y);
 
+    this.planetName = new Phaser.GameObjects.Text(
+      scene.phaserScene,
+      coord.x,
+      coord.y + 10,
+      entityToPlanetName(id),
+      {
+        fontSize: 25,
+        color: "rgba(255,255,255,0.5)",
+        fontFamily: "Silkscreen",
+        backgroundColor: "rgba(0,0,0,0.5)",
+        padding: { x: 10 },
+      }
+    )
+      .setOrigin(0.5, 0.5)
+      .setAlpha(0.25)
+      .setDepth(DepthLayers.Planet - 1);
+
+    this.shields = new IconLabel(
+      scene,
+      {
+        x: coord.x - 45,
+        y: coord.y + 35,
+      },
+      "0",
+      "Shield"
+    ).setDepth(DepthLayers.Planet - 1);
+
+    this.ships = new IconLabel(
+      scene,
+
+      {
+        x: coord.x + 45,
+        y: coord.y + 35,
+      },
+      "0",
+      "Ship"
+    ).setDepth(DepthLayers.Planet - 1);
+
+    this.gold = new IconLabel(
+      scene,
+      {
+        x: coord.x,
+        y: coord.y + 60,
+      },
+      "0",
+      "Gold"
+    ).setDepth(DepthLayers.Planet - 1);
+
     this.hexHoloSprite = new Phaser.GameObjects.Sprite(
       scene.phaserScene,
       coord.x,
@@ -102,22 +160,21 @@ export class Planet
     this.coord = coord;
     this.empireId = empire;
 
-    this.setDepth(DepthLayers.Planet + coord.y - coord.x);
-
-    //TODO: disabled for perf
-    // this.planetSprite.preFX?.addShine(getRandomRange(0.1, 0.5), 1.5, 4);
-
     this._scene.objects.planet.add(id, this, false);
   }
 
   spawn() {
     this.spawned = true;
     this.scene.add.existing(this);
+    this.scene.add.existing(this.planetName);
     this.scene.add.existing(this.planetUnderglowSprite);
     this.scene.add.existing(this.planetSprite);
     this.scene.add.existing(this.hexHoloSprite);
     this.scene.add.existing(this.hexSprite);
     this.scene.add.existing(this.pendingArrow);
+    this.scene.add.existing(this.shields);
+    this.scene.add.existing(this.ships);
+    this.scene.add.existing(this.gold);
     return this;
   }
 
@@ -130,7 +187,25 @@ export class Planet
     this.planetUnderglowSprite.setScale(scale);
     this.hexSprite.setScale(scale);
     this.hexHoloSprite.setScale(scale);
+    this.planetName.setScale(scale);
+    this.shields.setScale(scale);
+    this.ships.setScale(scale);
+    this.gold.setScale(scale);
     return this;
+  }
+
+  override update(): void {
+    const alpha = lerp(
+      this._scene.camera.phaserCamera.zoom,
+      this._scene.config.camera.minZoom,
+      this._scene.config.camera.maxZoom,
+      0,
+      1
+    );
+
+    this.shields.setAlpha(alpha);
+    this.ships.setAlpha(alpha);
+    this.gold.setAlpha(alpha);
   }
 
   updateFaction(empire: EEmpire) {
@@ -301,6 +376,36 @@ export class Planet
 
   flashPlanet() {
     this._scene.fx.flashSprite(this.planetSprite);
+  }
+
+  setShieldCount(count: bigint) {
+    this.shields.setText(
+      formatNumber(count, {
+        short: true,
+        showZero: true,
+        fractionDigits: 2,
+      })
+    );
+  }
+
+  setShipCount(count: bigint) {
+    this.ships.setText(
+      formatNumber(count, {
+        short: true,
+        showZero: true,
+        fractionDigits: 2,
+      })
+    );
+  }
+
+  setGoldCount(count: bigint) {
+    this.gold.setText(
+      formatNumber(count, {
+        short: true,
+        showZero: true,
+        fractionDigits: 2,
+      })
+    );
   }
 
   override destroy() {
