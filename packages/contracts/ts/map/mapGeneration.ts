@@ -37,10 +37,9 @@ function generateContent() {
               empireName === "NULL"
                 ? ""
                 : `EmpirePlanetsSet.add(EEmpire.${empireName}, planetId); 
-                  Empire.set(EEmpire.${empireName}, EOrigin.North, 0, 0);
-                  planetData.empireId = EEmpire.${empireName};
-                  `
+                  Empire.set(EEmpire.${empireName}, EOrigin.North, 0, 0);`
             }
+            planetData.empireId = EEmpire.${empireName};
             planetData.q = ${coord.q};
             planetData.r = ${coord.r};
             PlanetsSet.add(planetId);
