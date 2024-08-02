@@ -29,7 +29,14 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
 
     planetObj
       .onClick(() => {
-        if (tables.SelectedPlanet.get()?.value === entity) return;
+        if (tables.SelectedPlanet.get()?.value === entity) {
+          tables.SelectedPlanet.remove();
+          return;
+        }
+
+        if (tables.SelectedPlanet.get()?.value) {
+          tables.SelectedPlanet.remove();
+        }
 
         if (!tables.Planet.get(entity)?.empireId) return;
         tables.SelectedPlanet.set({ value: entity });

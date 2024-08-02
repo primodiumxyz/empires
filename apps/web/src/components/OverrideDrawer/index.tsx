@@ -57,19 +57,6 @@ export const OverrideDrawer = () => {
     return objects.planet.get(selectedPlanet);
   }, [selectedPlanet]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (InteractPaneRef.current && !InteractPaneRef.current.contains(event.target as Node)) {
-        tables.SelectedPlanet.remove();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   if (!selectedPlanet || !planet) return null;
 
   return (
