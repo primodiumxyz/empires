@@ -6,10 +6,7 @@ import { EEmpire } from '@primodiumxyz/contracts';
 
 const calculateTurnsLeft = (endTurn: bigint | undefined, currTurn: bigint) => {
   if (endTurn === undefined) return 0;
-  const currFullTurn = (currTurn - 1n) / 3n + 1n;
-  const endFullTurn = (endTurn - 1n) / 3n + 1n;
-
-  return Number(endFullTurn - currFullTurn);
+  return Number(endTurn - currTurn);
 };
 
 export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
