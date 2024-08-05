@@ -2,7 +2,7 @@ import { Core, hashEntities } from "@primodiumxyz/core";
 import { Channel } from "@primodiumxyz/engine";
 import { createLocalTable, Type } from "@primodiumxyz/reactive-tables";
 
-const defaultVolume: Record<Channel | "master", number> = {
+export const defaultVolume: Record<Channel | "master", number> = {
   master: 1,
   music: 0.5,
   sfx: 0.5,
@@ -39,9 +39,10 @@ export function createVolumeTable(core: Core) {
   }
 
   function get(channel: Channel | "master") {
-    const currentVolume = table.get() ?? defaultVolume;
-    if (channel === "master") return currentVolume.master;
-    return currentVolume[channel] * (currentVolume.master ?? 1);
+    const currentVolume = table.get()[channel] ?? defaultVolume[channel];
+    const masterVolume = table.get().master ?? defaultVolume.master;
+    if (channel === "master") return currentVolume;
+    return currentVolume * masterVolume;
   }
 
   function set(volume: number, channel: Channel | "master" = "master") {

@@ -1,4 +1,5 @@
 import { GlobalApi } from "@game/api/global";
+import { defaultVolume } from "@game/lib/tables/VolumeTable";
 import { Channel, Scene } from "@primodiumxyz/engine";
 import { clone, throttle } from "lodash";
 import { useEffect, useMemo, useState } from "react";
@@ -31,9 +32,9 @@ export function createHooksApi(targetScene: Scene, globalApi: GlobalApi) {
   }
 
   function useVolume(channel: "master" | Channel) {
-    const volume = globalApi.tables.Volume.use();
+    const volume = globalApi.tables.Volume.use() ?? defaultVolume;
     return useMemo(() => {
-      const master = volume?.master ?? 0;
+      const master = volume.master!;
       if (channel === "master") return master;
 
       const channelVolume = volume?.[channel] ?? 0;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import { Channel } from "@primodiumxyz/engine";
 import { SecondaryCard } from "@/components/core/Card";
@@ -9,28 +9,18 @@ import { useGame } from "@/hooks/useGame";
 export const AudioSettings = () => {
   const game = useGame();
 
-  const [volume, setVolume] = useState<Record<Channel | "master", number>>({
-    master: 0,
-    music: 0,
-    sfx: 0,
-    ui: 0,
-  });
+  const masterVolume = game.ROOT.hooks.useVolume("master");
+  const musicVolume = game.ROOT.hooks.useVolume("music");
+  const sfxVolume = game.ROOT.hooks.useVolume("sfx");
+  const uiVolume = game.ROOT.hooks.useVolume("ui");
 
-  useEffect(() => {
-    setVolume({
-      master: game.ROOT.audio.getVolume("master"),
-      music: game.ROOT.audio.getVolume("music"),
-      sfx: game.ROOT.audio.getVolume("sfx"),
-      ui: game.ROOT.audio.getVolume("ui"),
-    });
-  }, [game]);
+  console.log({ masterVolume, musicVolume, sfxVolume, uiVolume });
 
   const setChannelVolume = useCallback(
     (amount: number, channel: Channel | "master") => {
       game.ROOT.audio.setVolume(amount, channel);
       game.UI.audio.setVolume(amount, channel);
       game.MAIN.audio.setVolume(amount, channel);
-      setVolume({ ...volume, [channel]: amount });
     },
     [game],
   );
@@ -43,7 +33,7 @@ export const AudioSettings = () => {
           <Range
             min={0}
             max={100}
-            defaultValue={volume.master * 100}
+            defaultValue={masterVolume * 100}
             className="range-accent"
             onChange={(e) => {
               setChannelVolume(e / 100, "master");
@@ -55,7 +45,7 @@ export const AudioSettings = () => {
           <Range
             min={0}
             max={100}
-            defaultValue={volume.music * 100}
+            defaultValue={musicVolume * 100}
             className="range-xs"
             onChange={(e) => {
               setChannelVolume(e / 100, "music");
@@ -67,7 +57,7 @@ export const AudioSettings = () => {
           <Range
             min={0}
             max={100}
-            defaultValue={volume.sfx * 100}
+            defaultValue={sfxVolume * 100}
             className="range-xs"
             onChange={(e) => {
               setChannelVolume(e / 100, "sfx");
@@ -79,7 +69,7 @@ export const AudioSettings = () => {
           <Range
             min={0}
             max={100}
-            defaultValue={volume.ui * 100}
+            defaultValue={uiVolume * 100}
             className="range-xs"
             onChange={(e) => {
               setChannelVolume(e / 100, "ui");
