@@ -22,10 +22,12 @@ export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function initializeAudioVolume() {
-    const masterVolume = globalApi.tables.Volume.get("master") ?? defaultVolume;
-    const musicVolume = globalApi.tables.Volume.get("music") ?? defaultVolume;
-    const sfxVolume = globalApi.tables.Volume.get("sfx") ?? defaultVolume;
-    const uiVolume = globalApi.tables.Volume.get("ui") ?? defaultVolume;
+    const masterVolume =
+      globalApi.tables.Volume.get("master") ?? defaultVolume.master;
+    const musicVolume =
+      globalApi.tables.Volume.get("music") ?? defaultVolume.music;
+    const sfxVolume = globalApi.tables.Volume.get("sfx") ?? defaultVolume.sfx;
+    const uiVolume = globalApi.tables.Volume.get("ui") ?? defaultVolume.ui;
 
     scene.audio.music.setVolume(masterVolume ?? 1 * (musicVolume ?? 1));
     scene.audio.sfx.setVolume(masterVolume ?? 1 * (sfxVolume ?? 1));
