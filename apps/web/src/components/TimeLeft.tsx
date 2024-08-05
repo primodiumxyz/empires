@@ -21,7 +21,7 @@ export const TimeLeft = () => {
     return new Date(Date.now() + (timeLeftMs ?? 0));
   }, [timeLeftMs]);
 
-  const turn = tables.Turn.use()?.value ?? 0n;
+  const turn = tables.Turn.use()?.value ?? 1n;
   const displayTurn = useMemo(() => {
     return ((turn - 1n) / 3n + 1n).toString();
   }, [turn]);
