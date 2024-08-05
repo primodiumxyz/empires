@@ -8,13 +8,16 @@ import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { PendingMove, WinningEmpire, HistoricalPointCost, Turn, P_GameConfig } from "codegen/index.sol";
+import { PendingMove, WinningEmpire, HistoricalPointCost, Magnet, Turn, P_GameConfig } from "codegen/index.sol";
 
 contract ResetSystem is System {
   function resetGame() public {
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint256 i = 0; i < planets.length; i++) {
       PendingMove.deleteRecord(planets[i]);
+      Magnet.deleteRecord(EEmpire.Red, planets[i]);
+      Magnet.deleteRecord(EEmpire.Blue, planets[i]);
+      Magnet.deleteRecord(EEmpire.Green, planets[i]);
     }
     PlanetsSet.clear();
     EmpirePlanetsSet.clear(EEmpire.Red);
