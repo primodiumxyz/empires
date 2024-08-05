@@ -53,9 +53,9 @@ library LibMoveShips {
 
     // Log the move
     MoveRoutineLog.set(
-      Turn.getValue(),
       pseudorandomEntity(),
       MoveRoutineLogData({
+        turn: Turn.getValue(),
         originPlanetId: planetId,
         destinationPlanetId: destinationPlanetId,
         shipCount: shipsToMove,

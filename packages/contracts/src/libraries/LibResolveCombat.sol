@@ -71,9 +71,9 @@ library LibResolveCombat {
       }
 
       PlanetBattleRoutineLog.set(
-        Turn.getValue(),
         eventEntity,
         PlanetBattleRoutineLogData({
+          turn: Turn.getValue(),
           planetId: planetId,
           attackingShipCount: attackingShips,
           defendingShipCount: defendingShips,
@@ -122,9 +122,9 @@ library LibResolveCombat {
     }
 
     ShipBattleRoutineLog.set(
-      Turn.getValue(),
       eventEntity,
       ShipBattleRoutineLogData({
+        turn: Turn.getValue(),
         redShipCount: Arrivals.get(planetId, EEmpire.Red),
         greenShipCount: Arrivals.get(planetId, EEmpire.Green),
         blueShipCount: Arrivals.get(planetId, EEmpire.Blue),

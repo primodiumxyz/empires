@@ -68,9 +68,13 @@ library LibRoutine {
     uint256 goldCount = Planet.getGoldCount(planetId);
     Planet.setGoldCount(planetId, goldCount + goldAdded);
     AccumulateGoldRoutineLog.set(
-      Turn.getValue(),
       pseudorandomEntity(),
-      AccumulateGoldRoutineLogData({ goldAdded: goldAdded, planetId: planetId, timestamp: block.timestamp })
+      AccumulateGoldRoutineLogData({
+        turn: Turn.getValue(),
+        goldAdded: goldAdded,
+        planetId: planetId,
+        timestamp: block.timestamp
+      })
     );
   }
 
@@ -96,9 +100,9 @@ library LibRoutine {
     Planet.setGoldCount(planetId, newGoldCount);
 
     BuyShieldsRoutineLog.set(
-      Turn.getValue(),
       pseudorandomEntity(),
       BuyShieldsRoutineLogData({
+        turn: Turn.getValue(),
         goldSpent: shieldsToBuy * shieldPrice,
         shieldBought: shieldsToBuy,
         planetId: planetId,
@@ -129,9 +133,9 @@ library LibRoutine {
     Planet.setGoldCount(planetId, newGoldCount);
 
     BuyShipsRoutineLog.set(
-      Turn.getValue(),
       pseudorandomEntity(),
       BuyShipsRoutineLogData({
+        turn: Turn.getValue(),
         goldSpent: shipsToBuy * shipPrice,
         shipBought: shipsToBuy,
         planetId: planetId,

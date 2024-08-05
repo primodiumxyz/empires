@@ -36,9 +36,9 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     planetTacticalStrikeData.charge += P_TacticalStrikeConfig.getBoostChargeIncrease() * _boostCount;
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
     BoostChargeOverrideLog.set(
-      Turn.getValue(),
       pseudorandomEntity(),
       BoostChargeOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
         ethSpent: cost,
         boostCount: _boostCount,
@@ -73,9 +73,9 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
       : 0;
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
     StunChargeOverrideLog.set(
-      Turn.getValue(),
       pseudorandomEntity(),
       StunChargeOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
         ethSpent: cost,
         stunCount: _stunCount,
@@ -112,9 +112,8 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     );
     // Log the tactical strike
     TacticalStrikeOverrideLog.set(
-      Turn.getValue(),
       pseudorandomEntity(),
-      TacticalStrikeOverrideLogData({ planetId: _planetId, timestamp: block.timestamp })
+      TacticalStrikeOverrideLogData({ turn: Turn.getValue(), planetId: _planetId, timestamp: block.timestamp })
     );
   }
 }
