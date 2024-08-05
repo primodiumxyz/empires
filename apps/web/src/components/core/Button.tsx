@@ -64,6 +64,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, Var
   tooltip?: React.ReactNode;
   tooltipDirection?: TooltipDirection;
   selected?: boolean;
+  fragment?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -81,7 +82,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       tooltip,
       tooltipDirection,
       selected,
-
+      fragment,
       ...props
     },
     ref,
@@ -123,6 +124,27 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         listener?.dispose();
       };
     }, [keybind, api, clickSound, mute, props.disabled, handleClick]);
+
+    if (fragment) {
+      return (
+        <Tooltip tooltipContent={tooltip} direction={tooltipDirection}>
+          <button
+            className={cn(
+              "pointer-events-auto cursor-pointer active:cursor-pointerDown disabled:opacity-50",
+              // buttonVariants({ variant, size, motion, modifier, shape, className }),
+              // selected && "border-1 z-10 border-accent",
+            )}
+            ref={ref}
+            tabIndex={-1}
+            {...props}
+            onClick={handleClick}
+            onPointerEnter={handleHoverEnter}
+          >
+            {props.children}
+          </button>
+        </Tooltip>
+      );
+    }
 
     return (
       <Tooltip tooltipContent={tooltip} direction={tooltipDirection}>

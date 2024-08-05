@@ -13,10 +13,6 @@ import { IconLabel } from "@/components/core/IconLabel";
 import { Join } from "@/components/core/Join";
 import { Marker } from "@/components/core/Marker";
 import { Tabs } from "@/components/core/Tabs";
-import { ChargeButton } from "@/components/OverridePopup/buttons/ChargeButton";
-import { MagnetButton } from "@/components/OverridePopup/buttons/MagnetButton";
-import { ShieldsButton } from "@/components/OverridePopup/buttons/ShieldsButton";
-import { ShipsButton } from "@/components/OverridePopup/buttons/ShipsButton";
 import { ChargeOverridePane } from "@/components/OverridePopup/ChargeOverridePane";
 import { OverrideButton } from "@/components/OverridePopup/OverrideButton";
 import { OverridePane } from "@/components/OverridePopup/OverridePane";
@@ -68,37 +64,31 @@ export const OverridePopup = () => {
   return (
     <div className="screen-container pointer-events-none relative flex items-center justify-center gap-2 bg-slate-900/25 backdrop-blur-md">
       <div className="screen-container pointer-events-auto absolute" onClick={() => tables.SelectedPlanet.remove()} />
-      <div className="flex h-screen items-center justify-center gap-2 py-10">
+      <div className="flex items-start gap-2">
         <PlanetSummary entity={selectedPlanet} />
-        <Card noDecor className="flex-row items-center justify-center bg-slate-900">
-          <Badge
-            size="lg"
-            variant="neutral"
-            className="absolute left-1/2 top-0 !w-56 -translate-x-1/2 -translate-y-full rounded-b-none border-secondary"
-          >
-            <IconLabel
-              imageUri={sprite.getSprite(EmpireToPlanetSpriteKeys[planet.empireId as EEmpire] ?? "PlanetGrey")}
-              text={entityToPlanetName(selectedPlanet)}
-            />
-          </Badge>
 
-          <Marker
-            id={selectedPlanet}
-            scene="MAIN"
-            coord={{ x: planetObj?.coord.x ?? 0, y: (planetObj?.coord.y ?? 0) - 25 }}
-            noPointerEvents
-          >
-            <img src={InterfaceIcons.Crosshairs} className="pixel-images w-14 animate-pulse text-error" />
-          </Marker>
-
-          <div className="flex flex-col items-center justify-center gap-1">
-            <Tabs className="flex w-fit flex-col items-center gap-2">
-              <div className="flex">
-                <OverrideButton index={0} icon="Fleet" />
-                <OverrideButton index={1} icon="Defense" />
-                <OverrideButton index={2} icon="RedMagnet" />
-                <OverrideButton index={3} icon="Shard" />
+        <div className="flex flex-col items-start justify-center gap-1">
+          <Tabs className="flex w-fit flex-col gap-2">
+            <div className="relative flex h-40 w-full items-center justify-center">
+              <div className="relative">
+                <OverrideButton index={0} icon="Fleet" axialCoord={{ q: -1, r: 0 }} />
+                <OverrideButton index={1} icon="Defense" axialCoord={{ q: 0, r: 0 }} />
+                <OverrideButton index={2} icon="RedMagnet" axialCoord={{ q: 1, r: -1 }} />
+                <OverrideButton index={3} icon="Shard" axialCoord={{ q: 1, r: 0 }} />
+                <OverrideButton index={4} icon="Expansion" axialCoord={{ q: 0, r: -1 }} />
               </div>
+            </div>
+            <Card noDecor className="w-96 flex-row items-center justify-center bg-slate-900">
+              <Badge
+                size="lg"
+                variant="neutral"
+                className="absolute left-1/2 top-0 !w-56 -translate-x-1/2 -translate-y-full rounded-b-none border-secondary"
+              >
+                <IconLabel
+                  imageUri={sprite.getSprite(EmpireToPlanetSpriteKeys[planet.empireId as EEmpire] ?? "PlanetGrey")}
+                  text={entityToPlanetName(selectedPlanet)}
+                />
+              </Badge>
 
               <Tabs.Pane index={0} className="w-full items-center gap-4">
                 <OverridePane
@@ -174,17 +164,17 @@ export const OverridePopup = () => {
                   isStunDisabled={gameOver || Number(planetEmpire) === 0}
                 />
               </Tabs.Pane>
-            </Tabs>
-            <Button
-              onClick={() => OverridePaneExpanded.set({ value: !expanded })}
-              variant="ghost"
-              size="xs"
-              className="self-end"
-            >
-              {expanded ? "-collapse" : "+expand"}
-            </Button>
-          </div>
-        </Card>
+            </Card>
+          </Tabs>
+          <Button
+            onClick={() => OverridePaneExpanded.set({ value: !expanded })}
+            variant="ghost"
+            size="xs"
+            className="self-end"
+          >
+            {expanded ? "-collapse" : "+expand"}
+          </Button>
+        </div>
       </div>
     </div>
   );
