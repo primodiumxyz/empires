@@ -453,14 +453,19 @@ contract OverrideSystemTest is PrimodiumTest {
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
     uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
 
-    assertEq(data.chargeRate, 100, "Charge Rate should be 100");
+    assertEq(data.chargeRate, P_TacticalStrikeConfig.getChargeRate(), "Charge Rate should be 100");
 
     uint256 currentCharge = _getCurrentCharge(planetId);
+    if (currentCharge >= maxCharge) {
+      world.Empires__tacticalStrike(planetId);
+    }
+    currentCharge = _getCurrentCharge(planetId);
+    assertEq(currentCharge, 0, "Current Charge should be 0");
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
     uint256 expectedEndBlock = block.number + remainingBlocks;
     assertLt(block.number, expectedEndBlock, "Block number should be less than the expected end block");
-    vm.expectRevert("[OverrideSystem] Planet is not ready for a tactical strike");
+    vm.expectRevert("[TacticalStrikeOverrideSystem] Planet is not ready for a tactical strike");
     world.Empires__tacticalStrike(planetId);
   }
 
