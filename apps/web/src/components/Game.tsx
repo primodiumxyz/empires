@@ -9,12 +9,13 @@ import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
 import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
+import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverrideDrawer } from "@/components/OverrideDrawer";
 import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
 import { SellPoints } from "@/components/SellPoints";
+import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
-import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -103,8 +104,11 @@ export const GameHUD = () => {
         </HUD.TopRight>
 
         <HUD.BottomLeft>
-          <SellPoints />
-          <Pot showRake={true} showPot={false} className="absolute bottom-1 left-2 w-56" />
+          <div className="flex flex-col gap-2">
+            <SellPoints />
+            <Pot showRake={true} showPot={false} />
+            <MusicPlayer />
+          </div>
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
@@ -116,7 +120,7 @@ export const GameHUD = () => {
         </HUD.BottomMiddle>
 
         <HUD.BottomRight className="flex gap-2">
-          <UserSettings />
+          <Settings />
           <ActionLog />
           <HistoricalPointPriceModal showIcon={true} />
           {DEV && <Cheatcodes className="-mr-1" />}

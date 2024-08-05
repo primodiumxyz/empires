@@ -1,8 +1,9 @@
-import { Scene } from "@primodiumxyz/engine";
+import { GlobalApi } from "@game/api/global";
+import { Channel, Scene } from "@primodiumxyz/engine";
 import { clone, throttle } from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-export function createHooksApi(targetScene: Scene) {
+export function createHooksApi(targetScene: Scene, globalApi: GlobalApi) {
   function useCamera() {
     const [worldView, setWorldView] = useState<Phaser.Geom.Rectangle>();
     const [zoom, setZoom] = useState(targetScene.camera.phaserCamera.zoom);
@@ -29,7 +30,19 @@ export function createHooksApi(targetScene: Scene) {
     };
   }
 
+  function useVolume(channel: "master" | Channel) {
+    const volume = globalApi.tables.Volume.use();
+    return useMemo(() => {
+      const master = volume?.master ?? 0;
+      if (channel === "master") return master;
+
+      const channelVolume = volume?.[channel] ?? 0;
+      return channelVolume * master;
+    }, [volume]);
+  }
+
   return {
     useCamera,
+    useVolume,
   };
 }
