@@ -27,7 +27,15 @@ export const setupCheatcodes = (
 ) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { updateWorld, requestDrip, setTableValue, removeTable, resetGame: _resetGame, tacticalStrike } = contractCalls;
+  const {
+    updateWorld,
+    requestDrip,
+    setTableValue,
+    removeTable,
+    resetGame: _resetGame,
+    tacticalStrike,
+    withdrawRake,
+  } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -565,6 +573,20 @@ export const setupCheatcodes = (
       return true;
     },
   });
+  // trigger all charges
+  const withdrawThatRake = createCheatcode({
+    title: "Withdraw rake",
+    bg: CheatcodeToBg["tacticalStrike"],
+    caption:
+      "The rake is an essential part of the game. It is used to fund the game and is collected from the pot. This cheatcode allows you to withdraw the rake from the pot. That is why it is called withdraw rake.",
+    inputs: {},
+    execute: async () => {
+      const success = await withdrawRake();
+
+      notify("success", `Rake withdrawn`);
+      return true;
+    },
+  });
 
   /* --------------------------------- CONFIG --------------------------------- */
   const updateGameConfig = {
@@ -755,6 +777,7 @@ export const setupCheatcodes = (
     resetCharges,
     maxOutCharges,
     triggerCharges,
+    withdrawThatRake,
     ...Object.values(updateGameConfig),
   ];
 };
