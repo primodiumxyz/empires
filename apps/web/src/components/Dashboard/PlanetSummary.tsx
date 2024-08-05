@@ -7,22 +7,21 @@ import {
   RocketLaunchIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/24/solid";
-import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { EPlayerAction } from "@primodiumxyz/contracts/config/enums";
+import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { EmpireToEmpireSpriteKeys } from "@primodiumxyz/game";
+import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
+import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
-import { useActionCost } from "@/hooks/useActionCost";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
 import { useGame } from "@/hooks/useGame";
+import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { EmpireEnumToName } from "@/util/lookups";
 
@@ -45,7 +44,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
         </Button>
       </div>
       <img
-        src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
+        src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
         width={64}
         height={64}
         className="my-2 self-center"
@@ -56,7 +55,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
             <h3 className="font-semibold text-gray-300">controlled by</h3>
             <span className="justify-self-end">{EmpireEnumToName[empireId as EEmpire]} empire</span>
             <img
-              src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
+              src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
               width={32}
               height={32}
               className="justify-self-center"
@@ -77,7 +76,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
       </div>
       {!!empireId && (
         <>
-          <PlanetQuickActions entity={entity} />
+          <PlanetQuickOverrides entity={entity} />
           <RoutineProbabilities entity={entity} />
         </>
       )}
@@ -86,29 +85,19 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
 };
 
 /* --------------------------------- ACTIONS -------------------------------- */
-const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
-  const {
-    tables,
-    utils: { weiToUsd },
-  } = useCore();
-  const { price: ethPrice, loading: loadingEthPrice } = useEthPrice();
+const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
+  const { tables } = useCore();
   const { createShip, removeShip, addShield, removeShield } = useContractCalls();
   const { gameOver } = useTimeLeft();
 
   const planet = tables.Planet.use(entity)!;
   const { empireId, shipCount, shieldCount } = planet;
 
-  const addShipPriceWei = useActionCost(EPlayerAction.CreateShip, empireId, 1n);
-  const removeShipPriceWei = useActionCost(EPlayerAction.KillShip, empireId, 1n);
-  const addShieldPriceWei = useActionCost(EPlayerAction.ChargeShield, empireId, 1n);
-  const removeShieldPriceWei = useActionCost(EPlayerAction.DrainShield, empireId, 1n);
+  const addShipPriceWei = useOverrideCost(EOverride.CreateShip, empireId, 1n);
+  const removeShipPriceWei = useOverrideCost(EOverride.KillShip, empireId, 1n);
+  const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, empireId, 1n);
+  const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, empireId, 1n);
 
-  const addShipPriceUsd = weiToUsd(addShipPriceWei, ethPrice ?? 0);
-  const removeShipPriceUsd = weiToUsd(removeShipPriceWei, ethPrice ?? 0);
-  const addShieldPriceUsd = weiToUsd(addShieldPriceWei, ethPrice ?? 0);
-  const removeShieldPriceUsd = weiToUsd(removeShieldPriceWei, ethPrice ?? 0);
-
-  if (loadingEthPrice) return <span>loading...</span>;
   return (
     <>
       <h2 className="mt-2 text-sm font-semibold text-gray-300">Actions</h2>
@@ -119,8 +108,8 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
             <PlusIcon className="size-4" />
           </div>
           <span className="flex items-center">deploy ship</span>
-          <span className="flex items-center">
-            {addShipPriceUsd} ({formatEther(addShipPriceWei)} ETH)
+          <span className="flex items-center gap-1">
+            <Price wei={addShipPriceWei} />
           </span>
           <TransactionQueueMask id={`${entity}-create-ship`}>
             <Button
@@ -138,7 +127,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">withdraw ship</span>
           <span className="flex items-center">
-            {removeShipPriceUsd} ({formatEther(removeShipPriceWei)} ETH)
+            <Price wei={removeShipPriceWei} />
           </span>
           <TransactionQueueMask id={`${entity}-kill-ship`}>
             <Button
@@ -156,7 +145,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">charge shield</span>
           <span className="flex items-center">
-            {addShieldPriceUsd} ({formatEther(addShieldPriceWei)} ETH)
+            <Price wei={addShieldPriceWei} />
           </span>
           <TransactionQueueMask id={`${entity}-add-shield`}>
             <Button
@@ -174,7 +163,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
           </div>
           <span className="flex items-center">drain shield</span>
           <span className="flex items-center">
-            {removeShieldPriceUsd} ({formatEther(removeShieldPriceWei)} ETH)
+            <Price wei={removeShieldPriceWei} />
           </span>
           <TransactionQueueMask id={`${entity}-remove-shield`}>
             <Button
@@ -194,7 +183,7 @@ const PlanetQuickActions = ({ entity }: { entity: Entity }) => {
 
 const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { utils } = useCore();
-  const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
+  const { context, probabilities: p, attackTargetId, supportTargetId } = utils.getRoutineProbabilities(entity);
 
   const valToText = (val: number) => {
     if (val >= 1) return "High";
@@ -227,12 +216,19 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
             { label: "Accumulate Gold", value: p.accumulateGold },
             { label: "Buy Shields", value: p.buyShields },
             { label: "Buy Ships", value: p.buyShips },
-            { label: "Support Ally", value: p.supportAlly },
-            { label: "Attack Enemy", value: p.attackEnemy },
-          ].map(({ label, value }) => (
+            { label: "Support Ally", value: p.supportAlly, data: supportTargetId },
+            { label: "Attack Enemy", value: p.attackEnemy, data: attackTargetId },
+          ].map(({ label, value, data }) => (
             <Fragment key={label}>
               <span className="text-gray-200">{label}</span>
-              <span className="text-right font-medium">{(value * 100).toFixed(1)}%</span>
+              <p className="text-right font-medium">
+                {(value * 100).toFixed(1)}%
+                {data && data.target && (
+                  <span className="text-right text-xs text-gray-400">
+                    {entityToPlanetName(data.target)} ({data.multiplier}x)
+                  </span>
+                )}
+              </p>
             </Fragment>
           ))}
         </div>

@@ -1,72 +1,62 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, Player, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_ActionConfig, P_ActionConfigData, ActionCost } from "codegen/index.sol";
-import { EEmpire, EPlayerAction } from "codegen/common.sol";
+import { Empire, Player, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData, OverrideCost } from "codegen/index.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 
 /**
  * @title LibPrice
- * @dev Library for calculating the cost of actions and point units in the game.
+ * @dev Library for calculating the cost of overrides and point units in the game.
  */
-library LibPrice { 
+library LibPrice {
   /**
-   * @dev Calculates the total cost of an action that is to be purchased.
-   * @param _actionType The type of action.
-   * @param _empireImpacted The empire impacted by the action.
-   * @param _progressAction Flag indicating whether the action is progressive or regressive to the impacted empire.
-   * @param _actionCount The number of actions to be purchased.
-   * @return totalCost The total cost of the action.
+   * @dev Calculates the total cost of an override that is to be purchased.
+   * @param _overrideType The type of override.
+   * @param _empireImpacted The empire impacted by the override.
+   * @param _overrideCount The number of overrides to be purchased.
+   * @return totalCost The total cost of the override.
    */
   function getTotalCost(
-    EPlayerAction _actionType,
+    EOverride _overrideType,
     EEmpire _empireImpacted,
-    bool _progressAction,
-    uint256 _actionCount
+    uint256 _overrideCount
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
-    if (_progressAction) {
-      require(
-        _actionType == EPlayerAction.CreateShip || _actionType == EPlayerAction.ChargeShield,
-        "[LibPrice] Action type is not a progressive action"
-      );
-      totalCost = getProgressPointCost(_empireImpacted, _actionCount);
+    if (P_OverrideConfig.getIsProgressOverride(_overrideType)) {
+      totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
     } else {
-      require(
-        _actionType == EPlayerAction.KillShip || _actionType == EPlayerAction.DrainShield,
-        "[LibPrice] Action type is not a regressive action"
-      );
-      totalCost = getRegressPointCost(_empireImpacted, _actionCount);
+      totalCost = getRegressPointCost(_empireImpacted, _overrideCount);
     }
 
-    totalCost += getMarginalActionCost(_empireImpacted, _actionType, _progressAction, _actionCount);
+    totalCost += getMarginalOverrideCost(_overrideType, _empireImpacted, _overrideCount);
 
     return totalCost;
   }
 
   /**
-   * @dev Calculates the cost of purchasing multiple points related to a progressive action that aids an empire.
-   * @param _empireImpacted The empire impacted by the action.
-   * @param _actionCount The number of actions to be purchased.
-   * @return pointCost The cost of all points related to the action.
+   * @dev Calculates the cost of purchasing multiple points related to a progressive override that aids an empire.
+   * @param _empireImpacted The empire impacted by the override.
+   * @param _overrideCount The number of overrides to be purchased.
+   * @return pointCost The cost of all points related to the override.
    */
-  function getProgressPointCost(EEmpire _empireImpacted, uint256 _actionCount) internal view returns (uint256) {
-    return getPointCost(_empireImpacted, _actionCount * (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit());
+  function getProgressPointCost(EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+    return getPointCost(_empireImpacted, _overrideCount * (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit());
   }
 
   /**
-   * @dev Calculates the cost of purchasing points related to a regressive action. Points are purchased for all empires except the impacted empire.
-   * @param _empireImpacted The empire impacted by the action.
-   * @param _actionCount The number of actions to be purchased.
-   * @return pointCost The cost of all points related to the action.
+   * @dev Calculates the cost of purchasing points related to a regressive override. Points are purchased for all empires except the impacted empire.
+   * @param _empireImpacted The empire impacted by the override.
+   * @param _overrideCount The number of overrides to be purchased.
+   * @return pointCost The cost of all points related to the override.
    */
-  function getRegressPointCost(EEmpire _empireImpacted, uint256 _actionCount) internal view returns (uint256) {
+  function getRegressPointCost(EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
     uint256 pointCost;
     for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
       if (i == uint256(_empireImpacted)) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), _actionCount * P_PointConfig.getPointUnit());
+      pointCost += getPointCost(EEmpire(i), _overrideCount * P_PointConfig.getPointUnit());
     }
     return pointCost;
   }
@@ -92,26 +82,26 @@ library LibPrice {
   }
 
   /**
-   * @dev Calculates the marginal cost of a specific number of actions for a specific empire.
+   * @dev Calculates the marginal cost of a specific number of overrides for a specific empire.
+   * @param _overrideType The type of override.
    * @param _empire The empire being impacted.
-   * @param _actionType The type of action.
-   * @param _progressAction Flag indicating whether the action is progressive or regressive to the impacted empire.
-   * @param _actionCount The number of actions.
-   * @return actionCost The marginal cost of the actions that impact a specific empire.
+   * @param _overrideCount The number of overrides.
+   * @return overrideCost The marginal cost of the overrides that impact a specific empire.
    */
-  function getMarginalActionCost(EEmpire _empire, EPlayerAction _actionType, bool _progressAction, uint256 _actionCount) internal view returns (uint256) {
-    require(_actionCount > 0, "[LibPrice] Action count must be greater than 0");
+  function getMarginalOverrideCost(
+    EOverride _overrideType,
+    EEmpire _empire,
+    uint256 _overrideCount
+  ) internal view returns (uint256) {
+    require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");
 
-    uint256 initActionCost = ActionCost.get(_empire, _actionType);
-    uint256 actionCostIncrease = P_ActionConfig.getActionCostIncrease();
+    uint256 initOverrideCost = OverrideCost.get(_empire, _overrideType);
+    uint256 overrideCostIncrease = P_OverrideConfig.getOverrideCostIncrease(_overrideType);
 
-    uint256 triangleSumOBO = ((_actionCount - 1) * _actionCount) / 2;
-    uint256 actionCost = initActionCost * _actionCount + actionCostIncrease * triangleSumOBO;
+    uint256 triangleSumOBO = ((_overrideCount - 1) * _overrideCount) / 2;
+    uint256 overrideCost = initOverrideCost * _overrideCount + overrideCostIncrease * triangleSumOBO;
 
-    if (!_progressAction) {
-      actionCost = (actionCost * P_ActionConfig.getRegressMultiplier()) / 10000;
-    }
-    return actionCost;
+    return overrideCost;
   }
 
   /**
@@ -131,15 +121,17 @@ library LibPrice {
   }
 
   /**
-   * @dev Increases the cost of a specific action for a specific empire.
-   * @param _empire The empire to increase the action cost for.
-   * @param _actionType The type of action to increase the cost for.
-   * @param _actionCount The number of actions to increase the cost by.
+   * @dev Increases the cost of a specific override for a specific empire.
+   * @param _empire The empire to increase the override cost for.
+   * @param _overrideType The type of override to increase the cost for.
+   * @param _overrideCount The number of overrides to increase the cost by.
    */
-  function actionCostUp(EEmpire _empire, EPlayerAction _actionType, uint256 _actionCount) internal {
-    require(_actionCount > 0, "[LibPrice] Action count must be greater than 0");
-    uint256 newActionCost = ActionCost.get(_empire, _actionType) + P_ActionConfig.getActionCostIncrease() * _actionCount;
-    ActionCost.set(_empire, _actionType, newActionCost);
+  function overrideCostUp(EEmpire _empire, EOverride _overrideType, uint256 _overrideCount) internal {
+    require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");
+    uint256 newOverrideCost = OverrideCost.get(_empire, _overrideType) +
+      P_OverrideConfig.getOverrideCostIncrease(_overrideType) *
+      _overrideCount;
+    OverrideCost.set(_empire, _overrideType, newOverrideCost);
   }
 
   /**
@@ -159,19 +151,19 @@ library LibPrice {
   }
 
   /**
-   * @dev Decreases the cost of all actions that impact a specific empire.
-   * @param _empireImpacted The empire to decrease the action costs for.
+   * @dev Decreases the cost of all overrides that impact a specific empire.
+   * @param _empireImpacted The empire to decrease the override costs for.
    */
-  function empirePlayerActionsCostDown(EEmpire _empireImpacted) internal {
-    P_ActionConfigData memory config = P_ActionConfig.get();
-    for (uint256 i = 1; i < uint256(EPlayerAction.LENGTH); i++) {
-      uint256 newActionCost = ActionCost.get(_empireImpacted, EPlayerAction(i));
-      if (newActionCost > config.minActionCost + config.actionGenRate) {
-        newActionCost -= config.actionGenRate;
+  function empireOverridesCostDown(EEmpire _empireImpacted) internal {
+    for (uint256 i = 1; i < uint256(EOverride.LENGTH); i++) {
+      P_OverrideConfigData memory config = P_OverrideConfig.get(EOverride(i));
+      uint256 newOverrideCost = OverrideCost.get(_empireImpacted, EOverride(i));
+      if (newOverrideCost > config.minOverrideCost + config.overrideGenRate) {
+        newOverrideCost -= config.overrideGenRate;
       } else {
-        newActionCost = config.minActionCost;
+        newOverrideCost = config.minOverrideCost;
       }
-      ActionCost.set(_empireImpacted, EPlayerAction(i), newActionCost);
+      OverrideCost.set(_empireImpacted, EOverride(i), newOverrideCost);
     }
   }
 

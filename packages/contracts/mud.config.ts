@@ -26,34 +26,51 @@ export const worldInput = {
       },
     },
 
+    P_TacticalStrikeConfig: {
+      key: [],
+      schema: {
+        maxCharge: "uint256",
+        boostChargeIncrease: "uint256",
+        stunChargeDecrease: "uint256",
+        createShipBoostIncrease: "uint256", // per ship created
+        killShipBoostCostDecrease: "uint256", // per ship killed
+      },
+    },
+
     P_PointConfig: {
       key: [],
       schema: {
         pointUnit: "uint256",
+        pointRake: "uint256", // times 10_000
+        pointSellTax: "uint256",
         minPointCost: "uint256",
         startPointCost: "uint256",
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
-        pointRake: "uint256", // times 10_000
-        pointSellTax: "uint256",
       },
     },
 
-    P_ActionConfig: {
+    P_OverrideConfig: {
+      key: ["overrideAction"],
+      schema: {
+        overrideAction: "EOverride",
+        isProgressOverride: "bool",
+        minOverrideCost: "uint256",
+        startOverrideCost: "uint256",
+        overrideGenRate: "uint256",
+        overrideCostIncrease: "uint256",
+      },
+    },
+
+    P_MagnetConfig: {
       key: [],
       schema: {
-        actionGenRate: "uint256",
-        actionCostIncrease: "uint256",
-        startActionCost: "uint256",
-        minActionCost: "uint256",
-        reductionPct: "uint256",
-        regressMultiplier: "uint256",
+        lockedPointsPercent: "uint256", // out of 10000
       },
     },
-
     Turn: {
       key: [],
-      schema: { nextTurnBlock: "uint256", empire: "EEmpire" },
+      schema: { nextTurnBlock: "uint256", empire: "EEmpire", value: "uint256" },
     },
 
     Player: {
@@ -73,7 +90,7 @@ export const worldInput = {
     // Used in the mbuilding utilities Map data structure
     Value_PointsMap: {
       key: ["empireId", "playerId"],
-      schema: { playerId: "bytes32", empireId: "EEmpire", value: "uint256" },
+      schema: { playerId: "bytes32", empireId: "EEmpire", value: "uint256", lockedPoints: "uint256" },
     },
 
     Meta_PointsMap: {
@@ -101,6 +118,16 @@ export const worldInput = {
       },
     },
 
+    Planet_TacticalStrike: {
+      key: ["planetId"],
+      schema: {
+        planetId: "bytes32",
+        lastUpdated: "uint256",
+        chargeRate: "uint256",
+        charge: "uint256",
+      },
+    },
+
     Empire: {
       key: ["id"],
       schema: {
@@ -111,11 +138,11 @@ export const worldInput = {
       },
     },
 
-    ActionCost: {
-      key: ["empireId", "action"],
+    OverrideCost: {
+      key: ["empireId", "overrideAction"],
       schema: {
         empireId: "EEmpire",
-        action: "EPlayerAction",
+        overrideAction: "EOverride",
         value: "uint256",
       },
     },
@@ -142,12 +169,12 @@ export const worldInput = {
       schema: { id: "bytes32", stored: "bool", index: "uint256" },
     },
 
-    /* ------------------------------- NPC Actions ------------------------------ */
+    /* ------------------------------- NPC Routines ----------------------------- */
 
-    P_NPCActionCosts: {
-      key: ["action"],
+    P_RoutineCosts: {
+      key: ["routine"],
       schema: {
-        action: "ENPCAction",
+        routine: "ERoutine",
         goldCost: "uint256",
       },
     },
@@ -171,6 +198,29 @@ export const worldInput = {
       },
     },
 
+    /* ----------------------------- Magnet ---------------------------- */
+
+    Magnet: {
+      key: ["empireId", "planetId"],
+      schema: {
+        planetId: "bytes32",
+        empireId: "EEmpire",
+        isMagnet: "bool",
+        lockedPoints: "uint256",
+        endTurn: "uint256",
+        playerId: "bytes32",
+      },
+    },
+
+    MagnetTurnPlanets: {
+      key: ["empireId", "endTurn"],
+      schema: {
+        empireId: "EEmpire",
+        endTurn: "uint256",
+        planetIds: "bytes32[]",
+      },
+    },
+
     /* ----------------------------- Offchain Tables ---------------------------- */
 
     // used to generate random ids for offchain tables
@@ -181,7 +231,7 @@ export const worldInput = {
       },
     },
 
-    MoveNPCAction: {
+    MoveRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -193,7 +243,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    ShipBattleNPCAction: {
+    ShipBattleRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -206,7 +256,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    PlanetBattleNPCAction: {
+    PlanetBattleRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -220,7 +270,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    AccumulateGoldNPCAction: {
+    AccumulateGoldRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -231,7 +281,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyShipsNPCAction: {
+    BuyShipsRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -243,7 +293,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyShieldsNPCAction: {
+    BuyShieldsRoutine: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -255,51 +305,98 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    CreateShipPlayerAction: {
+    CreateShipOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
         playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
-        actionCount: "uint256",
+        overrideCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
     },
 
-    KillShipPlayerAction: {
+    KillShipOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
         playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
-        actionCount: "uint256",
+        overrideCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
     },
 
-    ChargeShieldsPlayerAction: {
+    ChargeShieldsOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
-        actionCount: "uint256",
+        overrideCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
     },
 
-    DrainShieldsPlayerAction: {
+    DrainShieldsOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
-        actionCount: "uint256",
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    PlaceMagnetOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    BoostChargeOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        boostCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    StunChargeOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        stunCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    TacticalStrikeOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
         timestamp: "uint256",
       },
       type: "offchainTable",

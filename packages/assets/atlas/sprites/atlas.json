@@ -5,16 +5,37 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1721839394656",
+            "image": "atlas.png?timestamp=1722625636438",
             "format": "RGBA8888",
             "size": {
-                "w": 256,
-                "h": 1024
+                "w": 1119,
+                "h": 1046
             },
             "scale": 1,
             "frames": [
                 {
-                    "filename": "sprites/empires/empire_blue.png",
+                    "filename": "sprites/background/nebula.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 768,
+                        "h": 619
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 768,
+                        "h": 619
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 768,
+                        "h": 619
+                    }
+                },
+                {
+                    "filename": "sprites/background/star.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -29,72 +50,1038 @@
                     },
                     "frame": {
                         "x": 0,
-                        "y": 0,
+                        "y": 619,
                         "w": 256,
                         "h": 256
                     }
                 },
                 {
-                    "filename": "sprites/empires/empire_green.png",
+                    "filename": "sprites/hex/hex_blue.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 256,
-                        "h": 256
+                        "w": 172,
+                        "h": 188
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 256,
-                        "h": 256
+                        "w": 172,
+                        "h": 188
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 256,
-                        "w": 256,
-                        "h": 256
+                        "x": 256,
+                        "y": 619,
+                        "w": 172,
+                        "h": 188
                     }
                 },
                 {
-                    "filename": "sprites/empires/empire_neutral.png",
+                    "filename": "sprites/hex/hex_green.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 256,
-                        "h": 256
+                        "w": 172,
+                        "h": 188
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 256,
-                        "h": 256
+                        "w": 172,
+                        "h": 188
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 512,
-                        "w": 256,
-                        "h": 256
+                        "x": 428,
+                        "y": 619,
+                        "w": 172,
+                        "h": 188
                     }
                 },
                 {
-                    "filename": "sprites/empires/empire_red.png",
+                    "filename": "sprites/hex/hex_grey.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 256,
-                        "h": 256
+                        "w": 172,
+                        "h": 188
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 256,
-                        "h": 256
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 600,
+                        "y": 619,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_red.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
                     },
                     "frame": {
                         "x": 0,
-                        "y": 768,
-                        "w": 256,
-                        "h": 256
+                        "y": 875,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 179,
+                        "y": 875,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 358,
+                        "y": 807,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 537,
+                        "y": 807,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 716,
+                        "y": 807,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 188,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 940,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 303,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 418,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 772,
+                        "y": 533,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 772,
+                        "y": 648,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_underglow.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 96
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 96
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 96,
+                        "h": 96
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_blue.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 859,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_green.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 971,
+                        "y": 859,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_grey.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 115,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_red.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 229,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 343,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 399,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 455,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 358,
+                        "y": 922,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 469,
+                        "y": 922,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 580,
+                        "y": 922,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 691,
+                        "y": 922,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 951,
+                        "y": 511,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 951,
+                        "y": 567,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 951,
+                        "y": 623,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 951,
+                        "y": 679,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 991,
+                        "y": 735,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 991,
+                        "y": 791,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 802,
+                        "y": 973,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 913,
+                        "y": 973,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 358,
+                        "y": 978,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 990,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 111,
+                        "y": 990,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/icons/attack.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 802,
+                        "y": 922,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/gold.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 834,
+                        "y": 922,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/shield.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 772,
+                        "y": 763,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/ship.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 804,
+                        "y": 763,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 875,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 875,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 875,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 875,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 343,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 691,
+                        "y": 922,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 991,
+                        "y": 791,
+                        "w": 111,
+                        "h": 56
                     }
                 }
             ]

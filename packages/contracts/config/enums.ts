@@ -30,15 +30,18 @@ export enum EMovement {
   LENGTH,
 }
 
-export enum EPlayerAction {
+export enum EOverride {
   CreateShip = 1,
   KillShip,
   ChargeShield,
   DrainShield,
+  PlaceMagnet,
+  BoostCharge,
+  StunCharge,
   LENGTH,
 }
 
-export enum ENPCAction {
+export enum ERoutine {
   BuyShips = 1,
   BuyShields,
   AccumulateGold,
@@ -51,8 +54,8 @@ export const MUDEnums = {
   EOrigin: enumToArray(EOrigin),
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
-  ENPCAction: enumToArray(ENPCAction),
-  EPlayerAction: enumToArray(EPlayerAction),
+  ERoutine: enumToArray(ERoutine),
+  EOverride: enumToArray(EOverride),
 };
 
 function enumToArray(enumObj: object): [string] {
