@@ -4,6 +4,7 @@ import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxy
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
+import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
 import { EmpireEnumToName } from "@/util/lookups";
@@ -15,8 +16,8 @@ export const CheatcodeToBg: Record<string, string> = {
   points: "bg-green-500/10",
   time: "bg-blue-500/10",
   utils: "bg-gray-500/10",
-  magnet: "bg-purple-700/10",
-  tacticalStrike: "bg-purple-500/10",
+  magnet: "bg-purple-900/10",
+  tacticalStrike: "bg-purple-400/10",
   config: "bg-gray-500/10",
 };
 
@@ -28,14 +29,7 @@ export const setupCheatcodes = (
 ) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const {
-    updateWorld,
-    requestDrip,
-    setTableProperties,
-    removeTableRecord,
-    resetGame: _resetGame,
-    tacticalStrike,
-  } = contractCalls;
+  const { devCalls, updateWorld, requestDrip, resetGame: _resetGame, tacticalStrike } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -66,13 +60,13 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount, planet }) => {
-      const success = await setTableProperties(
-        tables.Planet,
-        {
+      const success = await devCalls.setProperties({
+        table: tables.Planet,
+        keys: {
           id: planet.id as Entity,
         },
-        { shipCount: BigInt(amount.value) },
-      );
+        properties: { shipCount: BigInt(amount.value) },
+      });
 
       if (success) {
         notify("success", `Ships set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
@@ -89,13 +83,18 @@ export const setupCheatcodes = (
       if (tables.Meta_EmpirePlanetsSet.hasWithKeys({ empireId, planetId })) return true;
 
       const prevSet = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId })?.itemKeys ?? [];
-
-      await setTableProperties(tables.Keys_EmpirePlanetsSet, { empireId }, { itemKeys: [...prevSet, planetId] });
-      await setTableProperties(
-        tables.Meta_EmpirePlanetsSet,
-        { empireId, planetId },
-        { stored: true, index: BigInt(prevSet.length - 1) },
-      );
+      await devCalls.batch([
+        devCalls.createSetProperties({
+          table: tables.Keys_EmpirePlanetsSet,
+          keys: { empireId },
+          properties: { itemKeys: [...prevSet, planetId] },
+        }),
+        devCalls.createSetProperties({
+          table: tables.Meta_EmpirePlanetsSet,
+          keys: { empireId, planetId },
+          properties: { stored: true, index: BigInt(prevSet.length - 1) },
+        }),
+      ]);
       return true;
     } catch (e) {
       console.log(e);
@@ -108,8 +107,10 @@ export const setupCheatcodes = (
       if (!tables.Meta_EmpirePlanetsSet.hasWithKeys({ empireId, planetId })) return true;
 
       if (tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId })?.itemKeys.length == 1) {
-        await removeTableRecord(tables.Meta_EmpirePlanetsSet, { empireId, planetId });
-        await removeTableRecord(tables.Keys_EmpirePlanetsSet, { empireId });
+        await devCalls.batch([
+          devCalls.createRemove({ table: tables.Meta_EmpirePlanetsSet, keys: { empireId, planetId } }),
+          devCalls.createRemove({ table: tables.Keys_EmpirePlanetsSet, keys: { empireId } }),
+        ]);
         return true;
       }
 
@@ -122,8 +123,15 @@ export const setupCheatcodes = (
       currElems[Number(index)] = replacement;
       currElems.pop();
 
-      setTableProperties(tables.Keys_EmpirePlanetsSet, { empireId }, { itemKeys: currElems });
-      removeTableRecord(tables.Meta_EmpirePlanetsSet, { empireId, planetId });
+      await devCalls.batch([
+        devCalls.createSetProperties({
+          table: tables.Keys_EmpirePlanetsSet,
+          keys: { empireId },
+          properties: { itemKeys: currElems },
+        }),
+        devCalls.createRemove({ table: tables.Meta_EmpirePlanetsSet, keys: { empireId, planetId } }),
+      ]);
+
       return true;
     } catch (e) {
       console.log(e);
@@ -164,31 +172,62 @@ export const setupCheatcodes = (
         return false;
       }
 
-      await setTableProperties(tables.Planet, { id: fromEntity }, { shipCount: BigInt(0) });
+      let devOps: TableOperation[] = [
+        devCalls.createSetProperties({
+          table: tables.Planet,
+          keys: { id: fromEntity },
+          properties: { shipCount: BigInt(0) },
+        }),
+      ];
 
       if (toPlanetData.empireId === fromPlanetData.empireId) {
-        return await setTableProperties(
-          tables.Planet,
-          { id: toEntity },
-          { shipCount: toPlanetData.shipCount + shipsToMove },
+        devOps.push(
+          devCalls.createSetProperties({
+            table: tables.Planet,
+            keys: { id: toEntity },
+            properties: { shipCount: toPlanetData.shipCount + shipsToMove },
+          }),
         );
+
+        const success = await devCalls.batch(devOps);
+        if (success) {
+          notify(
+            "success",
+            `Sent ${shipsToMove} ships from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(toEntity)}`,
+          );
+          return true;
+        }
       } else {
         const conquer = toPlanetData.shipCount < shipsToMove;
         const remainingShips = conquer ? shipsToMove - toPlanetData.shipCount : toPlanetData.shipCount - shipsToMove;
 
         if (conquer) {
-          const success = (
+          const successA = await devCalls.batch(devOps);
+          if (!successA) return false;
+
+          const successB = (
             await Promise.all([
               await addPlanetToEmpire(fromPlanetData.empireId, toEntity),
               await removePlanetFromEmpire(toPlanetData.empireId, toEntity),
-              await setTableProperties(tables.Planet, { id: toEntity }, { empireId: fromPlanetData.empireId }),
+              await devCalls.setProperties({
+                table: tables.Planet,
+                keys: { id: toEntity },
+                properties: { empireId: fromPlanetData.empireId },
+              }),
             ])
           ).every(Boolean);
 
-          if (!success) return false;
+          if (successB) {
+            notify("success", `Conquered ${entityToPlanetName(toEntity)} from ${entityToPlanetName(fromEntity)}`);
+            return true;
+          }
         }
 
-        const success = await setTableProperties(tables.Planet, { id: toEntity }, { shipCount: remainingShips });
+        const success = await devCalls.setProperties({
+          table: tables.Planet,
+          keys: { id: toEntity },
+          properties: { shipCount: remainingShips },
+        });
 
         if (success) {
           notify(
@@ -226,13 +265,11 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount, planet }) => {
-      const success = await setTableProperties(
-        tables.Planet,
-        {
-          id: planet.id as Entity,
-        },
-        { shieldCount: BigInt(amount.value) },
-      );
+      const success = await devCalls.setProperties({
+        table: tables.Planet,
+        keys: { id: planet.id as Entity },
+        properties: { shieldCount: BigInt(amount.value) },
+      });
 
       if (success) {
         notify("success", `Shields set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
@@ -251,26 +288,24 @@ export const setupCheatcodes = (
     bg: CheatcodeToBg["gold"],
     caption: "Set the gold count for a planet",
     inputs: {
-      amount: {
-        label: "Amount",
-        inputType: "number",
-        defaultValue: 1,
-      },
       planet: {
         label: "Planet",
         inputType: "string",
         defaultValue: entityToPlanetName(planets[0]),
         options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
       },
+      amount: {
+        label: "Amount",
+        inputType: "number",
+        defaultValue: 1,
+      },
     },
     execute: async ({ amount, planet }) => {
-      const success = await setTableProperties(
-        tables.Planet,
-        {
-          id: planet.id as Entity,
-        },
-        { goldCount: BigInt(amount.value) },
-      );
+      const success = await devCalls.setProperties({
+        table: tables.Planet,
+        keys: { id: planet.id as Entity },
+        properties: { goldCount: BigInt(amount.value) },
+      });
 
       if (success) {
         notify("success", `Gold set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
@@ -295,17 +330,17 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
-      const success = await Promise.all(
+      const success = await devCalls.batch(
         planets.map((entity) =>
-          setTableProperties(
-            tables.Planet,
-            { id: entity },
-            { goldCount: (tables.Planet.get(entity)?.goldCount ?? BigInt(0)) + BigInt(amount.value) },
-          ),
+          devCalls.createSetProperties({
+            table: tables.Planet,
+            keys: { id: entity },
+            properties: { goldCount: (tables.Planet.get(entity)?.goldCount ?? BigInt(0)) + BigInt(amount.value) },
+          }),
         ),
       );
 
-      if (success.every(Boolean)) {
+      if (success) {
         notify("success", `Generated ${amount.value} gold on all planets`);
         return true;
       } else {
@@ -318,28 +353,63 @@ export const setupCheatcodes = (
   /* --------------------------------- POINTS --------------------------------- */
   const setEmpirePlayerPoints = async (playerId: Entity, empireId: EEmpire, value: bigint): Promise<boolean> => {
     try {
+      let devOps: TableOperation[] = [];
+
       const has = tables.Meta_PointsMap.hasWithKeys({ empireId, playerId });
       if (has) {
         const prevValue = tables.Value_PointsMap.getWithKeys({ empireId, playerId })?.value ?? 0n;
 
         const newValue = (tables.Empire.getWithKeys({ id: empireId })?.pointsIssued ?? 0n) + value - prevValue;
         if (newValue < 0) throw new Error("Cannot set points to negative value");
-        await setTableProperties(tables.Empire, { id: empireId }, { pointsIssued: newValue });
-
-        await setTableProperties(tables.Value_PointsMap, { empireId, playerId }, { value });
+        devOps.push(
+          devCalls.createSetProperties({
+            table: tables.Empire,
+            keys: { id: empireId },
+            properties: { pointsIssued: newValue },
+          }),
+        );
+        devOps.push(
+          devCalls.createSetProperties({
+            table: tables.Value_PointsMap,
+            keys: { empireId, playerId },
+            properties: { value },
+          }),
+        );
       } else {
         const prevKeys = tables.Keys_PointsMap.getWithKeys({ empireId })?.players ?? [];
-        await setTableProperties(tables.Keys_PointsMap, { empireId }, { players: [...prevKeys, playerId] });
-        await setTableProperties(tables.Value_PointsMap, { empireId, playerId }, { value });
-        await setTableProperties(
-          tables.Meta_PointsMap,
-          { empireId, playerId },
-          { stored: true, index: BigInt(prevKeys.length) },
+        devOps.push(
+          devCalls.createSetProperties({
+            table: tables.Keys_PointsMap,
+            keys: { empireId },
+            properties: { players: [...prevKeys, playerId] },
+          }),
         );
+        devOps.push(
+          devCalls.createSetProperties({
+            table: tables.Value_PointsMap,
+            keys: { empireId, playerId },
+            properties: { value },
+          }),
+        );
+        devOps.push(
+          devCalls.createSetProperties({
+            table: tables.Meta_PointsMap,
+            keys: { empireId, playerId },
+            properties: { stored: true, index: BigInt(prevKeys.length) },
+          }),
+        );
+
         const prevValue = tables.Empire.getWithKeys({ id: empireId })?.pointsIssued ?? 0n;
-        await setTableProperties(tables.Empire, { id: empireId }, { pointsIssued: prevValue + value });
+        devOps.push(
+          devCalls.createSetProperties({
+            table: tables.Empire,
+            keys: { id: empireId },
+            properties: { pointsIssued: prevValue + value },
+          }),
+        );
       }
-      return true;
+
+      return await devCalls.batch(devOps);
     } catch (e) {
       console.log(e);
       return false;
@@ -381,13 +451,13 @@ export const setupCheatcodes = (
 
       const success = await Promise.all([
         setEmpirePlayerPoints(playerId, empireId, newPoints),
-        setTableProperties(
-          tables.Empire,
-          { id: empireId },
-          {
+        devCalls.setProperties({
+          table: tables.Empire,
+          keys: { id: empireId },
+          properties: {
             pointCost: currentCost + increaseCost * BigInt(OTHER_EMPIRE_COUNT),
           },
-        ),
+        }),
       ]);
 
       if (success.every(Boolean)) {
@@ -441,7 +511,11 @@ export const setupCheatcodes = (
     inputs: {},
     execute: async () => {
       const nextBlock = (await playerAccount.publicClient.getBlockNumber()) + BigInt(1);
-      const success = await setTableProperties(tables.P_GameConfig, {}, { gameOverBlock: nextBlock });
+      const success = await devCalls.setProperties({
+        table: tables.P_GameConfig,
+        keys: {},
+        properties: { gameOverBlock: nextBlock },
+      });
 
       if (success) {
         notify("success", `Game ended at block ${nextBlock}`);
@@ -463,7 +537,6 @@ export const setupCheatcodes = (
       const success = await _resetGame();
 
       if (success) {
-        notify("success", "Game reset");
         const planets = tables.Planet.getAll();
         for (const planet of planets) {
           const planetObject = game.MAIN.objects.planet.get(planet);
@@ -472,6 +545,7 @@ export const setupCheatcodes = (
           planetObject?.updateFaction(planetEmpire);
         }
 
+        notify("success", "Game reset");
         return true;
       } else {
         notify("error", "Failed to reset game");
@@ -495,7 +569,7 @@ export const setupCheatcodes = (
   });
 
   /* --------------------------------- MAGNET --------------------------------- */
-  const _removeMagnetTurnRemoval = async (empireId: EEmpire, planetId: Entity): Promise<boolean> => {
+  const _removeMagnetTurnRemoval = (empireId: EEmpire, planetId: Entity) => {
     // if there is already a magnet for this planet
     const magnet = tables.Magnet.getWithKeys({ empireId, planetId });
     if (magnet) {
@@ -503,29 +577,34 @@ export const setupCheatcodes = (
       const magnetTurnPlanetsEntity = tables.MagnetTurnPlanets.getAll().find((entity) =>
         tables.MagnetTurnPlanets.get(entity)?.planetIds.includes(planetId),
       );
-      if (!magnetTurnPlanetsEntity) return false;
+      if (!magnetTurnPlanetsEntity) return undefined;
 
       // set planets to be removed in that turn with this planet filtered out
       const keys = tables.MagnetTurnPlanets.getEntityKeys(magnetTurnPlanetsEntity);
       const currentProperties = tables.MagnetTurnPlanets.get(magnetTurnPlanetsEntity);
       const newProperties = { planetIds: currentProperties?.planetIds.filter((id) => id !== planetId) };
 
-      return await setTableProperties(tables.MagnetTurnPlanets, keys, newProperties);
+      return devCalls.createSetProperties({
+        table: tables.MagnetTurnPlanets,
+        keys,
+        properties: newProperties,
+      });
     }
 
-    return true;
+    return undefined;
   };
 
-  const _removeMagnet = async (empireId: EEmpire, planetId: Entity): Promise<boolean> => {
+  const _removeMagnet = (empireId: EEmpire, planetId: Entity) => {
+    let devOps: TableOperation[] = [];
+
     if (tables.Magnet.getWithKeys({ empireId, planetId })) {
-      const successA = await removeTableRecord(tables.Magnet, { empireId, planetId });
-      if (!successA) return false;
+      devOps.push(devCalls.createRemove({ table: tables.Magnet, keys: { empireId, planetId } }));
     }
 
-    const successB = await _removeMagnetTurnRemoval(empireId, planetId);
-    if (!successB) return false;
+    const magnetTurnRemovalOp = _removeMagnetTurnRemoval(empireId, planetId);
+    if (magnetTurnRemovalOp) devOps.push(magnetTurnRemovalOp);
 
-    return true;
+    return devOps;
   };
 
   const placeMagnet = createCheatcode({
@@ -554,33 +633,49 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ empire, planet, turns }) => {
+      let devOps: TableOperation[] = [];
       const planetId = planet.id as Entity;
       const empireId = empire.id as EEmpire;
 
       const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
       const endTurn = currentTurn + BigInt(turns.value) * BigInt(EEmpire.LENGTH - 1);
 
-      const successA = await _removeMagnetTurnRemoval(empireId, planetId);
-      if (!successA) return false;
+      const magnetTurnRemovalOp = _removeMagnetTurnRemoval(empireId, planetId);
+      if (magnetTurnRemovalOp) devOps.push(magnetTurnRemovalOp);
 
       // set the Magnet
-      const successB = await setTableProperties(
-        tables.Magnet,
-        { empireId, planetId },
-        { isMagnet: true, lockedPoints: BigInt(0), endTurn, playerId: padHex(defaultEntity, { size: 32 }) },
+      devOps.push(
+        devCalls.createSetProperties({
+          table: tables.Magnet,
+          keys: { empireId, planetId },
+          properties: {
+            isMagnet: true,
+            lockedPoints: BigInt(0),
+            endTurn,
+            playerId: padHex(defaultEntity, { size: 32 }),
+          },
+        }),
       );
-      if (!successB) return false;
 
       // set MagnetTurnPlanets so it gets removed as well on the end turn
-      const successC = await setTableProperties(
-        tables.MagnetTurnPlanets,
-        { empireId, endTurn },
-        {
-          planetIds: [...(tables.MagnetTurnPlanets.getWithKeys({ empireId, endTurn })?.planetIds ?? []), planetId],
-        },
+      devOps.push(
+        devCalls.createSetProperties({
+          table: tables.MagnetTurnPlanets,
+          keys: { empireId, endTurn },
+          properties: {
+            planetIds: [...(tables.MagnetTurnPlanets.getWithKeys({ empireId, endTurn })?.planetIds ?? []), planetId],
+          },
+        }),
       );
 
-      return successC;
+      const success = await devCalls.batch(devOps);
+      if (success) {
+        notify("success", `Placed magnet on ${planet.value} for ${empire.value} for ${turns.value} turns`);
+        return true;
+      } else {
+        notify("error", `Failed to place magnet on ${planet.value} for ${empire.value} for ${turns.value} turns`);
+        return false;
+      }
     },
   });
 
@@ -609,7 +704,14 @@ export const setupCheatcodes = (
       const planetId = planet.id as Entity;
       const empireId = empire.id as EEmpire;
 
-      return await _removeMagnet(empireId, planetId);
+      const success = await devCalls.batch(_removeMagnet(empireId, planetId));
+      if (success) {
+        notify("success", `Removed magnet on ${planet.value} for ${empire.value}`);
+        return true;
+      } else {
+        notify("error", `Failed to remove magnet on ${planet.value} for ${empire.value}`);
+        return false;
+      }
     },
   });
 
@@ -629,8 +731,16 @@ export const setupCheatcodes = (
     execute: async ({ empire }) => {
       const empireId = empire.id as EEmpire;
       const planets = tables.Planet.getAll();
-      const results = await Promise.all(planets.map(async (entity) => await _removeMagnet(empireId, entity)));
-      return results.every(Boolean);
+      const devOps = planets.map((entity) => _removeMagnet(empireId, entity)).flat();
+
+      const success = await devCalls.batch(devOps);
+      if (success) {
+        notify("success", `Removed all magnets for ${empire.value}`);
+        return true;
+      } else {
+        notify("error", `Failed to remove all magnets for ${empire.value}`);
+        return false;
+      }
     },
   });
 
@@ -647,18 +757,22 @@ export const setupCheatcodes = (
         .filter((planet) => !!planet.properties?.empireId);
       const lastUpdated = tables.BlockNumber.get()?.value ?? BigInt(0);
 
-      await Promise.all(
-        planets.map((planet) =>
-          setTableProperties(
-            tables.Planet_TacticalStrike,
-            { planetId: planet.entity },
-            { charge: BigInt(0), lastUpdated },
-          ),
-        ),
+      const devOps = planets.map((planet) =>
+        devCalls.createSetProperties({
+          table: tables.Planet_TacticalStrike,
+          keys: { planetId: planet.entity },
+          properties: { charge: BigInt(0), lastUpdated },
+        }),
       );
 
-      notify("success", `Charges reset for ${planets.length} planets`);
-      return true;
+      const success = await devCalls.batch(devOps);
+      if (success) {
+        notify("success", `Charges reset for ${planets.length} planets`);
+        return true;
+      } else {
+        notify("error", `Failed to reset charges for ${planets.length} planets`);
+        return false;
+      }
     },
   });
 
@@ -675,18 +789,22 @@ export const setupCheatcodes = (
       const lastUpdated = tables.BlockNumber.get()?.value ?? BigInt(0);
       const maxCharge = tables.P_TacticalStrikeConfig.get()?.maxCharge ?? BigInt(0);
 
-      await Promise.all(
-        planets.map((planet) =>
-          setTableProperties(
-            tables.Planet_TacticalStrike,
-            { planetId: planet.entity },
-            { charge: maxCharge, lastUpdated },
-          ),
-        ),
+      const devOps = planets.map((planet) =>
+        devCalls.createSetProperties({
+          table: tables.Planet_TacticalStrike,
+          keys: { planetId: planet.entity },
+          properties: { charge: maxCharge, lastUpdated },
+        }),
       );
 
-      notify("success", `Charges maxed out for ${planets.length} planets`);
-      return true;
+      const success = await devCalls.batch(devOps);
+      if (success) {
+        notify("success", `Charges maxed out for ${planets.length} planets`);
+        return true;
+      } else {
+        notify("error", `Failed to max out charges for ${planets.length} planets`);
+        return false;
+      }
     },
   });
 
@@ -713,12 +831,14 @@ export const setupCheatcodes = (
           return false;
         });
 
-      for (const planet of planets) {
-        await tacticalStrike(planet.entity);
+      const success = await Promise.all(planets.map((planet) => tacticalStrike(planet.entity)));
+      if (success) {
+        notify("success", `Charges triggered for ${planets.length} planets`);
+        return true;
+      } else {
+        notify("error", `Failed to trigger charges for ${planets.length} planets`);
+        return false;
       }
-
-      notify("success", `Charges triggered for ${planets.length} planets`);
-      return true;
     },
   });
 
@@ -760,7 +880,11 @@ export const setupCheatcodes = (
           gameOverBlock: finalBlockFromTimeLeft,
           gameStartTimestamp: BigInt(properties.gameStartTimestamp.value),
         };
-        const success = await setTableProperties(tables.P_GameConfig, {}, newProperties);
+        const success = await devCalls.setProperties({
+          table: tables.P_GameConfig,
+          keys: {},
+          properties: newProperties,
+        });
 
         if (success) {
           notify("success", "Game config updated");
@@ -809,11 +933,11 @@ export const setupCheatcodes = (
         },
       },
       execute: async (properties) => {
-        const success = await setTableProperties(
-          tables.P_PointConfig,
-          {},
-          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
-        );
+        const success = await devCalls.setProperties({
+          table: tables.P_PointConfig,
+          keys: {},
+          properties: Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
+        });
 
         if (success) {
           notify("success", "Point config updated");
@@ -852,11 +976,11 @@ export const setupCheatcodes = (
         },
       },
       execute: async (properties) => {
-        const success = await setTableProperties(
-          tables.P_OverrideConfig,
-          {},
-          Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
-        );
+        const success = await devCalls.setProperties({
+          table: tables.P_OverrideConfig,
+          keys: {},
+          properties: Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
+        });
 
         if (success) {
           notify("success", "Override config updated");
@@ -880,11 +1004,11 @@ export const setupCheatcodes = (
         },
       },
       execute: async ({ buyShips }) => {
-        const success = await setTableProperties(
-          tables.P_RoutineCosts,
-          { routine: ERoutine["BuyShips"] },
-          { goldCost: BigInt(buyShips.value) },
-        );
+        const success = await devCalls.setProperties({
+          table: tables.P_RoutineCosts,
+          keys: { routine: ERoutine["BuyShips"] },
+          properties: { goldCost: BigInt(buyShips.value) },
+        });
 
         if (success) {
           notify("success", "Routine costs updated");
