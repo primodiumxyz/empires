@@ -15,11 +15,16 @@ import { useTimeLeft } from "@/hooks/useTimeLeft";
 export const TimeLeft = () => {
   const { timeLeftMs, blocksLeft, gameOver } = useTimeLeft();
   const { showBlockchainUnits } = useSettings();
+  const { tables } = useCore();
+
   const endTime = useMemo(() => {
     return new Date(Date.now() + (timeLeftMs ?? 0));
   }, [timeLeftMs]);
-  const { tables } = useCore();
+
   const turn = tables.Turn.use()?.value ?? 0n;
+  const displayTurn = useMemo(() => {
+    return ((turn - 1n) / 3n + 1n).toString();
+  }, [turn]);
 
   return (
     <div className="flex w-72 flex-col justify-center gap-1 rounded p-4 text-center">
@@ -29,7 +34,7 @@ export const TimeLeft = () => {
           <div className="flex flex-col">
             <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
               <p>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}</p>
-              <p>Turn: {(turn / 3n).toString()}</p>
+              <p>Turn: {displayTurn}</p>
             </Tooltip>
             {showBlockchainUnits.enabled && !!blocksLeft && (
               <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
