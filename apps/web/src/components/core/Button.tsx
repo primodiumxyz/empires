@@ -81,6 +81,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       tooltip,
       tooltipDirection,
       selected,
+
       ...props
     },
     ref,

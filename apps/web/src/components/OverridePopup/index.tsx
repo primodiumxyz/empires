@@ -12,14 +12,17 @@ import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
 import { Join } from "@/components/core/Join";
 import { Marker } from "@/components/core/Marker";
-import { Modal } from "@/components/core/Modal";
 import { Tabs } from "@/components/core/Tabs";
-import { PlanetSummary } from "@/components/Dashboard/PlanetSummary";
+import { ChargeButton } from "@/components/OverridePopup/buttons/ChargeButton";
+import { MagnetButton } from "@/components/OverridePopup/buttons/MagnetButton";
+import { ShieldsButton } from "@/components/OverridePopup/buttons/ShieldsButton";
+import { ShipsButton } from "@/components/OverridePopup/buttons/ShipsButton";
 import { ChargeOverridePane } from "@/components/OverridePopup/ChargeOverridePane";
+import { OverrideButton } from "@/components/OverridePopup/OverrideButton";
 import { OverridePane } from "@/components/OverridePopup/OverridePane";
 import { PlaceMagnetOverridePane } from "@/components/OverridePopup/PlaceMagnetOverridePane";
+import { PlanetSummary } from "@/components/OverridePopup/PlanetSummary";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEthPrice } from "@/hooks/useEthPrice";
 import { useGame } from "@/hooks/useGame";
 import { useNextTurnOverrideCost, useOverrideCost } from "@/hooks/useOverrideCost";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
@@ -65,7 +68,7 @@ export const OverridePopup = () => {
   return (
     <div className="screen-container pointer-events-none relative flex items-center justify-center gap-2 bg-slate-900/25 backdrop-blur-md">
       <div className="screen-container pointer-events-auto absolute" onClick={() => tables.SelectedPlanet.remove()} />
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex h-screen items-center justify-center gap-2 py-10">
         <PlanetSummary entity={selectedPlanet} />
         <Card noDecor className="flex-row items-center justify-center bg-slate-900">
           <Badge
@@ -90,12 +93,13 @@ export const OverridePopup = () => {
 
           <div className="flex flex-col items-center justify-center gap-1">
             <Tabs className="flex w-fit flex-col items-center gap-2">
-              <Join>
-                <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
-                <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
-                <Tabs.IconButton icon={InterfaceIcons.Crosshairs} text="MAGNET" index={2} />
-                <Tabs.IconButton icon={InterfaceIcons.Shard} text="CHARGE" index={3} />
-              </Join>
+              <div className="flex">
+                <OverrideButton index={0} icon="Fleet" />
+                <OverrideButton index={1} icon="Defense" />
+                <OverrideButton index={2} icon="RedMagnet" />
+                <OverrideButton index={3} icon="Shard" />
+              </div>
+
               <Tabs.Pane index={0} className="w-full items-center gap-4">
                 <OverridePane
                   inputValue={inputValue}

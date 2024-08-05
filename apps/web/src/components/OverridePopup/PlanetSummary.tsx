@@ -1,32 +1,13 @@
-import { Fragment } from "react/jsx-runtime";
-import {
-  ChevronLeftIcon,
-  CurrencyYenIcon,
-  MinusIcon,
-  PlusIcon,
-  RocketLaunchIcon,
-  ShieldCheckIcon,
-} from "@heroicons/react/24/solid";
-
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
-import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Badge } from "@/components/core/Badge";
-import { Button } from "@/components/core/Button";
-import { Card, SecondaryCard } from "@/components/core/Card";
+import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
-import { Price } from "@/components/shared/Price";
-import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useCharge } from "@/hooks/useCharge";
-import { useContractCalls } from "@/hooks/useContractCalls";
 import { useGame } from "@/hooks/useGame";
-import { useOverrideCost } from "@/hooks/useOverrideCost";
-import { useTimeLeft } from "@/hooks/useTimeLeft";
-import { EmpireEnumToName } from "@/util/lookups";
 
 /* --------------------------------- PLANET --------------------------------- */
 export const PlanetSummary = ({ entity }: { entity: Entity }) => {
@@ -38,7 +19,7 @@ export const PlanetSummary = ({ entity }: { entity: Entity }) => {
   const { empireId } = planet;
 
   return (
-    <Card noDecor className="w-fit flex-col items-center justify-center rounded-lg bg-neutral-900 p-4">
+    <Card noDecor className="hide-scrollbar max-h-full flex-col items-center overflow-y-auto">
       <div className="mb-2 flex w-full flex-col items-center justify-center gap-4">
         <img
           src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
@@ -134,8 +115,8 @@ const Overrides = ({ entity }: { entity: Entity }) => {
       <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
         <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-base-100 text-xs text-gray-300">OVERRIDES</h3>
         <div className="grid grid-cols-2 gap-y-1 text-xs">
-          <span className="text-gray-4000">CLIMIATE CHANGE</span>
-          <span className="text-right">{Number(climateChange.charge / 100n).toFixed(0)}%</span>
+          <span className="text-gray-4000">CLIMATE CHANGE</span>
+          <span className="text-right">{Math.min(Number(climateChange.charge / 100n), 100).toFixed(0)}%</span>
         </div>
         <div className="grid grid-cols-2 gap-y-1 text-xs">
           <span className="text-gray-4000">MAGNETS</span>
