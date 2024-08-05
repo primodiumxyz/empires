@@ -44,6 +44,9 @@ import Twitter from "../icons/x-twitter.svg?url";
 import EnemyFleet from "../icons/UI_Ship_Enemy.png?url";
 import Cooldown from "../icons/UI_Cooldown.gif?url";
 import Trash from "../icons/UI_Trash.png?url";
+import RedMagnet from "../icons/UI_RedMagnet.png?url";
+import BlueMagnet from "../icons/UI_BlueMagnet.png?url";
+import GreenMagnet from "../icons/UI_GreenMagnet.png?url";
 
 export const InterfaceIcons = {
   Add,
@@ -91,4 +94,7 @@ export const InterfaceIcons = {
   Twitter,
   Vault,
   Wormhole,
+  RedMagnet,
+  BlueMagnet,
+  GreenMagnet,
 };

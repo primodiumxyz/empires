@@ -9,7 +9,7 @@ import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
 import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
-import { PlanetGrid } from "@/components/PlanetGrid";
+import { OverridePopup } from "@/components/OverridePopup";
 import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
 import { SellPoints } from "@/components/SellPoints";
@@ -73,15 +73,14 @@ const Game = memo(() => {
 
       {/* cannot unmount. needs to be visible for phaser to attach to DOM element */}
       <div id="game-container" className="screen-container">
-        <div id="phaser-container" className="screen-container pointer-events-auto absolute cursor-pointer">
-          {!!gameRef.current && !loading && (
-            <GameProvider game={gameRef.current}>
-              <div className="pointer-events-none relative">
-                <GameHUD />
-              </div>
-            </GameProvider>
-          )}
-        </div>
+        <div id="phaser-container" className="screen-container pointer-events-auto absolute cursor-pointer"></div>
+        {!!gameRef.current && !loading && (
+          <GameProvider game={gameRef.current}>
+            <div className="pointer-events-auto relative">
+              <GameHUD />
+            </div>
+          </GameProvider>
+        )}
       </div>
     </>
   );
@@ -96,26 +95,26 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-        <Pot showRake={false} showPot={true} className="w-48" />
+          <Pot showRake={false} showPot={true} className="w-48" />
         </HUD.TopMiddle>
 
         <HUD.TopRight>
           <Account />
         </HUD.TopRight>
 
-        <HUD.Center>
-          <PlanetGrid tileSize={100} />
-        </HUD.Center>
-
         <HUD.BottomLeft>
           <SellPoints />
-          <Pot showRake={true} showPot={false} className="absolute left-2 bottom-1 w-56" />
+          <Pot showRake={true} showPot={false} className="absolute bottom-1 left-2 w-56" />
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
           <TimeLeft />
           <AdvanceTurn />
         </HUD.BottomMiddle>
+
+        <HUD.Center>
+          <OverridePopup />
+        </HUD.Center>
 
         <HUD.BottomRight className="flex gap-2">
           <UserSettings />

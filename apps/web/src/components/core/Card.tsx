@@ -45,7 +45,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     if (fragment)
       return (
         <div
-          className={`h-full`}
+          // className={`h-full`}
           style={{
             perspective: "1000px",
             transformStyle: "preserve-3d",
@@ -71,7 +71,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={`h-full`}
+        // className={`h-full`}
         style={{
           perspective: "1000px",
           transformStyle: "preserve-3d",

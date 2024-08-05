@@ -8,17 +8,20 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/24/solid";
 
+import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import { entityToPlanetName } from "@primodiumxyz/core";
+import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { EmpireToEmpireSpriteKeys } from "@primodiumxyz/game";
+import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
-import { SecondaryCard } from "@/components/core/Card";
+import { Card, SecondaryCard } from "@/components/core/Card";
+import { IconLabel } from "@/components/core/IconLabel";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { useCharge } from "@/hooks/useCharge";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useGame } from "@/hooks/useGame";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
@@ -26,158 +29,30 @@ import { useTimeLeft } from "@/hooks/useTimeLeft";
 import { EmpireEnumToName } from "@/util/lookups";
 
 /* --------------------------------- PLANET --------------------------------- */
-export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => void }) => {
+export const PlanetSummary = ({ entity }: { entity: Entity }) => {
   const { tables, utils } = useCore();
   const {
     ROOT: { sprite },
   } = useGame();
   const planet = tables.Planet.use(entity)!;
-  const { empireId, goldCount, shieldCount, shipCount } = planet;
+  const { empireId } = planet;
 
   return (
-    <>
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-sm font-semibold text-gray-300">{entityToPlanetName(entity)}</h2>
-        <Button variant="primary" className="flex w-fit items-center gap-2" onClick={back}>
-          <ChevronLeftIcon className="size-4" />
-          back
-        </Button>
+    <Card noDecor className="w-fit flex-col items-center justify-center rounded-lg bg-neutral-900 p-4">
+      <div className="mb-2 flex w-full flex-col items-center justify-center gap-4">
+        <img
+          src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
+          width={64}
+          height={64}
+        />
+        <h2 className="text-sm font-semibold text-warning">{entityToPlanetName(entity)}</h2>
       </div>
-      <img
-        src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
-        width={64}
-        height={64}
-        className="my-2 self-center"
-      />
-      <div className="grid w-[80%] grid-cols-[1fr_auto_3rem] items-center gap-y-4 self-center">
-        {empireId ? (
-          <>
-            <h3 className="font-semibold text-gray-300">controlled by</h3>
-            <span className="justify-self-end">{EmpireEnumToName[empireId as EEmpire]} empire</span>
-            <img
-              src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
-              width={32}
-              height={32}
-              className="justify-self-center"
-            />
-          </>
-        ) : (
-          <span className="col-span-3">neutral</span>
-        )}
-        <h3 className="font-semibold text-gray-300">gold</h3>
-        <span className="justify-self-end">{goldCount.toLocaleString()}</span>
-        <CurrencyYenIcon className="size-4 justify-self-center" />
-        <h3 className="font-semibold text-gray-300">ships</h3>
-        <span className="justify-self-end">{shipCount.toLocaleString()}</span>
-        <RocketLaunchIcon className="size-4 justify-self-center" />
-        <h3 className="font-semibold text-gray-300">shield</h3>
-        <span className="justify-self-end">{shieldCount.toLocaleString()}</span>
-        <ShieldCheckIcon className="size-4 justify-self-center" />
+
+      <div className="flex flex-col gap-3">
+        <RoutineProbabilities entity={entity} />
+        <Overrides entity={entity} />
       </div>
-      {!!empireId && (
-        <>
-          <PlanetQuickOverrides entity={entity} />
-          <RoutineProbabilities entity={entity} />
-        </>
-      )}
-    </>
-  );
-};
-
-/* --------------------------------- ACTIONS -------------------------------- */
-const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
-  const { tables } = useCore();
-  const { createShip, removeShip, addShield, removeShield } = useContractCalls();
-  const { gameOver } = useTimeLeft();
-
-  const planet = tables.Planet.use(entity)!;
-  const { empireId, shipCount, shieldCount } = planet;
-
-  const addShipPriceWei = useOverrideCost(EOverride.CreateShip, empireId, 1n);
-  const removeShipPriceWei = useOverrideCost(EOverride.KillShip, empireId, 1n);
-  const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, empireId, 1n);
-  const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, empireId, 1n);
-
-  return (
-    <>
-      <h2 className="mt-2 text-sm font-semibold text-gray-300">Actions</h2>
-      <SecondaryCard className="bg-gray-900/40">
-        <div className="grid grid-cols-[3rem_1fr_auto_auto] gap-x-4 gap-y-2">
-          <div className="flex items-center gap-1">
-            <RocketLaunchIcon className="size-4" />
-            <PlusIcon className="size-4" />
-          </div>
-          <span className="flex items-center">deploy ship</span>
-          <span className="flex items-center gap-1">
-            <Price wei={addShipPriceWei} />
-          </span>
-          <TransactionQueueMask id={`${entity}-create-ship`}>
-            <Button
-              variant="neutral"
-              size="xs"
-              onClick={() => createShip(entity, 1n, addShipPriceWei)}
-              disabled={gameOver}
-            >
-              Buy
-            </Button>
-          </TransactionQueueMask>
-          <div className="flex items-center gap-1">
-            <RocketLaunchIcon className="size-4" />
-            <MinusIcon className="size-4" />
-          </div>
-          <span className="flex items-center">withdraw ship</span>
-          <span className="flex items-center">
-            <Price wei={removeShipPriceWei} />
-          </span>
-          <TransactionQueueMask id={`${entity}-kill-ship`}>
-            <Button
-              variant="neutral"
-              size="xs"
-              onClick={() => removeShip(entity, 1n, removeShipPriceWei)}
-              disabled={gameOver || !shipCount}
-            >
-              Buy
-            </Button>
-          </TransactionQueueMask>
-          <div className="flex items-center gap-1">
-            <ShieldCheckIcon className="size-4" />
-            <PlusIcon className="size-4" />
-          </div>
-          <span className="flex items-center">charge shield</span>
-          <span className="flex items-center">
-            <Price wei={addShieldPriceWei} />
-          </span>
-          <TransactionQueueMask id={`${entity}-add-shield`}>
-            <Button
-              variant="neutral"
-              size="xs"
-              onClick={() => addShield(entity, 1n, addShieldPriceWei)}
-              disabled={gameOver}
-            >
-              Buy
-            </Button>
-          </TransactionQueueMask>
-          <div className="flex items-center gap-1">
-            <ShieldCheckIcon className="size-4" />
-            <MinusIcon className="size-4" />
-          </div>
-          <span className="flex items-center">drain shield</span>
-          <span className="flex items-center">
-            <Price wei={removeShieldPriceWei} />
-          </span>
-          <TransactionQueueMask id={`${entity}-remove-shield`}>
-            <Button
-              variant="neutral"
-              size="xs"
-              onClick={() => removeShield(entity, 1n, removeShieldPriceWei)}
-              disabled={gameOver || !shieldCount}
-            >
-              Buy
-            </Button>
-          </TransactionQueueMask>
-        </div>
-      </SecondaryCard>
-    </>
+    </Card>
   );
 };
 
@@ -186,46 +61,91 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
 
   const valToText = (val: number) => {
-    if (val >= 1) return "High";
-    if (val >= 0) return "Med";
-    return "Low";
+    if (val >= 1) return "HIGH";
+    if (val >= 0) return "MED";
+    return "LOW";
   };
+
   return (
     <>
-      <h2 className="mt-2 text-sm font-semibold text-gray-300">Routine Probabilities</h2>
-      <div>
-        <p>Decision Context</p>
-        <div className="grid w-full grid-cols-2 gap-1 text-xs">
-          <Badge className="w-full gap-2 py-2" tooltip="Is it Under attack?" tooltipDirection="top">
-            <span>At Risk</span>
-            <p className="rounded bg-accent px-1 text-neutral">{valToText(context.vulnerability)}</p>
-          </Badge>
-          <Badge className="w-full gap-2 py-2" tooltip="Does it own more ships than neighbors?" tooltipDirection="top">
-            <span>Planet Strength</span>
-            <p className="rounded bg-accent px-1 text-neutral">{valToText(context.planetStrength)}</p>
-          </Badge>
-          <Badge className="w-full gap-2 py-2" tooltip="Does empire control the most planets?">
-            <span>Empire Strength</span>
-            <p className="rounded bg-accent px-1 text-neutral">{valToText(context.empireStrength)}</p>
-          </Badge>
+      <div className="mb-4 p-2 text-xs">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+          <span className="text-gray-400">AT RISK</span>
+          <span className="text-right text-cyan-400">{valToText(context.vulnerability)}</span>
+          <span className="text-gray-400">PLANET STRENGTH</span>
+          <span className="text-right text-cyan-400">{valToText(context.planetStrength)}</span>
+          <span className="text-gray-400">EMPIRE STRENGTH</span>
+          <span className="text-right text-cyan-400">{valToText(context.empireStrength)}</span>
         </div>
       </div>
-      <SecondaryCard className="bg-gray-900/40">
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          {[
-            { label: "Accumulate Gold", value: p.accumulateGold },
-            { label: "Buy Shields", value: p.buyShields },
-            { label: "Buy Ships", value: p.buyShips },
-            { label: "Support Ally", value: p.supportAlly },
-            { label: "Attack Enemy", value: p.attackEnemy },
-          ].map(({ label, value }) => (
-            <Fragment key={label}>
-              <span className="text-gray-200">{label}</span>
-              <span className="text-right font-medium">{(value * 100).toFixed(1)}%</span>
-            </Fragment>
-          ))}
+      <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
+        <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-base-100 text-xs text-gray-300">
+          ROUTINE PROBABILITIES
+        </h3>
+        <div className="grid grid-cols-2 gap-y-1 text-xs">
+          <span>ACCUMULATE GOLD</span>
+          <span className="text-right">{(p.accumulateGold * 100).toFixed(0)}%</span>
+          <span>BUY SHIPS</span>
+          <span className="text-right">{(p.buyShips * 100).toFixed(0)}%</span>
+          <span>BUY SHIELDS</span>
+          <span className="text-right">{(p.buyShields * 100).toFixed(0)}%</span>
+          <span>SUPPORT</span>
+          <span className="text-right">{(p.supportAlly * 100).toFixed(0)}%</span>
+          <span>ATTACK</span>
+          <span className="text-right">{(p.attackEnemy * 100).toFixed(0)}%</span>
         </div>
-      </SecondaryCard>
+      </div>
+    </>
+  );
+};
+
+const calculateTurnsLeft = (endTurn: bigint | undefined, globalTurn: bigint, beforeEmpire: boolean) => {
+  if (endTurn == undefined) return 0;
+  const turnsLeft = Number(endTurn - globalTurn);
+  return beforeEmpire ? turnsLeft + 1 : turnsLeft;
+};
+
+const Overrides = ({ entity }: { entity: Entity }) => {
+  const { utils, tables } = useCore();
+  const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
+  const climateChange = useCharge(entity);
+  const redMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Red, planetId: entity });
+  const blueMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Blue, planetId: entity });
+  const greenMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Green, planetId: entity });
+
+  const currTurn = tables.Turn.use()?.value ?? 0n;
+  // if (!redMagnet && !blueMagnet && !greenMagnet) return null;
+
+  const currFullTurn = (currTurn - 1n) / 3n;
+  const turnModulo = Number(currTurn - 1n) % 3;
+
+  const redTurnsLeft = calculateTurnsLeft(redMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Red);
+  const blueTurnsLeft = calculateTurnsLeft(blueMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Blue);
+  const greenTurnsLeft = calculateTurnsLeft(greenMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Green);
+
+  const valToText = (val: number) => {
+    if (val >= 1) return "HIGH";
+    if (val >= 0) return "MED";
+    return "LOW";
+  };
+
+  return (
+    <>
+      <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
+        <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-base-100 text-xs text-gray-300">OVERRIDES</h3>
+        <div className="grid grid-cols-2 gap-y-1 text-xs">
+          <span className="text-gray-4000">CLIMIATE CHANGE</span>
+          <span className="text-right">{Number(climateChange.charge / 100n).toFixed(0)}%</span>
+        </div>
+        <div className="grid grid-cols-2 gap-y-1 text-xs">
+          <span className="text-gray-4000">MAGNETS</span>
+          <div className="flex flex-row gap-1">
+            <IconLabel imageUri={InterfaceIcons.RedMagnet} text={formatNumber(redTurnsLeft)} />
+            <IconLabel imageUri={InterfaceIcons.BlueMagnet} text={formatNumber(blueTurnsLeft)} />
+            <IconLabel imageUri={InterfaceIcons.GreenMagnet} text={formatNumber(greenTurnsLeft)} />
+          </div>
+        </div>
+      </div>
     </>
   );
 };

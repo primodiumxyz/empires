@@ -1,6 +1,24 @@
 declare const abi: [
   {
     "type": "function",
+    "name": "Empires__boostCharge",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "_boostCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__chargeShield",
     "inputs": [
       {
@@ -381,6 +399,29 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__placeMagnet",
+    "inputs": [
+      {
+        "name": "_empire",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
+      },
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "turnDuration",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__resetGame",
     "inputs": [],
     "outputs": [],
@@ -399,6 +440,37 @@ declare const abi: [
         "name": "_points",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__stunCharge",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "_stunCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__tacticalStrike",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
       }
     ],
     "outputs": [],
