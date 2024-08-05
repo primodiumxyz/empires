@@ -111,6 +111,14 @@ export const createDevCalls = ({ execute, executeBatch }: ExecuteFunctions) => {
     operation: TablePropertiesOperation<tableDef>,
   ): TablePropertiesOperation<ContractTableDef> => operation as unknown as TablePropertiesOperation<ContractTableDef>;
 
+  const createTableBaseParams = <tableDef extends ContractTableDef = ContractTableDef>(
+    operation: TableBaseOperation<tableDef>,
+  ) => _removeTableRecord(operation);
+
+  const createTablePropertiesParams = <tableDef extends ContractTableDef = ContractTableDef>(
+    operation: TablePropertiesOperation<tableDef>,
+  ) => _setTableProperties(operation);
+
   return {
     remove: removeTableRecord,
     setProperties: setTableProperties,
@@ -118,5 +126,8 @@ export const createDevCalls = ({ execute, executeBatch }: ExecuteFunctions) => {
     // for type safety when creating batch operations
     createRemove: createTableBaseOperation,
     createSetProperties: createTablePropertiesOperation,
+    // to create batch operations externally
+    createRemoveParams: createTableBaseParams,
+    createSetPropertiesParams: createTablePropertiesParams,
   };
 };

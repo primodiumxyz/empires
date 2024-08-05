@@ -29,7 +29,7 @@ export const setupCheatcodes = (
 ) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { devCalls, updateWorld, requestDrip, resetGame: _resetGame, tacticalStrike } = contractCalls;
+  const { devCalls, executeBatch, requestDrip, resetGame: _resetGame, tacticalStrike } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -484,9 +484,31 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
+      const turn = tables.Turn.get()?.value ?? 0n;
+      const empirePlanets = core.utils.getEmpirePlanets(turn);
+      const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
+      const updateWorldCallParams = {
+        functionName: "Empires__updateWorld" as const,
+        args: [routineThresholds],
+        options: {
+          gas: 15000000n,
+        },
+        txQueueOptions: {
+          id: `update-world`,
+        },
+      };
+
+      const currentBlock = tables.BlockNumber.get()?.value ?? 0n;
       let success = true;
+
       for (let i = 0; i < amount.value; i++) {
-        const txSuccess = await updateWorld();
+        const setTurnCallsParams = devCalls.createSetPropertiesParams({
+          table: tables.Turn,
+          keys: {},
+          properties: { nextTurnBlock: currentBlock },
+        });
+
+        const txSuccess = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
         if (!txSuccess) {
           success = false;
           break;
