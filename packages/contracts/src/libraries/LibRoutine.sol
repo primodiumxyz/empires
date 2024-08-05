@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { pseudorandom, pseudorandomEntity } from "src/utils.sol";
-import { AccumulateGoldRoutine, AccumulateGoldRoutineData, Planet, P_RoutineCosts, BuyShipsRoutine, BuyShipsRoutineData, BuyShieldsRoutine, BuyShieldsRoutineData } from "codegen/index.sol";
+import { Turn, AccumulateGoldRoutineLog, AccumulateGoldRoutineLogData, Planet, P_RoutineCosts, BuyShipsRoutineLog, BuyShipsRoutineLogData, BuyShieldsRoutineLog, BuyShieldsRoutineLogData } from "codegen/index.sol";
 import { ERoutine } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";
 
@@ -67,9 +67,10 @@ library LibRoutine {
     uint256 goldAdded = P_RoutineCosts.get(ERoutine.AccumulateGold);
     uint256 goldCount = Planet.getGoldCount(planetId);
     Planet.setGoldCount(planetId, goldCount + goldAdded);
-    AccumulateGoldRoutine.set(
+    AccumulateGoldRoutineLog.set(
+      Turn.getValue(),
       pseudorandomEntity(),
-      AccumulateGoldRoutineData({ goldAdded: goldAdded, planetId: planetId, timestamp: block.timestamp })
+      AccumulateGoldRoutineLogData({ goldAdded: goldAdded, planetId: planetId, timestamp: block.timestamp })
     );
   }
 
@@ -94,9 +95,10 @@ library LibRoutine {
     Planet.setShieldCount(planetId, Planet.getShieldCount(planetId) + shieldsToBuy);
     Planet.setGoldCount(planetId, newGoldCount);
 
-    BuyShieldsRoutine.set(
+    BuyShieldsRoutineLog.set(
+      Turn.getValue(),
       pseudorandomEntity(),
-      BuyShieldsRoutineData({
+      BuyShieldsRoutineLogData({
         goldSpent: shieldsToBuy * shieldPrice,
         shieldBought: shieldsToBuy,
         planetId: planetId,
@@ -126,9 +128,10 @@ library LibRoutine {
     Planet.setShipCount(planetId, Planet.getShipCount(planetId) + shipsToBuy);
     Planet.setGoldCount(planetId, newGoldCount);
 
-    BuyShipsRoutine.set(
+    BuyShipsRoutineLog.set(
+      Turn.getValue(),
       pseudorandomEntity(),
-      BuyShipsRoutineData({
+      BuyShipsRoutineLogData({
         goldSpent: shipsToBuy * shipPrice,
         shipBought: shipsToBuy,
         planetId: planetId,

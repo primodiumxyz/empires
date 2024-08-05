@@ -2,7 +2,9 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
+
+import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
+
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -51,6 +53,7 @@ contract OverrideSystem is EmpiresSystem {
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
 
     CreateShipOverrideLog.set(
+      Turn.getValue(),
       pseudorandomEntity(),
       CreateShipOverrideLogData({
         playerId: addressToId(_msgSender()),
@@ -98,6 +101,7 @@ contract OverrideSystem is EmpiresSystem {
     Planet_TacticalStrike.set(_planetId, planetTacticalStrikeData);
 
     KillShipOverrideLog.set(
+      Turn.getValue(),
       pseudorandomEntity(),
       KillShipOverrideLogData({
         playerId: addressToId(_msgSender()),
@@ -132,6 +136,7 @@ contract OverrideSystem is EmpiresSystem {
     Planet.setShieldCount(_planetId, planetData.shieldCount + _overrideCount);
 
     ChargeShieldsOverrideLog.set(
+      Turn.getValue(),
       pseudorandomEntity(),
       ChargeShieldsOverrideLogData({
         planetId: _planetId,
@@ -166,6 +171,7 @@ contract OverrideSystem is EmpiresSystem {
 
     Planet.setShieldCount(_planetId, planetData.shieldCount - _overrideCount);
     DrainShieldsOverrideLog.set(
+      Turn.getValue(),
       pseudorandomEntity(),
       DrainShieldsOverrideLogData({
         planetId: _planetId,
@@ -218,6 +224,7 @@ contract OverrideSystem is EmpiresSystem {
     LibOverride._purchaseOverride(addressToId(_msgSender()), EOverride.PlaceMagnet, _empire, turnDuration, _msgValue());
 
     PlaceMagnetOverrideLog.set(
+      Turn.getValue(),
       pseudorandomEntity(),
       PlaceMagnetOverrideLogData({
         planetId: _planetId,

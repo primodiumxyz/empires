@@ -232,9 +232,10 @@ export const worldInput = {
       },
     },
 
-    MoveRoutine: {
-      key: ["id"],
+    MoveRoutineLog: {
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         originPlanetId: "bytes32",
         destinationPlanetId: "bytes32",
@@ -244,9 +245,10 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    ShipBattleRoutine: {
-      key: ["id"],
+    ShipBattleRoutineLog: {
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         redShipCount: "uint256",
@@ -257,9 +259,10 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    PlanetBattleRoutine: {
-      key: ["id"],
+    PlanetBattleRoutineLog: {
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         attackingShipCount: "uint256",
@@ -271,9 +274,10 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    AccumulateGoldRoutine: {
-      key: ["id"],
+    AccumulateGoldRoutineLog: {
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         goldAdded: "uint256",
@@ -282,9 +286,10 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyShipsRoutine: {
-      key: ["id"],
+    BuyShipsRoutineLog: {
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         goldSpent: "uint256",
@@ -294,9 +299,10 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyShieldsRoutine: {
-      key: ["id"],
+    BuyShieldsRoutineLog: {
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         goldSpent: "uint256",
@@ -307,8 +313,9 @@ export const worldInput = {
     },
 
     CreateShipOverrideLog: {
-      key: ["id"],
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         playerId: "bytes32",
         planetId: "bytes32",
@@ -320,8 +327,9 @@ export const worldInput = {
     },
 
     KillShipOverrideLog: {
-      key: ["id"],
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         playerId: "bytes32",
         planetId: "bytes32",
@@ -333,8 +341,9 @@ export const worldInput = {
     },
 
     ChargeShieldsOverrideLog: {
-      key: ["id"],
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -345,8 +354,9 @@ export const worldInput = {
     },
 
     DrainShieldsOverrideLog: {
-      key: ["id"],
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -357,8 +367,9 @@ export const worldInput = {
     },
 
     PlaceMagnetOverrideLog: {
-      key: ["id"],
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -370,8 +381,9 @@ export const worldInput = {
     },
 
     BoostChargeOverrideLog: {
-      key: ["id"],
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -382,8 +394,9 @@ export const worldInput = {
     },
 
     StunChargeOverrideLog: {
-      key: ["id"],
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -394,8 +407,9 @@ export const worldInput = {
     },
 
     TacticalStrikeOverrideLog: {
-      key: ["id"],
+      key: ["turn", "id"],
       schema: {
+        turn: "uint256",
         id: "bytes32",
         planetId: "bytes32",
         timestamp: "uint256",
