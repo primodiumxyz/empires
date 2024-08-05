@@ -4,6 +4,12 @@ import { Scene } from "@primodiumxyz/engine";
 
 import { Channel } from "@primodiumxyz/engine";
 
+const defaultVolume: Record<Channel | "master", number> = {
+  master: 1,
+  music: 0.5,
+  sfx: 0.5,
+  ui: 0.5,
+};
 export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
   function play(
     key: AudioKeys,
@@ -16,10 +22,10 @@ export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function initializeAudioVolume() {
-    const masterVolume = globalApi.tables.Volume.get("master");
-    const musicVolume = globalApi.tables.Volume.get("music");
-    const sfxVolume = globalApi.tables.Volume.get("sfx");
-    const uiVolume = globalApi.tables.Volume.get("ui");
+    const masterVolume = globalApi.tables.Volume.get("master") ?? defaultVolume;
+    const musicVolume = globalApi.tables.Volume.get("music") ?? defaultVolume;
+    const sfxVolume = globalApi.tables.Volume.get("sfx") ?? defaultVolume;
+    const uiVolume = globalApi.tables.Volume.get("ui") ?? defaultVolume;
 
     scene.audio.music.setVolume(masterVolume ?? 1 * (musicVolume ?? 1));
     scene.audio.sfx.setVolume(masterVolume ?? 1 * (sfxVolume ?? 1));

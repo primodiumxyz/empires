@@ -3,7 +3,7 @@ import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { Modal } from "@/components/core/Modal";
 import { Navigator } from "@/components/core/Navigator";
 import { AudioSettings } from "@/components/Settings/AudioSettings";
-import { UserSettings } from "@/components/Settings/UserSettings";
+import { GeneralSettings } from "@/components/Settings/GeneralSettings";
 
 const params = new URLSearchParams(window.location.search);
 
@@ -13,7 +13,7 @@ export const Settings = () => (
       <Cog6ToothIcon className="size-8" />
     </Modal.Button>
 
-    <Modal.Content className="h-120 w-120">
+    <Modal.Content className="h-120 !w-[300px]">
       <_Settings />
     </Modal.Content>
   </Modal>
@@ -34,7 +34,7 @@ const _Settings = () => {
       </Navigator.Screen>
 
       <AudioSettings />
-      <UserSettings />
+      <GeneralSettings />
     </Navigator>
   );
 };
