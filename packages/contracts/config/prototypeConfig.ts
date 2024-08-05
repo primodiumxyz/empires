@@ -128,7 +128,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [{ [EOverride.StunCharge]: "uint8" }],
     tables: {
       P_OverrideConfig: {
-        isProgressOverride: false,
+        isProgressOverride: true,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
