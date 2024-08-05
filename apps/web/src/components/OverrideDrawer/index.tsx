@@ -15,6 +15,7 @@ import { Marker } from "@/components/core/Marker";
 import { Tabs } from "@/components/core/Tabs";
 import { ChargeOverridePane } from "@/components/OverrideDrawer/ChargeOverridePane";
 import { OverridePane } from "@/components/OverrideDrawer/OverridePane";
+import { PlaceMagnetOverridePane } from "@/components/OverrideDrawer/PlaceMagnetOverridePane";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useGame } from "@/hooks/useGame";
@@ -106,7 +107,8 @@ export const OverrideDrawer = () => {
             <Join>
               <Tabs.IconButton icon={InterfaceIcons.Fleet} text="SHIPS" index={0} />
               <Tabs.IconButton icon={InterfaceIcons.Defense} text="SHIELD" index={1} />
-              <Tabs.IconButton icon={InterfaceIcons.Shard} text="CHARGE" index={2} />
+              <Tabs.IconButton icon={InterfaceIcons.Crosshairs} text="MAGNET" index={2} />
+              <Tabs.IconButton icon={InterfaceIcons.Shard} text="CHARGE" index={3} />
             </Join>
             <Tabs.Pane index={0} className="w-full items-center gap-4">
               <OverridePane
@@ -159,6 +161,9 @@ export const OverrideDrawer = () => {
               />
             </Tabs.Pane>
             <Tabs.Pane index={2} className="w-full items-center gap-4">
+              <PlaceMagnetOverridePane planetId={selectedPlanet} />
+            </Tabs.Pane>
+            <Tabs.Pane index={3} className="w-full items-center gap-4">
               <ChargeOverridePane
                 inputValue={inputValue}
                 planetId={selectedPlanet}
