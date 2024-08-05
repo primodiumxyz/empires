@@ -1,7 +1,7 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
 import { POINTS_UNIT } from "./constants";
-import { EEmpire, ERoutine, EOverride } from "./enums";
+import { EEmpire, EOverride, ERoutine } from "./enums";
 
 const scaleMultiplier = (multiplier: number) => {
   if (multiplier < 0 || multiplier > 1) throw new Error("multiplier must be between 0 and 100");
@@ -14,7 +14,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 10n,
+        turnLengthBlocks: 1n,
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
@@ -28,9 +28,20 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointGenRate: BigInt(POINTS_UNIT * 0.000015),
         pointCostIncrease: BigInt(POINTS_UNIT * 0.00001),
       },
+      P_MagnetConfig: {
+        lockedPointsPercent: scaleMultiplier(0.05),
+      },
       Turn: {
         nextTurnBlock: 0n,
         empire: EEmpire.Red,
+        value: 1n,
+      },
+      P_TacticalStrikeConfig: {
+        maxCharge: 100n,
+        boostChargeIncrease: 10n,
+        stunChargeDecrease: 10n,
+        createShipBoostIncrease: 1n,
+        killShipBoostCostDecrease: 1n,
       },
     },
   },
@@ -87,6 +98,44 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     },
   },
 
+  PlaceMagnetOverride: {
+    keys: [{ [EOverride.PlaceMagnet]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: true,
+        minOverrideCost: 0n,
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+      },
+    },
+  },
+  BoostChargeOverride: {
+    keys: [{ [EOverride.BoostCharge]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: false,
+        minOverrideCost: 0n,
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+      },
+    },
+  },
+
+  StunChargeOverride: {
+    keys: [{ [EOverride.StunCharge]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: false,
+        minOverrideCost: 0n,
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+      },
+    },
+  },
+
   BuyShips: {
     keys: [{ [ERoutine.BuyShips]: "uint8" }],
     tables: {
@@ -101,7 +150,6 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_RoutineCosts: {
         goldCost: 1n,
       },
-
     },
   },
   // this is the gold added to the planet when this routine is triggered

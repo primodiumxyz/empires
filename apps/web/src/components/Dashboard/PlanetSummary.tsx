@@ -12,7 +12,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { EmpireToEmpireSpriteKeys } from "@primodiumxyz/game";
+import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
@@ -44,7 +44,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
         </Button>
       </div>
       <img
-        src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
+        src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
         width={64}
         height={64}
         className="my-2 self-center"
@@ -55,7 +55,7 @@ export const PlanetSummary = ({ entity, back }: { entity: Entity; back: () => vo
             <h3 className="font-semibold text-gray-300">controlled by</h3>
             <span className="justify-self-end">{EmpireEnumToName[empireId as EEmpire]} empire</span>
             <img
-              src={sprite.getSprite(EmpireToEmpireSpriteKeys[empireId as EEmpire] ?? "EmpireNeutral")}
+              src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
               width={32}
               height={32}
               className="justify-self-center"
@@ -183,7 +183,7 @@ const PlanetQuickOverrides = ({ entity }: { entity: Entity }) => {
 
 const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { utils } = useCore();
-  const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
+  const { context, probabilities: p, attackTargetId, supportTargetId } = utils.getRoutineProbabilities(entity);
 
   const valToText = (val: number) => {
     if (val >= 1) return "High";
@@ -216,12 +216,19 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
             { label: "Accumulate Gold", value: p.accumulateGold },
             { label: "Buy Shields", value: p.buyShields },
             { label: "Buy Ships", value: p.buyShips },
-            { label: "Support Ally", value: p.supportAlly },
-            { label: "Attack Enemy", value: p.attackEnemy },
-          ].map(({ label, value }) => (
+            { label: "Support Ally", value: p.supportAlly, data: supportTargetId },
+            { label: "Attack Enemy", value: p.attackEnemy, data: attackTargetId },
+          ].map(({ label, value, data }) => (
             <Fragment key={label}>
               <span className="text-gray-200">{label}</span>
-              <span className="text-right font-medium">{(value * 100).toFixed(1)}%</span>
+              <p className="text-right font-medium">
+                {(value * 100).toFixed(1)}%
+                {data && data.target && (
+                  <span className="text-right text-xs text-gray-400">
+                    {entityToPlanetName(data.target)} ({data.multiplier}x)
+                  </span>
+                )}
+              </p>
             </Fragment>
           ))}
         </div>
