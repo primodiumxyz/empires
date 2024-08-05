@@ -35,11 +35,8 @@ library LibMagnet {
 
     // the game starts on turn 1 (which is red) so we subtract 1 to get the global turn.
     uint256 currTurn = Turn.getValue();
-    uint256 currFullTurn = (currTurn - 1) / EMPIRE_COUNT;
+    uint256 currFullTurn = (currTurn - 1) / EMPIRE_COUNT + 1;
     uint256 endTurn = currFullTurn + _fullTurnDuration;
-
-    // empire still has to play this turn so subtract one from the end turn because current turn should be counted
-    if ((currTurn % EMPIRE_COUNT) <= uint8(_empire)) endTurn -= 1;
 
     Magnet.set(
       _empire,

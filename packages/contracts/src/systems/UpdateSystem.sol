@@ -59,14 +59,18 @@ contract UpdateSystem is EmpiresSystem {
     }
 
     TurnData memory currTurn = Turn.get();
-    uint256 currFullTurn = (currTurn.value - 1) / EMPIRE_COUNT;
+    uint256 currFullTurn = (currTurn.value - 1) / EMPIRE_COUNT + 1;
+    EEmpire newEmpire = EEmpire(((uint256(currTurn.empire) % 3) + 1));
+    // if the next empire is the first to play, currFullTurn should be the next full turn
+    if (newEmpire == EEmpire.Red) currFullTurn += 1;
 
-    bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(currTurn.empire, currFullTurn);
+    // remove magnets that should be removed for the next empire to play, so its turn starts on an updated state
+    bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(newEmpire, currFullTurn);
     for (uint i = 0; i < magnetEmpireTurnPlanets.length; i++) {
       // clear magnet
-      LibMagnet.removeMagnet(currTurn.empire, magnetEmpireTurnPlanets[i]);
+      LibMagnet.removeMagnet(newEmpire, magnetEmpireTurnPlanets[i]);
     }
-    MagnetTurnPlanets.deleteRecord(currTurn.empire, currFullTurn);
+    MagnetTurnPlanets.deleteRecord(newEmpire, currFullTurn);
 
     // update empire point costs
     for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {

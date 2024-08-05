@@ -1,9 +1,9 @@
-import { Hex } from "viem";
+import { Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
-import { Entity } from "@primodiumxyz/reactive-tables";
+import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
 import { EmpireEnumToName } from "@/util/lookups";
@@ -14,6 +14,7 @@ export const CheatcodeToBg: Record<string, string> = {
   gold: "bg-yellow-500/10",
   points: "bg-green-500/10",
   time: "bg-blue-500/10",
+  magnet: "bg-purple-700/10",
   config: "bg-gray-500/10",
 };
 
@@ -484,6 +485,47 @@ export const setupCheatcodes = (
     },
   });
 
+  /* --------------------------------- MAGNET --------------------------------- */
+  const placeMagnet = createCheatcode({
+    title: "Place magnet",
+    bg: "bg-purple-500/10",
+    caption: "Place a magnet on a planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets
+          .map((entity) => ({ id: entity, value: entityToPlanetName(entity) }))
+          .filter(({ id }) => !!tables.Planet.get(id)?.empireId),
+      },
+      turns: {
+        label: "Turns",
+        inputType: "number",
+        defaultValue: 1,
+      },
+    },
+    execute: async ({ planet, turns }) => {
+      const planetId = planet.id as Entity;
+      const empireId = tables.Planet.get(planetId)?.empireId;
+      if (!empireId) return false;
+
+      const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
+      const currentFullTurn = (currentTurn - BigInt(1)) / BigInt(EEmpire.LENGTH - 1) + BigInt(1);
+      let endTurn = currentFullTurn + BigInt(turns.value);
+      // if (currentTurn % BigInt(EEmpire.LENGTH - 1) <= BigInt(empireId)) endTurn -= BigInt(1);
+      console.log({ currentTurn, currentFullTurn, endTurn });
+
+      const success = await setTableValue(
+        tables.Magnet,
+        { empireId, planetId },
+        { isMagnet: true, lockedPoints: BigInt(0), endTurn, playerId: padHex(defaultEntity, { size: 32 }) },
+      );
+
+      return success;
+    },
+  });
+
   /* --------------------------------- CONFIG --------------------------------- */
   const updateGameConfig = {
     P_GameConfig: createCheatcode({
@@ -670,6 +712,7 @@ export const setupCheatcodes = (
     endGame,
     resetGame,
     dripEth,
+    placeMagnet,
     ...Object.values(updateGameConfig),
   ];
 };
