@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutine, ShipBattleRoutineData, PlanetBattleRoutine, PlanetBattleRoutineData } from "codegen/index.sol";
+import { P_TacticalStrikeConfig, Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutine, ShipBattleRoutineData, PlanetBattleRoutine, PlanetBattleRoutineData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { pseudorandomEntity } from "src/utils.sol";
@@ -56,7 +56,7 @@ library LibResolveCombat {
         conquer = true;
 
         if (defendingEmpire == EEmpire.NULL) {
-          Planet_TacticalStrike.setChargeRate(planetId, 1);
+          Planet_TacticalStrike.setChargeRate(planetId, P_TacticalStrikeConfig.getChargeRate());
         }
 
         Planet.setShieldCount(planetId, 0);

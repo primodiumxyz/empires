@@ -38,6 +38,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
       P_TacticalStrikeConfig: {
         maxCharge: 100n,
+        chargeRate: 100n, //
         boostChargeIncrease: 10n,
         stunChargeDecrease: 10n,
         createShipBoostIncrease: 1n,
