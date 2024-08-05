@@ -6,7 +6,7 @@ import { ContractTable, ContractTableDef, Properties } from "@primodiumxyz/react
 import { encodeField, encodeKeys, SchemaToPrimitives, StaticAbiType, uuid } from "@primodiumxyz/reactive-tables/utils";
 
 export const createDevCalls = ({ execute }: ExecuteFunctions) => {
-  async function removeTable<tableDef extends ContractTableDef = ContractTableDef>(
+  async function removeTableRecord<tableDef extends ContractTableDef = ContractTableDef>(
     table: ContractTable<tableDef>,
     keys: SchemaToPrimitives<ContractTable<tableDef>["metadata"]["abiKeySchema"]>,
   ) {
@@ -18,12 +18,12 @@ export const createDevCalls = ({ execute }: ExecuteFunctions) => {
       functionName: `${worldInput.namespace}__devDeleteRecord`,
       args: [tableId, keyTuple],
       txQueueOptions: {
-        id: "removeTable",
+        id: "removeTableRecord",
       },
     });
   }
 
-  async function setTableValue<tableDef extends ContractTableDef = ContractTableDef>(
+  async function setTableProperties<tableDef extends ContractTableDef = ContractTableDef>(
     table: ContractTable<tableDef>,
     _keys: SchemaToPrimitives<ContractTable<tableDef>["metadata"]["abiKeySchema"]>,
     newValues: Partial<Properties<ContractTable<tableDef>["propertiesSchema"]>>,
@@ -59,7 +59,7 @@ export const createDevCalls = ({ execute }: ExecuteFunctions) => {
   }
 
   return {
-    removeTable,
-    setTableValue,
+    removeTableRecord,
+    setTableProperties,
   };
 };
