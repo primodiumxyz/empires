@@ -558,8 +558,7 @@ export const setupCheatcodes = (
       const empireId = empire.id as EEmpire;
 
       const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
-      const currentFullTurn = (currentTurn - BigInt(1)) / BigInt(EEmpire.LENGTH - 1) + BigInt(1);
-      const endTurn = currentFullTurn + BigInt(turns.value);
+      const endTurn = currentTurn + BigInt(turns.value) * BigInt(EEmpire.LENGTH - 1);
 
       const successA = await _removeMagnetTurnRemoval(empireId, planetId);
       if (!successA) return false;

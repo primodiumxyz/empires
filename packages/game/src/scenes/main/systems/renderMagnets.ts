@@ -4,12 +4,12 @@ import { decodeEntity } from '@primodiumxyz/reactive-tables/utils';
 import { PrimodiumScene } from '@game/types';
 import { EEmpire } from '@primodiumxyz/contracts';
 
-const calculateTurnsLeft = (
-  endTurn: bigint | undefined,
-  globalTurn: bigint,
-) => {
+const calculateTurnsLeft = (endTurn: bigint | undefined, currTurn: bigint) => {
   if (endTurn === undefined) return 0;
-  return Number(endTurn - globalTurn);
+  const currFullTurn = (currTurn - 1n) / 3n + 1n;
+  const endFullTurn = (endTurn - 1n) / 3n + 1n;
+
+  return Number(endFullTurn - currFullTurn);
 };
 
 export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
@@ -20,14 +20,14 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
   const systemsWorld = namespaceWorld(world, 'systems');
   const planets = tables.Planet.getAll();
 
-  const updateMagnetForEmpire = (empire: EEmpire, currFullTurn: bigint) => {
+  const updateMagnetForEmpire = (empire: EEmpire, currTurn: bigint) => {
     for (const planet of planets) {
       const magnet = tables.Magnet.getWithKeys({
         empireId: empire,
         planetId: planet,
       });
 
-      const turnsLeft = calculateTurnsLeft(magnet?.endTurn, currFullTurn);
+      const turnsLeft = calculateTurnsLeft(magnet?.endTurn, currTurn);
       scene.objects.planet.get(planet)?.setMagnet(empire, turnsLeft);
     }
   };
@@ -36,11 +36,10 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
     world: systemsWorld,
     onChange: ({ properties: { current } }) => {
       const currTurn = current?.value ?? 1n;
-      const currFullTurn = (currTurn - 1n) / 3n + 1n;
 
-      updateMagnetForEmpire(EEmpire.Red, currFullTurn);
-      updateMagnetForEmpire(EEmpire.Blue, currFullTurn);
-      updateMagnetForEmpire(EEmpire.Green, currFullTurn);
+      updateMagnetForEmpire(EEmpire.Red, currTurn);
+      updateMagnetForEmpire(EEmpire.Blue, currTurn);
+      updateMagnetForEmpire(EEmpire.Green, currTurn);
     },
   });
 
@@ -68,9 +67,7 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
       if (!planet) return;
 
       const currTurn = tables.Turn.get()?.value ?? 1n;
-      const currFullTurn = (currTurn - 1n) / 3n + 1n;
-
-      const turnsLeft = calculateTurnsLeft(current.endTurn, currFullTurn);
+      const turnsLeft = calculateTurnsLeft(current.endTurn, currTurn);
 
       planet.setMagnet(empireId, turnsLeft);
     },
