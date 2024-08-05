@@ -33,6 +33,13 @@ export const worldInput = {
       },
     },
 
+    P_EMStormConfig: {
+      key: [],
+      schema: {
+        cooldownInBlocks: "uint256",
+      },
+    },
+
     P_PointConfig: {
       key: [],
       schema: {
@@ -105,6 +112,7 @@ export const worldInput = {
         shieldCount: "uint256",
         goldCount: "uint256",
         empireId: "EEmpire",
+        lastEMStormVisit: "uint256",
       },
     },
 
@@ -124,6 +132,15 @@ export const worldInput = {
         empireId: "EEmpire",
         overrideAction: "EOverride",
         value: "uint256",
+      },
+    },
+
+    EMStorm: {
+      key: [],
+      schema: {
+        currentPlanet: "bytes32",
+        destinationPlanet: "bytes32",
+        lastDetonationBlock: "uint256",
       },
     },
 
