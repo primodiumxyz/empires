@@ -46,10 +46,19 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
 
   tables.Magnet.watch({
     world: systemsWorld,
-    onChange: ({ entity, properties: { current } }) => {
-      if (!current) return;
+    onChange: ({ entity, properties: { current, prev } }) => {
+      if (!current) {
+        // we might have just removed some magnet with cheatcodes
+        if (prev) {
+          const { planetId, empireId } = decodeEntity(
+            tables.Magnet.metadata.abiKeySchema,
+            entity,
+          );
+          scene.objects.planet.get(planetId as Entity)?.setMagnet(empireId, 0);
+        }
 
-      console.log(entity);
+        return;
+      }
 
       const { planetId, empireId } = decodeEntity(
         tables.Magnet.metadata.abiKeySchema,

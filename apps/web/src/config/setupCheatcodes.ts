@@ -486,11 +486,50 @@ export const setupCheatcodes = (
   });
 
   /* --------------------------------- MAGNET --------------------------------- */
+  const _removeMagnetTurnRemoval = async (empireId: EEmpire, planetId: Entity): Promise<boolean> => {
+    // if there is already a magnet for this planet
+    const magnet = tables.Magnet.getWithKeys({ empireId, planetId });
+    if (magnet) {
+      // find out its entity in MagnetTurnPlanets
+      const magnetTurnPlanetsEntity = tables.MagnetTurnPlanets.getAll().find((entity) =>
+        tables.MagnetTurnPlanets.get(entity)?.planetIds.includes(planetId),
+      );
+      if (!magnetTurnPlanetsEntity) return false;
+
+      // set planets to be removed in that turn with this planet filtered out
+      const keys = tables.MagnetTurnPlanets.getEntityKeys(magnetTurnPlanetsEntity);
+      const currentProperties = tables.MagnetTurnPlanets.get(magnetTurnPlanetsEntity);
+      const newProperties = { planetIds: currentProperties?.planetIds.filter((id) => id !== planetId) };
+
+      return await setTableValue(tables.MagnetTurnPlanets, keys, newProperties);
+    }
+
+    return true;
+  };
+
+  const _removeMagnet = async (empireId: EEmpire, planetId: Entity): Promise<boolean> => {
+    if (tables.Magnet.getWithKeys({ empireId, planetId })) {
+      const successA = await removeTable(tables.Magnet, { empireId, planetId });
+      if (!successA) return false;
+    }
+
+    const successB = await _removeMagnetTurnRemoval(empireId, planetId);
+    if (!successB) return false;
+
+    return true;
+  };
+
   const placeMagnet = createCheatcode({
     title: "Place magnet",
-    bg: "bg-purple-500/10",
-    caption: "Place a magnet on a planet",
+    bg: CheatcodeToBg["magnet"],
+    caption: "Magnets",
     inputs: {
+      empire: {
+        label: "Empire",
+        inputType: "string",
+        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+      },
       planet: {
         label: "Planet",
         inputType: "string",
@@ -505,24 +544,85 @@ export const setupCheatcodes = (
         defaultValue: 1,
       },
     },
-    execute: async ({ planet, turns }) => {
+    execute: async ({ empire, planet, turns }) => {
       const planetId = planet.id as Entity;
-      const empireId = tables.Planet.get(planetId)?.empireId;
-      if (!empireId) return false;
+      const empireId = empire.id as EEmpire;
 
       const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
       const currentFullTurn = (currentTurn - BigInt(1)) / BigInt(EEmpire.LENGTH - 1) + BigInt(1);
-      let endTurn = currentFullTurn + BigInt(turns.value);
-      // if (currentTurn % BigInt(EEmpire.LENGTH - 1) <= BigInt(empireId)) endTurn -= BigInt(1);
-      console.log({ currentTurn, currentFullTurn, endTurn });
+      const endTurn = currentFullTurn + BigInt(turns.value);
 
-      const success = await setTableValue(
+      const successA = await _removeMagnetTurnRemoval(empireId, planetId);
+      if (!successA) return false;
+
+      // set the Magnet
+      const successB = await setTableValue(
         tables.Magnet,
         { empireId, planetId },
         { isMagnet: true, lockedPoints: BigInt(0), endTurn, playerId: padHex(defaultEntity, { size: 32 }) },
       );
+      if (!successB) return false;
 
-      return success;
+      // set MagnetTurnPlanets so it gets removed as well on the end turn
+      const successC = await setTableValue(
+        tables.MagnetTurnPlanets,
+        { empireId, endTurn },
+        {
+          planetIds: [...(tables.MagnetTurnPlanets.getWithKeys({ empireId, endTurn })?.planetIds ?? []), planetId],
+        },
+      );
+
+      return successC;
+    },
+  });
+
+  // remove magnet
+  const removeMagnet = createCheatcode({
+    title: "Remove magnet",
+    bg: CheatcodeToBg["magnet"],
+    caption: "Magnets",
+    inputs: {
+      empire: {
+        label: "Empire",
+        inputType: "string",
+        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+      },
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets
+          .map((entity) => ({ id: entity, value: entityToPlanetName(entity) }))
+          .filter(({ id }) => !!tables.Planet.get(id)?.empireId),
+      },
+    },
+    execute: async ({ empire, planet }) => {
+      const planetId = planet.id as Entity;
+      const empireId = empire.id as EEmpire;
+
+      return await _removeMagnet(empireId, planetId);
+    },
+  });
+
+  // remove all magnets
+  const removeAllMagnets = createCheatcode({
+    title: "Remove all magnets for an empire",
+    bg: CheatcodeToBg["magnet"],
+    caption: "Magnets",
+    inputs: {
+      empire: {
+        label: "Empire",
+        inputType: "string",
+        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+      },
+    },
+    execute: async ({ empire }) => {
+      const empireId = empire.id as EEmpire;
+      const planets = tables.Planet.getAll();
+      const results = await Promise.all(planets.map(async (entity) => await _removeMagnet(empireId, entity)));
+      return results.every(Boolean);
     },
   });
 
@@ -713,6 +813,8 @@ export const setupCheatcodes = (
     resetGame,
     dripEth,
     placeMagnet,
+    removeMagnet,
+    removeAllMagnets,
     ...Object.values(updateGameConfig),
   ];
 };
