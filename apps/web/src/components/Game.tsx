@@ -9,7 +9,7 @@ import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
 import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
-import { PlanetGrid } from "@/components/PlanetGrid";
+import { OverrideDrawer } from "@/components/OverrideDrawer";
 import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
 import { SellPoints } from "@/components/SellPoints";
@@ -102,10 +102,6 @@ export const GameHUD = () => {
           <Account />
         </HUD.TopRight>
 
-        <HUD.Center>
-          <PlanetGrid tileSize={100} />
-        </HUD.Center>
-
         <HUD.BottomLeft>
           <SellPoints />
           <Pot showRake={true} showPot={false} className="absolute bottom-1 left-2 w-56" />
@@ -114,6 +110,9 @@ export const GameHUD = () => {
         <HUD.BottomMiddle>
           <TimeLeft />
           <AdvanceTurn />
+        </HUD.BottomMiddle>
+        <HUD.BottomMiddle>
+          <OverrideDrawer />
         </HUD.BottomMiddle>
 
         <HUD.BottomRight className="flex gap-2">

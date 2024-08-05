@@ -14,7 +14,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 1n,
+        turnLengthBlocks: 10n,
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
@@ -28,13 +28,16 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointGenRate: BigInt(POINTS_UNIT * 0.000015),
         pointCostIncrease: BigInt(POINTS_UNIT * 0.00001),
       },
-      P_MagnetConfig: {
-        lockedPointsPercent: scaleMultiplier(0.05),
-      },
       Turn: {
         nextTurnBlock: 0n,
         empire: EEmpire.Red,
-        value: 1n,
+      },
+      P_TacticalStrikeConfig: {
+        maxCharge: 100n,
+        boostChargeIncrease: 10n,
+        stunChargeDecrease: 10n,
+        createShipBoostIncrease: 1n,
+        killShipBoostCostDecrease: 1n,
       },
     },
   },
@@ -91,11 +94,24 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     },
   },
 
-  PlaceMagnetOverride: {
-    keys: [{ [EOverride.PlaceMagnet]: "uint8" }],
+  BoostChargeOverride: {
+    keys: [{ [EOverride.BoostCharge]: "uint8" }],
     tables: {
       P_OverrideConfig: {
-        isProgressOverride: true,
+        isProgressOverride: false,
+        minOverrideCost: 0n,
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+      },
+    },
+  },
+
+  StunChargeOverride: {
+    keys: [{ [EOverride.StunCharge]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: false,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00004),

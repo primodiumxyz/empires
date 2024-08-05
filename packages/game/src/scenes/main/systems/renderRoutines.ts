@@ -1,7 +1,7 @@
-import { createStaggerQueue } from "@game/lib/utils/createStaggerQueue";
-import { PrimodiumScene } from "@game/types";
-import { Core, formatNumber, sleep } from "@primodiumxyz/core";
+import { Core, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
+import { PrimodiumScene } from "@game/types";
+import { createStaggerQueue } from "@game/lib/utils/createStaggerQueue";
 
 export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
   const {
@@ -22,7 +22,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
         if (!planet) return;
 
         enqueue(() => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.25 });
+          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `-${current.goldSpent}`,
@@ -32,7 +32,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
             }
           );
 
-          scene.audio.play("Build", "sfx", { volume: 0.25 });
+          scene.audio.play("Build", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `+${current.shieldBought}`,
@@ -67,7 +67,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
         if (!planet) return;
 
         enqueue(() => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.25 });
+          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `-${current.goldSpent}`,
@@ -77,7 +77,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
             }
           );
 
-          scene.audio.play("Build", "sfx", { volume: 0.25 });
+          scene.audio.play("Build", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `+${current.shipBought}`,
@@ -160,7 +160,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
         if (!planet) return;
 
         enqueue(() => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.25 });
+          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText(
             { x: planet.coord.x, y: planet.coord.y - 25 },
             `+${current.goldAdded}`,
@@ -184,33 +184,33 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
   tables.Turn.watch(
     {
       world: systemsWorld,
-      onUpdate: async ({ properties: { prev } }) => {
-        if (!prev) return;
+      onUpdate: async ({ properties: { current } }) => {
+        if (!current) return;
 
         const goldGenRate = tables.P_GameConfig.get()?.goldGenRate;
 
-        const planets = tables.Planet.getAllWith({ empireId: prev.empire });
+        const planets = tables.Planet.getAll();
 
         for (let i = 0; i < planets.length; i++) {
           const planet = scene.objects.planet.get(planets[i] as Entity);
 
-          if (!planet || !goldGenRate) continue;
+          if (!planet) continue;
 
           enqueue(() => {
             scene.audio.play("Complete", "sfx", {
-              volume: 0.1,
-              detune: Math.min(20 * i, 500),
+              volume: 0.01,
+              detune: 20 * i,
             });
             scene.fx.emitFloatingText(
               { x: planet.coord.x, y: planet.coord.y - 25 },
-              `+${formatNumber(goldGenRate * 3n)}`,
+              `+${goldGenRate?.toString()}`,
               {
                 icon: "Gold",
                 fontSize: 12,
                 iconSize: 16,
               }
             );
-          }, 150);
+          }, 50);
         }
       },
     },

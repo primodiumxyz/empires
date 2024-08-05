@@ -32,9 +32,9 @@ export async function executeBatch<functionName extends ContractFunctionName<Wor
       systemId,
       callData,
     }));
-    const tx = playerAccount.worldContract.write.batchCall([params]);
+    const tx = async () => await playerAccount.worldContract.write.batchCall([params]);
     const simulateTx = async () => {
-      await playerAccount.worldContract.simulate.batchCall([params]);
+      await playerAccount.worldContract.simulate.batchCall([params], { account: playerAccount.address });
     };
     return await _execute(core, tx, simulateTx);
   };

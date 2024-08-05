@@ -133,25 +133,18 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
       },
     });
   };
-
-  const placeMagnet = async (
-    empire: EEmpire,
-    planetId: Entity,
-    turnCount: bigint,
-    payment: bigint,
-    options?: Partial<TxQueueOptions>,
-  ) => {
+  const tacticalStrike = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
     return await execute({
-      functionName: "Empires__placeMagnet",
-      args: [empire, planetId, turnCount],
-      options: { value: payment, gas: 546063n * 2n },
+      functionName: "Empires__tacticalStrike",
+      args: [planetId],
+      options: { gas: 738649n * 2n },
       txQueueOptions: {
-        id: `${planetId}-place-magnet`,
+        id: `${planetId}-tactical-strike`,
         ...options,
       },
       onComplete: ({ success, error }) => {
         if (success) {
-          notify("success", `Placed magnet on ${entityToPlanetName(planetId)}`);
+          notify("success", `Tactical strike on ${entityToPlanetName(planetId)}`);
         } else {
           notify("error", error || "Unknown error");
         }
@@ -159,5 +152,43 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
     });
   };
 
-  return { createShip, removeShip, addShield, removeShield, sellPoints, placeMagnet };
+  const boostCharge = async (planetId: Entity, count: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__boostCharge",
+      args: [planetId, count],
+      options: { value: payment, gas: 738649n * 2n },
+      txQueueOptions: {
+        id: `${planetId}-boost-charge`,
+        ...options,
+      },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Boosted ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
+    });
+  };
+
+  const stunCharge = async (planetId: Entity, count: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__stunCharge",
+      args: [planetId, count],
+      options: { value: payment, gas: 738649n * 2n },
+      txQueueOptions: {
+        id: `${planetId}-stun-charge`,
+        ...options,
+      },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Stunned ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
+    });
+  };
+
+  return { createShip, removeShip, addShield, removeShield, sellPoints, tacticalStrike, boostCharge, stunCharge };
 };

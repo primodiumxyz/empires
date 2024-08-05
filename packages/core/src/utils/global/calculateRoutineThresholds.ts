@@ -15,13 +15,6 @@ type RoutineThresholdsBigInt = {
   attackEnemy: bigint;
 };
 
-type RoutineOptions = {
-  buyShipMultiplier?: number;
-  buyShieldMultiplier?: number;
-  attackMultiplier?: number;
-  supportMultiplier?: number;
-};
-
 export function calculateRoutineThresholds(probabilities: RoutineThresholds): RoutineThresholdsBigInt {
   const goldThreshold = BigInt(Math.round(probabilities.accumulateGold * 10000));
   const shieldThreshold = BigInt(Math.round(probabilities.buyShields * 10000)) + goldThreshold;
@@ -41,7 +34,13 @@ export function calculateRoutinePcts(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
-  options: RoutineOptions,
+  options: {
+    cantBuyShips?: boolean;
+    cantBuyShields?: boolean;
+
+    noAttackTarget?: boolean;
+    noSupportTarget?: boolean;
+  },
 ): RoutineThresholds {
   // Input variables and their multipliers
   const multipliers: {
@@ -74,11 +73,11 @@ export function calculateRoutinePcts(
 
   // Initial likelihoods
   const initialLikelihoods: RoutineThresholds = {
-    buyShields: 0.2,
-    attackEnemy: 0.35,
-    accumulateGold: 0.1,
-    buyShips: 0.2,
-    supportAlly: 0.15,
+    buyShields: 0.25,
+    attackEnemy: 0.3,
+    accumulateGold: 0.15,
+    buyShips: 0.23,
+    supportAlly: 0.07,
   } as const;
 
   // Calculate likelihood adjustments
@@ -109,10 +108,10 @@ export function calculateRoutinePcts(
     const category = _category as keyof RoutineThresholds;
     finalLikelihoods[category] = Math.max(0, initialLikelihoods[category] + adjustments[category]);
   }
-  if (options?.attackMultiplier !== undefined) finalLikelihoods.attackEnemy *= options.attackMultiplier;
-  if (options?.supportMultiplier !== undefined) finalLikelihoods.supportAlly *= options.supportMultiplier;
-  if (options?.buyShipMultiplier !== undefined) finalLikelihoods.buyShips *= options.buyShipMultiplier;
-  if (options?.buyShieldMultiplier !== undefined) finalLikelihoods.buyShields *= options.buyShieldMultiplier;
+  if (options?.noAttackTarget) finalLikelihoods.attackEnemy = 0;
+  if (options?.noSupportTarget) finalLikelihoods.supportAlly = 0;
+  if (options?.cantBuyShips) finalLikelihoods.buyShips = 0;
+  if (options?.cantBuyShields) finalLikelihoods.buyShields = 0;
 
   // Normalize likelihoods
   const normalizedLikelihoods: RoutineThresholds = {

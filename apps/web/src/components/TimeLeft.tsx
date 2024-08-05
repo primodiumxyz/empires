@@ -18,8 +18,6 @@ export const TimeLeft = () => {
   const endTime = useMemo(() => {
     return new Date(Date.now() + (timeLeftMs ?? 0));
   }, [timeLeftMs]);
-  const { tables } = useCore();
-  const turn = tables.Turn.use()?.value ?? 0n;
 
   return (
     <div className="flex w-72 flex-col justify-center gap-1 rounded p-4 text-center">
@@ -27,9 +25,8 @@ export const TimeLeft = () => {
       {!gameOver && (
         <Card className="py-2 text-sm" noDecor>
           <div className="flex flex-col">
-            <Tooltip tooltipContent={endTime.toLocaleString()} direction="bottom">
-              <p>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}</p>
-              <p>Turn: {(turn / 3n).toString()}</p>
+            <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
+              <span>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}</span>
             </Tooltip>
             {showBlockchainUnits.enabled && !!blocksLeft && (
               <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
