@@ -14,6 +14,8 @@ export const CheatcodeToBg: Record<string, string> = {
   gold: "bg-yellow-500/10",
   points: "bg-green-500/10",
   time: "bg-blue-500/10",
+  utils: "bg-gray-500/10",
+  tacticalStrike: "bg-purple-500/10",
   config: "bg-gray-500/10",
 };
 
@@ -25,7 +27,7 @@ export const setupCheatcodes = (
 ) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { updateWorld, requestDrip, setTableValue, removeTable, resetGame: _resetGame } = contractCalls;
+  const { updateWorld, requestDrip, setTableValue, removeTable, resetGame: _resetGame, tacticalStrike } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -474,12 +476,92 @@ export const setupCheatcodes = (
   // drip eth
   const dripEth = createCheatcode({
     title: "Drip",
-    bg: "bg-purple-500/10",
+    bg: CheatcodeToBg["utils"],
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
       requestDrip?.(accountClient.playerAccount.address);
       notify("success", "Dripped eth to player account");
+      return true;
+    },
+  });
+
+  /* ----------------------------- TACTICAL STRIKE ---------------------------- */
+  // reset all charges
+  const resetCharges = createCheatcode({
+    title: "Reset all charges",
+    bg: CheatcodeToBg["tacticalStrike"],
+    caption: "Tactical strike",
+    inputs: {},
+    execute: async () => {
+      const planets = tables.Planet.getAll()
+        .map((entity) => ({ entity, properties: tables.Planet.get(entity) }))
+        .filter((planet) => !!planet.properties?.empireId);
+      const lastUpdated = tables.BlockNumber.get()?.value ?? BigInt(0);
+
+      await Promise.all(
+        planets.map((planet) =>
+          setTableValue(tables.Planet_TacticalStrike, { planetId: planet.entity }, { charge: BigInt(0), lastUpdated }),
+        ),
+      );
+
+      notify("success", `Charges reset for ${planets.length} planets`);
+      return true;
+    },
+  });
+
+  // max out all charges
+  const maxOutCharges = createCheatcode({
+    title: "Max out all charges",
+    bg: CheatcodeToBg["tacticalStrike"],
+    caption: "Tactical strike",
+    inputs: {},
+    execute: async () => {
+      const planets = tables.Planet.getAll()
+        .map((entity) => ({ entity, properties: tables.Planet.get(entity) }))
+        .filter((planet) => !!planet.properties?.empireId);
+      const lastUpdated = tables.BlockNumber.get()?.value ?? BigInt(0);
+      const maxCharge = tables.P_TacticalStrikeConfig.get()?.maxCharge ?? BigInt(0);
+
+      await Promise.all(
+        planets.map((planet) =>
+          setTableValue(tables.Planet_TacticalStrike, { planetId: planet.entity }, { charge: maxCharge, lastUpdated }),
+        ),
+      );
+
+      notify("success", `Charges maxed out for ${planets.length} planets`);
+      return true;
+    },
+  });
+
+  // trigger all charges
+  const triggerCharges = createCheatcode({
+    title: "Trigger all charges",
+    bg: CheatcodeToBg["tacticalStrike"],
+    caption: "Tactical strike",
+    inputs: {},
+    execute: async () => {
+      const maxCharge = tables.P_TacticalStrikeConfig.get()?.maxCharge ?? BigInt(0);
+      const blockNumber = tables.BlockNumber.get()?.value ?? BigInt(0);
+
+      const planets = tables.Planet.getAll()
+        .map((entity) => ({ entity, properties: tables.Planet.get(entity) }))
+        .filter((planet) => {
+          const tacticalStrikeData = tables.Planet_TacticalStrike.get(planet.entity);
+          if (!tacticalStrikeData) return false;
+
+          const blocksElapsed = blockNumber - tacticalStrikeData.lastUpdated;
+          const actualCharge = tacticalStrikeData.charge + (blocksElapsed * tacticalStrikeData.chargeRate) / 100n;
+
+          if (actualCharge >= maxCharge) return true;
+          return false;
+        });
+
+      for (const planet of planets) {
+        await tacticalStrike(planet.entity);
+      }
+
+      notify("success", `Charges triggered for ${planets.length} planets`);
       return true;
     },
   });
@@ -670,6 +752,9 @@ export const setupCheatcodes = (
     endGame,
     resetGame,
     dripEth,
+    resetCharges,
+    maxOutCharges,
+    triggerCharges,
     ...Object.values(updateGameConfig),
   ];
 };
