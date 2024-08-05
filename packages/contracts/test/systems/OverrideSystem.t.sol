@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, P_OverrideConfig, Planet, OverrideCost, Player, P_PointConfig, Empire } from "codegen/index.sol";
+import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, Turn, P_GameConfig, Planet, OverrideCost, Player, P_PointConfig, P_MagnetConfig, Magnet, Empire } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
@@ -31,34 +31,48 @@ contract OverrideSystemTest is PrimodiumTest {
     pointUnit = P_PointConfig.getPointUnit();
   }
 
+  function _getCurrentCharge(bytes32 _planetId) internal view returns (uint256) {
+    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(_planetId);
+    return data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
+  }
+
   function testCreateShipSingle() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
+    uint256 currentCharge = _getCurrentCharge(planetId);
     world.Empires__createShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 1);
+    assertEq(_getCurrentCharge(planetId), currentCharge + P_TacticalStrikeConfig.getCreateShipBoostIncrease());
   }
 
   function testCreateShipMultiple() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 10);
+    uint256 currentCharge = _getCurrentCharge(planetId);
     world.Empires__createShip{ value: cost }(planetId, 10);
     assertEq(Planet.get(planetId).shipCount, 10);
+    assertEq(_getCurrentCharge(planetId), currentCharge + (P_TacticalStrikeConfig.getCreateShipBoostIncrease() * 10));
   }
 
   function testKillShipSingle() public {
+    testCreateShipSingle();
+    uint256 currentCharge = _getCurrentCharge(planetId);
     vm.startPrank(creator);
     Planet.setShipCount(planetId, 1);
 
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 1);
     world.Empires__killShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 0);
+    assertEq(_getCurrentCharge(planetId), currentCharge - P_TacticalStrikeConfig.getKillShipBoostCostDecrease());
   }
 
   function testKillShipMultiple() public {
     testCreateShipMultiple();
+    uint256 currentCharge = _getCurrentCharge(planetId);
     uint256 currentShips = Planet.get(planetId).shipCount;
 
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 6);
     world.Empires__killShip{ value: cost }(planetId, 6);
     assertEq(Planet.get(planetId).shipCount, currentShips - 6);
+    assertEq(_getCurrentCharge(planetId), currentCharge - (P_TacticalStrikeConfig.getKillShipBoostCostDecrease() * 6));
   }
 
   function testChargeShieldSingle() public {
@@ -139,7 +153,11 @@ contract OverrideSystemTest is PrimodiumTest {
     assertGt(OverrideCost.get(empire, EOverride.CreateShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Red, aliceId), (EMPIRE_COUNT - 1) * pointUnit, "Player should have received points");
+    assertEq(
+      PointsMap.getValue(EEmpire.Red, aliceId),
+      (EMPIRE_COUNT - 1) * pointUnit,
+      "Player should have received points"
+    );
   }
 
   function testPurchaseOverrideProgressMultiple() public {
@@ -159,7 +177,7 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
-      PointsMap.get(EEmpire.Red, aliceId),
+      PointsMap.getValue(EEmpire.Red, aliceId),
       overrideCount * (EMPIRE_COUNT - 1) * pointUnit,
       "Player should have received points"
     );
@@ -179,8 +197,8 @@ contract OverrideSystemTest is PrimodiumTest {
     assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
-    assertEq(PointsMap.get(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
+    assertEq(PointsMap.getValue(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
+    assertEq(PointsMap.getValue(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
   }
 
   function testPurchaseOverrideRegressMultiple() public {
@@ -202,9 +220,13 @@ contract OverrideSystemTest is PrimodiumTest {
     assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
     assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.get(EEmpire.Blue, bobId), overrideCount * pointUnit, "Player should have received blue points");
     assertEq(
-      PointsMap.get(EEmpire.Green, bobId),
+      PointsMap.getValue(EEmpire.Blue, bobId),
+      overrideCount * pointUnit,
+      "Player should have received blue points"
+    );
+    assertEq(
+      PointsMap.getValue(EEmpire.Green, bobId),
       overrideCount * pointUnit,
       "Player should have received green points"
     );
@@ -219,10 +241,10 @@ contract OverrideSystemTest is PrimodiumTest {
     console.log("marginal cost before createShip", OverrideCost.get(empire, EOverride.CreateShip));
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
-    console.log("alice points after createShip", PointsMap.get(empire, aliceId));
+    console.log("alice points after createShip", PointsMap.getValue(empire, aliceId));
     console.log("alice balance after createShip", alice.balance);
 
-    uint256 aliceInitPoints = PointsMap.get(empire, aliceId);
+    uint256 aliceInitPoints = PointsMap.getValue(empire, aliceId);
     uint256 aliceInitBalance = alice.balance;
     uint256 gameInitBalance = Balances.get(EMPIRES_NAMESPACE_ID);
     uint256 pointSaleValue = LibPrice.getPointSaleValue(empire, 1 * pointUnit);
@@ -231,7 +253,7 @@ contract OverrideSystemTest is PrimodiumTest {
 
     world.Empires__sellPoints(empire, 1 * pointUnit);
 
-    assertEq(PointsMap.get(empire, aliceId), aliceInitPoints - (1 * pointUnit), "Player should have lost points");
+    assertEq(PointsMap.getValue(empire, aliceId), aliceInitPoints - (1 * pointUnit), "Player should have lost points");
     assertEq(alice.balance, aliceInitBalance + pointSaleValue, "Player should have gained balance");
     assertEq(
       Balances.get(EMPIRES_NAMESPACE_ID),
@@ -250,7 +272,7 @@ contract OverrideSystemTest is PrimodiumTest {
       "Empire should have reduced points issued"
     );
 
-    console.log("alice points after sellPoints", PointsMap.get(empire, aliceId));
+    console.log("alice points after sellPoints", PointsMap.getValue(empire, aliceId));
     console.log("alice balance after sellPoints", alice.balance);
   }
 
@@ -301,25 +323,139 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__sellPoints(empire, (EMPIRE_COUNT - 1) * pointUnit);
   }
 
-  function testTacticalStrikeFailTooEarly() public {
+  function testSellPointsFailLockedPoints() public {
     EEmpire empire = Planet.getEmpireId(planetId);
+
+    vm.startPrank(creator);
+    PointsMap.setValue(empire, aliceId, 100 * pointUnit);
+    PointsMap.setLockedPoints(empire, aliceId, 50 * pointUnit);
+
+    switchPrank(alice);
+    vm.expectRevert("[OverrideSystem] Player does not have enough points to remove");
+    world.Empires__sellPoints(empire, 100 * pointUnit);
+  }
+
+  function testSellPointsLockedPoints() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    vm.prank(creator);
+    P_TacticalStrikeConfig.setMaxCharge(10000);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, 1);
 
     vm.startPrank(alice);
     world.Empires__createShip{ value: totalCost }(planetId, 1);
+    uint256 points = PointsMap.getValue(empire, aliceId);
+    vm.startPrank(creator);
+    PointsMap.setLockedPoints(empire, aliceId, points / 2);
+
+    switchPrank(alice);
+    world.Empires__sellPoints(empire, points / 2);
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), points / 2, "Locked Points should be 50");
+    assertEq(PointsMap.getValue(empire, aliceId), points - (points / 2), "Player Points should be 80");
+  }
+
+  function testPlaceMagnet() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+    uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
+
+    vm.prank(creator);
+    Turn.setValue(32);
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+    assertEq(Magnet.getIsMagnet(empire, planetId), true, "Magnet should be placed");
+    assertEq(Magnet.getLockedPoints(empire, planetId), pointsToStake, "Magnet should have locked points");
+    assertEq(Magnet.getPlayerId(empire, planetId), aliceId, "Magnet should have player id");
+    assertEq(Magnet.getEndTurn(empire, planetId), Turn.getValue() / EMPIRE_COUNT + 1, "Magnet should have end turn");
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
+  }
+
+  function testPlaceMagnetMultipleTurns() public {
+    uint256 turns = 3;
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, turns);
+    uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, turns);
+    uint256 currTurn = Turn.getValue();
+    uint256 fullTurn = (currTurn - 1) / EMPIRE_COUNT;
+    assertEq(Magnet.getIsMagnet(empire, planetId), true, "Magnet should be placed");
+    assertEq(Magnet.getLockedPoints(empire, planetId), pointsToStake, "Magnet should have locked points");
+    assertEq(Magnet.getPlayerId(empire, planetId), aliceId, "Magnet should have player id");
+    // should be minus one because the magnet is placed before the empire's turn has occurred in the current full turn
+    assertEq(Magnet.getEndTurn(empire, planetId), fullTurn + turns - 1, "Magnet should have end turn");
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
+  }
+
+  function testPlaceMagnetFailExistingMagnet() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+
+    vm.prank(bob);
+    vm.expectRevert("[OverrideSystem] Planet already has a magnet");
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+  }
+
+  function testPlaceMagnetFailInsufficientPayment() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+
+    vm.prank(alice);
+    vm.expectRevert("[OverrideSystem] Incorrect payment");
+    world.Empires__placeMagnet{ value: totalCost - 1 }(empire, planetId, 1);
+  }
+
+  function testPlaceMagnetFailInsufficientPoints() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+
+    // Set player points to 0
+    vm.startPrank(creator);
+    Empire.setPointsIssued(empire, 100 * pointUnit);
+    PointsMap.setValue(empire, aliceId, 0);
+
+    switchPrank(alice);
+    vm.expectRevert("[OverrideSystem] Player does not have enough points to place magnet");
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+  }
+
+  function testPlaceMagnetCostDeduction() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+    uint256 initialBalance = alice.balance;
+
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+
+    assertEq(alice.balance, initialBalance - totalCost, "Incorrect amount deducted from player's balance");
+  }
+
+  function testPlaceMagnetPointLocking() public {
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+    uint256 initialPoints = PointsMap.getValue(empire, aliceId);
+    uint256 expectedLockedPoints = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
+
+    vm.prank(alice);
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), expectedLockedPoints, "Incorrect amount of points locked");
+    assertEq(
+      PointsMap.getValue(empire, aliceId),
+      initialPoints + ((EMPIRE_COUNT - 1) * pointUnit),
+      "Total points should not change"
+    );
+  }
+
+  function testTacticalStrikeFailTooEarly() public {
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
     uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
-    assertEq(data.charge, 0, "Charge should be 0");
+
     assertEq(data.chargeRate, 100, "Charge Rate should be 100");
 
-    // end block will be when charge >= maxCharge
-    // current charge = data.charge + pending charge
-    // pending charge = (block.number - data.lastUpdated) * data.chargeRate / 100
-    // charge = current charge + pending charge
-    // remaining charge = maxCharge - charge
-    // remaining blocks = remaining charge / data.chargeRate
-
-    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
+    uint256 currentCharge = _getCurrentCharge(planetId);
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
     uint256 expectedEndBlock = block.number + remainingBlocks;
@@ -330,6 +466,8 @@ contract OverrideSystemTest is PrimodiumTest {
 
   function testTacticalStrike() public {
     EEmpire empire = Planet.getEmpireId(planetId);
+    vm.prank(creator);
+    P_TacticalStrikeConfig.setMaxCharge(10000);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, 1);
 
     vm.startPrank(alice);
@@ -338,10 +476,10 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
 
-    assertEq(data.charge, 0);
     assertEq(data.chargeRate, 100);
 
-    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
+    uint256 currentCharge = _getCurrentCharge(planetId);
+    console.log(currentCharge, maxCharge);
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
     uint256 expectedEndBlock = block.number + remainingBlocks;
@@ -421,10 +559,20 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 cost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 1);
 
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
+
+    // update charge to current value
     world.Empires__boostCharge{ value: cost }(planetId, 1);
+    vm.prank(creator);
+    console.log("charge before boostCharge", data.charge);
+    Planet_TacticalStrike.setCharge(planetId, 0);
+    console.log("charge after setCharge", Planet_TacticalStrike.get(planetId).charge);
+    cost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 1);
+    world.Empires__boostCharge{ value: cost }(planetId, 1);
+    console.log("charge after boostCharge", Planet_TacticalStrike.get(planetId).charge);
 
     cost = LibPrice.getTotalCost(EOverride.StunCharge, empire, 5);
     world.Empires__stunCharge{ value: cost }(planetId, 5);
+    console.log("charge after stunCharge", Planet_TacticalStrike.get(planetId).charge);
     assertEq(Planet_TacticalStrike.get(planetId).charge, 0);
   }
 }

@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider } from "@primodiumxyz/core/react";
+import { BackgroundNebula } from "@/components/BackgroundNebula";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
@@ -42,7 +43,7 @@ const App = () => {
   }, []);
 
   if (!core) {
-    return <div>Loading...</div>;
+    return <></>;
   }
 
   return (
@@ -69,10 +70,11 @@ const App = () => {
             <CoreProvider {...core}>
               <div
                 className={cn(
-                  "flex h-screen w-screen cursor-default items-center justify-center bg-gray-950",
+                  "star-background flex h-screen w-screen cursor-default items-center justify-center",
                   fontStyle,
                 )}
               >
+                <BackgroundNebula />
                 <Landing />
                 <ToastContainer
                   toastClassName={cn("text-xs border text-base-100 bg-neutral border-neutral rounded-box", fontStyle)}

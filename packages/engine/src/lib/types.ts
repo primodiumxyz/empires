@@ -58,6 +58,8 @@ export type Animation = {
   startFrame: number;
   endFrame: number;
   frameRate: number;
+  zeroPad?: number;
+  randomFrame?: boolean;
   // Number of times to repeat the animation, -1 for infinity
   repeat?: number;
   prefix?: string;

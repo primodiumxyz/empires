@@ -2,6 +2,7 @@ import { Hex } from "viem";
 
 import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
+import { PrimodiumGame } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
@@ -18,7 +19,12 @@ export const CheatcodeToBg: Record<string, string> = {
   config: "bg-gray-500/10",
 };
 
-export const setupCheatcodes = (core: Core, accountClient: AccountClient, contractCalls: ContractCalls) => {
+export const setupCheatcodes = (
+  core: Core,
+  game: PrimodiumGame,
+  accountClient: AccountClient,
+  contractCalls: ContractCalls,
+) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
   const { updateWorld, requestDrip, setTableValue, removeTable, resetGame: _resetGame, tacticalStrike } = contractCalls;
@@ -450,6 +456,14 @@ export const setupCheatcodes = (core: Core, accountClient: AccountClient, contra
 
       if (success) {
         notify("success", "Game reset");
+        const planets = tables.Planet.getAll();
+        for (const planet of planets) {
+          const planetObject = game.MAIN.objects.planet.get(planet);
+          const planetEmpire = tables.Planet.get(planet)?.empireId ?? 0;
+
+          planetObject?.updateFaction(planetEmpire);
+        }
+
         return true;
       } else {
         notify("error", "Failed to reset game");

@@ -59,6 +59,7 @@ interface TooltipProps extends React.ButtonHTMLAttributes<HTMLDivElement>, Varia
   show?: boolean;
   rotate?: boolean;
   containerClassName?: string;
+  enabled?: boolean;
 }
 
 export const Tooltip = ({
@@ -68,6 +69,7 @@ export const Tooltip = ({
   direction,
   show = false,
   containerClassName,
+  enabled = true,
 }: TooltipProps) => {
   const [visible, setVisible] = useState(false);
   const x = useMotionValue(0); // going to set this value on mouse move
@@ -78,7 +80,7 @@ export const Tooltip = ({
     x.set(event.nativeEvent.offsetX - halfWidth); // set the x value, which is then used in transform and rotate
   };
 
-  if (!tooltipContent) return children;
+  if (!tooltipContent || !enabled) return children;
 
   return (
     <div
@@ -99,7 +101,7 @@ export const Tooltip = ({
             exit={{ opacity: 0, y: 20, scale: 0.6 }}
             className={cn(
               tooltipVariants({ direction }),
-              "heropattern-graphpaper-slate-800/50 pixel-border absolute flex flex-col items-center justify-center bg-neutral px-4 py-2 text-xs shadow-xl",
+              "pixel-border absolute flex flex-col items-center justify-center bg-neutral px-4 py-2 text-xs shadow-xl heropattern-graphpaper-slate-800/50",
               className,
             )}
           >

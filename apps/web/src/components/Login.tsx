@@ -12,7 +12,7 @@ function Login() {
   const DEV = import.meta.env.PRI_DEV === "true";
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="z-10 flex flex-col gap-2">
       <button
         disabled={disableLogin}
         onClick={login}

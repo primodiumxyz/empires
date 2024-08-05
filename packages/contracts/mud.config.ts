@@ -32,6 +32,8 @@ export const worldInput = {
         maxCharge: "uint256",
         boostChargeIncrease: "uint256",
         stunChargeDecrease: "uint256",
+        createShipBoostIncrease: "uint256", // per ship created
+        killShipBoostCostDecrease: "uint256", // per ship killed
       },
     },
 
@@ -39,28 +41,36 @@ export const worldInput = {
       key: [],
       schema: {
         pointUnit: "uint256",
+        pointRake: "uint256", // times 10_000
+        pointSellTax: "uint256",
         minPointCost: "uint256",
         startPointCost: "uint256",
         pointGenRate: "uint256",
         pointCostIncrease: "uint256",
-        pointRake: "uint256", // times 10_000
-        pointSellTax: "uint256",
       },
     },
 
     P_OverrideConfig: {
-      key: [],
+      key: ["overrideAction"],
       schema: {
+        overrideAction: "EOverride",
+        isProgressOverride: "bool",
+        minOverrideCost: "uint256",
+        startOverrideCost: "uint256",
         overrideGenRate: "uint256",
         overrideCostIncrease: "uint256",
-        startOverrideCost: "uint256",
-        minOverrideCost: "uint256",
       },
     },
 
+    P_MagnetConfig: {
+      key: [],
+      schema: {
+        lockedPointsPercent: "uint256", // out of 10000
+      },
+    },
     Turn: {
       key: [],
-      schema: { nextTurnBlock: "uint256", empire: "EEmpire" },
+      schema: { nextTurnBlock: "uint256", empire: "EEmpire", value: "uint256" },
     },
 
     Player: {
@@ -80,7 +90,7 @@ export const worldInput = {
     // Used in the mbuilding utilities Map data structure
     Value_PointsMap: {
       key: ["empireId", "playerId"],
-      schema: { playerId: "bytes32", empireId: "EEmpire", value: "uint256" },
+      schema: { playerId: "bytes32", empireId: "EEmpire", value: "uint256", lockedPoints: "uint256" },
     },
 
     Meta_PointsMap: {
@@ -188,6 +198,29 @@ export const worldInput = {
       },
     },
 
+    /* ----------------------------- Magnet ---------------------------- */
+
+    Magnet: {
+      key: ["empireId", "planetId"],
+      schema: {
+        planetId: "bytes32",
+        empireId: "EEmpire",
+        isMagnet: "bool",
+        lockedPoints: "uint256",
+        endTurn: "uint256",
+        playerId: "bytes32",
+      },
+    },
+
+    MagnetTurnPlanets: {
+      key: ["empireId", "endTurn"],
+      schema: {
+        empireId: "EEmpire",
+        endTurn: "uint256",
+        planetIds: "bytes32[]",
+      },
+    },
+
     /* ----------------------------- Offchain Tables ---------------------------- */
 
     // used to generate random ids for offchain tables
@@ -272,7 +305,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    CreateShipOverride: {
+    CreateShipOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -285,7 +318,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    KillShipOverride: {
+    KillShipOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -298,7 +331,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    ChargeShieldsOverride: {
+    ChargeShieldsOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -310,7 +343,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    DrainShieldsOverride: {
+    DrainShieldsOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -322,7 +355,20 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BoostChargeOverride: {
+    PlaceMagnetOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    BoostChargeOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -334,7 +380,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    StunChargeOverride: {
+    StunChargeOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -346,7 +392,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    TacticalStrikeOverride: {
+    TacticalStrikeOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",

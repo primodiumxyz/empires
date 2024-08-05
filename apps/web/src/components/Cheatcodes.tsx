@@ -12,6 +12,8 @@ import { cn } from "@/util/client";
 
 import "@/index.css";
 
+import { useGame } from "@/hooks/useGame";
+
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
 /* -------------------------------------------------------------------------- */
@@ -23,9 +25,10 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const core = useCore();
+  const game = useGame();
   const accountClient = useAccountClient();
   const contractCalls = useContractCalls();
-  const cheatcodes = setupCheatcodes(core, accountClient, contractCalls);
+  const cheatcodes = setupCheatcodes(core, game, accountClient, contractCalls);
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
