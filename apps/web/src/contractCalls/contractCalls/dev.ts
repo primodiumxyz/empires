@@ -25,10 +25,11 @@ export const createDevCalls = ({ execute }: ExecuteFunctions) => {
 
   async function setTableValue<tableDef extends ContractTableDef = ContractTableDef>(
     table: ContractTable<tableDef>,
-    keys: SchemaToPrimitives<ContractTable<tableDef>["metadata"]["abiKeySchema"]>,
+    _keys: SchemaToPrimitives<ContractTable<tableDef>["metadata"]["abiKeySchema"]>,
     newValues: Partial<Properties<ContractTable<tableDef>["propertiesSchema"]>>,
   ) {
     const tableId = table.id as Hex;
+    const keys = Object.fromEntries(Object.keys(table.metadata.abiKeySchema).map((key) => [key, _keys[key]]));
     const schema = Object.keys(table.metadata.abiPropertiesSchema);
     const keyTuple = encodeKeys(table.metadata.abiKeySchema, keys);
 
