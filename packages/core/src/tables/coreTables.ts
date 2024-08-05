@@ -37,6 +37,7 @@ export default function setupCoreTables(network: CreateNetworkResult) {
   });
 
   const SelectedPlanet = createLocalEntityTable(world, { id: "SelectedPlanet" });
+  const HoveredPlanet = createLocalEntityTable(world, { id: "HoveredPlanet" });
   const SelectedTab = createLocalNumberTable(world, {
     id: "SelectedTab",
     persist: true,
@@ -52,5 +53,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     TransactionQueue,
     SelectedPlanet,
     SelectedTab,
+    HoveredPlanet,
   };
 }

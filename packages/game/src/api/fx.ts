@@ -96,6 +96,11 @@ export const createFxApi = (scene: Scene) => {
         fontSize,
         color,
         align: "center",
+        metrics: {
+          ascent: 10,
+          descent: 10,
+          fontSize,
+        },
       })
       .setStroke("#000000", 5)
       .setOrigin(0.5, 0.5);

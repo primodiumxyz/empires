@@ -29,7 +29,11 @@ export const worldInput = {
     P_TacticalStrikeConfig: {
       key: [],
       schema: {
-        countdownLength: "uint256",
+        maxCharge: "uint256",
+        boostChargeIncrease: "uint256",
+        stunChargeDecrease: "uint256",
+        createShipBoostIncrease: "uint256", // per ship created
+        killShipBoostCostDecrease: "uint256", // per ship killed
       },
     },
 
@@ -113,6 +117,16 @@ export const worldInput = {
         goldCount: "uint256",
         empireId: "EEmpire",
         lastEMStormVisit: "uint256",
+      },
+    },
+
+    Planet_TacticalStrike: {
+      key: ["planetId"],
+      schema: {
+        planetId: "bytes32",
+        lastUpdated: "uint256",
+        chargeRate: "uint256",
+        charge: "uint256",
       },
     },
 
@@ -324,6 +338,40 @@ export const worldInput = {
         planetId: "bytes32",
         ethSpent: "uint256",
         overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    BoostChargeOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        boostCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    StunChargeOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        stunCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    TacticalStrikeOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
         timestamp: "uint256",
       },
       type: "offchainTable",
