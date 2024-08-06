@@ -211,6 +211,7 @@ contract OverrideSystem is EmpiresSystem {
         turn: Turn.getValue(),
         planetId: _planetId,
         playerId: playerId,
+        empireId: _empire,
         ethSpent: cost,
         overrideCount: turnDuration,
         timestamp: block.timestamp

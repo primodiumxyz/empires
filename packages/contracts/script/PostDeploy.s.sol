@@ -8,7 +8,7 @@ import { IWorld } from "codegen/world/IWorld.sol";
 import { createPrototypes } from "codegen/Prototypes.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { P_GameConfig } from "codegen/index.sol";
+import { Turn, P_GameConfig } from "codegen/index.sol";
 
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
 import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
@@ -36,6 +36,7 @@ contract PostDeploy is Script {
 
     createPlanets();
     initPrice();
+    Turn.setNextTurnBlock(block.number + P_GameConfig.getTurnLengthBlocks());
 
     // register the admin namespace that stores raked eth
     world.registerNamespace(ADMIN_NAMESPACE_ID);

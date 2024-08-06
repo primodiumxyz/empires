@@ -375,8 +375,8 @@ export const worldInput = {
         playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
+        empireId: "EEmpire",
         ethSpent: "uint256",
-
         overrideCount: "uint256",
         timestamp: "uint256",
       },
