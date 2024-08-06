@@ -23,7 +23,8 @@ export const TimeLeft = () => {
 
   const turn = tables.Turn.use()?.value ?? 1n;
   const displayTurn = useMemo(() => {
-    return ((turn - 1n) / 3n + 1n).toString();
+    // return ((turn - 1n) / 3n + 1n).toString();
+    return (turn / 3n).toString();
   }, [turn]);
 
   return (
