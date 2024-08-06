@@ -10,6 +10,7 @@ import { HUD } from "@/components/core/HUD";
 import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { OverrideDrawer } from "@/components/OverrideDrawer";
+import { PlayerInsight } from "@/components/PlayerInsight";
 import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
 import { SellPoints } from "@/components/SellPoints";
@@ -98,8 +99,9 @@ export const GameHUD = () => {
           <Pot className="w-48" />
         </HUD.TopMiddle>
 
-        <HUD.TopRight>
+        <HUD.TopRight className="flex flex-col gap-2">
           <Account />
+          <PlayerInsight />
         </HUD.TopRight>
 
         <HUD.BottomLeft>
