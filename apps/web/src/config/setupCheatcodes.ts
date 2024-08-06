@@ -632,7 +632,7 @@ export const setupCheatcodes = (
   const placeMagnet = createCheatcode({
     title: "Place magnet",
     bg: CheatcodeToBg["magnet"],
-    caption: "Magnets",
+    caption: "on a planet",
     inputs: {
       empire: {
         label: "Empire",
@@ -705,7 +705,7 @@ export const setupCheatcodes = (
   const removeMagnet = createCheatcode({
     title: "Remove magnet",
     bg: CheatcodeToBg["magnet"],
-    caption: "Magnets",
+    caption: "from a planet",
     inputs: {
       empire: {
         label: "Empire",
@@ -739,9 +739,9 @@ export const setupCheatcodes = (
 
   // remove all magnets
   const removeAllMagnets = createCheatcode({
-    title: "Remove all magnets for an empire",
+    title: "Remove all magnets",
     bg: CheatcodeToBg["magnet"],
-    caption: "Magnets",
+    caption: "for an empire",
     inputs: {
       empire: {
         label: "Empire",
