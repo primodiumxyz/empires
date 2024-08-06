@@ -109,10 +109,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         <p className="text-xs text-gray-400">{caption}</p>
       </div>
       <div
-        className={cn(
-          "hidden gap-2 overflow-hidden bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4",
-          activeTab === index && "grid",
-        )}
+        className={cn("hidden gap-2 bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4", activeTab === index && "grid")}
       >
         {Object.entries(inputs).map(([inputKey, input]) => {
           const { label, inputType = "string", options } = input;

@@ -43,7 +43,7 @@ function generateContent() {
             PlanetsSet.add(planetId);
             ${empireName === "NULL" ? "" : `EmpirePlanetsSet.add(EEmpire.${empireName}, planetId);`}
 
-            createTacticalCharge(planetId, ${empireName === "NULL" ? 0 : 100});
+            createTacticalCharge(planetId, ${empireName === "NULL" ? 0 : "chargeRate"});
             `;
     })
     .join("");
@@ -57,13 +57,14 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
-import { Planet, PlanetData, Empire, Planet_TacticalStrikeData, Planet_TacticalStrike } from "codegen/index.sol";
+import { Planet, PlanetData, Empire, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig } from "codegen/index.sol";
 import { EEmpire, EOrigin, EOverride } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
 
 function createPlanets() {
 
   bytes32 planetId;
+  uint256 chargeRate = P_TacticalStrikeConfig.getChargeRate();
 
   Empire.set(EEmpire.Red, EOrigin.North, 0, 0);
   Empire.set(EEmpire.Blue, EOrigin.North, 0, 0);

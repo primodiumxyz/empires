@@ -1,7 +1,7 @@
-import { Core, sleep } from "@primodiumxyz/core";
-import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
-import { PrimodiumScene } from "@game/types";
 import { createStaggerQueue } from "@game/lib/utils/createStaggerQueue";
+import { PrimodiumScene } from "@game/types";
+import { Core, formatNumber, sleep } from "@primodiumxyz/core";
+import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 
 export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
   const {
@@ -184,17 +184,17 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
   tables.Turn.watch(
     {
       world: systemsWorld,
-      onUpdate: async ({ properties: { current } }) => {
-        if (!current) return;
+      onUpdate: async ({ properties: { prev } }) => {
+        if (!prev) return;
 
         const goldGenRate = tables.P_GameConfig.get()?.goldGenRate;
 
-        const planets = tables.Planet.getAll();
+        const planets = tables.Planet.getAllWith({ empireId: prev.empire });
 
         for (let i = 0; i < planets.length; i++) {
           const planet = scene.objects.planet.get(planets[i] as Entity);
 
-          if (!planet) continue;
+          if (!planet || !goldGenRate) continue;
 
           enqueue(() => {
             scene.audio.play("Complete", "sfx", {
@@ -203,7 +203,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
             });
             scene.fx.emitFloatingText(
               { x: planet.coord.x, y: planet.coord.y - 25 },
-              `+${goldGenRate?.toString()}`,
+              `+${formatNumber(goldGenRate * 3n)}`,
               {
                 icon: "Gold",
                 fontSize: 12,
