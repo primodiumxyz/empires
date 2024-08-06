@@ -11,7 +11,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
   const systemsWorld = namespaceWorld(world, "systems");
   const { enqueue } = createStaggerQueue();
 
-  tables.BuyShieldsRoutine.watch(
+  tables.BuyShieldsRoutineLog.watch(
     {
       world: systemsWorld,
       onEnter: async ({ properties: { current } }) => {
@@ -56,7 +56,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
     }
   );
 
-  tables.BuyShipsRoutine.watch(
+  tables.BuyShipsRoutineLog.watch(
     {
       world: systemsWorld,
       onEnter: async ({ properties: { current } }) => {
@@ -99,7 +99,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
     { runOnInit: false }
   );
 
-  tables.MoveRoutine.watch(
+  tables.MoveRoutineLog.watch(
     {
       world: systemsWorld,
       onEnter: async ({ properties: { current } }) => {
@@ -149,7 +149,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
     { runOnInit: false }
   );
 
-  tables.AccumulateGoldRoutine.watch(
+  tables.AccumulateGoldRoutineLog.watch(
     {
       world: systemsWorld,
       onEnter: async ({ properties: { current } }) => {

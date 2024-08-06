@@ -44,7 +44,7 @@ export const SellPoints = () => {
   const { price: pointsToWei, message } = usePointPrice(empire, Number(amountToSell));
 
   return (
-    <Card noDecor className="w-56 gap-2">
+    <Card noDecor className="w-full gap-2">
       <div className="flex flex-col gap-2">
         <p className="text-left text-xs font-bold uppercase">Sell Points</p>
         <SecondaryCard>
