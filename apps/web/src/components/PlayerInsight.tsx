@@ -93,7 +93,7 @@ const EmpireEndReward = ({
     <Badge
       variant="glass"
       size="sm"
-      className={cn("flex h-full w-full justify-start gap-3 border-none py-1", EmpireEnumToColor[empire])}
+      className={cn("grid h-full w-full grid-cols-[12px_1fr_auto] gap-3 border-none py-1", EmpireEnumToColor[empire])}
     >
       <div className={cn("mx-1 size-2 rounded-full", EmpireEnumToColor[empire])} />
       <div className="flex w-full items-center justify-between gap-1">
