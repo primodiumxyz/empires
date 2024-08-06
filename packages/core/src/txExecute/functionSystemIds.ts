@@ -34,4 +34,5 @@ export const functionSystemIds: {
 
   /* ----------------------------------- Dev ---------------------------------- */
   Empires__devSetField: getSystemId("DevSystem"),
+  Empires__devDeleteRecord: getSystemId("DevSystem"),
 };

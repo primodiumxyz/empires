@@ -136,22 +136,26 @@ contract UpdateSystemTest is PrimodiumTest {
     assertEq(OverrideCost.get(EEmpire.Green, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
   }
 
+  function _getEndTurn(uint256 turnDuration) internal view returns (uint256) {
+    return block.number + (turnDuration * 3) * P_GameConfig.getTurnLengthBlocks();
+  }
+
   function testMagnetRemoval() public {
     // Add a magnet to a planet
     EEmpire empire = Turn.getEmpire();
     uint256 turnDuration = 1;
+    uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
     PointsMap.setValue(empire, aliceId, 100 * pointUnit);
     LibMagnet.addMagnet(empire, planetId, addressToId(alice), turnDuration);
 
     // Simulate the end of the turn
-    while (Turn.getEmpire() != empire) {
+    while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
       world.Empires__updateWorld(allRoutineThresholds);
     }
 
-    world.Empires__updateWorld(allRoutineThresholds);
     // Verify magnet is removed
     assertFalse(Magnet.get(empire, planetId).isMagnet, "Magnet should be removed");
     assertEq(PointsMap.getLockedPoints(empire, addressToId(alice)), 0, "Locked points should be returned");
@@ -161,23 +165,18 @@ contract UpdateSystemTest is PrimodiumTest {
     // Add a magnet to a planet
     EEmpire empire = Turn.getEmpire();
     uint256 turnDuration = 30;
+    uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
     PointsMap.setValue(empire, aliceId, 100 * pointUnit);
     LibMagnet.addMagnet(empire, planetId, addressToId(alice), turnDuration);
 
-    uint256 turn = 0;
     // Simulate the end of the turn
-    while (turn < turnDuration - 1) {
+    while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
       world.Empires__updateWorld(allRoutineThresholds);
-      if (Turn.getEmpire() == empire) {
-        turn++;
-      }
     }
 
-    vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
-    world.Empires__updateWorld(allRoutineThresholds);
     // Verify magnet is removed
     assertFalse(Magnet.get(empire, planetId).isMagnet, "Magnet should be removed");
     assertEq(PointsMap.getLockedPoints(empire, addressToId(alice)), 0, "Locked points should be returned");
@@ -186,6 +185,7 @@ contract UpdateSystemTest is PrimodiumTest {
   function testMultipleMagnetRemoval() public {
     EEmpire empire = Turn.getEmpire();
     uint256 turnDuration = 1;
+    uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
     PointsMap.setValue(empire, aliceId, 50 * pointUnit);
     PointsMap.setValue(empire, bobId, 50 * pointUnit);
@@ -195,13 +195,12 @@ contract UpdateSystemTest is PrimodiumTest {
     LibMagnet.addMagnet(empire, emptyPlanetId, addressToId(bob), turnDuration);
 
     // Simulate the end of the turn
-    while (Turn.getEmpire() != empire) {
+    while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
       world.Empires__updateWorld(allRoutineThresholds);
     }
 
-    world.Empires__updateWorld(allRoutineThresholds);
     // Verify all magnets are removed
     assertFalse(Magnet.get(empire, planetId).isMagnet, "Magnet 1 should be removed");
     assertFalse(Magnet.get(empire, emptyPlanetId).isMagnet, "Magnet 2 should be removed");
@@ -212,19 +211,18 @@ contract UpdateSystemTest is PrimodiumTest {
   function testMagnetRemovalEffectOnPlayerPoints() public {
     EEmpire empire = Turn.getEmpire();
     uint256 turnDuration = 1;
+    uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
     PointsMap.setValue(empire, aliceId, 100 * pointUnit);
 
     LibMagnet.addMagnet(empire, planetId, addressToId(alice), turnDuration);
 
     // Simulate the end of the turn
-    while (Turn.getEmpire() != empire) {
+    while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
       world.Empires__updateWorld(allRoutineThresholds);
     }
-
-    world.Empires__updateWorld(allRoutineThresholds);
 
     // Verify points
     assertFalse(Magnet.get(empire, planetId).isMagnet, "Magnet should not be present");
@@ -235,19 +233,18 @@ contract UpdateSystemTest is PrimodiumTest {
   function testMagnetRemovalNotPlacedOnCurrTurn() public {
     EEmpire empire = EEmpire(((uint8(Turn.getEmpire()) - 1) % EMPIRE_COUNT) + 1);
     uint256 turnDuration = 1;
+    uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
     PointsMap.setValue(empire, aliceId, 100 * pointUnit);
 
     LibMagnet.addMagnet(empire, planetId, addressToId(alice), turnDuration);
 
     // Simulate the end of the turn
-    while (Turn.getEmpire() != empire) {
+    while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
       world.Empires__updateWorld(allRoutineThresholds);
     }
-
-    world.Empires__updateWorld(allRoutineThresholds);
 
     // Verify points
     assertFalse(Magnet.get(empire, planetId).isMagnet, "Magnet should not be present");
@@ -258,6 +255,7 @@ contract UpdateSystemTest is PrimodiumTest {
   function testMagnetRemovalInteractionWithMagnetTurnPlanets() public {
     EEmpire empire = Turn.getEmpire();
     uint256 turnDuration = 2;
+    uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
     PointsMap.setValue(empire, aliceId, 100 * pointUnit);
     PointsMap.setValue(empire, bobId, 100 * pointUnit);
@@ -266,7 +264,7 @@ contract UpdateSystemTest is PrimodiumTest {
     LibMagnet.addMagnet(empire, emptyPlanetId, addressToId(bob), turnDuration + 1);
 
     // Simulate two turns passing
-    for (uint i = 0; i <= EMPIRE_COUNT; i++) {
+    while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       world.Empires__updateWorld(allRoutineThresholds);
     }
