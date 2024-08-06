@@ -38,9 +38,9 @@ export const PlayerInsight = () => {
           </div>
           <div className="flex flex-col gap-1">
             <h2 className="flex items-center justify-between gap-2 font-semibold text-gray-400">
-              <span>End rewards</span>
+              <span>Projected</span>
               <Tooltip
-                tooltipContent="Your rewards at the end of the game for each empire if it wins"
+                tooltipContent="Your projected rewards at the end of the game for each empire if it wins"
                 direction="left"
                 className="w-64 text-xs"
               >
@@ -54,11 +54,11 @@ export const PlayerInsight = () => {
             </div>
           </div>
           <Divider className="self-center" />
-          <div>
+          <div className="flex flex-col gap-1">
             <h2 className="flex items-center justify-between gap-2 font-semibold text-gray-400">
-              <span>Immediate reward</span>
+              <span>Sell now</span>
               <Tooltip
-                tooltipContent="Your rewards if you sell all points right now"
+                tooltipContent="Your reward if you sell points for all empires right now"
                 direction="left"
                 className="w-64 text-xs"
               >
