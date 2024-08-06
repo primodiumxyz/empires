@@ -67,6 +67,11 @@ library LibShieldEater {
     Planet.setLastShieldEaterVisit(coordToId(src.q + offset.q, src.r + offset.r), block.number);
   }
 
+  /**
+   * @dev Detonates the Shield Eater at the current location, wiping out shield on all nearby planets.
+   */
+  function detonateShieldEater() internal {}
+
   /********************/
   /* HELPER FUNCTIONS */
   /********************/
