@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, Player, P_PointConfig, ShieldEater, Planet, PlanetData } from "codegen/index.sol";
+import { Empire, Player, P_PointConfig, ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 
 import { PlanetsSet } from "adts/PlanetsSet.sol";
@@ -70,7 +70,63 @@ library LibShieldEater {
   /**
    * @dev Detonates the Shield Eater at the current location, wiping out shield on all nearby planets.
    */
-  function detonateShieldEater() internal {}
+  function detonateShieldEater() internal {
+    require(
+      block.number >= ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown(),
+      "LibShieldEater::detonateShieldEater cooldown not yet expired"
+    );
+
+    PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
+    CoordData memory center = CoordData(currentPlanet.q, currentPlanet.r);
+
+    // Center
+    Planet.setShieldCount(ShieldEater.getCurrentPlanet(), 0);
+    Planet.setLastShieldEaterVisit(ShieldEater.getCurrentPlanet(), block.number);
+
+    // East
+    CoordData memory neighbor = CoordData(center.q + 1, center.r);
+    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
+      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
+      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    }
+
+    // Southeast
+    neighbor = CoordData(center.q, center.r + 1);
+    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
+      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
+      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    }
+
+    // Southwest
+    neighbor = CoordData(center.q - 1, center.r + 1);
+    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
+      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
+      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    }
+
+    // West
+    neighbor = CoordData(center.q - 1, center.r);
+    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
+      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
+      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    }
+
+    // Northwest
+    neighbor = CoordData(center.q, center.r - 1);
+    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
+      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
+      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    }
+
+    // Northeast
+    neighbor = CoordData(center.q + 1, center.r - 1);
+    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
+      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
+      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    }
+
+    ShieldEater.setLastDetonationBlock(block.number);
+  }
 
   /********************/
   /* HELPER FUNCTIONS */

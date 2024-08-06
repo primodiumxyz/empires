@@ -39,6 +39,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         createShipBoostIncrease: 1n,
         killShipBoostCostDecrease: 1n,
       },
+      P_ShieldEaterConfig: {
+        detonationCooldown: 15n,
+      }
     },
   },
 
