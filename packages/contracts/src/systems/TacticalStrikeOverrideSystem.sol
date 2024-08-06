@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, Planet, PlanetData } from "codegen/index.sol";
+import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, Planet, PlanetData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
@@ -38,6 +38,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     BoostChargeOverrideLog.set(
       pseudorandomEntity(),
       BoostChargeOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
         ethSpent: cost,
         boostCount: _boostCount,
@@ -74,6 +75,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     StunChargeOverrideLog.set(
       pseudorandomEntity(),
       StunChargeOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
         ethSpent: cost,
         stunCount: _stunCount,
@@ -111,7 +113,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     // Log the tactical strike
     TacticalStrikeOverrideLog.set(
       pseudorandomEntity(),
-      TacticalStrikeOverrideLogData({ planetId: _planetId, timestamp: block.timestamp })
+      TacticalStrikeOverrideLogData({ turn: Turn.getValue(), planetId: _planetId, timestamp: block.timestamp })
     );
   }
 }
