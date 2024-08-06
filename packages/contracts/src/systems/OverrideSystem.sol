@@ -232,12 +232,14 @@ contract OverrideSystem is EmpiresSystem {
       pseudorandomEntity(),
       PlaceMagnetOverrideLogData({
         planetId: _planetId,
+        empireId: _empire,
         ethSpent: cost,
         overrideCount: turnDuration,
         timestamp: block.timestamp
       })
     );
   }
+
   /* ----------------------------- Tactical Strike ---------------------------- */
   /**
    * @dev Updates the tactical strike countdown for a given planet.
@@ -312,6 +314,7 @@ contract OverrideSystem is EmpiresSystem {
       })
     );
   }
+
   /**
    * @dev Executes a tactical strike on a planet, setting its ship count to 0.
    * @notice This override is free and designed to be called by the keeper automatically when the countdown ends.
