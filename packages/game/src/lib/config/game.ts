@@ -1,6 +1,5 @@
-import { GameConfig } from "@primodiumxyz/engine";
 import { pack } from "@primodiumxyz/assets";
-
+import { GameConfig } from "@primodiumxyz/engine";
 import { KEY } from "@game/lib/constants/common";
 
 const gameConfig: GameConfig = {

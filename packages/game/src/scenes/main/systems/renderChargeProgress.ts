@@ -1,6 +1,5 @@
 import { Core } from "@primodiumxyz/core";
 import { namespaceWorld } from "@primodiumxyz/reactive-tables";
-
 import { PrimodiumScene } from "@game/types";
 
 export const renderChargeProgress = (scene: PrimodiumScene, core: Core) => {
@@ -17,20 +16,15 @@ export const renderChargeProgress = (scene: PrimodiumScene, core: Core) => {
     onChange: ({ properties: { current } }) => {
       const blockNumber = current?.value ?? 0n;
       for (const planet of planets) {
-        const planetTacticalStrikeData =
-          tables.Planet_TacticalStrike.getWithKeys({ planetId: planet });
+        const planetTacticalStrikeData = tables.Planet_TacticalStrike.getWithKeys({ planetId: planet });
 
         if (!planetTacticalStrikeData) continue;
 
-        const blocksElapsed =
-          blockNumber - planetTacticalStrikeData.lastUpdated;
+        const blocksElapsed = blockNumber - planetTacticalStrikeData.lastUpdated;
         const chargeProgress =
-          planetTacticalStrikeData.charge +
-          (blocksElapsed * planetTacticalStrikeData.chargeRate) / 100n;
+          planetTacticalStrikeData.charge + (blocksElapsed * planetTacticalStrikeData.chargeRate) / 100n;
 
-        scene.objects.planet
-          .get(planet)
-          ?.setChargeProgress(Number(chargeProgress) / Number(maxCharge));
+        scene.objects.planet.get(planet)?.setChargeProgress(Number(chargeProgress) / Number(maxCharge));
       }
     },
   });

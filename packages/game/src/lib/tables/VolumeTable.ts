@@ -1,6 +1,6 @@
+import { Core, hashEntities } from "@primodiumxyz/core";
 import { Channel } from "@primodiumxyz/engine";
 import { createLocalTable, Type } from "@primodiumxyz/reactive-tables";
-import { hashEntities, Core } from "@primodiumxyz/core";
 
 const defaultVolume: Record<Channel | "master", number> = {
   master: 1,
@@ -25,7 +25,7 @@ export function createVolumeTable(core: Core) {
       id: "Volume",
       persist: true,
       version: hashEntities(JSON.stringify(defaultVolume)),
-    }
+    },
   );
 
   function get() {

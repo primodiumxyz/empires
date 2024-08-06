@@ -1,7 +1,6 @@
-import { SceneConfig } from "@primodiumxyz/engine";
-
-import { Scenes } from "@game/lib/constants/common";
 import { AnimationConfig } from "@primodiumxyz/assets";
+import { SceneConfig } from "@primodiumxyz/engine";
+import { Scenes } from "@game/lib/constants/common";
 
 export const rootSceneConfig: SceneConfig = {
   key: Scenes.Root,

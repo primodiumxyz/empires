@@ -1,6 +1,7 @@
-import { Scene } from "@primodiumxyz/engine";
-import { clone, throttle } from "lodash";
 import { useEffect, useState } from "react";
+import { clone, throttle } from "lodash";
+
+import { Scene } from "@primodiumxyz/engine";
 
 export function createHooksApi(targetScene: Scene) {
   function useCamera() {
@@ -12,7 +13,7 @@ export function createHooksApi(targetScene: Scene) {
       const worldViewListener = camera?.worldView$.subscribe(
         throttle((worldView: Phaser.Geom.Rectangle) => {
           setWorldView(clone(worldView));
-        }, 50)
+        }, 50),
       );
 
       const zoomListener = camera?.zoom$.subscribe(throttle(setZoom, 100));
