@@ -113,8 +113,8 @@ export const useActions = () => {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            {getPlayerSpan(action.playerId)} killed {formatNumber(action.overrideCount)} ship
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
+            {getPlayerSpan(action.playerId)} removed {formatNumber(action.overrideCount)} ship
+            {action.overrideCount === 1n ? "" : "s"} from {getPlanetSpan(action.planetId as Entity)}
           </p>
         ),
       };
@@ -140,7 +140,7 @@ export const useActions = () => {
         element: (
           <p className="text-xs">
             {getPlayerSpan(action.playerId)} drained {formatNumber(action.overrideCount)} shield
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
+            {action.overrideCount === 1n ? "" : "s"} from {getPlanetSpan(action.planetId as Entity)}
           </p>
         ),
       };
@@ -199,7 +199,11 @@ export const useActions = () => {
       const action = tables.TacticalStrikeOverrideLog.get(actionEntity)!;
       return {
         timestamp: action.timestamp,
-        element: <p className="text-xs">Tactical Strike performed on {getPlanetSpan(action.planetId as Entity)}</p>,
+        element: (
+          <p className="text-xs">
+            <span className="text-accent">Tactical Strike</span> performed on {getPlanetSpan(action.planetId as Entity)}
+          </p>
+        ),
       };
     });
 
