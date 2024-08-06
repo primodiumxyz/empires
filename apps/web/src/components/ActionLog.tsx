@@ -18,10 +18,10 @@ type ActionLogEntry = {
 export const ActionLog = () => {
   const { tables, utils } = useCore();
 
-  const moveActions = tables.MoveRoutine.useAll();
-  const battleActions = tables.PlanetBattleRoutine.useAll();
-  const buyActions = tables.BuyShipsRoutine.useAll();
-  const buyShieldActions = tables.BuyShieldsRoutine.useAll();
+  const moveActions = tables.MoveRoutineLog.useAll();
+  const battleActions = tables.PlanetBattleRoutineLog.useAll();
+  const buyActions = tables.BuyShipsRoutineLog.useAll();
+  const buyShieldActions = tables.BuyShieldsRoutineLog.useAll();
   const createActions = tables.CreateShipOverrideLog.useAll();
   const killActions = tables.KillShipOverrideLog.useAll();
   const chargeShieldActions = tables.ChargeShieldsOverrideLog.useAll();
@@ -30,7 +30,7 @@ export const ActionLog = () => {
 
   const actions = useMemo(() => {
     const moveActionEntries = moveActions.map((actionEntity) => {
-      const action = tables.MoveRoutine.get(actionEntity)!;
+      const action = tables.MoveRoutineLog.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.originPlanetId as Entity),
         type: "Move",
@@ -40,7 +40,7 @@ export const ActionLog = () => {
     });
 
     const battleActionEntries = battleActions.map((actionEntity) => {
-      const action = tables.PlanetBattleRoutine.get(actionEntity)!;
+      const action = tables.PlanetBattleRoutineLog.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Battle",
@@ -50,7 +50,7 @@ export const ActionLog = () => {
     });
 
     const buyActionEntries = buyActions.map((actionEntity) => {
-      const action = tables.BuyShipsRoutine.get(actionEntity)!;
+      const action = tables.BuyShipsRoutineLog.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Buy Ships",
@@ -100,7 +100,7 @@ export const ActionLog = () => {
     });
 
     const buyShieldActionEntries = buyShieldActions.map((actionEntity) => {
-      const action = tables.BuyShieldsRoutine.get(actionEntity)!;
+      const action = tables.BuyShieldsRoutineLog.get(actionEntity)!;
       return {
         actor: entityToPlanetName(action.planetId as Entity),
         type: "Buy Shield",
