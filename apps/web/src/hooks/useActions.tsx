@@ -5,7 +5,6 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToPlanetName, formatAddress, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { useEthPrice } from "@/hooks/useEthPrice";
 
 export const EmpireEnumToTextColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "text-blue-400",
@@ -15,13 +14,13 @@ export const EmpireEnumToTextColor: Record<EEmpire, string> = {
 };
 
 export const useActions = () => {
-  const { tables, utils } = useCore();
+  const { tables } = useCore();
 
-  const moveRoutines = tables.MoveRoutine.useAll();
-  const planetBattleRoutines = tables.PlanetBattleRoutine.useAll();
-  const buyShipsRoutines = tables.BuyShipsRoutine.useAll();
-  const buyShieldsRoutines = tables.BuyShieldsRoutine.useAll();
-  const accumulateGoldRoutines = tables.AccumulateGoldRoutine.useAll();
+  const moveRoutines = tables.MoveRoutineLog.useAll();
+  const planetBattleRoutines = tables.PlanetBattleRoutineLog.useAll();
+  const buyShipsRoutines = tables.BuyShipsRoutineLog.useAll();
+  const buyShieldsRoutines = tables.BuyShieldsRoutineLog.useAll();
+  const accumulateGoldRoutines = tables.AccumulateGoldRoutineLog.useAll();
 
   const createShipOverrides = tables.CreateShipOverrideLog.useAll();
   const killShipOverrides = tables.KillShipOverrideLog.useAll();
@@ -31,7 +30,6 @@ export const useActions = () => {
   const boostChargeOverrides = tables.BoostChargeOverrideLog.useAll();
   const stunChargeOverrides = tables.StunChargeOverrideLog.useAll();
   const tacticalStrikeOverrides = tables.TacticalStrikeOverrideLog.useAll();
-  const { price } = useEthPrice();
 
   return useMemo(() => {
     const getPlanetSpan = (planetId: Entity) => {
@@ -45,7 +43,7 @@ export const useActions = () => {
     );
 
     const accumulateGoldRoutineEntries = accumulateGoldRoutines.map((actionEntity) => {
-      const action = tables.AccumulateGoldRoutine.get(actionEntity)!;
+      const action = tables.AccumulateGoldRoutineLog.get(actionEntity)!;
       return {
         timestamp: action.timestamp,
         element: (
@@ -57,39 +55,40 @@ export const useActions = () => {
     });
 
     const moveRoutineEntries = moveRoutines.map((actionEntity) => {
-      const action = tables.MoveRoutine.get(actionEntity)!;
+      const action = tables.MoveRoutineLog.get(actionEntity)!;
       return {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            {getPlanetSpan(action.originPlanetId as Entity)} moved {formatNumber(action.shipCount)} ships to{" "}
-            {getPlanetSpan(action.destinationPlanetId as Entity)}
+            {getPlanetSpan(action.originPlanetId as Entity)} moved {formatNumber(action.shipCount)} ship
+            {action.shipCount === 1n ? "" : "s"} to {getPlanetSpan(action.destinationPlanetId as Entity)}
           </p>
         ),
       };
     });
 
     const planetBattleRoutineEntries = planetBattleRoutines.map((actionEntity) => {
-      const action = tables.PlanetBattleRoutine.get(actionEntity)!;
+      const action = tables.PlanetBattleRoutineLog.get(actionEntity)!;
       return {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
             A battle on {getPlanetSpan(action.planetId as Entity)} attacked {formatNumber(action.attackingShipCount)}{" "}
-            ships and defended {formatNumber(action.defendingShipCount)} ships
+            ship{action.attackingShipCount === 1n ? "" : "s"} and defended {formatNumber(action.defendingShipCount)}{" "}
+            ship{action.defendingShipCount === 1n ? "" : "s"}
           </p>
         ),
       };
     });
 
     const buyShipsRoutineEntries = buyShipsRoutines.map((actionEntity) => {
-      const action = tables.BuyShipsRoutine.get(actionEntity)!;
+      const action = tables.BuyShipsRoutineLog.get(actionEntity)!;
       return {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            {getPlanetSpan(action.planetId as Entity)} bought {formatNumber(action.shipBought)} ships for{" "}
-            {utils.weiToUsd(action.goldSpent, price ?? 0)}
+            {getPlanetSpan(action.planetId as Entity)} bought {formatNumber(action.shipBought)} ship
+            {action.shipBought === 1n ? "" : "s"}
           </p>
         ),
       };
@@ -101,8 +100,8 @@ export const useActions = () => {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount)} ships on{" "}
-            {getPlanetSpan(action.planetId as Entity)}
+            {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount)} ship
+            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
           </p>
         ),
       };
@@ -114,8 +113,8 @@ export const useActions = () => {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            {getPlayerSpan(action.playerId)} killed {formatNumber(action.overrideCount)} ships on{" "}
-            {getPlanetSpan(action.planetId as Entity)}
+            {getPlayerSpan(action.playerId)} killed {formatNumber(action.overrideCount)} ship
+            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
           </p>
         ),
       };
@@ -127,8 +126,8 @@ export const useActions = () => {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount)} shields on{" "}
-            {getPlanetSpan(action.planetId as Entity)}
+            {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount)} shield
+            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
           </p>
         ),
       };
@@ -140,20 +139,21 @@ export const useActions = () => {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            {getPlayerSpan(action.playerId)} drained {formatNumber(action.overrideCount)} shields on{" "}
-            {getPlanetSpan(action.planetId as Entity)}
+            {getPlayerSpan(action.playerId)} drained {formatNumber(action.overrideCount)} shield
+            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
           </p>
         ),
       };
     });
 
     const buyShieldsRoutineEntries = buyShieldsRoutines.map((actionEntity) => {
-      const action = tables.BuyShieldsRoutine.get(actionEntity)!;
+      const action = tables.BuyShieldsRoutineLog.get(actionEntity)!;
       return {
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            {getPlanetSpan(action.planetId as Entity)} added {formatNumber(action.shieldBought)} shields
+            {getPlanetSpan(action.planetId as Entity)} added {formatNumber(action.shieldBought)} shield
+            {action.shieldBought === 1n ? "" : "s"}
           </p>
         ),
       };

@@ -2,7 +2,9 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
+
+import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
+
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -49,6 +51,7 @@ contract OverrideSystem is EmpiresSystem {
       pseudorandomEntity(),
       CreateShipOverrideLogData({
         playerId: playerId,
+        turn: Turn.getValue(),
         planetId: _planetId,
         ethSpent: cost,
         overrideCount: _overrideCount,
@@ -91,6 +94,7 @@ contract OverrideSystem is EmpiresSystem {
       pseudorandomEntity(),
       KillShipOverrideLogData({
         playerId: playerId,
+        turn: Turn.getValue(),
         planetId: _planetId,
         ethSpent: cost,
         overrideCount: _overrideCount,
@@ -119,6 +123,7 @@ contract OverrideSystem is EmpiresSystem {
     ChargeShieldsOverrideLog.set(
       pseudorandomEntity(),
       ChargeShieldsOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
         playerId: playerId,
         ethSpent: cost,
@@ -149,6 +154,7 @@ contract OverrideSystem is EmpiresSystem {
     DrainShieldsOverrideLog.set(
       pseudorandomEntity(),
       DrainShieldsOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
         playerId: playerId,
         ethSpent: cost,
@@ -202,6 +208,7 @@ contract OverrideSystem is EmpiresSystem {
     PlaceMagnetOverrideLog.set(
       pseudorandomEntity(),
       PlaceMagnetOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
         playerId: playerId,
         ethSpent: cost,
