@@ -98,6 +98,9 @@ export const GameHUD = () => {
         <HUD.TopMiddle>
           <Pot className="w-48" />
         </HUD.TopMiddle>
+        <HUD.Left>
+          <ActionLog />
+        </HUD.Left>
 
         <HUD.TopRight>
           <Account />
@@ -120,7 +123,6 @@ export const GameHUD = () => {
 
         <HUD.BottomRight className="flex gap-2">
           <Settings />
-          <ActionLog />
           <HistoricalPointPriceModal showIcon={true} />
           {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomRight>

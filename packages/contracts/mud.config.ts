@@ -344,6 +344,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -357,6 +358,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -370,6 +372,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
         empireId: "EEmpire",
@@ -384,6 +387,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -397,6 +401,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
         ethSpent: "uint256",
