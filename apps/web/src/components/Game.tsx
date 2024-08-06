@@ -7,10 +7,9 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
-import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { MusicPlayer } from "@/components/MusicPlayer";
-import { OverrideDrawer } from "@/components/OverrideDrawer";
+import { OverridePopup } from "@/components/OverridePopup";
 import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
 import { SellPoints } from "@/components/SellPoints";
@@ -118,19 +117,18 @@ export const GameHUD = () => {
           <AdvanceTurn />
         </HUD.BottomMiddle>
         <HUD.BottomMiddle>
-          <OverrideDrawer />
+          <OverridePopup />
         </HUD.BottomMiddle>
+
+        <HUD.Center>
+          <OverridePopup />
+        </HUD.Center>
 
         <HUD.BottomRight className="flex gap-2">
           <Settings />
           <HistoricalPointPriceModal showIcon={true} />
           {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomRight>
-      </HUD>
-      <HUD>
-        <HUD.Right>
-          <Dashboard />
-        </HUD.Right>
       </HUD>
     </>
   );

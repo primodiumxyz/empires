@@ -166,6 +166,14 @@ export const Tabs: FC<TabProps> & {
   );
 };
 
+export const useTabs = () => {
+  const context = useContext(IndexContext);
+  if (!context) {
+    throw new Error("useTabs must be used within Tabs");
+  }
+  return context.index;
+};
+
 Tabs.Button = Button;
 Tabs.Pane = Pane;
 Tabs.IconButton = IconButton;
