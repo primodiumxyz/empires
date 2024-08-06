@@ -7,13 +7,10 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
-import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { OverrideDrawer } from "@/components/OverrideDrawer";
-import { PlayerInsight } from "@/components/PlayerInsight";
-import { Pot } from "@/components/Pot";
+import { PlayerReturns } from "@/components/PlayerReturns";
 import { PriceHistory } from "@/components/PriceHistory";
-import { SellPoints } from "@/components/SellPoints";
 import { TimeLeft } from "@/components/TimeLeft";
 import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
@@ -96,37 +93,34 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-          <Pot className="w-48" />
+          <TimeLeft />
         </HUD.TopMiddle>
 
         <HUD.TopRight className="flex flex-col gap-2">
           <Account />
-          <PlayerInsight />
         </HUD.TopRight>
 
-        <HUD.BottomLeft>
+        {/* <HUD.BottomLeft>
           <SellPoints />
-        </HUD.BottomLeft>
+        </HUD.BottomLeft> */}
 
         <HUD.BottomMiddle>
-          <TimeLeft />
           <AdvanceTurn />
         </HUD.BottomMiddle>
         <HUD.BottomMiddle>
           <OverrideDrawer />
         </HUD.BottomMiddle>
 
-        <HUD.BottomRight className="flex gap-2">
+        <HUD.BottomLeft className="flex gap-2">
           <UserSettings />
           <ActionLog />
           <HistoricalPointPriceModal showIcon={true} />
           {DEV && <Cheatcodes className="-mr-1" />}
+        </HUD.BottomLeft>
+
+        <HUD.BottomRight className="flex gap-2">
+          <PlayerReturns />
         </HUD.BottomRight>
-      </HUD>
-      <HUD>
-        <HUD.Right>
-          <Dashboard />
-        </HUD.Right>
       </HUD>
     </>
   );
