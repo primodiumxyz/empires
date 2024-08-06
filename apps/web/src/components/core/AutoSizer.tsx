@@ -6,10 +6,12 @@ export const AutoSizer = <T,>({
   items,
   itemSize,
   render,
+  scrollToBottom,
 }: {
   items: T[];
   itemSize: number;
   render: (item: T, index: number) => ReactNode;
+  scrollToBottom?: boolean;
 }) => {
   return (
     <ReactAutoSizer>

@@ -1,12 +1,11 @@
-import { useMemo } from "react";
-import { BookOpenIcon } from "@heroicons/react/24/outline";
+import { useMemo, useRef } from "react";
 
 import { entityToPlanetName, formatAddress } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { AutoSizer } from "@/components/core/AutoSizer";
-import { Modal } from "@/components/core/Modal";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { cn } from "@/util/client";
 
 type ActionLogEntry = {
   actor: string;
@@ -122,29 +121,34 @@ export const ActionLog = () => {
     allActions.sort((a, b) => Number(b.timestamp - a.timestamp));
     return allActions;
   }, [moveActions, battleActions, buyActions, createActions, killActions]);
+  const now = Date.now();
+
+  const bottomEl = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    bottomEl?.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <Modal title="Action Log">
-      <Modal.Button size="md" className="h-[58px] w-fit" variant="info">
-        <BookOpenIcon className="size-8" />
-      </Modal.Button>
-      <Modal.Content className="h-screen !w-[400px] md:h-3/4">
-        <AutoSizer
-          items={actions}
-          itemSize={70}
-          render={(action) => {
-            return (
-              <div className="rounded border border-white/20 bg-white/20 p-1 text-sm">
-                <p className="font-bold">
-                  {action.type} ({action.actor})
-                </p>
-                <p className="text-[0.7rem]">{action.details}</p>
-                <p className="text-xs text-gray-300">{new Date(Number(action.timestamp) * 1000).toLocaleString()}</p>
+    <div className="pointer-events-auto h-[200px] w-[300px] flex-grow overflow-y-auto p-4">
+      <AutoSizer
+        items={actions}
+        itemSize={80}
+        render={(action) => {
+          return (
+            <div className={cn("mb-2 text-xs", now - Number(action.timestamp) * 1000 > 15 * 1000 ? "opacity-50" : "")}>
+              <span className="font-bold text-blue-400">{action.actor}: </span>
+              <span className="text-white">
+                {action.type} - {action.details}
+              </span>
+              <div className="mt-1 text-xs text-gray-500">
+                {new Date(Number(action.timestamp) * 1000).toLocaleString()}
               </div>
-            );
-          }}
-        />
-      </Modal.Content>
-    </Modal>
+            </div>
+          );
+        }}
+      />
+      <div ref={bottomEl}></div>
+    </div>
   );
 };
