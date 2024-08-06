@@ -40,6 +40,7 @@ export class Planet
   private shields: IconLabel;
   private ships: IconLabel;
   private gold: IconLabel;
+  private magnets: [red: IconLabel, blue: IconLabel, green: IconLabel];
   private empireId: EEmpire;
   private spawned = false;
 
@@ -159,6 +160,32 @@ export class Planet
       y: coord.y + 5,
     }).setDepth(DepthLayers.Planet + 1);
 
+    this.magnets = [
+      new IconLabel(
+        scene,
+        { x: coord.x + 75, y: coord.y - 60 },
+        "0",
+        "Attack",
+        { color: "red" }
+      )
+        .setDepth(DepthLayers.Planet - 1)
+        .setVisible(false),
+      new IconLabel(
+        scene,
+        { x: coord.x + 75, y: coord.y - 30 },
+        "0",
+        "Attack",
+        { color: "blue" }
+      )
+        .setDepth(DepthLayers.Planet - 1)
+        .setVisible(false),
+      new IconLabel(scene, { x: coord.x + 75, y: coord.y - 0 }, "0", "Attack", {
+        color: "green",
+      })
+        .setDepth(DepthLayers.Planet - 1)
+        .setVisible(false),
+    ];
+
     this._scene = scene;
     this.id = id;
     this.coord = coord;
@@ -180,6 +207,9 @@ export class Planet
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
     this.scene.add.existing(this.chargeProgress);
+    this.magnets.forEach((magnet) => {
+      this.scene.add.existing(magnet);
+    });
     return this;
   }
 
@@ -197,6 +227,9 @@ export class Planet
     this.ships.setScale(scale);
     this.gold.setScale(scale);
     this.chargeProgress.setScale(scale);
+    this.magnets.forEach((magnet) => {
+      magnet.setScale(scale);
+    });
     return this;
   }
 
@@ -220,6 +253,9 @@ export class Planet
     this.ships.setAlpha(alpha);
     this.gold.setAlpha(alpha);
     this.chargeProgress.setAlpha(alpha);
+    this.magnets.forEach((magnet) => {
+      magnet.setAlpha(alpha);
+    });
     this.planetName.setAlpha(nameAlpha);
   }
 
@@ -396,6 +432,14 @@ export class Planet
 
   setChargeProgress(progress: number) {
     this.chargeProgress.setProgress(progress);
+  }
+
+  setMagnet(empire: EEmpire, turns: number) {
+    this.magnets[empire - 1]
+      ?.setText(formatNumber(turns))
+      .setVisible(turns > 0);
+
+    return this;
   }
 
   override destroy() {

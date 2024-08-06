@@ -69,5 +69,7 @@ export class IconLabel extends Phaser.GameObjects.Container {
   setText(text: string) {
     this.label.setText(text);
     this.updatePositions();
+
+    return this;
   }
 }
