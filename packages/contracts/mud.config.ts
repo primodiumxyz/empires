@@ -37,10 +37,10 @@ export const worldInput = {
       },
     },
 
-    P_EMStormConfig: {
+    P_ShieldEaterConfig: {
       key: [],
       schema: {
-        cooldownInBlocks: "uint256",
+        detonationCooldown: "uint256",
       },
     },
 
@@ -116,7 +116,7 @@ export const worldInput = {
         shieldCount: "uint256",
         goldCount: "uint256",
         empireId: "EEmpire",
-        lastEMStormVisit: "uint256",
+        lastShieldEaterVisit: "uint256",
       },
     },
 
@@ -149,7 +149,7 @@ export const worldInput = {
       },
     },
 
-    EMStorm: {
+    ShieldEater: {
       key: [],
       schema: {
         currentPlanet: "bytes32",
