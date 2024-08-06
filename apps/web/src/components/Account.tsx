@@ -39,7 +39,7 @@ export const Account = () => {
   const balance = useBalance(address).value ?? 0n;
 
   return (
-    <div className="absolute right-2 w-48">
+    <div className="w-48">
       <Card noDecor>
         <div className="flex flex-col justify-center gap-1 text-center">
           <p className="text-left text-xs font-bold uppercase">Account</p>
