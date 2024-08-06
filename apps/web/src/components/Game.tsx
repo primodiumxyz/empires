@@ -96,7 +96,7 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-          <Pot showRake={false} showPot={true} className="w-48" />
+          <Pot className="w-48" />
         </HUD.TopMiddle>
 
         <HUD.TopRight>
@@ -106,7 +106,6 @@ export const GameHUD = () => {
         <HUD.BottomLeft>
           <div className="flex w-48 flex-col gap-2">
             <SellPoints />
-            <Pot showRake={true} showPot={false} />
             <MusicPlayer />
           </div>
         </HUD.BottomLeft>

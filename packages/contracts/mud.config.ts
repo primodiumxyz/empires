@@ -30,6 +30,7 @@ export const worldInput = {
       key: [],
       schema: {
         maxCharge: "uint256",
+        chargeRate: "uint256",
         boostChargeIncrease: "uint256",
         stunChargeDecrease: "uint256",
         createShipBoostIncrease: "uint256", // per ship created
@@ -123,8 +124,8 @@ export const worldInput = {
       schema: {
         planetId: "bytes32",
         lastUpdated: "uint256",
-        chargeRate: "uint256",
         charge: "uint256",
+        chargeRate: "uint256",
       },
     },
 
