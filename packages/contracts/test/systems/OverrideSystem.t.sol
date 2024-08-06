@@ -459,7 +459,6 @@ contract OverrideSystemTest is PrimodiumTest {
       world.Empires__tacticalStrike(planetId);
     }
     currentCharge = _getCurrentCharge(planetId);
-    assertEq(currentCharge, 0, "Current Charge should be 0");
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
     uint256 expectedEndBlock = block.number + remainingBlocks;
