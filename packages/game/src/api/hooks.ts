@@ -34,12 +34,12 @@ export function createHooksApi(targetScene: Scene, globalApi: GlobalApi) {
   function useVolume(channel: "master" | Channel) {
     const volume = globalApi.tables.Volume.use() ?? defaultVolume;
     return useMemo(() => {
-      const master = volume.master!;
+      const master = volume.master ?? defaultVolume.master;
       if (channel === "master") return master;
 
       const channelVolume = volume?.[channel] ?? 0;
       return channelVolume * master;
-    }, [volume]);
+    }, [volume, channel]);
   }
 
   return {

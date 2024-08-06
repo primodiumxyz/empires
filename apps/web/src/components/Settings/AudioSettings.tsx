@@ -14,8 +14,6 @@ export const AudioSettings = () => {
   const sfxVolume = game.ROOT.hooks.useVolume("sfx");
   const uiVolume = game.ROOT.hooks.useVolume("ui");
 
-  console.log({ masterVolume, musicVolume, sfxVolume, uiVolume });
-
   const setChannelVolume = useCallback(
     (amount: number, channel: Channel | "master") => {
       game.ROOT.audio.setVolume(amount, channel);

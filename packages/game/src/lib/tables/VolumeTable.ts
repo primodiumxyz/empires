@@ -46,7 +46,7 @@ export function createVolumeTable(core: Core) {
   }
 
   function set(volume: number, channel: Channel | "master" = "master") {
-    const currentVolume = get();
+    const currentVolume = getAllChannels();
 
     const newVolume = {
       ...currentVolume,
@@ -54,7 +54,6 @@ export function createVolumeTable(core: Core) {
         channel === "master" ? volume : (currentVolume.master ?? 1) * volume,
     };
 
-    console.log({ volume, newVolume, channel, currentVolume });
     table.set(newVolume);
 
     return newVolume;
