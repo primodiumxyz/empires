@@ -24,7 +24,7 @@ export const createContractCalls = (
 
   return {
     ...execute,
-    ...devCalls,
+    devCalls,
     ...overrideCalls,
     ...updateCalls,
     ...resetCalls,

@@ -8,12 +8,13 @@ import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
+import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverridePopup } from "@/components/OverridePopup";
 import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
 import { SellPoints } from "@/components/SellPoints";
+import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
-import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -94,21 +95,29 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-          <Pot showRake={false} showPot={true} className="w-48" />
+          <Pot className="w-48" />
         </HUD.TopMiddle>
+        <HUD.Left>
+          <ActionLog />
+        </HUD.Left>
 
         <HUD.TopRight>
           <Account />
         </HUD.TopRight>
 
         <HUD.BottomLeft>
-          <SellPoints />
-          <Pot showRake={true} showPot={false} className="absolute bottom-1 left-2 w-56" />
+          <div className="flex w-48 flex-col gap-2">
+            <SellPoints />
+            <MusicPlayer />
+          </div>
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
           <TimeLeft />
           <AdvanceTurn />
+        </HUD.BottomMiddle>
+        <HUD.BottomMiddle>
+          <OverridePopup />
         </HUD.BottomMiddle>
 
         <HUD.Center>
@@ -116,8 +125,7 @@ export const GameHUD = () => {
         </HUD.Center>
 
         <HUD.BottomRight className="flex gap-2">
-          <UserSettings />
-          <ActionLog />
+          <Settings />
           <HistoricalPointPriceModal showIcon={true} />
           {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomRight>

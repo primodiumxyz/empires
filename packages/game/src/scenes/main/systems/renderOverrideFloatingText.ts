@@ -2,6 +2,14 @@ import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 
 import { PrimodiumScene } from "@game/types";
+import { EEmpire } from "@primodiumxyz/contracts";
+
+export const EmpireEnumToColor: Record<EEmpire, string> = {
+  [EEmpire.Blue]: "blue",
+  [EEmpire.Green]: "green",
+  [EEmpire.Red]: "red",
+  [EEmpire.LENGTH]: "",
+};
 
 export const renderOverrideFloatingText = (
   scene: PrimodiumScene,
@@ -199,7 +207,7 @@ export const renderOverrideFloatingText = (
           `+${current.overrideCount}`,
           {
             icon: "Attack",
-            color: "#ff0000",
+            color: EmpireEnumToColor[current.empireId as EEmpire],
           }
         );
       },

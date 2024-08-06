@@ -365,7 +365,7 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(Magnet.getIsMagnet(empire, planetId), true, "Magnet should be placed");
     assertEq(Magnet.getLockedPoints(empire, planetId), pointsToStake, "Magnet should have locked points");
     assertEq(Magnet.getPlayerId(empire, planetId), aliceId, "Magnet should have player id");
-    assertEq(Magnet.getEndTurn(empire, planetId), Turn.getValue() / EMPIRE_COUNT + 1, "Magnet should have end turn");
+    assertEq(Magnet.getEndTurn(empire, planetId), Turn.getValue() + EMPIRE_COUNT, "Magnet should have end turn");
     assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
   }
 
@@ -377,12 +377,11 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.prank(alice);
     world.Empires__placeMagnet{ value: totalCost }(empire, planetId, turns);
     uint256 currTurn = Turn.getValue();
-    uint256 fullTurn = (currTurn - 1) / EMPIRE_COUNT;
+
     assertEq(Magnet.getIsMagnet(empire, planetId), true, "Magnet should be placed");
     assertEq(Magnet.getLockedPoints(empire, planetId), pointsToStake, "Magnet should have locked points");
     assertEq(Magnet.getPlayerId(empire, planetId), aliceId, "Magnet should have player id");
-    // should be minus one because the magnet is placed before the empire's turn has occurred in the current full turn
-    assertEq(Magnet.getEndTurn(empire, planetId), fullTurn + turns - 1, "Magnet should have end turn");
+    assertEq(Magnet.getEndTurn(empire, planetId), currTurn + EMPIRE_COUNT * turns, "Magnet should have end turn");
     assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
   }
 
@@ -453,14 +452,18 @@ contract OverrideSystemTest is PrimodiumTest {
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
     uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
 
-    assertEq(data.chargeRate, 100, "Charge Rate should be 100");
+    assertEq(data.chargeRate, P_TacticalStrikeConfig.getChargeRate(), "Charge Rate should be 100");
 
     uint256 currentCharge = _getCurrentCharge(planetId);
+    if (currentCharge >= maxCharge) {
+      world.Empires__tacticalStrike(planetId);
+    }
+    currentCharge = _getCurrentCharge(planetId);
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
     uint256 expectedEndBlock = block.number + remainingBlocks;
     assertLt(block.number, expectedEndBlock, "Block number should be less than the expected end block");
-    vm.expectRevert("[OverrideSystem] Planet is not ready for a tactical strike");
+    vm.expectRevert("[TacticalStrikeOverrideSystem] Planet is not ready for a tactical strike");
     world.Empires__tacticalStrike(planetId);
   }
 

@@ -44,46 +44,39 @@ export const SellPoints = () => {
   const { price: pointsToWei, message } = usePointPrice(empire, Number(amountToSell));
 
   return (
-    <div className="absolute bottom-36 left-2">
-      <Card noDecor className="w-56 gap-2">
-        <div className="flex flex-col gap-2">
-          <p className="text-left text-xs font-bold uppercase">Sell Points</p>
-          <SecondaryCard>
-            <p className="text-left text-xs opacity-50">EMPIRE</p>
-            <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-full">
-              <Dropdown.Item value={EEmpire.Green}>Green</Dropdown.Item>
-              <Dropdown.Item value={EEmpire.Red}>Red</Dropdown.Item>
-              <Dropdown.Item value={EEmpire.Blue}>Blue</Dropdown.Item>
-            </Dropdown>
-          </SecondaryCard>
-          <SecondaryCard className="flex flex-col gap-2">
-            <NumberInput
-              count={amountToSell}
-              onChange={handleInputChange}
-              min={0}
-              max={Number(formatEther(playerPoints))}
-              className="self-center"
-            />
-            <div className="flex justify-center gap-2 rounded-md bg-primary/50 px-2 py-1 text-xs font-bold uppercase">
-              {message ? (
-                <span className="text-[0.6rem] text-white">{message}</span>
-              ) : (
-                <Price wei={pointsToWei} className="text-white" />
-              )}
-            </div>
-            <TransactionQueueMask id="sell-points">
-              <Button
-                size="md"
-                className="w-full"
-                disabled={amountToSell == "0" || !pointsToWei}
-                onClick={handleSubmit}
-              >
-                Sell
-              </Button>
-            </TransactionQueueMask>
-          </SecondaryCard>
-        </div>
-      </Card>
-    </div>
+    <Card noDecor className="w-full gap-2">
+      <div className="flex flex-col gap-2">
+        <p className="text-left text-xs font-bold uppercase">Sell Points</p>
+        <SecondaryCard>
+          <p className="text-left text-xs opacity-50">EMPIRE</p>
+          <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-full">
+            <Dropdown.Item value={EEmpire.Green}>Green</Dropdown.Item>
+            <Dropdown.Item value={EEmpire.Red}>Red</Dropdown.Item>
+            <Dropdown.Item value={EEmpire.Blue}>Blue</Dropdown.Item>
+          </Dropdown>
+        </SecondaryCard>
+        <SecondaryCard className="flex flex-col gap-2">
+          <NumberInput
+            count={amountToSell}
+            onChange={handleInputChange}
+            min={0}
+            max={Number(formatEther(playerPoints))}
+            className="self-center"
+          />
+          <div className="flex justify-center gap-2 rounded-md bg-primary/50 px-2 py-1 text-xs font-bold uppercase">
+            {message ? (
+              <span className="text-[0.6rem] text-white">{message}</span>
+            ) : (
+              <Price wei={pointsToWei} className="text-white" />
+            )}
+          </div>
+          <TransactionQueueMask id="sell-points">
+            <Button size="md" className="w-full" disabled={amountToSell == "0" || !pointsToWei} onClick={handleSubmit}>
+              Sell
+            </Button>
+          </TransactionQueueMask>
+        </SecondaryCard>
+      </div>
+    </Card>
   );
 };

@@ -30,6 +30,7 @@ export const worldInput = {
       key: [],
       schema: {
         maxCharge: "uint256",
+        chargeRate: "uint256",
         boostChargeIncrease: "uint256",
         stunChargeDecrease: "uint256",
         createShipBoostIncrease: "uint256", // per ship created
@@ -123,8 +124,8 @@ export const worldInput = {
       schema: {
         planetId: "bytes32",
         lastUpdated: "uint256",
-        chargeRate: "uint256",
         charge: "uint256",
+        chargeRate: "uint256",
       },
     },
 
@@ -231,10 +232,11 @@ export const worldInput = {
       },
     },
 
-    MoveRoutine: {
+    MoveRoutineLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         originPlanetId: "bytes32",
         destinationPlanetId: "bytes32",
         shipCount: "uint256",
@@ -243,10 +245,11 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    ShipBattleRoutine: {
+    ShipBattleRoutineLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         redShipCount: "uint256",
         greenShipCount: "uint256",
@@ -256,10 +259,11 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    PlanetBattleRoutine: {
+    PlanetBattleRoutineLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         attackingShipCount: "uint256",
         defendingShipCount: "uint256",
@@ -270,10 +274,11 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    AccumulateGoldRoutine: {
+    AccumulateGoldRoutineLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         goldAdded: "uint256",
         timestamp: "uint256",
@@ -281,10 +286,11 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyShipsRoutine: {
+    BuyShipsRoutineLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         goldSpent: "uint256",
         shipBought: "uint256",
@@ -293,10 +299,11 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    BuyShieldsRoutine: {
+    BuyShieldsRoutineLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         goldSpent: "uint256",
         shieldBought: "uint256",
@@ -309,6 +316,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -322,6 +330,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
@@ -335,6 +344,8 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         ethSpent: "uint256",
         overrideCount: "uint256",
@@ -347,6 +358,8 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         ethSpent: "uint256",
         overrideCount: "uint256",
@@ -359,9 +372,11 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
+        empireId: "EEmpire",
         ethSpent: "uint256",
-
         overrideCount: "uint256",
         timestamp: "uint256",
       },
@@ -372,6 +387,8 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         ethSpent: "uint256",
         boostCount: "uint256",
@@ -384,6 +401,8 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         ethSpent: "uint256",
         stunCount: "uint256",
@@ -396,6 +415,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        turn: "uint256",
         planetId: "bytes32",
         timestamp: "uint256",
       },
