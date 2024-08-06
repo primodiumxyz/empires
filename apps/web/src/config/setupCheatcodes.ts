@@ -18,6 +18,7 @@ export const CheatcodeToBg: Record<string, string> = {
   utils: "bg-gray-500/10",
   magnet: "bg-purple-900/10",
   tacticalStrike: "bg-purple-400/10",
+  shieldEater: "bg-purple-900/10",
   config: "bg-gray-500/10",
 };
 
@@ -880,6 +881,69 @@ export const setupCheatcodes = (
     },
   });
 
+  /* ------------------------------ SHIELD EATER ------------------------------ */
+  // place shield eater on planet
+  const moveShieldEater = createCheatcode({
+    title: "Move shield eater",
+    bg: CheatcodeToBg["shieldEater"],
+    caption: "to planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+      },
+    },
+    execute: async ({ planet }) => {
+      const success = await devCalls.setProperties({
+        table: tables.ShieldEater,
+        keys: {},
+        properties: { currentPlanet: planet.id as Entity },
+      });
+
+      if (success) {
+        notify("success", `Shield eater moved to ${planet.value}`);
+        return true;
+      } else {
+        notify("error", `Failed to move shield eater to ${planet.value}`);
+        return false;
+      }
+    },
+  });
+
+  // set shield eater destination
+  const setShieldEaterDestination = createCheatcode({
+    title: "Set shield eater destination",
+    bg: CheatcodeToBg["shieldEater"],
+    caption: "to planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+      },
+    },
+    execute: async ({ planet }) => {
+      const success = await devCalls.setProperties({
+        table: tables.ShieldEater,
+        keys: {},
+        properties: { destinationPlanet: planet.id as Entity },
+      });
+
+      if (success) {
+        notify("success", `Shield eater destination set to ${planet.value}`);
+        return true;
+      } else {
+        notify("error", `Failed to set shield eater destination to ${planet.value}`);
+        return false;
+      }
+    },
+  });
+
+  // TODO(SE): detonate shield eater
+
+  // TODO(SE): reset shield eater countdown
+
   /* --------------------------------- CONFIG --------------------------------- */
   const updateGameConfig = {
     P_GameConfig: createCheatcode({
@@ -1076,6 +1140,8 @@ export const setupCheatcodes = (
     resetCharges,
     maxOutCharges,
     triggerCharges,
+    moveShieldEater,
+    setShieldEaterDestination,
     withdrawThatRake,
     ...Object.values(updateGameConfig),
   ];
