@@ -9,17 +9,20 @@ export const OverrideButton: React.FC<{
   icon: keyof typeof InterfaceIcons;
   stroke?: string;
   fill?: string;
+  tooltip?: string;
+  className?: string;
   axialCoord: AxialCoord;
-}> = ({ index, icon, stroke = "#6EEDFF", fill = "#2C4148", axialCoord }) => {
+}> = ({ index, icon, stroke = "#6EEDFF", fill = "#2C4148", tooltip, axialCoord, className }) => {
   const currentIndex = useTabs();
   const coord = convertAxialToCartesian(axialCoord, 45);
+
   return (
     <div
-      className={cn(`absolute -translate-x-1/2 -translate-y-1/2`)}
-      style={{ left: `${coord.x}px`, top: `${coord.y}px` }}
+      className={cn(`absolute origin-top-left -translate-x-1/2 -translate-y-1/2 transition-all`, className)}
+      style={{ left: `${coord.x}px`, top: `${coord.y}px`, scale: currentIndex === index ? "110%" : "100%" }}
     >
-      <Tabs.Button fragment index={index} className={cn(currentIndex === index && "scale-110")}>
-        <div className="relative">
+      <Tabs.Button fragment index={index} tooltip={tooltip}>
+        <div className={cn("relative", currentIndex !== index && "opacity-100")}>
           <svg width="78" height="86" viewBox="0 0 78 86" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M38.6422 4L7.86719 21.7679C6.01078 22.8397 4.86719 24.8205 4.86719 26.9641V62.5M72.4172 23.5V59.0359C72.4172 61.1795 71.2736 63.1603 69.4172 64.2321L38.6422 82"
@@ -28,7 +31,7 @@ export const OverrideButton: React.FC<{
             <path d="M38.6422 4L72.4172 23.5M38.6422 82L4.86719 62.5" stroke={stroke} strokeDasharray="2 2" />
             <path
               d="M35.6667 9.73205C37.5231 8.66026 39.8103 8.66025 41.6667 9.73205L65.6889 23.6013C67.5453 24.6731 68.6889 26.6538 68.6889 28.7974V56.5359C68.6889 58.6795 67.5453 60.6603 65.6889 61.732L41.6667 75.6013C39.8103 76.6731 37.5231 76.6731 35.6667 75.6013L11.6445 61.732C9.78805 60.6603 8.64445 58.6795 8.64445 56.5359V28.7974C8.64445 26.6538 9.78805 24.6731 11.6445 23.6013L35.6667 9.73205Z"
-              fill={currentIndex === index ? fill : "none"}
+              fill={currentIndex === index ? fill : "#1e1e1e"}
             />
             <path
               d="M41.4167 10.1651L65.4389 24.0343C67.1406 25.0168 68.1889 26.8325 68.1889 28.7974V56.5359C68.1889 58.5009 67.1406 60.3166 65.4389 61.299L41.4167 75.1683C39.715 76.1507 37.6184 76.1507 35.9167 75.1683L11.8945 61.299C10.1927 60.3166 9.14445 58.5009 9.14445 56.5359V28.7974C9.14445 26.8325 10.1927 25.0168 11.8945 24.0343L35.9167 10.1651C37.6184 9.18258 39.715 9.18258 41.4167 10.1651Z"
@@ -58,7 +61,7 @@ export const OverrideButton: React.FC<{
             </defs>
           </svg>
           <IconLabel
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg"
             imageUri={InterfaceIcons[icon]}
             hideText
           />

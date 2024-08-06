@@ -8,10 +8,11 @@ import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
 import { useCharge } from "@/hooks/useCharge";
 import { useGame } from "@/hooks/useGame";
+import { cn } from "@/util/client";
 
 /* --------------------------------- PLANET --------------------------------- */
-export const PlanetSummary = ({ entity }: { entity: Entity }) => {
-  const { tables, utils } = useCore();
+export const PlanetSummary = ({ entity, className }: { entity: Entity; className?: string }) => {
+  const { tables } = useCore();
   const {
     ROOT: { sprite },
   } = useGame();
@@ -19,7 +20,7 @@ export const PlanetSummary = ({ entity }: { entity: Entity }) => {
   const { empireId } = planet;
 
   return (
-    <Card noDecor className="hide-scrollbar max-h-full flex-col items-center overflow-y-auto">
+    <Card noDecor className={cn("hide-scrollbar h-fit max-h-full flex-col items-center overflow-y-auto", className)}>
       <div className="mb-2 flex w-full flex-col items-center justify-center gap-4">
         <img
           src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
@@ -60,9 +61,7 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
         </div>
       </div>
       <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
-        <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-base-100 text-xs text-gray-300">
-          ROUTINE PROBABILITIES
-        </h3>
+        <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">ROUTINE PROBABILITIES</h3>
         <div className="grid grid-cols-2 gap-y-1 text-xs">
           <span>ACCUMULATE GOLD</span>
           <span className="text-right">{(p.accumulateGold * 100).toFixed(0)}%</span>
@@ -113,7 +112,7 @@ const Overrides = ({ entity }: { entity: Entity }) => {
   return (
     <>
       <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
-        <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-base-100 text-xs text-gray-300">OVERRIDES</h3>
+        <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
         <div className="grid grid-cols-2 gap-y-1 text-xs">
           <span className="text-gray-4000">CLIMATE CHANGE</span>
           <span className="text-right">{Math.min(Number(climateChange.charge / 100n), 100).toFixed(0)}%</span>

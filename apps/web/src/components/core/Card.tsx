@@ -1,7 +1,6 @@
 import { forwardRef, HTMLAttributes, MouseEvent, ReactNode, useCallback, useRef } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 
-import { lerp } from "@primodiumxyz/core";
 import { cn } from "@/util/client";
 
 /* ---------------------------------- CARD ---------------------------------- */
@@ -11,11 +10,10 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
   noDecor?: boolean;
   noPointerEvents?: boolean;
   fragment?: boolean;
-  noMotion?: boolean;
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ children, className, noDecor = false, fragment = false, noMotion = false, ...props }, ref) => {
+  ({ children, className, noDecor = false, fragment = false, ...props }, ref) => {
     if (fragment)
       return (
         <div ref={ref} className={cn("overflow-visible", className)}>
