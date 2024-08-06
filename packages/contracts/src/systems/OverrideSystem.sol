@@ -228,6 +228,7 @@ contract OverrideSystem is EmpiresSystem {
       PlaceMagnetOverrideLogData({
         turn: Turn.getValue(),
         planetId: _planetId,
+        empireId: _empire,
         ethSpent: cost,
         overrideCount: turnDuration,
         timestamp: block.timestamp
