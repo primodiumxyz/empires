@@ -73,7 +73,7 @@ library LibShieldEater {
   function detonateShieldEater() internal {
     require(
       block.number >= ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown(),
-      "LibShieldEater::detonateShieldEater cooldown not yet expired"
+      "[LibShieldEater] detonateShieldEater cooldown not yet expired"
     );
 
     PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
