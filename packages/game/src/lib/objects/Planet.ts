@@ -190,25 +190,29 @@ export class Planet
 
     this.shieldEaterLocation = new IconLabel(
       scene,
-      { x: coord.x, y: coord.y + 60 },
-      '0',
+      { x: coord.x, y: coord.y - 70 },
+      '',
       'ShieldEaterLocation',
       {
-        color: 'orange',
+        color: 'red',
       },
     )
-      .setDepth(DepthLayers.Planet - 1)
+      .setDepth(DepthLayers.Planet + 1)
+      .setScale(2)
       .setVisible(false);
 
     this.shieldEaterDestination = new IconLabel(
       scene,
-      { x: coord.x, y: coord.y + 60 },
-      '0',
+      { x: coord.x, y: coord.y - 70 },
+      '',
       'ShieldEaterDestination',
       {
-        color: 'orange',
+        color: 'red',
       },
-    );
+    )
+      .setDepth(DepthLayers.Planet + 1)
+      .setScale(2)
+      .setVisible(false);
 
     this._scene = scene;
     this.id = id;
@@ -234,6 +238,8 @@ export class Planet
     this.magnets.forEach((magnet) => {
       this.scene.add.existing(magnet);
     });
+    this.scene.add.existing(this.shieldEaterLocation);
+    this.scene.add.existing(this.shieldEaterDestination);
     return this;
   }
 
@@ -254,6 +260,8 @@ export class Planet
     this.magnets.forEach((magnet) => {
       magnet.setScale(scale);
     });
+    this.shieldEaterLocation.setScale(scale * 2);
+    this.shieldEaterDestination.setScale(scale * 2);
     return this;
   }
 
@@ -281,6 +289,8 @@ export class Planet
       magnet.setAlpha(alpha);
     });
     this.planetName.setAlpha(nameAlpha);
+    this.shieldEaterLocation.setAlpha(alpha);
+    this.shieldEaterDestination.setAlpha(alpha);
   }
 
   updateFaction(empire: EEmpire) {
@@ -469,6 +479,9 @@ export class Planet
   }
 
   setShieldEaterLocation(present: boolean) {
+    // TODO(SE): temp
+    this.shieldEaterLocation.setText(present ? 'SNAKE' : '').setVisible(true);
+
     this.shieldEaterLocation.setVisible(present);
     if (present && this.shieldEaterDestination.visible)
       this.setShieldEaterDestination(0);
@@ -476,7 +489,9 @@ export class Planet
 
   setShieldEaterDestination(turns: number) {
     this.shieldEaterDestination.setVisible(turns > 0);
-    this.shieldEaterLocation.setText(turns ? turns.toLocaleString() : '');
+    this.shieldEaterDestination
+      .setText(turns ? turns.toLocaleString() : 'none')
+      .setVisible(turns > 0);
   }
 
   override destroy() {

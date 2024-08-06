@@ -892,6 +892,7 @@ export const setupCheatcodes = (
         label: "Planet",
         inputType: "string",
         defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
       },
     },
     execute: async ({ planet }) => {
@@ -921,6 +922,7 @@ export const setupCheatcodes = (
         label: "Planet",
         inputType: "string",
         defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
       },
     },
     execute: async ({ planet }) => {
