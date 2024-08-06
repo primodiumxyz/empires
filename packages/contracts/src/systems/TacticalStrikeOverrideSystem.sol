@@ -17,6 +17,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     bytes32 _planetId,
     uint256 _boostCount
   ) public payable _onlyNotGameOver _takeRake _updateTacticalStrikeCharge(_planetId) {
+    bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[TacticalStrikeOverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[TacticalStrikeOverrideSystem] Planet is not owned");
@@ -24,13 +25,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.BoostCharge, planetData.empireId, _boostCount);
     require(_msgValue() == cost, "[TacticalStrikeOverrideSystem] Incorrect payment");
 
-    LibOverride._purchaseOverride(
-      addressToId(_msgSender()),
-      EOverride.BoostCharge,
-      planetData.empireId,
-      _boostCount,
-      _msgValue()
-    );
+    LibOverride._purchaseOverride(playerId, EOverride.BoostCharge, planetData.empireId, _boostCount, _msgValue());
 
     Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
     planetTacticalStrikeData.charge += P_TacticalStrikeConfig.getBoostChargeIncrease() * _boostCount;
@@ -39,6 +34,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
       pseudorandomEntity(),
       BoostChargeOverrideLogData({
         planetId: _planetId,
+        playerId: playerId,
         ethSpent: cost,
         boostCount: _boostCount,
         timestamp: block.timestamp
@@ -50,6 +46,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     bytes32 _planetId,
     uint256 _stunCount
   ) public payable _onlyNotGameOver _takeRake _updateTacticalStrikeCharge(_planetId) {
+    bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[TacticalStrikeOverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[TacticalStrikeOverrideSystem] Planet is not owned");
@@ -57,13 +54,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.StunCharge, planetData.empireId, _stunCount);
     require(_msgValue() == cost, "[TacticalStrikeOverrideSystem] Incorrect payment");
 
-    LibOverride._purchaseOverride(
-      addressToId(_msgSender()),
-      EOverride.StunCharge,
-      planetData.empireId,
-      _stunCount,
-      _msgValue()
-    );
+    LibOverride._purchaseOverride(playerId, EOverride.StunCharge, planetData.empireId, _stunCount, _msgValue());
 
     Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(_planetId);
     uint256 stunDecrease = P_TacticalStrikeConfig.getStunChargeDecrease() * _stunCount;
@@ -75,6 +66,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
       pseudorandomEntity(),
       StunChargeOverrideLogData({
         planetId: _planetId,
+        playerId: playerId,
         ethSpent: cost,
         stunCount: _stunCount,
         timestamp: block.timestamp

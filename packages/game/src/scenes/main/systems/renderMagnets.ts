@@ -1,8 +1,8 @@
+import { PrimodiumScene } from "@game/types";
+import { EEmpire } from "@primodiumxyz/contracts";
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
-import { PrimodiumScene } from "@game/types";
-import { EEmpire } from "@primodiumxyz/contracts";
 
 const calculateTurnsLeft = (
   endTurn: bigint | undefined,
@@ -74,8 +74,6 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
     world: systemsWorld,
     onChange: ({ entity, properties: { current } }) => {
       if (!current) return;
-
-      console.log(entity);
 
       const { planetId, empireId } = decodeEntity(
         tables.Magnet.metadata.abiKeySchema,

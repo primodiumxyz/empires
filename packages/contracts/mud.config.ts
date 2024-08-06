@@ -336,6 +336,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
         overrideCount: "uint256",
@@ -348,6 +349,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
         overrideCount: "uint256",
@@ -360,6 +362,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
 
@@ -373,6 +376,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
         boostCount: "uint256",
@@ -385,6 +389,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         planetId: "bytes32",
         ethSpent: "uint256",
         stunCount: "uint256",
