@@ -474,6 +474,41 @@ export const setupCheatcodes = (
   });
 
   /* ---------------------------------- TIME ---------------------------------- */
+  const _advanceTurns = async (amount: number) => {
+    const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
+    const empirePlanets = core.utils.getEmpirePlanets(turn);
+    const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
+    const updateWorldCallParams = {
+      functionName: "Empires__updateWorld" as const,
+      args: [routineThresholds],
+      options: {
+        gas: 15000000n,
+      },
+      txQueueOptions: {
+        id: `update-world`,
+      },
+    };
+
+    const currentBlock = tables.BlockNumber.get()?.value ?? 0n;
+    let success = true;
+
+    for (let i = 0; i < amount; i++) {
+      const setTurnCallsParams = devCalls.createSetPropertiesParams({
+        table: tables.Turn,
+        keys: {},
+        properties: { nextTurnBlock: currentBlock },
+      });
+
+      const txSuccess = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
+      if (!txSuccess) {
+        success = false;
+        break;
+      }
+
+      return success;
+    }
+  };
+
   // advance turns
   const advanceTurns = createCheatcode({
     title: "Advance turns",
@@ -487,36 +522,7 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
-      const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
-      const empirePlanets = core.utils.getEmpirePlanets(turn);
-      const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
-      const updateWorldCallParams = {
-        functionName: "Empires__updateWorld" as const,
-        args: [routineThresholds],
-        options: {
-          gas: 15000000n,
-        },
-        txQueueOptions: {
-          id: `update-world`,
-        },
-      };
-
-      const currentBlock = tables.BlockNumber.get()?.value ?? 0n;
-      let success = true;
-
-      for (let i = 0; i < amount.value; i++) {
-        const setTurnCallsParams = devCalls.createSetPropertiesParams({
-          table: tables.Turn,
-          keys: {},
-          properties: { nextTurnBlock: currentBlock },
-        });
-
-        const txSuccess = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
-        if (!txSuccess) {
-          success = false;
-          break;
-        }
-      }
+      const success = await _advanceTurns(amount.value);
 
       if (success) {
         notify("success", `Advanced ${amount.value} turns`);
@@ -950,9 +956,43 @@ export const setupCheatcodes = (
     },
   });
 
-  // TODO(SE): detonate shield eater
+  // reset shield eater countdown
+  const resetShieldEaterCountdown = createCheatcode({
+    title: "Reset shield eater countdown",
+    bg: CheatcodeToBg["shieldEater"],
+    caption: "Shield eater",
+    inputs: {},
+    execute: async () => {
+      const countdown = tables.P_ShieldEaterConfig.get()?.detonationCooldown ?? BigInt(0);
+      let currentBlock = tables.BlockNumber.get()?.value ?? BigInt(0);
 
-  // TODO(SE): reset shield eater countdown
+      if (currentBlock < countdown) {
+        const needToAdvance = countdown - currentBlock;
+        const needToAdvanceTurns = needToAdvance / (tables.P_GameConfig.get()?.turnLengthBlocks ?? 1n) + 1n;
+        const success = await _advanceTurns(Number(needToAdvanceTurns));
+        if (!success) {
+          notify("error", "Failed to advance blocks to update shield eater countdown");
+          return false;
+        }
+
+        currentBlock += needToAdvance;
+      }
+
+      const success = await devCalls.setProperties({
+        table: tables.ShieldEater,
+        keys: {},
+        properties: { lastDetonationBlock: currentBlock - countdown },
+      });
+
+      if (success) {
+        notify("success", "Shield eater countdown reset");
+        return true;
+      } else {
+        notify("error", "Failed to reset shield eater countdown");
+        return false;
+      }
+    },
+  });
 
   /* --------------------------------- CONFIG --------------------------------- */
   const updateGameConfig = {
@@ -1152,6 +1192,7 @@ export const setupCheatcodes = (
     triggerCharges,
     moveShieldEater,
     setShieldEaterDestination,
+    resetShieldEaterCountdown,
     withdrawThatRake,
     ...Object.values(updateGameConfig),
   ];
