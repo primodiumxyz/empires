@@ -1,25 +1,25 @@
-import { Core } from '@primodiumxyz/core';
-import { Entity, namespaceWorld } from '@primodiumxyz/reactive-tables';
+import { Core } from "@primodiumxyz/core";
+import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 
-import { PrimodiumScene } from '@game/types';
-import { EEmpire } from '@primodiumxyz/contracts';
+import { PrimodiumScene } from "@game/types";
+import { EEmpire } from "@primodiumxyz/contracts";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: 'blue',
-  [EEmpire.Green]: 'green',
-  [EEmpire.Red]: 'red',
-  [EEmpire.LENGTH]: '',
+  [EEmpire.Blue]: "blue",
+  [EEmpire.Green]: "green",
+  [EEmpire.Red]: "red",
+  [EEmpire.LENGTH]: "",
 };
 
 export const renderOverrideFloatingText = (
   scene: PrimodiumScene,
-  core: Core,
+  core: Core
 ) => {
   const {
     tables,
     network: { world },
   } = core;
-  const systemsWorld = namespaceWorld(world, 'systems');
+  const systemsWorld = namespaceWorld(world, "systems");
 
   tables.ChargeShieldsOverrideLog.watch(
     {
@@ -31,20 +31,20 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Build', 'sfx', { volume: 0.25 });
+        scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 25 },
           `+${current.overrideCount}`,
           {
-            icon: 'Shield',
+            icon: "Shield",
             delay: 500,
-          },
+          }
         );
       },
     },
     {
       runOnInit: false,
-    },
+    }
   );
 
   tables.CreateShipOverrideLog.watch(
@@ -57,18 +57,18 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Build', 'sfx', { volume: 0.25 });
+        scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `+${current.overrideCount}`,
           {
-            icon: 'Ship',
+            icon: "Ship",
             delay: 500,
-          },
+          }
         );
       },
     },
-    { runOnInit: false },
+    { runOnInit: false }
   );
 
   tables.BoostChargeOverrideLog.watch(
@@ -81,18 +81,18 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Build', 'sfx', { volume: 0.25 });
+        scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `+${current.boostCount}`,
           {
-            icon: 'Ship',
+            icon: "Ship",
             delay: 500,
-          },
+          }
         );
       },
     },
-    { runOnInit: false },
+    { runOnInit: false }
   );
 
   tables.DrainShieldsOverrideLog.watch(
@@ -105,18 +105,18 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `-${current.overrideCount}`,
           {
-            icon: 'Shield',
-            color: '#ff0000',
-          },
+            icon: "Shield",
+            color: "#ff0000",
+          }
         );
       },
     },
-    { runOnInit: false },
+    { runOnInit: false }
   );
 
   tables.KillShipOverrideLog.watch(
@@ -129,18 +129,18 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `-${current.overrideCount}`,
           {
-            icon: 'Ship',
-            color: '#ff0000',
-          },
+            icon: "Ship",
+            color: "#ff0000",
+          }
         );
       },
     },
-    { runOnInit: false },
+    { runOnInit: false }
   );
 
   tables.StunChargeOverrideLog.watch(
@@ -153,18 +153,18 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `-${current.stunCount}`,
           {
-            icon: 'Ship',
-            color: '#ff0000',
-          },
+            icon: "Ship",
+            color: "#ff0000",
+          }
         );
       },
     },
-    { runOnInit: false },
+    { runOnInit: false }
   );
 
   tables.TacticalStrikeOverrideLog.watch(
@@ -177,18 +177,18 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `ALL SHIPS DESTROYED`,
           {
-            icon: 'Ship',
-            color: '#ff0000',
-          },
+            icon: "Ship",
+            color: "#ff0000",
+          }
         );
       },
     },
-    { runOnInit: false },
+    { runOnInit: false }
   );
 
   tables.PlaceMagnetOverrideLog.watch(
@@ -201,17 +201,17 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText(
           { x: planet.coord.x, y: planet.coord.y - 20 },
           `+${current.overrideCount}`,
           {
-            icon: 'Attack',
+            icon: "Attack",
             color: EmpireEnumToColor[current.empireId as EEmpire],
-          },
+          }
         );
       },
     },
-    { runOnInit: false },
+    { runOnInit: false }
   );
 };

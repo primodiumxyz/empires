@@ -17,7 +17,7 @@ library LibShieldEater {
   /**
    * @dev Randomly selects a starting planet for the Shield Eater.
    */
-  function chooseStartingPlanet() internal {
+  function initialize() internal {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     uint256 randomIndex = pseudorandom(block.number, planetIds.length);
     ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
@@ -28,7 +28,7 @@ library LibShieldEater {
    * @dev Selects a destination for the Shield Eater, biased towards planets that have
    *      not been visited recently.
    */
-  function chooseNextDestination() internal {
+  function retarget() internal {
     // get a list of all planets
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     bytes32[] memory longestWithoutVisit = new bytes32[](3);
@@ -50,32 +50,48 @@ library LibShieldEater {
   /**
    * @dev Moves the Shield Eater to the next planet en route to the destination planet.
    */
-  function moveShieldEater() internal {
+  function update() internal {
+    // Where is the Shield Eater now?
     PlanetData memory tmpPlanet = Planet.get(ShieldEater.getCurrentPlanet());
     CoordData memory src = CoordData(tmpPlanet.q, tmpPlanet.r);
 
+    // Where is the Shield Eater going?
     tmpPlanet = Planet.get(ShieldEater.getDestinationPlanet());
     CoordData memory dst = CoordData(tmpPlanet.q, tmpPlanet.r);
 
+    // How do we get there?
     CoordData memory offset = getTargetDirection(src, dst);
 
+    // If there is a hole in the map here, go around it
     if (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
       offset = rotateTargetDirection(offset);
     }
 
-    ShieldEater.setCurrentPlanet(coordToId(src.q + offset.q, src.r + offset.r));
-    Planet.setLastShieldEaterVisit(coordToId(src.q + offset.q, src.r + offset.r), block.number);
+    // Next movement target selected
+    bytes32 planetId = coordToId(src.q + offset.q, src.r + offset.r);
+
+    // Move the Shield Eater to the next planet
+    ShieldEater.setCurrentPlanet(planetId);
+
+    // Mark the planet as visited
+    Planet.setLastShieldEaterVisit(planetId, block.number);
+
+    // Eat a little shields if there are any
+    uint256 shieldCount = Planet.getShieldCount(planetId);
+    if (shieldCount > 0) {
+      Planet.setShieldCount(planetId, shieldCount - 1);
+    }
+
+    // If the Shield Eater has reached its destination, select a new destination
+    if (ShieldEater.getCurrentPlanet() == ShieldEater.getDestinationPlanet()) {
+      retarget();
+    }
   }
 
   /**
    * @dev Detonates the Shield Eater at the current location, wiping out shield on all nearby planets.
    */
-  function detonateShieldEater() internal {
-    require(
-      block.number >= ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown(),
-      "[LibShieldEater] detonateShieldEater cooldown not yet expired"
-    );
-
+  function detonate() internal {
     PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
     CoordData memory center = CoordData(currentPlanet.q, currentPlanet.r);
 

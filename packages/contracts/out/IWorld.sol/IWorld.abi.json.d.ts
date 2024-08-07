@@ -68,6 +68,13 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__detonateShieldEater",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__devDeleteRecord",
     "inputs": [
       {
