@@ -1,13 +1,6 @@
 import { AutoSizer } from "@/components/core/AutoSizer";
 import { useActions } from "@/hooks/useActions";
 
-type ActionLogEntry = {
-  actor: string;
-  type: string;
-  timestamp: bigint;
-  details: string;
-};
-
 export const ActionLog = () => {
   const actions = useActions();
 
