@@ -1,6 +1,14 @@
+import { EEmpire } from "@primodiumxyz/contracts";
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { PrimodiumScene } from "@game/types";
+
+export const EmpireEnumToColor: Record<EEmpire, string> = {
+  [EEmpire.Blue]: "blue",
+  [EEmpire.Green]: "green",
+  [EEmpire.Red]: "red",
+  [EEmpire.LENGTH]: "",
+};
 
 export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) => {
   const {
@@ -164,7 +172,7 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) =>
         scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.overrideCount}`, {
           icon: "Attack",
-          color: "#ff0000",
+          color: EmpireEnumToColor[current.empireId as EEmpire],
         });
       },
     },

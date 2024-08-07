@@ -19,7 +19,7 @@ export function createSceneApi(scene: Scene, globalApi: GlobalApi) {
     camera: cameraApi,
     dispose: scene.dispose,
     fx: createFxApi(scene),
-    hooks: createHooksApi(scene),
+    hooks: createHooksApi(scene, globalApi),
     input: createInputApi(scene, globalApi),
     objects: createObjectApi(scene),
     sprite: createSpriteApi(scene),

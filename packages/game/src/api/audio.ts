@@ -10,11 +10,14 @@ export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function initializeAudioVolume() {
-    const volume = globalApi.tables.Volume.get();
+    const masterVolume = globalApi.tables.Volume.get("master");
+    const musicVolume = globalApi.tables.Volume.get("music");
+    const sfxVolume = globalApi.tables.Volume.get("sfx");
+    const uiVolume = globalApi.tables.Volume.get("ui");
 
-    scene.audio.music.setVolume(volume?.master ?? 1 * (volume?.music ?? 1));
-    scene.audio.sfx.setVolume(volume?.master ?? 1 * (volume?.sfx ?? 1));
-    scene.audio.ui.setVolume(volume?.master ?? 1 * (volume?.ui ?? 1));
+    scene.audio.music.setVolume(masterVolume ?? 1 * (musicVolume ?? 1));
+    scene.audio.sfx.setVolume(masterVolume ?? 1 * (sfxVolume ?? 1));
+    scene.audio.ui.setVolume(masterVolume ?? 1 * (uiVolume ?? 1));
   }
 
   function get(key: AudioKeys, channel: Channel) {
@@ -24,6 +27,10 @@ export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
         return sound;
       }
     }
+  }
+
+  function getVolume(channel: Channel | "master" = "master") {
+    return globalApi.tables.Volume.get(channel);
   }
 
   function setVolume(volume: number, channel: Channel | "master" = "master") {
@@ -45,6 +52,7 @@ export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
     play,
     get,
     setVolume,
+    getVolume,
     setPauseOnBlur,
     initializeAudioVolume,
   };

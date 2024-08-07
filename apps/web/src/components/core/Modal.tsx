@@ -146,7 +146,7 @@ Modal.Content = function ModalContent({ children, className }) {
       onClick={handleClickOutside}
     >
       <div
-        className={cn("max-h-screen w-screen max-w-screen-xl space-y-2 p-5 pt-12 md:w-[90%]", className)}
+        className={cn(className, "max-h-screen w-screen max-w-screen-xl space-y-2 p-5 pt-12 md:w-[90%]")}
         ref={modalRef}
       >
         <Card className="pointer-events-auto h-full w-full shadow-2xl" noMotion>

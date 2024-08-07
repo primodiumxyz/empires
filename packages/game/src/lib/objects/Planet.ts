@@ -372,7 +372,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   setMagnet(empire: EEmpire, turns: number) {
-    this.magnets[empire - 1]?.setText(formatNumber(turns)).setVisible(turns > 0);
+    const fullTurnLeft = Math.ceil(turns / 3);
+    const subTurnLeft = turns % 3;
+    const text = turns > 2 ? formatNumber(fullTurnLeft) : `${"●".repeat(subTurnLeft)}`;
+    this.magnets[empire - 1]?.setText(text).setVisible(turns > 0);
 
     return this;
   }

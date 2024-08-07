@@ -7,14 +7,14 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
-import { Dashboard } from "@/components/Dashboard";
 import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
-import { OverrideDrawer } from "@/components/OverrideDrawer";
+import { MusicPlayer } from "@/components/MusicPlayer";
+import { OverridePopup } from "@/components/OverridePopup";
 import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
 import { SellPoints } from "@/components/SellPoints";
+import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
-import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -97,13 +97,19 @@ export const GameHUD = () => {
         <HUD.TopMiddle>
           <Pot className="w-48" />
         </HUD.TopMiddle>
+        <HUD.Left>
+          <ActionLog />
+        </HUD.Left>
 
         <HUD.TopRight>
           <Account />
         </HUD.TopRight>
 
         <HUD.BottomLeft>
-          <SellPoints />
+          <div className="flex w-48 flex-col gap-2">
+            <SellPoints />
+            <MusicPlayer />
+          </div>
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
@@ -111,20 +117,18 @@ export const GameHUD = () => {
           <AdvanceTurn />
         </HUD.BottomMiddle>
         <HUD.BottomMiddle>
-          <OverrideDrawer />
+          <OverridePopup />
         </HUD.BottomMiddle>
 
+        <HUD.Center>
+          <OverridePopup />
+        </HUD.Center>
+
         <HUD.BottomRight className="flex gap-2">
-          <UserSettings />
-          <ActionLog />
+          <Settings />
           <HistoricalPointPriceModal showIcon={true} />
           {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomRight>
-      </HUD>
-      <HUD>
-        <HUD.Right>
-          <Dashboard />
-        </HUD.Right>
       </HUD>
     </>
   );
