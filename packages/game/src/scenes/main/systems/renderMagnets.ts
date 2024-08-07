@@ -1,17 +1,12 @@
+import { PrimodiumScene } from "@game/types";
+import { EEmpire } from "@primodiumxyz/contracts";
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
-import { PrimodiumScene } from "@game/types";
-import { EEmpire } from "@primodiumxyz/contracts";
 
-const calculateTurnsLeft = (
-  endTurn: bigint | undefined,
-  globalTurn: bigint,
-  beforeEmpire: boolean
-) => {
-  if (endTurn == undefined) return 0;
-  const turnsLeft = Number(endTurn - globalTurn);
-  return beforeEmpire ? turnsLeft + 1 : turnsLeft;
+const calculateTurnsLeft = (endTurn: bigint | undefined, currTurn: bigint) => {
+  if (endTurn === undefined) return 0;
+  return Number(endTurn - currTurn);
 };
 
 export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
@@ -22,60 +17,44 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
   const systemsWorld = namespaceWorld(world, "systems");
   const planets = tables.Planet.getAll();
 
+  const updateMagnetForEmpire = (empire: EEmpire, currTurn: bigint) => {
+    for (const planet of planets) {
+      const magnet = tables.Magnet.getWithKeys({
+        empireId: empire,
+        planetId: planet,
+      });
+
+      const turnsLeft = calculateTurnsLeft(magnet?.endTurn, currTurn);
+      scene.objects.planet.get(planet)?.setMagnet(empire, turnsLeft);
+    }
+  };
+
   tables.Turn.watch({
     world: systemsWorld,
     onChange: ({ properties: { current } }) => {
-      const currTurn = current?.value ?? 0n;
-      const currFullTurn = (currTurn - 1n) / 3n;
-      const turnModulo = Number(currTurn - 1n) % 3;
+      const currTurn = current?.value ?? 1n;
 
-      for (const planet of planets) {
-        const redMagnet = tables.Magnet.getWithKeys({
-          empireId: EEmpire.Red,
-          planetId: planet,
-        });
-        const blueMagnet = tables.Magnet.getWithKeys({
-          empireId: EEmpire.Blue,
-          planetId: planet,
-        });
-        const greenMagnet = tables.Magnet.getWithKeys({
-          empireId: EEmpire.Green,
-          planetId: planet,
-        });
-
-        if (!redMagnet && !blueMagnet && !greenMagnet) continue;
-
-        const redTurnsLeft = calculateTurnsLeft(
-          redMagnet?.endTurn,
-          currFullTurn,
-          turnModulo < EEmpire.Red
-        );
-        const blueTurnsLeft = calculateTurnsLeft(
-          blueMagnet?.endTurn,
-          currFullTurn,
-          turnModulo < EEmpire.Blue
-        );
-        const greenTurnsLeft = calculateTurnsLeft(
-          greenMagnet?.endTurn,
-          currFullTurn,
-          turnModulo < EEmpire.Green
-        );
-
-        scene.objects.planet
-          .get(planet)
-          ?.setMagnet(EEmpire.Red, redTurnsLeft)
-          .setMagnet(EEmpire.Blue, blueTurnsLeft)
-          .setMagnet(EEmpire.Green, greenTurnsLeft);
-      }
+      updateMagnetForEmpire(EEmpire.Red, currTurn);
+      updateMagnetForEmpire(EEmpire.Blue, currTurn);
+      updateMagnetForEmpire(EEmpire.Green, currTurn);
     },
   });
 
   tables.Magnet.watch({
     world: systemsWorld,
-    onChange: ({ entity, properties: { current } }) => {
-      if (!current) return;
+    onChange: ({ entity, properties: { current, prev } }) => {
+      if (!current) {
+        // we might have just removed some magnet with cheatcodes
+        if (prev) {
+          const { planetId, empireId } = decodeEntity(
+            tables.Magnet.metadata.abiKeySchema,
+            entity
+          );
+          scene.objects.planet.get(planetId as Entity)?.setMagnet(empireId, 0);
+        }
 
-      console.log(entity);
+        return;
+      }
 
       const { planetId, empireId } = decodeEntity(
         tables.Magnet.metadata.abiKeySchema,
@@ -84,15 +63,8 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
       const planet = scene.objects.planet.get(planetId as Entity);
       if (!planet) return;
 
-      const currTurn = tables.Turn.get()?.value ?? 0n;
-      const currFullTurn = (currTurn - 1n) / 3n;
-      const turnModulo = Number(currTurn - 1n) % 3;
-
-      const turnsLeft = calculateTurnsLeft(
-        current.endTurn,
-        currFullTurn,
-        turnModulo < empireId
-      );
+      const currTurn = tables.Turn.get()?.value ?? 1n;
+      const turnsLeft = calculateTurnsLeft(current.endTurn, currTurn);
 
       planet.setMagnet(empireId, turnsLeft);
     },
