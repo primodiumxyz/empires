@@ -1,5 +1,4 @@
 import { SceneConfig } from "@primodiumxyz/engine";
-
 import { Scenes } from "@game/lib/constants/common";
 
 export const uiSceneConfig: SceneConfig = {

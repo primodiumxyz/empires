@@ -1,15 +1,9 @@
-import { GlobalApi } from "@game/api/global";
 import { Assets, Audio, AudioKeys } from "@primodiumxyz/assets";
-import { Scene } from "@primodiumxyz/engine";
-
-import { Channel } from "@primodiumxyz/engine";
+import { Channel, Scene } from "@primodiumxyz/engine";
+import { GlobalApi } from "@game/api/global";
 
 export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
-  function play(
-    key: AudioKeys,
-    channel: Channel,
-    config?: Phaser.Types.Sound.SoundConfig
-  ) {
+  function play(key: AudioKeys, channel: Channel, config?: Phaser.Types.Sound.SoundConfig) {
     scene.audio[channel].playAudioSprite(Assets.AudioAtlas, Audio[key], {
       ...config,
     });

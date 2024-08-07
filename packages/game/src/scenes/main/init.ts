@@ -1,19 +1,15 @@
 // ROOT ENTRY POINT
+import { Assets, Sprites } from "@primodiumxyz/assets";
 import { Core } from "@primodiumxyz/core";
-
 import { GlobalApi } from "@game/api/global";
 import { createSceneApi } from "@game/api/scene";
-import { PrimodiumScene } from "@game/types";
-import { runSystems as runMainSystems } from "@game/scenes/main/systems";
 import { mainSceneConfig } from "@game/lib/config/mainScene";
-import { Assets, Sprites } from "@primodiumxyz/assets";
-import { setupBasicCameraMovement } from "@game/scenes/common/setup/setupBasicCameraMovement";
 import { isValidClick } from "@game/lib/utils/inputGuards";
+import { setupBasicCameraMovement } from "@game/scenes/common/setup/setupBasicCameraMovement";
+import { runSystems as runMainSystems } from "@game/scenes/main/systems";
+import { PrimodiumScene } from "@game/types";
 
-export const initMainScene = async (
-  game: GlobalApi,
-  core: Core
-): Promise<PrimodiumScene> => {
+export const initMainScene = async (game: GlobalApi, core: Core): Promise<PrimodiumScene> => {
   const scene = await game.createScene(mainSceneConfig, true);
   const { tables } = core;
 
@@ -32,7 +28,7 @@ export const initMainScene = async (
       scene.phaserScene.sys.canvas.width * 5,
       scene.phaserScene.sys.canvas.height * 5,
       Assets.SpriteAtlas,
-      Sprites.StarBg
+      Sprites.StarBg,
     )
     .setDepth(-Infinity)
     .setScrollFactor(0.25, 0.25)
