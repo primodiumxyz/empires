@@ -439,10 +439,11 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    DetonateShieldEaterLog: {
+    DetonateShieldEaterOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
+        playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
         timestamp: "uint256",
