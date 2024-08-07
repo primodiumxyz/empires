@@ -17,7 +17,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
   const { tables } = useCore();
   const { detonateShieldEater } = useContractCalls();
   const { showBlockchainUnits } = useSettings();
-  const { currentPlanet, turnsToDestination, cooldownMs, cooldownBlocks } = useShieldEater();
+  const { currentPlanet, cooldownMs, cooldownBlocks } = useShieldEater();
 
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? (0 as EEmpire);
