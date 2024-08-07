@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Player, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
+import { Turn, Player, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
@@ -28,6 +28,7 @@ contract OverrideSystem is EmpiresSystem {
     bytes32 _planetId,
     uint256 _overrideCount
   ) public payable _onlyNotGameOver _takeRake _updateTacticalStrikeCharge(_planetId) {
+    bytes32 playerId = addressToId(_msgSender());
     // increase ships
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
@@ -35,13 +36,7 @@ contract OverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    LibOverride._purchaseOverride(
-      addressToId(_msgSender()),
-      EOverride.CreateShip,
-      planetData.empireId,
-      _overrideCount,
-      _msgValue()
-    );
+    LibOverride._purchaseOverride(playerId, EOverride.CreateShip, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount + _overrideCount);
 
@@ -53,7 +48,8 @@ contract OverrideSystem is EmpiresSystem {
     CreateShipOverrideLog.set(
       pseudorandomEntity(),
       CreateShipOverrideLogData({
-        playerId: addressToId(_msgSender()),
+        playerId: playerId,
+        turn: Turn.getValue(),
         planetId: _planetId,
         ethSpent: cost,
         overrideCount: _overrideCount,
@@ -72,6 +68,7 @@ contract OverrideSystem is EmpiresSystem {
     uint256 _overrideCount
   ) public payable _onlyNotGameOver _takeRake _updateTacticalStrikeCharge(_planetId) {
     // decrease ship count
+    bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.shipCount >= _overrideCount, "[OverrideSystem] Not enough ships to kill");
@@ -79,13 +76,7 @@ contract OverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    LibOverride._purchaseOverride(
-      addressToId(_msgSender()),
-      EOverride.KillShip,
-      planetData.empireId,
-      _overrideCount,
-      _msgValue()
-    );
+    LibOverride._purchaseOverride(playerId, EOverride.KillShip, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount - _overrideCount);
 
@@ -100,7 +91,8 @@ contract OverrideSystem is EmpiresSystem {
     KillShipOverrideLog.set(
       pseudorandomEntity(),
       KillShipOverrideLogData({
-        playerId: addressToId(_msgSender()),
+        playerId: playerId,
+        turn: Turn.getValue(),
         planetId: _planetId,
         ethSpent: cost,
         overrideCount: _overrideCount,
@@ -115,26 +107,23 @@ contract OverrideSystem is EmpiresSystem {
    * @param _overrideCount The number of overrides to purchase.
    */
   function chargeShield(bytes32 _planetId, uint256 _overrideCount) public payable _onlyNotGameOver _takeRake {
+    bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    LibOverride._purchaseOverride(
-      addressToId(_msgSender()),
-      EOverride.ChargeShield,
-      planetData.empireId,
-      _overrideCount,
-      _msgValue()
-    );
+    LibOverride._purchaseOverride(playerId, EOverride.ChargeShield, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount + _overrideCount);
 
     ChargeShieldsOverrideLog.set(
       pseudorandomEntity(),
       ChargeShieldsOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
+        playerId: playerId,
         ethSpent: cost,
         overrideCount: _overrideCount,
         timestamp: block.timestamp
@@ -148,6 +137,7 @@ contract OverrideSystem is EmpiresSystem {
    * @param _overrideCount The number of overrides to purchase.
    */
   function drainShield(bytes32 _planetId, uint256 _overrideCount) public payable _onlyNotGameOver _takeRake {
+    bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.shieldCount >= _overrideCount, "[OverrideSystem] Not enough shields to drain");
@@ -156,19 +146,15 @@ contract OverrideSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    LibOverride._purchaseOverride(
-      addressToId(_msgSender()),
-      EOverride.DrainShield,
-      planetData.empireId,
-      _overrideCount,
-      _msgValue()
-    );
+    LibOverride._purchaseOverride(playerId, EOverride.DrainShield, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount - _overrideCount);
     DrainShieldsOverrideLog.set(
       pseudorandomEntity(),
       DrainShieldsOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
+        playerId: playerId,
         ethSpent: cost,
         overrideCount: _overrideCount,
         timestamp: block.timestamp
@@ -222,7 +208,10 @@ contract OverrideSystem is EmpiresSystem {
     PlaceMagnetOverrideLog.set(
       pseudorandomEntity(),
       PlaceMagnetOverrideLogData({
+        turn: Turn.getValue(),
         planetId: _planetId,
+        playerId: playerId,
+        empireId: _empire,
         ethSpent: cost,
         overrideCount: turnDuration,
         timestamp: block.timestamp

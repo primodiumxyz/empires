@@ -1,9 +1,8 @@
+import { EEmpire } from "@primodiumxyz/contracts";
 import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
-
+import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { Planet } from "@game/lib/objects/Planet";
 import { PrimodiumScene } from "@game/types";
-import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
-import { EEmpire } from "@primodiumxyz/contracts";
 
 const MARGIN = 10;
 
@@ -21,10 +20,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
     const planetObj = new Planet({
       id: entity,
       scene,
-      coord: convertAxialToCartesian(
-        { q: Number(q) - 100, r: Number(r) },
-        100 + MARGIN
-      ),
+      coord: convertAxialToCartesian({ q: Number(q) - 100, r: Number(r) }, 100 + MARGIN),
       empire: planet.empireId,
     });
 

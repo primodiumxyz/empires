@@ -7,12 +7,12 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
-import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
-import { OverrideDrawer } from "@/components/OverrideDrawer";
+import { MusicPlayer } from "@/components/MusicPlayer";
+import { OverridePopup } from "@/components/OverridePopup";
 import { PlayerReturns } from "@/components/PlayerReturns";
 import { PriceHistory } from "@/components/PriceHistory";
+import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
-import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -95,28 +95,34 @@ export const GameHUD = () => {
         <HUD.TopMiddle>
           <TimeLeft />
         </HUD.TopMiddle>
+        <HUD.Left>
+          <ActionLog />
+        </HUD.Left>
 
         <HUD.TopRight className="flex flex-col gap-2">
           <Account />
         </HUD.TopRight>
 
-        {/* <HUD.BottomLeft>
-          <SellPoints />
-        </HUD.BottomLeft> */}
+        <HUD.BottomLeft>
+          <div className="flex w-48 flex-col gap-2">
+            <MusicPlayer />
+            <Settings />
+            <ActionLog />
+          </div>
+        </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
           <AdvanceTurn />
-        </HUD.BottomMiddle>
-        <HUD.BottomMiddle>
-          <OverrideDrawer />
+          {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomMiddle>
 
-        <HUD.BottomLeft className="flex gap-2">
-          <UserSettings />
-          <ActionLog />
-          <HistoricalPointPriceModal showIcon={true} />
-          {DEV && <Cheatcodes className="-mr-1" />}
-        </HUD.BottomLeft>
+        <HUD.Center>
+          <OverridePopup />
+        </HUD.Center>
+
+        <HUD.BottomRight className="flex gap-2">
+          <PlayerReturns />
+        </HUD.BottomRight>
 
         <HUD.BottomRight className="flex gap-2">
           <PlayerReturns />

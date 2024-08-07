@@ -58,15 +58,17 @@ contract UpdateSystem is EmpiresSystem {
       LibResolveCombat.resolveCombat(planets[i]);
     }
 
-    TurnData memory currTurn = Turn.get();
-    uint256 currFullTurn = (currTurn.value - 1) / EMPIRE_COUNT;
+    uint256 nextTurn = Turn.getValue() + 1;
+    // remove magnets that should be removed for the next turn for each empire, so the turn starts on an updated state
+    for (uint i = 1; i <= EMPIRE_COUNT; i++) {
+      bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(i), nextTurn);
+      for (uint j = 0; j < magnetEmpireTurnPlanets.length; j++) {
+        // clear magnet
+        LibMagnet.removeMagnet(EEmpire(i), magnetEmpireTurnPlanets[j]);
+      }
 
-    bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(currTurn.empire, currFullTurn);
-    for (uint i = 0; i < magnetEmpireTurnPlanets.length; i++) {
-      // clear magnet
-      LibMagnet.removeMagnet(currTurn.empire, magnetEmpireTurnPlanets[i]);
+      MagnetTurnPlanets.deleteRecord(EEmpire(i), nextTurn);
     }
-    MagnetTurnPlanets.deleteRecord(currTurn.empire, currFullTurn);
 
     // update empire point costs
     for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {
