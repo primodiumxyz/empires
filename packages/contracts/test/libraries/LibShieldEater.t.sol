@@ -18,7 +18,7 @@ contract LibShieldEaterTest is PrimodiumTest {
     super.setUp();
   }
 
-  function testChooseStartingPlanet(uint256 fuzz) public {
+  function testInitialize(uint256 fuzz) public {
     vm.startPrank(creator);
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     assertTrue(planetIds.length > 0, "LibShieldEater: planetIds.length is 0");
@@ -28,13 +28,13 @@ contract LibShieldEaterTest is PrimodiumTest {
     vm.roll(fuzz);
 
     // choose a starting planet
-    LibShieldEater.chooseStartingPlanet();
+    LibShieldEater.initialize();
 
     // check that it is a valid planetId
     assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "LibShieldEater: planetId not contained in PlanetsSet");
   }
 
-  function testChooseNextDestination(uint256 fuzz) public {
+  function testRetarget(uint256 fuzz) public {
     vm.startPrank(creator);
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
 
@@ -61,7 +61,7 @@ contract LibShieldEaterTest is PrimodiumTest {
     }
 
     // choose a next destination
-    LibShieldEater.chooseNextDestination();
+    LibShieldEater.retarget();
 
     // check that it is a valid planetId
     assertTrue(
@@ -78,15 +78,15 @@ contract LibShieldEaterTest is PrimodiumTest {
     );
   }
 
-  function testMoveShieldEater(uint256 fuzz) public {
+  function testUpdate(uint256 fuzz) public {
     vm.startPrank(creator);
 
     // set a random block.number
     fuzz = bound(fuzz, 1000000, 1e36);
     vm.roll(fuzz);
 
-    LibShieldEater.chooseStartingPlanet();
-    LibShieldEater.chooseNextDestination();
+    LibShieldEater.initialize();
+    LibShieldEater.retarget();
 
     PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
     PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
@@ -103,7 +103,7 @@ contract LibShieldEaterTest is PrimodiumTest {
     uint256 loopcount = 0;
 
     while (currPlanetData.q != destPlanetData.q || currPlanetData.r != destPlanetData.r) {
-      LibShieldEater.moveShieldEater();
+      LibShieldEater.update();
       currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
       console.log("currPlanetData:");
       console.logInt(currPlanetData.q);
@@ -118,7 +118,7 @@ contract LibShieldEaterTest is PrimodiumTest {
     assertEq(currPlanetData.r, destPlanetData.r, "LibShieldEater: currPlanetData.r != destPlanetData.r");
   }
 
-  function testDetonateShieldEater(uint256 fuzz) public {
+  function testDetonate(uint256 fuzz) public {
     vm.startPrank(creator);
 
     // set a random block.number
@@ -174,7 +174,7 @@ contract LibShieldEaterTest is PrimodiumTest {
       Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
     }
 
-    LibShieldEater.detonateShieldEater();
+    LibShieldEater.detonate();
 
     assertEq(Planet.getShieldCount(ShieldEater.getCurrentPlanet()), 0, "LibShieldEater: Center shieldCount not zero.");
     assertEq(
@@ -274,12 +274,12 @@ contract LibShieldEaterTest is PrimodiumTest {
     }
   }
 
-  // function testDetonateShieldEaterCooldown(uint256 fuzz) public {
+  // function testDetonateCooldown() public {
   //   vm.startPrank(creator);
 
-  //   // set a random block.number
-  //   fuzz = bound(fuzz, 1000000, 1e36);
-  //   vm.roll(fuzz);
+  //   ShieldEater.setLastDetonationBlock(block.number + 1);
+
+  //   // vm.roll(1000000);
 
   //   // console.log("P_ShieldEaterConfig.getDetonationCooldown()");
   //   // console.log(P_ShieldEaterConfig.getDetonationCooldown());
@@ -289,25 +289,25 @@ contract LibShieldEaterTest is PrimodiumTest {
 
   //   // console.log("block.number");
   //   // console.log(block.number);
+  //   // vm.expectRevert();
+  //   LibShieldEater.detonate();
 
-  //   LibShieldEater.detonateShieldEater();
+  //   // vm.roll(ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown() - 1);
 
-  //   vm.roll(fuzz + P_ShieldEaterConfig.getDetonationCooldown() - 1);
+  //   // // console.log("P_ShieldEaterConfig.getDetonationCooldown()");
+  //   // // console.log(P_ShieldEaterConfig.getDetonationCooldown());
 
-  //   // console.log("P_ShieldEaterConfig.getDetonationCooldown()");
-  //   // console.log(P_ShieldEaterConfig.getDetonationCooldown());
+  //   // // console.log("ShieldEater.getLastDetonationBlock()");
+  //   // // console.log(ShieldEater.getLastDetonationBlock());
 
-  //   // console.log("ShieldEater.getLastDetonationBlock()");
-  //   // console.log(ShieldEater.getLastDetonationBlock());
+  //   // // console.log("block.number");
+  //   // // console.log(block.number);
 
-  //   console.log("block.number");
-  //   console.log(block.number);
+  //   // // console.log("ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown()");
+  //   // // console.log(ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown());
 
-  //   console.log("ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown()");
-  //   console.log(ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown());
-
-  //   // vm.expectRevert("[LibShieldEater] detonateShieldEater cooldown not yet expired");
-  //   vm.expectRevert();
-  //   LibShieldEater.detonateShieldEater();
+  //   // // vm.expectRevert("[LibShieldEater] detonate cooldown not yet expired");
+  //   // vm.expectRevert();
+  //   // LibShieldEater.detonate();
   // }
 }

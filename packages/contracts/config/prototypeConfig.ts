@@ -140,6 +140,19 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     },
   },
 
+  DetonateShieldEaterOverride: {
+    keys: [{ [EOverride.DetonateShieldEater]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: false,
+        minOverrideCost: 0n,
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+      },
+    },
+  },
+
   BuyShips: {
     keys: [{ [ERoutine.BuyShips]: "uint8" }],
     tables: {
