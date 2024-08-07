@@ -6,7 +6,6 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Badge } from "@/components/core/Badge";
 import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { useGame } from "@/hooks/useGame";
@@ -43,10 +42,10 @@ export const PlayerReturns = () => {
   }, [points]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-40 flex-col gap-2">
       <div className="text-right">
         <h2 className="font-semibold text-gray-400">Pot</h2>
-        <Price wei={pot} />
+        <Price wei={pot} className="text-base" />
       </div>
 
       <EmpireEndReward
@@ -81,14 +80,15 @@ const EmpireEndReward = ({
   const pnl = isProfit ? earnings - totalSpent : totalSpent - earnings;
 
   const imgUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
+  const empireName = empire === EEmpire.Red ? "Red" : empire === EEmpire.Blue ? "Blue" : "Green";
   return (
-    <div className="flex flex-col gap-1 rounded-lg border border-white p-2">
+    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg border border-white p-2">
       <h2 className="flex items-center justify-between gap-2 font-semibold text-gray-400">
         <span className="text-xs">Earn up to</span>
         <Tooltip
-          tooltipContent="Your projected rewards at the end of the game for each empire if it wins"
+          tooltipContent={`Projected rewards if ${empireName} empire wins`}
           direction="left"
-          className="w-64 text-xs"
+          className="w-56 text-xs"
         >
           <ExclamationCircleIcon className="size-3" />
         </Tooltip>
@@ -126,22 +126,14 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const pnl = isProfit ? totalReward - totalSpent : totalSpent - totalReward;
 
   return (
-    <div className="flex flex-col gap-1 rounded-lg border border-white p-2">
+    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg border border-white p-2">
       <h2 className="flex items-center justify-between gap-2 font-semibold text-gray-400">
         <span className="text-xs">Sell now</span>
-        <Tooltip
-          tooltipContent="Your reward if you sell points for all empires right now"
-          direction="left"
-          className="w-64 text-xs"
-        >
+        <Tooltip tooltipContent="Rewards if you sell all points now" direction="left" className="w-56 text-xs">
           <ExclamationCircleIcon className="size-3" />
         </Tooltip>
       </h2>
-      <Badge
-        variant="glass"
-        size="sm"
-        className={cn("flex h-full w-full justify-between gap-1 border-none py-1 text-sm")}
-      >
+      <div className={cn("flex h-full w-full justify-between gap-1 border-none py-1 text-sm")}>
         <Price wei={totalReward} />
         {!!totalSpent && (
           <span className={cn(isProfit ? "text-green-400" : "text-red-400")}>
@@ -149,7 +141,7 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
             <Price wei={pnl} />
           </span>
         )}
-      </Badge>
+      </div>
     </div>
   );
 };

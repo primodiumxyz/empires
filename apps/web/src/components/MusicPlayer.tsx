@@ -87,7 +87,7 @@ export const MusicPlayer = () => {
   };
 
   return (
-    <Card className={cn("group text-sm")} noDecor>
+    <Card className={cn("group w-full text-sm")} noDecor>
       <div className={cn("flex items-center gap-2 transition-all group-hover:opacity-15", !isPlaying && "opacity-15")}>
         <MusicalNoteIcon className={cn("w-6", isPlaying && "animate-pulse")} />
         <div className="marquee relative flex grow">
