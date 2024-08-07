@@ -15,21 +15,19 @@ import { msToDuration } from "@/util/time";
 
 export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
-  // const {detonateShieldEater} = useContractCalls()
-  // TODO(SE): Temp
-  const detonateShieldEater = async () => {};
+  const { detonateShieldEater } = useContractCalls();
   const { showBlockchainUnits } = useSettings();
   const { currentPlanet, turnsToDestination, cooldownMs, cooldownBlocks } = useShieldEater();
 
-  const selectedPlanet = tables.SelectedPlanet.use()?.value ?? defaultEntity;
-  const selectedPlanetEmpire = tables.Planet.get(selectedPlanet)?.empireId ?? (0 as EEmpire);
+  const planet = tables.Planet.use(entity);
+  const planetEmpire = planet?.empireId ?? (0 as EEmpire);
   const cooldownDuration = useMemo(() => msToDuration(cooldownMs ?? 0), [cooldownMs]);
 
-  const detonatePriceWei = useOverrideCost(EOverride.DetonateShieldEater, selectedPlanetEmpire, 1n);
-  const detonateDisabled = currentPlanet !== selectedPlanet || !!cooldownMs;
+  const detonatePriceWei = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
+  const detonateDisabled = currentPlanet !== entity || !!cooldownMs;
 
   const caption =
-    currentPlanet !== selectedPlanet
+    currentPlanet !== entity
       ? `The shield eater is currently on ${entityToPlanetName(currentPlanet)}.`
       : cooldownMs
         ? `The shield eater is on cooldown for ${cooldownDuration.toLocaleString()}${showBlockchainUnits.enabled ? ` (${cooldownBlocks} blocks)` : ""}.`
@@ -40,10 +38,10 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
       {!!caption && (
         <p className="mb-1 rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">{caption}</p>
       )}
-      <TransactionQueueMask id={`${entity}-boost-charge`}>
+      <TransactionQueueMask id="detonate-shield-eater">
         <Button
           onClick={async () => {
-            await detonateShieldEater();
+            await detonateShieldEater(entity);
             tables.SelectedPlanet.remove();
           }}
           disabled={detonateDisabled}

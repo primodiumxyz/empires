@@ -235,7 +235,7 @@ contract OverrideSystem is EmpiresSystem {
       pseudorandomEntity(),
       DetonateShieldEaterLogData({
         turn: Turn.getValue(),
-        planetId: _planetId,
+        planetId: ShieldEater.getCurrentPlanet(),
         impactedPlanetIds: new bytes32[](0),
         timestamp: block.timestamp
       })

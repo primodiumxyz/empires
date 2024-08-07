@@ -133,6 +133,7 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
       },
     });
   };
+
   const tacticalStrike = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__tacticalStrike",
@@ -215,6 +216,25 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
     });
   };
 
+  const detonateShieldEater = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
+    return await execute({
+      functionName: "Empires__detonateShieldEater",
+      args: [],
+      options: { gas: 738649n * 2n }, // TODO: get gas estimate
+      txQueueOptions: {
+        id: "detonate-shield-eater",
+        ...options,
+      },
+      onComplete: ({ success, error }) => {
+        if (success) {
+          notify("success", `Detonated shield eater on ${entityToPlanetName(planetId)}`);
+        } else {
+          notify("error", error || "Unknown error");
+        }
+      },
+    });
+  };
+
   return {
     createShip,
     removeShip,
@@ -225,5 +245,6 @@ export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient
     boostCharge,
     stunCharge,
     placeMagnet,
+    detonateShieldEater,
   };
 };
