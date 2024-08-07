@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 
-import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, ShieldEater, P_ShieldEaterConfig } from "codegen/index.sol";
+import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, ShieldEater, P_ShieldEaterConfig, DetonateShieldEaterLog, DetonateShieldEaterLogData } from "codegen/index.sol";
 
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
@@ -229,5 +229,16 @@ contract OverrideSystem is EmpiresSystem {
 
     // uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, planetData.empireId, 1);
     // require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
+
+    // Log the detonation
+    DetonateShieldEaterLog.set(
+      pseudorandomEntity(),
+      DetonateShieldEaterLogData({
+        turn: Turn.getValue(),
+        planetId: _planetId,
+        impactedPlanetIds: new bytes32[](0),
+        timestamp: block.timestamp
+      })
+    );
   }
 }

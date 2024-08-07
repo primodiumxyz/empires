@@ -438,6 +438,19 @@ export const worldInput = {
       },
       type: "offchainTable",
     },
+
+    DetonateShieldEaterLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        turn: "uint256",
+        planetId: "bytes32",
+        impactedPlanetIds: "bytes32[]",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {
