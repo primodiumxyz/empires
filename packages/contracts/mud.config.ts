@@ -78,7 +78,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
-        spent: "uint256",
+        spent: "int256",
       },
     },
 
