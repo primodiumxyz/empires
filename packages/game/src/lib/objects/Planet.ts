@@ -480,7 +480,7 @@ export class Planet
 
   setShieldEaterLocation(present: boolean) {
     // TODO(SE): temp
-    this.shieldEaterLocation.setText(present ? 'SNAKE' : '').setVisible(true);
+    this.shieldEaterLocation.setText(present ? '🐍' : '').setVisible(true);
 
     this.shieldEaterLocation.setVisible(present);
     if (present && this.shieldEaterDestination.visible)
@@ -490,7 +490,13 @@ export class Planet
   setShieldEaterDestination(turns: number) {
     this.shieldEaterDestination.setVisible(turns > 0);
     this.shieldEaterDestination
-      .setText(turns ? turns.toLocaleString() : '')
+      .setText(turns ? `🎯${turns.toLocaleString()}` : '')
+      .setVisible(turns > 0);
+  }
+
+  setShieldEaterPath(turns: number) {
+    this.shieldEaterDestination
+      .setText(turns.toLocaleString())
       .setVisible(turns > 0);
   }
 

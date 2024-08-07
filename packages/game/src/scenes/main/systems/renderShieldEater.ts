@@ -1,4 +1,4 @@
-import { Core } from '@primodiumxyz/core';
+import { Core, entityToPlanetName } from '@primodiumxyz/core';
 import { Entity, namespaceWorld } from '@primodiumxyz/reactive-tables';
 import { PrimodiumScene } from '@game/types';
 
@@ -6,7 +6,7 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
   const {
     tables,
     network: { world },
-    utils: { getAllNeighbors },
+    utils: { getAllNeighbors, getShieldEaterPath },
   } = core;
   const systemsWorld = namespaceWorld(world, 'systems');
 
@@ -14,6 +14,7 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
   tables.ShieldEater.watch({
     world: systemsWorld,
     onChange: ({ properties: { current, prev } }) => {
+      // remove previous labels
       if (prev) {
         scene.objects.planet
           .get(prev.destinationPlanet as Entity)
@@ -23,13 +24,24 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
           ?.setShieldEaterLocation(false);
       }
 
+      // add new labels
       if (current) {
         const destPlanet = current.destinationPlanet as Entity;
         const currPlanet = current.currentPlanet as Entity;
 
-        // TODO: get amount of planets between currPlanet and destPlanet to figure out how many turns for destination
-        scene.objects.planet.get(destPlanet)?.setShieldEaterDestination(1);
+        const path = getShieldEaterPath(currPlanet, destPlanet);
+        const turnsToDestination = path.length + 1;
+
+        // add current & destination labels
+        scene.objects.planet
+          .get(destPlanet)
+          ?.setShieldEaterDestination(turnsToDestination);
         scene.objects.planet.get(currPlanet)?.setShieldEaterLocation(true);
+
+        // add path labels with turns to arrival
+        path.forEach((planet, index) => {
+          scene.objects.planet.get(planet)?.setShieldEaterPath(index + 1);
+        });
       }
     },
   });
