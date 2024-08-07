@@ -6,9 +6,11 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
   const {
     tables,
     network: { world },
+    utils: { getAllNeighbors },
   } = core;
   const systemsWorld = namespaceWorld(world, 'systems');
 
+  // Update current planet, path and destination
   tables.ShieldEater.watch({
     world: systemsWorld,
     onChange: ({ properties: { current, prev } }) => {
@@ -31,4 +33,27 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
       }
     },
   });
+
+  // Animate when detonating
+  tables.DetonateShieldEaterOverrideLog.watch(
+    {
+      world: systemsWorld,
+      onChange: ({ properties: { current } }) => {
+        if (!current) return;
+
+        const planetEntity = current.planetId as Entity;
+        const neighborPlanetEntities = getAllNeighbors(planetEntity);
+        const planet = scene.objects.planet.get(planetEntity);
+        const neighborPlanets = neighborPlanetEntities.map((planet) =>
+          scene.objects.planet.get(planet),
+        );
+
+        planet?.detonateShieldEaterDamage();
+        neighborPlanets.forEach((planet) =>
+          planet?.detonateShieldEaterCollateralDamage(),
+        );
+      },
+    },
+    { runOnInit: false },
+  );
 };
