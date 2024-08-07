@@ -1,25 +1,21 @@
-import { Core } from '@primodiumxyz/core';
-import { Entity, namespaceWorld } from '@primodiumxyz/reactive-tables';
-
-import { PrimodiumScene } from '@game/types';
-import { EEmpire } from '@primodiumxyz/contracts';
+import { EEmpire } from "@primodiumxyz/contracts";
+import { Core } from "@primodiumxyz/core";
+import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
+import { PrimodiumScene } from "@game/types";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: 'blue',
-  [EEmpire.Green]: 'green',
-  [EEmpire.Red]: 'red',
-  [EEmpire.LENGTH]: '',
+  [EEmpire.Blue]: "blue",
+  [EEmpire.Green]: "green",
+  [EEmpire.Red]: "red",
+  [EEmpire.LENGTH]: "",
 };
 
-export const renderOverrideFloatingText = (
-  scene: PrimodiumScene,
-  core: Core,
-) => {
+export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) => {
   const {
     tables,
     network: { world },
   } = core;
-  const systemsWorld = namespaceWorld(world, 'systems');
+  const systemsWorld = namespaceWorld(world, "systems");
 
   tables.ChargeShieldsOverrideLog.watch(
     {
@@ -31,15 +27,11 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Build', 'sfx', { volume: 0.25 });
-        scene.fx.emitFloatingText(
-          { x: planet.coord.x, y: planet.coord.y - 25 },
-          `+${current.overrideCount}`,
-          {
-            icon: 'Shield',
-            delay: 500,
-          },
-        );
+        scene.audio.play("Build", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.overrideCount}`, {
+          icon: "Shield",
+          delay: 500,
+        });
       },
     },
     {
@@ -57,15 +49,11 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Build', 'sfx', { volume: 0.25 });
-        scene.fx.emitFloatingText(
-          { x: planet.coord.x, y: planet.coord.y - 20 },
-          `+${current.overrideCount}`,
-          {
-            icon: 'Ship',
-            delay: 500,
-          },
-        );
+        scene.audio.play("Build", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.overrideCount}`, {
+          icon: "Ship",
+          delay: 500,
+        });
       },
     },
     { runOnInit: false },
@@ -81,15 +69,11 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Build', 'sfx', { volume: 0.25 });
-        scene.fx.emitFloatingText(
-          { x: planet.coord.x, y: planet.coord.y - 20 },
-          `+${current.boostCount}`,
-          {
-            icon: 'Ship',
-            delay: 500,
-          },
-        );
+        scene.audio.play("Build", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.boostCount}`, {
+          icon: "Ship",
+          delay: 500,
+        });
       },
     },
     { runOnInit: false },
@@ -105,15 +89,11 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
-        scene.fx.emitFloatingText(
-          { x: planet.coord.x, y: planet.coord.y - 20 },
-          `-${current.overrideCount}`,
-          {
-            icon: 'Shield',
-            color: '#ff0000',
-          },
-        );
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.overrideCount}`, {
+          icon: "Shield",
+          color: "#ff0000",
+        });
       },
     },
     { runOnInit: false },
@@ -129,15 +109,11 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
-        scene.fx.emitFloatingText(
-          { x: planet.coord.x, y: planet.coord.y - 20 },
-          `-${current.overrideCount}`,
-          {
-            icon: 'Ship',
-            color: '#ff0000',
-          },
-        );
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.overrideCount}`, {
+          icon: "Ship",
+          color: "#ff0000",
+        });
       },
     },
     { runOnInit: false },
@@ -153,15 +129,11 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
-        scene.fx.emitFloatingText(
-          { x: planet.coord.x, y: planet.coord.y - 20 },
-          `-${current.stunCount}`,
-          {
-            icon: 'Ship',
-            color: '#ff0000',
-          },
-        );
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.stunCount}`, {
+          icon: "Ship",
+          color: "#ff0000",
+        });
       },
     },
     { runOnInit: false },
@@ -177,15 +149,11 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
-        scene.fx.emitFloatingText(
-          { x: planet.coord.x, y: planet.coord.y - 20 },
-          `ALL SHIPS DESTROYED`,
-          {
-            icon: 'Ship',
-            color: '#ff0000',
-          },
-        );
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `ALL SHIPS DESTROYED`, {
+          icon: "Ship",
+          color: "#ff0000",
+        });
       },
     },
     { runOnInit: false },
@@ -201,15 +169,11 @@ export const renderOverrideFloatingText = (
 
         if (!planet) return;
 
-        scene.audio.play('Demolish', 'sfx', { volume: 0.25 });
-        scene.fx.emitFloatingText(
-          { x: planet.coord.x, y: planet.coord.y - 20 },
-          `+${current.overrideCount}`,
-          {
-            icon: 'Attack',
-            color: EmpireEnumToColor[current.empireId as EEmpire],
-          },
-        );
+        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
+        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.overrideCount}`, {
+          icon: "Attack",
+          color: EmpireEnumToColor[current.empireId as EEmpire],
+        });
       },
     },
     { runOnInit: false },

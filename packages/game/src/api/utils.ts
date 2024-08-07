@@ -3,19 +3,11 @@ import * as Coord from "@primodiumxyz/engine/src/lib/util/coords";
 
 export const createUtilApi = (scene: Scene) => {
   function pixelCoordToTileCoord(coord: PixelCoord): TileCoord {
-    return Coord.pixelCoordToTileCoord(
-      coord,
-      scene.tiled.tileWidth,
-      scene.tiled.tileHeight
-    );
+    return Coord.pixelCoordToTileCoord(coord, scene.tiled.tileWidth, scene.tiled.tileHeight);
   }
 
   function tileCoordToPixelCoord(coord: TileCoord): PixelCoord {
-    return Coord.tileCoordToPixelCoord(
-      coord,
-      scene.config.tilemap.tileWidth,
-      scene.config.tilemap.tileHeight
-    );
+    return Coord.tileCoordToPixelCoord(coord, scene.config.tilemap.tileWidth, scene.config.tilemap.tileHeight);
   }
 
   function pixelCoordToChunkCoord(coord: PixelCoord): ChunkCoord {
@@ -27,7 +19,7 @@ export const createUtilApi = (scene: Scene) => {
       coord,
       scene.config.tilemap.tileWidth,
       scene.config.tilemap.tileHeight,
-      scene.config.cullingChunkSize
+      scene.config.cullingChunkSize,
     );
   }
 
@@ -40,7 +32,7 @@ export const createUtilApi = (scene: Scene) => {
       coord,
       scene.config.tilemap.tileWidth,
       scene.config.tilemap.tileHeight,
-      scene.config.cullingChunkSize
+      scene.config.cullingChunkSize,
     );
   }
 
