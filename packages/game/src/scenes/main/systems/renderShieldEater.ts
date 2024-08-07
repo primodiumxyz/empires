@@ -13,7 +13,6 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
     world: systemsWorld,
     onChange: ({ properties: { current, prev } }) => {
       if (prev) {
-        console.log('prev', prev);
         scene.objects.planet
           .get(prev.destinationPlanet as Entity)
           ?.setShieldEaterDestination(0);
@@ -23,7 +22,6 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
       }
 
       if (current) {
-        console.log('current', current);
         const destPlanet = current.destinationPlanet as Entity;
         const currPlanet = current.currentPlanet as Entity;
 
