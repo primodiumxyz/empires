@@ -122,10 +122,6 @@ export const GameHUD = () => {
         <HUD.BottomRight className="flex gap-2">
           <PlayerReturns />
         </HUD.BottomRight>
-
-        <HUD.BottomRight className="flex gap-2">
-          <PlayerReturns />
-        </HUD.BottomRight>
       </HUD>
     </>
   );
