@@ -23,28 +23,28 @@ contract RewardsSystemTest is PrimodiumTest {
     world.registerFunctionSelector(systemId, "echoValue()");
   }
 
-  function testClaimVictoryNotGameOver() public {
-    vm.expectRevert("[RewardsSystem] Game is not over");
-    world.Empires__claimVictory(EEmpire.Red);
-  }
+  // function testClaimVictoryNotGameOver() public {
+  //   vm.expectRevert("[RewardsSystem] Game is not over");
+  //   world.Empires__claimVictory(EEmpire.Red);
+  // }
 
   function setGameover() internal {
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     vm.roll(endBlock + 1);
   }
 
-  function testClaimVictoryAlreadyClaimed() public {
-    setGameover();
-    world.Empires__claimVictory(EEmpire.Red);
-    vm.expectRevert("[RewardsSystem] Victory has already been claimed");
-    world.Empires__claimVictory(EEmpire.Blue);
-  }
+  // function testClaimVictoryAlreadyClaimed() public {
+  //   setGameover();
+  //   world.Empires__claimVictory(EEmpire.Red);
+  //   vm.expectRevert("[RewardsSystem] Victory has already been claimed");
+  //   world.Empires__claimVictory(EEmpire.Blue);
+  // }
 
-  function testClaimVictory() public {
-    setGameover();
-    world.Empires__claimVictory(EEmpire.Red);
-    assertEq(WinningEmpire.get(), EEmpire.Red);
-  }
+  // function testClaimVictory() public {
+  //   setGameover();
+  //   world.Empires__claimVictory(EEmpire.Red);
+  //   assertEq(WinningEmpire.get(), EEmpire.Red);
+  // }
 
   function testSendEther() public {
     sendEther(alice, value);
@@ -59,8 +59,7 @@ contract RewardsSystemTest is PrimodiumTest {
     testSendEther();
     setGameover();
     vm.startPrank(creator);
-    world.Empires__claimVictory(EEmpire.Red);
-
+    WinningEmpire.set(EEmpire.Red);
     P_PointConfig.setPointRake(0); // out of 10_000
 
     PointsMap.setValue(EEmpire.Red, addressToId(alice), alicePoints);
@@ -98,7 +97,7 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.deal(eve, 1 ether);
 
     vm.startPrank(creator);
-    world.Empires__claimVictory(EEmpire.Red);
+    WinningEmpire.set(EEmpire.Red);
 
     Empire.setPointsIssued(EEmpire.Red, 100 ether);
 

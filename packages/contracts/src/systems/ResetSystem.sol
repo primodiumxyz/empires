@@ -4,6 +4,7 @@ pragma solidity >=0.8.24;
 import { System } from "@latticexyz/world/src/System.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
+import { CapitolPlanetsSet } from "adts/CapitolPlanetsSet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
@@ -17,6 +18,7 @@ contract ResetSystem is System {
       PendingMove.deleteRecord(planets[i]);
     }
     PlanetsSet.clear();
+    CapitolPlanetsSet.clear();
     EmpirePlanetsSet.clear(EEmpire.Red);
     EmpirePlanetsSet.clear(EEmpire.Blue);
     EmpirePlanetsSet.clear(EEmpire.Green);
