@@ -10,16 +10,7 @@
   "useTabs": false,
   "quoteProps": "as-needed",
   "requirePragma": false,
-  "importOrder": [
-    "^(react/(.*)$)|^(react$)",
-    "<THIRD_PARTY_MODULES>",
-    "",
-    "^@primodiumxyz/(.*)$",
-    "^@client/(.*)$",
-    "^@game/(.*)$",
-    "",
-    "^[./]"
-  ],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "", "^@primodiumxyz/(.*)$", "", "^[./]"],
   "importOrderSeparation": false,
   "importOrderSortSpecifiers": true,
   "importOrderBuiltinModulesToTop": true,
