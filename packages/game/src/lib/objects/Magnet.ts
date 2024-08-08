@@ -32,20 +32,47 @@ export class Magnet extends Phaser.GameObjects.Container {
 
   setMagnet(turns: number) {
     if (turns === this.turns) return;
+    const blink = (duration: number) => {
+      this.scene.tweens.killAll();
+      this.sprite.setAlpha(1);
+      if (duration)
+        this.scene.tweens.add({
+          targets: this.sprite,
+          alpha: 0.5,
+          duration: duration,
+          yoyo: true,
+          repeat: -1,
+        });
+    };
 
     if (turns > 0) {
       this.setVisible(true);
-      if (!this.sprite.anims.isPlaying) {
-        this.sprite.play(this.getAnimationForEmpire());
-      }
       const fullTurnLeft = Math.ceil(turns / 3);
       const subTurnLeft = turns % 3;
+
+      if (!this.sprite.anims.isPlaying) {
+        this.sprite.play(this.getAnimationForEmpire());
+        // animate alpha to show a magnet close to expiration
+        blink(turns === 2 ? 1000 : turns === 1 ? 500 : 0);
+      }
+
       const text = turns > 2 ? formatNumber(fullTurnLeft) : `${"●".repeat(subTurnLeft)}`;
       this.label.setText(text);
+      this.scene.tweens.add({
+        targets: this.label,
+        alpha: 1,
+        duration: 500,
+      });
     } else {
       this.sprite.anims.playReverse(this.getAnimationForEmpire());
       this.sprite.once("animationcomplete", () => {
         this.setVisible(false);
+      });
+
+      this.scene.tweens.add({
+        targets: this.label,
+        alpha: 0,
+        duration: 1000,
       });
     }
 
@@ -65,7 +92,7 @@ export class Magnet extends Phaser.GameObjects.Container {
       case EEmpire.Green:
         return "#00ff00";
       default:
-        return "#ffffff";
+        return "#ff0000";
     }
   }
 
@@ -78,7 +105,7 @@ export class Magnet extends Phaser.GameObjects.Container {
       case EEmpire.Green:
         return Animations.MagnetGreen;
       default:
-        return Animations.MagnetBlue;
+        return Animations.MagnetRed;
     }
   }
 }
