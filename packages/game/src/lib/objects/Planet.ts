@@ -34,6 +34,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private ships: IconLabel;
   private gold: IconLabel;
   private magnets: [red: Magnet, blue: Magnet, green: Magnet];
+  private magnetWaves: Phaser.GameObjects.Sprite;
   private empireId: EEmpire;
   private spawned = false;
 
@@ -138,6 +139,17 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       new Magnet(scene, coord.x + 75, coord.y - 0, EEmpire.Green),
     ];
 
+    this.magnetWaves = new Phaser.GameObjects.Sprite(
+      scene.phaserScene,
+      this.planetSprite.x - 1,
+      this.planetSprite.y + 5,
+      Assets.VfxAtlas,
+    )
+      .setBlendMode(Phaser.BlendModes.ADD)
+      .setDepth(DepthLayers.MagnetWaves)
+      .setActive(false)
+      .setVisible(false);
+
     this._scene = scene;
     this.id = id;
     this.coord = coord;
@@ -160,6 +172,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.gold);
     this.scene.add.existing(this.chargeProgress);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
+    this.scene.add.existing(this.magnetWaves);
     return this;
   }
 
@@ -178,6 +191,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.gold.setScale(scale);
     this.chargeProgress.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
+    this.magnetWaves.setScale(scale);
     return this;
   }
 
@@ -201,9 +215,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.ships.setAlpha(alpha);
     this.gold.setAlpha(alpha);
     this.chargeProgress.setAlpha(alpha);
-    this.magnets.forEach((magnet) => {
-      magnet.setAlpha(alpha);
-    });
+    this.magnets.forEach((magnet) => magnet.setAlpha(alpha));
+    this.magnetWaves.setAlpha(alpha);
     this.planetName.setAlpha(nameAlpha);
   }
 
@@ -362,21 +375,18 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
   setMagnet(empire: EEmpire, turns: number) {
     const magnet = this.magnets[empire - 1];
-    const emitVfx = () => {
-      this._scene.fx.emitVfx({ x: this.planetSprite.x, y: this.planetSprite.y }, "Waves", {
-        depth: DepthLayers.Planet + 2,
-        blendMode: Phaser.BlendModes.ADD,
-        scale: 1,
-        offset: {
-          x: -1,
-          y: 5,
-        },
+
+    // emit only if no magnet is already active
+    if (turns > 0 && !this.magnets.some((magnet) => magnet.hasMagnet())) {
+      this.magnetWaves.play(Animations.MagnetWaves);
+      this.magnetWaves.setVisible(true).setActive(true);
+    } else if (!turns && this.magnetWaves.visible && this.magnets.every((magnet) => !magnet.hasMagnet())) {
+      this.magnetWaves.once("animationrepeat", () => {
+        this.magnetWaves.setVisible(false).setActive(false);
       });
-    };
+    }
 
-    if (turns > 0 && !magnet?.hasMagnet()) emitVfx();
     magnet?.setMagnet(turns);
-
     return magnet;
   }
 
@@ -388,6 +398,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.hexHoloSprite.destroy();
     this._scene.objects.planet.remove(this.id);
     this.magnets.forEach((magnet) => magnet.destroy());
+    this.magnetWaves.destroy();
     super.destroy();
   }
 }

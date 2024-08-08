@@ -27,7 +27,7 @@ export const Animations = {
   DestroyerArcLowerGreen: "destroyer/lower/green",
 
   // Waves
-  Waves: "waves",
+  MagnetWaves: "waves",
 };
 
 export type AnimationKeys = keyof typeof Animations;
