@@ -77,7 +77,6 @@ function createPlanets() {
     shieldCount: 0,
     empireId: EEmpire.Red,
     goldCount: 0,
-    lastShieldEaterVisit: 0
   });
 
   ${str}

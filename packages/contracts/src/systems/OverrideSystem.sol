@@ -2,12 +2,13 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Turn, Player, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, ShieldEater, P_ShieldEaterConfig } from "codegen/index.sol";
+import { Turn, Player, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData, ShieldEater, P_ShieldEaterConfig, ShieldEaterDetonateOverrideLog, ShieldEaterDetonateOverrideLogData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
+import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId, pseudorandomEntity } from "src/utils.sol";
@@ -221,13 +222,30 @@ contract OverrideSystem is EmpiresSystem {
 
   function detonateShieldEater() public payable _onlyNotGameOver _takeRake {
     bytes32 playerId = addressToId(_msgSender());
+    PlanetData memory planetData = Planet.get(ShieldEater.getCurrentPlanet());
 
     require(
-      ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown() < block.number,
-      "[OverrideSystem] Detonate is on cooldown"
+      ShieldEater.getCurrentCharge() >= P_ShieldEaterConfig.getDetonationThreshold(),
+      "[OverrideSystem] ShieldEater not fully charged"
     );
 
-    // uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, planetData.empireId, 1);
-    // require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
+    uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, planetData.empireId, 1);
+    require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
+
+    LibOverride._purchaseOverride(playerId, EOverride.DetonateShieldEater, planetData.empireId, 1, _msgValue());
+
+    LibShieldEater.detonate();
+
+    ShieldEaterDetonateOverrideLog.set(
+      pseudorandomEntity(),
+      ShieldEaterDetonateOverrideLogData({
+        turn: Turn.getValue(),
+        planetId: ShieldEater.getCurrentPlanet(),
+        playerId: playerId,
+        ethSpent: cost,
+        overrideCount: 1,
+        timestamp: block.timestamp
+      })
+    );
   }
 }

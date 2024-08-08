@@ -21,30 +21,27 @@ library LibShieldEater {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     uint256 randomIndex = pseudorandom(block.number, planetIds.length);
     ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
-    Planet.setLastShieldEaterVisit(planetIds[randomIndex], block.number);
   }
 
   /**
-   * @dev Selects a destination for the Shield Eater, biased towards planets that have
-   *      not been visited recently.
+   * @dev Selects a destination for the Shield Eater, from the top 3 planets with the most shields.
    */
   function retarget() internal {
-    // get a list of all planets
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    bytes32[] memory longestWithoutVisit = new bytes32[](3);
-    uint256 longest = 0;
+    bytes32[] memory dstOptions = new bytes32[](3);
+    uint256 largest = 0;
 
-    // TODO: so expensive.  optimize.
+    // TODO: so expensive.  rewrite as modulo wrapped writes
     for (uint256 i = 0; i < planetIds.length; i++) {
-      if (block.number - Planet.getLastShieldEaterVisit(planetIds[i]) >= longest) {
-        longestWithoutVisit[2] = longestWithoutVisit[1];
-        longestWithoutVisit[1] = longestWithoutVisit[0];
-        longestWithoutVisit[0] = planetIds[i];
+      if ((Planet.getShieldCount(planetIds[i]) >= largest) && (planetIds[i] != ShieldEater.getCurrentPlanet())) {
+        dstOptions[2] = dstOptions[1];
+        dstOptions[1] = dstOptions[0];
+        dstOptions[0] = planetIds[i];
       }
     }
 
     uint256 randomIndex = pseudorandom(block.number, 3);
-    ShieldEater.setDestinationPlanet(longestWithoutVisit[randomIndex]);
+    ShieldEater.setDestinationPlanet(dstOptions[randomIndex]);
   }
 
   /**
@@ -73,13 +70,11 @@ library LibShieldEater {
     // Move the Shield Eater to the next planet
     ShieldEater.setCurrentPlanet(planetId);
 
-    // Mark the planet as visited
-    Planet.setLastShieldEaterVisit(planetId, block.number);
-
     // Eat a little shields if there are any
     uint256 shieldCount = Planet.getShieldCount(planetId);
     if (shieldCount > 0) {
       Planet.setShieldCount(planetId, shieldCount - 1);
+      // ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + 1);
     }
 
     // If the Shield Eater has reached its destination, select a new destination
@@ -97,51 +92,44 @@ library LibShieldEater {
 
     // Center
     Planet.setShieldCount(ShieldEater.getCurrentPlanet(), 0);
-    Planet.setLastShieldEaterVisit(ShieldEater.getCurrentPlanet(), block.number);
 
     // East
     bytes32 planetId = coordToId(center.q + 1, center.r);
     if (Planet.getIsPlanet(planetId)) {
       Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
-      Planet.setLastShieldEaterVisit(planetId, block.number);
     }
 
     // Southeast
     planetId = coordToId(center.q, center.r + 1);
     if (Planet.getIsPlanet(planetId)) {
       Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
-      Planet.setLastShieldEaterVisit(planetId, block.number);
     }
 
     // Southwest
-    neighbor = CoordData(center.q - 1, center.r + 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q - 1, center.r + 1);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
     // West
-    neighbor = CoordData(center.q - 1, center.r);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q - 1, center.r);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
     // Northwest
-    neighbor = CoordData(center.q, center.r - 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q, center.r - 1);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
     // Northeast
-    neighbor = CoordData(center.q + 1, center.r - 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q + 1, center.r - 1);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
-    ShieldEater.setLastDetonationBlock(block.number);
+    ShieldEater.setCurrentCharge(0);
   }
 
   /********************/
