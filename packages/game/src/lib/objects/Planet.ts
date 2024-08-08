@@ -141,7 +141,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.magnetWaves = new Phaser.GameObjects.Sprite(
       scene.phaserScene,
-      this.planetSprite.x - 1,
+      this.planetSprite.x - 3,
       this.planetSprite.y + 5,
       Assets.VfxAtlas,
     )

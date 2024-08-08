@@ -38,3 +38,17 @@ export const EmpireToDestroyerArcAnimationKeys: Record<
   [EEmpire.Blue]: ["DestroyerArcLowerBlue", "DestroyerArcUpperBlue"],
   [EEmpire.LENGTH]: [undefined, undefined],
 };
+
+export const EmpireToMagnetAnimationKeys: Record<EEmpire, AnimationKeys | undefined> = {
+  [EEmpire.Red]: "MagnetRed",
+  [EEmpire.Green]: "MagnetGreen",
+  [EEmpire.Blue]: "MagnetBlue",
+  [EEmpire.LENGTH]: undefined,
+};
+
+export const EmpireToHexColor: Record<EEmpire, string> = {
+  [EEmpire.Red]: "#ff0000",
+  [EEmpire.Green]: "#00ff00",
+  [EEmpire.Blue]: "#0000ff",
+  [EEmpire.LENGTH]: "#ffffff",
+};

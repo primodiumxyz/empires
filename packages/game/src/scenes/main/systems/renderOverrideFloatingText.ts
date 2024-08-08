@@ -1,14 +1,6 @@
-import { EEmpire } from "@primodiumxyz/contracts";
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { PrimodiumScene } from "@game/types";
-
-export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "blue",
-  [EEmpire.Green]: "green",
-  [EEmpire.Red]: "red",
-  [EEmpire.LENGTH]: "",
-};
 
 export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) => {
   const {

@@ -2,6 +2,7 @@ import { Animations } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
 import { DepthLayers } from "@game/lib/constants/common";
+import { EmpireToHexColor, EmpireToMagnetAnimationKeys } from "@game/lib/mappings";
 import { PrimodiumScene } from "@game/types";
 
 export class Magnet extends Phaser.GameObjects.Container {
@@ -21,7 +22,7 @@ export class Magnet extends Phaser.GameObjects.Container {
     this.label = new Phaser.GameObjects.Text(scene.phaserScene, 25, 0, "0", {
       fontFamily: "Silkscreen",
       fontSize: "13px",
-      color: this.getColorForEmpire(),
+      color: EmpireToHexColor[this.empire],
     })
       .setOrigin(0, 0.5)
       .setDepth(DepthLayers.Planet + 1);
@@ -33,7 +34,7 @@ export class Magnet extends Phaser.GameObjects.Container {
   setMagnet(turns: number) {
     if (turns === this.turns) return;
     const blink = (duration: number) => {
-      this.scene.tweens.killAll();
+      this.scene.tweens.killTweensOf(this.sprite);
       this.sprite.setAlpha(1);
       if (duration)
         this.scene.tweens.add({
@@ -51,7 +52,7 @@ export class Magnet extends Phaser.GameObjects.Container {
       const subTurnLeft = turns % 3;
 
       if (!this.sprite.anims.isPlaying && this.turns === 0) {
-        this.sprite.play(this.getAnimationForEmpire());
+        this.sprite.play(Animations[EmpireToMagnetAnimationKeys[this.empire] ?? "MagnetRed"]);
       }
 
       // animate alpha to show a magnet close to expiration
@@ -65,7 +66,7 @@ export class Magnet extends Phaser.GameObjects.Container {
         duration: 500,
       });
     } else {
-      this.sprite.anims.playReverse(this.getAnimationForEmpire());
+      this.sprite.anims.playReverse(Animations[EmpireToMagnetAnimationKeys[this.empire] ?? "MagnetRed"]);
       this.sprite.once("animationcomplete", () => {
         this.setVisible(false);
       });
@@ -82,31 +83,5 @@ export class Magnet extends Phaser.GameObjects.Container {
 
   hasMagnet(): boolean {
     return this.turns > 0;
-  }
-
-  private getColorForEmpire(): string {
-    switch (this.empire) {
-      case EEmpire.Red:
-        return "#ff0000";
-      case EEmpire.Blue:
-        return "#0000ff";
-      case EEmpire.Green:
-        return "#00ff00";
-      default:
-        return "#ff0000";
-    }
-  }
-
-  private getAnimationForEmpire(): string {
-    switch (this.empire) {
-      case EEmpire.Red:
-        return Animations.MagnetRed;
-      case EEmpire.Blue:
-        return Animations.MagnetBlue;
-      case EEmpire.Green:
-        return Animations.MagnetGreen;
-      default:
-        return Animations.MagnetRed;
-    }
   }
 }
