@@ -37,7 +37,7 @@ contract UpdateSystem is EmpiresSystem {
    * @dev Updates the game world state, including gold generation, ship movements, combat resolution.
    * @param routineThresholds An array of RoutineThresholds structs containing information about planet routines.
    */
-  function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver {
+  function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver _onlyAdmin {
     uint256 goldGenRate = P_GameConfig.getGoldGenRate();
     // add gold to every planet
 
