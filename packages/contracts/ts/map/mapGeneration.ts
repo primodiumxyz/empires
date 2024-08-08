@@ -20,6 +20,7 @@ function oddrToAxial(hex: { row: number; col: number }) {
 function generateContent() {
   const center = { q: Math.floor((planetMap.width - 1) / 2), r: Math.floor((planetMap.height - 1) / 2) };
   const planets = planetMap.layers[0].data;
+  const citadelPlanets = planetMap.layers[1].data;
 
   return planets
     .map((_empire, i) => {
@@ -30,6 +31,7 @@ function generateContent() {
       const coord = oddrToAxial({ row: r, col: q });
 
       const empireName = EmpireNames[empire] ?? "NULL";
+      const isCitadel = citadelPlanets[i] === 5;
 
       return `
             /* Planet at (${coord.q}, ${coord.r}) */
@@ -42,6 +44,7 @@ function generateContent() {
 
             PlanetsSet.add(planetId);
             ${empireName === "NULL" ? "" : `EmpirePlanetsSet.add(EEmpire.${empireName}, planetId);`}
+            ${isCitadel ? `CitadelPlanetsSet.add(planetId);` : ""}
 
             createTacticalCharge(planetId, ${empireName === "NULL" ? 0 : "chargeRate"});
             `;
@@ -57,6 +60,7 @@ import { console } from "forge-std/console.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
+import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { Planet, PlanetData, Empire, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig } from "codegen/index.sol";
 import { EEmpire, EOrigin, EOverride } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
@@ -73,6 +77,7 @@ function createPlanets() {
     q: 0,
     r: 0,
     isPlanet: true,
+    isCitadel: false,
     shipCount: 0,
     shieldCount: 0,
     empireId: EEmpire.Red,
