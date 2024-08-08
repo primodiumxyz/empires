@@ -50,11 +50,12 @@ export class Magnet extends Phaser.GameObjects.Container {
       const fullTurnLeft = Math.ceil(turns / 3);
       const subTurnLeft = turns % 3;
 
-      if (!this.sprite.anims.isPlaying) {
+      if (!this.sprite.anims.isPlaying && this.turns === 0) {
         this.sprite.play(this.getAnimationForEmpire());
-        // animate alpha to show a magnet close to expiration
-        blink(turns === 2 ? 1000 : turns === 1 ? 500 : 0);
       }
+
+      // animate alpha to show a magnet close to expiration
+      blink(turns === 2 ? 1000 : turns === 1 ? 500 : 0);
 
       const text = turns > 2 ? formatNumber(fullTurnLeft) : `${"●".repeat(subTurnLeft)}`;
       this.label.setText(text);
