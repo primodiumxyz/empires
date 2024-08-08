@@ -33,18 +33,28 @@ export function createHooksApi(targetScene: Scene, globalApi: GlobalApi) {
   }
 
   function useVolume(channel: "master" | Channel) {
-    const volume = globalApi.tables.Volume.use() ?? defaultVolume;
+    const volume = globalApi.tables.Volume.use();
+
     return useMemo(() => {
-      const master = volume.master ?? defaultVolume.master;
+      const master = volume?.master ?? defaultVolume.master;
       if (channel === "master") return master;
 
-      const channelVolume = volume?.[channel] ?? 0;
+      const channelVolume = volume?.[channel] ?? defaultVolume[channel];
       return channelVolume * master;
+    }, [volume, channel]);
+  }
+
+  function useRawVolume(channel: "master" | Channel) {
+    const volume = globalApi.tables.Volume.use();
+
+    return useMemo(() => {
+      return volume?.[channel] ?? defaultVolume[channel];
     }, [volume, channel]);
   }
 
   return {
     useCamera,
     useVolume,
+    useRawVolume,
   };
 }
