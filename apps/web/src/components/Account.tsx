@@ -70,7 +70,7 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
 
   return (
-    <div className="flex h-full w-full justify-between gap-5 border-none py-1">
+    <div className="flex h-full w-full items-center justify-between gap-5 border-none py-1">
       <img src={spriteUrl} className="h-12" />
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>
