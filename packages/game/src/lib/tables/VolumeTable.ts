@@ -25,7 +25,7 @@ export function createVolumeTable(core: Core) {
       id: "Volume",
       persist: true,
       version: hashEntities(JSON.stringify(defaultVolume)),
-    }
+    },
   );
 
   function getAllChannels() {

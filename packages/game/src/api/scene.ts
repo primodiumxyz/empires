@@ -1,5 +1,4 @@
 import { Scene } from "@primodiumxyz/engine";
-
 import { createAudioApi } from "@game/api/audio";
 import { createCameraApi } from "@game/api/camera";
 import { createFxApi } from "@game/api/fx";

@@ -1,7 +1,7 @@
-import { SceneKeys } from "@game/lib/constants/common";
-import { createGameTables } from "@game/lib/tables";
 import { Core } from "@primodiumxyz/core";
 import { Game, Scene } from "@primodiumxyz/engine";
+import { SceneKeys } from "@game/lib/constants/common";
+import { createGameTables } from "@game/lib/tables";
 
 export type GlobalApi = ReturnType<typeof createGlobalApi>;
 
@@ -40,10 +40,7 @@ export function createGlobalApi(game: Game, core: Core) {
 
     target.appendChild(div);
 
-    setResolution(
-      target.offsetWidth * window.devicePixelRatio,
-      target.offsetHeight * window.devicePixelRatio
-    );
+    setResolution(target.offsetWidth * window.devicePixelRatio, target.offsetHeight * window.devicePixelRatio);
   }
 
   function getConfig() {
@@ -59,17 +56,11 @@ export function createGlobalApi(game: Game, core: Core) {
     target: SceneKeys,
     duration = 0,
     onTransitionStart?: (originScene: Scene, targetScene: Scene) => undefined,
-    onTransitionEnd?: (originScene: Scene, targetScene: Scene) => undefined
+    onTransitionEnd?: (originScene: Scene, targetScene: Scene) => undefined,
   ) {
     if (origin === target) return;
 
-    await game.sceneManager.transitionToScene(
-      origin,
-      target,
-      duration,
-      onTransitionStart,
-      onTransitionEnd
-    );
+    await game.sceneManager.transitionToScene(origin, target, duration, onTransitionStart, onTransitionEnd);
   }
 
   function enableGlobalInput() {
