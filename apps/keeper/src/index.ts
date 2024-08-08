@@ -1,14 +1,17 @@
 import {
   Core,
+  CoreConfig,
   createCore,
   createLocalAccount,
   SyncStep,
 } from "@primodiumxyz/core";
+import net from "net";
+import { URL } from "url";
 import { getCoreConfig } from "../src/getCoreConfig";
 import { updateWorld } from "./contractCalls/updateWorld";
 
-async function main() {
-  const { core, deployerAccount } = await setup();
+async function run(config: CoreConfig) {
+  const { core, deployerAccount } = await setup(config);
 
   let updating = false;
   core.tables.BlockNumber.watch({
@@ -43,8 +46,7 @@ async function main() {
   });
 }
 
-async function setup() {
-  const config = getCoreConfig();
+async function setup(config: CoreConfig) {
   const core = createCore(config);
   const deployerKey = process.env.PRIVATE_KEY as `0x${string}`;
   if (!deployerKey) {
@@ -67,4 +69,43 @@ function awaitSync(core: Core) {
   });
 }
 
-main();
+async function checkPort(url: string): Promise<boolean> {
+  const parsedUrl = new URL(url);
+  return new Promise((resolve) => {
+    const socket = new net.Socket();
+    socket.setTimeout(1000);
+    socket.on("connect", () => {
+      socket.destroy();
+      resolve(true);
+    });
+    socket.on("timeout", () => {
+      socket.destroy();
+      resolve(false);
+    });
+    socket.on("error", () => {
+      socket.destroy();
+      resolve(false);
+    });
+    socket.connect(Number(parsedUrl.port) || 80, parsedUrl.hostname);
+  });
+}
+
+async function main(config: CoreConfig) {
+  const url = config.chain.rpcUrls.default?.http[0];
+  console.log("url", config.chain.rpcUrls);
+  if (!url) {
+    throw new Error("RPC URL is not set");
+  }
+  console.log("Checking port for", url);
+  const isPortOpen = await checkPort(url);
+
+  if (isPortOpen) {
+    await run(config);
+  } else {
+    console.log("Port is not open. Waiting to retry...");
+    setTimeout(() => main(config), 5000); // Retry after 5 seconds
+  }
+}
+
+const config = getCoreConfig();
+main(config);
