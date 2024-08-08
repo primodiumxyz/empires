@@ -1,6 +1,7 @@
 import { Animation } from "@primodiumxyz/engine";
 
 export const AnimationConfig: Animation[] = [
+  /* --------------------------------- Sprites -------------------------------- */
   {
     key: "hex/holo",
     assetKey: "sprite-atlas",
@@ -45,6 +46,40 @@ export const AnimationConfig: Animation[] = [
     prefix: "sprites/pending-arrows/red/Pending_Red_",
     suffix: ".png",
   },
+  {
+    key: "magnet/blue",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    randomFrame: true,
+    startFrame: 0,
+    endFrame: 8,
+    repeat: -1,
+    prefix: "sprites/magnets/blue/Magnet_Blue_",
+    suffix: ".png",
+  },
+  {
+    key: "magnet/green",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    randomFrame: true,
+    startFrame: 0,
+    endFrame: 8,
+    repeat: -1,
+    prefix: "sprites/magnets/green/Magnet_Green_",
+    suffix: ".png",
+  },
+  {
+    key: "magnet/red",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    randomFrame: true,
+    startFrame: 0,
+    endFrame: 8,
+    repeat: -1,
+    prefix: "sprites/magnets/red/Magnet_Red_",
+    suffix: ".png",
+  },
+  /* ----------------------------------- VFX ---------------------------------- */
   {
     key: "conquer/blue",
     assetKey: "vfx-atlas",

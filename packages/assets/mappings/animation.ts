@@ -6,6 +6,11 @@ export const Animations = {
   PendingGreen: "pending/green",
   PendingRed: "pending/red",
 
+  // Magnet
+  MagnetBlue: "magnet/blue",
+  MagnetGreen: "magnet/green",
+  MagnetRed: "magnet/red",
+
   //VFX --------------------------
 
   //CONQUER

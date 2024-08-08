@@ -12,6 +12,7 @@ import {
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
 import { IconLabel } from "@game/lib/objects/IconLabel";
+import { Magnet } from "@game/lib/objects/Magnet";
 import { Progress } from "@game/lib/objects/Progress";
 import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 import { PrimodiumScene } from "@game/types";
@@ -32,7 +33,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private shields: IconLabel;
   private ships: IconLabel;
   private gold: IconLabel;
-  private magnets: [red: IconLabel, blue: IconLabel, green: IconLabel];
+  private magnets: [red: Magnet, blue: Magnet, green: Magnet];
   private empireId: EEmpire;
   private spawned = false;
 
@@ -132,17 +133,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     }).setDepth(DepthLayers.Planet + 1);
 
     this.magnets = [
-      new IconLabel(scene, { x: coord.x + 75, y: coord.y - 60 }, "0", "Attack", { color: "red" })
-        .setDepth(DepthLayers.Planet - 1)
-        .setVisible(false),
-      new IconLabel(scene, { x: coord.x + 75, y: coord.y - 30 }, "0", "Attack", { color: "blue" })
-        .setDepth(DepthLayers.Planet - 1)
-        .setVisible(false),
-      new IconLabel(scene, { x: coord.x + 75, y: coord.y - 0 }, "0", "Attack", {
-        color: "green",
-      })
-        .setDepth(DepthLayers.Planet - 1)
-        .setVisible(false),
+      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Red),
+      new Magnet(scene, coord.x + 75, coord.y - 30, EEmpire.Blue),
+      new Magnet(scene, coord.x + 75, coord.y - 0, EEmpire.Green),
     ];
 
     this._scene = scene;
@@ -166,9 +159,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
     this.scene.add.existing(this.chargeProgress);
-    this.magnets.forEach((magnet) => {
-      this.scene.add.existing(magnet);
-    });
+    this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     return this;
   }
 
@@ -186,9 +177,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.ships.setScale(scale);
     this.gold.setScale(scale);
     this.chargeProgress.setScale(scale);
-    this.magnets.forEach((magnet) => {
-      magnet.setScale(scale);
-    });
+    this.magnets.forEach((magnet) => magnet.setScale(scale));
     return this;
   }
 
@@ -372,12 +361,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   setMagnet(empire: EEmpire, turns: number) {
-    const fullTurnLeft = Math.ceil(turns / 3);
-    const subTurnLeft = turns % 3;
-    const text = turns > 2 ? formatNumber(fullTurnLeft) : `${"●".repeat(subTurnLeft)}`;
-    this.magnets[empire - 1]?.setText(text).setVisible(turns > 0);
-
-    return this;
+    const magnet = this.magnets[empire - 1];
+    magnet?.setMagnet(turns);
+    return magnet;
   }
 
   override destroy() {
@@ -387,6 +373,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.hexSprite.destroy();
     this.hexHoloSprite.destroy();
     this._scene.objects.planet.remove(this.id);
+    this.magnets.forEach((magnet) => magnet.destroy());
     super.destroy();
   }
 }
