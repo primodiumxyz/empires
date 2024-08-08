@@ -31,10 +31,10 @@ export function createVolumeTable(core: Core) {
   function getAllChannels() {
     const currentVolume = table.get() ?? defaultVolume;
     return {
-      master: currentVolume.master,
-      music: currentVolume.music,
-      sfx: currentVolume.sfx,
-      ui: currentVolume.ui,
+      master: currentVolume.master ?? defaultVolume.master,
+      music: currentVolume.music ?? defaultVolume.music,
+      sfx: currentVolume.sfx ?? defaultVolume.sfx,
+      ui: currentVolume.ui ?? defaultVolume.ui,
     };
   }
 
