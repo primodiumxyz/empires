@@ -101,8 +101,8 @@ export const GameHUD = () => {
           <Account />
         </HUD.TopRight>
 
-        <HUD.BottomLeft className="flex flex-col gap-2">
-          <div className="flex w-full items-center gap-2">
+        <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
+          <div className="flex w-full items-center justify-between gap-2">
             <MusicPlayer />
             <Settings />
           </div>

@@ -87,7 +87,7 @@ export const MusicPlayer = () => {
   };
 
   return (
-    <div className={cn("group pointer-events-auto relative w-full text-sm")}>
+    <div className={cn("group pointer-events-auto relative w-5/6 text-sm")}>
       <div className={cn("flex items-center gap-2 transition-all group-hover:opacity-15", !isPlaying && "opacity-15")}>
         <MusicalNoteIcon className={cn("w-6", isPlaying && "animate-pulse")} />
         <div className="marquee relative flex grow">
