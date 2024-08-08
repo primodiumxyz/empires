@@ -6,6 +6,7 @@ import { PrimodiumScene } from "@game/types";
 
 export class Magnet extends Phaser.GameObjects.Container {
   private empire: EEmpire;
+  private turns = 0;
   private sprite: Phaser.GameObjects.Sprite;
   private label: Phaser.GameObjects.Text;
 
@@ -28,6 +29,8 @@ export class Magnet extends Phaser.GameObjects.Container {
   }
 
   setMagnet(turns: number) {
+    if (turns === this.turns) return;
+
     if (turns > 0) {
       this.setVisible(true);
       if (!this.sprite.anims.isPlaying) {
@@ -38,9 +41,14 @@ export class Magnet extends Phaser.GameObjects.Container {
       const text = turns > 2 ? formatNumber(fullTurnLeft) : `${"●".repeat(subTurnLeft)}`;
       this.label.setText(text);
     } else {
-      this.setVisible(false);
-      this.sprite.stop();
+      // Play the animation in reverse
+      this.sprite.anims.playReverse(this.getAnimationForEmpire());
+      this.sprite.once("animationcomplete", () => {
+        this.setVisible(false);
+      });
     }
+
+    this.turns = turns;
   }
 
   private getColorForEmpire(): string {
