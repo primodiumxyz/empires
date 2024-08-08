@@ -95,19 +95,18 @@ export const GameHUD = () => {
         <HUD.TopMiddle>
           <TimeLeft />
         </HUD.TopMiddle>
-        <HUD.Left>
-          <ActionLog />
-        </HUD.Left>
+        <HUD.Left></HUD.Left>
 
         <HUD.TopRight className="flex flex-col gap-2">
           <Account />
         </HUD.TopRight>
 
-        <HUD.BottomLeft>
-          <div className="flex w-48 items-center gap-2">
+        <HUD.BottomLeft className="flex flex-col gap-2">
+          <div className="flex w-full items-center gap-2">
             <MusicPlayer />
             <Settings />
           </div>
+          <ActionLog />
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>

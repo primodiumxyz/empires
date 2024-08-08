@@ -3,8 +3,10 @@ import { PresentationChartLineIcon } from "@heroicons/react/24/solid";
 import { axisBottom, axisLeft, curveMonotoneX, line, pointer, scaleLinear, select } from "d3";
 import { formatEther } from "viem";
 
+import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
+import { IconLabel } from "@/components/core/IconLabel";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { Price } from "@/components/shared/Price";
@@ -31,24 +33,16 @@ export const EmpireEnumToTextColor: Record<EEmpire, string> = {
   [EEmpire.LENGTH]: "",
 };
 
-interface HistoricalPointPriceModalProps {
-  showIcon: boolean;
-}
+interface HistoricalPointPriceModalProps {}
 
-export const HistoricalPointPriceModal = ({ showIcon }: HistoricalPointPriceModalProps) => {
+export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
 
   return (
     <Modal title="Points Price History">
-      {showIcon ? (
-        <Modal.Button className="btn-md h-[58px] w-fit" variant="info">
-          <PresentationChartLineIcon className="size-8" />
-        </Modal.Button>
-      ) : (
-        <Modal.Button className="btn-xs border-none">
-          <span>+Expand</span>
-        </Modal.Button>
-      )}
+      <Modal.Button size="sm" variant="neutral" className="rounded-t-none !border-t-0">
+        <IconLabel imageUri={InterfaceIcons.Trade} text="OPEN MARKET" className="mx-2 text-xs" />
+      </Modal.Button>
       <Modal.Content>
         <RadioGroup
           name="select-empire-chart"
@@ -63,6 +57,7 @@ export const HistoricalPointPriceModal = ({ showIcon }: HistoricalPointPriceModa
           ]}
           onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
         />
+
         <HistoricalPointPriceChart selectedEmpire={selectedEmpire} />
       </Modal.Content>
     </Modal>

@@ -19,16 +19,15 @@ const WINDOW_SIZE = 10;
 
 export const PriceHistory = () => {
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <div className="flex flex-col justify-center gap-1 text-center">
         <EmpireDetails empire={EEmpire.Red} />
         <EmpireDetails empire={EEmpire.Green} />
         <EmpireDetails empire={EEmpire.Blue} />
       </div>
 
-      <p className="pt-2 text-right text-xs">
-        <HistoricalPointPriceModal showIcon={false} />
-      </p>
+      <hr className="mt-2 w-full border-secondary/50" />
+      <HistoricalPointPriceModal />
     </div>
   );
 };

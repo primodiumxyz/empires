@@ -87,7 +87,7 @@ export const MusicPlayer = () => {
   };
 
   return (
-    <Card className={cn("group w-full text-sm")} noDecor>
+    <div className={cn("group pointer-events-auto relative w-full text-sm")}>
       <div className={cn("flex items-center gap-2 transition-all group-hover:opacity-15", !isPlaying && "opacity-15")}>
         <MusicalNoteIcon className={cn("w-6", isPlaying && "animate-pulse")} />
         <div className="marquee relative flex grow">
@@ -139,6 +139,6 @@ export const MusicPlayer = () => {
         autoPlay
         onTimeUpdate={handleUpdate}
       />
-    </Card>
+    </div>
   );
 };
