@@ -1,9 +1,9 @@
+import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
+import { EEmpire } from "@primodiumxyz/contracts";
+import { calculateAngleBetweenPoints, entityToPlanetName, formatNumber, lerp } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
-
-import { PrimodiumScene } from "@game/types";
-import { IPrimodiumGameObject } from "./interfaces";
-import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
+import { DepthLayers } from "@game/lib/constants/common";
 import {
   EmpireToConquerAnimationKeys,
   EmpireToDestroyerArcAnimationKeys,
@@ -11,22 +11,14 @@ import {
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
-import {
-  calculateAngleBetweenPoints,
-  entityToPlanetName,
-  formatNumber,
-  lerp,
-} from "@primodiumxyz/core";
-import { DepthLayers } from "@game/lib/constants/common";
-import { EEmpire } from "@primodiumxyz/contracts";
-import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 import { IconLabel } from "@game/lib/objects/IconLabel";
 import { Progress } from "@game/lib/objects/Progress";
+import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
+import { PrimodiumScene } from "@game/types";
 
-export class Planet
-  extends Phaser.GameObjects.Zone
-  implements IPrimodiumGameObject
-{
+import { IPrimodiumGameObject } from "./interfaces";
+
+export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObject {
   readonly id: Entity;
   readonly coord: PixelCoord;
   protected _scene: PrimodiumScene;
@@ -44,12 +36,7 @@ export class Planet
   private empireId: EEmpire;
   private spawned = false;
 
-  constructor(args: {
-    id: Entity;
-    scene: PrimodiumScene;
-    coord: PixelCoord;
-    empire: EEmpire;
-  }) {
+  constructor(args: { id: Entity; scene: PrimodiumScene; coord: PixelCoord; empire: EEmpire }) {
     const { id, scene, coord, empire } = args;
 
     super(scene.phaserScene, coord.x, coord.y);
@@ -59,7 +46,7 @@ export class Planet
       coord.x,
       coord.y - 25,
       Assets.SpriteAtlas,
-      Sprites.PlanetUnderglow
+      Sprites.PlanetUnderglow,
     )
       .setBlendMode(Phaser.BlendModes.SCREEN)
       .setDepth(DepthLayers.Planet - 1);
@@ -69,7 +56,7 @@ export class Planet
       coord.x,
       coord.y - 25,
       Assets.SpriteAtlas,
-      Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]
+      Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"],
     ).setDepth(DepthLayers.Planet);
 
     this.hexSprite = new Phaser.GameObjects.Sprite(
@@ -77,22 +64,16 @@ export class Planet
       coord.x,
       coord.y,
       Assets.SpriteAtlas,
-      Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]
+      Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"],
     ).setDepth(DepthLayers.Base + coord.y);
 
-    this.planetName = new Phaser.GameObjects.Text(
-      scene.phaserScene,
-      coord.x,
-      coord.y + 25,
-      entityToPlanetName(id),
-      {
-        fontSize: 25,
-        color: "rgba(255,255,255,0.5)",
-        fontFamily: "Silkscreen",
-        backgroundColor: "rgba(0,0,0,0.5)",
-        padding: { x: 10 },
-      }
-    )
+    this.planetName = new Phaser.GameObjects.Text(scene.phaserScene, coord.x, coord.y + 25, entityToPlanetName(id), {
+      fontSize: 25,
+      color: "rgba(255,255,255,0.5)",
+      fontFamily: "Silkscreen",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      padding: { x: 10 },
+    })
       .setOrigin(0.5, 0.5)
       .setAlpha(0.25)
       .setDepth(DepthLayers.Planet - 1);
@@ -104,7 +85,7 @@ export class Planet
         y: coord.y + 35,
       },
       "0",
-      "Shield"
+      "Shield",
     ).setDepth(DepthLayers.Planet - 1);
 
     this.ships = new IconLabel(
@@ -115,7 +96,7 @@ export class Planet
         y: coord.y + 35,
       },
       "0",
-      "Ship"
+      "Ship",
     ).setDepth(DepthLayers.Planet - 1);
 
     this.gold = new IconLabel(
@@ -125,7 +106,7 @@ export class Planet
         y: coord.y + 60,
       },
       "0",
-      "Gold"
+      "Gold",
     ).setDepth(DepthLayers.Planet - 1);
 
     this.hexHoloSprite = new Phaser.GameObjects.Sprite(
@@ -133,24 +114,14 @@ export class Planet
       coord.x,
       coord.y + 75,
       Assets.SpriteAtlas,
-      "sprites/hex/holo/Holo_Rough_0.png"
+      "sprites/hex/holo/Holo_Rough_0.png",
     ).setDepth(DepthLayers.Base + coord.y - 1);
 
-    this.pendingArrow = new Phaser.GameObjects.Container(
-      scene.phaserScene,
-      coord.x,
-      coord.y,
-      [
-        new Phaser.GameObjects.Sprite(
-          scene.phaserScene,
-          75,
-          25,
-          Assets.SpriteAtlas
-        )
-          .play(Animations.PendingBlue)
-          .setBlendMode(Phaser.BlendModes.ADD),
-      ]
-    )
+    this.pendingArrow = new Phaser.GameObjects.Container(scene.phaserScene, coord.x, coord.y, [
+      new Phaser.GameObjects.Sprite(scene.phaserScene, 75, 25, Assets.SpriteAtlas)
+        .play(Animations.PendingBlue)
+        .setBlendMode(Phaser.BlendModes.ADD),
+    ])
       .setDepth(DepthLayers.PendingArrows)
       .setActive(false)
       .setVisible(false);
@@ -161,22 +132,10 @@ export class Planet
     }).setDepth(DepthLayers.Planet + 1);
 
     this.magnets = [
-      new IconLabel(
-        scene,
-        { x: coord.x + 75, y: coord.y - 60 },
-        "0",
-        "Attack",
-        { color: "red" }
-      )
+      new IconLabel(scene, { x: coord.x + 75, y: coord.y - 60 }, "0", "Attack", { color: "red" })
         .setDepth(DepthLayers.Planet - 1)
         .setVisible(false),
-      new IconLabel(
-        scene,
-        { x: coord.x + 75, y: coord.y - 30 },
-        "0",
-        "Attack",
-        { color: "blue" }
-      )
+      new IconLabel(scene, { x: coord.x + 75, y: coord.y - 30 }, "0", "Attack", { color: "blue" })
         .setDepth(DepthLayers.Planet - 1)
         .setVisible(false),
       new IconLabel(scene, { x: coord.x + 75, y: coord.y - 0 }, "0", "Attack", {
@@ -239,14 +198,14 @@ export class Planet
       this._scene.config.camera.minZoom,
       this._scene.config.camera.defaultZoom,
       0,
-      1
+      1,
     );
     const nameAlpha = lerp(
       this._scene.camera.phaserCamera.zoom,
       this._scene.config.camera.minZoom,
       this._scene.config.camera.defaultZoom,
       0.5,
-      0
+      0,
     );
 
     this.shields.setAlpha(alpha);
@@ -271,41 +230,31 @@ export class Planet
         blendMode: Phaser.BlendModes.ADD,
         onFrameChange: (frameNumber) => {
           if (frameNumber === 6) {
-            this.planetSprite.setTexture(
-              Assets.SpriteAtlas,
-              Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]
-            );
+            this.planetSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]);
           }
         },
-      }
+      },
     );
 
     this._scene.fx.flashSprite(this.hexSprite);
 
-    this.hexSprite.setTexture(
-      Assets.SpriteAtlas,
-      Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]
-    );
+    this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
 
     this.empireId = empire;
   }
 
   setPendingMove(destinationPlanetId: Entity) {
-    const destinationPlanet =
-      this._scene.objects.planet.get(destinationPlanetId);
+    const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
 
     if (!destinationPlanet) return;
 
-    const angle = calculateAngleBetweenPoints(
-      this.coord,
-      destinationPlanet.coord
-    );
+    const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
     this.pendingArrow.setRotation(angle.radian);
 
     this.pendingArrow.setVisible(true).setActive(true);
     (this.pendingArrow.getAt(0) as Phaser.GameObjects.Sprite).play(
-      Animations[EmpireToPendingAnimationKeys[this.empireId] ?? "PendingBlue"]
+      Animations[EmpireToPendingAnimationKeys[this.empireId] ?? "PendingBlue"],
     );
   }
 
@@ -314,21 +263,16 @@ export class Planet
   }
 
   moveDestroyers(destinationPlanetId: Entity) {
-    const destinationPlanet =
-      this._scene.objects.planet.get(destinationPlanetId);
+    const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
 
     if (!destinationPlanet) return;
 
-    const angle = calculateAngleBetweenPoints(
-      this.coord,
-      destinationPlanet.coord
-    );
+    const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
     //lower
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][0] ??
-        "DestroyerArcLowerRed",
+      EmpireToDestroyerArcAnimationKeys[this.empireId][0] ?? "DestroyerArcLowerRed",
       {
         rotation: angle.radian,
         depth: DepthLayers.Planet + 1,
@@ -340,13 +284,12 @@ export class Planet
           y: 10,
         },
         scale: 1.3,
-      }
+      },
     );
     //upper
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][1] ??
-        "DestroyerArcUpperRed",
+      EmpireToDestroyerArcAnimationKeys[this.empireId][1] ?? "DestroyerArcUpperRed",
       {
         rotation: angle.radian + 2 * Math.PI,
         depth: DepthLayers.Planet + 2,
@@ -357,7 +300,7 @@ export class Planet
           y: 15,
         },
         scale: 1.3,
-      }
+      },
     );
 
     this._scene.audio.play("Execute2", "sfx", { volume: 0.1 });
@@ -375,24 +318,18 @@ export class Planet
 
   onHoverEnter(fn: (e: Phaser.Input.Pointer) => void) {
     const obj = this.hexSprite.setInteractive();
-    obj.on(
-      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
-      (e: Phaser.Input.Pointer) => {
-        if (!isValidHover(e)) return;
-        fn(e);
-      }
-    );
+    obj.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, (e: Phaser.Input.Pointer) => {
+      if (!isValidHover(e)) return;
+      fn(e);
+    });
     return this;
   }
 
   onHoverExit(fn: (e: Phaser.Input.Pointer) => void) {
     const obj = this.hexSprite.setInteractive();
-    obj.on(
-      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
-      (e: Phaser.Input.Pointer) => {
-        fn(e);
-      }
-    );
+    obj.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, (e: Phaser.Input.Pointer) => {
+      fn(e);
+    });
     return this;
   }
 
@@ -406,7 +343,7 @@ export class Planet
         short: true,
         showZero: true,
         fractionDigits: 2,
-      })
+      }),
     );
   }
 
@@ -416,7 +353,7 @@ export class Planet
         short: true,
         showZero: true,
         fractionDigits: 2,
-      })
+      }),
     );
   }
 
@@ -426,7 +363,7 @@ export class Planet
         short: true,
         showZero: true,
         fractionDigits: 2,
-      })
+      }),
     );
   }
 
@@ -435,9 +372,10 @@ export class Planet
   }
 
   setMagnet(empire: EEmpire, turns: number) {
-    this.magnets[empire - 1]
-      ?.setText(formatNumber(turns))
-      .setVisible(turns > 0);
+    const fullTurnLeft = Math.ceil(turns / 3);
+    const subTurnLeft = turns % 3;
+    const text = turns > 2 ? formatNumber(fullTurnLeft) : `${"●".repeat(subTurnLeft)}`;
+    this.magnets[empire - 1]?.setText(text).setVisible(turns > 0);
 
     return this;
   }

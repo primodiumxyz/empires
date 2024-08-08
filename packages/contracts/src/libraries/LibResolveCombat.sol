@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutine, ShipBattleRoutineData, PlanetBattleRoutine, PlanetBattleRoutineData } from "codegen/index.sol";
+import { Turn, P_TacticalStrikeConfig, Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { pseudorandomEntity } from "src/utils.sol";
@@ -56,7 +56,7 @@ library LibResolveCombat {
         conquer = true;
 
         if (defendingEmpire == EEmpire.NULL) {
-          Planet_TacticalStrike.setChargeRate(planetId, 1);
+          Planet_TacticalStrike.setChargeRate(planetId, P_TacticalStrikeConfig.getChargeRate());
         }
 
         Planet.setShieldCount(planetId, 0);
@@ -70,9 +70,10 @@ library LibResolveCombat {
         revert("[LibResolveCombat] Invalid combat resolution");
       }
 
-      PlanetBattleRoutine.set(
+      PlanetBattleRoutineLog.set(
         eventEntity,
-        PlanetBattleRoutineData({
+        PlanetBattleRoutineLogData({
+          turn: Turn.getValue(),
           planetId: planetId,
           attackingShipCount: attackingShips,
           defendingShipCount: defendingShips,
@@ -120,9 +121,10 @@ library LibResolveCombat {
       }
     }
 
-    ShipBattleRoutine.set(
+    ShipBattleRoutineLog.set(
       eventEntity,
-      ShipBattleRoutineData({
+      ShipBattleRoutineLogData({
+        turn: Turn.getValue(),
         redShipCount: Arrivals.get(planetId, EEmpire.Red),
         greenShipCount: Arrivals.get(planetId, EEmpire.Green),
         blueShipCount: Arrivals.get(planetId, EEmpire.Blue),

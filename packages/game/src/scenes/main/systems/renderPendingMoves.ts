@@ -1,6 +1,5 @@
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
-
 import { PrimodiumScene } from "@game/types";
 
 export const renderPendingMoves = (scene: PrimodiumScene, core: Core) => {

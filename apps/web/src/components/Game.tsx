@@ -7,14 +7,12 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
-import { Dashboard } from "@/components/Dashboard";
-import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
-import { OverrideDrawer } from "@/components/OverrideDrawer";
-import { Pot } from "@/components/Pot";
+import { MusicPlayer } from "@/components/MusicPlayer";
+import { OverridePopup } from "@/components/OverridePopup";
+import { PlayerReturns } from "@/components/PlayerReturns";
 import { PriceHistory } from "@/components/PriceHistory";
-import { SellPoints } from "@/components/SellPoints";
+import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
-import { UserSettings } from "@/components/UserSettings";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -95,37 +93,35 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-          <Pot showRake={false} showPot={true} className="w-48" />
+          <TimeLeft />
         </HUD.TopMiddle>
+        <HUD.Left>
+          <ActionLog />
+        </HUD.Left>
 
-        <HUD.TopRight>
+        <HUD.TopRight className="flex flex-col gap-2">
           <Account />
         </HUD.TopRight>
 
         <HUD.BottomLeft>
-          <SellPoints />
-          <Pot showRake={true} showPot={false} className="absolute bottom-1 left-2 w-56" />
+          <div className="flex w-48 items-center gap-2">
+            <MusicPlayer />
+            <Settings />
+          </div>
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
-          <TimeLeft />
           <AdvanceTurn />
-        </HUD.BottomMiddle>
-        <HUD.BottomMiddle>
-          <OverrideDrawer />
+          {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomMiddle>
 
+        <HUD.Center>
+          <OverridePopup />
+        </HUD.Center>
+
         <HUD.BottomRight className="flex gap-2">
-          <UserSettings />
-          <ActionLog />
-          <HistoricalPointPriceModal showIcon={true} />
-          {DEV && <Cheatcodes className="-mr-1" />}
+          <PlayerReturns />
         </HUD.BottomRight>
-      </HUD>
-      <HUD>
-        <HUD.Right>
-          <Dashboard />
-        </HUD.Right>
       </HUD>
     </>
   );

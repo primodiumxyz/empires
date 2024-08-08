@@ -1,7 +1,7 @@
+import { Core, hashEntities } from "@primodiumxyz/core";
 import { Key } from "@primodiumxyz/engine";
 import { KeybindActionKeys } from "@primodiumxyz/game";
 import { createLocalTable, Entity, Type } from "@primodiumxyz/reactive-tables";
-import { hashEntities, Core } from "@primodiumxyz/core";
 
 type Keybinds = Partial<{
   [key in KeybindActionKeys]: Set<Key>;
@@ -58,7 +58,7 @@ export function createKeybindTable(core: Core) {
       id: "Keybinds",
       persist: true,
       version: hashEntities(JSON.stringify(defaultKeybinds)),
-    }
+    },
   );
 
   function get(keybind: KeybindActionKeys) {

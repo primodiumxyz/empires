@@ -1,14 +1,13 @@
 import { Core } from "@primodiumxyz/core";
-import type { ContractCalls } from "@client/contractCalls/createContractCalls";
-
-import { createGlobalApi, GlobalApi } from "@game/api/global";
-import { PrimodiumScene } from "@game/types";
-import { SceneKeys } from "@game/lib/constants/common";
 import { engine } from "@primodiumxyz/engine";
+import type { ContractCalls } from "@client/contractCalls/createContractCalls";
+import { createGlobalApi, GlobalApi } from "@game/api/global";
 import gameConfig from "@game/lib/config/game";
+import { SceneKeys } from "@game/lib/constants/common";
+import { initMainScene } from "@game/scenes/main/init";
 import { initRootScene } from "@game/scenes/root/init";
 import { initUIScene } from "@game/scenes/ui/init";
-import { initMainScene } from "@game/scenes/main/init";
+import { PrimodiumScene } from "@game/types";
 
 export type InitResult = Promise<
   Record<SceneKeys, PrimodiumScene> & {

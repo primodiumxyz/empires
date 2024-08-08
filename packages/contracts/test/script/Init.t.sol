@@ -20,7 +20,7 @@ contract InitTest is PrimodiumTest {
     assertEq(planetData.q, 99);
     assertEq(planetData.r, 1);
     Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(redPlanetId);
-    assertEq(planetTacticalStrikeData.chargeRate, 100);
+    assertEq(planetTacticalStrikeData.chargeRate, P_TacticalStrikeConfig.getChargeRate());
     assertEq(planetTacticalStrikeData.charge, 0);
   }
 

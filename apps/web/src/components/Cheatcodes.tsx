@@ -1,18 +1,18 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { AutoSizer } from "@/components/core/AutoSizer";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
 import { Modal } from "@/components/core/Modal";
 import { TextInput } from "@/components/core/TextInput";
 import { setupCheatcodes } from "@/config/setupCheatcodes";
 import { useContractCalls } from "@/hooks/useContractCalls";
+import { useGame } from "@/hooks/useGame";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 
 import "@/index.css";
-
-import { useGame } from "@/hooks/useGame";
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
@@ -50,14 +50,35 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
           <path d="M64 32C28.7 32 0 60.7 0 96v64c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm280 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm48 24a24 24 0 1 1 48 0 24 24 0 1 1-48 0zM64 288c-35.3 0-64 28.7-64 64v64c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64v-64c0-35.3-28.7-64-64-64H64zm280 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm56 24a24 24 0 1 1 48 0 24 24 0 1 1-48 0z" />
         </svg>
       </Modal.Button>
-      {/* TODO: remove when default overflow-y behavior on modal */}
-      <Modal.Content className="overflow-y-auto">
-        <div className="grid grid-cols-1 gap-4 pr-2 md:grid-cols-2 lg:grid-cols-3">
-          {cheatcodes.map((cheatcode, i) => (
+      <Modal.Content className={cn(activeTab == undefined && "h-screen")}>
+        {activeTab !== undefined && (
+          <Button
+            variant="primary"
+            size="sm"
+            className="absolute -top-10 right-12"
+            onClick={() => setActiveTab(undefined)}
+          >
+            Back
+          </Button>
+        )}
+        {activeTab === undefined ? (
+          <AutoSizer
+            items={cheatcodes}
+            itemSize={64}
+            render={(item, index) => (
+              // @ts-expect-error wrong type inference -- will fix on base template
+              <Cheatcode cheatcode={item} index={index} activeTab={activeTab} setActiveTab={setActiveTab} />
+            )}
+          />
+        ) : (
+          <Cheatcode
             // @ts-expect-error wrong type inference -- will fix on base template
-            <Cheatcode key={i} cheatcode={cheatcode} index={i} activeTab={activeTab} setActiveTab={setActiveTab} />
-          ))}
-        </div>
+            cheatcode={cheatcodes[activeTab]}
+            index={activeTab}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        )}
       </Modal.Content>
     </Modal>
   );
@@ -93,20 +114,20 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
     setLoading(false);
   };
 
+  if (activeTab !== undefined && activeTab !== index) return null;
   return (
-    <div className={cn("flex flex-col", activeTab === index && "col-span-full")}>
+    <div className="flex flex-col">
       <div
         className={cn(
-          "cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
-          bg,
-          activeTab === index && "bg-primary",
+          "h-14 cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
+          activeTab === undefined && bg,
         )}
         onClick={() => setActiveTab(activeTab === index ? undefined : index)}
       >
         <h2 className="text-sm font-semibold text-gray-300">
           {index + 1}. {title}
         </h2>
-        <p className="text-xs text-gray-400">{caption}</p>
+        <p className="whitespace-nowrap text-xs text-gray-400">{caption}</p>
       </div>
       <div
         className={cn("hidden gap-2 bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4", activeTab === index && "grid")}

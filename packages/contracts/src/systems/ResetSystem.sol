@@ -9,13 +9,16 @@ import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { PendingMove, WinningEmpire, HistoricalPointCost, P_GameConfig } from "codegen/index.sol";
+import { PendingMove, WinningEmpire, HistoricalPointCost, Magnet, Turn, P_GameConfig } from "codegen/index.sol";
 
 contract ResetSystem is System {
   function resetGame() public {
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint256 i = 0; i < planets.length; i++) {
       PendingMove.deleteRecord(planets[i]);
+      Magnet.deleteRecord(EEmpire.Red, planets[i]);
+      Magnet.deleteRecord(EEmpire.Blue, planets[i]);
+      Magnet.deleteRecord(EEmpire.Green, planets[i]);
     }
     PlanetsSet.clear();
     CapitolPlanetsSet.clear();
@@ -34,5 +37,6 @@ contract ResetSystem is System {
     P_GameConfig.setGameStartTimestamp(block.timestamp);
     createPlanets(); // Planet and Empire tables are reset to default values
     initPrice(); // Empire.setPointCost and OverrideCost tables are reset to default values
+    Turn.set(block.number + P_GameConfig.getTurnLengthBlocks(), EEmpire.Red, 1);
   }
 }

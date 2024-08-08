@@ -17,9 +17,9 @@ export const functionSystemIds: {
   Empires__chargeShield: getSystemId("OverrideSystem"),
   Empires__drainShield: getSystemId("OverrideSystem"),
   Empires__sellPoints: getSystemId("OverrideSystem"),
-  Empires__tacticalStrike: getSystemId("OverrideSystem"),
-  Empires__boostCharge: getSystemId("OverrideSystem"),
-  Empires__stunCharge: getSystemId("OverrideSystem"),
+  Empires__tacticalStrike: getSystemId("TacticalStrikeOverrideSystem"),
+  Empires__boostCharge: getSystemId("TacticalStrikeOverrideSystem"),
+  Empires__stunCharge: getSystemId("TacticalStrikeOverrideSystem"),
 
   Empires__updateWorld: getSystemId("UpdateSystem"),
 
@@ -34,4 +34,5 @@ export const functionSystemIds: {
 
   /* ----------------------------------- Dev ---------------------------------- */
   Empires__devSetField: getSystemId("DevSystem"),
+  Empires__devDeleteRecord: getSystemId("DevSystem"),
 };
