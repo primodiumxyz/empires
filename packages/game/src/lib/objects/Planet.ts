@@ -194,7 +194,7 @@ export class Planet
       '',
       'ShieldEaterLocation',
       {
-        color: 'red',
+        color: 'white',
       },
     )
       .setDepth(DepthLayers.Planet + 1)
@@ -207,7 +207,7 @@ export class Planet
       '',
       'ShieldEaterDestination',
       {
-        color: 'red',
+        color: 'white',
       },
     )
       .setDepth(DepthLayers.Planet + 1)
