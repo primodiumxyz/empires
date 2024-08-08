@@ -4,7 +4,6 @@ import { useCore } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
 import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
-import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
 import { MusicPlayer } from "@/components/MusicPlayer";
@@ -109,10 +108,7 @@ export const GameHUD = () => {
           <ActionLog />
         </HUD.BottomLeft>
 
-        <HUD.BottomMiddle>
-          <AdvanceTurn />
-          {DEV && <Cheatcodes className="-mr-1" />}
-        </HUD.BottomMiddle>
+        <HUD.BottomMiddle>{DEV && <Cheatcodes className="-mr-1" />}</HUD.BottomMiddle>
 
         <HUD.Center>
           <OverridePopup />

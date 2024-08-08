@@ -138,6 +138,17 @@ export const setupCheatcodes = (
       return false;
     }
   };
+
+  const advanceTurn = createCheatcode({
+    title: "Advance turn",
+    caption: "Advance the turn",
+    bg: CheatcodeToBg["time"],
+    inputs: {},
+    execute: async () => {
+      await contractCalls.updateWorld();
+      return true;
+    },
+  });
   // send ships from a planet to another
   const sendShips = createCheatcode({
     title: "Send ships",
@@ -1068,6 +1079,7 @@ export const setupCheatcodes = (
   };
 
   return [
+    advanceTurn,
     setShips,
     sendShips,
     setShields,
