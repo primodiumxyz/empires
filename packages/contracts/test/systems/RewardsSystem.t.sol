@@ -10,7 +10,7 @@ import { P_GameConfig, WinningEmpire, Empire, P_PointConfig, Planet } from "code
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
-import { CapitolPlanetsSet } from "adts/CapitolPlanetsSet.sol";
+import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 
 contract RewardsSystemTest is PrimodiumTest {
@@ -36,35 +36,35 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.roll(endBlock + 1);
   }
 
-  function getEmpireCapitolPlanets(EEmpire empire) internal view returns (uint256) {
-    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
-    uint256[] memory capitolPlanetsPerEmpire = new uint256[](uint256(EEmpire.LENGTH));
-    for (uint256 i = 0; i < capitolPlanets.length; i++) {
-      EEmpire owningEmpire = Planet.getEmpireId(capitolPlanets[i]);
-      capitolPlanetsPerEmpire[uint256(owningEmpire)]++;
+  function getEmpireCitadelPlanets(EEmpire empire) internal view returns (uint256) {
+    bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
+    uint256[] memory citadelPlanetsPerEmpire = new uint256[](uint256(EEmpire.LENGTH));
+    for (uint256 i = 0; i < citadelPlanets.length; i++) {
+      EEmpire owningEmpire = Planet.getEmpireId(citadelPlanets[i]);
+      citadelPlanetsPerEmpire[uint256(owningEmpire)]++;
     }
-    return capitolPlanetsPerEmpire[uint256(empire)];
+    return citadelPlanetsPerEmpire[uint256(empire)];
   }
 
-  function findCapitolPlanet(EEmpire empire) internal view returns (bytes32) {
-    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
-    for (uint256 i = 0; i < capitolPlanets.length; i++) {
-      EEmpire owningEmpire = Planet.getEmpireId(capitolPlanets[i]);
+  function findCitadelPlanet(EEmpire empire) internal view returns (bytes32) {
+    bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
+    for (uint256 i = 0; i < citadelPlanets.length; i++) {
+      EEmpire owningEmpire = Planet.getEmpireId(citadelPlanets[i]);
       if (owningEmpire == empire) {
-        return capitolPlanets[i];
+        return citadelPlanets[i];
       }
     }
-    revert("[RewardsSystemTest] No capitol planet found");
+    revert("[RewardsSystemTest] No citadel planet found");
   }
 
-  function findUnownedNonCapitolPlanet() internal view returns (bytes32) {
+  function findUnownedNonCitadelPlanet() internal view returns (bytes32) {
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint256 i = 0; i < planets.length; i++) {
-      if (!Planet.getIsCapitol(planets[i]) && Planet.getEmpireId(planets[i]) == EEmpire.NULL) {
+      if (!Planet.getIsCitadel(planets[i]) && Planet.getEmpireId(planets[i]) == EEmpire.NULL) {
         return planets[i];
       }
     }
-    revert("[RewardsSystemTest] No non-capitol planet found");
+    revert("[RewardsSystemTest] No non-citadel planet found");
   }
 
   function testWithdrawEarningsTimeVictoryTiedTwice() public {
@@ -74,32 +74,32 @@ contract RewardsSystemTest is PrimodiumTest {
   }
 
   function testWithdrawEarningsTimeVictoryTiedOnce() public {
-    bytes32 extraCapitolPlanet = findUnownedNonCapitolPlanet();
-    Planet.setEmpireId(extraCapitolPlanet, EEmpire.Green);
-    EmpirePlanetsSet.add(EEmpire.Green, extraCapitolPlanet);
-    EmpirePlanetsSet.remove(EEmpire.NULL, extraCapitolPlanet);
+    bytes32 extraCitadelPlanet = findUnownedNonCitadelPlanet();
+    Planet.setEmpireId(extraCitadelPlanet, EEmpire.Green);
+    EmpirePlanetsSet.add(EEmpire.Green, extraCitadelPlanet);
+    EmpirePlanetsSet.remove(EEmpire.NULL, extraCitadelPlanet);
     setGameover();
     world.Empires__withdrawEarnings();
     assertEq(WinningEmpire.get(), EEmpire.Green);
   }
 
   function testWithdrawEarningsTimeVictory() public {
-    bytes32 extraCapitolPlanet = findCapitolPlanet(EEmpire.NULL);
-    Planet.setEmpireId(extraCapitolPlanet, EEmpire.Blue);
-    EmpirePlanetsSet.add(EEmpire.Blue, extraCapitolPlanet);
-    EmpirePlanetsSet.remove(EEmpire.NULL, extraCapitolPlanet);
+    bytes32 extraCitadelPlanet = findCitadelPlanet(EEmpire.NULL);
+    Planet.setEmpireId(extraCitadelPlanet, EEmpire.Blue);
+    EmpirePlanetsSet.add(EEmpire.Blue, extraCitadelPlanet);
+    EmpirePlanetsSet.remove(EEmpire.NULL, extraCitadelPlanet);
     setGameover();
     world.Empires__withdrawEarnings();
     assertEq(WinningEmpire.get(), EEmpire.Blue);
   }
 
   function testWithdrawEarningsDominationVictory() public {
-    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
-    for (uint256 i = 0; i < capitolPlanets.length; i++) {
-      EEmpire prevEmpire = Planet.getEmpireId(capitolPlanets[i]);
-      Planet.setEmpireId(capitolPlanets[i], EEmpire.Blue);
-      EmpirePlanetsSet.add(EEmpire.Blue, capitolPlanets[i]);
-      EmpirePlanetsSet.remove(prevEmpire, capitolPlanets[i]);
+    bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
+    for (uint256 i = 0; i < citadelPlanets.length; i++) {
+      EEmpire prevEmpire = Planet.getEmpireId(citadelPlanets[i]);
+      Planet.setEmpireId(citadelPlanets[i], EEmpire.Blue);
+      EmpirePlanetsSet.add(EEmpire.Blue, citadelPlanets[i]);
+      EmpirePlanetsSet.remove(prevEmpire, citadelPlanets[i]);
     }
     // Do NOT add setGameOver() here, because we want to test the case where the time is not up yet
     world.Empires__withdrawEarnings();
@@ -108,12 +108,12 @@ contract RewardsSystemTest is PrimodiumTest {
 
   function testWithdrawEarningsVictoryAlreadyClaimed() public {
     testWithdrawEarningsDominationVictory();
-    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
-    for (uint256 i = 0; i < capitolPlanets.length; i++) {
-      EEmpire prevEmpire = Planet.getEmpireId(capitolPlanets[i]);
-      Planet.setEmpireId(capitolPlanets[i], EEmpire.Green);
-      EmpirePlanetsSet.add(EEmpire.Green, capitolPlanets[i]);
-      EmpirePlanetsSet.remove(prevEmpire, capitolPlanets[i]);
+    bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
+    for (uint256 i = 0; i < citadelPlanets.length; i++) {
+      EEmpire prevEmpire = Planet.getEmpireId(citadelPlanets[i]);
+      Planet.setEmpireId(citadelPlanets[i], EEmpire.Green);
+      EmpirePlanetsSet.add(EEmpire.Green, citadelPlanets[i]);
+      EmpirePlanetsSet.remove(prevEmpire, citadelPlanets[i]);
     }
     setGameover();
     world.Empires__withdrawEarnings();

@@ -18,7 +18,7 @@
    <image width="172" height="188" source="../../sprites/hex/hex_green.png"/>
   </tile>
  </tileset>
- <tileset firstgid="5" name="capitol-tiles" tilewidth="32" tileheight="32" tilecount="1" columns="0" fillmode="preserve-aspect-fit">
+ <tileset firstgid="5" name="citadel-tiles" tilewidth="32" tileheight="32" tilecount="1" columns="0" fillmode="preserve-aspect-fit">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0">
    <image width="32" height="32" source="../../sprites/icons/shard.png"/>

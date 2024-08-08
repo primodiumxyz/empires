@@ -11,7 +11,7 @@ import { IWorld } from "codegen/world/IWorld.sol";
 import { EEmpire } from "codegen/common.sol";
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { CapitolPlanetsSet } from "adts/CapitolPlanetsSet.sol";
+import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 
 import { PointsMap } from "adts/PointsMap.sol";
@@ -45,14 +45,14 @@ contract RewardsSystem is EmpiresSystem {
    * @return winningEmpire The EEmpire that has won the game, or EEmpire.NULL if the game has not been won by domination.
    */
   function _checkDominationVictory() internal view returns (EEmpire) {
-    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
-    EEmpire winningEmpire = Planet.getEmpireId(capitolPlanets[0]);
+    bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
+    EEmpire winningEmpire = Planet.getEmpireId(citadelPlanets[0]);
     if (winningEmpire == EEmpire.NULL) {
       return EEmpire.NULL;
     }
 
-    for (uint256 i = 1; i < capitolPlanets.length; i++) {
-      if (Planet.getEmpireId(capitolPlanets[i]) != winningEmpire) {
+    for (uint256 i = 1; i < citadelPlanets.length; i++) {
+      if (Planet.getEmpireId(citadelPlanets[i]) != winningEmpire) {
         return EEmpire.NULL;
       }
     }
@@ -62,7 +62,7 @@ contract RewardsSystem is EmpiresSystem {
 
   /**
    * @dev Checks if the game has been won by the match running out of time.
-   * @notice First condition is number of owned capitol planets. Second condition is number of all owned planets.
+   * @notice First condition is number of owned citadel planets. Second condition is number of all owned planets.
    * @return winningEmpire The EEmpire that has won the game, or EEmpire.NULL if the game has not been won by time.
    */
   function _checkTimeVictory() internal view returns (EEmpire) {
@@ -71,27 +71,27 @@ contract RewardsSystem is EmpiresSystem {
       return EEmpire.NULL;
     }
 
-    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
-    uint256[] memory capitolPlanetsPerEmpire = new uint256[](uint256(EEmpire.LENGTH));
-    for (uint256 i = 0; i < capitolPlanets.length; i++) {
-      EEmpire empire = Planet.getEmpireId(capitolPlanets[i]);
-      capitolPlanetsPerEmpire[uint256(empire)]++;
+    bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
+    uint256[] memory citadelPlanetsPerEmpire = new uint256[](uint256(EEmpire.LENGTH));
+    for (uint256 i = 0; i < citadelPlanets.length; i++) {
+      EEmpire empire = Planet.getEmpireId(citadelPlanets[i]);
+      citadelPlanetsPerEmpire[uint256(empire)]++;
     }
 
     EEmpire winningEmpire = EEmpire.NULL;
-    uint256 maxCapitolPlanets = 0;
+    uint256 maxCitadelPlanets = 0;
     // skip EEmpire.NULL
     for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
       EEmpire empire = EEmpire(i);
-      if (capitolPlanetsPerEmpire[uint256(empire)] > maxCapitolPlanets) {
-        maxCapitolPlanets = capitolPlanetsPerEmpire[uint256(empire)];
+      if (citadelPlanetsPerEmpire[uint256(empire)] > maxCitadelPlanets) {
+        maxCitadelPlanets = citadelPlanetsPerEmpire[uint256(empire)];
         winningEmpire = empire;
-      } else if (capitolPlanetsPerEmpire[uint256(empire)] == maxCapitolPlanets) {
+      } else if (citadelPlanetsPerEmpire[uint256(empire)] == maxCitadelPlanets) {
         if (EmpirePlanetsSet.size(empire) > EmpirePlanetsSet.size(winningEmpire)) {
           winningEmpire = empire;
         }
         else if (EmpirePlanetsSet.size(empire) == EmpirePlanetsSet.size(winningEmpire)) {
-          // todo: handle a tie of both the number of capitol planets and the number of planets. Likely overtime or most points issued.
+          // todo: handle a tie of both the number of citadel planets and the number of planets. Likely overtime or most points issued.
           continue;
         }
       }

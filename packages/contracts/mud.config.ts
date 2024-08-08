@@ -112,7 +112,7 @@ export const worldInput = {
         q: "int128",
         r: "int128",
         isPlanet: "bool",
-        isCapitol: "bool",
+        isCitadel: "bool",
         shipCount: "uint256",
         shieldCount: "uint256",
         goldCount: "uint256",
@@ -171,12 +171,12 @@ export const worldInput = {
       schema: { id: "bytes32", stored: "bool", index: "uint256" },
     },
 
-    Keys_CapitolPlanetsSet: {
+    Keys_CitadelPlanetsSet: {
       key: [],
       schema: { itemKeys: "bytes32[]" },
     },
 
-    Meta_CapitolPlanetsSet: {
+    Meta_CitadelPlanetsSet: {
       key: ["id"],
       schema: { id: "bytes32", stored: "bool", index: "uint256" },
     },
