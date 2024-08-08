@@ -72,7 +72,7 @@ contract RewardsSystem is EmpiresSystem {
     }
 
     bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
-    uint256[] memory capitolPlanetsPerEmpire;
+    uint256[] memory capitolPlanetsPerEmpire = new uint256[](uint256(EEmpire.LENGTH));
     for (uint256 i = 0; i < capitolPlanets.length; i++) {
       EEmpire empire = Planet.getEmpireId(capitolPlanets[i]);
       capitolPlanetsPerEmpire[uint256(empire)]++;

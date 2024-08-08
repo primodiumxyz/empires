@@ -6,8 +6,11 @@ import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 import { addressToId } from "src/utils.sol";
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_GameConfig, WinningEmpire, Empire, P_PointConfig } from "codegen/index.sol";
+import { P_GameConfig, WinningEmpire, Empire, P_PointConfig, Planet } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
+import { PlanetsSet } from "adts/PlanetsSet.sol";
+import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
+import { CapitolPlanetsSet } from "adts/CapitolPlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 
 contract RewardsSystemTest is PrimodiumTest {
@@ -23,28 +26,100 @@ contract RewardsSystemTest is PrimodiumTest {
     world.registerFunctionSelector(systemId, "echoValue()");
   }
 
-  // function testClaimVictoryNotGameOver() public {
-  //   vm.expectRevert("[RewardsSystem] Game is not over");
-  //   world.Empires__claimVictory(EEmpire.Red);
-  // }
+  function testWithdrawEarningsNotGameOver() public {
+    vm.expectRevert("[RewardsSystem] Game is not over");
+    world.Empires__withdrawEarnings();
+  }
 
   function setGameover() internal {
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     vm.roll(endBlock + 1);
   }
 
-  // function testClaimVictoryAlreadyClaimed() public {
-  //   setGameover();
-  //   world.Empires__claimVictory(EEmpire.Red);
-  //   vm.expectRevert("[RewardsSystem] Victory has already been claimed");
-  //   world.Empires__claimVictory(EEmpire.Blue);
-  // }
+  function getEmpireCapitolPlanets(EEmpire empire) internal view returns (uint256) {
+    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
+    uint256[] memory capitolPlanetsPerEmpire = new uint256[](uint256(EEmpire.LENGTH));
+    for (uint256 i = 0; i < capitolPlanets.length; i++) {
+      EEmpire owningEmpire = Planet.getEmpireId(capitolPlanets[i]);
+      capitolPlanetsPerEmpire[uint256(owningEmpire)]++;
+    }
+    return capitolPlanetsPerEmpire[uint256(empire)];
+  }
 
-  // function testClaimVictory() public {
-  //   setGameover();
-  //   world.Empires__claimVictory(EEmpire.Red);
-  //   assertEq(WinningEmpire.get(), EEmpire.Red);
-  // }
+  function findCapitolPlanet(EEmpire empire) internal view returns (bytes32) {
+    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
+    for (uint256 i = 0; i < capitolPlanets.length; i++) {
+      EEmpire owningEmpire = Planet.getEmpireId(capitolPlanets[i]);
+      if (owningEmpire == empire) {
+        return capitolPlanets[i];
+      }
+    }
+    revert("[RewardsSystemTest] No capitol planet found");
+  }
+
+  function findUnownedNonCapitolPlanet() internal view returns (bytes32) {
+    bytes32[] memory planets = PlanetsSet.getPlanetIds();
+    for (uint256 i = 0; i < planets.length; i++) {
+      if (!Planet.getIsCapitol(planets[i]) && Planet.getEmpireId(planets[i]) == EEmpire.NULL) {
+        return planets[i];
+      }
+    }
+    revert("[RewardsSystemTest] No non-capitol planet found");
+  }
+
+  function testWithdrawEarningsTimeVictoryTiedTwice() public {
+    setGameover();
+    world.Empires__withdrawEarnings(); // note: this currently hits all tie conditions and then defaults to Red
+    assertEq(WinningEmpire.get(), EEmpire.Red); 
+  }
+
+  function testWithdrawEarningsTimeVictoryTiedOnce() public {
+    bytes32 extraCapitolPlanet = findUnownedNonCapitolPlanet();
+    Planet.setEmpireId(extraCapitolPlanet, EEmpire.Green);
+    EmpirePlanetsSet.add(EEmpire.Green, extraCapitolPlanet);
+    EmpirePlanetsSet.remove(EEmpire.NULL, extraCapitolPlanet);
+    setGameover();
+    world.Empires__withdrawEarnings();
+    assertEq(WinningEmpire.get(), EEmpire.Green);
+  }
+
+  function testWithdrawEarningsTimeVictory() public {
+    bytes32 extraCapitolPlanet = findCapitolPlanet(EEmpire.NULL);
+    Planet.setEmpireId(extraCapitolPlanet, EEmpire.Blue);
+    EmpirePlanetsSet.add(EEmpire.Blue, extraCapitolPlanet);
+    EmpirePlanetsSet.remove(EEmpire.NULL, extraCapitolPlanet);
+    setGameover();
+    world.Empires__withdrawEarnings();
+    assertEq(WinningEmpire.get(), EEmpire.Blue);
+  }
+
+  function testWithdrawEarningsDominationVictory() public {
+    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
+    for (uint256 i = 0; i < capitolPlanets.length; i++) {
+      EEmpire prevEmpire = Planet.getEmpireId(capitolPlanets[i]);
+      Planet.setEmpireId(capitolPlanets[i], EEmpire.Blue);
+      EmpirePlanetsSet.add(EEmpire.Blue, capitolPlanets[i]);
+      EmpirePlanetsSet.remove(prevEmpire, capitolPlanets[i]);
+    }
+    // Do NOT add setGameOver() here, because we want to test the case where the time is not up yet
+    world.Empires__withdrawEarnings();
+    assertEq(WinningEmpire.get(), EEmpire.Blue);
+  }
+
+  function testWithdrawEarningsVictoryAlreadyClaimed() public {
+    testWithdrawEarningsDominationVictory();
+    bytes32[] memory capitolPlanets = CapitolPlanetsSet.getCapitolPlanetIds();
+    for (uint256 i = 0; i < capitolPlanets.length; i++) {
+      EEmpire prevEmpire = Planet.getEmpireId(capitolPlanets[i]);
+      Planet.setEmpireId(capitolPlanets[i], EEmpire.Green);
+      EmpirePlanetsSet.add(EEmpire.Green, capitolPlanets[i]);
+      EmpirePlanetsSet.remove(prevEmpire, capitolPlanets[i]);
+    }
+    setGameover();
+    world.Empires__withdrawEarnings();
+    assertEq(WinningEmpire.get(), EEmpire.Blue, "Victory should be locked from domination");
+  }
+
 
   function testSendEther() public {
     sendEther(alice, value);
