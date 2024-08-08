@@ -100,17 +100,17 @@ library LibShieldEater {
     Planet.setLastShieldEaterVisit(ShieldEater.getCurrentPlanet(), block.number);
 
     // East
-    CoordData memory neighbor = CoordData(center.q + 1, center.r);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    bytes32 planetId = coordToId(center.q + 1, center.r);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
+      Planet.setLastShieldEaterVisit(planetId, block.number);
     }
 
     // Southeast
-    neighbor = CoordData(center.q, center.r + 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q, center.r + 1);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
+      Planet.setLastShieldEaterVisit(planetId, block.number);
     }
 
     // Southwest
