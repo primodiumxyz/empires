@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1723104452983",
+            "image": "atlas.png?timestamp=1723105553101",
             "format": "RGBA8888",
             "size": {
                 "w": 1119,
@@ -854,7 +854,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_1.png",
+                    "filename": "sprites/magnet/blue/Magnet_Blue_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -875,7 +875,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_2.png",
+                    "filename": "sprites/magnet/blue/Magnet_Blue_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -896,7 +896,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_3.png",
+                    "filename": "sprites/magnet/blue/Magnet_Blue_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -917,7 +917,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_4.png",
+                    "filename": "sprites/magnet/blue/Magnet_Blue_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -938,7 +938,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_5.png",
+                    "filename": "sprites/magnet/blue/Magnet_Blue_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -959,7 +959,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_6.png",
+                    "filename": "sprites/magnet/blue/Magnet_Blue_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -980,7 +980,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_7.png",
+                    "filename": "sprites/magnet/blue/Magnet_Blue_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1001,7 +1001,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_8.png",
+                    "filename": "sprites/magnet/blue/Magnet_Blue_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1022,7 +1022,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_1.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1043,7 +1043,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_2.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1064,7 +1064,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_3.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1085,7 +1085,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_4.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1106,7 +1106,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_5.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1127,7 +1127,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_6.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1148,7 +1148,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_7.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1169,7 +1169,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_8.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1190,7 +1190,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/red/Magnet_Red_1.png",
+                    "filename": "sprites/magnet/red/Magnet_Red_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1206,6 +1206,27 @@
                     "frame": {
                         "x": 1047,
                         "y": 847,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1047,
+                        "y": 888,
                         "w": 27,
                         "h": 41
                     }
@@ -1226,34 +1247,13 @@
                     },
                     "frame": {
                         "x": 1047,
-                        "y": 888,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/red/Magnet_Red_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1047,
                         "y": 929,
                         "w": 27,
                         "h": 41
                     }
                 },
                 {
-                    "filename": "sprites/magnet/red/Magnet_Red_4.png",
+                    "filename": "sprites/magnet/red/Magnet_Red_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1274,7 +1274,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/red/Magnet_Red_5.png",
+                    "filename": "sprites/magnet/red/Magnet_Red_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1295,7 +1295,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/red/Magnet_Red_6.png",
+                    "filename": "sprites/magnet/red/Magnet_Red_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1316,7 +1316,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/red/Magnet_Red_7.png",
+                    "filename": "sprites/magnet/red/Magnet_Red_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1337,7 +1337,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/red/Magnet_Red_8.png",
+                    "filename": "sprites/magnet/red/Magnet_Red_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
