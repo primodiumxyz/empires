@@ -23,7 +23,6 @@ type RoutineOptions = {
 };
 
 export function calculateRoutineThresholds(probabilities: RoutineThresholds): RoutineThresholdsBigInt {
-  console.log(probabilities);
   const goldThreshold = BigInt(Math.round(probabilities.accumulateGold * 10000));
   const shieldThreshold = BigInt(Math.round(probabilities.buyShields * 10000)) + goldThreshold;
   const shipThreshold = BigInt(Math.round(probabilities.buyShips * 10000)) + shieldThreshold;

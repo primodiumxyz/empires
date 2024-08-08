@@ -40,7 +40,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
   const HoveredPlanet = createLocalEntityTable(world, { id: "HoveredPlanet" });
   const SelectedTab = createLocalNumberTable(world, {
     id: "SelectedTab",
-    persist: true,
     version: "1",
   });
 
