@@ -5,14 +5,602 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1723104457373",
+            "image": "atlas.png?timestamp=1723110069137",
             "format": "RGBA8888",
             "size": {
-                "w": 1324,
-                "h": 1330
+                "w": 1694,
+                "h": 1741
             },
             "scale": 1,
             "frames": [
+                {
+                    "filename": "vfx/waves/Magnet_Waves_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 187,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 187,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 374,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 374,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 187,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_16.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 374,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_17.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 561,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_18.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 561,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_19.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 561,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_20.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 187,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_21.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 374,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_24.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 561,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_25.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 748,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_26.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 748,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_27.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 748,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_28.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 748,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_29.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 780,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 780,
+                        "y": 187,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_30.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 780,
+                        "y": 374,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_31.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 780,
+                        "y": 561,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 780,
+                        "y": 748,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 935,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 935,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 935,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
                 {
                     "filename": "vfx/destroyer/blue/upper/Arc_Upper_Blue_000.png",
                     "rotated": false,
@@ -28,8 +616,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 0,
+                        "x": 585,
+                        "y": 935,
                         "w": 185,
                         "h": 79
                     }
@@ -49,8 +637,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 79,
+                        "x": 770,
+                        "y": 935,
                         "w": 185,
                         "h": 79
                     }
@@ -70,8 +658,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 158,
+                        "x": 585,
+                        "y": 1014,
                         "w": 185,
                         "h": 79
                     }
@@ -91,8 +679,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 0,
+                        "x": 770,
+                        "y": 1014,
                         "w": 185,
                         "h": 79
                     }
@@ -112,8 +700,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 79,
+                        "x": 955,
+                        "y": 935,
                         "w": 185,
                         "h": 79
                     }
@@ -133,8 +721,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 158,
+                        "x": 955,
+                        "y": 1014,
                         "w": 185,
                         "h": 79
                     }
@@ -154,8 +742,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 237,
+                        "x": 975,
+                        "y": 0,
                         "w": 185,
                         "h": 79
                     }
@@ -175,8 +763,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 237,
+                        "x": 975,
+                        "y": 79,
                         "w": 185,
                         "h": 79
                     }
@@ -196,8 +784,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 316,
+                        "x": 975,
+                        "y": 158,
                         "w": 185,
                         "h": 79
                     }
@@ -217,8 +805,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 316,
+                        "x": 975,
+                        "y": 237,
                         "w": 185,
                         "h": 79
                     }
@@ -238,8 +826,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 0,
+                        "x": 975,
+                        "y": 316,
                         "w": 185,
                         "h": 79
                     }
@@ -259,8 +847,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 79,
+                        "x": 975,
+                        "y": 395,
                         "w": 185,
                         "h": 79
                     }
@@ -280,8 +868,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -301,8 +889,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 237,
+                        "x": 975,
+                        "y": 553,
                         "w": 185,
                         "h": 79
                     }
@@ -322,8 +910,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 316,
+                        "x": 975,
+                        "y": 632,
                         "w": 185,
                         "h": 79
                     }
@@ -343,8 +931,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 395,
+                        "x": 975,
+                        "y": 711,
                         "w": 185,
                         "h": 79
                     }
@@ -364,8 +952,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 395,
+                        "x": 975,
+                        "y": 790,
                         "w": 185,
                         "h": 79
                     }
@@ -385,8 +973,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 395,
+                        "x": 585,
+                        "y": 1093,
                         "w": 185,
                         "h": 79
                     }
@@ -406,8 +994,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 474,
+                        "x": 770,
+                        "y": 1093,
                         "w": 185,
                         "h": 79
                     }
@@ -427,8 +1015,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 474,
+                        "x": 955,
+                        "y": 1093,
                         "w": 185,
                         "h": 79
                     }
@@ -448,8 +1036,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 474,
+                        "x": 0,
+                        "y": 1122,
                         "w": 185,
                         "h": 79
                     }
@@ -469,8 +1057,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 553,
+                        "x": 185,
+                        "y": 1122,
                         "w": 185,
                         "h": 79
                     }
@@ -490,8 +1078,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 553,
+                        "x": 370,
+                        "y": 1122,
                         "w": 185,
                         "h": 79
                     }
@@ -511,8 +1099,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 553,
+                        "x": 1140,
+                        "y": 869,
                         "w": 185,
                         "h": 79
                     }
@@ -532,8 +1120,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 0,
+                        "x": 1140,
+                        "y": 948,
                         "w": 185,
                         "h": 79
                     }
@@ -553,8 +1141,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 79,
+                        "x": 1140,
+                        "y": 1027,
                         "w": 185,
                         "h": 79
                     }
@@ -574,8 +1162,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 158,
+                        "x": 1140,
+                        "y": 1106,
                         "w": 185,
                         "h": 79
                     }
@@ -595,8 +1183,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 237,
+                        "x": 1160,
+                        "y": 0,
                         "w": 185,
                         "h": 79
                     }
@@ -616,8 +1204,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 316,
+                        "x": 1160,
+                        "y": 79,
                         "w": 185,
                         "h": 79
                     }
@@ -637,8 +1225,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 395,
+                        "x": 1160,
+                        "y": 158,
                         "w": 185,
                         "h": 79
                     }
@@ -658,8 +1246,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 474,
+                        "x": 1160,
+                        "y": 237,
                         "w": 185,
                         "h": 79
                     }
@@ -679,8 +1267,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 553,
+                        "x": 1160,
+                        "y": 316,
                         "w": 185,
                         "h": 79
                     }
@@ -700,8 +1288,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 632,
+                        "x": 1160,
+                        "y": 395,
                         "w": 185,
                         "h": 79
                     }
@@ -721,8 +1309,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 185,
-                        "y": 632,
+                        "x": 1160,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -742,8 +1330,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 632,
+                        "x": 1160,
+                        "y": 553,
                         "w": 185,
                         "h": 79
                     }
@@ -763,7 +1351,7 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
+                        "x": 1160,
                         "y": 632,
                         "w": 185,
                         "h": 79
@@ -784,955 +1372,10 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
+                        "x": 1160,
                         "y": 711,
                         "w": 185,
                         "h": 79
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 185,
-                        "y": 711,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 356,
-                        "y": 711,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 527,
-                        "y": 711,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 65,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 130,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 195,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 260,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 325,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 390,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 455,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 520,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 585,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 740,
-                        "y": 650,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 698,
-                        "y": 715,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 790,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 171,
-                        "y": 790,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 342,
-                        "y": 780,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 513,
-                        "y": 780,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 684,
-                        "y": 780,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 855,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 171,
-                        "y": 855,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 342,
-                        "y": 845,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 513,
-                        "y": 845,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 684,
-                        "y": 845,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 65,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 130,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 195,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 260,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_000.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 325,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_001.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 390,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_002.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 455,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_003.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 520,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_004.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 585,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_005.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 911,
-                        "y": 650,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_006.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 869,
-                        "y": 715,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_007.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 855,
-                        "y": 780,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_008.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 855,
-                        "y": 845,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_009.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 920,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_010.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 171,
-                        "y": 920,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_011.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 342,
-                        "y": 910,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_012.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 513,
-                        "y": 910,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_013.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 684,
-                        "y": 910,
-                        "w": 171,
-                        "h": 65
-                    }
-                },
-                {
-                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_014.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 171,
-                        "h": 65
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 171,
-                        "h": 65
-                    },
-                    "frame": {
-                        "x": 855,
-                        "y": 910,
-                        "w": 171,
-                        "h": 65
                     }
                 },
                 {
@@ -1750,8 +1393,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 985,
+                        "x": 555,
+                        "y": 1172,
                         "w": 121,
                         "h": 115
                     }
@@ -1771,8 +1414,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 121,
-                        "y": 985,
+                        "x": 0,
+                        "y": 1201,
                         "w": 121,
                         "h": 115
                     }
@@ -1792,8 +1435,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 242,
-                        "y": 985,
+                        "x": 121,
+                        "y": 1201,
                         "w": 121,
                         "h": 115
                     }
@@ -1813,8 +1456,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 363,
-                        "y": 975,
+                        "x": 242,
+                        "y": 1201,
                         "w": 121,
                         "h": 115
                     }
@@ -1834,8 +1477,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 484,
-                        "y": 975,
+                        "x": 363,
+                        "y": 1201,
                         "w": 121,
                         "h": 115
                     }
@@ -1855,8 +1498,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 605,
-                        "y": 975,
+                        "x": 676,
+                        "y": 1172,
                         "w": 121,
                         "h": 115
                     }
@@ -1876,8 +1519,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 726,
-                        "y": 975,
+                        "x": 797,
+                        "y": 1172,
                         "w": 121,
                         "h": 115
                     }
@@ -1897,8 +1540,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 847,
-                        "y": 975,
+                        "x": 918,
+                        "y": 1172,
                         "w": 121,
                         "h": 115
                     }
@@ -1918,8 +1561,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1082,
-                        "y": 0,
+                        "x": 1039,
+                        "y": 1185,
                         "w": 121,
                         "h": 115
                     }
@@ -1939,8 +1582,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1082,
-                        "y": 115,
+                        "x": 1160,
+                        "y": 1185,
                         "w": 121,
                         "h": 115
                     }
@@ -1960,8 +1603,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1082,
-                        "y": 230,
+                        "x": 484,
+                        "y": 1287,
                         "w": 121,
                         "h": 115
                     }
@@ -1981,8 +1624,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1082,
-                        "y": 345,
+                        "x": 0,
+                        "y": 1316,
                         "w": 121,
                         "h": 115
                     }
@@ -2002,8 +1645,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1082,
-                        "y": 460,
+                        "x": 121,
+                        "y": 1316,
                         "w": 121,
                         "h": 115
                     }
@@ -2023,8 +1666,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1082,
-                        "y": 575,
+                        "x": 242,
+                        "y": 1316,
                         "w": 121,
                         "h": 115
                     }
@@ -2044,8 +1687,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1082,
-                        "y": 690,
+                        "x": 363,
+                        "y": 1316,
                         "w": 121,
                         "h": 115
                     }
@@ -2065,8 +1708,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 968,
-                        "y": 975,
+                        "x": 605,
+                        "y": 1287,
                         "w": 121,
                         "h": 115
                     }
@@ -2086,8 +1729,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1026,
-                        "y": 805,
+                        "x": 726,
+                        "y": 1287,
                         "w": 121,
                         "h": 115
                     }
@@ -2107,8 +1750,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1100,
+                        "x": 847,
+                        "y": 1287,
                         "w": 121,
                         "h": 115
                     }
@@ -2128,8 +1771,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 121,
-                        "y": 1100,
+                        "x": 968,
+                        "y": 1300,
                         "w": 121,
                         "h": 115
                     }
@@ -2149,8 +1792,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 242,
-                        "y": 1100,
+                        "x": 1089,
+                        "y": 1300,
                         "w": 121,
                         "h": 115
                     }
@@ -2170,8 +1813,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 363,
-                        "y": 1090,
+                        "x": 1210,
+                        "y": 1300,
                         "w": 121,
                         "h": 115
                     }
@@ -2191,8 +1834,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 484,
-                        "y": 1090,
+                        "x": 1281,
+                        "y": 1185,
                         "w": 121,
                         "h": 115
                     }
@@ -2212,8 +1855,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 605,
-                        "y": 1090,
+                        "x": 1331,
+                        "y": 1300,
                         "w": 121,
                         "h": 115
                     }
@@ -2233,8 +1876,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 726,
-                        "y": 1090,
+                        "x": 1325,
+                        "y": 790,
                         "w": 121,
                         "h": 115
                     }
@@ -2254,8 +1897,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 847,
-                        "y": 1090,
+                        "x": 1325,
+                        "y": 905,
                         "w": 121,
                         "h": 115
                     }
@@ -2275,8 +1918,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 968,
-                        "y": 1090,
+                        "x": 1325,
+                        "y": 1020,
                         "w": 121,
                         "h": 115
                     }
@@ -2296,7 +1939,7 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1203,
+                        "x": 1345,
                         "y": 0,
                         "w": 121,
                         "h": 115
@@ -2317,7 +1960,7 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1203,
+                        "x": 1345,
                         "y": 115,
                         "w": 121,
                         "h": 115
@@ -2338,7 +1981,7 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1203,
+                        "x": 1345,
                         "y": 230,
                         "w": 121,
                         "h": 115
@@ -2359,7 +2002,7 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1203,
+                        "x": 1345,
                         "y": 345,
                         "w": 121,
                         "h": 115
@@ -2380,7 +2023,7 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1203,
+                        "x": 1345,
                         "y": 460,
                         "w": 121,
                         "h": 115
@@ -2401,7 +2044,7 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1203,
+                        "x": 1345,
                         "y": 575,
                         "w": 121,
                         "h": 115
@@ -2422,8 +2065,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1203,
-                        "y": 690,
+                        "x": 484,
+                        "y": 1402,
                         "w": 121,
                         "h": 115
                     }
@@ -2443,8 +2086,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1147,
-                        "y": 805,
+                        "x": 605,
+                        "y": 1402,
                         "w": 121,
                         "h": 115
                     }
@@ -2464,8 +2107,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1089,
-                        "y": 920,
+                        "x": 726,
+                        "y": 1402,
                         "w": 121,
                         "h": 115
                     }
@@ -2485,8 +2128,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1089,
-                        "y": 1035,
+                        "x": 847,
+                        "y": 1402,
                         "w": 121,
                         "h": 115
                     }
@@ -2507,7 +2150,7 @@
                     },
                     "frame": {
                         "x": 0,
-                        "y": 1215,
+                        "y": 1431,
                         "w": 121,
                         "h": 115
                     }
@@ -2528,7 +2171,7 @@
                     },
                     "frame": {
                         "x": 121,
-                        "y": 1215,
+                        "y": 1431,
                         "w": 121,
                         "h": 115
                     }
@@ -2549,7 +2192,7 @@
                     },
                     "frame": {
                         "x": 242,
-                        "y": 1215,
+                        "y": 1431,
                         "w": 121,
                         "h": 115
                     }
@@ -2570,7 +2213,7 @@
                     },
                     "frame": {
                         "x": 363,
-                        "y": 1205,
+                        "y": 1431,
                         "w": 121,
                         "h": 115
                     }
@@ -2590,8 +2233,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 484,
-                        "y": 1205,
+                        "x": 968,
+                        "y": 1415,
                         "w": 121,
                         "h": 115
                     }
@@ -2611,8 +2254,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 605,
-                        "y": 1205,
+                        "x": 1089,
+                        "y": 1415,
                         "w": 121,
                         "h": 115
                     }
@@ -2632,8 +2275,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 726,
-                        "y": 1205,
+                        "x": 1210,
+                        "y": 1415,
                         "w": 121,
                         "h": 115
                     }
@@ -2653,8 +2296,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 847,
-                        "y": 1205,
+                        "x": 1331,
+                        "y": 1415,
                         "w": 121,
                         "h": 115
                     }
@@ -2674,10 +2317,955 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 968,
-                        "y": 1205,
+                        "x": 1402,
+                        "y": 1135,
                         "w": 121,
                         "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1345,
+                        "y": 690,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 1517,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 655,
+                        "y": 1517,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1546,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 1546,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 826,
+                        "y": 1530,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 997,
+                        "y": 1530,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1168,
+                        "y": 1530,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1339,
+                        "y": 1530,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1452,
+                        "y": 1250,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1452,
+                        "y": 1315,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1452,
+                        "y": 1380,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1452,
+                        "y": 1445,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1510,
+                        "y": 1510,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/blue/lower/Arc_Lower_Blue_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 755,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 820,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 885,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 950,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 1015,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1523,
+                        "y": 1080,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1523,
+                        "y": 1145,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1516,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1516,
+                        "y": 65,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1516,
+                        "y": 130,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1516,
+                        "y": 195,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1516,
+                        "y": 260,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1516,
+                        "y": 325,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1466,
+                        "y": 390,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1466,
+                        "y": 455,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/green/lower/Arc_Lower_Green_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1466,
+                        "y": 520,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_000.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1466,
+                        "y": 585,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_001.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1516,
+                        "y": 650,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_002.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1510,
+                        "y": 1575,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_003.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 342,
+                        "y": 1582,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_004.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1611,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_005.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 1611,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_006.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 513,
+                        "y": 1582,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_007.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 684,
+                        "y": 1595,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_008.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 855,
+                        "y": 1595,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_009.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1026,
+                        "y": 1595,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_010.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 1197,
+                        "y": 1595,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_011.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 342,
+                        "y": 1647,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_012.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 513,
+                        "y": 1647,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_013.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1676,
+                        "w": 171,
+                        "h": 65
+                    }
+                },
+                {
+                    "filename": "vfx/destroyer/red/lower/Arc_Lower_Red_014.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 171,
+                        "h": 65
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 171,
+                        "h": 65
+                    },
+                    "frame": {
+                        "x": 171,
+                        "y": 1676,
+                        "w": 171,
+                        "h": 65
                     }
                 },
                 {
@@ -2695,8 +3283,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 740,
-                        "y": 195,
+                        "x": 997,
+                        "y": 1530,
                         "w": 171,
                         "h": 65
                     }
@@ -2716,8 +3304,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 740,
-                        "y": 195,
+                        "x": 997,
+                        "y": 1530,
                         "w": 171,
                         "h": 65
                     }
@@ -2737,8 +3325,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 740,
-                        "y": 195,
+                        "x": 997,
+                        "y": 1530,
                         "w": 171,
                         "h": 65
                     }
@@ -2758,8 +3346,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 740,
-                        "y": 195,
+                        "x": 997,
+                        "y": 1530,
                         "w": 171,
                         "h": 65
                     }
@@ -2779,8 +3367,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 740,
-                        "y": 195,
+                        "x": 997,
+                        "y": 1530,
                         "w": 171,
                         "h": 65
                     }
@@ -2800,8 +3388,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 0,
+                        "x": 585,
+                        "y": 935,
                         "w": 185,
                         "h": 79
                     }
@@ -2821,8 +3409,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 158,
+                        "x": 585,
+                        "y": 1014,
                         "w": 185,
                         "h": 79
                     }
@@ -2842,8 +3430,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 237,
+                        "x": 975,
+                        "y": 0,
                         "w": 185,
                         "h": 79
                     }
@@ -2863,8 +3451,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 0,
+                        "x": 975,
+                        "y": 316,
                         "w": 185,
                         "h": 79
                     }
@@ -2884,8 +3472,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -2905,8 +3493,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -2926,8 +3514,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -2947,8 +3535,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -2968,8 +3556,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -2989,8 +3577,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -3010,8 +3598,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -3031,8 +3619,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -3052,8 +3640,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -3073,8 +3661,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -3094,8 +3682,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 158,
+                        "x": 975,
+                        "y": 474,
                         "w": 185,
                         "h": 79
                     }
@@ -3115,8 +3703,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 171,
-                        "y": 855,
+                        "x": 1516,
+                        "y": 0,
                         "w": 171,
                         "h": 65
                     }
@@ -3136,8 +3724,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 171,
-                        "y": 855,
+                        "x": 1516,
+                        "y": 0,
                         "w": 171,
                         "h": 65
                     }
@@ -3157,8 +3745,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 171,
-                        "y": 855,
+                        "x": 1516,
+                        "y": 0,
                         "w": 171,
                         "h": 65
                     }
@@ -3178,8 +3766,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 171,
-                        "y": 855,
+                        "x": 1516,
+                        "y": 0,
                         "w": 171,
                         "h": 65
                     }
@@ -3199,8 +3787,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 171,
-                        "y": 855,
+                        "x": 1516,
+                        "y": 0,
                         "w": 171,
                         "h": 65
                     }
@@ -3220,8 +3808,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 237,
+                        "x": 975,
+                        "y": 553,
                         "w": 185,
                         "h": 79
                     }
@@ -3241,8 +3829,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 395,
+                        "x": 585,
+                        "y": 1093,
                         "w": 185,
                         "h": 79
                     }
@@ -3262,8 +3850,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 370,
-                        "y": 474,
+                        "x": 0,
+                        "y": 1122,
                         "w": 185,
                         "h": 79
                     }
@@ -3283,8 +3871,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 0,
+                        "x": 1140,
+                        "y": 948,
                         "w": 185,
                         "h": 79
                     }
@@ -3304,8 +3892,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 855,
-                        "y": 910,
+                        "x": 171,
+                        "y": 1676,
                         "w": 171,
                         "h": 65
                     }
@@ -3325,8 +3913,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 855,
-                        "y": 910,
+                        "x": 171,
+                        "y": 1676,
                         "w": 171,
                         "h": 65
                     }
@@ -3346,8 +3934,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 855,
-                        "y": 910,
+                        "x": 171,
+                        "y": 1676,
                         "w": 171,
                         "h": 65
                     }
@@ -3367,8 +3955,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 855,
-                        "y": 910,
+                        "x": 171,
+                        "y": 1676,
                         "w": 171,
                         "h": 65
                     }
@@ -3388,8 +3976,8 @@
                         "h": 65
                     },
                     "frame": {
-                        "x": 855,
-                        "y": 910,
+                        "x": 171,
+                        "y": 1676,
                         "w": 171,
                         "h": 65
                     }
@@ -3409,8 +3997,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 79,
+                        "x": 1140,
+                        "y": 1027,
                         "w": 185,
                         "h": 79
                     }
@@ -3430,8 +4018,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 395,
+                        "x": 1160,
+                        "y": 158,
                         "w": 185,
                         "h": 79
                     }
@@ -3451,8 +4039,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 632,
+                        "x": 1160,
+                        "y": 395,
                         "w": 185,
                         "h": 79
                     }
@@ -3472,10 +4060,94 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 0,
+                        "x": 1160,
                         "y": 711,
                         "w": 185,
                         "h": 79
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_22.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_23.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 187,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 187,
+                        "w": 195,
+                        "h": 187
+                    }
+                },
+                {
+                    "filename": "vfx/waves/Magnet_Waves_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 195,
+                        "h": 187
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 195,
+                        "h": 187
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 374,
+                        "w": 195,
+                        "h": 187
                     }
                 }
             ]

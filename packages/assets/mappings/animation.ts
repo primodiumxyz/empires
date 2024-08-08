@@ -25,6 +25,9 @@ export const Animations = {
   DestroyerArcLowerRed: "destroyer/lower/red",
   DestroyerArcLowerBlue: "destroyer/lower/blue",
   DestroyerArcLowerGreen: "destroyer/lower/green",
+
+  // Waves
+  Waves: "waves",
 };
 
 export type AnimationKeys = keyof typeof Animations;

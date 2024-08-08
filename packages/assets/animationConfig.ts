@@ -163,4 +163,14 @@ export const AnimationConfig: Animation[] = [
     prefix: "vfx/destroyer/blue/lower/Arc_Lower_Blue_",
     suffix: ".png",
   },
+  {
+    key: "waves",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 31,
+    repeat: -1,
+    prefix: "vfx/waves/Magnet_Waves_",
+    suffix: ".png",
+  },
 ];

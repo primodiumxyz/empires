@@ -22,7 +22,9 @@ export class Magnet extends Phaser.GameObjects.Container {
       fontFamily: "Silkscreen",
       fontSize: "13px",
       color: this.getColorForEmpire(),
-    }).setOrigin(0, 0.5);
+    })
+      .setOrigin(0, 0.5)
+      .setDepth(DepthLayers.Planet + 1);
 
     this.add([this.sprite, this.label]);
     this.setVisible(false);
@@ -41,7 +43,6 @@ export class Magnet extends Phaser.GameObjects.Container {
       const text = turns > 2 ? formatNumber(fullTurnLeft) : `${"●".repeat(subTurnLeft)}`;
       this.label.setText(text);
     } else {
-      // Play the animation in reverse
       this.sprite.anims.playReverse(this.getAnimationForEmpire());
       this.sprite.once("animationcomplete", () => {
         this.setVisible(false);
@@ -49,6 +50,10 @@ export class Magnet extends Phaser.GameObjects.Container {
     }
 
     this.turns = turns;
+  }
+
+  hasMagnet(): boolean {
+    return this.turns > 0;
   }
 
   private getColorForEmpire(): string {

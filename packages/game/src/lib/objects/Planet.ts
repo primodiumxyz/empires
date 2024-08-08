@@ -362,7 +362,21 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
   setMagnet(empire: EEmpire, turns: number) {
     const magnet = this.magnets[empire - 1];
+    const emitVfx = () => {
+      this._scene.fx.emitVfx({ x: this.planetSprite.x, y: this.planetSprite.y }, "Waves", {
+        depth: DepthLayers.Planet + 2,
+        blendMode: Phaser.BlendModes.ADD,
+        scale: 1,
+        offset: {
+          x: -1,
+          y: 5,
+        },
+      });
+    };
+
+    if (turns > 0 && !magnet?.hasMagnet()) emitVfx();
     magnet?.setMagnet(turns);
+
     return magnet;
   }
 
