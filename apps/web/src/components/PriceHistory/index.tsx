@@ -2,11 +2,10 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { HistoricalPointPriceModal } from "@/components/PriceHistory/HistoricalPointPriceModal";
-import Test from "@/components/PriceHistory/SmallHistoricalPointPrice";
+import { SmallHistoricalPointGraph } from "@/components/PriceHistory/SmallHistoricalPointGraph";
 import { Price } from "@/components/shared/Price";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
-import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
@@ -16,6 +15,8 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.LENGTH]: "",
 };
 
+const WINDOW_SIZE = 10;
+
 export const PriceHistory = () => {
   return (
     <div>
@@ -24,6 +25,7 @@ export const PriceHistory = () => {
         <EmpireDetails empire={EEmpire.Green} />
         <EmpireDetails empire={EEmpire.Blue} />
       </div>
+
       <p className="pt-2 text-right text-xs">
         <HistoricalPointPriceModal showIcon={false} />
       </p>
@@ -43,13 +45,13 @@ const EmpireDetails = ({ empire }: { empire: EEmpire }) => {
 
   return (
     <div className="flex flex-col justify-center rounded-box text-center text-white">
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-3">
         <img src={spriteUrl} className="h-12" />
         <div className={cn("flex flex-col items-start gap-1")}>
           <Price wei={sellPrice} />
           <p className="text-xs opacity-75">{planetCount} Planets</p>
         </div>
-        <Test width={100} height={30} empire={empire} />
+        <SmallHistoricalPointGraph width={75} height={25} empire={empire} windowSize={WINDOW_SIZE} />
       </div>
     </div>
   );
