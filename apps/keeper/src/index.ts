@@ -16,18 +16,18 @@ async function run(config: CoreConfig) {
   let updating = false;
   core.tables.BlockNumber.watch({
     onChange: async ({ properties: { current } }) => {
+      const ready = core.tables.Ready.get()?.value ?? false;
+      const endBlock = core.tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
+      const blocksLeft = endBlock - (current?.value ?? 0n);
+      const gameOver = blocksLeft <= 0n;
+      if (!ready || gameOver) {
+        console.info("SKIPPING: not ready or game over");
+        return;
+      }
       const txQueueSize = core.tables.TransactionQueue.getSize();
 
       if (txQueueSize > 0 || updating) {
         console.info("SKIPPING: transaction in progress");
-        return;
-      }
-
-      const endBlock = core.tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
-      const blocksLeft = endBlock - (current?.value ?? 0n);
-      const gameOver = blocksLeft <= 0n;
-      if (gameOver) {
-        console.info("SKIPPING: game over");
         return;
       }
 
