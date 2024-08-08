@@ -8,7 +8,8 @@ const worlds = worldsJson as Partial<
 export const getCoreConfig = (): CoreConfig => {
   // Ignore deployment URL params on production subdomains (primodium.com)
 
-  const chainId = "dev";
+  const chainId = (process.env.PRI_CHAIN_ID ??
+    "dev") as keyof typeof chainConfigs;
 
   const chain = chainConfigs[chainId];
 
