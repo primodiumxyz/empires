@@ -10,6 +10,8 @@ import { EEmpire } from "codegen/common.sol";
 contract EmpiresSystem is System {
   modifier _onlyNotGameOver() {
     require(WinningEmpire.get() == EEmpire.NULL, "[EmpiresSystem] Game over");
+    uint256 endBlock = P_GameConfig.getGameOverBlock();
+    require(endBlock == 0 || block.number < endBlock, "[EmpiresSystem] Game over");
     _;
   }
   /**
