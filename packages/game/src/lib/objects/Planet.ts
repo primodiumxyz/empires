@@ -212,7 +212,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.shields.setAlpha(alpha);
     this.ships.setAlpha(alpha);
     this.gold.setAlpha(alpha);
-    this.overheat.setAlpha(alpha);
     this.magnets.forEach((magnet) => magnet.setAlpha(alpha));
     this.planetName.setAlpha(nameAlpha);
   }
