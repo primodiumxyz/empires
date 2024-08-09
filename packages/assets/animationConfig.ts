@@ -83,7 +83,7 @@ export const AnimationConfig: Animation[] = [
     startFrame: 0,
     endFrame: 19,
     repeat: -1,
-    prefix: "sprites/shield-eater/idle/ShieldEater_Test_Idle_",
+    prefix: "sprites/shield-eater/ShieldEater_Test_Idle_",
     suffix: ".png",
   },
   /* ----------------------------------- VFX ---------------------------------- */

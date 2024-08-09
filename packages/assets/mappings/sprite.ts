@@ -45,10 +45,6 @@ export const Sprites = {
   OverheatBorderGreen5: "sprites/overheat-border/green/Overheat_Border_Green_5.png",
   OverheatBorderGreen6: "sprites/overheat-border/green/Overheat_Border_Green_6.png",
 
-  // TODO(SE): temp
-  ShieldEaterLocation: "sprites/pending-arrows/red/Pending_Red_6.png",
-  ShieldEaterDestination: "sprites/pending-arrows/red/Pending_Red_0.png",
-
   // TEMP
   Boost: "sprites/icons/TEMP_Boost.png",
   Stun: "sprites/icons/TEMP_Stun.png",

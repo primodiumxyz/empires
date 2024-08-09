@@ -47,14 +47,14 @@ export class ShieldEater extends Phaser.GameObjects.Container {
   setShieldEaterDestination(turns: number) {
     // TODO(SE): temp
     this.destinationLabel.setVisible(turns > 0);
-    this.destinationLabel.setText(turns ? `🎯${turns.toLocaleString()}` : "").setVisible(turns > 0);
+    this.destinationLabel.setText(`🐍🎯${turns.toLocaleString()}`).setVisible(turns > 0);
 
     return this;
   }
 
   setShieldEaterPath(turns: number) {
     // TODO(SE): temp
-    this.destinationLabel.setText(turns.toLocaleString()).setVisible(turns > 0);
+    this.destinationLabel.setText(`🐍${turns.toLocaleString()}`).setVisible(turns > 0);
 
     return this;
   }

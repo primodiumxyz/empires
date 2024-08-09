@@ -35,7 +35,7 @@ export const Animations = {
   OverheatFlamesFull: "overheat/full",
 
   // Shield eater
-  ShieldEaterIdle: "shield-eater",
+  ShieldEaterIdle: "shield-eater/idle",
   ShieldEaterDetonate: "shield-eater/detonate",
   ShieldEaterCrack: "shield-eater/crack",
 };
