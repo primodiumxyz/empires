@@ -32,16 +32,19 @@ export const TimeLeft = () => {
   if (!turn) return null;
 
   return (
-    <div className="flex w-72 flex-col justify-center gap-1 rounded p-4 text-center">
+    <div className="pointer-events-auto flex w-72 flex-col justify-center gap-1 rounded p-4 text-center">
       {gameOver && <GameOver />}
       {!gameOver && (
-        <Card className="py-2 text-sm" noDecor>
+        <div className="py-2 text-sm">
           <div className="flex flex-col">
             <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
-              <p>Round ends in {formatTime((timeLeftMs ?? 0) / 1000)}</p>
-              <div className="flex flex-col gap-2 text-white">
-                <p className="text-md font-bold">
-                  {EmpireEnumToName[turn.empire as EEmpire]}'s Turn in {timeLeft}
+              <div className="flex flex-col items-center">
+                <p className="text-xs">Round ends in</p>{" "}
+                <p className="text-accent">{formatTime((timeLeftMs ?? 0) / 1000)}</p>
+              </div>
+              <div className="mt-2 flex flex-col gap-2 text-white">
+                <p className="text-xs font-bold">
+                  {EmpireEnumToName[turn.empire as EEmpire]}'s Turn in <span className="text-error">{timeLeft}</span>
                 </p>
               </div>
             </Tooltip>
@@ -49,7 +52,7 @@ export const TimeLeft = () => {
               <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
             )}
           </div>
-        </Card>
+        </div>
       )}
     </div>
   );

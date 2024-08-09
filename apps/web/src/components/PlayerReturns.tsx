@@ -44,9 +44,11 @@ export const PlayerReturns = () => {
   return (
     <div className="flex w-40 flex-col gap-2">
       <div className="text-right">
-        <h2 className="font-semibold text-gray-400">Pot</h2>
-        <Price wei={pot} className="text-base" />
+        <h2 className="font-semibold">Pot</h2>
+        <Price wei={pot} className="text-accent" />
       </div>
+
+      <hr className="my-1 w-full border-secondary/50" />
 
       <EmpireEndReward
         empire={biggestReward.empire}
@@ -82,8 +84,8 @@ const EmpireEndReward = ({
   const imgUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
   const empireName = empire === EEmpire.Red ? "Red" : empire === EEmpire.Blue ? "Blue" : "Green";
   return (
-    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg border border-white p-2">
-      <h2 className="flex items-center justify-between gap-2 font-semibold text-gray-400">
+    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
+      <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
         <span className="text-xs">Earn up to</span>
         <Tooltip
           tooltipContent={`Projected rewards if ${empireName} empire wins`}
@@ -93,17 +95,17 @@ const EmpireEndReward = ({
           <ExclamationCircleIcon className="size-3" />
         </Tooltip>
       </h2>
-      <div className={cn("flex h-full w-full flex-row items-center justify-between border-none py-1 text-sm")}>
-        <div className="flex items-center gap-1">
+      <div className={cn("flex h-full w-full flex-row items-center gap-2 border-none py-1 text-sm")}>
+        <div className="flex items-center justify-end gap-2">
           <img src={imgUrl} className="h-6" />
           <Price wei={earnings} />
+          {!!totalSpent && (
+            <div className={cn("text-right text-xs", isProfit ? "text-green-400" : "text-red-400")}>
+              {isProfit ? "+" : "-"}
+              <Price wei={pnl} />
+            </div>
+          )}
         </div>
-        {!!totalSpent && (
-          <div className={cn("text-right text-xs", isProfit ? "text-green-400" : "text-red-400")}>
-            {isProfit ? "+" : "-"}
-            <Price wei={pnl} />
-          </div>
-        )}
       </div>
     </div>
   );
@@ -126,17 +128,17 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const pnl = isProfit ? totalReward - totalSpent : totalSpent - totalReward;
 
   return (
-    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg border border-white p-2">
-      <h2 className="flex items-center justify-between gap-2 font-semibold text-gray-400">
+    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
+      <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
         <span className="text-xs">Sell now</span>
         <Tooltip tooltipContent="Rewards if you sell all points now" direction="left" className="w-56 text-xs">
           <ExclamationCircleIcon className="size-3" />
         </Tooltip>
       </h2>
-      <div className={cn("flex h-full w-full justify-between gap-1 border-none py-1 text-sm")}>
+      <div className={cn("flex h-full w-full items-center justify-end gap-1 border-none py-1 text-sm")}>
         <Price wei={totalReward} />
         {!!totalSpent && (
-          <span className={cn(isProfit ? "text-green-400" : "text-red-400")}>
+          <span className={cn("text-xs", isProfit ? "text-green-400" : "text-red-400")}>
             {isProfit ? "+" : "-"}
             <Price wei={pnl} />
           </span>

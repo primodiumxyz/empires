@@ -43,8 +43,8 @@ export const Account = () => {
           <UserIcon className="w-4" />
           <p>{formatAddress(address)}</p>
         </div>
-        <Price wei={balance} className="text-base" />
-        <hr className="opacity-50" />
+        <Price wei={balance} className="text-sm text-accent" />
+        <hr className="my-1 w-full border-secondary/50" />
 
         <EmpirePoints empire={EEmpire.Red} playerId={entity} />
         <EmpirePoints empire={EEmpire.Green} playerId={entity} />

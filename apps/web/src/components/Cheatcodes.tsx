@@ -14,6 +14,8 @@ import { cn } from "@/util/client";
 
 import "@/index.css";
 
+import { ServerIcon } from "@heroicons/react/24/solid";
+
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
 /* -------------------------------------------------------------------------- */
@@ -44,11 +46,8 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
 
   return (
     <Modal title="Cheatcodes">
-      <Modal.Button className={cn("h-[26px] w-[26px] p-0", className)} variant="warning">
-        {/* <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--> */}
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={16} height={16} fill="#000000">
-          <path d="M64 32C28.7 32 0 60.7 0 96v64c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm280 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm48 24a24 24 0 1 1 48 0 24 24 0 1 1-48 0zM64 288c-35.3 0-64 28.7-64 64v64c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64v-64c0-35.3-28.7-64-64-64H64zm280 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm56 24a24 24 0 1 1 48 0 24 24 0 1 1-48 0z" />
-        </svg>
+      <Modal.Button variant="warning">
+        <ServerIcon className="size-6" /> CHEATCODES
       </Modal.Button>
       <Modal.Content className={cn(activeTab == undefined && "h-screen")}>
         {activeTab !== undefined && (

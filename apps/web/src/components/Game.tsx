@@ -91,10 +91,7 @@ export const GameHUD = () => {
           <PriceHistory />
         </HUD.TopLeft>
 
-        <HUD.TopMiddle>
-          <TimeLeft />
-        </HUD.TopMiddle>
-        <HUD.Left></HUD.Left>
+        <HUD.TopMiddle>{DEV && <Cheatcodes />}</HUD.TopMiddle>
 
         <HUD.TopRight className="flex flex-col gap-2">
           <Account />
@@ -108,7 +105,9 @@ export const GameHUD = () => {
           <ActionLog />
         </HUD.BottomLeft>
 
-        <HUD.BottomMiddle>{DEV && <Cheatcodes className="-mr-1" />}</HUD.BottomMiddle>
+        <HUD.BottomMiddle>
+          <TimeLeft />
+        </HUD.BottomMiddle>
 
         <HUD.Center>
           <OverridePopup />
