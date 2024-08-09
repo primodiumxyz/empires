@@ -32,7 +32,12 @@ export class Overheat extends Phaser.GameObjects.Container {
   }
 
   private setBorder(progress: number) {
-    this.border.setTexture(Assets.SpriteAtlas, Sprites[this.getBorderProgressSprite(progress)]);
+    if (progress >= this.minProgressForBorder) {
+      this.border.setTexture(Assets.SpriteAtlas, Sprites[this.getBorderProgressSprite(progress)]);
+      this.border.setActive(true).setVisible(true);
+    } else {
+      this.border.setVisible(false).setActive(false);
+    }
     return this;
   }
 
@@ -45,9 +50,18 @@ export class Overheat extends Phaser.GameObjects.Container {
 
       // Reposition flames at the bottom center of the border
       this.flames.setPosition(0, this.border.height / 2 - 12);
+      this.flames.setAlpha(progress >= 1 ? 0.7 : 1);
+      this.flames.setActive(true).setVisible(true);
       this.flamesAnimation = anim;
     } else {
-      this.flames.setVisible(false).setActive(false);
+      this.scene.tweens.add({
+        targets: this.flames,
+        alpha: 0,
+        duration: 1000,
+        onComplete: () => {
+          this.flames.setVisible(false).setActive(false);
+        },
+      });
       this.flamesAnimation = undefined;
     }
 
