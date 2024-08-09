@@ -1,7 +1,7 @@
 import { Coord } from "@primodiumxyz/engine";
 import { PrimodiumScene } from "@game/types";
 
-export class Progress extends Phaser.GameObjects.Container {
+export class Overheat extends Phaser.GameObjects.Container {
   private fullBar: Phaser.GameObjects.Rectangle;
   private bar: Phaser.GameObjects.Rectangle;
   private _scene: PrimodiumScene;

@@ -24,7 +24,7 @@ export const renderOverheat = (scene: PrimodiumScene, core: Core) => {
         const chargeProgress =
           planetTacticalStrikeData.charge + (blocksElapsed * planetTacticalStrikeData.chargeRate) / 100n;
 
-        scene.objects.planet.get(planet)?.setChargeProgress(Number(chargeProgress) / Number(maxCharge));
+        scene.objects.planet.get(planet)?.setOverheatProgress(Number(chargeProgress) / Number(maxCharge));
       }
     },
   });
