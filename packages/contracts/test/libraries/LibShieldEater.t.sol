@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Empire, Player, P_PointConfig, ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
+import { Empire, P_PointConfig, ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 
@@ -33,50 +33,6 @@ contract LibShieldEaterTest is PrimodiumTest {
     // check that it is a valid planetId
     assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "LibShieldEater: planetId not contained in PlanetsSet");
   }
-
-  // function testRetarget(uint256 fuzz) public {
-  //   vm.startPrank(creator);
-  //   bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-
-  //   // set a random block.number
-  //   fuzz = bound(fuzz, 1000000, 1e36);
-  //   vm.roll(fuzz);
-
-  //   // populate shieldCount for all planets
-  //   for (uint256 i = 0; i < planetIds.length; i++) {
-  //     Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
-  //   }
-
-  //   // save the top 3 planetIds
-  //   bytes32[] memory dstOptions = new bytes32[](3);
-  //   uint256 largest = 0;
-
-  //   // TODO: so expensive.  rewrite as modulo wrapped writes
-  //   for (uint256 i = 0; i < planetIds.length; i++) {
-  //     if ((Planet.getShieldCount(planetIds[i]) >= largest) && (planetIds[i] != ShieldEater.getCurrentPlanet())) {
-  //       dstOptions[2] = dstOptions[1];
-  //       dstOptions[1] = dstOptions[0];
-  //       dstOptions[0] = planetIds[i];
-  //     }
-  //   }
-
-  //   // choose a next destination
-  //   LibShieldEater.retarget();
-
-  //   // check that it is a valid planetId
-  //   assertTrue(
-  //     PlanetsSet.has(ShieldEater.getDestinationPlanet()),
-  //     "LibShieldEater: planetId not contained in PlanetsSet"
-  //   );
-
-  //   // check that it is one of the top 3 planetIds
-  //   assertTrue(
-  //     ShieldEater.getDestinationPlanet() == dstOptions[0] ||
-  //       ShieldEater.getDestinationPlanet() == dstOptions[1] ||
-  //       ShieldEater.getDestinationPlanet() == dstOptions[2],
-  //     "LibShieldEater: planetId not one of the top 3"
-  //   );
-  // }
 
   function testUpdate(uint256 fuzz) public {
     vm.startPrank(creator);
