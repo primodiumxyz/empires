@@ -21,7 +21,7 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.LENGTH]: "",
 };
 
-export const Account = () => {
+export const Account: React.FC<{ hideAccountBalance?: boolean }> = ({ hideAccountBalance = false }) => {
   const { logout } = usePrivy();
   const { cancelBurner, usingBurner } = useBurnerAccount();
 
@@ -39,12 +39,16 @@ export const Account = () => {
   return (
     <div className="min-w-42 flex flex-col gap-2 p-2 text-right text-xs">
       <div className="flex flex-col justify-center gap-1">
-        <div className="flex w-full flex-row justify-end gap-2">
-          <UserIcon className="w-4" />
-          <p>{formatAddress(address)}</p>
-        </div>
-        <Price wei={balance} className="text-sm text-accent" />
-        <hr className="my-1 w-full border-secondary/50" />
+        {!hideAccountBalance && (
+          <>
+            <div className="flex w-full flex-row justify-end gap-2">
+              <UserIcon className="w-4" />
+              <p>{formatAddress(address)}</p>
+            </div>
+            <Price wei={balance} className="text-sm text-accent" />
+            <hr className="my-1 w-full border-secondary/50" />
+          </>
+        )}
 
         <EmpirePoints empire={EEmpire.Red} playerId={entity} />
         <EmpirePoints empire={EEmpire.Green} playerId={entity} />
@@ -70,7 +74,7 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
 
   return (
-    <div className="flex h-full w-full items-center justify-between gap-5 border-none py-1">
+    <div className="flex h-full w-full items-center justify-start gap-5 border-none py-1">
       <img src={spriteUrl} className="h-12" />
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>
