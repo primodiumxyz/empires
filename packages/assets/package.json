@@ -14,6 +14,7 @@
     "export:vfx": "node ./scripts/cli.mjs --project ./config-vfx.json"
   },
   "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
     "@primodiumxyz/engine": "workspace:*",
     "@mapeditor/tiled-api": "^1.8.2",
     "@types/ejs": "^3.1.1",
@@ -29,6 +30,7 @@
     "free-tex-packer-core": "^0.3.4",
     "glob": "^8.0.3",
     "optimist": "^0.6.1",
+    "prettier": "^3.3.2",
     "ts-node": "^10.8.2",
     "typescript": "^5.5.3",
     "vite": "^3.2.3",

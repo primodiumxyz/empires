@@ -1,6 +1,6 @@
 import { ContractFunctionName } from "viem";
 
-import { AccountClient, Core, TxReceipt, WorldAbiType } from "@core/lib/types";
+import { Core, ExternalAccount, LocalAccount, TxReceipt, WorldAbiType } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { TxQueueOptions } from "@core/tables/types";
 import { _execute } from "@core/txExecute/_execute";
@@ -12,10 +12,10 @@ export async function executeBatch<functionName extends ContractFunctionName<Wor
   txQueueOptions,
   onComplete,
   core,
-  accountClient: { playerAccount },
+  playerAccount,
 }: {
   core: Core;
-  accountClient: AccountClient;
+  playerAccount: LocalAccount | ExternalAccount;
   systemCalls: readonly Omit<SystemCall<WorldAbiType, functionName>, "abi" | "systemId">[];
   txQueueOptions?: TxQueueOptions;
   onComplete?: (receipt: TxReceipt) => void;

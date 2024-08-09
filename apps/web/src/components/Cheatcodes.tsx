@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { AutoSizer } from "@/components/core/AutoSizer";
@@ -98,6 +98,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   const [inputValues, setInputValues] = useState<CheatcodeInputs<T>>({} as CheatcodeInputs<T>);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"success" | "error" | undefined>(undefined);
+  const [searchTerms, setSearchTerms] = useState<Record<string, string>>({});
 
   const execute = async (args: CheatcodeInputs<T>) => {
     setLoading(true);
@@ -137,34 +138,47 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
             console.error('Cheatcode input options must have unique "id" values', input);
             return;
           }
-          // default value will be either provided or default value corresponding to the input type
           const defaultValue = formatValue(inputType, input.defaultValue).toString();
+
+          const filteredOptions = options?.filter((option) =>
+            option.value
+              .toString()
+              .toLowerCase()
+              .includes(searchTerms[inputKey]?.toLowerCase() || ""),
+          );
 
           return (
             <div key={inputKey} className="flex flex-col gap-1 text-sm">
               <label className="text-gray-300">{label}</label>
               {options ? (
-                <Dropdown
-                  size="sm"
-                  value={inputValues[inputKey]?.id ?? options[0].id}
-                  onChange={(value) => {
-                    setInputValues((prev) => ({
-                      ...prev,
-                      [inputKey]: {
-                        ...input,
-                        id: value,
-                        value: formatValue(inputType, options.find((o) => o.id === value)?.value),
-                      },
-                    }));
-                  }}
-                  className="w-full"
-                >
-                  {options?.map((option) => (
-                    <Dropdown.Item key={option.id} value={option.id}>
-                      {option.value.toString()}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown>
+                <>
+                  <TextInput
+                    placeholder="Search..."
+                    onChange={(e) => setSearchTerms((prev) => ({ ...prev, [inputKey]: e.target.value }))}
+                    className="mb-1 max-h-8 text-sm"
+                  />
+                  <Dropdown
+                    size="sm"
+                    value={inputValues[inputKey]?.id ?? options[0].id}
+                    onChange={(value) => {
+                      setInputValues((prev) => ({
+                        ...prev,
+                        [inputKey]: {
+                          ...input,
+                          id: value,
+                          value: formatValue(inputType, options.find((o) => o.id === value)?.value),
+                        },
+                      }));
+                    }}
+                    className="h-48 w-full"
+                  >
+                    {filteredOptions?.map((option) => (
+                      <Dropdown.Item key={option.id} value={option.id}>
+                        {option.value.toString()}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown>
+                </>
               ) : (
                 <TextInput
                   placeholder={defaultValue}

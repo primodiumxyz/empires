@@ -6,6 +6,11 @@ export const Animations = {
   PendingGreen: "pending/green",
   PendingRed: "pending/red",
 
+  // Magnet
+  MagnetBlue: "magnet/blue",
+  MagnetGreen: "magnet/green",
+  MagnetRed: "magnet/red",
+
   //VFX --------------------------
 
   //CONQUER
@@ -20,6 +25,14 @@ export const Animations = {
   DestroyerArcLowerRed: "destroyer/lower/red",
   DestroyerArcLowerBlue: "destroyer/lower/blue",
   DestroyerArcLowerGreen: "destroyer/lower/green",
+
+  // Waves
+  MagnetWaves: "waves",
+
+  // Overheat flames
+  OverheatFlamesLow: "overheat/low",
+  OverheatFlamesMedium: "overheat/medium",
+  OverheatFlamesFull: "overheat/full",
 };
 
 export type AnimationKeys = keyof typeof Animations;
