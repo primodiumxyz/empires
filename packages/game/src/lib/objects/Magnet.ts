@@ -7,6 +7,7 @@ import { PrimodiumScene } from "@game/types";
 
 export class Magnet extends Phaser.GameObjects.Container {
   private empire: EEmpire;
+  private enabled = false;
   private turns = 0;
   private sprite: Phaser.GameObjects.Sprite;
   private label: Phaser.GameObjects.Text;
@@ -17,7 +18,7 @@ export class Magnet extends Phaser.GameObjects.Container {
 
     this.sprite = new Phaser.GameObjects.Sprite(scene.phaserScene, 0, 0, "spriteAtlas")
       .setOrigin(0.5)
-      .setDepth(DepthLayers.Planet + 1);
+      .setDepth(DepthLayers.Magnet);
 
     this.label = new Phaser.GameObjects.Text(scene.phaserScene, 25, 0, "0", {
       fontFamily: "Silkscreen",
@@ -25,14 +26,16 @@ export class Magnet extends Phaser.GameObjects.Container {
       color: EmpireToHexColor[this.empire],
     })
       .setOrigin(0, 0.5)
-      .setDepth(DepthLayers.Planet + 1);
+      .setDepth(DepthLayers.Magnet);
 
     this.add([this.sprite, this.label]);
+    this.setActive(false);
     this.setVisible(false);
   }
 
-  setMagnet(turns: number) {
+  setMagnet(turns: number, callback?: (oldTurns: number, newTurns: number) => void) {
     if (turns === this.turns) return;
+    this.enabled = turns > 0;
     const blink = (duration: number) => {
       this.scene.tweens.killTweensOf(this.sprite);
       this.sprite.setAlpha(1);
@@ -47,7 +50,9 @@ export class Magnet extends Phaser.GameObjects.Container {
     };
 
     if (turns > 0) {
-      this.setVisible(true);
+      this.setActive(true).setVisible(true);
+      callback?.(this.turns, turns);
+
       const fullTurnLeft = Math.ceil(turns / 3);
       const subTurnLeft = turns % 3;
 
@@ -68,7 +73,8 @@ export class Magnet extends Phaser.GameObjects.Container {
     } else {
       this.sprite.anims.playReverse(Animations[EmpireToMagnetAnimationKeys[this.empire] ?? "MagnetRed"]);
       this.sprite.once("animationcomplete", () => {
-        this.setVisible(false);
+        this.setActive(false).setVisible(false);
+        callback?.(this.turns, turns);
       });
 
       this.scene.tweens.add({
@@ -79,9 +85,25 @@ export class Magnet extends Phaser.GameObjects.Container {
     }
 
     this.turns = turns;
+    return this;
   }
 
-  hasMagnet(): boolean {
-    return this.turns > 0;
+  getEmpire(): EEmpire {
+    return this.empire;
+  }
+
+  isEnabled(): boolean {
+    return this.enabled;
+  }
+
+  updatePosition(x: number, y: number) {
+    this.scene.tweens.add({
+      targets: this,
+      x,
+      y,
+      duration: 50,
+    });
+
+    return this;
   }
 }

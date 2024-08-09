@@ -135,8 +135,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.magnets = [
       new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Red),
-      new Magnet(scene, coord.x + 75, coord.y - 30, EEmpire.Blue),
-      new Magnet(scene, coord.x + 75, coord.y - 0, EEmpire.Green),
+      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Blue),
+      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Green),
     ];
 
     this.magnetWaves = new Phaser.GameObjects.Sprite(
@@ -375,19 +375,33 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
   setMagnet(empire: EEmpire, turns: number) {
     const magnet = this.magnets[empire - 1];
+    // 1. when turns > 0 it will add/update the magnet & reorder magnets
+    // to give space for the new one if needed
+    // 2. when turns === 0 it will wait for the magnet to be removed
+    // THEN reorder so it doesn't overlap
+    magnet?.setMagnet(turns, (oldTurns, newTurns) => {
+      // reorder only if the magnet is being removed or added
+      if (!oldTurns || !newTurns) this.reorderMagnets();
+    });
 
     // emit only if no magnet is already active
-    if (turns > 0 && !this.magnets.some((magnet) => magnet.hasMagnet())) {
+    if (turns > 0 && !this.magnets.some((magnet) => magnet.isEnabled())) {
       this.magnetWaves.play(Animations.MagnetWaves);
       this.magnetWaves.setVisible(true).setActive(true);
-    } else if (!turns && this.magnetWaves.visible && this.magnets.every((magnet) => !magnet.hasMagnet())) {
+    } else if (!turns && this.magnetWaves.visible && this.magnets.every((magnet) => !magnet.isEnabled())) {
       this.magnetWaves.once("animationrepeat", () => {
         this.magnetWaves.setVisible(false).setActive(false);
       });
     }
 
-    magnet?.setMagnet(turns);
     return magnet;
+  }
+
+  private reorderMagnets(): void {
+    const activeMagnets = this.magnets
+      .filter((magnet) => magnet.isEnabled())
+      .sort((a, b) => a.getEmpire() - b.getEmpire());
+    activeMagnets.forEach((magnet, index) => magnet.updatePosition(this.coord.x + 75, this.coord.y - 60 + index * 30));
   }
 
   override destroy() {
