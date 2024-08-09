@@ -38,7 +38,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
       P_TacticalStrikeConfig: {
         maxCharge: 100n,
-        chargeRate: 15n, //
+        chargeRate: 15n,
         boostChargeIncrease: 10n,
         stunChargeDecrease: 10n,
         createShipBoostIncrease: 1n,
@@ -117,9 +117,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: false,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00010),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00010),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
       },
     },
   },
@@ -130,9 +130,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00010),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00010),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00008),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
       },
     },
   },
