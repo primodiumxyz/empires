@@ -72,7 +72,7 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
 
   // Calculate KPIs
   const walletBalance = useBalance(playerAccount.address).value ?? 0n;
-  const totalInvestment = tables.Value_PlayersMap.get(playerAccount.entity)?.profit ?? 0n;
+  const totalInvestment = tables.Value_PlayersMap.get(playerAccount.entity)?.loss ?? 0n;
   const netTotalPotential = earnings - totalInvestment;
   const netTotalImmediate = earningsImmediate - totalInvestment;
 
