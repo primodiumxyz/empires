@@ -34,7 +34,7 @@ contract LibShieldEaterTest is PrimodiumTest {
     assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "LibShieldEater: planetId not contained in PlanetsSet");
   }
 
-  function testUpdate(uint256 fuzz) public {
+  function testShieldEaterUpdate(uint256 fuzz) public {
     vm.startPrank(creator);
 
     // set a random block.number
@@ -74,7 +74,88 @@ contract LibShieldEaterTest is PrimodiumTest {
     assertEq(currPlanetData.r, destPlanetData.r, "LibShieldEater: currPlanetData.r != destPlanetData.r");
   }
 
-  function testDetonate(uint256 fuzz) public {
+  //   function retarget() internal {
+  //   bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+  //   bytes32[] memory dstOptions = new bytes32[](3);
+  //   uint256 largest = 0;
+
+  //   // TODO: so expensive.  rewrite as modulo wrapped writes
+  //   for (uint256 i = 0; i < planetIds.length; i++) {
+  //     if ((Planet.getShieldCount(planetIds[i]) >= largest) && (planetIds[i] != ShieldEater.getCurrentPlanet())) {
+  //       dstOptions[2] = dstOptions[1];
+  //       dstOptions[1] = dstOptions[0];
+  //       dstOptions[0] = planetIds[i];
+  //     }
+  //   }
+
+  //   uint256 randomIndex = pseudorandom(block.number, 3);
+  //   ShieldEater.setDestinationPlanet(dstOptions[randomIndex]);
+  // }
+
+  function testShieldEaterRetarget(uint256 fuzz) public {
+    vm.startPrank(creator);
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+
+    // set a random block.number
+    fuzz = bound(fuzz, 1000000, 1e36);
+    vm.roll(fuzz);
+
+    // populate shieldCount for all planets
+    for (uint256 i = 0; i < planetIds.length; i++) {
+      Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
+    }
+
+    // save the top 3 planetIds
+    bytes32[] memory dstOptions = new bytes32[](3);
+
+    for (uint256 i = 0; i < planetIds.length; i++) {
+      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+        continue;
+      }
+      uint256 shieldCount = Planet.getShieldCount(planetIds[i]);
+      if (shieldCount > Planet.getShieldCount(dstOptions[2])) {
+        dstOptions[2] = planetIds[i];
+        continue;
+      }
+
+      if (shieldCount > Planet.getShieldCount(dstOptions[1])) {
+        dstOptions[1] = planetIds[i];
+        continue;
+      }
+
+      if (shieldCount > Planet.getShieldCount(dstOptions[0])) {
+        dstOptions[0] = planetIds[i];
+        continue;
+      }
+    }
+
+    console.log("dstOptions:");
+    console.logBytes32(dstOptions[0]);
+    console.logBytes32(dstOptions[1]);
+    console.logBytes32(dstOptions[2]);
+
+    // choose a next destination
+    LibShieldEater.retarget();
+
+    console.log("ShieldEater.getDestinationPlanet():");
+    console.logBytes32(ShieldEater.getDestinationPlanet());
+
+    // check that it is a valid planetId
+    assertTrue(
+      PlanetsSet.has(ShieldEater.getDestinationPlanet()),
+      "LibShieldEater: planetId not contained in PlanetsSet"
+    );
+
+    // check that it is one of the top 3 planetIds
+    assertTrue(
+      ShieldEater.getDestinationPlanet() == dstOptions[0] ||
+        ShieldEater.getDestinationPlanet() == dstOptions[1] ||
+        ShieldEater.getDestinationPlanet() == dstOptions[2],
+      "LibShieldEater: planetId not one of the top 3"
+    );
+  }
+
+  function testShieldEaterDetonate(uint256 fuzz) public {
     vm.startPrank(creator);
 
     // set a random block.number
