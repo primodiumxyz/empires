@@ -1,20 +1,28 @@
+import TransitionImage from "phaser3-rex-plugins/plugins/transitionimage.js";
+
 import { AnimationKeys, Animations, Assets, SpriteKeys, Sprites } from "@primodiumxyz/assets";
 import { Coord } from "@primodiumxyz/engine";
 import { OverheatThresholdToBorderSpriteKeys, OverheatThresholdToFlameAnimationKeys } from "@game/lib/mappings";
 import { PrimodiumScene } from "@game/types";
 
 export class Overheat extends Phaser.GameObjects.Container {
-  private minProgressForBorder = 0.1;
-  private minProgressForFlames = 0.25;
-  private border: Phaser.GameObjects.Sprite;
+  private progress = 0;
+  private border: TransitionImage;
   private flames: Phaser.GameObjects.Sprite;
   private flamesAnimation: AnimationKeys | undefined;
 
   constructor(scene: PrimodiumScene, coord: Coord, progress: number = 0) {
     super(scene.phaserScene, coord.x, coord.y);
 
-    this.border = new Phaser.GameObjects.Sprite(scene.phaserScene, 0, 0, Assets.SpriteAtlas).setBlendMode(
-      Phaser.BlendModes.ADD,
+    this.border = new TransitionImage(
+      scene.phaserScene,
+      0,
+      0,
+      Assets.SpriteAtlas,
+      Sprites[OverheatThresholdToBorderSpriteKeys[0]],
+      {
+        duration: 1000,
+      },
     );
 
     this.flames = new Phaser.GameObjects.Sprite(scene.phaserScene, 0, 0, Assets.VfxAtlas)
@@ -28,22 +36,22 @@ export class Overheat extends Phaser.GameObjects.Container {
   setProgress(progress: number) {
     this.setBorder(progress);
     this.setFlames(progress);
-    this.setActive(progress > 0).setVisible(progress > 0);
+    this.progress = progress;
   }
 
   private setBorder(progress: number) {
-    if (progress >= this.minProgressForBorder) {
-      this.border.setTexture(Assets.SpriteAtlas, Sprites[this.getBorderProgressSprite(progress)]);
-      this.border.setActive(true).setVisible(true);
-    } else {
-      this.border.setVisible(false).setActive(false);
+    const currentSprite = this.getBorderProgressSprite(this.progress);
+    const nextSprite = this.getBorderProgressSprite(progress);
+    if (currentSprite !== nextSprite) {
+      this.border.transit(Assets.SpriteAtlas, Sprites[nextSprite]);
     }
+
     return this;
   }
 
   private setFlames(progress: number) {
-    if (progress >= this.minProgressForFlames) {
-      const anim = this.getFlamesProgressThresholdAnimation(progress);
+    const anim = this.getFlamesProgressThresholdAnimation(progress);
+    if (anim) {
       if (!this.flames.anims.isPlaying || anim !== this.flamesAnimation) {
         this.flames.play(Animations[anim]).setActive(true).setVisible(true);
       }
@@ -58,10 +66,9 @@ export class Overheat extends Phaser.GameObjects.Container {
         targets: this.flames,
         alpha: 0,
         duration: 1000,
-        onComplete: () => {
-          this.flames.setVisible(false).setActive(false);
-        },
+        onComplete: () => this.flames.setVisible(false).setActive(false),
       });
+
       this.flamesAnimation = undefined;
     }
 
@@ -74,12 +81,14 @@ export class Overheat extends Phaser.GameObjects.Container {
     if (progress >= 0.7) return OverheatThresholdToBorderSpriteKeys[4];
     if (progress >= 0.5) return OverheatThresholdToBorderSpriteKeys[3];
     if (progress >= 0.3) return OverheatThresholdToBorderSpriteKeys[2];
-    return OverheatThresholdToBorderSpriteKeys[1];
+    if (progress >= 0.1) return OverheatThresholdToBorderSpriteKeys[1];
+    return OverheatThresholdToBorderSpriteKeys[0];
   }
 
-  private getFlamesProgressThresholdAnimation(progress: number): AnimationKeys {
+  private getFlamesProgressThresholdAnimation(progress: number): AnimationKeys | undefined {
     if (progress >= 1) return OverheatThresholdToFlameAnimationKeys["full"];
     if (progress >= 0.5) return OverheatThresholdToFlameAnimationKeys["medium"];
-    return OverheatThresholdToFlameAnimationKeys["low"];
+    if (progress >= 0.3) return OverheatThresholdToFlameAnimationKeys["low"];
+    return undefined;
   }
 }

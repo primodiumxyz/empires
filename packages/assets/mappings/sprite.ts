@@ -29,6 +29,7 @@ export const Sprites = {
   OverheatBorder3: "sprites/overheat-border/Overheat_Border_3.png",
   OverheatBorder4: "sprites/overheat-border/Overheat_Border_4.png",
   OverheatBorder5: "sprites/overheat-border/Overheat_Border_5.png",
+  OverheatBorder6: "sprites/overheat-border/Overheat_Border_6.png",
 };
 
 export type SpriteKeys = keyof typeof Sprites;

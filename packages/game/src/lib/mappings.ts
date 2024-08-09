@@ -53,14 +53,15 @@ export const EmpireToHexColor: Record<EEmpire, string> = {
   [EEmpire.LENGTH]: "#ffffff",
 };
 
-type HexagonFraction = 1 | 2 | 3 | 4 | 5 | 6;
+type HexagonFraction = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 export const OverheatThresholdToBorderSpriteKeys: Record<HexagonFraction, SpriteKeys> = {
-  1: "OverheatBorder0",
-  2: "OverheatBorder1",
-  3: "OverheatBorder2",
-  4: "OverheatBorder3",
-  5: "OverheatBorder4",
-  6: "OverheatBorder5",
+  0: "OverheatBorder0",
+  1: "OverheatBorder1",
+  2: "OverheatBorder2",
+  3: "OverheatBorder3",
+  4: "OverheatBorder4",
+  5: "OverheatBorder5",
+  6: "OverheatBorder6",
 };
 
 type OverheatProgress = "low" | "medium" | "full";
