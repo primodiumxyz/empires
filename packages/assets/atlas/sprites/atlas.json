@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1723219896210",
+            "image": "atlas.png?timestamp=1723227451803",
             "format": "RGBA8888",
             "size": {
-                "w": 1119,
-                "h": 1237
+                "w": 1471,
+                "h": 1466
             },
             "scale": 1,
             "frames": [
@@ -56,6 +56,405 @@
                     }
                 },
                 {
+                    "filename": "sprites/overheat-border/Overheat_Border_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 256,
+                        "y": 619,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 450,
+                        "y": 619,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 210,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 420,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 644,
+                        "y": 630,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 875,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 194,
+                        "y": 875,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 388,
+                        "y": 840,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 582,
+                        "y": 840,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 962,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 962,
+                        "y": 210,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 962,
+                        "y": 420,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 776,
+                        "y": 840,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 838,
+                        "y": 630,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1085,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 194,
+                        "y": 1085,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 388,
+                        "y": 1050,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 582,
+                        "y": 1050,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
                     "filename": "sprites/hex/hex_blue.png",
                     "rotated": false,
                     "trimmed": false,
@@ -70,8 +469,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 256,
-                        "y": 619,
+                        "x": 970,
+                        "y": 840,
                         "w": 172,
                         "h": 188
                     }
@@ -91,8 +490,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 428,
-                        "y": 619,
+                        "x": 970,
+                        "y": 1028,
                         "w": 172,
                         "h": 188
                     }
@@ -112,8 +511,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 600,
-                        "y": 619,
+                        "x": 776,
+                        "y": 1050,
                         "w": 172,
                         "h": 188
                     }
@@ -133,7 +532,7 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 768,
+                        "x": 1156,
                         "y": 0,
                         "w": 172,
                         "h": 188
@@ -154,8 +553,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 875,
+                        "x": 1142,
+                        "y": 630,
                         "w": 179,
                         "h": 115
                     }
@@ -175,8 +574,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 179,
-                        "y": 875,
+                        "x": 1142,
+                        "y": 745,
                         "w": 179,
                         "h": 115
                     }
@@ -196,8 +595,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 358,
-                        "y": 807,
+                        "x": 1142,
+                        "y": 860,
                         "w": 179,
                         "h": 115
                     }
@@ -217,8 +616,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 537,
-                        "y": 807,
+                        "x": 1142,
+                        "y": 975,
                         "w": 179,
                         "h": 115
                     }
@@ -238,8 +637,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 716,
-                        "y": 807,
+                        "x": 1142,
+                        "y": 1090,
                         "w": 179,
                         "h": 115
                     }
@@ -259,8 +658,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 768,
-                        "y": 188,
+                        "x": 0,
+                        "y": 1295,
                         "w": 179,
                         "h": 115
                     }
@@ -280,8 +679,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 940,
-                        "y": 0,
+                        "x": 179,
+                        "y": 1295,
                         "w": 179,
                         "h": 115
                     }
@@ -301,8 +700,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 768,
-                        "y": 303,
+                        "x": 358,
+                        "y": 1295,
                         "w": 179,
                         "h": 115
                     }
@@ -322,8 +721,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 768,
-                        "y": 418,
+                        "x": 1142,
+                        "y": 1205,
                         "w": 179,
                         "h": 115
                     }
@@ -343,8 +742,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 772,
-                        "y": 533,
+                        "x": 948,
+                        "y": 1216,
                         "w": 179,
                         "h": 115
                     }
@@ -364,8 +763,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 772,
-                        "y": 648,
+                        "x": 537,
+                        "y": 1260,
                         "w": 179,
                         "h": 115
                     }
@@ -385,8 +784,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 716,
+                        "y": 1260,
                         "w": 143,
                         "h": 124
                     }
@@ -406,8 +805,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 115,
+                        "x": 1156,
+                        "y": 188,
                         "w": 143,
                         "h": 124
                     }
@@ -427,8 +826,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 239,
+                        "x": 1156,
+                        "y": 312,
                         "w": 143,
                         "h": 124
                     }
@@ -448,8 +847,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 363,
+                        "x": 1156,
+                        "y": 436,
                         "w": 143,
                         "h": 124
                     }
@@ -469,8 +868,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 951,
-                        "y": 487,
+                        "x": 1328,
+                        "y": 0,
                         "w": 143,
                         "h": 124
                     }
@@ -490,8 +889,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 951,
-                        "y": 611,
+                        "x": 1328,
+                        "y": 124,
                         "w": 143,
                         "h": 124
                     }
@@ -511,8 +910,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 887,
+                        "x": 1321,
+                        "y": 248,
                         "w": 143,
                         "h": 124
                     }
@@ -532,8 +931,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 358,
-                        "y": 922,
+                        "x": 1321,
+                        "y": 372,
                         "w": 143,
                         "h": 124
                     }
@@ -553,8 +952,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 990,
+                        "x": 1321,
+                        "y": 496,
                         "w": 143,
                         "h": 124
                     }
@@ -574,8 +973,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 143,
-                        "y": 990,
+                        "x": 1321,
+                        "y": 620,
                         "w": 143,
                         "h": 124
                     }
@@ -595,8 +994,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 501,
-                        "y": 922,
+                        "x": 1321,
+                        "y": 744,
                         "w": 143,
                         "h": 124
                     }
@@ -616,8 +1015,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 644,
-                        "y": 922,
+                        "x": 1321,
+                        "y": 868,
                         "w": 143,
                         "h": 124
                     }
@@ -637,31 +1036,10 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 787,
-                        "y": 1011,
+                        "x": 1321,
+                        "y": 992,
                         "w": 143,
                         "h": 124
-                    }
-                },
-                {
-                    "filename": "sprites/planet/planet_underglow.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 96,
-                        "h": 96
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 96,
-                        "h": 96
-                    },
-                    "frame": {
-                        "x": 930,
-                        "y": 1011,
-                        "w": 96,
-                        "h": 96
                     }
                 },
                 {
@@ -679,8 +1057,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 1026,
-                        "y": 1011,
+                        "x": 859,
+                        "y": 1238,
                         "w": 76,
                         "h": 114
                     }
@@ -700,8 +1078,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 930,
-                        "y": 1107,
+                        "x": 1032,
+                        "y": 630,
                         "w": 76,
                         "h": 114
                     }
@@ -721,8 +1099,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 1038,
-                        "y": 735,
+                        "x": 1321,
+                        "y": 1116,
                         "w": 76,
                         "h": 114
                     }
@@ -742,8 +1120,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 1038,
-                        "y": 849,
+                        "x": 1321,
+                        "y": 1230,
                         "w": 76,
                         "h": 114
                     }
@@ -763,8 +1141,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 1006,
-                        "y": 1125,
+                        "x": 859,
+                        "y": 1352,
                         "w": 111,
                         "h": 56
                     }
@@ -784,8 +1162,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 1006,
-                        "y": 1181,
+                        "x": 970,
+                        "y": 1344,
                         "w": 111,
                         "h": 56
                     }
@@ -805,8 +1183,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1135,
+                        "x": 1081,
+                        "y": 1344,
                         "w": 111,
                         "h": 56
                     }
@@ -826,8 +1204,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 111,
-                        "y": 1114,
+                        "x": 1192,
+                        "y": 1344,
                         "w": 111,
                         "h": 56
                     }
@@ -847,8 +1225,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 111,
-                        "y": 1170,
+                        "x": 1303,
+                        "y": 1344,
                         "w": 111,
                         "h": 56
                     }
@@ -868,8 +1246,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 222,
-                        "y": 1114,
+                        "x": 1156,
+                        "y": 560,
                         "w": 111,
                         "h": 56
                     }
@@ -889,8 +1267,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 286,
-                        "y": 1046,
+                        "x": 0,
+                        "y": 1410,
                         "w": 111,
                         "h": 56
                     }
@@ -910,8 +1288,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 222,
-                        "y": 1170,
+                        "x": 111,
+                        "y": 1410,
                         "w": 111,
                         "h": 56
                     }
@@ -931,8 +1309,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 333,
-                        "y": 1135,
+                        "x": 222,
+                        "y": 1410,
                         "w": 111,
                         "h": 56
                     }
@@ -952,8 +1330,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 397,
-                        "y": 1046,
+                        "x": 333,
+                        "y": 1410,
                         "w": 111,
                         "h": 56
                     }
@@ -974,7 +1352,7 @@
                     },
                     "frame": {
                         "x": 444,
-                        "y": 1102,
+                        "y": 1410,
                         "w": 111,
                         "h": 56
                     }
@@ -994,8 +1372,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 508,
-                        "y": 1046,
+                        "x": 555,
+                        "y": 1408,
                         "w": 111,
                         "h": 56
                     }
@@ -1015,8 +1393,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 1102,
+                        "x": 666,
+                        "y": 1408,
                         "w": 111,
                         "h": 56
                     }
@@ -1036,8 +1414,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 619,
-                        "y": 1046,
+                        "x": 777,
+                        "y": 1408,
                         "w": 111,
                         "h": 56
                     }
@@ -1057,8 +1435,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 666,
-                        "y": 1102,
+                        "x": 888,
+                        "y": 1408,
                         "w": 111,
                         "h": 56
                     }
@@ -1078,8 +1456,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 777,
-                        "y": 1135,
+                        "x": 999,
+                        "y": 1400,
                         "w": 111,
                         "h": 56
                     }
@@ -1099,8 +1477,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 444,
-                        "y": 1158,
+                        "x": 1110,
+                        "y": 1400,
                         "w": 111,
                         "h": 56
                     }
@@ -1120,10 +1498,577 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 1158,
+                        "x": 1221,
+                        "y": 1400,
                         "w": 111,
                         "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_underglow.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 96
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 96
+                    },
+                    "frame": {
+                        "x": 1032,
+                        "y": 744,
+                        "w": 96,
+                        "h": 96
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1299,
+                        "y": 188,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 256,
+                        "y": 829,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 283,
+                        "y": 829,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 310,
+                        "y": 829,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 337,
+                        "y": 829,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1108,
+                        "y": 630,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1108,
+                        "y": 671,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1332,
+                        "y": 1400,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1359,
+                        "y": 1400,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1386,
+                        "y": 1400,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1413,
+                        "y": 1400,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 1116,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 1157,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 1198,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 1239,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 1280,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 1321,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 1362,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 1403,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1397,
+                        "y": 1116,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1397,
+                        "y": 1157,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1397,
+                        "y": 1198,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1397,
+                        "y": 1239,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1397,
+                        "y": 1280,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/icons/TEMP_Boost.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1108,
+                        "y": 712,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/TEMP_Stun.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 537,
+                        "y": 1375,
+                        "w": 32,
+                        "h": 32
                     }
                 },
                 {
@@ -1141,8 +2086,29 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 730,
-                        "y": 1046,
+                        "x": 569,
+                        "y": 1375,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/crown.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 601,
+                        "y": 1375,
                         "w": 32,
                         "h": 32
                     }
@@ -1162,8 +2128,29 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 333,
-                        "y": 1102,
+                        "x": 633,
+                        "y": 1375,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/shard.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 665,
+                        "y": 1375,
                         "w": 32,
                         "h": 32
                     }
@@ -1183,8 +2170,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 365,
-                        "y": 1102,
+                        "x": 388,
+                        "y": 1260,
                         "w": 32,
                         "h": 32
                     }
@@ -1204,8 +2191,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 397,
-                        "y": 1102,
+                        "x": 420,
+                        "y": 1260,
                         "w": 32,
                         "h": 32
                     }
@@ -1225,8 +2212,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 875,
+                        "x": 1142,
+                        "y": 630,
                         "w": 179,
                         "h": 115
                     }
@@ -1246,8 +2233,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 875,
+                        "x": 1142,
+                        "y": 630,
                         "w": 179,
                         "h": 115
                     }
@@ -1267,8 +2254,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 875,
+                        "x": 1142,
+                        "y": 630,
                         "w": 179,
                         "h": 115
                     }
@@ -1288,8 +2275,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 875,
+                        "x": 1142,
+                        "y": 630,
                         "w": 179,
                         "h": 115
                     }
@@ -1309,8 +2296,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 1006,
-                        "y": 1125,
+                        "x": 859,
+                        "y": 1352,
                         "w": 111,
                         "h": 56
                     }
@@ -1330,8 +2317,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 286,
-                        "y": 1046,
+                        "x": 0,
+                        "y": 1410,
                         "w": 111,
                         "h": 56
                     }
@@ -1351,8 +2338,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 555,
-                        "y": 1102,
+                        "x": 666,
+                        "y": 1408,
                         "w": 111,
                         "h": 56
                     }
@@ -1372,8 +2359,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 716,
+                        "y": 1260,
                         "w": 143,
                         "h": 124
                     }
@@ -1393,8 +2380,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 716,
+                        "y": 1260,
                         "w": 143,
                         "h": 124
                     }
@@ -1414,8 +2401,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 716,
+                        "y": 1260,
                         "w": 143,
                         "h": 124
                     }
@@ -1435,8 +2422,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 716,
+                        "y": 1260,
                         "w": 143,
                         "h": 124
                     }
@@ -1456,8 +2443,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 716,
+                        "y": 1260,
                         "w": 143,
                         "h": 124
                     }
@@ -1477,8 +2464,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 716,
+                        "y": 1260,
                         "w": 143,
                         "h": 124
                     }
@@ -1498,8 +2485,8 @@
                         "h": 124
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 716,
+                        "y": 1260,
                         "w": 143,
                         "h": 124
                     }

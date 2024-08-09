@@ -37,19 +37,6 @@ declare const abi: [
   },
   {
     "type": "function",
-    "name": "Empires__claimVictory",
-    "inputs": [
-      {
-        "name": "empire",
-        "type": "uint8",
-        "internalType": "enum EEmpire"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "Empires__createShip",
     "inputs": [
       {
@@ -406,6 +393,13 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__pause",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__placeMagnet",
     "inputs": [
       {
@@ -480,6 +474,13 @@ declare const abi: [
         "internalType": "bytes32"
       }
     ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__unpause",
+    "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
   },

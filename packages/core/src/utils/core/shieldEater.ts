@@ -3,7 +3,7 @@ import { Entity, query } from "@primodiumxyz/reactive-tables";
 import { AxialCoord, AxialCoordBigInt, Tables } from "@core/lib";
 import { getDirection, getNeighbor } from "@core/utils/global/coord";
 
-export function createOverrideUtils(tables: Tables) {
+export function createShieldEaterUtils(tables: Tables) {
   const getShieldEaterPath = (currentPlanetEntity: Entity, destinationPlanetEntity: Entity): Entity[] => {
     const path: Entity[] = [];
     const destinationPlanet = tables.Planet.get(destinationPlanetEntity);
@@ -15,9 +15,7 @@ export function createOverrideUtils(tables: Tables) {
       const dst: AxialCoordBigInt = { q: destinationPlanet.q, r: destinationPlanet.r };
 
       // Get the direction to move
-      console.log({ src, dst });
       const direction = getDirection(src, dst);
-      console.log(direction);
       // Get the coordinates of the next planet
       let nextCoord = getNeighbor(src.q, src.r, direction);
       // If there's a hole in the map, rotate the direction

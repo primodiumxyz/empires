@@ -11,13 +11,13 @@ import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useCharge } from "@/hooks/useCharge";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
-import { useTimeLeft } from "@/hooks/useTimeLeft";
+import useWinningEmpire from "@/hooks/useWinningEmpire";
 
 export const ChargeContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
   const { stunCharge, boostCharge, tacticalStrike } = useContractCalls();
   const { charge, maxCharge, percent } = useCharge(entity);
-  const { gameOver } = useTimeLeft();
+  const { gameOver } = useWinningEmpire();
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? (0 as EEmpire);
   const [inputValue, setInputValue] = useState("1");

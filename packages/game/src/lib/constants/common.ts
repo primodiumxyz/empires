@@ -13,5 +13,7 @@ export const DepthLayers = {
   Base: 0,
   PendingArrows: 1000,
   Planet: 2000,
-  Marker: 3000,
+  MagnetWaves: 3000,
+  Magnet: 4000,
+  Marker: 5000,
 } as const;

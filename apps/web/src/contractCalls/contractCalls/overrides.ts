@@ -1,12 +1,12 @@
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { AccountClient, Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
+import { Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { EmpireEnumToName } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
-export const createOverrideCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
+export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) => {
   const createShip = async (
     planetId: Entity,
     overrideCount: bigint,
