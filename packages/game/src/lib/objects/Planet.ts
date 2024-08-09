@@ -128,7 +128,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
-    this.overheat = new Overheat(scene, coord).setDepth(DepthLayers.Overheat);
+    this.overheat = new Overheat(scene, coord).setDepth(DepthLayers.Overheat).setActive(false).setVisible(false);
 
     this.magnets = [
       new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Red),
@@ -376,7 +376,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     // emit only if no magnet is already active
     if (turns > 0 && !this.magnets.some((magnet) => magnet.isEnabled())) {
-      this.magnetWaves.play(Animations.MagnetWaves);
+      this.magnetWaves.play(Animations["MagnetWaves"]);
       this.magnetWaves.setVisible(true).setActive(true);
     } else if (!turns && this.magnetWaves.visible && this.magnets.every((magnet) => !magnet.isEnabled())) {
       this.magnetWaves.once("animationrepeat", () => {

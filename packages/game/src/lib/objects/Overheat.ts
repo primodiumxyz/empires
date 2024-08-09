@@ -1,31 +1,65 @@
+import { AnimationKeys, Animations, Assets, SpriteKeys } from "@primodiumxyz/assets";
 import { Coord } from "@primodiumxyz/engine";
+import { OverheatThresholdToBorderSpriteKeys, OverheatThresholdToFlameAnimationKeys } from "@game/lib/mappings";
 import { PrimodiumScene } from "@game/types";
 
 export class Overheat extends Phaser.GameObjects.Container {
-  private fullBar: Phaser.GameObjects.Rectangle;
-  private bar: Phaser.GameObjects.Rectangle;
-  private _scene: PrimodiumScene;
+  private minProgressForBorder = 10;
+  private minProgressForFlames = 25;
+  private flames: Phaser.GameObjects.Sprite;
+  private flamesAnimation: AnimationKeys | undefined;
+
   constructor(scene: PrimodiumScene, coord: Coord, progress: number = 0) {
     super(scene.phaserScene, coord.x, coord.y);
 
-    this.fullBar = new Phaser.GameObjects.Rectangle(scene.phaserScene, 0, 0, 100, 10, 0x000000)
-      .setOrigin(0.5, 0.5)
-      .setAlpha(0.75)
-      .setStrokeStyle(1, 0x00ffff, 0.25);
-
-    this.bar = new Phaser.GameObjects.Rectangle(scene.phaserScene, -this.fullBar.width / 2, 0, 75, 10, 0x00ffff)
-      .setOrigin(0, 0.5)
-      .setAlpha(0.25);
+    this.flames = new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y, Assets.VfxAtlas).setBlendMode(
+      Phaser.BlendModes.ADD,
+    );
 
     this.setProgress(progress);
-
-    this._scene = scene;
-
-    // Add icon and text to the container
-    this.add([this.fullBar, this.bar]);
   }
 
   setProgress(progress: number) {
-    this.bar.width = Math.min(this.fullBar.width * progress, 100);
+    this.setBorder(progress);
+    this.setFlames(progress);
+    this.setActive(progress > 0).setVisible(progress > 0);
+  }
+
+  private setBorder(progress: number) {
+    return this;
+  }
+
+  private setFlames(progress: number) {
+    if (progress >= this.minProgressForFlames) {
+      const anim = this.getFlamesProgressThresholdAnimation(progress);
+      if (!this.flames.anims.isPlaying || anim !== this.flamesAnimation) {
+        this.flames.play(Animations[anim]).setActive(true).setVisible(true);
+      }
+
+      // this.setActive(true).setVisible(true);
+      this.flamesAnimation = anim;
+    } else {
+      // this.flames.once("animationrepeat", () => {
+      // this.flames.setVisible(false).setActive(false);
+      this.flamesAnimation = undefined;
+      // });
+    }
+
+    return this;
+  }
+
+  private getBorderProgressSprite(progress: number): SpriteKeys {
+    if (progress >= 100) return OverheatThresholdToBorderSpriteKeys[6];
+    if (progress >= 90) return OverheatThresholdToBorderSpriteKeys[5];
+    if (progress >= 70) return OverheatThresholdToBorderSpriteKeys[4];
+    if (progress >= 50) return OverheatThresholdToBorderSpriteKeys[3];
+    if (progress >= 30) return OverheatThresholdToBorderSpriteKeys[2];
+    return OverheatThresholdToBorderSpriteKeys[1];
+  }
+
+  private getFlamesProgressThresholdAnimation(progress: number): AnimationKeys {
+    if (progress >= 100) return OverheatThresholdToFlameAnimationKeys["full"];
+    if (progress >= 50) return OverheatThresholdToFlameAnimationKeys["medium"];
+    return OverheatThresholdToFlameAnimationKeys["low"];
   }
 }

@@ -21,6 +21,14 @@ export const Sprites = {
   //Background
   StarBg: "sprites/background/star.png",
   Nebula: "sprites/background/nebula.png",
+
+  // Overheat border
+  OverheatBorder0: "sprites/overheat-border/Overheat_Border_0.png",
+  OverheatBorder1: "sprites/overheat-border/Overheat_Border_1.png",
+  OverheatBorder2: "sprites/overheat-border/Overheat_Border_2.png",
+  OverheatBorder3: "sprites/overheat-border/Overheat_Border_3.png",
+  OverheatBorder4: "sprites/overheat-border/Overheat_Border_4.png",
+  OverheatBorder5: "sprites/overheat-border/Overheat_Border_5.png",
 };
 
 export type SpriteKeys = keyof typeof Sprites;
