@@ -82,17 +82,25 @@ export const worldInput = {
       schema: { nextTurnBlock: "uint256", empire: "EEmpire", value: "uint256" },
     },
 
-    Player: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        spent: "int256",
-      },
-    },
-
     WinningEmpire: {
       key: [],
       schema: { empire: "EEmpire" },
+    },
+
+    /* ------------------------------- Players Map ------------------------------ */
+    // Used in the mbuilding utilities Map data structure
+    Value_PlayersMap: {
+      key: ["playerId"],
+      schema: { playerId: "bytes32", profit: "int256" },
+    },
+
+    Meta_PlayersMap: {
+      key: ["playerId"],
+      schema: { playerId: "bytes32", stored: "bool", index: "uint256" },
+    },
+    Keys_PlayersMap: {
+      key: [],
+      schema: { players: "bytes32[]" },
     },
     /* ------------------------------- Points Map ------------------------------- */
 
@@ -169,6 +177,7 @@ export const worldInput = {
     },
 
     /* --------------------------------- Planets -------------------------------- */
+
     Keys_PlanetsSet: {
       key: [],
       schema: { itemKeys: "bytes32[]" },

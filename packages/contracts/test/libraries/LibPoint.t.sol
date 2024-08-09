@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Empire, Player, P_PointConfig } from "codegen/index.sol";
+import { Empire, P_PointConfig } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { PointsMap } from "adts/PointsMap.sol";

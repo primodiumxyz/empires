@@ -11,10 +11,12 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { usePot } from "@/hooks/usePot";
 import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
+import useWinningEmpire from "@/hooks/useWinningEmpire";
 import { EmpireEnumToName } from "@/util/lookups";
 
 export const TimeLeft = () => {
-  const { timeLeftMs, blocksLeft, gameOver } = useTimeLeft();
+  const { timeLeftMs, blocksLeft } = useTimeLeft();
+  const { gameOver } = useWinningEmpire();
   const { showBlockchainUnits } = useSettings();
   const { tables } = useCore();
 
@@ -56,64 +58,22 @@ export const TimeLeft = () => {
 };
 
 const GameOver = () => {
-  const { tables } = useCore();
-  const victoryClaimed = tables.WinningEmpire.use()?.empire ?? (0 as EEmpire);
-
-  return (
-    <>
-      {!!victoryClaimed && <WithdrawButton empire={victoryClaimed} />}
-      {!victoryClaimed && <ClaimVictoryButtons />}
-    </>
-  );
-};
-const ClaimVictoryButtons = () => {
-  const { claimVictory } = useContractCalls();
-
-  return (
-    <Card>
-      <div className="flex flex-col gap-1">
-        <p className="text-sm font-bold uppercase">Game over.</p>
-        <p className="text-sm font-semibold uppercase">Claim Victory for an empire</p>
-        <div className="flex justify-center gap-2">
-          <Button variant="ghost" size="md" className="bg-red-600 text-white" onClick={() => claimVictory(EEmpire.Red)}>
-            Red
-          </Button>
-          <Button
-            variant="ghost"
-            size="md"
-            className="bg-green-600 text-white"
-            onClick={() => claimVictory(EEmpire.Green)}
-          >
-            Green
-          </Button>
-          <Button
-            variant="ghost"
-            size="md"
-            className="bg-blue-600 text-white"
-            onClick={() => claimVictory(EEmpire.Blue)}
-          >
-            Blue
-          </Button>
-        </div>
-      </div>
-    </Card>
-  );
-};
-
-const WithdrawButton = ({ empire }: { empire: EEmpire }) => {
   const calls = useContractCalls();
   const { tables } = useCore();
   const {
     playerAccount: { entity },
   } = useAccountClient();
   const { pot } = usePot();
+  const { empire } = useWinningEmpire();
 
-  const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
-  const playerEmpirePoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
+  const empirePoints = tables.Empire.useWithKeys({ id: empire ?? 0 })?.pointsIssued ?? 0n;
+  const playerEmpirePoints =
+    tables.Value_PointsMap.useWithKeys({ empireId: empire ?? 0, playerId: entity })?.value ?? 0n;
 
   const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
 
   const empireName = empire == EEmpire.Blue ? "Blue" : empire == EEmpire.Green ? "Green" : "Red";
+  if (empire == null) return <div>Something went wrong.</div>;
 
   return (
     <Card className="flex flex-col">

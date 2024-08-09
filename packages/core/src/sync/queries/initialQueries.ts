@@ -22,7 +22,7 @@ export const getInitialQuery = ({
       ...configTableQueries,
       { tableId: tables.Planet.tableId },
       { tableId: tables.Turn.tableId },
-      { tableId: tables.Player.tableId },
+      { tableId: tables.Value_PlayersMap.tableId },
       { tableId: tables.FunctionSelectors.tableId },
       { tableId: tables.FunctionSignatures.tableId },
     ],

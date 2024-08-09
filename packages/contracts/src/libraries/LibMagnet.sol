@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Turn, Empire, Player, P_MagnetConfig, Magnet, MagnetData, MagnetTurnPlanets } from "codegen/index.sol";
+import { Turn, Empire, P_MagnetConfig, Magnet, MagnetData, MagnetTurnPlanets } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 import { PointsMap } from "adts/PointsMap.sol";
