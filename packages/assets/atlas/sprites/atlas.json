@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1723208313832",
+            "image": "atlas.png?timestamp=1723216908342",
             "format": "RGBA8888",
             "size": {
                 "w": 1252,
@@ -1505,7 +1505,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/attack.png",
+                    "filename": "sprites/icons/TEMP_Boost.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1526,7 +1526,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/gold.png",
+                    "filename": "sprites/icons/TEMP_Stun.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1547,7 +1547,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/shield.png",
+                    "filename": "sprites/icons/attack.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1568,7 +1568,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/ship.png",
+                    "filename": "sprites/icons/gold.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1584,6 +1584,48 @@
                     "frame": {
                         "x": 398,
                         "y": 1028,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/shield.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 430,
+                        "y": 1028,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/ship.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1072,
+                        "y": 1146,
                         "w": 32,
                         "h": 32
                     }
