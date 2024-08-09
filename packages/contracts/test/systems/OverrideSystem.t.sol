@@ -2,9 +2,10 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, Turn, P_GameConfig, Planet, OverrideCost, Player, P_PointConfig, P_MagnetConfig, Magnet, Empire } from "codegen/index.sol";
+import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, Turn, P_GameConfig, Planet, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
+import { PlayersMap } from "adts/PlayersMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
@@ -151,7 +152,7 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__createShip{ value: totalCost }(planetId, 1);
     assertGt(LibPrice.getTotalCost(EOverride.CreateShip, empire, 1), totalCost, "Total Cost should have increased");
     assertGt(OverrideCost.get(empire, EOverride.CreateShip), overrideCost, "Override Cost should have increased");
-    assertEq(uint256(Player.getSpent(aliceId)), totalCost, "Player should have spent total cost");
+    assertEq(PlayersMap.get(aliceId).loss, totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.getValue(EEmpire.Red, aliceId),
@@ -174,7 +175,7 @@ contract OverrideSystemTest is PrimodiumTest {
       "Total Cost should have increased"
     );
     assertGt(OverrideCost.get(empire, EOverride.CreateShip), overrideCost, "Override Cost should have increased");
-    assertEq(uint256(Player.getSpent(aliceId)), totalCost, "Player should have spent total cost");
+    assertEq(PlayersMap.get(aliceId).loss, totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.getValue(EEmpire.Red, aliceId),
@@ -195,7 +196,7 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__killShip{ value: totalCost }(planetId, 1);
     assertGt(LibPrice.getTotalCost(EOverride.KillShip, empire, 1), totalCost, "Total Cost should have increased");
     assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
-    assertEq(uint256(Player.getSpent(bobId)), totalCost, "Player should have spent total cost");
+    assertEq(PlayersMap.get(bobId).loss, totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
     assertEq(PointsMap.getValue(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
     assertEq(PointsMap.getValue(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
@@ -218,7 +219,7 @@ contract OverrideSystemTest is PrimodiumTest {
       "Total Cost should have increased"
     );
     assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
-    assertEq(uint256(Player.getSpent(bobId)), totalCost, "Player should have spent total cost");
+    assertEq(PlayersMap.get(bobId).loss, totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.getValue(EEmpire.Blue, bobId),

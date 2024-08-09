@@ -11,6 +11,13 @@ import { ConfigWithPrototypes } from "./ts/prototypes/types";
 
 export const worldInput = {
   namespace: "Empires",
+  systems: {
+    UpdateCombatSubsystem: { openAccess: false },
+    UpdateEmpiresSubsystem: { openAccess: false },
+    UpdateMagnetsSubsystem: { openAccess: false },
+    UpdatePriceSubsystem: { openAccess: false },
+    UpdateShieldEaterSubsystem: { openAccess: false },
+  },
 
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
   enums: MUDEnums,
@@ -76,22 +83,38 @@ export const worldInput = {
         lockedPointsPercent: "uint256", // out of 10000
       },
     },
+
+    Ready: {
+      key: [],
+      schema: {
+        value: "bool",
+      },
+    },
+
     Turn: {
       key: [],
       schema: { nextTurnBlock: "uint256", empire: "EEmpire", value: "uint256" },
     },
 
-    Player: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        spent: "int256",
-      },
-    },
-
     WinningEmpire: {
       key: [],
       schema: { empire: "EEmpire" },
+    },
+
+    /* ------------------------------- Players Map ------------------------------ */
+    // Used in the mbuilding utilities Map data structure
+    Value_PlayersMap: {
+      key: ["playerId"],
+      schema: { playerId: "bytes32", gain: "uint256", loss: "uint256" },
+    },
+
+    Meta_PlayersMap: {
+      key: ["playerId"],
+      schema: { playerId: "bytes32", stored: "bool", index: "uint256" },
+    },
+    Keys_PlayersMap: {
+      key: [],
+      schema: { players: "bytes32[]" },
     },
     /* ------------------------------- Points Map ------------------------------- */
 
@@ -119,6 +142,7 @@ export const worldInput = {
         q: "int128",
         r: "int128",
         isPlanet: "bool",
+        isCitadel: "bool",
         shipCount: "uint256",
         shieldCount: "uint256",
         goldCount: "uint256",
@@ -176,12 +200,23 @@ export const worldInput = {
     },
 
     /* --------------------------------- Planets -------------------------------- */
+
     Keys_PlanetsSet: {
       key: [],
       schema: { itemKeys: "bytes32[]" },
     },
 
     Meta_PlanetsSet: {
+      key: ["id"],
+      schema: { id: "bytes32", stored: "bool", index: "uint256" },
+    },
+
+    Keys_CitadelPlanetsSet: {
+      key: [],
+      schema: { itemKeys: "bytes32[]" },
+    },
+
+    Meta_CitadelPlanetsSet: {
       key: ["id"],
       schema: { id: "bytes32", stored: "bool", index: "uint256" },
     },

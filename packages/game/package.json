@@ -21,6 +21,7 @@
     "@primodiumxyz/engine": "workspace:*",
     "@primodiumxyz/reactive-tables": "^3.5.4",
     "lodash": "^4.17.21",
+    "phaser3-rex-plugins": "^1.80.6",
     "react": "^18.3.1"
   },
   "devDependencies": {

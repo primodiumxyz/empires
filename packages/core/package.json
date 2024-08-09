@@ -7,8 +7,8 @@
   "author": "",
   "type": "module",
   "exports": {
-    ".": "./src/index.js",
-    "./react": "./src/react/index.js"
+    ".": "./src/index.ts",
+    "./react": "./src/react/index.ts"
   },
   "files": [
     "src"

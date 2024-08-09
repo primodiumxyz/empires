@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { useCore } from "@primodiumxyz/core/react";
 
-export const useTimeLeft = (): { gameOver: boolean; timeLeftMs: number | undefined; blocksLeft: bigint } => {
+export const useTimeLeft = (): { timeLeftMs: number | undefined; blocksLeft: bigint } => {
   const { tables } = useCore();
   const [timeLeft, setTimeLeft] = useState<number>();
   const endBlock = tables.P_GameConfig.use()?.gameOverBlock ?? 0n;
@@ -31,9 +31,8 @@ export const useTimeLeft = (): { gameOver: boolean; timeLeftMs: number | undefin
   }, [expectedEndTime]);
 
   return useMemo(() => {
-    if (!block) return { gameOver: false, timeLeftMs: 0, blocksLeft: 0n };
+    if (!block) return { timeLeftMs: 0, blocksLeft: 0n };
     const blocksLeft = endBlock - block.value;
-    const gameOver = blocksLeft <= 0n;
-    return { gameOver, timeLeftMs: timeLeft, blocksLeft };
+    return { timeLeftMs: timeLeft, blocksLeft };
   }, [time, block, endBlock, timeLeft]);
 };
