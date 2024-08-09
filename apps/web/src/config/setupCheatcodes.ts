@@ -1078,6 +1078,63 @@ export const setupCheatcodes = (
     }),
   };
 
+  /* --------------------------------- EMPIRE --------------------------------- */
+  const setEmpire = createCheatcode({
+    title: "Set empire",
+    bg: CheatcodeToBg["utils"],
+    caption: "Set the empire of a planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+      },
+      empire: {
+        label: "Empire",
+        inputType: "string",
+        defaultValue: EmpireEnumToName[EEmpire.Red],
+        options: empires.map((entity) => ({
+          id: Number(entity) as EEmpire,
+          value: EmpireEnumToName[Number(entity) as EEmpire],
+        })),
+      },
+    },
+    execute: async ({ planet, empire }) => {
+      const planetId = planet.id as Entity;
+      const empireId = empire.id as EEmpire;
+      const currentEmpireId = tables.Planet.get(planetId)?.empireId;
+
+      let devOps: TableOperation[] = [
+        devCalls.createSetProperties({
+          table: tables.Planet,
+          keys: { id: planetId },
+          properties: { empireId },
+        }),
+      ];
+
+      devOps.push(
+        devCalls.createSetProperties({
+          table: tables.Meta_EmpirePlanetsSet,
+          keys: { empireId, planetId },
+          properties: { stored: true, index: BigInt(0) },
+        }),
+      );
+
+      const success = await devCalls.batch(devOps);
+
+      if (success) {
+        const planetObject = game.MAIN.objects.planet.get(planetId);
+        planetObject?.updateFaction(empireId);
+        notify("success", `Set ${planet.value} to ${empire.value}`);
+        return true;
+      } else {
+        notify("error", `Failed to set ${planet.value} to ${empire.value}`);
+        return false;
+      }
+    },
+  });
+
   return [
     advanceTurn,
     setShips,
@@ -1097,6 +1154,7 @@ export const setupCheatcodes = (
     maxOutCharges,
     triggerCharges,
     withdrawThatRake,
+    setEmpire,
     ...Object.values(updateGameConfig),
   ];
 };

@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1723105553101",
+            "image": "atlas.png?timestamp=1723225865356",
             "format": "RGBA8888",
             "size": {
                 "w": 1119,
@@ -1379,7 +1379,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/gold.png",
+                    "filename": "sprites/icons/crown.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1400,7 +1400,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/shield.png",
+                    "filename": "sprites/icons/gold.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1421,7 +1421,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/ship.png",
+                    "filename": "sprites/icons/shard.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1437,6 +1437,48 @@
                     "frame": {
                         "x": 1055,
                         "y": 115,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/shield.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1023,
+                        "y": 147,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/ship.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1055,
+                        "y": 147,
                         "w": 32,
                         "h": 32
                     }

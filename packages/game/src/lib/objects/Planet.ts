@@ -36,10 +36,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private magnets: [red: Magnet, blue: Magnet, green: Magnet];
   private magnetWaves: Phaser.GameObjects.Sprite;
   private empireId: EEmpire;
+  private citadel: Phaser.GameObjects.Sprite | null;
   private spawned = false;
 
-  constructor(args: { id: Entity; scene: PrimodiumScene; coord: PixelCoord; empire: EEmpire }) {
-    const { id, scene, coord, empire } = args;
+  constructor(args: { id: Entity; scene: PrimodiumScene; coord: PixelCoord; empire: EEmpire; citadel?: boolean }) {
+    const { id, scene, coord, empire, citadel } = args;
 
     super(scene.phaserScene, coord.x, coord.y);
 
@@ -151,6 +152,13 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
+    this.citadel = citadel
+      ? new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y - 70, Assets.SpriteAtlas, Sprites.Crown)
+          .setOrigin(0.5, 0.5)
+          .setDepth(DepthLayers.Planet + 1)
+          .setScale(1.5)
+      : null;
+
     this._scene = scene;
     this.id = id;
     this.coord = coord;
@@ -172,6 +180,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
     this.scene.add.existing(this.chargeProgress);
+    if (this.citadel) this.scene.add.existing(this.citadel);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     this.scene.add.existing(this.magnetWaves);
     return this;
@@ -191,6 +200,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.ships.setScale(scale);
     this.gold.setScale(scale);
     this.chargeProgress.setScale(scale);
+    if (this.citadel) this.citadel.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
     return this;
@@ -411,6 +421,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.planetUnderglowSprite.destroy();
     this.hexSprite.destroy();
     this.hexHoloSprite.destroy();
+    this.citadel?.destroy();
     this._scene.objects.planet.remove(this.id);
     this.magnets.forEach((magnet) => magnet.destroy());
     this.magnetWaves.destroy();
