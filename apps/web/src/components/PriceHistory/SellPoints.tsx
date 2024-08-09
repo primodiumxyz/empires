@@ -49,50 +49,48 @@ export const SellPoints = () => {
   const { price: pointsToWei, message } = usePointPrice(empire, Number(amountToSell));
 
   return (
-    <Card noDecor className="w-full gap-2">
-      <div className="flex gap-2">
-        <SecondaryCard>
-          <p className="text-left text-xs opacity-50">EMPIRE</p>
-          <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-full">
-            <Dropdown.Item value={EEmpire.Red}>
-              <IconLabel imageUri={sprite.getSprite("PlanetRed")} text="Red" />
-            </Dropdown.Item>
-            <Dropdown.Item value={EEmpire.Green}>
-              <IconLabel imageUri={sprite.getSprite("PlanetGreen")} text="Green" />
-            </Dropdown.Item>
-            <Dropdown.Item value={EEmpire.Blue}>
-              <IconLabel imageUri={sprite.getSprite("PlanetBlue")} text="Blue" />
-            </Dropdown.Item>
-          </Dropdown>
-        </SecondaryCard>
-        <SecondaryCard className="grid grow grid-cols-3 items-center gap-5">
-          <div className="flex justify-center gap-2 rounded-md bg-primary/50 px-2 py-1 text-lg font-bold uppercase">
-            {message ? (
-              <span className="text-[0.6rem] text-white">{message}</span>
-            ) : (
-              <Price wei={pointsToWei} className="text-white" />
-            )}
-          </div>
-          <NumberInput
-            count={amountToSell}
-            onChange={handleInputChange}
-            min={0}
-            max={Number(formatEther(playerPoints))}
-            className="place-self-center"
-          />
+    <div className="flex w-full gap-2">
+      <SecondaryCard className="bg-black/10">
+        <p className="text-left text-xs opacity-50">EMPIRE</p>
+        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-44">
+          <Dropdown.Item value={EEmpire.Red}>
+            <IconLabel imageUri={sprite.getSprite("PlanetRed")} text="Red" />
+          </Dropdown.Item>
+          <Dropdown.Item value={EEmpire.Green}>
+            <IconLabel imageUri={sprite.getSprite("PlanetGreen")} text="Green" />
+          </Dropdown.Item>
+          <Dropdown.Item value={EEmpire.Blue}>
+            <IconLabel imageUri={sprite.getSprite("PlanetBlue")} text="Blue" />
+          </Dropdown.Item>
+        </Dropdown>
+      </SecondaryCard>
+      <SecondaryCard className="grid grow grid-cols-3 items-center gap-5 bg-black/10">
+        <div className="flex justify-center gap-2 rounded-md bg-primary/50 px-2 py-1 text-lg font-bold uppercase">
+          {message ? (
+            <span className="text-[0.6rem] text-white">{message}</span>
+          ) : (
+            <Price wei={pointsToWei} className="text-white" />
+          )}
+        </div>
+        <NumberInput
+          count={amountToSell}
+          onChange={handleInputChange}
+          min={0}
+          max={Number(formatEther(playerPoints))}
+          className="place-self-center"
+        />
 
-          <TransactionQueueMask id="sell-points">
-            <Button
-              size="md"
-              className="w-full px-10"
-              disabled={amountToSell == "0" || !pointsToWei}
-              onClick={handleSubmit}
-            >
-              Sell
-            </Button>
-          </TransactionQueueMask>
-        </SecondaryCard>
-      </div>
-    </Card>
+        <TransactionQueueMask id="sell-points">
+          <Button
+            size="md"
+            className="w-full px-10"
+            disabled={amountToSell == "0" || !pointsToWei}
+            onClick={handleSubmit}
+          >
+            Sell
+          </Button>
+        </TransactionQueueMask>
+      </SecondaryCard>
+    </div>
   );
 };

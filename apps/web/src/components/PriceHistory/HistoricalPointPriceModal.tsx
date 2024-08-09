@@ -114,8 +114,10 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
                 </ParentSize>
               </div>
             </SecondaryCard>
-
-            <SellPoints />
+            <SecondaryCard className="flex flex-col gap-2">
+              <p className="text-sm">SELL POINTS</p>
+              <SellPoints />
+            </SecondaryCard>
           </div>
           <div className="col-span-2 flex flex-col gap-2">
             <SecondaryCard>
