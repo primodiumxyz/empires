@@ -31,18 +31,15 @@ export function createVolumeTable(core: Core) {
   function getAllChannels() {
     const currentVolume = table.get() ?? defaultVolume;
     return {
-      master: currentVolume.master,
-      music: currentVolume.music,
-      sfx: currentVolume.sfx,
-      ui: currentVolume.ui,
+      master: currentVolume.master ?? defaultVolume.master,
+      music: currentVolume.music ?? defaultVolume.music,
+      sfx: currentVolume.sfx ?? defaultVolume.sfx,
+      ui: currentVolume.ui ?? defaultVolume.ui,
     };
   }
 
   function get(channel: Channel | "master") {
-    const currentVolume = table.get()[channel] ?? defaultVolume[channel];
-    const masterVolume = table.get().master ?? defaultVolume.master;
-    if (channel === "master") return currentVolume;
-    return currentVolume * masterVolume;
+    return table.get()[channel] ?? defaultVolume[channel];
   }
 
   function set(volume: number, channel: Channel | "master" = "master") {
@@ -50,9 +47,8 @@ export function createVolumeTable(core: Core) {
 
     const newVolume = {
       ...currentVolume,
-      [channel]:
-        channel === "master" ? volume : (currentVolume.master ?? 1) * volume,
-    };
+      [channel]: volume,
+    } as Record<Channel | "master", number>;
 
     table.set(newVolume);
 

@@ -9,10 +9,10 @@ import { useGame } from "@/hooks/useGame";
 export const AudioSettings = () => {
   const game = useGame();
 
-  const masterVolume = game.ROOT.hooks.useVolume("master");
-  const musicVolume = game.ROOT.hooks.useVolume("music");
-  const sfxVolume = game.ROOT.hooks.useVolume("sfx");
-  const uiVolume = game.ROOT.hooks.useVolume("ui");
+  const masterVolume = game.ROOT.hooks.useRawVolume("master");
+  const musicVolume = game.ROOT.hooks.useRawVolume("music");
+  const sfxVolume = game.ROOT.hooks.useRawVolume("sfx");
+  const uiVolume = game.ROOT.hooks.useRawVolume("ui");
 
   const setChannelVolume = useCallback(
     (amount: number, channel: Channel | "master") => {
