@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Empire, Player, OverrideCost, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData } from "codegen/index.sol";
+import { Empire, OverrideCost, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";

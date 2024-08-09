@@ -9,6 +9,8 @@ import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { P_GameConfig, WinningEmpire, Empire, P_PointConfig, Planet } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
+import { PlayersMap } from "adts/PlayersMap.sol";
+
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
@@ -70,7 +72,7 @@ contract RewardsSystemTest is PrimodiumTest {
   function testWithdrawEarningsTimeVictoryTiedTwice() public {
     setGameover();
     world.Empires__withdrawEarnings(); // note: this currently hits all tie conditions and then defaults to Red
-    assertEq(WinningEmpire.get(), EEmpire.Red); 
+    assertEq(WinningEmpire.get(), EEmpire.Red);
   }
 
   function testWithdrawEarningsTimeVictoryTiedOnce() public {
@@ -120,7 +122,6 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(WinningEmpire.get(), EEmpire.Blue, "Victory should be locked from domination");
   }
 
-
   function testSendEther() public {
     sendEther(alice, value);
 
@@ -141,6 +142,7 @@ contract RewardsSystemTest is PrimodiumTest {
     Empire.setPointsIssued(EEmpire.Red, totalPoints);
 
     uint256 alicePrevBalance = alice.balance;
+    int256 profit = PlayersMap.get(addressToId(alice));
     vm.stopPrank();
     vm.prank(alice);
     world.Empires__withdrawEarnings();
@@ -150,6 +152,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), value - aliceTotal, "empire balance");
 
     assertEq(PointsMap.getValue(EEmpire.Red, addressToId(alice)), 0, "alice points");
+    assertEq(PlayersMap.get(addressToId(alice)), profit + int256(aliceTotal), "alice profit");
 
     // should be 0 because all points were withdrawn (or not issued in the first place)
     assertEq(Empire.getPointsIssued(EEmpire.Red), alicePoints == 0 ? totalPoints : 0, "empire points");

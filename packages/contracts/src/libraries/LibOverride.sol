@@ -6,7 +6,7 @@ import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
-import { Player } from "codegen/index.sol";
+import { PlayersMap } from "adts/PlayersMap.sol";
 import { P_PointConfig, P_OverrideConfig } from "codegen/index.sol";
 
 /**
@@ -28,7 +28,7 @@ library LibOverride {
     uint256 _overrideCount,
     uint256 _spend
   ) internal {
-    Player.setSpent(playerId, Player.getSpent(playerId) + int256(_spend));
+    PlayersMap.set(playerId, PlayersMap.get(playerId) - int256(_spend));
     uint256 pointUnit = P_PointConfig.getPointUnit();
     bool progressOverride = P_OverrideConfig.getIsProgressOverride(_overrideType);
 
