@@ -30,15 +30,18 @@ export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function getVolume(channel: Channel | "master" = "master") {
-    return globalApi.tables.Volume.get(channel);
+    const masterVolume = globalApi.tables.Volume.get("master");
+    if (channel === "master") return masterVolume;
+
+    return globalApi.tables.Volume.get(channel) * masterVolume;
   }
 
   function setVolume(volume: number, channel: Channel | "master" = "master") {
     const newVolume = globalApi.tables.Volume.set(volume, channel);
 
-    scene.audio.music.setVolume(newVolume.music ?? 1);
-    scene.audio.sfx.setVolume(newVolume.sfx ?? 1);
-    scene.audio.ui.setVolume(newVolume.ui ?? 1);
+    scene.audio.music.setVolume(newVolume.music * newVolume.master);
+    scene.audio.sfx.setVolume(newVolume.sfx * newVolume.master);
+    scene.audio.ui.setVolume(newVolume.ui * newVolume.master);
   }
 
   function setPauseOnBlur(pause: boolean) {
