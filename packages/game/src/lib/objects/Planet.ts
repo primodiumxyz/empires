@@ -158,7 +158,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
           .setScale(1.5)
       : null;
 
-    this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y });
+    this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
+      DepthLayers.ShieldEater,
+    );
 
     this._scene = scene;
     this.id = id;

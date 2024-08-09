@@ -1,7 +1,6 @@
 import { Animations } from "@primodiumxyz/assets";
 import { Coord } from "@primodiumxyz/engine";
 import { DepthLayers } from "@game/lib/constants/common";
-import { IconLabel } from "@game/lib/objects/IconLabel";
 import { PrimodiumScene } from "@game/types";
 
 export class ShieldEater extends Phaser.GameObjects.Container {
@@ -10,7 +9,7 @@ export class ShieldEater extends Phaser.GameObjects.Container {
   private coord: Coord;
 
   // TODO(SE): temp
-  private destinationLabel: IconLabel;
+  private destinationLabel: Phaser.GameObjects.Text;
 
   constructor(scene: PrimodiumScene, coord: Coord) {
     super(scene.phaserScene, coord.x, coord.y);
@@ -23,11 +22,12 @@ export class ShieldEater extends Phaser.GameObjects.Container {
       .setVisible(false);
 
     // TODO(SE): temp
-    this.destinationLabel = new IconLabel(scene, { x: coord.x, y: coord.y - 70 }, "", "ShieldEaterDestination", {
-      color: "white",
-    })
-      .setDepth(DepthLayers.ShieldEater)
-      .setScale(2)
+    this.destinationLabel = scene.phaserScene.add
+      .text(0, -70, "", {
+        fontSize: "24px",
+        color: "white",
+      })
+      .setActive(false)
       .setVisible(false);
 
     this.add([this.location, this.destinationLabel]);
@@ -46,15 +46,20 @@ export class ShieldEater extends Phaser.GameObjects.Container {
 
   setShieldEaterDestination(turns: number) {
     // TODO(SE): temp
-    this.destinationLabel.setVisible(turns > 0);
-    this.destinationLabel.setText(`🐍🎯${turns.toLocaleString()}`).setVisible(turns > 0);
+    this.destinationLabel
+      .setText(`🐍🎯 ${turns.toLocaleString()}`)
+      .setActive(turns > 0)
+      .setVisible(turns > 0);
 
     return this;
   }
 
   setShieldEaterPath(turns: number) {
     // TODO(SE): temp
-    this.destinationLabel.setText(`🐍${turns.toLocaleString()}`).setVisible(turns > 0);
+    this.destinationLabel
+      .setText(`🐍 ${turns.toLocaleString()}`)
+      .setActive(turns > 0)
+      .setVisible(turns > 0);
 
     return this;
   }
