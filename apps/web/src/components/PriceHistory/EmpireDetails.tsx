@@ -21,6 +21,8 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
   const { price: sellPrice } = usePointPrice(empire, 1);
   const planetCount = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: EEmpire.Red })?.itemKeys.length ?? 0;
   const citadelPlanets = tables.Keys_CitadelPlanetsSet.useWithKeys()?.itemKeys ?? [];
+  // TODO: something better
+  const block = tables.BlockNumber.use()?.value ?? 0n;
 
   const citadelCount = useMemo(() => {
     let count = 0;
@@ -35,7 +37,7 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
     }
 
     return count;
-  }, [citadelPlanets, empire]);
+  }, [citadelPlanets, empire, block]);
 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
 
