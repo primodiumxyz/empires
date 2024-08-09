@@ -29,7 +29,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointCostIncrease: BigInt(POINTS_UNIT * 0.00001),
       },
       P_MagnetConfig: {
-        lockedPointsPercent: scaleMultiplier(0.05),
+        lockedPointsPercent: scaleMultiplier(0.10),
       },
       Turn: {
         nextTurnBlock: 0n,
@@ -38,7 +38,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
       P_TacticalStrikeConfig: {
         maxCharge: 100n,
-        chargeRate: 100n, //
+        chargeRate: 15n, //
         boostChargeIncrease: 10n,
         stunChargeDecrease: 10n,
         createShipBoostIncrease: 1n,
@@ -106,8 +106,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         isProgressOverride: true,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00001),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
       },
     },
   },
