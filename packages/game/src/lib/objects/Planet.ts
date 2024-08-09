@@ -376,14 +376,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
   setMagnet(empire: EEmpire, turns: number) {
     const magnet = this.magnets[empire - 1];
-    // 1. when turns > 0 it will add/update the magnet & reorder magnets
-    // to give space for the new one if needed
-    // 2. when turns === 0 it will wait for the magnet to be removed
-    // THEN reorder so it doesn't overlap
-    magnet?.setMagnet(turns, (oldTurns, newTurns) => {
-      // reorder only if the magnet is being removed or added
-      if (!oldTurns || !newTurns) this.reorderMagnets();
-    });
 
     // emit only if no magnet is already active
     if (turns > 0 && !this.magnets.some((magnet) => magnet.isEnabled())) {
@@ -394,6 +386,15 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         this.magnetWaves.setVisible(false).setActive(false);
       });
     }
+
+    // 1. when turns > 0 it will add/update the magnet & reorder magnets
+    // to give space for the new one if needed
+    // 2. when turns === 0 it will wait for the magnet to be removed
+    // THEN reorder so it doesn't overlap
+    magnet?.setMagnet(turns, (oldTurns, newTurns) => {
+      // reorder only if the magnet is being removed or added
+      if (!oldTurns || !newTurns) this.reorderMagnets();
+    });
 
     return magnet;
   }

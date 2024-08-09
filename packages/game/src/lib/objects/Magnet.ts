@@ -50,7 +50,6 @@ export class Magnet extends Phaser.GameObjects.Container {
 
       const fullTurnLeft = Math.ceil(turns / 3);
       const subTurnLeft = turns % 3;
-
       if (!this.sprite.anims.isPlaying && this.turns === 0) {
         this.sprite.play(Animations[EmpireToMagnetAnimationKeys[this.empire] ?? "MagnetRed"]);
       }

@@ -29,16 +29,19 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
     }
   };
 
-  tables.Turn.watch({
-    world: systemsWorld,
-    onChange: ({ properties: { current } }) => {
-      const currTurn = current?.value ?? 1n;
+  tables.Turn.watch(
+    {
+      world: systemsWorld,
+      onChange: ({ properties: { current } }) => {
+        const currTurn = current?.value ?? 1n;
 
-      updateMagnetForEmpire(EEmpire.Red, currTurn);
-      updateMagnetForEmpire(EEmpire.Blue, currTurn);
-      updateMagnetForEmpire(EEmpire.Green, currTurn);
+        updateMagnetForEmpire(EEmpire.Red, currTurn);
+        updateMagnetForEmpire(EEmpire.Blue, currTurn);
+        updateMagnetForEmpire(EEmpire.Green, currTurn);
+      },
     },
-  });
+    { runOnInit: false },
+  );
 
   tables.Magnet.watch({
     world: systemsWorld,
