@@ -17,20 +17,19 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
   const { tables } = useCore();
   const { detonateShieldEater } = useContractCalls();
   const { showBlockchainUnits } = useSettings();
-  const { currentPlanet, cooldownMs, cooldownBlocks } = useShieldEater();
+  const { currentPlanet, cooldownShields } = useShieldEater();
 
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? (0 as EEmpire);
-  const cooldownDuration = useMemo(() => msToDuration(cooldownMs ?? 0), [cooldownMs]);
 
   const detonatePriceWei = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
-  const detonateDisabled = currentPlanet !== entity || !!cooldownMs;
+  const detonateDisabled = currentPlanet !== entity || !!cooldownShields;
 
   const caption =
     currentPlanet !== entity
       ? `The shield eater is currently on ${entityToPlanetName(currentPlanet)}.`
-      : cooldownMs
-        ? `The shield eater is on cooldown for ${cooldownDuration.toLocaleString()}${showBlockchainUnits.enabled ? ` (${cooldownBlocks} blocks)` : ""}.`
+      : cooldownShields
+        ? `The shield eater is eating, come back after it ate ${cooldownShields} more shields.`
         : undefined;
 
   return (
