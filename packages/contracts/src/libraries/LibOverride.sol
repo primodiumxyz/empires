@@ -28,7 +28,7 @@ library LibOverride {
     uint256 _overrideCount,
     uint256 _spend
   ) internal {
-    PlayersMap.set(playerId, PlayersMap.get(playerId) - int256(_spend));
+    PlayersMap.setLoss(playerId, PlayersMap.get(playerId).loss + _spend);
     uint256 pointUnit = P_PointConfig.getPointUnit();
     bool progressOverride = P_OverrideConfig.getIsProgressOverride(_overrideType);
 
