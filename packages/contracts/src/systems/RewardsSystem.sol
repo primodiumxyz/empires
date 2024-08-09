@@ -6,7 +6,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
-import { P_GameConfig, WinningEmpire, Player, Empire, Planet } from "codegen/index.sol";
+import { P_GameConfig, WinningEmpire, Empire, Planet } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EEmpire } from "codegen/common.sol";
 
@@ -15,6 +15,7 @@ import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 
 import { PointsMap } from "adts/PointsMap.sol";
+import { PlayersMap } from "adts/PlayersMap.sol";
 
 import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
@@ -89,8 +90,7 @@ contract RewardsSystem is EmpiresSystem {
       } else if (citadelPlanetsPerEmpire[uint256(empire)] == maxCitadelPlanets) {
         if (EmpirePlanetsSet.size(empire) > EmpirePlanetsSet.size(winningEmpire)) {
           winningEmpire = empire;
-        }
-        else if (EmpirePlanetsSet.size(empire) == EmpirePlanetsSet.size(winningEmpire)) {
+        } else if (EmpirePlanetsSet.size(empire) == EmpirePlanetsSet.size(winningEmpire)) {
           // todo: handle a tie of both the number of citadel planets and the number of planets. Likely overtime or most points issued.
           continue;
         }
@@ -120,6 +120,8 @@ contract RewardsSystem is EmpiresSystem {
 
     uint256 pot = (Balances.get(EMPIRES_NAMESPACE_ID));
     uint256 playerPot = (pot * playerEmpirePoints) / empirePoints;
+
+    PlayersMap.set(playerId, PlayersMap.get(playerId) + int256(playerPot));
 
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), playerPot);
 

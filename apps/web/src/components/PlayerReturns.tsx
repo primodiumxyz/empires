@@ -29,7 +29,7 @@ export const PlayerReturns = () => {
     playerAccount: { entity: playerId },
   } = useAccountClient();
   const points = usePoints(playerId);
-  const totalSpent = tables.Player.use(playerId)?.spent ?? 0n;
+  const totalSpent = -(tables.Value_PlayersMap.use(playerId)?.profit ?? 0n);
   const biggestReward = useMemo(() => {
     return Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
       (acc, [empire, { playerPoints }]) => {
@@ -115,7 +115,7 @@ const EmpireEndReward = ({
 const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const { tables } = useCore();
   const points = usePoints(playerId);
-  const totalSpent = tables.Player.use(playerId)?.spent ?? 0n;
+  const totalSpent = -(tables.Value_PlayersMap.use(playerId)?.profit ?? 0n);
 
   const { price: redPointCost } = usePointPrice(EEmpire.Red, Number(formatEther(points[EEmpire.Red].playerPoints)));
   const { price: bluePointCost } = usePointPrice(EEmpire.Blue, Number(formatEther(points[EEmpire.Blue].playerPoints)));
