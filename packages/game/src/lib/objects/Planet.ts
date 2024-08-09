@@ -128,7 +128,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
-    this.overheat = new Overheat(scene, coord).setDepth(DepthLayers.Base + coord.y);
+    this.overheat = new Overheat(scene, coord, empire).setDepth(DepthLayers.Base + coord.y);
 
     this.magnets = [
       new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Red),
