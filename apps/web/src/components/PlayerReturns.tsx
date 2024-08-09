@@ -95,7 +95,7 @@ const EmpireEndReward = ({
           <ExclamationCircleIcon className="size-3" />
         </Tooltip>
       </h2>
-      <div className={cn("flex h-full w-full flex-row items-center gap-2 border-none py-1 text-sm")}>
+      <div className={cn("flex h-full w-full flex-row items-center justify-end gap-2 border-none py-1 text-sm")}>
         <div className="flex items-center justify-end gap-2">
           <img src={imgUrl} className="h-6" />
           <Price wei={earnings} />
