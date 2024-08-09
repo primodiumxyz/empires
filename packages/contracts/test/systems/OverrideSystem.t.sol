@@ -151,7 +151,7 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__createShip{ value: totalCost }(planetId, 1);
     assertGt(LibPrice.getTotalCost(EOverride.CreateShip, empire, 1), totalCost, "Total Cost should have increased");
     assertGt(OverrideCost.get(empire, EOverride.CreateShip), overrideCost, "Override Cost should have increased");
-    assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
+    assertEq(uint256(Player.getSpent(aliceId)), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.getValue(EEmpire.Red, aliceId),
@@ -174,7 +174,7 @@ contract OverrideSystemTest is PrimodiumTest {
       "Total Cost should have increased"
     );
     assertGt(OverrideCost.get(empire, EOverride.CreateShip), overrideCost, "Override Cost should have increased");
-    assertEq(Player.getSpent(aliceId), totalCost, "Player should have spent total cost");
+    assertEq(uint256(Player.getSpent(aliceId)), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.getValue(EEmpire.Red, aliceId),
@@ -195,7 +195,7 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__killShip{ value: totalCost }(planetId, 1);
     assertGt(LibPrice.getTotalCost(EOverride.KillShip, empire, 1), totalCost, "Total Cost should have increased");
     assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
-    assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
+    assertEq(uint256(Player.getSpent(bobId)), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
     assertEq(PointsMap.getValue(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
     assertEq(PointsMap.getValue(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
@@ -218,7 +218,7 @@ contract OverrideSystemTest is PrimodiumTest {
       "Total Cost should have increased"
     );
     assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
-    assertEq(Player.getSpent(bobId), totalCost, "Player should have spent total cost");
+    assertEq(uint256(Player.getSpent(bobId)), totalCost, "Player should have spent total cost");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
     assertEq(
       PointsMap.getValue(EEmpire.Blue, bobId),
@@ -577,5 +577,25 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__stunCharge{ value: cost }(planetId, 5);
     console.log("charge after stunCharge", Planet_TacticalStrike.get(planetId).charge);
     assertEq(Planet_TacticalStrike.get(planetId).charge, 0);
+  }
+
+  /**************************************************************************
+   * Shield Eater
+   *************************************************************************/
+
+  function testDetonateShieldEater() public {
+    // EEmpire empire = Planet.getEmpireId(planetId);
+    // uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+    // uint256 currentShields = Planet.get(planetId).shieldCount;
+    // world.Empires__shieldEater{ value: cost }(planetId, 1);
+    // assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
+  }
+
+  function testDetonateShieldEaterNotCharged() public {
+    // EEmpire empire = Planet.getEmpireId(planetId);
+    // uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+    // uint256 currentShields = Planet.get(planetId).shieldCount;
+    // world.Empires__shieldEater{ value: cost }(planetId, 1);
+    // assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
   }
 }

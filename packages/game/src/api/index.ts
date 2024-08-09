@@ -1,15 +1,10 @@
 import { Core } from "@primodiumxyz/core";
 import { namespaceWorld } from "@primodiumxyz/reactive-tables";
-
+import { ContractCalls } from "@client/contractCalls/createContractCalls";
 import init from "@game/api/init";
 import { Scenes } from "@game/lib/constants/common";
-import { ContractCalls } from "@client/contractCalls/createContractCalls";
 
-export async function initGame(
-  core: Core,
-  calls: ContractCalls,
-  version = "v1"
-) {
+export async function initGame(core: Core, calls: ContractCalls, version = "v1") {
   const {
     network: { world },
   } = core;
@@ -27,11 +22,7 @@ export async function initGame(
 
   console.log("%c" + asciiArt, "color: white; background-color: brown;");
 
-  console.log(
-    `%cPrimodium ${version}`,
-    "color: white; background-color: black;",
-    "https://twitter.com/primodiumgame"
-  );
+  console.log(`%cPrimodium ${version}`, "color: white; background-color: black;", "https://twitter.com/primodiumgame");
 
   namespaceWorld(world, "game");
 

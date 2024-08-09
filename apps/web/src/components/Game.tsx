@@ -7,12 +7,10 @@ import { ActionLog } from "@/components/ActionLog";
 import { AdvanceTurn } from "@/components/AdvanceTurn";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
-import { HistoricalPointPriceModal } from "@/components/HistoricalPointPriceModal";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverridePopup } from "@/components/OverridePopup";
-import { Pot } from "@/components/Pot";
+import { PlayerReturns } from "@/components/PlayerReturns";
 import { PriceHistory } from "@/components/PriceHistory";
-import { SellPoints } from "@/components/SellPoints";
 import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
 import { GameProvider } from "@/hooks/providers/GameProvider";
@@ -95,29 +93,26 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-          <Pot className="w-48" />
+          <TimeLeft />
         </HUD.TopMiddle>
         <HUD.Left>
           <ActionLog />
         </HUD.Left>
 
-        <HUD.TopRight>
+        <HUD.TopRight className="flex flex-col gap-2">
           <Account />
         </HUD.TopRight>
 
         <HUD.BottomLeft>
-          <div className="flex w-48 flex-col gap-2">
-            <SellPoints />
+          <div className="flex w-48 items-center gap-2">
             <MusicPlayer />
+            <Settings />
           </div>
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
-          <TimeLeft />
           <AdvanceTurn />
-        </HUD.BottomMiddle>
-        <HUD.BottomMiddle>
-          <OverridePopup />
+          {DEV && <Cheatcodes className="-mr-1" />}
         </HUD.BottomMiddle>
 
         <HUD.Center>
@@ -125,9 +120,7 @@ export const GameHUD = () => {
         </HUD.Center>
 
         <HUD.BottomRight className="flex gap-2">
-          <Settings />
-          <HistoricalPointPriceModal showIcon={true} />
-          {DEV && <Cheatcodes className="-mr-1" />}
+          <PlayerReturns />
         </HUD.BottomRight>
       </HUD>
     </>

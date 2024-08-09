@@ -7,6 +7,7 @@ import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
+import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
 import { PendingMove, WinningEmpire, HistoricalPointCost, Magnet, Turn, P_GameConfig } from "codegen/index.sol";
 
@@ -34,6 +35,7 @@ contract ResetSystem is System {
     P_GameConfig.setGameOverBlock(block.number + 1_000);
     P_GameConfig.setGameStartTimestamp(block.timestamp);
     createPlanets(); // Planet and Empire tables are reset to default values
+    LibShieldEater.initialize(); // ShieldEater relocated, charge reset, and destination set
     initPrice(); // Empire.setPointCost and OverrideCost tables are reset to default values
     Turn.set(block.number + P_GameConfig.getTurnLengthBlocks(), EEmpire.Red, 1);
   }

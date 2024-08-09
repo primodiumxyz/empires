@@ -1,7 +1,7 @@
-import { createStaggerQueue } from "@game/lib/utils/createStaggerQueue";
-import { PrimodiumScene } from "@game/types";
 import { Core, formatNumber, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
+import { createStaggerQueue } from "@game/lib/utils/createStaggerQueue";
+import { PrimodiumScene } from "@game/types";
 
 export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
   const {
@@ -23,37 +23,29 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
-          scene.fx.emitFloatingText(
-            { x: planet.coord.x, y: planet.coord.y - 25 },
-            `-${current.goldSpent}`,
-            {
-              icon: "Gold",
-              color: "#ff0000",
-            }
-          );
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `-${current.goldSpent}`, {
+            icon: "Gold",
+            color: "#ff0000",
+          });
 
           scene.audio.play("Build", "sfx", { volume: 0.15 });
-          scene.fx.emitFloatingText(
-            { x: planet.coord.x, y: planet.coord.y - 25 },
-            `+${current.shieldBought}`,
-            {
-              icon: "Shield",
-              fontSize: 16,
-              iconSize: 20,
-              borderStyle: {
-                width: 2,
-                color: 0x00ff00,
-                alpha: 0.75,
-              },
-              delay: 500,
-            }
-          );
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.shieldBought}`, {
+            icon: "Shield",
+            fontSize: 16,
+            iconSize: 20,
+            borderStyle: {
+              width: 2,
+              color: 0x00ff00,
+              alpha: 0.75,
+            },
+            delay: 500,
+          });
         }, 1000);
       },
     },
     {
       runOnInit: false,
-    }
+    },
   );
 
   tables.BuyShipsRoutineLog.watch(
@@ -68,35 +60,27 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
-          scene.fx.emitFloatingText(
-            { x: planet.coord.x, y: planet.coord.y - 25 },
-            `-${current.goldSpent}`,
-            {
-              icon: "Gold",
-              color: "#ff0000",
-            }
-          );
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `-${current.goldSpent}`, {
+            icon: "Gold",
+            color: "#ff0000",
+          });
 
           scene.audio.play("Build", "sfx", { volume: 0.15 });
-          scene.fx.emitFloatingText(
-            { x: planet.coord.x, y: planet.coord.y - 25 },
-            `+${current.shipBought}`,
-            {
-              icon: "Ship",
-              delay: 500,
-              fontSize: 16,
-              iconSize: 20,
-              borderStyle: {
-                width: 2,
-                color: 0x00ff00,
-                alpha: 0.75,
-              },
-            }
-          );
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.shipBought}`, {
+            icon: "Ship",
+            delay: 500,
+            fontSize: 16,
+            iconSize: 20,
+            borderStyle: {
+              width: 2,
+              color: 0x00ff00,
+              alpha: 0.75,
+            },
+          });
         }, 1000);
       },
     },
-    { runOnInit: false }
+    { runOnInit: false },
   );
 
   tables.MoveRoutineLog.watch(
@@ -105,12 +89,8 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
       onEnter: async ({ properties: { current } }) => {
         if (!current) return;
 
-        const planet = scene.objects.planet.get(
-          current.originPlanetId as Entity
-        );
-        const destinationPlanet = scene.objects.planet.get(
-          current.destinationPlanetId as Entity
-        );
+        const planet = scene.objects.planet.get(current.originPlanetId as Entity);
+        const destinationPlanet = scene.objects.planet.get(current.destinationPlanetId as Entity);
 
         if (!planet) return;
 
@@ -131,22 +111,19 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
                 alpha: 0.75,
                 width: 1,
               },
-            }
+            },
           );
 
           await sleep(750);
 
           //update factions if it changed
-          const faction = tables.Planet.get(
-            current.destinationPlanetId as Entity
-          )?.empireId;
+          const faction = tables.Planet.get(current.destinationPlanetId as Entity)?.empireId;
 
-          if (faction && destinationPlanet)
-            destinationPlanet.updateFaction(faction);
+          if (faction && destinationPlanet) destinationPlanet.updateFaction(faction);
         }, 2250);
       },
     },
-    { runOnInit: false }
+    { runOnInit: false },
   );
 
   tables.AccumulateGoldRoutineLog.watch(
@@ -161,24 +138,20 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
-          scene.fx.emitFloatingText(
-            { x: planet.coord.x, y: planet.coord.y - 25 },
-            `+${current.goldAdded}`,
-            {
-              icon: "Gold",
-              fontSize: 16,
-              iconSize: 20,
-              borderStyle: {
-                alpha: 0.75,
-                width: 2,
-                color: 0xffd700,
-              },
-            }
-          );
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
+            icon: "Gold",
+            fontSize: 16,
+            iconSize: 20,
+            borderStyle: {
+              alpha: 0.75,
+              width: 2,
+              color: 0xffd700,
+            },
+          });
         }, 1000);
       },
     },
-    { runOnInit: false }
+    { runOnInit: false },
   );
 
   tables.Turn.watch(
@@ -208,12 +181,12 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
                 icon: "Gold",
                 fontSize: 12,
                 iconSize: 16,
-              }
+              },
             );
           }, 50);
         }
       },
     },
-    { runOnInit: false }
+    { runOnInit: false },
   );
 };

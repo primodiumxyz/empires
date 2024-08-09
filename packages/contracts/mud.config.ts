@@ -41,7 +41,7 @@ export const worldInput = {
     P_ShieldEaterConfig: {
       key: [],
       schema: {
-        detonationCooldown: "uint256",
+        detonationThreshold: "uint256",
       },
     },
 
@@ -85,7 +85,7 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "bytes32",
-        spent: "uint256",
+        spent: "int256",
       },
     },
 
@@ -123,7 +123,6 @@ export const worldInput = {
         shieldCount: "uint256",
         goldCount: "uint256",
         empireId: "EEmpire",
-        lastShieldEaterVisit: "uint256",
       },
     },
 
@@ -161,7 +160,7 @@ export const worldInput = {
       schema: {
         currentPlanet: "bytes32",
         destinationPlanet: "bytes32",
-        lastDetonationBlock: "uint256",
+        currentCharge: "uint256",
       },
     },
 
@@ -439,19 +438,19 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    DetonateShieldEaterOverrideLog: {
+    ShieldEaterDetonateOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
         playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
+        ethSpent: "uint256",
+        overrideCount: "uint256",
         timestamp: "uint256",
-        impactedPlanetIds: "bytes32[]",
       },
       type: "offchainTable",
     },
-
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {

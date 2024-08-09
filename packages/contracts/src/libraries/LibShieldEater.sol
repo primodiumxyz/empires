@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, Player, P_PointConfig, ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
-import { EEmpire } from "codegen/common.sol";
-
+import { ShieldEater, Planet, PlanetData } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 
 import { pseudorandom, coordToId } from "src/utils.sol";
@@ -21,30 +19,34 @@ library LibShieldEater {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     uint256 randomIndex = pseudorandom(block.number, planetIds.length);
     ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
-    Planet.setLastShieldEaterVisit(planetIds[randomIndex], block.number);
+    ShieldEater.setCurrentCharge(0);
+    retarget();
   }
 
   /**
-   * @dev Selects a destination for the Shield Eater, biased towards planets that have
-   *      not been visited recently.
+   * @dev Selects a destination for the Shield Eater, from the top 3 planets with the most shields.
+   * @notice This function is overly complicated due to contract size optimizations.
    */
   function retarget() internal {
-    // get a list of all planets
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    bytes32[] memory longestWithoutVisit = new bytes32[](3);
-    uint256 longest = 0;
+    bytes32 dst;
 
-    // TODO: so expensive.  optimize.
-    for (uint256 i = 0; i < planetIds.length; i++) {
-      if (block.number - Planet.getLastShieldEaterVisit(planetIds[i]) >= longest) {
-        longestWithoutVisit[2] = longestWithoutVisit[1];
-        longestWithoutVisit[1] = longestWithoutVisit[0];
-        longestWithoutVisit[0] = planetIds[i];
+    uint256 largest = 0;
+    uint256 shieldCount = 0;
+
+    uint256 i = 0;
+    for (; i < planetIds.length; ++i) {
+      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+        continue;
+      }
+      shieldCount = Planet.getShieldCount(planetIds[i]);
+      if (shieldCount > largest) {
+        largest = shieldCount;
+        dst = planetIds[i];
       }
     }
 
-    uint256 randomIndex = pseudorandom(block.number, 3);
-    ShieldEater.setDestinationPlanet(longestWithoutVisit[randomIndex]);
+    ShieldEater.setDestinationPlanet(dst);
   }
 
   /**
@@ -62,10 +64,10 @@ library LibShieldEater {
     // How do we get there?
     CoordData memory offset = getTargetDirection(src, dst);
 
-    // If there is a hole in the map here, go around it
-    if (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
-      offset = rotateTargetDirection(offset);
-    }
+    // // If there is a hole in the map here, go around it
+    // if (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
+    //   offset = rotateTargetDirection(offset);
+    // }
 
     // Next movement target selected
     bytes32 planetId = coordToId(src.q + offset.q, src.r + offset.r);
@@ -73,14 +75,12 @@ library LibShieldEater {
     // Move the Shield Eater to the next planet
     ShieldEater.setCurrentPlanet(planetId);
 
-    // Mark the planet as visited
-    Planet.setLastShieldEaterVisit(planetId, block.number);
-
-    // Eat a little shields if there are any
-    uint256 shieldCount = Planet.getShieldCount(planetId);
-    if (shieldCount > 0) {
-      Planet.setShieldCount(planetId, shieldCount - 1);
-    }
+    // // Eat a little shields if there are any
+    // uint256 shieldCount = Planet.getShieldCount(planetId);
+    // if (shieldCount > 0) {
+    //   Planet.setShieldCount(planetId, shieldCount - 1);
+    //   ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + 1);
+    // }
 
     // If the Shield Eater has reached its destination, select a new destination
     if (ShieldEater.getCurrentPlanet() == ShieldEater.getDestinationPlanet()) {
@@ -97,51 +97,44 @@ library LibShieldEater {
 
     // Center
     Planet.setShieldCount(ShieldEater.getCurrentPlanet(), 0);
-    Planet.setLastShieldEaterVisit(ShieldEater.getCurrentPlanet(), block.number);
 
     // East
-    CoordData memory neighbor = CoordData(center.q + 1, center.r);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    bytes32 planetId = coordToId(center.q + 1, center.r);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
     // Southeast
-    neighbor = CoordData(center.q, center.r + 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q, center.r + 1);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
     // Southwest
-    neighbor = CoordData(center.q - 1, center.r + 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q - 1, center.r + 1);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
     // West
-    neighbor = CoordData(center.q - 1, center.r);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q - 1, center.r);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
     // Northwest
-    neighbor = CoordData(center.q, center.r - 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q, center.r - 1);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
     // Northeast
-    neighbor = CoordData(center.q + 1, center.r - 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 0);
-      Planet.setLastShieldEaterVisit(coordToId(neighbor.q, neighbor.r), block.number);
+    planetId = coordToId(center.q + 1, center.r - 1);
+    if (Planet.getIsPlanet(planetId)) {
+      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
     }
 
-    ShieldEater.setLastDetonationBlock(block.number);
+    ShieldEater.setCurrentCharge(0);
   }
 
   /********************/
@@ -164,7 +157,7 @@ library LibShieldEater {
    * @dev Returns the direction to move to advance from the source to the destination.
    */
 
-  function getTargetDirection(CoordData memory src, CoordData memory dst) internal pure returns (CoordData memory dir) {
+  function getTargetDirection(CoordData memory src, CoordData memory dst) internal view returns (CoordData memory dir) {
     if (dst.q > src.q) {
       dir.q = 1; // East or Northeast
       if (dst.r > src.r) {
@@ -188,44 +181,80 @@ library LibShieldEater {
         dir.r = 0; // West
       }
     }
-  }
 
-  /**
-   * @dev Rotates a direction 60 degrees clockwise, to avoid a gap in the planet map.
-   */
-
-  function rotateTargetDirection(CoordData memory dir) internal pure returns (CoordData memory newDir) {
-    if (dir.q == 1) {
-      if (dir.r == 0) {
-        //* East
-        newDir.q = 0; //* Southeast
-        newDir.r = 1;
+    // If there is a hole in the map here, go around it
+    if (!Planet.getIsPlanet(coordToId(src.q + dir.q, src.r + dir.r))) {
+      if (dir.q == 1) {
+        if (dir.r == 0) {
+          //* East
+          dir.q = 0; //* Southeast
+          dir.r = 1;
+        } else {
+          //* Northeast
+          dir.q = 1; //* East
+          dir.r = 0;
+        }
+      } else if (dir.q == 0) {
+        if (dir.r == 1) {
+          //* Southeast
+          dir.q = -1; //* Southwest
+          dir.r = 1;
+        } else {
+          //* Northwest
+          dir.q = 1; //* Northeast
+          dir.r = -1;
+        }
       } else {
-        //* Northeast
-        newDir.q = 1; //* East
-        newDir.r = 0;
-      }
-    } else if (dir.q == 0) {
-      if (dir.r == 1) {
-        //* Southeast
-        newDir.q = -1; //* Southwest
-        newDir.r = 1;
-      } else {
-        //* Northwest
-        newDir.q = 1; //* Northeast
-        newDir.r = -1;
-      }
-    } else {
-      // (dir.q == -1)
-      if (dir.r == 0) {
-        //* West
-        newDir.q = 0; //* Northwest
-        newDir.r = -1;
-      } else {
-        //* Southwest
-        newDir.q = -1; //* West
-        newDir.r = 0;
+        // (dir.q == -1)
+        if (dir.r == 0) {
+          //* West
+          dir.q = 0; //* Northwest
+          dir.r = -1;
+        } else {
+          //* Southwest
+          dir.q = -1; //* West
+          dir.r = 0;
+        }
       }
     }
   }
+
+  // /**
+  //  * @dev Rotates a direction 60 degrees clockwise, to avoid a gap in the planet map.
+  //  */
+
+  // function rotateTargetDirection(CoordData memory dir) internal pure returns (CoordData memory newDir) {
+  //   if (dir.q == 1) {
+  //     if (dir.r == 0) {
+  //       //* East
+  //       newDir.q = 0; //* Southeast
+  //       newDir.r = 1;
+  //     } else {
+  //       //* Northeast
+  //       newDir.q = 1; //* East
+  //       newDir.r = 0;
+  //     }
+  //   } else if (dir.q == 0) {
+  //     if (dir.r == 1) {
+  //       //* Southeast
+  //       newDir.q = -1; //* Southwest
+  //       newDir.r = 1;
+  //     } else {
+  //       //* Northwest
+  //       newDir.q = 1; //* Northeast
+  //       newDir.r = -1;
+  //     }
+  //   } else {
+  //     // (dir.q == -1)
+  //     if (dir.r == 0) {
+  //       //* West
+  //       newDir.q = 0; //* Northwest
+  //       newDir.r = -1;
+  //     } else {
+  //       //* Southwest
+  //       newDir.q = -1; //* West
+  //       newDir.r = 0;
+  //     }
+  //   }
+  // }
 }

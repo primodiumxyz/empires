@@ -45,7 +45,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         killShipBoostCostDecrease: 1n,
       },
       P_ShieldEaterConfig: {
-        detonationCooldown: 15n,
+        detonationThreshold: 10n,
       }
     },
   },

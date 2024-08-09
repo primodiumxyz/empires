@@ -1,9 +1,8 @@
 import { throttle } from "lodash";
 
 import { Key, Scene } from "@primodiumxyz/engine";
-import { KeybindActionKeys } from "@game/lib/constants/keybinds";
-
 import { GlobalApi } from "@game/api/global";
+import { KeybindActionKeys } from "@game/lib/constants/keybinds";
 
 export function createInputApi(scene: Scene, globalApi: GlobalApi) {
   function isDown(keybindAction: KeybindActionKeys) {
@@ -13,14 +12,12 @@ export function createInputApi(scene: Scene, globalApi: GlobalApi) {
     if (!keybinds) return false;
 
     if ("LeftClick" === keybindAction) {
-      if (input.phaserInput.activePointer.downElement?.nodeName !== "CANVAS")
-        return false;
+      if (input.phaserInput.activePointer.downElement?.nodeName !== "CANVAS") return false;
       return input.phaserInput.activePointer.leftButtonDown();
     }
 
     if ("RightClick" === keybindAction) {
-      if (input.phaserInput.activePointer.downElement?.nodeName !== "CANVAS")
-        return false;
+      if (input.phaserInput.activePointer.downElement?.nodeName !== "CANVAS") return false;
       return input.phaserInput.activePointer.rightButtonDown();
     }
 
@@ -56,12 +53,7 @@ export function createInputApi(scene: Scene, globalApi: GlobalApi) {
     return false;
   }
 
-  function addListener(
-    keybindAction: KeybindActionKeys,
-    callback: () => void,
-    emitOnRepeat = false,
-    wait = 0
-  ) {
+  function addListener(keybindAction: KeybindActionKeys, callback: () => void, emitOnRepeat = false, wait = 0) {
     const { input } = scene;
     const keybinds = globalApi.tables.Keybinds.get(keybindAction);
 

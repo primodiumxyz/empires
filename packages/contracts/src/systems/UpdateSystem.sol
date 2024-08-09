@@ -7,6 +7,7 @@ import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
 import { LibRoutine } from "libraries/LibRoutine.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
+import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { Planet, Turn, TurnData, P_GameConfig, MagnetTurnPlanets } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
@@ -38,7 +39,7 @@ contract UpdateSystem is EmpiresSystem {
    * @param routineThresholds An array of RoutineThresholds structs containing information about planet routines.
    */
   function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver {
-    uint256 goldGenRate = P_GameConfig.getGoldGenRate();
+    // uint256 goldGenRate = P_GameConfig.getGoldGenRate();
     // add gold to every planet
 
     // spend gold and move ships for each empire planet
@@ -47,7 +48,7 @@ contract UpdateSystem is EmpiresSystem {
       LibRoutine.executeRoutine(routineThresholds[i].planetId, routineThresholds[i]);
       Planet.setGoldCount(
         routineThresholds[i].planetId,
-        Planet.getGoldCount(routineThresholds[i].planetId) + goldGenRate * EMPIRE_COUNT
+        Planet.getGoldCount(routineThresholds[i].planetId) + P_GameConfig.getGoldGenRate() * EMPIRE_COUNT
       );
     }
 
@@ -69,6 +70,9 @@ contract UpdateSystem is EmpiresSystem {
 
       MagnetTurnPlanets.deleteRecord(EEmpire(i), nextTurn);
     }
+
+    // move the shield eater
+    LibShieldEater.update();
 
     // update empire point costs
     for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {

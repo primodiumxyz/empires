@@ -28,7 +28,7 @@ library LibOverride {
     uint256 _overrideCount,
     uint256 _spend
   ) internal {
-    Player.setSpent(playerId, Player.getSpent(playerId) + _spend);
+    Player.setSpent(playerId, Player.getSpent(playerId) + int256(_spend));
     uint256 pointUnit = P_PointConfig.getPointUnit();
     bool progressOverride = P_OverrideConfig.getIsProgressOverride(_overrideType);
 
