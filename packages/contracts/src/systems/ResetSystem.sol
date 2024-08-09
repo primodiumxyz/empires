@@ -6,6 +6,7 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
+import { PlayersMap } from "adts/PlayersMap.sol";
 import { EEmpire } from "codegen/common.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
@@ -21,6 +22,9 @@ contract ResetSystem is System {
       Magnet.deleteRecord(EEmpire.Blue, planets[i]);
       Magnet.deleteRecord(EEmpire.Green, planets[i]);
     }
+
+    PlayersMap.clear();
+
     PlanetsSet.clear();
     CitadelPlanetsSet.clear();
     EmpirePlanetsSet.clear(EEmpire.Red);

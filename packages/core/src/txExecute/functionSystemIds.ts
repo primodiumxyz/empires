@@ -12,11 +12,11 @@ export const functionSystemIds: {
   unregisterDelegation: getSystemId("Registration", "CORE"),
 
   /* -------------------------------- Gameplay -------------------------------- */
-  Empires__createShip: getSystemId("OverrideSystem"),
-  Empires__killShip: getSystemId("OverrideSystem"),
-  Empires__chargeShield: getSystemId("OverrideSystem"),
-  Empires__drainShield: getSystemId("OverrideSystem"),
-  Empires__sellPoints: getSystemId("OverrideSystem"),
+  Empires__createShip: getSystemId("OverrideShipSystem"),
+  Empires__killShip: getSystemId("OverrideShipSystem"),
+  Empires__chargeShield: getSystemId("OverrideShieldSystem"),
+  Empires__drainShield: getSystemId("OverrideShieldSystem"),
+  Empires__sellPoints: getSystemId("OverridePointsSystem"),
   Empires__tacticalStrike: getSystemId("TacticalStrikeOverrideSystem"),
   Empires__boostCharge: getSystemId("TacticalStrikeOverrideSystem"),
   Empires__stunCharge: getSystemId("TacticalStrikeOverrideSystem"),
@@ -28,7 +28,7 @@ export const functionSystemIds: {
 
   Empires__withdrawEarnings: getSystemId("RewardsSystem"),
 
-  Empires__placeMagnet: getSystemId("OverrideSystem"),
+  Empires__placeMagnet: getSystemId("OverrideMagnetsSystem"),
 
   Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
 
