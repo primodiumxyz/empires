@@ -29,7 +29,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
     currentPlanet !== entity
       ? `The shield eater is currently on ${entityToPlanetName(currentPlanet)}.`
       : cooldownShields
-        ? `The shield eater is eating, come back after it ate ${cooldownShields} more shields.`
+        ? `The shield eater is eating, come back after it ate ${cooldownShields.toLocaleString()} more shields.`
         : undefined;
 
   return (

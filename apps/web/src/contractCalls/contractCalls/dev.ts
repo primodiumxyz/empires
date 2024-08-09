@@ -58,6 +58,9 @@ export const createDevCalls = ({ execute, executeBatch }: ExecuteFunctions) => {
       return {
         functionName: `${worldInput.namespace}__devSetField` as const,
         args: [tableId, keyTuple, schemaIndex, data],
+        options: {
+          gas: 15000000n,
+        },
       };
     });
   };

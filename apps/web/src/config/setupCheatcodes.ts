@@ -968,31 +968,18 @@ export const setupCheatcodes = (
   });
 
   // reset shield eater countdown
-  const resetShieldEaterCountdown = createCheatcode({
+  const feedShieldEater = createCheatcode({
     title: "Reset shield eater countdown",
     bg: CheatcodeToBg["shieldEater"],
     caption: "Shield eater",
     inputs: {},
     execute: async () => {
-      const countdown = tables.P_ShieldEaterConfig.get()?.detonationCooldown ?? BigInt(0);
-      let currentBlock = tables.BlockNumber.get()?.value ?? BigInt(0);
-
-      if (currentBlock < countdown) {
-        const needToAdvance = countdown - currentBlock;
-        const needToAdvanceTurns = needToAdvance / (tables.P_GameConfig.get()?.turnLengthBlocks ?? 1n) + 1n;
-        const success = await _advanceTurns(Number(needToAdvanceTurns));
-        if (!success) {
-          notify("error", "Failed to advance blocks to update shield eater countdown");
-          return false;
-        }
-
-        currentBlock += needToAdvance;
-      }
+      const threshold = tables.P_ShieldEaterConfig.get()?.detonationThreshold ?? BigInt(0);
 
       const success = await devCalls.setProperties({
         table: tables.ShieldEater,
         keys: {},
-        properties: { lastDetonationBlock: currentBlock - countdown },
+        properties: { currentCharge: threshold },
       });
 
       if (success) {
@@ -1261,7 +1248,7 @@ export const setupCheatcodes = (
     triggerCharges,
     moveShieldEater,
     setShieldEaterDestination,
-    resetShieldEaterCountdown,
+    feedShieldEater,
     withdrawThatRake,
     setEmpire,
     ...Object.values(updateGameConfig),

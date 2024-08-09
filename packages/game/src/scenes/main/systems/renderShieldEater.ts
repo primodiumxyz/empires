@@ -1,4 +1,4 @@
-import { Core } from "@primodiumxyz/core";
+import { Core, entityToPlanetName } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { PrimodiumScene } from "@game/types";
 
@@ -26,6 +26,7 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
         const currPlanet = current.currentPlanet as Entity;
 
         const path = getShieldEaterPath(currPlanet, destPlanet);
+        console.log(path, entityToPlanetName(currPlanet), entityToPlanetName(destPlanet));
         const turnsToDestination = path.length + 1;
 
         // add current & destination labels
