@@ -64,7 +64,7 @@ library LibShieldEater {
     // How do we get there?
     CoordData memory offset = getTargetDirection(src, dst);
 
-    // If there is a hole in the map here, go around it
+    // // If there is a hole in the map here, go around it
     // if (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
     //   offset = rotateTargetDirection(offset);
     // }
@@ -75,12 +75,12 @@ library LibShieldEater {
     // Move the Shield Eater to the next planet
     ShieldEater.setCurrentPlanet(planetId);
 
-    // Eat a little shields if there are any
-    uint256 shieldCount = Planet.getShieldCount(planetId);
-    if (shieldCount > 0) {
-      Planet.setShieldCount(planetId, shieldCount - 1);
-      ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + 1);
-    }
+    // // Eat a little shields if there are any
+    // uint256 shieldCount = Planet.getShieldCount(planetId);
+    // if (shieldCount > 0) {
+    //   Planet.setShieldCount(planetId, shieldCount - 1);
+    //   ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + 1);
+    // }
 
     // If the Shield Eater has reached its destination, select a new destination
     if (ShieldEater.getCurrentPlanet() == ShieldEater.getDestinationPlanet()) {
@@ -157,7 +157,7 @@ library LibShieldEater {
    * @dev Returns the direction to move to advance from the source to the destination.
    */
 
-  function getTargetDirection(CoordData memory src, CoordData memory dst) internal pure returns (CoordData memory dir) {
+  function getTargetDirection(CoordData memory src, CoordData memory dst) internal view returns (CoordData memory dir) {
     if (dst.q > src.q) {
       dir.q = 1; // East or Northeast
       if (dst.r > src.r) {
@@ -181,11 +181,47 @@ library LibShieldEater {
         dir.r = 0; // West
       }
     }
+
+    // If there is a hole in the map here, go around it
+    if (!Planet.getIsPlanet(coordToId(src.q + dir.q, src.r + dir.r))) {
+      if (dir.q == 1) {
+        if (dir.r == 0) {
+          //* East
+          dir.q = 0; //* Southeast
+          dir.r = 1;
+        } else {
+          //* Northeast
+          dir.q = 1; //* East
+          dir.r = 0;
+        }
+      } else if (dir.q == 0) {
+        if (dir.r == 1) {
+          //* Southeast
+          dir.q = -1; //* Southwest
+          dir.r = 1;
+        } else {
+          //* Northwest
+          dir.q = 1; //* Northeast
+          dir.r = -1;
+        }
+      } else {
+        // (dir.q == -1)
+        if (dir.r == 0) {
+          //* West
+          dir.q = 0; //* Northwest
+          dir.r = -1;
+        } else {
+          //* Southwest
+          dir.q = -1; //* West
+          dir.r = 0;
+        }
+      }
+    }
   }
 
-  /**
-   * @dev Rotates a direction 60 degrees clockwise, to avoid a gap in the planet map.
-   */
+  // /**
+  //  * @dev Rotates a direction 60 degrees clockwise, to avoid a gap in the planet map.
+  //  */
 
   // function rotateTargetDirection(CoordData memory dir) internal pure returns (CoordData memory newDir) {
   //   if (dir.q == 1) {
