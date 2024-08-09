@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { System } from "@latticexyz/world/src/System.sol";
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { Turn, MagnetTurnPlanets } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
 
-contract UpdateMagnetsSystem is System {
+contract UpdateMagnetsSubsystem is EmpiresSystem {
   function updateMagnets() public {
     uint256 nextTurn = Turn.getValue() + 1;
     // remove magnets that should be removed for the next turn for each empire, so the turn starts on an updated state

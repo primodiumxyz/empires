@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { System } from "@latticexyz/world/src/System.sol";
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 // import { LibShieldEater } from "libraries/LibShieldEater.sol";
-contract UpdateShieldEaterSystem is System {
+contract UpdateShieldEaterSubsystem is EmpiresSystem {
   function updateShieldEater() public {
     // LibShieldEater.update();
   }
