@@ -183,6 +183,7 @@ export const worldInput = {
       key: [],
       schema: {
         currentPlanet: "bytes32",
+        nextPlanet: "bytes32",
         destinationPlanet: "bytes32",
         currentCharge: "uint256",
       },
