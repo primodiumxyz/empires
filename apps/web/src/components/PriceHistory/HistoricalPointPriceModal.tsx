@@ -106,12 +106,10 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
                 onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
               />
 
-              <div className="h-80 w-full">
+              <div className="h-96 w-full">
                 <ParentSize>
                   {({ width: visWidth, height: visHeight }) => (
-                    <p>
-                      <HistoricalPointGraph empire={selectedEmpire} width={visWidth} height={visHeight} />
-                    </p>
+                    <HistoricalPointGraph empire={selectedEmpire} width={visWidth} height={visHeight} />
                   )}
                 </ParentSize>
               </div>
@@ -122,7 +120,7 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
           <div className="col-span-2 flex flex-col gap-2">
             <SecondaryCard>
               <p className="mb-2 text-sm">YOUR PORTFOLIO</p>
-              <Account hideAccountBalance />
+              <Account hideAccountBalance justifyStart />
             </SecondaryCard>
             <SecondaryCard>
               <p className="mb-2 text-sm">MARKET RATES</p>

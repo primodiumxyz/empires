@@ -1,6 +1,9 @@
+import { useMemo } from "react";
+
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { SmallHistoricalPointGraph } from "@/components/PriceHistory/SmallHistoricalPointGraph";
 import { Price } from "@/components/shared/Price";
 import { useGame } from "@/hooks/useGame";
@@ -16,17 +19,42 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
     ROOT: { sprite },
   } = useGame();
   const { price: sellPrice } = usePointPrice(empire, 1);
-  const planetCount = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: empire })?.itemKeys.length ?? 0;
+  const planetCount = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: EEmpire.Red })?.itemKeys.length ?? 0;
+  const citadelPlanets = tables.Keys_CitadelPlanetsSet.useWithKeys()?.itemKeys ?? [];
+
+  const citadelCount = useMemo(() => {
+    let count = 0;
+    for (const entity of citadelPlanets) {
+      const planet = tables.Planet.get(entity as Entity);
+
+      if (!planet) continue;
+
+      if (planet.empireId !== empire) continue;
+
+      if (planet.isCitadel) count++;
+    }
+
+    return count;
+  }, [citadelPlanets, empire]);
 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
 
   return (
     <div className="flex flex-col justify-center rounded-box text-center text-white">
-      <div className="flex items-center justify-center gap-3">
-        <img src={spriteUrl} className="h-12" />
+      <div className="flex items-center justify-between gap-3">
+        <div className="relative">
+          <p className="text-md absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-xs text-accent opacity-75">
+            {planetCount}
+          </p>
+          <img src={spriteUrl} className="h-12" />
+        </div>
+
         <div className={cn("flex flex-col items-start gap-1")}>
           <Price wei={sellPrice} />
-          <p className="text-xs opacity-75">{planetCount} Planets</p>
+
+          <p className="text-xs opacity-75">
+            {citadelCount}/{citadelPlanets.length} Citadels
+          </p>
         </div>
         {!hideGraph && <SmallHistoricalPointGraph width={75} height={25} empire={empire} windowSize={WINDOW_SIZE} />}
       </div>
