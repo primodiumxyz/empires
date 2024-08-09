@@ -1,6 +1,6 @@
-import { Core, entityToPlanetName } from '@primodiumxyz/core';
-import { Entity, namespaceWorld } from '@primodiumxyz/reactive-tables';
-import { PrimodiumScene } from '@game/types';
+import { Core, entityToPlanetName } from "@primodiumxyz/core";
+import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
+import { PrimodiumScene } from "@game/types";
 
 export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
   const {
@@ -8,7 +8,7 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
     network: { world },
     utils: { getAllNeighbors, getShieldEaterPath },
   } = core;
-  const systemsWorld = namespaceWorld(world, 'systems');
+  const systemsWorld = namespaceWorld(world, "systems");
 
   // Update current planet, path and destination
   tables.ShieldEater.watch({
@@ -16,12 +16,8 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
     onChange: ({ properties: { current, prev } }) => {
       // remove previous labels
       if (prev) {
-        scene.objects.planet
-          .get(prev.destinationPlanet as Entity)
-          ?.setShieldEaterDestination(0);
-        scene.objects.planet
-          .get(prev.currentPlanet as Entity)
-          ?.setShieldEaterLocation(false);
+        scene.objects.planet.get(prev.destinationPlanet as Entity)?.setShieldEaterDestination(0);
+        scene.objects.planet.get(prev.currentPlanet as Entity)?.setShieldEaterLocation(false);
       }
 
       // add new labels
@@ -33,9 +29,7 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
         const turnsToDestination = path.length + 1;
 
         // add current & destination labels
-        scene.objects.planet
-          .get(destPlanet)
-          ?.setShieldEaterDestination(turnsToDestination);
+        scene.objects.planet.get(destPlanet)?.setShieldEaterDestination(turnsToDestination);
         scene.objects.planet.get(currPlanet)?.setShieldEaterLocation(true);
 
         // add path labels with turns to arrival
@@ -47,7 +41,7 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
   });
 
   // Animate when detonating
-  tables.DetonateShieldEaterOverrideLog.watch(
+  tables.ShieldEaterDetonateOverrideLog.watch(
     {
       world: systemsWorld,
       onChange: ({ properties: { current } }) => {
@@ -56,14 +50,10 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
         const planetEntity = current.planetId as Entity;
         const neighborPlanetEntities = getAllNeighbors(planetEntity);
         const planet = scene.objects.planet.get(planetEntity);
-        const neighborPlanets = neighborPlanetEntities.map((planet) =>
-          scene.objects.planet.get(planet),
-        );
+        const neighborPlanets = neighborPlanetEntities.map((planet) => scene.objects.planet.get(planet));
 
         planet?.detonateShieldEaterDamage();
-        neighborPlanets.forEach((planet) =>
-          planet?.detonateShieldEaterCollateralDamage(),
-        );
+        neighborPlanets.forEach((planet) => planet?.detonateShieldEaterCollateralDamage());
       },
     },
     { runOnInit: false },

@@ -30,7 +30,7 @@ export const useActions = () => {
   const boostChargeOverrides = tables.BoostChargeOverrideLog.useAll();
   const stunChargeOverrides = tables.StunChargeOverrideLog.useAll();
   const tacticalStrikeOverrides = tables.TacticalStrikeOverrideLog.useAll();
-  const detonateShieldEaterOverrides = tables.DetonateShieldEaterOverrideLog.useAll();
+  const detonateShieldEaterOverrides = tables.ShieldEaterDetonateOverrideLog.useAll();
 
   return useMemo(() => {
     const getPlanetSpan = (planetId: Entity) => {
@@ -209,7 +209,7 @@ export const useActions = () => {
     });
 
     const detonateShieldEaterOverrideEntries = detonateShieldEaterOverrides.map((actionEntity) => {
-      const action = tables.DetonateShieldEaterOverrideLog.get(actionEntity)!;
+      const action = tables.ShieldEaterDetonateOverrideLog.get(actionEntity)!;
       return {
         timestamp: action.timestamp,
         element: (

@@ -14,6 +14,7 @@ import {
 import { IconLabel } from "@game/lib/objects/IconLabel";
 import { Magnet } from "@game/lib/objects/Magnet";
 import { Overheat } from "@game/lib/objects/Overheat";
+import { ShieldEater } from "@game/lib/objects/ShieldEater";
 import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 import { PrimodiumScene } from "@game/types";
 
@@ -35,8 +36,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private overheat: Overheat;
   private magnets: [red: Magnet, blue: Magnet, green: Magnet];
   private magnetWaves: Phaser.GameObjects.Sprite;
-  private shieldEaterLocation: IconLabel;
-  private shieldEaterDestination: IconLabel;
+  private shieldEater: ShieldEater;
   private citadel: Phaser.GameObjects.Sprite | null;
   private empireId: EEmpire;
   private spawned = false;
@@ -158,19 +158,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
           .setScale(1.5)
       : null;
 
-    this.shieldEaterLocation = new IconLabel(scene, { x: coord.x, y: coord.y - 70 }, "", "ShieldEaterLocation", {
-      color: "white",
-    })
-      .setDepth(DepthLayers.Planet + 1)
-      .setScale(2)
-      .setVisible(false);
-
-    this.shieldEaterDestination = new IconLabel(scene, { x: coord.x, y: coord.y - 70 }, "", "ShieldEaterDestination", {
-      color: "white",
-    })
-      .setDepth(DepthLayers.Planet + 1)
-      .setScale(2)
-      .setVisible(false);
+    this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y }, empire);
 
     this._scene = scene;
     this.id = id;
@@ -193,8 +181,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
     this.scene.add.existing(this.overheat);
-    this.scene.add.existing(this.shieldEaterLocation);
-    this.scene.add.existing(this.shieldEaterDestination);
+    this.scene.add.existing(this.shieldEater);
     if (this.citadel) this.scene.add.existing(this.citadel);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     this.scene.add.existing(this.magnetWaves);
@@ -217,8 +204,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.overheat.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
-    this.shieldEaterLocation.setScale(scale * 2);
-    this.shieldEaterDestination.setScale(scale * 2);
+    this.shieldEater.setScale(scale);
     if (this.citadel) this.citadel.setScale(scale);
     return this;
   }
@@ -244,8 +230,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.gold.setAlpha(alpha);
     this.magnets.forEach((magnet) => magnet.setAlpha(alpha));
     this.planetName.setAlpha(nameAlpha);
-    this.shieldEaterLocation.setAlpha(alpha);
-    this.shieldEaterDestination.setAlpha(alpha);
   }
 
   updateFaction(empire: EEmpire) {
@@ -433,37 +417,24 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     activeMagnets.forEach((magnet, index) => magnet.updatePosition(this.coord.x + 75, this.coord.y - 60 + index * 30));
   }
 
-  setShieldEaterLocation(present: boolean) {
-    // TODO(SE): temp
-    this.shieldEaterLocation.setText(present ? "🐍" : "").setVisible(true);
-
-    this.shieldEaterLocation.setVisible(present);
-    if (present && this.shieldEaterDestination.visible) this.setShieldEaterDestination(0);
+  setShieldEaterLocation(present: boolean): ShieldEater {
+    return this.shieldEater.setShieldEaterLocation(present);
   }
 
-  setShieldEaterDestination(turns: number) {
-    this.shieldEaterDestination.setVisible(turns > 0);
-    this.shieldEaterDestination.setText(turns ? `🎯${turns.toLocaleString()}` : "").setVisible(turns > 0);
+  setShieldEaterDestination(turns: number): ShieldEater {
+    return this.shieldEater.setShieldEaterDestination(turns);
   }
 
-  setShieldEaterPath(turns: number) {
-    this.shieldEaterDestination.setText(turns.toLocaleString()).setVisible(turns > 0);
+  setShieldEaterPath(turns: number): ShieldEater {
+    return this.shieldEater.setShieldEaterPath(turns);
   }
 
-  detonateShieldEaterDamage() {
-    // TODO(SE): detonate shield eater
-    this.shieldEaterDestination.setText("💣💣💣").setVisible(true);
-    setTimeout(() => {
-      this.shieldEaterDestination.setVisible(false);
-    }, 3000);
+  detonateShieldEaterDamage(): ShieldEater {
+    return this.shieldEater.detonateShieldEaterDamage();
   }
 
-  detonateShieldEaterCollateralDamage() {
-    // TODO(SE): detonate shield eater collateral damage
-    this.shieldEaterDestination.setText("💣").setVisible(true);
-    setTimeout(() => {
-      this.shieldEaterDestination.setVisible(false);
-    }, 3000);
+  detonateShieldEaterCollateralDamage(): ShieldEater {
+    return this.shieldEater.detonateShieldEaterCollateralDamage();
   }
 
   override destroy() {
