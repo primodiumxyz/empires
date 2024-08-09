@@ -7,13 +7,22 @@ import { useEthPrice } from "@/hooks/useEthPrice";
 import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
-export const Price = ({ wei, className }: { wei: bigint; className?: string }) => {
+export const Price = ({
+  wei,
+  className,
+  forceBlockchainUnits,
+}: {
+  wei: bigint;
+  className?: string;
+  forceBlockchainUnits?: boolean;
+}) => {
   const {
     utils: { weiToUsd },
   } = useCore();
   const { price, loading } = useEthPrice();
   const { showBlockchainUnits } = useSettings();
 
+  if (forceBlockchainUnits) return <span className={className}>{formatEther(wei)}ETH</span>;
   if (showBlockchainUnits.enabled) return <span className={className}>{formatEther(wei)}ETH</span>;
   if (loading) return <span className={className}>...</span>;
   if (!price)

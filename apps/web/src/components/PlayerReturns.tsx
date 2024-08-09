@@ -10,6 +10,7 @@ import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
 
@@ -44,9 +45,11 @@ export const PlayerReturns = () => {
   return (
     <div className="flex w-40 flex-col gap-2">
       <div className="text-right">
-        <h2 className="font-semibold text-gray-400">Pot</h2>
-        <Price wei={pot} className="text-base" />
+        <h2 className="font-semibold">Pot</h2>
+        <Price wei={pot} className="text-accent" />
       </div>
+
+      <hr className="my-1 w-full border-secondary/50" />
 
       <EmpireEndReward
         empire={biggestReward.empire}
@@ -82,8 +85,8 @@ const EmpireEndReward = ({
   const imgUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
   const empireName = empire === EEmpire.Red ? "Red" : empire === EEmpire.Blue ? "Blue" : "Green";
   return (
-    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg border border-white p-2">
-      <h2 className="flex items-center justify-between gap-2 font-semibold text-gray-400">
+    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
+      <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
         <span className="text-xs">Earn up to</span>
         <Tooltip
           tooltipContent={`Projected rewards if ${empireName} empire wins`}
@@ -93,17 +96,17 @@ const EmpireEndReward = ({
           <ExclamationCircleIcon className="size-3" />
         </Tooltip>
       </h2>
-      <div className={cn("flex h-full w-full flex-row items-center justify-between border-none py-1 text-sm")}>
-        <div className="flex items-center gap-1">
+      <div className={cn("flex h-full w-full flex-row items-center justify-end gap-2 border-none py-1 text-sm")}>
+        <div className="flex items-center justify-end gap-2">
           <img src={imgUrl} className="h-6" />
           <Price wei={earnings} />
+          {!!totalSpent && (
+            <div className={cn("text-right text-xs", isProfit ? "text-green-400" : "text-red-400")}>
+              {isProfit ? "+" : "-"}
+              <Price wei={pnl} />
+            </div>
+          )}
         </div>
-        {!!totalSpent && (
-          <div className={cn("text-right text-xs", isProfit ? "text-green-400" : "text-red-400")}>
-            {isProfit ? "+" : "-"}
-            <Price wei={pnl} />
-          </div>
-        )}
       </div>
     </div>
   );
@@ -126,17 +129,17 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const pnl = isProfit ? totalReward - totalSpent : totalSpent - totalReward;
 
   return (
-    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg border border-white p-2">
-      <h2 className="flex items-center justify-between gap-2 font-semibold text-gray-400">
+    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
+      <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
         <span className="text-xs">Sell now</span>
         <Tooltip tooltipContent="Rewards if you sell all points now" direction="left" className="w-56 text-xs">
           <ExclamationCircleIcon className="size-3" />
         </Tooltip>
       </h2>
-      <div className={cn("flex h-full w-full justify-between gap-1 border-none py-1 text-sm")}>
+      <div className={cn("flex h-full w-full items-center justify-end gap-1 border-none py-1 text-sm")}>
         <Price wei={totalReward} />
         {!!totalSpent && (
-          <span className={cn(isProfit ? "text-green-400" : "text-red-400")}>
+          <span className={cn("text-xs", isProfit ? "text-green-400" : "text-red-400")}>
             {isProfit ? "+" : "-"}
             <Price wei={pnl} />
           </span>
@@ -144,35 +147,4 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
       </div>
     </div>
   );
-};
-
-const usePoints = (playerId: Entity): Record<EEmpire, { playerPoints: bigint; empirePoints: bigint }> => {
-  const { tables } = useCore();
-
-  const redPlayerPoints = tables.Value_PointsMap.useWithKeys({ empireId: EEmpire.Red, playerId })?.value ?? 0n;
-  const bluePlayerPoints = tables.Value_PointsMap.useWithKeys({ empireId: EEmpire.Blue, playerId })?.value ?? 0n;
-  const greenPlayerPoints = tables.Value_PointsMap.useWithKeys({ empireId: EEmpire.Green, playerId })?.value ?? 0n;
-
-  const redEmpirePoints = tables.Empire.useWithKeys({ id: EEmpire.Red })?.pointsIssued ?? 0n;
-  const blueEmpirePoints = tables.Empire.useWithKeys({ id: EEmpire.Blue })?.pointsIssued ?? 0n;
-  const greenEmpirePoints = tables.Empire.useWithKeys({ id: EEmpire.Green })?.pointsIssued ?? 0n;
-
-  return {
-    [EEmpire.Red]: {
-      playerPoints: redPlayerPoints,
-      empirePoints: redEmpirePoints,
-    },
-    [EEmpire.Blue]: {
-      playerPoints: bluePlayerPoints,
-      empirePoints: blueEmpirePoints,
-    },
-    [EEmpire.Green]: {
-      playerPoints: greenPlayerPoints,
-      empirePoints: greenEmpirePoints,
-    },
-    [EEmpire.LENGTH]: {
-      playerPoints: 0n,
-      empirePoints: 0n,
-    },
-  };
 };

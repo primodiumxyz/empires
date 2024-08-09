@@ -31,13 +31,14 @@ export const initMainScene = async (game: GlobalApi, core: Core): Promise<Primod
       Sprites.StarBg,
     )
     .setDepth(-Infinity)
-    .setScrollFactor(0.25, 0.25)
+    .setScrollFactor(0.1, 0.1)
+
     .postFX.addShine();
   scene.phaserScene.add
     .image(0, 0, Assets.SpriteAtlas, Sprites.Nebula)
     .setScale(3)
     .setAlpha(0.35)
-    .setScrollFactor(0.5, 0.5)
+    .setScrollFactor(0.1, 0.1)
     .setDepth(-Infinity);
 
   setupBasicCameraMovement(sceneApi, core.network.world, {

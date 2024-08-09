@@ -91,25 +91,23 @@ export const GameHUD = () => {
           <PriceHistory />
         </HUD.TopLeft>
 
-        <HUD.TopMiddle>
-          <TimeLeft />
-        </HUD.TopMiddle>
-        <HUD.Left>
-          <ActionLog />
-        </HUD.Left>
+        <HUD.TopMiddle>{DEV && <Cheatcodes />}</HUD.TopMiddle>
 
         <HUD.TopRight className="flex flex-col gap-2">
           <Account />
         </HUD.TopRight>
 
-        <HUD.BottomLeft>
-          <div className="flex w-48 items-center gap-2">
+        <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
+          <div className="flex w-full items-center justify-between gap-2">
             <MusicPlayer />
             <Settings />
           </div>
+          <ActionLog />
         </HUD.BottomLeft>
 
-        <HUD.BottomMiddle>{DEV && <Cheatcodes className="-mr-1" />}</HUD.BottomMiddle>
+        <HUD.BottomMiddle>
+          <TimeLeft />
+        </HUD.BottomMiddle>
 
         <HUD.Center>
           <OverridePopup />
