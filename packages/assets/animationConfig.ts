@@ -169,6 +169,7 @@ export const AnimationConfig: Animation[] = [
     frameRate: 10,
     startFrame: 0,
     endFrame: 31,
+    randomFrame: true,
     repeat: -1,
     prefix: "vfx/waves/Magnet_Waves_",
     suffix: ".png",
