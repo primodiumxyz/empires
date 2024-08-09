@@ -231,41 +231,4 @@ contract LibShieldEaterTest is PrimodiumTest {
       );
     }
   }
-
-  // function testDetonateCooldown() public {
-  //   vm.startPrank(creator);
-
-  //   ShieldEater.setLastDetonationBlock(block.number + 1);
-
-  //   // vm.roll(1000000);
-
-  //   // console.log("P_ShieldEaterConfig.getDetonationCooldown()");
-  //   // console.log(P_ShieldEaterConfig.getDetonationCooldown());
-
-  //   // console.log("ShieldEater.getLastDetonationBlock()");
-  //   // console.log(ShieldEater.getLastDetonationBlock());
-
-  //   // console.log("block.number");
-  //   // console.log(block.number);
-  //   // vm.expectRevert();
-  //   LibShieldEater.detonate();
-
-  //   // vm.roll(ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown() - 1);
-
-  //   // // console.log("P_ShieldEaterConfig.getDetonationCooldown()");
-  //   // // console.log(P_ShieldEaterConfig.getDetonationCooldown());
-
-  //   // // console.log("ShieldEater.getLastDetonationBlock()");
-  //   // // console.log(ShieldEater.getLastDetonationBlock());
-
-  //   // // console.log("block.number");
-  //   // // console.log(block.number);
-
-  //   // // console.log("ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown()");
-  //   // // console.log(ShieldEater.getLastDetonationBlock() + P_ShieldEaterConfig.getDetonationCooldown());
-
-  //   // // vm.expectRevert("[LibShieldEater] detonate cooldown not yet expired");
-  //   // vm.expectRevert();
-  //   // LibShieldEater.detonate();
-  // }
 }

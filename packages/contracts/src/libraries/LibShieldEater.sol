@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, Player, P_PointConfig, ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
-import { EEmpire } from "codegen/common.sol";
-
+import { ShieldEater, Planet, PlanetData } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 
 import { pseudorandom, coordToId } from "src/utils.sol";
@@ -21,22 +19,32 @@ library LibShieldEater {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     uint256 randomIndex = pseudorandom(block.number, planetIds.length);
     ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
+    ShieldEater.setCurrentCharge(0);
+    retarget();
   }
 
   /**
    * @dev Selects a destination for the Shield Eater, from the top 3 planets with the most shields.
+   * @notice This function is overly complicated due to contract size optimizations.
    */
   function retarget() internal {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     bytes32[] memory dstOptions = new bytes32[](3);
-    uint256 largest = 0;
 
-    // TODO: so expensive.  rewrite as modulo wrapped writes
-    for (uint256 i = 0; i < planetIds.length; i++) {
-      if ((Planet.getShieldCount(planetIds[i]) >= largest) && (planetIds[i] != ShieldEater.getCurrentPlanet())) {
-        dstOptions[2] = dstOptions[1];
-        dstOptions[1] = dstOptions[0];
-        dstOptions[0] = planetIds[i];
+    uint256 writeIndex = 0;
+    uint256 largest = 0;
+    uint256 shieldCount = 0;
+
+    uint256 i = 0;
+    for (; i < planetIds.length; ++i) {
+      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+        continue;
+      }
+      shieldCount = Planet.getShieldCount(planetIds[i]);
+      if (shieldCount >= largest) {
+        largest = shieldCount;
+        writeIndex = (writeIndex + 1) % 3;
+        dstOptions[writeIndex] = planetIds[i];
       }
     }
 
@@ -74,7 +82,7 @@ library LibShieldEater {
     uint256 shieldCount = Planet.getShieldCount(planetId);
     if (shieldCount > 0) {
       Planet.setShieldCount(planetId, shieldCount - 1);
-      // ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + 1);
+      ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + 1);
     }
 
     // If the Shield Eater has reached its destination, select a new destination

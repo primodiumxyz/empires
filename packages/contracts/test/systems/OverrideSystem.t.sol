@@ -578,4 +578,24 @@ contract OverrideSystemTest is PrimodiumTest {
     console.log("charge after stunCharge", Planet_TacticalStrike.get(planetId).charge);
     assertEq(Planet_TacticalStrike.get(planetId).charge, 0);
   }
+
+  /**************************************************************************
+   * Shield Eater
+   *************************************************************************/
+
+  function testDetonateShieldEater() public {
+    // EEmpire empire = Planet.getEmpireId(planetId);
+    // uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+    // uint256 currentShields = Planet.get(planetId).shieldCount;
+    // world.Empires__shieldEater{ value: cost }(planetId, 1);
+    // assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
+  }
+
+  function testDetonateShieldEaterNotCharged() public {
+    // EEmpire empire = Planet.getEmpireId(planetId);
+    // uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+    // uint256 currentShields = Planet.get(planetId).shieldCount;
+    // world.Empires__shieldEater{ value: cost }(planetId, 1);
+    // assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
+  }
 }
