@@ -1,4 +1,4 @@
-import { Core, entityToPlanetName } from "@primodiumxyz/core";
+import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { PrimodiumScene } from "@game/types";
 
@@ -52,8 +52,8 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
         const planet = scene.objects.planet.get(planetEntity);
         const neighborPlanets = neighborPlanetEntities.map((planet) => scene.objects.planet.get(planet));
 
-        planet?.detonateShieldEaterDamage();
-        neighborPlanets.forEach((planet) => planet?.detonateShieldEaterCollateralDamage());
+        planet?.shieldEaterDetonate();
+        neighborPlanets.forEach((planet) => planet?.shieldEaterCrack());
       },
     },
     { runOnInit: false },

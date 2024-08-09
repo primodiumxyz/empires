@@ -33,6 +33,11 @@ export const Animations = {
   OverheatFlamesLow: "overheat/low",
   OverheatFlamesMedium: "overheat/medium",
   OverheatFlamesFull: "overheat/full",
+
+  // Shield eater
+  ShieldEaterIdle: "shield-eater",
+  ShieldEaterDetonate: "shield-eater/detonate",
+  ShieldEaterCrack: "shield-eater/crack",
 };
 
 export type AnimationKeys = keyof typeof Animations;

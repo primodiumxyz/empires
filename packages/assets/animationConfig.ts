@@ -76,6 +76,16 @@ export const AnimationConfig: Animation[] = [
     prefix: "sprites/magnet/red/Magnet_Red_",
     suffix: ".png",
   },
+  {
+    key: "shield-eater/idle",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 19,
+    repeat: -1,
+    prefix: "sprites/shield-eater/idle/ShieldEater_Test_Idle_",
+    suffix: ".png",
+  },
   /* ----------------------------------- VFX ---------------------------------- */
   {
     key: "conquer/blue",
@@ -202,6 +212,26 @@ export const AnimationConfig: Animation[] = [
     randomFrame: true,
     repeat: -1,
     prefix: "vfx/overheat/full/Overheat_Full_",
+    suffix: ".png",
+  },
+  {
+    key: "shield-eater/detonate",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 19,
+    prefix: "vfx/shield-eater/detonate/ShieldEater_Test_Shaking_",
+    suffix: ".png",
+  },
+  {
+    key: "shield-eater/crack",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 14,
+    randomFrame: true,
+    zeroPad: 3,
+    prefix: "vfx/shield-eater/crack/AOE_Crack_",
     suffix: ".png",
   },
 ];

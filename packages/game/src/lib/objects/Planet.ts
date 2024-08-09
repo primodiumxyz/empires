@@ -158,7 +158,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
           .setScale(1.5)
       : null;
 
-    this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y }, empire);
+    this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y });
 
     this._scene = scene;
     this.id = id;
@@ -429,12 +429,12 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     return this.shieldEater.setShieldEaterPath(turns);
   }
 
-  detonateShieldEaterDamage(): ShieldEater {
-    return this.shieldEater.detonateShieldEaterDamage();
+  shieldEaterDetonate(): ShieldEater {
+    return this.shieldEater.shieldEaterDetonate();
   }
 
-  detonateShieldEaterCollateralDamage(): ShieldEater {
-    return this.shieldEater.detonateShieldEaterCollateralDamage();
+  shieldEaterCrack(): ShieldEater {
+    return this.shieldEater.shieldEaterCrack();
   }
 
   override destroy() {

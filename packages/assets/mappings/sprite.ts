@@ -19,10 +19,6 @@ export const Sprites = {
   Attack: "sprites/icons/attack.png",
   Crown: "sprites/icons/crown.png",
 
-  // TODO(SE): temp
-  ShieldEaterLocation: "sprites/pending-arrows/red/Pending_Red_6.png",
-  ShieldEaterDestination: "sprites/pending-arrows/red/Pending_Red_0.png",
-
   //Background
   StarBg: "sprites/background/star.png",
   Nebula: "sprites/background/nebula.png",
@@ -48,6 +44,10 @@ export const Sprites = {
   OverheatBorderGreen4: "sprites/overheat-border/green/Overheat_Border_Green_4.png",
   OverheatBorderGreen5: "sprites/overheat-border/green/Overheat_Border_Green_5.png",
   OverheatBorderGreen6: "sprites/overheat-border/green/Overheat_Border_Green_6.png",
+
+  // TODO(SE): temp
+  ShieldEaterLocation: "sprites/pending-arrows/red/Pending_Red_6.png",
+  ShieldEaterDestination: "sprites/pending-arrows/red/Pending_Red_0.png",
 
   // TEMP
   Boost: "sprites/icons/TEMP_Boost.png",
