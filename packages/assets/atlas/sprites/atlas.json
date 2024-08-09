@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1722625636438",
+            "image": "atlas.png?timestamp=1723219896210",
             "format": "RGBA8888",
             "size": {
                 "w": 1119,
-                "h": 1046
+                "h": 1237
             },
             "scale": 1,
             "frames": [
@@ -371,6 +371,279 @@
                     }
                 },
                 {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 115,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 239,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 947,
+                        "y": 363,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 951,
+                        "y": 487,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 951,
+                        "y": 611,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 887,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_16.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 358,
+                        "y": 922,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_17.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 990,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_18.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 143,
+                        "y": 990,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 501,
+                        "y": 922,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 644,
+                        "y": 922,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 787,
+                        "y": 1011,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
                     "filename": "sprites/planet/planet_underglow.png",
                     "rotated": false,
                     "trimmed": false,
@@ -385,8 +658,8 @@
                         "h": 96
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 763,
+                        "x": 930,
+                        "y": 1011,
                         "w": 96,
                         "h": 96
                     }
@@ -406,8 +679,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 895,
-                        "y": 859,
+                        "x": 1026,
+                        "y": 1011,
                         "w": 76,
                         "h": 114
                     }
@@ -427,8 +700,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 971,
-                        "y": 859,
+                        "x": 930,
+                        "y": 1107,
                         "w": 76,
                         "h": 114
                     }
@@ -448,8 +721,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 115,
+                        "x": 1038,
+                        "y": 735,
                         "w": 76,
                         "h": 114
                     }
@@ -469,8 +742,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 229,
+                        "x": 1038,
+                        "y": 849,
                         "w": 76,
                         "h": 114
                     }
@@ -490,8 +763,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 343,
+                        "x": 1006,
+                        "y": 1125,
                         "w": 111,
                         "h": 56
                     }
@@ -511,8 +784,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 399,
+                        "x": 1006,
+                        "y": 1181,
                         "w": 111,
                         "h": 56
                     }
@@ -532,8 +805,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 455,
+                        "x": 0,
+                        "y": 1135,
                         "w": 111,
                         "h": 56
                     }
@@ -553,8 +826,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 358,
-                        "y": 922,
+                        "x": 111,
+                        "y": 1114,
                         "w": 111,
                         "h": 56
                     }
@@ -574,8 +847,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 469,
-                        "y": 922,
+                        "x": 111,
+                        "y": 1170,
                         "w": 111,
                         "h": 56
                     }
@@ -595,8 +868,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 580,
-                        "y": 922,
+                        "x": 222,
+                        "y": 1114,
                         "w": 111,
                         "h": 56
                     }
@@ -616,8 +889,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 691,
-                        "y": 922,
+                        "x": 286,
+                        "y": 1046,
                         "w": 111,
                         "h": 56
                     }
@@ -637,8 +910,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 951,
-                        "y": 511,
+                        "x": 222,
+                        "y": 1170,
                         "w": 111,
                         "h": 56
                     }
@@ -658,8 +931,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 951,
-                        "y": 567,
+                        "x": 333,
+                        "y": 1135,
                         "w": 111,
                         "h": 56
                     }
@@ -679,8 +952,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 951,
-                        "y": 623,
+                        "x": 397,
+                        "y": 1046,
                         "w": 111,
                         "h": 56
                     }
@@ -700,8 +973,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 951,
-                        "y": 679,
+                        "x": 444,
+                        "y": 1102,
                         "w": 111,
                         "h": 56
                     }
@@ -721,8 +994,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 991,
-                        "y": 735,
+                        "x": 508,
+                        "y": 1046,
                         "w": 111,
                         "h": 56
                     }
@@ -742,8 +1015,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 991,
-                        "y": 791,
+                        "x": 555,
+                        "y": 1102,
                         "w": 111,
                         "h": 56
                     }
@@ -763,8 +1036,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 802,
-                        "y": 973,
+                        "x": 619,
+                        "y": 1046,
                         "w": 111,
                         "h": 56
                     }
@@ -784,8 +1057,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 913,
-                        "y": 973,
+                        "x": 666,
+                        "y": 1102,
                         "w": 111,
                         "h": 56
                     }
@@ -805,8 +1078,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 358,
-                        "y": 978,
+                        "x": 777,
+                        "y": 1135,
                         "w": 111,
                         "h": 56
                     }
@@ -826,8 +1099,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 990,
+                        "x": 444,
+                        "y": 1158,
                         "w": 111,
                         "h": 56
                     }
@@ -847,8 +1120,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 111,
-                        "y": 990,
+                        "x": 555,
+                        "y": 1158,
                         "w": 111,
                         "h": 56
                     }
@@ -868,8 +1141,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 802,
-                        "y": 922,
+                        "x": 730,
+                        "y": 1046,
                         "w": 32,
                         "h": 32
                     }
@@ -889,8 +1162,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 834,
-                        "y": 922,
+                        "x": 333,
+                        "y": 1102,
                         "w": 32,
                         "h": 32
                     }
@@ -910,8 +1183,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 772,
-                        "y": 763,
+                        "x": 365,
+                        "y": 1102,
                         "w": 32,
                         "h": 32
                     }
@@ -931,8 +1204,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 804,
-                        "y": 763,
+                        "x": 397,
+                        "y": 1102,
                         "w": 32,
                         "h": 32
                     }
@@ -1036,8 +1309,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 947,
-                        "y": 343,
+                        "x": 1006,
+                        "y": 1125,
                         "w": 111,
                         "h": 56
                     }
@@ -1057,8 +1330,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 691,
-                        "y": 922,
+                        "x": 286,
+                        "y": 1046,
                         "w": 111,
                         "h": 56
                     }
@@ -1078,10 +1351,157 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 991,
-                        "y": 791,
+                        "x": 555,
+                        "y": 1102,
                         "w": 111,
                         "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_19.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 895,
+                        "y": 763,
+                        "w": 143,
+                        "h": 124
                     }
                 }
             ]
