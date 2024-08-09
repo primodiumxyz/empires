@@ -10,13 +10,13 @@ import { LibMagnet } from "libraries/LibMagnet.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { Planet, Turn, TurnData, P_GameConfig, MagnetTurnPlanets } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-// import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
+import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { RoutineThresholds } from "../Types.sol";
 import { EMPIRE_COUNT } from "src/constants.sol";
 
-// import { console } from "forge-std/console.sol";
+import { console } from "forge-std/console.sol";
 
 contract UpdateSystem is EmpiresSystem {
   /**
@@ -72,7 +72,7 @@ contract UpdateSystem is EmpiresSystem {
     }
 
     // move the shield eater
-    // LibShieldEater.update();
+    LibShieldEater.update();
 
     // update empire point costs
     for (uint i = 1; i < uint256(EEmpire.LENGTH); i++) {

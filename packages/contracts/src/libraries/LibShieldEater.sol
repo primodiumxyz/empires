@@ -29,9 +29,8 @@ library LibShieldEater {
    */
   function retarget() internal {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    bytes32[] memory dstOptions = new bytes32[](3);
+    bytes32 dst;
 
-    uint256 writeIndex = 0;
     uint256 largest = 0;
     uint256 shieldCount = 0;
 
@@ -41,15 +40,13 @@ library LibShieldEater {
         continue;
       }
       shieldCount = Planet.getShieldCount(planetIds[i]);
-      if (shieldCount >= largest) {
+      if (shieldCount > largest) {
         largest = shieldCount;
-        writeIndex = (writeIndex + 1) % 3;
-        dstOptions[writeIndex] = planetIds[i];
+        dst = planetIds[i];
       }
     }
 
-    uint256 randomIndex = pseudorandom(block.number, 3);
-    ShieldEater.setDestinationPlanet(dstOptions[randomIndex]);
+    ShieldEater.setDestinationPlanet(dst);
   }
 
   /**
@@ -68,9 +65,9 @@ library LibShieldEater {
     CoordData memory offset = getTargetDirection(src, dst);
 
     // If there is a hole in the map here, go around it
-    if (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
-      offset = rotateTargetDirection(offset);
-    }
+    // if (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
+    //   offset = rotateTargetDirection(offset);
+    // }
 
     // Next movement target selected
     bytes32 planetId = coordToId(src.q + offset.q, src.r + offset.r);
@@ -190,38 +187,38 @@ library LibShieldEater {
    * @dev Rotates a direction 60 degrees clockwise, to avoid a gap in the planet map.
    */
 
-  function rotateTargetDirection(CoordData memory dir) internal pure returns (CoordData memory newDir) {
-    if (dir.q == 1) {
-      if (dir.r == 0) {
-        //* East
-        newDir.q = 0; //* Southeast
-        newDir.r = 1;
-      } else {
-        //* Northeast
-        newDir.q = 1; //* East
-        newDir.r = 0;
-      }
-    } else if (dir.q == 0) {
-      if (dir.r == 1) {
-        //* Southeast
-        newDir.q = -1; //* Southwest
-        newDir.r = 1;
-      } else {
-        //* Northwest
-        newDir.q = 1; //* Northeast
-        newDir.r = -1;
-      }
-    } else {
-      // (dir.q == -1)
-      if (dir.r == 0) {
-        //* West
-        newDir.q = 0; //* Northwest
-        newDir.r = -1;
-      } else {
-        //* Southwest
-        newDir.q = -1; //* West
-        newDir.r = 0;
-      }
-    }
-  }
+  // function rotateTargetDirection(CoordData memory dir) internal pure returns (CoordData memory newDir) {
+  //   if (dir.q == 1) {
+  //     if (dir.r == 0) {
+  //       //* East
+  //       newDir.q = 0; //* Southeast
+  //       newDir.r = 1;
+  //     } else {
+  //       //* Northeast
+  //       newDir.q = 1; //* East
+  //       newDir.r = 0;
+  //     }
+  //   } else if (dir.q == 0) {
+  //     if (dir.r == 1) {
+  //       //* Southeast
+  //       newDir.q = -1; //* Southwest
+  //       newDir.r = 1;
+  //     } else {
+  //       //* Northwest
+  //       newDir.q = 1; //* Northeast
+  //       newDir.r = -1;
+  //     }
+  //   } else {
+  //     // (dir.q == -1)
+  //     if (dir.r == 0) {
+  //       //* West
+  //       newDir.q = 0; //* Northwest
+  //       newDir.r = -1;
+  //     } else {
+  //       //* Southwest
+  //       newDir.q = -1; //* West
+  //       newDir.r = 0;
+  //     }
+  //   }
+  // }
 }
