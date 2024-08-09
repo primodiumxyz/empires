@@ -40,6 +40,7 @@ function generateContent() {
             planetData.q = ${coord.q};
             planetData.r = ${coord.r};
             planetData.shieldCount = ${empireName === "NULL" ? 4 : 0};
+            planetData.isCitadel = ${isCitadel ? "true" : "false"};
             Planet.set(planetId, planetData);
 
             PlanetsSet.add(planetId);

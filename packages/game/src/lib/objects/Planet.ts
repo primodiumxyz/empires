@@ -34,10 +34,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private gold: IconLabel;
   private magnets: [red: IconLabel, blue: IconLabel, green: IconLabel];
   private empireId: EEmpire;
+  private citadel: Phaser.GameObjects.Sprite | null;
   private spawned = false;
 
-  constructor(args: { id: Entity; scene: PrimodiumScene; coord: PixelCoord; empire: EEmpire }) {
-    const { id, scene, coord, empire } = args;
+  constructor(args: { id: Entity; scene: PrimodiumScene; coord: PixelCoord; empire: EEmpire; citadel?: boolean }) {
+    const { id, scene, coord, empire, citadel } = args;
 
     super(scene.phaserScene, coord.x, coord.y);
 
@@ -145,6 +146,13 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         .setVisible(false),
     ];
 
+    this.citadel = citadel
+      ? new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y - 70, Assets.SpriteAtlas, Sprites.Crown)
+          .setOrigin(0.5, 0.5)
+          .setDepth(DepthLayers.Planet + 1)
+          .setScale(1.5)
+      : null;
+
     this._scene = scene;
     this.id = id;
     this.coord = coord;
@@ -166,6 +174,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
     this.scene.add.existing(this.chargeProgress);
+    if (this.citadel) this.scene.add.existing(this.citadel);
     this.magnets.forEach((magnet) => {
       this.scene.add.existing(magnet);
     });
@@ -189,6 +198,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.magnets.forEach((magnet) => {
       magnet.setScale(scale);
     });
+    if (this.citadel) this.citadel.setScale(scale);
     return this;
   }
 
@@ -386,6 +396,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.planetUnderglowSprite.destroy();
     this.hexSprite.destroy();
     this.hexHoloSprite.destroy();
+    this.citadel?.destroy();
     this._scene.objects.planet.remove(this.id);
     super.destroy();
   }
