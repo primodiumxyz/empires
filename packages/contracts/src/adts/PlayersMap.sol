@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Keys_PlayersMap, Value_PlayersMap, Meta_PlayersMap } from "codegen/index.sol";
+import { Keys_PlayersMap, Value_PlayersMap, Value_PlayersMapData, Meta_PlayersMap } from "codegen/index.sol";
 
 /**
  * @title PlayersMap
@@ -23,12 +23,22 @@ library PlayersMap {
    * @param value The item value to associate with the player.
    * @dev Adds the player if it doesn't exist, otherwise updates the existing player's value.
    */
-  function set(bytes32 playerId, int256 value) internal {
+  function setGain(bytes32 playerId, uint256 value) internal {
     if (has(playerId)) {
-      Value_PlayersMap.set(playerId, value);
+      Value_PlayersMap.setGain(playerId, value);
     } else {
       Keys_PlayersMap.push(playerId);
-      Value_PlayersMap.set(playerId, value);
+      Value_PlayersMap.setGain(playerId, value);
+      Meta_PlayersMap.set(playerId, true, Keys_PlayersMap.length() - 1);
+    }
+  }
+
+  function setLoss(bytes32 playerId, uint256 value) internal {
+    if (has(playerId)) {
+      Value_PlayersMap.setLoss(playerId, value);
+    } else {
+      Keys_PlayersMap.push(playerId);
+      Value_PlayersMap.setLoss(playerId, value);
       Meta_PlayersMap.set(playerId, true, Keys_PlayersMap.length() - 1);
     }
   }
@@ -38,7 +48,7 @@ library PlayersMap {
    * @param playerId The identifier of the player.
    * @return The value associated with the player.
    */
-  function get(bytes32 playerId) internal view returns (int256) {
+  function get(bytes32 playerId) internal view returns (Value_PlayersMapData memory) {
     return Value_PlayersMap.get(playerId);
   }
 
@@ -54,9 +64,9 @@ library PlayersMap {
    * @notice Returns the values associated with each player.
    * @return _values An array of player point values.
    */
-  function values() internal view returns (int256[] memory _values) {
+  function values() internal view returns (Value_PlayersMapData[] memory _values) {
     bytes32[] memory players = keys();
-    _values = new int256[](players.length);
+    _values = new Value_PlayersMapData[](players.length);
     for (uint256 i = 0; i < players.length; i++) {
       _values[i] = Value_PlayersMap.get(players[i]);
     }

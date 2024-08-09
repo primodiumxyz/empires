@@ -142,7 +142,7 @@ contract RewardsSystemTest is PrimodiumTest {
     Empire.setPointsIssued(EEmpire.Red, totalPoints);
 
     uint256 alicePrevBalance = alice.balance;
-    int256 profit = PlayersMap.get(addressToId(alice));
+    uint256 gain = PlayersMap.get(addressToId(alice)).gain;
     vm.stopPrank();
     vm.prank(alice);
     world.Empires__withdrawEarnings();
@@ -152,7 +152,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), value - aliceTotal, "empire balance");
 
     assertEq(PointsMap.getValue(EEmpire.Red, addressToId(alice)), 0, "alice points");
-    assertEq(PlayersMap.get(addressToId(alice)), profit + int256(aliceTotal), "alice profit");
+    assertEq(PlayersMap.get(addressToId(alice)).gain, aliceTotal, "alice profit");
 
     // should be 0 because all points were withdrawn (or not issued in the first place)
     assertEq(Empire.getPointsIssued(EEmpire.Red), alicePoints == 0 ? totalPoints : 0, "empire points");

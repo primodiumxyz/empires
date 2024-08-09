@@ -91,7 +91,7 @@ export const worldInput = {
     // Used in the mbuilding utilities Map data structure
     Value_PlayersMap: {
       key: ["playerId"],
-      schema: { playerId: "bytes32", profit: "int256" },
+      schema: { playerId: "bytes32", gain: "uint256", loss: "uint256" },
     },
 
     Meta_PlayersMap: {
