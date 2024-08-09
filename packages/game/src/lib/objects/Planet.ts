@@ -13,7 +13,7 @@ import {
 } from "@game/lib/mappings";
 import { IconLabel } from "@game/lib/objects/IconLabel";
 import { Magnet } from "@game/lib/objects/Magnet";
-import { Progress } from "@game/lib/objects/Progress";
+import { Overheat } from "@game/lib/objects/Overheat";
 import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 import { PrimodiumScene } from "@game/types";
 
@@ -29,10 +29,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private hexHoloSprite: Phaser.GameObjects.Sprite;
   private planetName: Phaser.GameObjects.Text;
   private pendingArrow: Phaser.GameObjects.Container;
-  private chargeProgress: Progress;
   private shields: IconLabel;
   private ships: IconLabel;
   private gold: IconLabel;
+  private overheat: Overheat;
   private magnets: [red: Magnet, blue: Magnet, green: Magnet];
   private magnetWaves: Phaser.GameObjects.Sprite;
   private empireId: EEmpire;
@@ -129,10 +129,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
-    this.chargeProgress = new Progress(scene, {
-      x: coord.x,
-      y: coord.y + 5,
-    }).setDepth(DepthLayers.Planet + 1);
+    this.overheat = new Overheat(scene, coord, empire).setDepth(DepthLayers.Base + coord.y);
 
     this.magnets = [
       new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Red),
@@ -179,7 +176,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
-    this.scene.add.existing(this.chargeProgress);
+    this.scene.add.existing(this.overheat);
     if (this.citadel) this.scene.add.existing(this.citadel);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     this.scene.add.existing(this.magnetWaves);
@@ -199,7 +196,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.shields.setScale(scale);
     this.ships.setScale(scale);
     this.gold.setScale(scale);
-    this.chargeProgress.setScale(scale);
+    this.overheat.setScale(scale);
     if (this.citadel) this.citadel.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
@@ -225,7 +222,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.shields.setAlpha(alpha);
     this.ships.setAlpha(alpha);
     this.gold.setAlpha(alpha);
-    this.chargeProgress.setAlpha(alpha);
     this.magnets.forEach((magnet) => magnet.setAlpha(alpha));
     this.planetName.setAlpha(nameAlpha);
   }
@@ -379,8 +375,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     );
   }
 
-  setChargeProgress(progress: number) {
-    this.chargeProgress.setProgress(progress);
+  setOverheatProgress(progress: number) {
+    this.overheat.setProgress(progress);
   }
 
   setMagnet(empire: EEmpire, turns: number) {
@@ -388,7 +384,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     // emit only if no magnet is already active
     if (turns > 0 && !this.magnets.some((magnet) => magnet.isEnabled())) {
-      this.magnetWaves.play(Animations.MagnetWaves);
+      this.magnetWaves.play(Animations["MagnetWaves"]);
       this.magnetWaves.setVisible(true).setActive(true);
     } else if (!turns && this.magnetWaves.visible && this.magnets.every((magnet) => !magnet.isEnabled())) {
       this.magnetWaves.once("animationrepeat", () => {

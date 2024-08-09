@@ -28,6 +28,11 @@ export const Animations = {
 
   // Waves
   MagnetWaves: "waves",
+
+  // Overheat flames
+  OverheatFlamesLow: "overheat/low",
+  OverheatFlamesMedium: "overheat/medium",
+  OverheatFlamesFull: "overheat/full",
 };
 
 export type AnimationKeys = keyof typeof Animations;

@@ -63,8 +63,9 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) =>
 
         scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.boostCount}`, {
-          icon: "Ship",
+          icon: "Boost",
           delay: 500,
+          color: "#ff0000",
         });
       },
     },
@@ -123,8 +124,8 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) =>
 
         scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.stunCount}`, {
-          icon: "Ship",
-          color: "#ff0000",
+          icon: "Stun",
+          delay: 500,
         });
       },
     },
