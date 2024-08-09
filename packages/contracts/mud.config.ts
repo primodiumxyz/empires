@@ -69,6 +69,14 @@ export const worldInput = {
         lockedPointsPercent: "uint256", // out of 10000
       },
     },
+
+    Ready: {
+      key: [],
+      schema: {
+        value: "bool",
+      },
+    },
+
     Turn: {
       key: [],
       schema: { nextTurnBlock: "uint256", empire: "EEmpire", value: "uint256" },
