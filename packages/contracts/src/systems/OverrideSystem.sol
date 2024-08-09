@@ -186,7 +186,7 @@ contract OverrideSystem is EmpiresSystem {
     // remove points from player and empire's issued points count
     LibPoint.removePoints(_empire, playerId, _points);
 
-    PlayersMap.set(playerId, PlayersMap.get(playerId) - int256(pointSaleValue));
+    PlayersMap.set(playerId, PlayersMap.get(playerId) + int256(pointSaleValue));
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
