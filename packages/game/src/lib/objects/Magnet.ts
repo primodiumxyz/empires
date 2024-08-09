@@ -1,7 +1,6 @@
 import { Animations } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
-import { DepthLayers } from "@game/lib/constants/common";
 import { EmpireToHexColor, EmpireToMagnetAnimationKeys } from "@game/lib/mappings";
 import { PrimodiumScene } from "@game/types";
 
@@ -16,17 +15,13 @@ export class Magnet extends Phaser.GameObjects.Container {
     super(scene.phaserScene, x, y);
     this.empire = empire;
 
-    this.sprite = new Phaser.GameObjects.Sprite(scene.phaserScene, 0, 0, "spriteAtlas")
-      .setOrigin(0.5)
-      .setDepth(DepthLayers.Magnet);
+    this.sprite = new Phaser.GameObjects.Sprite(scene.phaserScene, 0, 0, "spriteAtlas").setOrigin(0.5);
 
     this.label = new Phaser.GameObjects.Text(scene.phaserScene, 25, 0, "0", {
       fontFamily: "Silkscreen",
       fontSize: "13px",
       color: EmpireToHexColor[this.empire],
-    })
-      .setOrigin(0, 0.5)
-      .setDepth(DepthLayers.Magnet);
+    }).setOrigin(0, 0.5);
 
     this.add([this.sprite, this.label]);
     this.setActive(false);
