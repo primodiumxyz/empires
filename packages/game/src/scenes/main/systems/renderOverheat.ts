@@ -2,7 +2,7 @@ import { Core } from "@primodiumxyz/core";
 import { namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { PrimodiumScene } from "@game/types";
 
-export const renderChargeProgress = (scene: PrimodiumScene, core: Core) => {
+export const renderOverheat = (scene: PrimodiumScene, core: Core) => {
   const {
     tables,
     network: { world },
