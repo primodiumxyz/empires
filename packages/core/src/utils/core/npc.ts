@@ -215,7 +215,7 @@ export const createNpcUtils = (tables: Tables) => {
     );
     if (magnetizedPlanets.length > 0) {
       const randomIndex = Math.floor(Math.random() * magnetizedPlanets.length);
-      return { target: magnetizedPlanets[randomIndex], multiplier: 1.5 };
+      return { target: magnetizedPlanets[randomIndex], multiplier: 4 };
     }
     // Get direction weights
     const directionWeights = getDirectionWeights(planetId);
