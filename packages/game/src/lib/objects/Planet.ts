@@ -256,6 +256,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
 
+    this.overheat.setEmpire(empire);
     this.empireId = empire;
   }
 

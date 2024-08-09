@@ -43,6 +43,10 @@ export class Overheat extends Phaser.GameObjects.Container {
     this.progress = progress;
   }
 
+  setEmpire(empire: EEmpire) {
+    this.empire = empire;
+  }
+
   private setBorder(progress: number) {
     const currentSprite = this.getBorderProgressSprite(this.progress);
     const nextSprite = this.getBorderProgressSprite(progress);
