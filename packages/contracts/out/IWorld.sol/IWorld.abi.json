@@ -55,6 +55,13 @@
   },
   {
     "type": "function",
+    "name": "Empires__detonateShieldEater",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__devDeleteRecord",
     "inputs": [
       {
@@ -473,6 +480,89 @@
   {
     "type": "function",
     "name": "Empires__unpause",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__updateCombat",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__updateEmpires",
+    "inputs": [
+      {
+        "name": "routineThresholds",
+        "type": "tuple[]",
+        "internalType": "struct RoutineThresholds[]",
+        "components": [
+          {
+            "name": "planetId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "accumulateGold",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "buyShields",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "buyShips",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "supportAlly",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "attackEnemy",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "supportTargetId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "attackTargetId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          }
+        ]
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__updateMagnets",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__updatePrice",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__updateShieldEater",
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"

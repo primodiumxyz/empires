@@ -11,6 +11,13 @@ import { ConfigWithPrototypes } from "./ts/prototypes/types";
 
 export const worldInput = {
   namespace: "Empires",
+  systems: {
+    UpdateCombatSubsystem: { openAccess: false },
+    UpdateEmpiresSubsystem: { openAccess: false },
+    UpdateMagnetsSubsystem: { openAccess: false },
+    UpdatePriceSubsystem: { openAccess: false },
+    UpdateShieldEaterSubsystem: { openAccess: false },
+  },
 
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
   enums: MUDEnums,
