@@ -19,7 +19,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
-import { EmpireEnumToConfig } from "@/util/lookups";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
 
 interface HistoricalPointPriceModalProps {}
 
@@ -29,12 +29,13 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
   const { tables } = useCore();
   const { pot } = usePot();
   const points = usePoints(playerAccount.entity);
-  const { price: redPointCost } = usePointPrice(EEmpire.Red, Number(formatEther(points[EEmpire.Red].playerPoints)));
-  const { price: bluePointCost } = usePointPrice(EEmpire.Blue, Number(formatEther(points[EEmpire.Blue].playerPoints)));
-  const { price: greenPointCost } = usePointPrice(
-    EEmpire.Green,
-    Number(formatEther(points[EEmpire.Green].playerPoints)),
-  );
+  const pointCosts = useMemo(() => {
+    return EMPIRES.map((empire) => ({
+      empire,
+      data: usePointPrice(empire, Number(formatEther(points[empire].playerPoints))),
+    }));
+  }, [points]);
+
   const earnings = useMemo(() => {
     const biggestReward = Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
       (acc, [empire, { playerPoints }]) => {
@@ -43,7 +44,7 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
         }
         return acc;
       },
-      { empire: EEmpire.Red, points: 0n },
+      { empire: DEFAULT_EMPIRE, points: 0n },
     );
 
     const playerPoints = points[biggestReward.empire].playerPoints;
@@ -53,8 +54,8 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
   }, [points, pot]);
 
   const earningsImmediate = useMemo(() => {
-    return redPointCost + bluePointCost + greenPointCost;
-  }, [redPointCost, bluePointCost, greenPointCost]);
+    return pointCosts.reduce((acc, { data }) => acc + data.price, 0n);
+  }, [pointCosts]);
 
   // Calculate KPIs
   const walletBalance = useBalance(playerAccount.address).value ?? 0n;

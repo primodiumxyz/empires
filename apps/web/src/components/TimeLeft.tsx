@@ -12,7 +12,7 @@ import { usePot } from "@/hooks/usePot";
 import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
-import { EmpireEnumToConfig } from "@/util/lookups";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
 export const TimeLeft = () => {
   const { timeLeftMs, blocksLeft } = useTimeLeft();
@@ -76,7 +76,7 @@ const GameOver = () => {
 
   const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
 
-  const empireName = empire == EEmpire.Blue ? "Blue" : empire == EEmpire.Green ? "Green" : "Red";
+  const empireName = EmpireEnumToConfig[empire ?? DEFAULT_EMPIRE].name;
   if (empire == null) return <div>Something went wrong.</div>;
 
   return (

@@ -7,7 +7,7 @@ import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
-import { EmpireEnumToConfig } from "@/util/lookups";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES_COUNT } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
@@ -500,7 +500,7 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
-      const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
+      const turn = tables.Turn.get()?.empire ?? DEFAULT_EMPIRE;
       const empirePlanets = core.utils.getEmpirePlanets(turn);
       const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
       const updateWorldCallParams = {
@@ -684,7 +684,7 @@ export const setupCheatcodes = (
       const empireId = empire.id as EEmpire;
 
       const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
-      const endTurn = currentTurn + BigInt(turns.value) * BigInt(EEmpire.LENGTH - 1);
+      const endTurn = currentTurn + BigInt(turns.value) * BigInt(EMPIRES_COUNT);
 
       const magnetTurnRemovalOp = _removeMagnetTurnRemoval(empireId, planetId);
       if (magnetTurnRemovalOp) devOps.push(magnetTurnRemovalOp);
@@ -1096,7 +1096,7 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToConfig[EEmpire.Red].name,
+        defaultValue: EmpireEnumToConfig[DEFAULT_EMPIRE].name,
         options: [
           ...empires.map((entity) => ({
             id: Number(entity) as EEmpire,

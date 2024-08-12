@@ -14,6 +14,7 @@ import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
+import { EMPIRES } from "@/util/lookups";
 
 export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: boolean }> = ({
   hideAccountBalance = false,
@@ -46,10 +47,9 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
             <hr className="my-1 w-full border-secondary/50" />
           </>
         )}
-
-        <EmpirePoints empire={EEmpire.Red} playerId={entity} justifyStart={justifyStart} />
-        <EmpirePoints empire={EEmpire.Green} playerId={entity} justifyStart={justifyStart} />
-        <EmpirePoints empire={EEmpire.Blue} playerId={entity} justifyStart={justifyStart} />
+        {EMPIRES.map((empire, index) => (
+          <EmpirePoints key={index} empire={empire} playerId={entity} justifyStart={justifyStart} />
+        ))}
       </div>
     </div>
   );

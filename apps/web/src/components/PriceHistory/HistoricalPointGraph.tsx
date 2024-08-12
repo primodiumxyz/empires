@@ -14,6 +14,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { SecondaryCard } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { EmpireEnumToConfig, EMPIRES, EMPIRES_COUNT } from "@/util/lookups";
 
 export const accentColor = "rgba(0,255, 0, .75)";
 export const accentColorDark = "rgba(0,255, 0, .25)";
@@ -86,7 +87,7 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
       );
 
       // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
-      const allEmpires = Array.from(new Array(EEmpire.LENGTH - 1)).map((_, i) => i + 1);
+      const allEmpires = Array.from(new Array(EMPIRES_COUNT)).map((_, i) => i + 1);
       const timestampMap = new Map<number, { [key: number]: bigint }>();
 
       // grab costs for each timestamp
@@ -188,39 +189,17 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
     return (
       <div className="pointer-event-auto flex items-center justify-center gap-2 rounded-box bg-black/10">
         <svg width={width} height={height}>
-          {(empire === EEmpire.Red || empire === EEmpire.LENGTH) && (
+          {EMPIRES.map((empire) => (
             <LinePath
-              data={historicalPriceData.filter((d) => d.empire === EEmpire.Red)}
+              key={empire}
+              data={historicalPriceData.filter((d) => d.empire === empire)}
               x={(d) => dateScale(getDate(d)) ?? 0}
               y={(d) => stockValueScale(getPointValue(d)) ?? 0}
               strokeWidth={1}
-              stroke={"rgba(255, 0, 0, .75)"}
-              curve={curveMonotoneX}
-              onMouseLeave={() => hideTooltip()}
-            />
-          )}
-
-          {(empire === EEmpire.Blue || empire === EEmpire.LENGTH) && (
-            <LinePath
-              data={historicalPriceData.filter((d) => d.empire === EEmpire.Blue)}
-              x={(d) => dateScale(getDate(d)) ?? 0}
-              y={(d) => stockValueScale(getPointValue(d)) ?? 0}
-              strokeWidth={1}
-              stroke={"rgba(0, 0, 255, .75)"}
+              stroke={EmpireEnumToConfig[empire].chartColor}
               curve={curveMonotoneX}
             />
-          )}
-
-          {(empire === EEmpire.Green || empire === EEmpire.LENGTH) && (
-            <LinePath
-              data={historicalPriceData.filter((d) => d.empire === EEmpire.Green)}
-              x={(d) => dateScale(getDate(d)) ?? 0}
-              y={(d) => stockValueScale(getPointValue(d)) ?? 0}
-              strokeWidth={1}
-              stroke={"rgba(0, 255, 0, .75)"}
-              curve={curveMonotoneX}
-            />
-          )}
+          ))}
 
           <GridRows
             left={margin.left}
