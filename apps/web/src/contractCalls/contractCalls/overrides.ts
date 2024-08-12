@@ -19,6 +19,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { value: payment, gas: 552401n * 2n },
       txQueueOptions: {
         id: `${planetId}-create-ship`,
+        type: "support (ship)",
         ...options,
       },
       onComplete: ({ success, error }) => {
@@ -46,6 +47,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { value: payment, gas: 739007n * 2n },
       txQueueOptions: {
         id: `${planetId}-kill-ship`,
+        type: "attack (ship)",
         ...options,
       },
       onComplete: ({ success, error }) => {
@@ -73,6 +75,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { value: payment, gas: 546063n * 2n },
       txQueueOptions: {
         id: `${planetId}-add-shield`,
+        type: "support (shield)",
         ...options,
       },
       onComplete: ({ success, error }) => {
@@ -100,6 +103,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { value: payment, gas: 738649n * 2n },
       txQueueOptions: {
         id: `${planetId}-remove-shield`,
+        type: "attack (shield)",
         ...options,
       },
       onComplete: ({ success, error }) => {
@@ -122,6 +126,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { gas: 151271n * 2n },
       txQueueOptions: {
         id: "sell-points",
+        type: "sell points",
         ...options,
       },
       onComplete: ({ success, error }) => {
@@ -140,6 +145,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { gas: 738649n * 2n },
       txQueueOptions: {
         id: `${planetId}-tactical-strike`,
+        type: "tactical strike",
         ...options,
       },
       onComplete: ({ success, error }) => {
@@ -165,6 +171,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { value: payment, gas: 546063n * 2n },
       txQueueOptions: {
         id: `${planetId}-place-magnet`,
+        type: "place magnet",
         ...options,
       },
       onComplete: ({ success, error }) => {
@@ -184,6 +191,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { value: payment, gas: 738649n * 2n },
       txQueueOptions: {
         id: `${planetId}-boost-charge`,
+        type: "boost charge",
         ...options,
       },
       onComplete: ({ success, error }) => {
@@ -203,6 +211,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       options: { value: payment, gas: 738649n * 2n },
       txQueueOptions: {
         id: `${planetId}-stun-charge`,
+        type: "stun charge",
         ...options,
       },
       onComplete: ({ success, error }) => {

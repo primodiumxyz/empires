@@ -18,6 +18,8 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
     {
       metadata: Type.OptionalString,
       type: Type.OptionalString,
+      pending: Type.OptionalBoolean,
+      success: Type.OptionalBoolean,
     },
     options,
   );
@@ -35,6 +37,8 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
       {
         metadata: JSON.stringify(options?.metadata),
         type: options.type,
+        pending: true,
+        success: false,
       },
       options.id as Entity,
     );
@@ -56,8 +60,10 @@ export function createTransactionQueueTable<M extends BaseTableMetadata = BaseTa
         try {
           const receipt = await fn();
           txReceipts.set(id, receipt);
+          table.update({ pending: false, success: true }, id as Entity);
         } catch (error) {
           console.error("Error executing function:", error);
+          table.update({ pending: false, success: false }, id as Entity);
           txReceipts.set(id, { success: false, error: error instanceof Error ? error.message : String(error) });
         } finally {
           queue.shift();
