@@ -21,20 +21,6 @@ import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
-export const EmpireEnumToFillColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "stroke-blue-400",
-  [EEmpire.Green]: "stroke-green-400",
-  [EEmpire.Red]: "stroke-red-400",
-  [EEmpire.LENGTH]: "",
-};
-
-export const EmpireEnumToTextColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "text-blue-400",
-  [EEmpire.Green]: "text-green-400",
-  [EEmpire.Red]: "text-red-400",
-  [EEmpire.LENGTH]: "",
-};
-
 interface HistoricalPointPriceModalProps {}
 
 export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) => {
@@ -100,7 +86,7 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
                     .map((_, i) => i + 1)
                     .map((empire) => ({
                       id: empire.toString(),
-                      label: empire === EEmpire.LENGTH ? "ALL EMPIRES" : EmpireEnumToConfig[empire as EEmpire].name,
+                      label: EmpireEnumToConfig[empire as EEmpire].name,
                     })),
                 ]}
                 onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}

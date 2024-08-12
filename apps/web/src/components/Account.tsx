@@ -15,13 +15,6 @@ import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 
-export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "bg-blue-600",
-  [EEmpire.Green]: "bg-green-600",
-  [EEmpire.Red]: "bg-red-600",
-  [EEmpire.LENGTH]: "",
-};
-
 export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: boolean }> = ({
   hideAccountBalance = false,
   justifyStart = false,
