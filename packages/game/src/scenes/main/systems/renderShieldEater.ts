@@ -26,17 +26,17 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
         const currPlanet = current.currentPlanet as Entity;
 
         const path = getShieldEaterPath(currPlanet, destPlanet);
-        console.log(path, entityToPlanetName(currPlanet), entityToPlanetName(destPlanet));
         const turnsToDestination = path.length + 1;
+
+        // add path labels with turns to arrival
+        tables.Planet.getAll().forEach((planet) => {
+          if (path.includes(planet)) scene.objects.planet.get(planet)?.setShieldEaterPath(path.indexOf(planet) + 1);
+          else scene.objects.planet.get(planet)?.setShieldEaterPath(0);
+        });
 
         // add current & destination labels
         scene.objects.planet.get(destPlanet)?.setShieldEaterDestination(turnsToDestination);
         scene.objects.planet.get(currPlanet)?.setShieldEaterLocation(true);
-
-        // add path labels with turns to arrival
-        path.forEach((planet, index) => {
-          scene.objects.planet.get(planet)?.setShieldEaterPath(index + 1);
-        });
       }
     },
   });
