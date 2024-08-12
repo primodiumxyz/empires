@@ -12,6 +12,7 @@ import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { NamespaceOwner } from "@latticexyz/world/src/codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
+import { EEmpire } from "codegen/common.sol";
 
 function toString(bytes32 id) pure returns (string memory) {
   return string(abi.encodePacked(id));
@@ -67,6 +68,13 @@ contract PrimodiumTest is MudTest {
   function switchPrank(address prankster) internal {
     vm.stopPrank();
     vm.startPrank(prankster);
+  }
+
+  function assertEq(EEmpire a, EEmpire b) internal {
+    assertEq(uint8(a), uint8(b));
+  }
+  function assertEq(EEmpire a, EEmpire b, string memory message) internal {
+    assertEq(uint8(a), uint8(b), message);
   }
 
   function sendEther(address from, uint256 value) internal {

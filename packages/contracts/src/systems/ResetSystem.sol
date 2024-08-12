@@ -10,6 +10,7 @@ import { PlayersMap } from "adts/PlayersMap.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { initPrice } from "libraries/InitPrice.sol";
 import { PendingMove, WinningEmpire, HistoricalPointCost, Magnet, Turn, P_GameConfig } from "codegen/index.sol";
+import { EEmpire } from "codegen/common.sol";
 
 contract ResetSystem is System {
   function resetGame() public {
@@ -20,9 +21,10 @@ contract ResetSystem is System {
       PendingMove.deleteRecord(planets[i]);
     }
 
-    for (uint8 empire = 1; empire <= empireCount; empire++) {
-      for (uint256 i = 0; i < planets.length; i++) {
-        PendingMove.deleteRecord(planets[i]);
+    for (uint8 i = 1; i <= empireCount; i++) {
+      EEmpire empire = EEmpire(i);
+      for (uint256 j = 0; j < planets.length; j++) {
+        PendingMove.deleteRecord(planets[j]);
         Magnet.deleteRecord(empire, planets[i]);
       }
 
@@ -35,12 +37,12 @@ contract ResetSystem is System {
     // Does not reset Player table, that's fine. it only contains id and spent
     // by not clearing Player.spent, we can keep track of how much each player has spent over multiple matches
 
-    WinningEmpire.set(0);
+    WinningEmpire.set(EEmpire.NULL);
 
     P_GameConfig.setGameOverBlock(block.number + 1_000);
     P_GameConfig.setGameStartTimestamp(block.timestamp);
     createPlanets(); // Planet and Empire tables are reset to default values
     initPrice(); // Empire.setPointCost and OverrideCost tables are reset to default values
-    Turn.set(block.number + P_GameConfig.getTurnLengthBlocks(), 1, 1);
+    Turn.set(block.number + P_GameConfig.getTurnLengthBlocks(), EEmpire.Red, 1);
   }
 }

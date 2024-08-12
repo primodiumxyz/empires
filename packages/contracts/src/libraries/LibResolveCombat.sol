@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { P_GameConfig, Turn, P_TacticalStrikeConfig, Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { pseudorandomEntity } from "src/utils.sol";
-import { console } from "forge-std/console.sol";
+import { EEmpire } from "codegen/common.sol";
 
 library LibResolveCombat {
   /**
@@ -23,18 +23,18 @@ library LibResolveCombat {
    */
   function resolveCombat(bytes32 planetId) internal {
     PlanetData memory planetData = Planet.get(planetId);
-    uint8 defendingEmpire = planetData.empireId;
+    EEmpire defendingEmpire = planetData.empireId;
 
     uint256 defendingShips = planetData.shipCount + Arrivals.get(planetId, defendingEmpire);
 
     bytes32 eventEntity = pseudorandomEntity();
-    (uint8 attackingEmpire, uint256 attackingShips) = resolveMultiPartyAttackers(
+    (EEmpire attackingEmpire, uint256 attackingShips) = resolveMultiPartyAttackers(
       eventEntity,
       planetId,
       defendingEmpire
     );
 
-    if (attackingEmpire == 0) {
+    if (attackingEmpire == EEmpire.NULL) {
       Planet.setShipCount(planetId, defendingShips);
     } else {
       bool conquer = false;
@@ -54,7 +54,7 @@ library LibResolveCombat {
       else if (attackingShips > totalDefenses) {
         conquer = true;
 
-        if (defendingEmpire == 0) {
+        if (defendingEmpire == EEmpire.NULL) {
           Planet_TacticalStrike.setChargeRate(planetId, P_TacticalStrikeConfig.getChargeRate());
           Planet_TacticalStrike.setLastUpdated(planetId, block.number);
         }
@@ -86,7 +86,7 @@ library LibResolveCombat {
 
     uint8 empireCount = P_GameConfig.getEmpireCount();
     for (uint8 i = 1; i <= empireCount; i++) {
-      Arrivals.deleteRecord(planetId, i);
+      Arrivals.deleteRecord(planetId, EEmpire(i));
     }
   }
 
@@ -103,21 +103,21 @@ library LibResolveCombat {
   function resolveMultiPartyAttackers(
     bytes32 eventEntity,
     bytes32 planetId,
-    uint8 defendingEmpire
-  ) internal returns (uint8, uint256) {
-    uint8 winningEmpire = 0;
+    EEmpire defendingEmpire
+  ) internal returns (EEmpire, uint256) {
+    EEmpire winningEmpire = EEmpire.NULL;
     uint256 winningCount = 0;
     uint256 secondPlaceCount = 0;
 
     uint8 empireCount = P_GameConfig.getEmpireCount();
 
     for (uint8 empire = 1; empire <= empireCount; empire++) {
-      if (empire == defendingEmpire) continue;
-      uint256 shipCount = Arrivals.get(planetId, empire);
+      if (EEmpire(empire) == defendingEmpire) continue;
+      uint256 shipCount = Arrivals.get(planetId, EEmpire(empire));
       if (shipCount > winningCount) {
         secondPlaceCount = winningCount;
         winningCount = shipCount;
-        winningEmpire = empire;
+        winningEmpire = EEmpire(empire);
       } else if (shipCount > secondPlaceCount) {
         secondPlaceCount = shipCount;
       }

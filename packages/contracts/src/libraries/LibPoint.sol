@@ -3,6 +3,7 @@ pragma solidity >=0.8.24;
 
 import { Empire, P_PointConfig } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
+import { EEmpire } from "codegen/common.sol";
 
 /**
  * @title LibPoint
@@ -15,7 +16,7 @@ library LibPoint {
    * @param _playerId The ID of the player.
    * @param _points The number of points to issue.
    */
-  function issuePoints(uint8 _empire, bytes32 _playerId, uint256 _points) internal {
+  function issuePoints(EEmpire _empire, bytes32 _playerId, uint256 _points) internal {
     PointsMap.setValue(_empire, _playerId, PointsMap.getValue(_empire, _playerId) + _points);
   }
 
@@ -25,7 +26,7 @@ library LibPoint {
    * @param _playerId The ID of the player.
    * @param _points The number of points to remove.
    */
-  function removePoints(uint8 _empire, bytes32 _playerId, uint256 _points) internal {
+  function removePoints(EEmpire _empire, bytes32 _playerId, uint256 _points) internal {
     require(
       _points <= PointsMap.getValue(_empire, _playerId) - PointsMap.getLockedPoints(_empire, _playerId),
       "[LibPoint] Player does not have enough unlocked points to remove"

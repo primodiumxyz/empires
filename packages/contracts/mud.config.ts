@@ -87,12 +87,12 @@ export const worldInput = {
 
     Turn: {
       key: [],
-      schema: { nextTurnBlock: "uint256", empire: "uint8", value: "uint256" },
+      schema: { nextTurnBlock: "uint256", empire: "EEmpire", value: "uint256" },
     },
 
     WinningEmpire: {
       key: [],
-      schema: { empire: "uint8" },
+      schema: { empire: "EEmpire" },
     },
 
     /* ------------------------------- Players Map ------------------------------ */
@@ -115,17 +115,17 @@ export const worldInput = {
     // Used in the mbuilding utilities Map data structure
     Value_PointsMap: {
       key: ["empireId", "playerId"],
-      schema: { playerId: "bytes32", empireId: "uint8", value: "uint256", lockedPoints: "uint256" },
+      schema: { playerId: "bytes32", empireId: "EEmpire", value: "uint256", lockedPoints: "uint256" },
     },
 
     Meta_PointsMap: {
       key: ["empireId", "playerId"],
-      schema: { playerId: "bytes32", empireId: "uint8", stored: "bool", index: "uint256" },
+      schema: { playerId: "bytes32", empireId: "EEmpire", stored: "bool", index: "uint256" },
     },
 
     Keys_PointsMap: {
       key: ["empireId"],
-      schema: { empireId: "uint8", players: "bytes32[]" },
+      schema: { empireId: "EEmpire", players: "bytes32[]" },
     },
 
     // see https://www.redblobgames.com/grids/hexagons/#conversions-axial for context
@@ -140,7 +140,7 @@ export const worldInput = {
         shipCount: "uint256",
         shieldCount: "uint256",
         goldCount: "uint256",
-        empireId: "uint8",
+        empireId: "EEmpire",
       },
     },
 
@@ -157,7 +157,7 @@ export const worldInput = {
     Empire: {
       key: ["id"],
       schema: {
-        id: "uint8",
+        id: "EEmpire",
         origin: "EOrigin",
         pointsIssued: "uint256",
         pointCost: "uint256",
@@ -167,7 +167,7 @@ export const worldInput = {
     OverrideCost: {
       key: ["empireId", "overrideAction"],
       schema: {
-        empireId: "uint8",
+        empireId: "EEmpire",
         overrideAction: "EOverride",
         value: "uint256",
       },
@@ -176,12 +176,12 @@ export const worldInput = {
     /* ---------------------------- Empire Ownership --------------------------- */
     Keys_EmpirePlanetsSet: {
       key: ["empireId"],
-      schema: { empireId: "uint8", itemKeys: "bytes32[]" },
+      schema: { empireId: "EEmpire", itemKeys: "bytes32[]" },
     },
 
     Meta_EmpirePlanetsSet: {
       key: ["empireId", "planetId"],
-      schema: { empireId: "uint8", planetId: "bytes32", stored: "bool", index: "uint256" },
+      schema: { empireId: "EEmpire", planetId: "bytes32", stored: "bool", index: "uint256" },
     },
 
     /* --------------------------------- Planets -------------------------------- */
@@ -221,7 +221,7 @@ export const worldInput = {
       key: ["planetId"],
       schema: {
         planetId: "bytes32",
-        empireId: "uint8",
+        empireId: "EEmpire",
         destinationPlanetId: "bytes32",
       },
     },
@@ -230,7 +230,7 @@ export const worldInput = {
       key: ["planetId", "empireId"],
       schema: {
         planetId: "bytes32",
-        empireId: "uint8",
+        empireId: "EEmpire",
         shipCount: "uint256",
       },
     },
@@ -241,7 +241,7 @@ export const worldInput = {
       key: ["empireId", "planetId"],
       schema: {
         planetId: "bytes32",
-        empireId: "uint8",
+        empireId: "EEmpire",
         isMagnet: "bool",
         lockedPoints: "uint256",
         endTurn: "uint256",
@@ -252,7 +252,7 @@ export const worldInput = {
     MagnetTurnPlanets: {
       key: ["empireId", "endTurn"],
       schema: {
-        empireId: "uint8",
+        empireId: "EEmpire",
         endTurn: "uint256",
         planetIds: "bytes32[]",
       },
@@ -411,7 +411,7 @@ export const worldInput = {
         playerId: "bytes32",
         turn: "uint256",
         planetId: "bytes32",
-        empireId: "uint8",
+        empireId: "EEmpire",
         ethSpent: "uint256",
         overrideCount: "uint256",
         timestamp: "uint256",
@@ -462,7 +462,7 @@ export const worldInput = {
     HistoricalPointCost: {
       key: ["empire", "timestamp"],
       schema: {
-        empire: "uint8",
+        empire: "EEmpire",
         timestamp: "uint256",
         cost: "uint256", // the cost of each point for this empire in wei
       },

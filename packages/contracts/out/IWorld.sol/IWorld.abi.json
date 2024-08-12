@@ -405,7 +405,7 @@
       {
         "name": "_empire",
         "type": "uint8",
-        "internalType": "uint8"
+        "internalType": "enum EEmpire"
       },
       {
         "name": "_planetId",
@@ -435,7 +435,7 @@
       {
         "name": "_empire",
         "type": "uint8",
-        "internalType": "uint8"
+        "internalType": "enum EEmpire"
       },
       {
         "name": "_points",

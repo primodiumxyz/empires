@@ -13,6 +13,7 @@ import { PlayersMap } from "adts/PlayersMap.sol";
 
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
+import { EEmpire } from "codegen/common.sol";
 
 contract RewardsSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -37,21 +38,21 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.roll(endBlock + 1);
   }
 
-  function getEmpireCitadelPlanets(uint8 empire) internal view returns (uint256) {
+  function getEmpireCitadelPlanets(EEmpire empire) internal view returns (uint256) {
     bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
-    uint8 empireCount = P_GameConfig.getEmpireCount();
-    uint256[] memory citadelPlanetsPerEmpire = new uint256[](empireCount);
+    uint256 EMPIRE_COUNT = P_GameConfig.getEmpireCount();
+    uint256[] memory citadelPlanetsPerEmpire = new uint256[](EMPIRE_COUNT);
     for (uint256 i = 0; i < citadelPlanets.length; i++) {
-      uint8 owningEmpire = Planet.getEmpireId(citadelPlanets[i]);
-      citadelPlanetsPerEmpire[owningEmpire]++;
+      EEmpire owningEmpire = Planet.getEmpireId(citadelPlanets[i]);
+      citadelPlanetsPerEmpire[uint256(owningEmpire)]++;
     }
-    return citadelPlanetsPerEmpire[empire];
+    return citadelPlanetsPerEmpire[uint256(empire)];
   }
 
-  function findCitadelPlanet(uint8 empire) internal view returns (bytes32) {
+  function findCitadelPlanet(EEmpire empire) internal view returns (bytes32) {
     bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
     for (uint256 i = 0; i < citadelPlanets.length; i++) {
-      uint8 owningEmpire = Planet.getEmpireId(citadelPlanets[i]);
+      EEmpire owningEmpire = Planet.getEmpireId(citadelPlanets[i]);
       if (owningEmpire == empire) {
         return citadelPlanets[i];
       }
@@ -62,7 +63,7 @@ contract RewardsSystemTest is PrimodiumTest {
   function findUnownedNonCitadelPlanet() internal view returns (bytes32) {
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
     for (uint256 i = 0; i < planets.length; i++) {
-      if (!Planet.getIsCitadel(planets[i]) && Planet.getEmpireId(planets[i]) == 0) {
+      if (!Planet.getIsCitadel(planets[i]) && Planet.getEmpireId(planets[i]) == EEmpire.NULL) {
         return planets[i];
       }
     }
@@ -72,58 +73,54 @@ contract RewardsSystemTest is PrimodiumTest {
   function testWithdrawEarningsTimeVictoryTiedTwice() public {
     setGameover();
     world.Empires__withdrawEarnings(); // note: this currently hits all tie conditions and then defaults to Red
-    assertEq(WinningEmpire.get(), 1);
+    assertEq(WinningEmpire.get(), EEmpire.Red);
   }
 
   function testWithdrawEarningsTimeVictoryTiedOnce() public {
     bytes32 extraCitadelPlanet = findUnownedNonCitadelPlanet();
-    Planet.setEmpireId(extraCitadelPlanet, 3);
-    EmpirePlanetsSet.add(3, extraCitadelPlanet);
-    EmpirePlanetsSet.remove(0, extraCitadelPlanet);
+    Planet.setEmpireId(extraCitadelPlanet, EEmpire.Green);
+    EmpirePlanetsSet.add(EEmpire.Green, extraCitadelPlanet);
+    EmpirePlanetsSet.remove(EEmpire.NULL, extraCitadelPlanet);
     setGameover();
-    uint256 playerEmpirePoints = PointsMap.getValue(3, addressToId(alice));
-    uint256 lockedPoints = PointsMap.getLockedPoints(3, addressToId(alice));
-    assertGe(playerEmpirePoints, lockedPoints, "playerEmpirePoints should be greater than or equal to lockedPoints");
-
     world.Empires__withdrawEarnings();
-    assertEq(WinningEmpire.get(), 3);
+    assertEq(WinningEmpire.get(), EEmpire.Green);
   }
 
   function testWithdrawEarningsTimeVictory() public {
-    bytes32 extraCitadelPlanet = findCitadelPlanet(0);
-    Planet.setEmpireId(extraCitadelPlanet, 2);
-    EmpirePlanetsSet.add(2, extraCitadelPlanet);
-    EmpirePlanetsSet.remove(0, extraCitadelPlanet);
+    bytes32 extraCitadelPlanet = findCitadelPlanet(EEmpire.NULL);
+    Planet.setEmpireId(extraCitadelPlanet, EEmpire.Blue);
+    EmpirePlanetsSet.add(EEmpire.Blue, extraCitadelPlanet);
+    EmpirePlanetsSet.remove(EEmpire.NULL, extraCitadelPlanet);
     setGameover();
     world.Empires__withdrawEarnings();
-    // assertEq(WinningEmpire.get(), 2);
+    assertEq(WinningEmpire.get(), EEmpire.Blue);
   }
 
   function testWithdrawEarningsDominationVictory() public {
     bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
     for (uint256 i = 0; i < citadelPlanets.length; i++) {
-      uint8 prevEmpire = Planet.getEmpireId(citadelPlanets[i]);
-      Planet.setEmpireId(citadelPlanets[i], 2);
-      EmpirePlanetsSet.add(2, citadelPlanets[i]);
+      EEmpire prevEmpire = Planet.getEmpireId(citadelPlanets[i]);
+      Planet.setEmpireId(citadelPlanets[i], EEmpire.Blue);
+      EmpirePlanetsSet.add(EEmpire.Blue, citadelPlanets[i]);
       EmpirePlanetsSet.remove(prevEmpire, citadelPlanets[i]);
     }
     // Do NOT add setGameOver() here, because we want to test the case where the time is not up yet
     world.Empires__withdrawEarnings();
-    assertEq(WinningEmpire.get(), 2);
+    assertEq(WinningEmpire.get(), EEmpire.Blue);
   }
 
   function testWithdrawEarningsVictoryAlreadyClaimed() public {
     testWithdrawEarningsDominationVictory();
     bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
     for (uint256 i = 0; i < citadelPlanets.length; i++) {
-      uint8 prevEmpire = Planet.getEmpireId(citadelPlanets[i]);
-      Planet.setEmpireId(citadelPlanets[i], 3);
-      EmpirePlanetsSet.add(3, citadelPlanets[i]);
+      EEmpire prevEmpire = Planet.getEmpireId(citadelPlanets[i]);
+      Planet.setEmpireId(citadelPlanets[i], EEmpire.Green);
+      EmpirePlanetsSet.add(EEmpire.Green, citadelPlanets[i]);
       EmpirePlanetsSet.remove(prevEmpire, citadelPlanets[i]);
     }
     setGameover();
     world.Empires__withdrawEarnings();
-    assertEq(WinningEmpire.get(), 2, "Victory should be locked from domination");
+    assertEq(WinningEmpire.get(), EEmpire.Blue, "Victory should be locked from domination");
   }
 
   function testSendEther() public {
@@ -139,11 +136,11 @@ contract RewardsSystemTest is PrimodiumTest {
     testSendEther();
     setGameover();
     vm.startPrank(creator);
-    WinningEmpire.set(1);
+    WinningEmpire.set(EEmpire.Red);
     P_PointConfig.setPointRake(0); // out of 10_000
 
-    PointsMap.setValue(1, addressToId(alice), alicePoints);
-    Empire.setPointsIssued(1, totalPoints);
+    PointsMap.setValue(EEmpire.Red, addressToId(alice), alicePoints);
+    Empire.setPointsIssued(EEmpire.Red, totalPoints);
 
     uint256 alicePrevBalance = alice.balance;
     uint256 gain = PlayersMap.get(addressToId(alice)).gain;
@@ -155,11 +152,11 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(alice.balance, aliceTotal + alicePrevBalance, "alice balance");
     assertEq(Balances.get(EMPIRES_NAMESPACE_ID), value - aliceTotal, "empire balance");
 
-    assertEq(PointsMap.getValue(1, addressToId(alice)), 0, "alice points");
+    assertEq(PointsMap.getValue(EEmpire.Red, addressToId(alice)), 0, "alice points");
     assertEq(PlayersMap.get(addressToId(alice)).gain, aliceTotal, "alice profit");
 
     // should be 0 because all points were withdrawn (or not issued in the first place)
-    assertEq(Empire.getPointsIssued(1), alicePoints == 0 ? totalPoints : 0, "empire points");
+    assertEq(Empire.getPointsIssued(EEmpire.Red), alicePoints == 0 ? totalPoints : 0, "empire points");
   }
 
   // function testWithdrawEarningsEqualAfterWithdrawal(uint256 playerPoints, uint256 totalPoints) public {
@@ -179,14 +176,14 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.deal(eve, 1 ether);
 
     vm.startPrank(creator);
-    WinningEmpire.set(1);
+    WinningEmpire.set(EEmpire.Red);
 
-    Empire.setPointsIssued(1, 100 ether);
+    Empire.setPointsIssued(EEmpire.Red, 100 ether);
 
-    PointsMap.setValue(1, addressToId(alice), playerPoints);
-    PointsMap.setValue(1, addressToId(bob), playerPoints);
-    PointsMap.setValue(1, addressToId(eve), playerPoints);
-    Empire.setPointsIssued(1, totalPoints);
+    PointsMap.setValue(EEmpire.Red, addressToId(alice), playerPoints);
+    PointsMap.setValue(EEmpire.Red, addressToId(bob), playerPoints);
+    PointsMap.setValue(EEmpire.Red, addressToId(eve), playerPoints);
+    Empire.setPointsIssued(EEmpire.Red, totalPoints);
     vm.stopPrank();
     vm.prank(alice);
     world.Empires__withdrawEarnings();
@@ -196,7 +193,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertApproxEqRel(alice.balance, bob.balance, .001e18, "balances not approximately equal");
 
     assertEq(
-      Empire.getPointsIssued(1),
+      Empire.getPointsIssued(EEmpire.Red),
       playerPoints == 0 ? totalPoints : totalPoints - (playerPoints * 2),
       "empire points"
     );

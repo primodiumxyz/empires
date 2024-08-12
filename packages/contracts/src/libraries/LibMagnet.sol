@@ -3,14 +3,14 @@ pragma solidity >=0.8.24;
 
 import { Turn, Empire, P_MagnetConfig, Magnet, MagnetData, MagnetTurnPlanets, P_GameConfig } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
-import { console } from "forge-std/console.sol";
+import { EEmpire } from "codegen/common.sol";
 
 /**
  * @title LibMagnet
  * @dev A library for managing magnets in the Primodium Empires game.
  */
 library LibMagnet {
-  function removeMagnet(uint8 _empire, bytes32 _planetId) internal {
+  function removeMagnet(EEmpire _empire, bytes32 _planetId) internal {
     // todo: remove magnet from planet. remove locked points from player.
     MagnetData memory magnetData = Magnet.get(_empire, _planetId);
     if (!magnetData.isMagnet) return;
@@ -24,7 +24,7 @@ library LibMagnet {
     PointsMap.setLockedPoints(_empire, playerId, PointsMap.getLockedPoints(_empire, playerId) - lockedPoints);
   }
 
-  function addMagnet(uint8 _empire, bytes32 _planetId, bytes32 _playerId, uint256 _fullTurnDuration) internal {
+  function addMagnet(EEmpire _empire, bytes32 _planetId, bytes32 _playerId, uint256 _fullTurnDuration) internal {
     uint256 requiredPoints = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(_empire)) / 10000;
     require(
       requiredPoints <= PointsMap.getValue(_empire, _playerId) - PointsMap.getLockedPoints(_empire, _playerId),

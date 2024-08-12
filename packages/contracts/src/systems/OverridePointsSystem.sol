@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
-import { EOverride } from "codegen/common.sol";
+import { EOverride, EEmpire } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
@@ -25,7 +25,7 @@ contract OverridePointsSystem is EmpiresSystem {
    * @param _empire The empire to sell points from.
    * @param _points The number of points to sell.
    */
-  function sellPoints(uint8 _empire, uint256 _points) public {
+  function sellPoints(EEmpire _empire, uint256 _points) public {
     bytes32 playerId = addressToId(_msgSender());
     require(
       _points <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),

@@ -5,11 +5,12 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Ready, P_PointConfig, P_GameConfig, Planet_TacticalStrike, Planet_TacticalStrikeData, WinningEmpire } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { EEmpire } from "codegen/common.sol";
 
 contract EmpiresSystem is System {
   modifier _onlyNotGameOver() {
     require(Ready.get(), "[EmpiresSystem] Game not ready");
-    require(WinningEmpire.get() == 0, "[EmpiresSystem] Game over");
+    require(WinningEmpire.get() == EEmpire.NULL, "[EmpiresSystem] Game over");
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     require(endBlock == 0 || block.number < endBlock, "[EmpiresSystem] Game over");
     _;

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { EOverride } from "codegen/common.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { addressToId } from "src/utils.sol";
@@ -23,7 +23,7 @@ library LibOverride {
   function _purchaseOverride(
     bytes32 playerId,
     EOverride _overrideType,
-    uint8 _empireImpacted,
+    EEmpire _empireImpacted,
     uint256 _overrideCount,
     uint256 _spend
   ) internal {
@@ -40,11 +40,11 @@ library LibOverride {
       uint256 numPoints = _overrideCount * pointUnit;
       // Iterate through each empire except the impacted one
       for (uint8 i = 1; i <= empireCount; i++) {
-        if (i == _empireImpacted) {
+        if (EEmpire(i) == _empireImpacted) {
           continue;
         }
-        LibPoint.issuePoints(i, playerId, numPoints);
-        LibPrice.pointCostUp(_empireImpacted, numPoints);
+        LibPoint.issuePoints(EEmpire(i), playerId, numPoints);
+        LibPrice.pointCostUp(EEmpire(i), numPoints);
       }
     }
     LibPrice.overrideCostUp(_empireImpacted, _overrideType, _overrideCount);

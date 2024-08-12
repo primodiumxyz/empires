@@ -14,7 +14,7 @@ import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { P_GameConfig, WinningEmpire, Empire, P_PointConfig, Planet } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-import { EOverride } from "codegen/common.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
 
@@ -31,7 +31,7 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getEmpireId(planetId) == 0);
+    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
 
     world.registerSystem(systemId, system, true);
     world.registerFunctionSelector(systemId, "echoValue()");

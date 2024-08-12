@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { Turn, PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveRoutineLog, MoveRoutineLogData, Arrivals } from "codegen/index.sol";
-import { EMovement, EDirection, EOrigin } from "codegen/common.sol";
+import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 
 library LibMoveShips {
@@ -16,7 +16,7 @@ library LibMoveShips {
     PlanetData memory planetData = Planet.get(planetId);
     if (!Planet.getIsPlanet(targetId)) revert("[LibMoveShips] Target is not a planet");
     // Return false if the planet has no empire or no ships
-    if (planetData.empireId == 0 || planetData.shipCount == 0) return false;
+    if (planetData.empireId == EEmpire.NULL || planetData.shipCount == 0) return false;
 
     // Create a pending move with the current empire and the target planet
     PendingMove.set(planetId, PendingMoveData({ empireId: planetData.empireId, destinationPlanetId: targetId }));

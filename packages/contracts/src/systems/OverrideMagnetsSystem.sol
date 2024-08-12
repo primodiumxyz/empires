@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
-import { EOverride } from "codegen/common.sol";
+import { EOverride, EEmpire } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
@@ -20,7 +20,7 @@ import { Balances } from "@latticexyz/world/src/codegen/index.sol";
  */
 contract OverrideMagnetsSystem is EmpiresSystem {
   function placeMagnet(
-    uint8 _empire,
+    EEmpire _empire,
     bytes32 _planetId,
     uint256 turnDuration
   ) public payable _onlyNotGameOver _takeRake {
