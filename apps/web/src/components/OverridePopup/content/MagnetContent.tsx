@@ -18,28 +18,29 @@ import { cn } from "@/util/client";
 
 export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }) => {
   const [inputValue, setInputValue] = useState("1");
-  const [empire, setEmpire] = useState<EEmpire>(EEmpire.Red);
+  const [empire, setEmpire] = useState<EEmpire | undefined>(undefined);
   const { tables } = useCore();
   const { placeMagnet } = useContractCalls();
 
-  const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
+  const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire ?? EEmpire.Red, BigInt(inputValue));
 
   const onPlaceMagnet = useCallback(async () => {
-    await placeMagnet(empire, planetId, BigInt(inputValue), placeMagnetPriceWei);
+    await placeMagnet(empire ?? EEmpire.Red, planetId, BigInt(inputValue), placeMagnetPriceWei);
     setInputValue("1");
     tables.SelectedPlanet.remove();
   }, [empire, planetId, inputValue, placeMagnetPriceWei, placeMagnet]);
 
   const pointLockPct = tables.P_MagnetConfig.useWithKeys()?.lockedPointsPercent ?? 0n;
-  const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
+  const empirePoints = tables.Empire.useWithKeys({ id: empire ?? EEmpire.Red })?.pointsIssued ?? 0n;
   const pointsLocked = (empirePoints * pointLockPct) / 10000n;
   const {
     playerAccount: { address, entity },
   } = useAccountClient();
-  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
+  const playerPoints =
+    tables.Value_PointsMap.useWithKeys({ empireId: empire ?? EEmpire.Red, playerId: entity })?.value ?? 0n;
   const playerBalance = useBalance(address).value ?? 0n;
 
-  const magnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: empire });
+  const magnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: empire ?? EEmpire.Red });
   const redMagnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: EEmpire.Red });
   const blueMagnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: EEmpire.Blue });
   const greenMagnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: EEmpire.Green });
@@ -89,28 +90,31 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
         </div>
       </div>
 
-      <div className="flex">
-        <div className="flex flex-col items-center justify-center">
-          {message && <p className="px-2 text-xs text-error">{message}</p>}
-          {!message && (
-            <p className="px-2 py-1 text-xs opacity-50">
-              {formatEther(pointsLocked)} POINTS WILL BE LOCKED{" "}
-              <span className="text-success">({formatEther(playerPoints - pointsLocked)} AVAIL.)</span>
-            </p>
-          )}
+      {!!empire && (
+        <div className="flex">
+          <div className="flex flex-col items-center justify-center">
+            {message && <p className="px-2 text-xs text-error">{message}</p>}
+            {!message && (
+              <p className="px-2 py-1 text-xs opacity-50">
+                {formatEther(pointsLocked)} POINTS WILL BE LOCKED{" "}
+                <span className="text-success">({formatEther(playerPoints - pointsLocked)} AVAIL.)</span>
+              </p>
+            )}
 
-          {!message && (
-            <TransactionQueueMask id={`${planetId}-place-magnet`} className="">
-              <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
-                PLACE MAGNET
-              </Button>
-            </TransactionQueueMask>
-          )}
-          <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
-            <Price wei={placeMagnetPriceWei} />
-          </p>
+            {!message && (
+              <TransactionQueueMask id={`${planetId}-place-magnet`} className="">
+                <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
+                  PLACE MAGNET
+                </Button>
+              </TransactionQueueMask>
+            )}
+            <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
+              <Price wei={placeMagnetPriceWei} />
+            </p>
+          </div>
         </div>
-      </div>
+      )}
+      {!empire && <p className="text-xs opacity-50">Select an empire to place a magnet</p>}
     </div>
   );
 };
