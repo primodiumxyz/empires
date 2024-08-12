@@ -29,12 +29,10 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
   const { tables } = useCore();
   const { pot } = usePot();
   const points = usePoints(playerAccount.entity);
-  const pointCosts = useMemo(() => {
-    return EMPIRES.map((empire) => ({
-      empire,
-      data: usePointPrice(empire, Number(formatEther(points[empire].playerPoints))),
-    }));
-  }, [points]);
+  const pointCosts = EMPIRES.map((empire) => ({
+    empire,
+    data: usePointPrice(empire, Number(formatEther(points[empire].playerPoints))),
+  }));
 
   const earnings = useMemo(() => {
     const biggestReward = Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
