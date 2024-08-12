@@ -8,6 +8,7 @@ export enum EEmpire {
   Pink,
   Black,
   White,
+  LENGTH,
 }
 
 export enum EOrigin {

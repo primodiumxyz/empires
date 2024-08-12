@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, P_PointConfig } from "codegen/index.sol";
+import { Empire, P_PointConfig, P_GameConfig } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire } from "codegen/common.sol";
 
@@ -17,7 +17,8 @@ library LibPoint {
    * @param _points The number of points to issue.
    */
   function issuePoints(EEmpire _empire, bytes32 _playerId, uint256 _points) internal {
-    require(_empire != EEmpire.NULL && _empire != EEmpire.LENGTH, "[LibPoint] Invalid empire");
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    require(_empire != EEmpire.NULL && uint8(_empire) <= empireCount, "[LibPoint] Invalid empire");
     PointsMap.setValue(_empire, _playerId, PointsMap.getValue(_empire, _playerId) + _points);
   }
 
