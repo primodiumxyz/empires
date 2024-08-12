@@ -17,6 +17,7 @@ library LibPoint {
    * @param _points The number of points to issue.
    */
   function issuePoints(EEmpire _empire, bytes32 _playerId, uint256 _points) internal {
+    require(_empire != EEmpire.NULL && _empire != EEmpire.LENGTH, "[LibPoint] Invalid empire");
     PointsMap.setValue(_empire, _playerId, PointsMap.getValue(_empire, _playerId) + _points);
   }
 

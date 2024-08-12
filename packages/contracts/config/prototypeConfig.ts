@@ -1,7 +1,7 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
 import { POINTS_UNIT } from "./constants";
-import { EOverride, ERoutine } from "./enums";
+import { EEmpire, EOverride, ERoutine } from "./enums";
 
 const scaleMultiplier = (multiplier: number) => {
   if (multiplier < 0 || multiplier > 1) throw new Error("multiplier must be between 0 and 100");
@@ -34,7 +34,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
       Turn: {
         nextTurnBlock: 0n,
-        empire: 1,
+        empire: EEmpire.Red,
         value: 1n,
       },
       P_TacticalStrikeConfig: {
