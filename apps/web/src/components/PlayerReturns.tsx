@@ -13,13 +13,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
-
-export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "bg-blue-600",
-  [EEmpire.Green]: "bg-green-600",
-  [EEmpire.Red]: "bg-red-600",
-  [EEmpire.LENGTH]: "",
-};
+import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
 
 export const PlayerReturns = () => {
   const { tables } = useCore();
@@ -38,7 +32,7 @@ export const PlayerReturns = () => {
         }
         return acc;
       },
-      { empire: EEmpire.Red, points: 0n },
+      { empire: DEFAULT_EMPIRE, points: 0n },
     );
   }, [points]);
 
@@ -83,7 +77,7 @@ const EmpireEndReward = ({
   const pnl = isProfit ? earnings - totalSpent : totalSpent - earnings;
 
   const imgUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
-  const empireName = empire === EEmpire.Red ? "Red" : empire === EEmpire.Blue ? "Blue" : "Green";
+  const empireName = EmpireEnumToConfig[empire].name;
   return (
     <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
       <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
@@ -117,13 +111,11 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const points = usePoints(playerId);
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
 
-  const { price: redPointCost } = usePointPrice(EEmpire.Red, Number(formatEther(points[EEmpire.Red].playerPoints)));
-  const { price: bluePointCost } = usePointPrice(EEmpire.Blue, Number(formatEther(points[EEmpire.Blue].playerPoints)));
-  const { price: greenPointCost } = usePointPrice(
-    EEmpire.Green,
-    Number(formatEther(points[EEmpire.Green].playerPoints)),
-  );
-  const totalReward = redPointCost + bluePointCost + greenPointCost;
+  const pointCosts = EMPIRES.map((empire) => ({
+    empire,
+    cost: usePointPrice(empire, Number(formatEther(points[empire].playerPoints))).price,
+  }));
+  const totalReward = pointCosts.reduce((sum, { cost }) => sum + cost, 0n);
 
   const isProfit = totalReward >= totalSpent;
   const pnl = isProfit ? totalReward - totalSpent : totalSpent - totalReward;

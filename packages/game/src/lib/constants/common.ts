@@ -1,5 +1,9 @@
+import { EEmpire } from "@primodiumxyz/contracts";
+
 export const ASSET_PACK = "/assets/pack.json";
 export const KEY = "MAIN";
+
+export const Empires = [EEmpire.Red, EEmpire.Blue, EEmpire.Green];
 
 export const Scenes = {
   UI: "UI",

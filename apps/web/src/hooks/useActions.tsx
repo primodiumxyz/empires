@@ -5,13 +5,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToPlanetName, formatAddress, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
-
-export const EmpireEnumToTextColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "text-blue-400",
-  [EEmpire.Green]: "text-green-400",
-  [EEmpire.Red]: "text-red-400",
-  [EEmpire.LENGTH]: "",
-};
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const useActions = () => {
   const { tables } = useCore();
@@ -34,7 +28,7 @@ export const useActions = () => {
   return useMemo(() => {
     const getPlanetSpan = (planetId: Entity) => {
       const empireId = tables.Planet.get(planetId)?.empireId ?? EEmpire.LENGTH;
-      const colorClass = EmpireEnumToTextColor[empireId as EEmpire];
+      const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
       return <span className={colorClass}>{entityToPlanetName(planetId)}</span>;
     };
 
