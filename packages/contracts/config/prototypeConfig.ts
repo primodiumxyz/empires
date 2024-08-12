@@ -146,9 +146,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: false,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00001),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
       },
     },
   },

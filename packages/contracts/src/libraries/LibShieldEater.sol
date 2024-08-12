@@ -7,6 +7,8 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { pseudorandom, coordToId } from "src/utils.sol";
 import { CoordData } from "src/Types.sol";
 
+import { console } from "forge-std/console.sol";
+
 /**
  * @title LibShieldEater
  * @dev A library for managing Shield Eater Event and Override in the Primodium Empires game.
@@ -28,25 +30,33 @@ library LibShieldEater {
    * @notice This function is overly complicated due to contract size optimizations.
    */
   function retarget() internal {
+    // save the top 3 planetIds
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     bytes32[] memory dstOptions = new bytes32[](3);
 
-    uint256 writeIndex = 0;
-    uint256 largest = 0;
-    uint256 shieldCount = 0;
-
-    uint256 i = 0;
-    for (; i < planetIds.length; ++i) {
+    for (uint256 i = 0; i < planetIds.length; i++) {
       if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
         continue;
       }
-      shieldCount = Planet.getShieldCount(planetIds[i]);
-      if (shieldCount >= largest) {
-        largest = shieldCount;
-        writeIndex = (writeIndex + 1) % 3;
-        dstOptions[writeIndex] = planetIds[i];
+      uint256 shieldCount = Planet.getShieldCount(planetIds[i]);
+      if (shieldCount > Planet.getShieldCount(dstOptions[2])) {
+        dstOptions[2] = planetIds[i];
+        continue;
+      }
+
+      if (shieldCount > Planet.getShieldCount(dstOptions[1])) {
+        dstOptions[1] = planetIds[i];
+        continue;
+      }
+
+      if (shieldCount > Planet.getShieldCount(dstOptions[0])) {
+        dstOptions[0] = planetIds[i];
+        continue;
       }
     }
+
+    uint256 randomIndex = pseudorandom(block.number, 2);
+    ShieldEater.setDestinationPlanet(dstOptions[randomIndex]);
   }
 
   /**
@@ -63,6 +73,11 @@ library LibShieldEater {
 
     // How do we get there?
     CoordData memory offset = getTargetDirection(src, dst);
+
+    // If there is a hole in the map here, go around it
+    if (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
+      offset = rotateTargetDirection(offset);
+    }
 
     // Next movement target selected
     bytes32 planetId = coordToId(src.q + offset.q, src.r + offset.r);
@@ -135,7 +150,6 @@ library LibShieldEater {
   /********************/
   /* HELPER FUNCTIONS */
   /********************/
-
   // Direction Offsets
   // EDirection.East: [1, 0],
   // EDirection.Southeast: [0, 1],
@@ -143,16 +157,13 @@ library LibShieldEater {
   // EDirection.West: [-1, 0],
   // EDirection.Northwest: [0, -1],
   // EDirection.Northeast: [1, -1]
-
   // q = x, r = y
   // q is right positive
   // r is down positive
-
   /**
    * @dev Returns the direction to move to advance from the source to the destination.
    */
-
-  function getTargetDirection(CoordData memory src, CoordData memory dst) internal view returns (CoordData memory dir) {
+  function getTargetDirection(CoordData memory src, CoordData memory dst) internal pure returns (CoordData memory dir) {
     if (dst.q > src.q) {
       dir.q = 1; // East or Northeast
       if (dst.r > src.r) {
@@ -176,40 +187,41 @@ library LibShieldEater {
         dir.r = 0; // West
       }
     }
-
-    // If there is a hole in the map here, go around it
-    if (!Planet.getIsPlanet(coordToId(src.q + dir.q, src.r + dir.r))) {
-      if (dir.q == 1) {
-        if (dir.r == 0) {
-          //* East
-          dir.q = 0; //* Southeast
-          dir.r = 1;
-        } else {
-          //* Northeast
-          dir.q = 1; //* East
-          dir.r = 0;
-        }
-      } else if (dir.q == 0) {
-        if (dir.r == 1) {
-          //* Southeast
-          dir.q = -1; //* Southwest
-          dir.r = 1;
-        } else {
-          //* Northwest
-          dir.q = 1; //* Northeast
-          dir.r = -1;
-        }
+  }
+  /**
+   * @dev Rotates a direction 60 degrees clockwise, to avoid a gap in the planet map.
+   */
+  function rotateTargetDirection(CoordData memory dir) internal pure returns (CoordData memory newDir) {
+    if (dir.q == 1) {
+      if (dir.r == 0) {
+        //* East
+        newDir.q = 0; //* Southeast
+        newDir.r = 1;
       } else {
-        // (dir.q == -1)
-        if (dir.r == 0) {
-          //* West
-          dir.q = 0; //* Northwest
-          dir.r = -1;
-        } else {
-          //* Southwest
-          dir.q = -1; //* West
-          dir.r = 0;
-        }
+        //* Northeast
+        newDir.q = 1; //* East
+        newDir.r = 0;
+      }
+    } else if (dir.q == 0) {
+      if (dir.r == 1) {
+        //* Southeast
+        newDir.q = -1; //* Southwest
+        newDir.r = 1;
+      } else {
+        //* Northwest
+        newDir.q = 1; //* Northeast
+        newDir.r = -1;
+      }
+    } else {
+      // (dir.q == -1)
+      if (dir.r == 0) {
+        //* West
+        newDir.q = 0; //* Northwest
+        newDir.r = -1;
+      } else {
+        //* Southwest
+        newDir.q = -1; //* West
+        newDir.r = 0;
       }
     }
   }
