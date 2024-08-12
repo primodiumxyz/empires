@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Turn, P_TacticalStrikeConfig, Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
+import { P_GameConfig, Turn, P_TacticalStrikeConfig, Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
-import { EEmpire } from "codegen/common.sol";
 import { pseudorandomEntity } from "src/utils.sol";
 import { console } from "forge-std/console.sol";
 
@@ -24,18 +23,18 @@ library LibResolveCombat {
    */
   function resolveCombat(bytes32 planetId) internal {
     PlanetData memory planetData = Planet.get(planetId);
-    EEmpire defendingEmpire = planetData.empireId;
+    uint8 defendingEmpire = planetData.empireId;
 
     uint256 defendingShips = planetData.shipCount + Arrivals.get(planetId, defendingEmpire);
 
     bytes32 eventEntity = pseudorandomEntity();
-    (EEmpire attackingEmpire, uint256 attackingShips) = resolveMultiPartyAttackers(
+    (uint8 attackingEmpire, uint256 attackingShips) = resolveMultiPartyAttackers(
       eventEntity,
       planetId,
       defendingEmpire
     );
 
-    if (attackingEmpire == EEmpire.NULL) {
+    if (attackingEmpire == 0) {
       Planet.setShipCount(planetId, defendingShips);
     } else {
       bool conquer = false;
@@ -55,7 +54,7 @@ library LibResolveCombat {
       else if (attackingShips > totalDefenses) {
         conquer = true;
 
-        if (defendingEmpire == EEmpire.NULL) {
+        if (defendingEmpire == 0) {
           Planet_TacticalStrike.setChargeRate(planetId, P_TacticalStrikeConfig.getChargeRate());
           Planet_TacticalStrike.setLastUpdated(planetId, block.number);
         }
@@ -85,9 +84,10 @@ library LibResolveCombat {
       );
     }
 
-    Arrivals.deleteRecord(planetId, EEmpire.Green);
-    Arrivals.deleteRecord(planetId, EEmpire.Blue);
-    Arrivals.deleteRecord(planetId, EEmpire.Red);
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    for (uint8 i = 1; i <= empireCount; i++) {
+      Arrivals.deleteRecord(planetId, i);
+    }
   }
 
   /**
@@ -103,14 +103,15 @@ library LibResolveCombat {
   function resolveMultiPartyAttackers(
     bytes32 eventEntity,
     bytes32 planetId,
-    EEmpire defendingEmpire
-  ) internal returns (EEmpire, uint256) {
-    EEmpire winningEmpire = EEmpire.NULL;
+    uint8 defendingEmpire
+  ) internal returns (uint8, uint256) {
+    uint8 winningEmpire = 0;
     uint256 winningCount = 0;
     uint256 secondPlaceCount = 0;
 
-    for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
-      EEmpire empire = EEmpire(i);
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+
+    for (uint8 empire = 1; empire <= empireCount; empire++) {
       if (empire == defendingEmpire) continue;
       uint256 shipCount = Arrivals.get(planetId, empire);
       if (shipCount > winningCount) {
@@ -122,17 +123,17 @@ library LibResolveCombat {
       }
     }
 
-    ShipBattleRoutineLog.set(
-      eventEntity,
-      ShipBattleRoutineLogData({
-        turn: Turn.getValue(),
-        redShipCount: Arrivals.get(planetId, EEmpire.Red),
-        greenShipCount: Arrivals.get(planetId, EEmpire.Green),
-        blueShipCount: Arrivals.get(planetId, EEmpire.Blue),
-        planetId: planetId,
-        timestamp: block.timestamp
-      })
-    );
+    // ShipBattleRoutineLog.set(
+    //   eventEntity,
+    //   ShipBattleRoutineLogData({
+    //     turn: Turn.getValue(),
+    //     redShipCount: Arrivals.get(planetId, 1),
+    //     greenShipCount: Arrivals.get(planetId, 3),
+    //     blueShipCount: Arrivals.get(planetId, 2),
+    //     planetId: planetId,
+    //     timestamp: block.timestamp
+    //   })
+    // );
 
     uint256 remainingShips = winningCount - secondPlaceCount;
     return (winningEmpire, remainingShips);

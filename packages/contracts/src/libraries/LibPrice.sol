@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData, OverrideCost } from "codegen/index.sol";
-import { EEmpire, EOverride } from "codegen/common.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
+import { Empire, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_GameConfig, P_OverrideConfig, P_OverrideConfigData, OverrideCost } from "codegen/index.sol";
+import { EOverride } from "codegen/common.sol";
 
 /**
  * @title LibPrice
@@ -19,7 +18,7 @@ library LibPrice {
    */
   function getTotalCost(
     EOverride _overrideType,
-    EEmpire _empireImpacted,
+    uint8 _empireImpacted,
     uint256 _overrideCount
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
@@ -40,8 +39,9 @@ library LibPrice {
    * @param _overrideCount The number of overrides to be purchased.
    * @return pointCost The cost of all points related to the override.
    */
-  function getProgressPointCost(EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
-    return getPointCost(_empireImpacted, _overrideCount * (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit());
+  function getProgressPointCost(uint8 _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    return getPointCost(_empireImpacted, _overrideCount * (empireCount - 1) * P_PointConfig.getPointUnit());
   }
 
   /**
@@ -50,13 +50,14 @@ library LibPrice {
    * @param _overrideCount The number of overrides to be purchased.
    * @return pointCost The cost of all points related to the override.
    */
-  function getRegressPointCost(EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+  function getRegressPointCost(uint8 _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
     uint256 pointCost;
-    for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
-      if (i == uint256(_empireImpacted)) {
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    for (uint8 i = 1; i <= empireCount; i++) {
+      if (i == _empireImpacted) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), _overrideCount * P_PointConfig.getPointUnit());
+      pointCost += getPointCost(i, _overrideCount * P_PointConfig.getPointUnit());
     }
     return pointCost;
   }
@@ -67,7 +68,7 @@ library LibPrice {
    * @param _points The number of points. (in 1e18)
    * @return pointCost The cost of the points from the specific empire.
    */
-  function getPointCost(EEmpire _empire, uint256 _points) internal view returns (uint256) {
+  function getPointCost(uint8 _empire, uint256 _points) internal view returns (uint256) {
     uint256 pointUnit = P_PointConfig.getPointUnit();
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
@@ -90,7 +91,7 @@ library LibPrice {
    */
   function getMarginalOverrideCost(
     EOverride _overrideType,
-    EEmpire _empire,
+    uint8 _empire,
     uint256 _overrideCount
   ) internal view returns (uint256) {
     require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");
@@ -109,7 +110,7 @@ library LibPrice {
    * @param _empire The empire to increase the point cost for.
    * @param _points The number of point units to increase the cost by.
    */
-  function pointCostUp(EEmpire _empire, uint256 _points) internal {
+  function pointCostUp(uint8 _empire, uint256 _points) internal {
     uint256 pointUnit = P_PointConfig.getPointUnit();
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
@@ -126,7 +127,7 @@ library LibPrice {
    * @param _overrideType The type of override to increase the cost for.
    * @param _overrideCount The number of overrides to increase the cost by.
    */
-  function overrideCostUp(EEmpire _empire, EOverride _overrideType, uint256 _overrideCount) internal {
+  function overrideCostUp(uint8 _empire, EOverride _overrideType, uint256 _overrideCount) internal {
     require(_overrideCount > 0, "[LibPrice] Override count must be greater than 0");
     uint256 newOverrideCost = OverrideCost.get(_empire, _overrideType) +
       P_OverrideConfig.getOverrideCostIncrease(_overrideType) *
@@ -138,7 +139,7 @@ library LibPrice {
    * @dev Decreases the cost of points for a specific empire.
    * @param _empire The empire to decrease the point cost for.
    */
-  function turnEmpirePointCostDown(EEmpire _empire) internal {
+  function turnEmpirePointCostDown(uint8 _empire) internal {
     P_PointConfigData memory config = P_PointConfig.get();
     uint256 newPointCost = Empire.getPointCost(_empire);
     if (newPointCost >= config.minPointCost + config.pointGenRate) {
@@ -154,7 +155,7 @@ library LibPrice {
    * @dev Decreases the cost of all overrides that impact a specific empire.
    * @param _empireImpacted The empire to decrease the override costs for.
    */
-  function empireOverridesCostDown(EEmpire _empireImpacted) internal {
+  function empireOverridesCostDown(uint8 _empireImpacted) internal {
     for (uint256 i = 1; i < uint256(EOverride.LENGTH); i++) {
       P_OverrideConfigData memory config = P_OverrideConfig.get(EOverride(i));
       uint256 newOverrideCost = OverrideCost.get(_empireImpacted, EOverride(i));
@@ -174,7 +175,7 @@ library LibPrice {
    * @param _points The number of points to sell.
    * @return pointSaleValue The value of the points to be sold.
    */
-  function getPointSaleValue(EEmpire _empire, uint256 _points) internal view returns (uint256) {
+  function getPointSaleValue(uint8 _empire, uint256 _points) internal view returns (uint256) {
     P_PointConfigData memory config = P_PointConfig.get();
     uint256 pointUnit = config.pointUnit;
 
@@ -201,7 +202,7 @@ library LibPrice {
    * @param _points The number of point units to decrease the cost by.
    * @notice If the resulting point cost after the decrease is less than the minimum point cost, the function reverts with an error message.
    */
-  function sellEmpirePointCostDown(EEmpire _empire, uint256 _points) internal {
+  function sellEmpirePointCostDown(uint8 _empire, uint256 _points) internal {
     P_PointConfigData memory config = P_PointConfig.get();
     uint256 pointUnit = config.pointUnit;
     require(_points > 0, "[LibPrice] Points must be greater than 0");

@@ -1,7 +1,7 @@
 import { worldInput } from "../mud.config";
 import { PrototypesConfig } from "../ts/prototypes/types";
 import { POINTS_UNIT } from "./constants";
-import { EEmpire, EOverride, ERoutine } from "./enums";
+import { EOverride, ERoutine } from "./enums";
 
 const scaleMultiplier = (multiplier: number) => {
   if (multiplier < 0 || multiplier > 1) throw new Error("multiplier must be between 0 and 100");
@@ -18,6 +18,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
+        empireCount: 3,
       },
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),
@@ -29,11 +30,11 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointCostIncrease: BigInt(POINTS_UNIT * 0.00001),
       },
       P_MagnetConfig: {
-        lockedPointsPercent: scaleMultiplier(0.10),
+        lockedPointsPercent: scaleMultiplier(0.1),
       },
       Turn: {
         nextTurnBlock: 0n,
-        empire: EEmpire.Red,
+        empire: 1,
         value: 1n,
       },
       P_TacticalStrikeConfig: {
@@ -54,7 +55,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         isProgressOverride: true,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00010),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.0001),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
       },
     },
@@ -105,9 +106,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00010),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.0001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00010),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.0001),
       },
     },
   },
@@ -117,9 +118,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: false,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.0002),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.0002),
       },
     },
   },
@@ -130,9 +131,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.0002),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00008),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.0002),
       },
     },
   },

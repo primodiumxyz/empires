@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, Planet, PlanetData } from "codegen/index.sol";
-import { EEmpire, EOverride } from "codegen/common.sol";
+import { EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
 import { pseudorandomEntity, addressToId } from "src/utils.sol";
@@ -20,7 +20,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[TacticalStrikeOverrideSystem] Planet not found");
-    require(planetData.empireId != EEmpire.NULL, "[TacticalStrikeOverrideSystem] Planet is not owned");
+    require(planetData.empireId != 0, "[TacticalStrikeOverrideSystem] Planet is not owned");
 
     uint256 cost = LibPrice.getTotalCost(EOverride.BoostCharge, planetData.empireId, _boostCount);
     require(_msgValue() == cost, "[TacticalStrikeOverrideSystem] Incorrect payment");
@@ -50,7 +50,7 @@ contract TacticalStrikeOverrideSystem is EmpiresSystem {
     bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[TacticalStrikeOverrideSystem] Planet not found");
-    require(planetData.empireId != EEmpire.NULL, "[TacticalStrikeOverrideSystem] Planet is not owned");
+    require(planetData.empireId != 0, "[TacticalStrikeOverrideSystem] Planet is not owned");
 
     uint256 cost = LibPrice.getTotalCost(EOverride.StunCharge, planetData.empireId, _stunCount);
     require(_msgValue() == cost, "[TacticalStrikeOverrideSystem] Incorrect payment");

@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { console } from "forge-std/console.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
 import { P_GameConfig, WinningEmpire, Empire, Planet } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
-import { EEmpire } from "codegen/common.sol";
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
@@ -29,13 +27,13 @@ contract RewardsSystem is EmpiresSystem {
    * @dev Modifier that restricts the execution of a function to when the game is over.
    */
   modifier _onlyGameOver() {
-    EEmpire winningEmpire = WinningEmpire.get();
-    if (winningEmpire == EEmpire.NULL) {
+    uint8 winningEmpire = WinningEmpire.get();
+    if (winningEmpire == 0) {
       winningEmpire = _checkTimeVictory();
-      if (winningEmpire == EEmpire.NULL) {
+      if (winningEmpire == 0) {
         winningEmpire = _checkDominationVictory();
       }
-      require(winningEmpire != EEmpire.NULL, "[RewardsSystem] Game is not over");
+      require(winningEmpire != 0, "[RewardsSystem] Game is not over");
       WinningEmpire.set(winningEmpire);
     }
     _;
@@ -43,18 +41,21 @@ contract RewardsSystem is EmpiresSystem {
 
   /**
    * @dev Checks if the game has been won by domination.
-   * @return winningEmpire The EEmpire that has won the game, or EEmpire.NULL if the game has not been won by domination.
+   * @return winningEmpire The empire index that has won the game, or 0 if the game has not been won by domination.
    */
-  function _checkDominationVictory() internal view returns (EEmpire) {
+  function _checkDominationVictory() internal view returns (uint8) {
     bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
-    EEmpire winningEmpire = Planet.getEmpireId(citadelPlanets[0]);
-    if (winningEmpire == EEmpire.NULL) {
-      return EEmpire.NULL;
+    if (citadelPlanets.length == 0) {
+      return 0;
+    }
+    uint8 winningEmpire = Planet.getEmpireId(citadelPlanets[0]);
+    if (winningEmpire == 0) {
+      return 0;
     }
 
-    for (uint256 i = 1; i < citadelPlanets.length; i++) {
+    for (uint256 i = 0; i < citadelPlanets.length; i++) {
       if (Planet.getEmpireId(citadelPlanets[i]) != winningEmpire) {
-        return EEmpire.NULL;
+        return 0;
       }
     }
 
@@ -64,30 +65,33 @@ contract RewardsSystem is EmpiresSystem {
   /**
    * @dev Checks if the game has been won by the match running out of time.
    * @notice First condition is number of owned citadel planets. Second condition is number of all owned planets.
-   * @return winningEmpire The EEmpire that has won the game, or EEmpire.NULL if the game has not been won by time.
+   * @return winningEmpire The empire index that has won the game, or 0 if the game has not been won by time.
    */
-  function _checkTimeVictory() internal view returns (EEmpire) {
+  function _checkTimeVictory() internal view returns (uint8) {
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     if (endBlock == 0 || block.number <= endBlock) {
-      return EEmpire.NULL;
+      return 0;
     }
 
     bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
-    uint256[] memory citadelPlanetsPerEmpire = new uint256[](uint256(EEmpire.LENGTH));
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    uint256[] memory citadelPlanetsPerEmpire = new uint256[](empireCount);
     for (uint256 i = 0; i < citadelPlanets.length; i++) {
-      EEmpire empire = Planet.getEmpireId(citadelPlanets[i]);
-      citadelPlanetsPerEmpire[uint256(empire)]++;
+      uint8 empire = Planet.getEmpireId(citadelPlanets[i]);
+      if (empire == 0) continue;
+
+      citadelPlanetsPerEmpire[empire - 1]++;
     }
 
-    EEmpire winningEmpire = EEmpire.NULL;
+    uint8 winningEmpire = 0;
     uint256 maxCitadelPlanets = 0;
-    // skip EEmpire.NULL
-    for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
-      EEmpire empire = EEmpire(i);
-      if (citadelPlanetsPerEmpire[uint256(empire)] > maxCitadelPlanets) {
-        maxCitadelPlanets = citadelPlanetsPerEmpire[uint256(empire)];
+    for (uint8 empire = 1; empire <= empireCount; empire++) {
+      uint8 index = empire - 1;
+      uint256 citadelPlanets = citadelPlanetsPerEmpire[index];
+      if (citadelPlanets > maxCitadelPlanets) {
+        maxCitadelPlanets = citadelPlanets;
         winningEmpire = empire;
-      } else if (citadelPlanetsPerEmpire[uint256(empire)] == maxCitadelPlanets) {
+      } else if (citadelPlanets == maxCitadelPlanets) {
         if (EmpirePlanetsSet.size(empire) > EmpirePlanetsSet.size(winningEmpire)) {
           winningEmpire = empire;
         } else if (EmpirePlanetsSet.size(empire) == EmpirePlanetsSet.size(winningEmpire)) {
@@ -105,17 +109,19 @@ contract RewardsSystem is EmpiresSystem {
    * This function can only be called when the game is over.
    */
   function withdrawEarnings() public _onlyGameOver {
-    EEmpire empire = WinningEmpire.get();
-    require(empire != EEmpire.NULL, "[RewardsSystem] No empire has won the game");
+    uint8 winningEmpire = WinningEmpire.get();
+    require(winningEmpire != 0, "[RewardsSystem] No empire has won the game");
 
     bytes32 playerId = addressToId(_msgSender());
 
-    uint256 empirePoints = Empire.getPointsIssued(empire);
+    uint256 empirePoints = Empire.getPointsIssued(winningEmpire);
     if (empirePoints == 0) {
       return;
     }
 
-    uint256 playerEmpirePoints = PointsMap.getValue(empire, playerId) - PointsMap.getLockedPoints(empire, playerId);
+    uint256 playerEmpirePoints = PointsMap.getValue(winningEmpire, playerId) -
+      PointsMap.getLockedPoints(winningEmpire, playerId);
+
     if (playerEmpirePoints == 0) return;
 
     uint256 pot = (Balances.get(EMPIRES_NAMESPACE_ID));
@@ -124,6 +130,6 @@ contract RewardsSystem is EmpiresSystem {
     PlayersMap.setGain(playerId, PlayersMap.get(playerId).gain + playerPot);
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), playerPot);
 
-    PointsMap.remove(empire, playerId);
+    PointsMap.remove(winningEmpire, playerId);
   }
 }

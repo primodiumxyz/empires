@@ -5,7 +5,6 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 
 import { Turn, TurnData, P_GameConfig } from "codegen/index.sol";
-import { EEmpire } from "codegen/common.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { RoutineThresholds } from "../Types.sol";
 
@@ -14,15 +13,15 @@ contract UpdateSystem is EmpiresSystem {
    * @dev Updates the current turn and returns the empire whose turn just ended.
    * @return The empire whose turn just ended.
    */
-  function _updateTurn() private returns (EEmpire) {
+  function _updateTurn() private returns (uint8) {
     TurnData memory turn = Turn.get();
 
     bool canUpdate = block.number >= turn.nextTurnBlock;
     if (!canUpdate) revert("[UpdateSystem] Cannot update yet");
     uint256 newNextTurnBlock = block.number + P_GameConfig.getTurnLengthBlocks();
-    EEmpire newEmpire = EEmpire(((uint256(turn.empire) % 3) + 1));
+    uint8 newEmpire = (turn.empire % 3) + 1;
     Turn.set(newNextTurnBlock, newEmpire, turn.value + 1);
-    return turn.empire;
+    return newEmpire;
   }
 
   /**

@@ -13,5 +13,3 @@ ResourceId constant EMPIRES_NAMESPACE_ID = ResourceId.wrap(
 ResourceId constant ADMIN_NAMESPACE_ID = ResourceId.wrap(
   bytes32(RESOURCE_NAMESPACE) | (bytes32("Admin") >> (TYPE_BITS))
 );
-
-uint256 constant EMPIRE_COUNT = uint256(EEmpire.LENGTH) - 1;

@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { Turn, TacticalStrikeOverrideLog, TacticalStrikeOverrideLogData, BoostChargeOverrideLog, BoostChargeOverrideLogData, StunChargeOverrideLog, StunChargeOverrideLogData, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig, P_OverrideConfig, Empire, CreateShipOverrideLog, CreateShipOverrideLogData, KillShipOverrideLog, KillShipOverrideLogData, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, DrainShieldsOverrideLog, DrainShieldsOverrideLogData, Magnet, Planet, PlanetData, P_PointConfig, PlaceMagnetOverrideLog, PlaceMagnetOverrideLogData } from "codegen/index.sol";
-import { EEmpire, EOverride } from "codegen/common.sol";
+import { EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
@@ -28,7 +28,7 @@ contract OverrideShieldSystem is EmpiresSystem {
     bytes32 playerId = addressToId(_msgSender());
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
-    require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
+    require(planetData.empireId != 0, "[OverrideSystem] Planet is not owned");
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
@@ -59,7 +59,7 @@ contract OverrideShieldSystem is EmpiresSystem {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.shieldCount >= _overrideCount, "[OverrideSystem] Not enough shields to drain");
-    require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
+    require(planetData.empireId != 0, "[OverrideSystem] Planet is not owned");
 
     uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, planetData.empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");

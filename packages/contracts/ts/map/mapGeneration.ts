@@ -24,11 +24,12 @@ function generateContent() {
 
   return planets
     .map((_empire, i) => {
-      const empire = _empire - 1;
+      const empire = _empire > 10 ? 0 : _empire - 1;
       if (empire === -1) return "";
       const r = Math.floor(i / planetMap.width) - center.r;
       const q = (i % planetMap.width) - center.q + OFFSET;
       const coord = oddrToAxial({ row: r, col: q });
+      console.log({ coord, empire });
 
       const empireName = EmpireNames[empire] ?? "NULL";
       const isCitadel = citadelPlanets[i] === 5;
@@ -36,7 +37,7 @@ function generateContent() {
       return `
             /* Planet at (${coord.q}, ${coord.r}) */
             planetId = coordToId(${coord.q}, ${coord.r});
-            planetData.empireId = EEmpire.${empireName};
+            planetData.empireId = ${empire};
             planetData.q = ${coord.q};
             planetData.r = ${coord.r};
             planetData.shieldCount = ${empireName === "NULL" ? 4 : 0};
@@ -44,7 +45,7 @@ function generateContent() {
             Planet.set(planetId, planetData);
 
             PlanetsSet.add(planetId);
-            ${empireName === "NULL" ? "" : `EmpirePlanetsSet.add(EEmpire.${empireName}, planetId);`}
+            ${empireName === "NULL" ? "" : `EmpirePlanetsSet.add(${empire}, planetId);`}
             ${isCitadel ? `CitadelPlanetsSet.add(planetId);` : ""}
 
             createTacticalCharge(planetId, ${empireName === "NULL" ? 0 : "chargeRate"});
@@ -63,7 +64,7 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { Planet, PlanetData, Empire, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig } from "codegen/index.sol";
-import { EEmpire, EOrigin, EOverride } from "codegen/common.sol";
+import { EOrigin, EOverride } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
 
 function createPlanets() {
@@ -71,9 +72,9 @@ function createPlanets() {
   bytes32 planetId;
   uint256 chargeRate = P_TacticalStrikeConfig.getChargeRate();
 
-  Empire.set(EEmpire.Red, EOrigin.North, 0, 0);
-  Empire.set(EEmpire.Blue, EOrigin.North, 0, 0);
-  Empire.set(EEmpire.Green, EOrigin.North, 0, 0);
+  Empire.set(1, EOrigin.North, 0, 0);
+  Empire.set(2, EOrigin.North, 0, 0);
+  Empire.set(3, EOrigin.North, 0, 0);
   PlanetData memory planetData = PlanetData({
     q: 0,
     r: 0,
@@ -81,7 +82,7 @@ function createPlanets() {
     isCitadel: false,
     shipCount: 0,
     shieldCount: 0,
-    empireId: EEmpire.Red,
+    empireId: 1,
     goldCount: 0
   });
 

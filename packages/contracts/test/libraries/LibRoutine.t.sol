@@ -4,7 +4,6 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { EEmpire } from "codegen/common.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { P_RoutineCosts, Planet } from "codegen/index.sol";
 import { ERoutine } from "codegen/common.sol";
@@ -36,7 +35,7 @@ contract LibRoutineTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getEmpireId(planetId) != EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) != 0);
     routineThresholds.planetId = planetId;
   }
 

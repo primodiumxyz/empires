@@ -9,9 +9,8 @@ import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { LibRoutine } from "libraries/LibRoutine.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
-import { EEmpire, ERoutine, EOverride } from "codegen/common.sol";
+import { ERoutine, EOverride } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -19,6 +18,7 @@ contract UpdateSystemTest is PrimodiumTest {
   bytes32 targetPlanetId;
   uint256 turnLength = 100;
   uint256 pointUnit;
+  uint8 EMPIRE_COUNT;
 
   bytes32 aliceId;
   bytes32 bobId;
@@ -32,6 +32,7 @@ contract UpdateSystemTest is PrimodiumTest {
     aliceId = addressToId(alice);
     bobId = addressToId(bob);
     pointUnit = P_PointConfig.getPointUnit();
+    EMPIRE_COUNT = P_GameConfig.getEmpireCount();
     vm.startPrank(creator);
     P_GameConfig.setTurnLengthBlocks(turnLength);
     P_GameConfig.setGameOverBlock(block.number + 100000);
@@ -39,13 +40,13 @@ contract UpdateSystemTest is PrimodiumTest {
     do {
       planetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getEmpireId(planetId) == EEmpire.NULL);
+    } while (Planet.getEmpireId(planetId) == 0);
 
     i = 0;
     do {
       emptyPlanetId = PlanetsSet.getPlanetIds()[i];
       i++;
-    } while (Planet.getEmpireId(emptyPlanetId) != EEmpire.NULL);
+    } while (Planet.getEmpireId(emptyPlanetId) != 0);
 
     targetPlanetId = PlanetsSet.getPlanetIds()[1];
 
@@ -103,37 +104,34 @@ contract UpdateSystemTest is PrimodiumTest {
   function testGeneratePointsAndOverrides() public {
     P_PointConfigData memory pointCfg = P_PointConfig.get();
     uint256 beginPointCost = pointCfg.minPointCost + pointCfg.pointGenRate;
-    Empire.setPointCost(EEmpire.Red, beginPointCost);
-    Empire.setPointCost(EEmpire.Blue, beginPointCost);
-    Empire.setPointCost(EEmpire.Green, beginPointCost);
+    Empire.setPointCost(1, beginPointCost);
+    Empire.setPointCost(2, beginPointCost);
+    Empire.setPointCost(3, beginPointCost);
 
     P_OverrideConfigData memory createShipCfg = P_OverrideConfig.get(EOverride.CreateShip);
     uint256 beginCreateShipCost = createShipCfg.minOverrideCost + createShipCfg.overrideGenRate;
     P_OverrideConfigData memory killShipCfg = P_OverrideConfig.get(EOverride.KillShip);
     uint256 beginKillShipCost = killShipCfg.minOverrideCost + killShipCfg.overrideGenRate;
-    OverrideCost.set(EEmpire.Red, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Red, EOverride.KillShip, beginKillShipCost);
-    OverrideCost.set(EEmpire.Blue, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Blue, EOverride.KillShip, beginKillShipCost);
-    OverrideCost.set(EEmpire.Green, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Green, EOverride.KillShip, beginKillShipCost);
+    OverrideCost.set(1, EOverride.CreateShip, beginCreateShipCost);
+    OverrideCost.set(1, EOverride.KillShip, beginKillShipCost);
+    OverrideCost.set(2, EOverride.CreateShip, beginCreateShipCost);
+    OverrideCost.set(2, EOverride.KillShip, beginKillShipCost);
+    OverrideCost.set(3, EOverride.CreateShip, beginCreateShipCost);
+    OverrideCost.set(3, EOverride.KillShip, beginKillShipCost);
 
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld(allRoutineThresholds);
 
-    assertEq(Empire.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Empire.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Empire.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(1), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(2), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointCost(3), beginPointCost - pointCfg.pointGenRate);
 
-    assertEq(OverrideCost.get(EEmpire.Red, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
-    assertEq(OverrideCost.get(EEmpire.Red, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
-    assertEq(OverrideCost.get(EEmpire.Blue, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
-    assertEq(OverrideCost.get(EEmpire.Blue, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
-    assertEq(
-      OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
-      beginCreateShipCost - createShipCfg.overrideGenRate
-    );
-    assertEq(OverrideCost.get(EEmpire.Green, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
+    assertEq(OverrideCost.get(1, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
+    assertEq(OverrideCost.get(1, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
+    assertEq(OverrideCost.get(2, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
+    assertEq(OverrideCost.get(2, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
+    assertEq(OverrideCost.get(3, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
+    assertEq(OverrideCost.get(3, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
   }
 
   function _getEndTurn(uint256 turnDuration) internal view returns (uint256) {
@@ -142,7 +140,7 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function testMagnetRemoval() public {
     // Add a magnet to a planet
-    EEmpire empire = Turn.getEmpire();
+    uint8 empire = Turn.getEmpire();
     uint256 turnDuration = 1;
     uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
@@ -163,7 +161,7 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function testMagnetRemovalMultipleTurns() public {
     // Add a magnet to a planet
-    EEmpire empire = Turn.getEmpire();
+    uint8 empire = Turn.getEmpire();
     uint256 turnDuration = 30;
     uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
@@ -183,7 +181,7 @@ contract UpdateSystemTest is PrimodiumTest {
   }
 
   function testMultipleMagnetRemoval() public {
-    EEmpire empire = Turn.getEmpire();
+    uint8 empire = Turn.getEmpire();
     uint256 turnDuration = 1;
     uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
@@ -209,7 +207,7 @@ contract UpdateSystemTest is PrimodiumTest {
   }
 
   function testMagnetRemovalEffectOnPlayerPoints() public {
-    EEmpire empire = Turn.getEmpire();
+    uint8 empire = Turn.getEmpire();
     uint256 turnDuration = 1;
     uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
@@ -231,7 +229,7 @@ contract UpdateSystemTest is PrimodiumTest {
   }
 
   function testMagnetRemovalNotPlacedOnCurrTurn() public {
-    EEmpire empire = EEmpire(((uint8(Turn.getEmpire()) - 1) % EMPIRE_COUNT) + 1);
+    uint8 empire = ((uint8(Turn.getEmpire()) - 1) % EMPIRE_COUNT) + 1;
     uint256 turnDuration = 1;
     uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
@@ -253,7 +251,7 @@ contract UpdateSystemTest is PrimodiumTest {
   }
 
   function testMagnetRemovalInteractionWithMagnetTurnPlanets() public {
-    EEmpire empire = Turn.getEmpire();
+    uint8 empire = Turn.getEmpire();
     uint256 turnDuration = 2;
     uint256 endTurn = _getEndTurn(turnDuration);
     Empire.setPointsIssued(empire, 100 * pointUnit);
