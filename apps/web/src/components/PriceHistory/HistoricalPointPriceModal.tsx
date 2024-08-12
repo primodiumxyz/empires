@@ -19,7 +19,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
-import { EmpireEnumToName } from "@/util/lookups";
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const EmpireEnumToFillColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "stroke-blue-400",
@@ -100,7 +100,7 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
                     .map((_, i) => i + 1)
                     .map((empire) => ({
                       id: empire.toString(),
-                      label: empire === EEmpire.LENGTH ? "ALL EMPIRES" : EmpireEnumToName[empire as EEmpire],
+                      label: empire === EEmpire.LENGTH ? "ALL EMPIRES" : EmpireEnumToConfig[empire as EEmpire].name,
                     })),
                 ]}
                 onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}

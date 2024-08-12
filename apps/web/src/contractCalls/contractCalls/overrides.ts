@@ -3,7 +3,7 @@ import { formatEther } from "viem";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { EmpireEnumToName } from "@/util/lookups";
+import { EmpireEnumToConfig } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
 export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) => {
@@ -126,7 +126,10 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       },
       onComplete: ({ success, error }) => {
         if (success) {
-          notify("success", `Sold ${formatEther(amount)} points from ${EmpireEnumToName[empire as EEmpire]} empire`);
+          notify(
+            "success",
+            `Sold ${formatEther(amount)} points from ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
+          );
         } else {
           notify("error", error || "Unknown error");
         }

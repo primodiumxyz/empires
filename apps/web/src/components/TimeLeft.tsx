@@ -12,7 +12,7 @@ import { usePot } from "@/hooks/usePot";
 import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
-import { EmpireEnumToName } from "@/util/lookups";
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const TimeLeft = () => {
   const { timeLeftMs, blocksLeft } = useTimeLeft();
@@ -46,7 +46,8 @@ export const TimeLeft = () => {
               </div>
               <div className="mt-2 flex flex-col gap-2 text-white">
                 <p className="text-xs font-bold">
-                  {EmpireEnumToName[turn.empire as EEmpire]}'s Turn in <span className="text-error">{timeLeft}</span>
+                  {EmpireEnumToConfig[turn.empire as EEmpire].name}'s Turn in{" "}
+                  <span className="text-error">{timeLeft}</span>
                 </p>
               </div>
             </Tooltip>

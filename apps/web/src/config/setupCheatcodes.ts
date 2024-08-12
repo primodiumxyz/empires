@@ -7,7 +7,7 @@ import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
-import { EmpireEnumToName } from "@/util/lookups";
+import { EmpireEnumToConfig } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
@@ -438,8 +438,11 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name.name,
+        options: empires.map((entity) => ({
+          id: entity,
+          value: EmpireEnumToConfig[Number(entity) as EEmpire].name.name,
+        })),
       },
       amount: {
         label: "Units",
@@ -658,8 +661,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
       planet: {
         label: "Planet",
@@ -731,8 +734,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
       planet: {
         label: "Planet",
@@ -767,8 +770,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
     },
     execute: async ({ empire }) => {
@@ -1093,11 +1096,11 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[EEmpire.Red],
+        defaultValue: EmpireEnumToConfig[EEmpire.Red].name,
         options: [
           ...empires.map((entity) => ({
             id: Number(entity) as EEmpire,
-            value: EmpireEnumToName[Number(entity) as EEmpire],
+            value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
           })),
           {
             id: 0,
