@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Empire, P_PointConfig, P_GameConfig } from "codegen/index.sol";
+import { Empire, P_PointConfig } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { PointsMap } from "adts/PointsMap.sol";
@@ -22,8 +22,7 @@ contract LibPointTest is PrimodiumTest {
   }
 
   function testInitEmptyEmpireIssuedPoints() public {
-    uint8 empireCount = P_GameConfig.getEmpireCount();
-    for (uint8 i = 1; i <= empireCount; i++) {
+    for (uint i = 0; i < uint256(EEmpire.LENGTH); i++) {
       assertEq(Empire.getPointsIssued(EEmpire(i)), 0, "Empire points at game start should be 0");
     }
   }

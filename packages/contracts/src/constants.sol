@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
+import { EEmpire } from "codegen/common.sol";
 
 import { ResourceId, TYPE_BITS } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_NAMESPACE } from "@latticexyz/world/src/worldResourceTypes.sol";
@@ -12,3 +13,5 @@ ResourceId constant EMPIRES_NAMESPACE_ID = ResourceId.wrap(
 ResourceId constant ADMIN_NAMESPACE_ID = ResourceId.wrap(
   bytes32(RESOURCE_NAMESPACE) | (bytes32("Admin") >> (TYPE_BITS))
 );
+
+uint256 constant EMPIRE_COUNT = uint256(EEmpire.LENGTH) - 1;

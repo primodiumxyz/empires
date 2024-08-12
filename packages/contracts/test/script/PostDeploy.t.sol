@@ -4,7 +4,10 @@ pragma solidity >=0.8.24;
 import { ResourceIds } from "@latticexyz/store/src/codegen/index.sol";
 import { NamespaceOwner, ResourceAccess } from "@latticexyz/world/src/codegen/index.sol";
 
-import { PrimodiumTest } from "test/PrimodiumTest.t.sol";
+import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
+import { coordToId } from "src/utils.sol";
+import { Planet, PlanetData } from "codegen/index.sol";
+import { EEmpire } from "codegen/common.sol";
 import { ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 contract PostDeployTest is PrimodiumTest {

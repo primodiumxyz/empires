@@ -11,9 +11,9 @@ import { LibMagnet } from "libraries/LibMagnet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire, ERoutine, EOverride } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";
+import { EMPIRE_COUNT } from "src/constants.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
-  uint8 EMPIRE_COUNT;
   bytes32 planetId;
   bytes32 emptyPlanetId;
   bytes32 targetPlanetId;
@@ -28,7 +28,7 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function setUp() public override {
     super.setUp();
-    EMPIRE_COUNT = P_GameConfig.getEmpireCount();
+
     aliceId = addressToId(alice);
     bobId = addressToId(bob);
     pointUnit = P_PointConfig.getPointUnit();

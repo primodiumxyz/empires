@@ -10,14 +10,13 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
-import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, EMPIRE_COUNT } from "src/constants.sol";
 
 contract OverrideSystemTest is PrimodiumTest {
   bytes32 planetId;
   bytes32 aliceId;
   bytes32 bobId;
   uint256 pointUnit;
-  uint8 EMPIRE_COUNT;
 
   function setUp() public override {
     super.setUp();
@@ -31,7 +30,6 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.prank(creator);
     P_PointConfig.setPointRake(0);
     pointUnit = P_PointConfig.getPointUnit();
-    EMPIRE_COUNT = P_GameConfig.getEmpireCount();
   }
 
   function _getCurrentCharge(bytes32 _planetId) internal view returns (uint256) {

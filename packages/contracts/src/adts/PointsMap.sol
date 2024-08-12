@@ -6,7 +6,7 @@ import { EEmpire, EOverride } from "codegen/common.sol";
 
 /**
  * @title empireMap
- * @dev Library to manage a mapping of utilities (identified by EEmpire keys) to values for each player entity in a game.
+ * @dev Library to manage a mapping of utilities (identified by uint8 keys) to values for each player entity in a game.
  */
 library PointsMap {
   /**
