@@ -2,8 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { Empire, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_GameConfig, P_OverrideConfig, P_OverrideConfigData, OverrideCost } from "codegen/index.sol";
-import { EOverride } from "codegen/common.sol";
-import { EEmpire } from "codegen/common.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 
 /**
  * @title LibPrice
