@@ -1,4 +1,4 @@
-import { CallExecutionError, ContractFunctionExecutionError, Hex, PublicClient } from "viem";
+import { CallExecutionError, ContractFunctionExecutionError, Hex } from "viem";
 
 import { Core, TxReceipt } from "@core/lib/types";
 
@@ -14,11 +14,9 @@ export async function _execute(
     const txHash = await txPromise();
     const txReceipt = await publicClient.waitForTransactionReceipt({ hash: txHash });
     receipt = { success: txReceipt.status === "success", ...txReceipt };
-    console.log("[Tx] hash: ", txHash);
 
+    // If the transaction failed BUT the simulation didn't throw, it's most likely a gas issue
     if (!receipt.success) {
-      // Force a CallExecutionError such that we can get the revert reason
-      await callTransaction(publicClient, txHash);
       console.error("[Insufficient Gas Limit] You're moving fast! Please wait a moment and then try again.");
       receipt.error = "Insufficient Gas Limit";
     }
@@ -52,15 +50,4 @@ export async function _execute(
   }
 
   return receipt;
-}
-
-// Call from a hash to force a CallExecutionError such that we can get the revert reason
-async function callTransaction(publicClient: PublicClient, txHash: Hex): Promise<void> {
-  const tx = await publicClient.getTransaction({ hash: txHash });
-  if (!tx) throw new Error("Transaction does not exist");
-  await publicClient.call({
-    account: tx.from!,
-    to: tx.to!,
-    data: tx.input,
-  });
 }
