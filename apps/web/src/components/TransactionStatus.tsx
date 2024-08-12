@@ -6,7 +6,7 @@ import { Loader } from "@/components/core/Loader";
 type Transaction = {
   id: string;
   type: string | undefined;
-  status: "pending" | "completed" | "error" | "removing";
+  status: "pending" | "success" | "error" | "removing";
   completedAt?: number;
 };
 
@@ -28,32 +28,28 @@ export const TransactionStatus: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = tables.TransactionQueue.watch({
-      onChange: () => {
-        const entities = tables.TransactionQueue.getAll();
-        const newTransactions = entities.map((entity) => {
-          const transaction = tables.TransactionQueue.get(entity);
-
-          return {
+      onEnter: ({ entity, properties: { current } }) => {
+        setTransactions((prev) => [
+          ...prev,
+          {
             id: entity,
-            type: transaction?.type || "Unknown",
-            status: transaction?.pending ? ("pending" as const) : ("completed" as const),
-          };
-        });
-
-        setTransactions((prevTransactions) => {
-          const updatedTransactions = prevTransactions.map((tx) => {
-            if (!newTransactions.some((newTx) => newTx.id === tx.id)) {
-              return { ...tx, status: "completed" as const, completedAt: Date.now() };
-            }
-
-            return tx;
-          });
-
-          return [
-            ...newTransactions.filter((newTx) => !prevTransactions.some((tx) => tx.id === newTx.id)),
-            ...updatedTransactions,
-          ];
-        });
+            type: current?.type || "Unknown",
+            status: "pending",
+          },
+        ]);
+      },
+      onUpdate: ({ entity, properties: { current } }) => {
+        setTransactions((prev) =>
+          prev.map((tx) =>
+            tx.id === entity
+              ? {
+                  ...tx,
+                  status: current?.success ? "success" : "error",
+                  completedAt: Date.now(),
+                }
+              : tx,
+          ),
+        );
       },
     });
 
@@ -64,7 +60,7 @@ export const TransactionStatus: React.FC = () => {
 
   useEffect(() => {
     transactions.forEach((transaction) => {
-      if (transaction.status === "completed" && transaction.completedAt) {
+      if (transaction.completedAt) {
         const timeLeft = FADEOUT_DELAY - (Date.now() - transaction.completedAt);
         if (timeLeft > 0) {
           const timer = setTimeout(() => {
@@ -100,7 +96,7 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }
     <div className="flex items-center justify-end gap-2">
       <span>{transaction.type}</span>
       {transaction.status === "pending" && <Loader size="xs" />}
-      {transaction.status === "completed" && (
+      {transaction.status === "success" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4 text-green-500"
@@ -110,6 +106,15 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }
           <path
             fillRule="evenodd"
             d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+            clipRule="evenodd"
+          />
+        </svg>
+      )}
+      {transaction.status === "error" && (
+        <svg className="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+          <path
+            fillRule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 0L14 10l-4.293 4.293a1 1 0 01-1.414 0z"
             clipRule="evenodd"
           />
         </svg>
