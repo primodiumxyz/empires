@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-import { EEmpire } from "codegen/common.sol";
 
 import { ResourceId, TYPE_BITS } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_NAMESPACE } from "@latticexyz/world/src/worldResourceTypes.sol";

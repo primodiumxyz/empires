@@ -8,7 +8,7 @@ import { EOverride } from "codegen/common.sol";
 function initPrice() {
   uint256 startPointCost = P_PointConfig.getStartPointCost();
   uint8 empireCount = P_GameConfig.getEmpireCount();
-  for (uint8 i = 1; i < empireCount; i++) {
+  for (uint8 i = 1; i <= empireCount; i++) {
     Empire.setPointCost(i, startPointCost);
     // Set the initial point cost for each empire for historical data visualization
     HistoricalPointCost.set(i, block.timestamp, startPointCost);

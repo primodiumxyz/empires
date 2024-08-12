@@ -83,16 +83,22 @@ contract LibPriceTest is PrimodiumTest {
   }
 
   function testStartGetPointCost() public {
+    uint256 initPointCost = Empire.getPointCost(1);
+    console.log("[LibPriceTest] initPointCost", initPointCost);
     assertEq(
       LibPrice.getPointCost(1, 1 * pointUnit),
       config.startPointCost,
       "Starting Red Empire point cost incorrect"
     );
+    initPointCost = Empire.getPointCost(2);
+    console.log("[LibPriceTest] initPointCost", initPointCost);
     assertEq(
       LibPrice.getPointCost(2, 1 * pointUnit),
       config.startPointCost,
       "Starting Blue Empire point cost incorrect"
     );
+    initPointCost = Empire.getPointCost(3);
+    console.log("[LibPriceTest] initPointCost", initPointCost);
     assertEq(
       LibPrice.getPointCost(3, 1 * pointUnit),
       config.startPointCost,
