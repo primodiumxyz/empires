@@ -1,12 +1,25 @@
-import { InterfaceIcons } from "@primodiumxyz/assets";
+import { InterfaceIcons, SpriteKeys } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 
-export const EMPIRES = [EEmpire.Red, EEmpire.Blue, EEmpire.Green];
 export const DEFAULT_EMPIRE = EEmpire.Red;
-export const EMPIRES_COUNT = EEmpire.LENGTH - 1;
 
-export const EmpireEnumToConfig = {
-  0: { name: "", textColor: "" },
+export const EmpireEnumToConfig: Record<
+  EEmpire,
+  {
+    name: string;
+    textColor: string;
+    chartColor: string;
+    icons: { magnet: string };
+    sprites: { planet: SpriteKeys };
+  }
+> = {
+  [EEmpire.LENGTH]: {
+    name: "Length",
+    textColor: "text-gray-400",
+    chartColor: "rgba(128, 128, 128, .75)",
+    icons: { magnet: "" },
+    sprites: { planet: "Gold" },
+  },
   [EEmpire.Red]: {
     name: "Red",
     textColor: "text-red-400",
@@ -28,11 +41,46 @@ export const EmpireEnumToConfig = {
     icons: { magnet: InterfaceIcons.GreenMagnet },
     sprites: { planet: "PlanetGreen" },
   },
-  [EEmpire.LENGTH]: {
-    name: "All Empires",
-    textColor: "text-gray-400",
+  [EEmpire.Yellow]: {
+    name: "Yellow",
+    textColor: "text-yellow-400",
+    chartColor: "rgba(255, 255, 0, .75)",
+    icons: { magnet: InterfaceIcons.GreenMagnet },
+    sprites: { planet: "PlanetGreen" },
+  },
+  [EEmpire.Purple]: {
+    name: "Purple",
+    textColor: "text-purple-400",
+    chartColor: "rgba(128, 0, 128, .75)",
+    icons: { magnet: InterfaceIcons.GreenMagnet },
+    sprites: { planet: "PlanetGreen" },
+  },
+  [EEmpire.Orange]: {
+    name: "Orange",
+    textColor: "text-orange-400",
+    chartColor: "rgba(255, 165, 0, .75)",
+    icons: { magnet: InterfaceIcons.GreenMagnet },
+    sprites: { planet: "PlanetGreen" },
+  },
+  [EEmpire.Pink]: {
+    name: "Pink",
+    textColor: "text-pink-400",
+    chartColor: "rgba(255, 192, 203, .75)",
+    icons: { magnet: InterfaceIcons.GreenMagnet },
+    sprites: { planet: "PlanetGreen" },
+  },
+  [EEmpire.Black]: {
+    name: "Black",
+    textColor: "text-black-400",
     chartColor: "rgba(0, 0, 0, .75)",
-    icons: { magnet: InterfaceIcons.RedMagnet },
-    sprites: { planet: "PlanetRed" },
+    icons: { magnet: InterfaceIcons.GreenMagnet },
+    sprites: { planet: "PlanetGreen" },
+  },
+  [EEmpire.White]: {
+    name: "White",
+    textColor: "text-white-400",
+    chartColor: "rgba(255, 255, 255, .75)",
+    icons: { magnet: InterfaceIcons.GreenMagnet },
+    sprites: { planet: "PlanetGreen" },
   },
 } as const;

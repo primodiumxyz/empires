@@ -11,10 +11,10 @@ import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
-import { EMPIRES } from "@/util/lookups";
 
 export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: boolean }> = ({
   hideAccountBalance = false,
@@ -33,6 +33,7 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
   };
 
   const balance = useBalance(address).value ?? 0n;
+  const empires = useEmpires();
 
   return (
     <div className="min-w-42 flex flex-col gap-2 p-2 text-right text-xs">
@@ -47,8 +48,8 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
             <hr className="my-1 w-full border-secondary/50" />
           </>
         )}
-        {EMPIRES.map((empire, index) => (
-          <EmpirePoints key={index} empire={empire} playerId={entity} justifyStart={justifyStart} />
+        {empires.values().map((empire, index) => (
+          <EmpirePoints key={index} empire={Number(empire)} playerId={entity} justifyStart={justifyStart} />
         ))}
       </div>
     </div>

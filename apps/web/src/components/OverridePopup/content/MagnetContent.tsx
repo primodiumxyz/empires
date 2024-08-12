@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { formatEther } from "viem";
 
-import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -13,9 +12,10 @@ import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { cn } from "@/util/client";
-import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
 export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }) => {
   const [inputValue, setInputValue] = useState("1");
@@ -40,11 +40,17 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
   const playerPoints =
     tables.Value_PointsMap.useWithKeys({ empireId: empire ?? DEFAULT_EMPIRE, playerId: entity })?.value ?? 0n;
   const playerBalance = useBalance(address).value ?? 0n;
+  const empires = useEmpires();
 
-  const magnets = EMPIRES.map((empire) => ({
-    empire,
-    exists: !!tables.Magnet.useWithKeys({ planetId, empireId: empire }),
-  }));
+  const time = tables.Time.use()?.value;
+  const magnets = useMemo(
+    () =>
+      Array.from(empires.keys()).map((empire) => ({
+        empire,
+        exists: !!tables.Magnet.getWithKeys({ planetId, empireId: empire }),
+      })),
+    [empires, planetId, time],
+  );
   const currentMagnetExists = !!magnets.find((magnet) => magnet.empire === empire)?.exists;
 
   const { disabled, message } = useMemo(() => {

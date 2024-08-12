@@ -1,4 +1,5 @@
-import { InterfaceIcons } from "@primodiumxyz/assets";
+import { useMemo } from "react";
+
 import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
@@ -7,9 +8,9 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
 import { useCharge } from "@/hooks/useCharge";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
-import { EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
 
 /* --------------------------------- PLANET --------------------------------- */
 export const PlanetSummary = ({ entity, className }: { entity: Entity; className?: string }) => {
@@ -90,18 +91,29 @@ const Overrides = ({ entity }: { entity: Entity }) => {
   const { utils, tables } = useCore();
   const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
   const overheat = useCharge(entity);
-  const magnets = EMPIRES.map((empire) => ({
-    empire,
-    data: tables.Magnet.useWithKeys({ empireId: empire, planetId: entity }),
-  }));
+  const empires = useEmpires();
+  const time = tables.Time.use();
+
+  const magnets = useMemo(
+    () =>
+      empires.keys().map((empire) => ({
+        endTurn: tables.Magnet.getWithKeys({ empireId: empire, planetId: entity })?.endTurn,
+        empire: empire,
+      })),
+    [empires, entity, time],
+  );
 
   const currTurn = tables.Turn.use()?.value ?? 0n;
 
   const currFullTurn = (currTurn - 1n) / 3n;
   const turnModulo = Number(currTurn - 1n) % 3;
 
-  const turnsLeft = magnets.map((magnet) =>
-    calculateTurnsLeft(magnet?.data?.endTurn, currFullTurn, turnModulo < magnet?.empire),
+  const turnsLeft = magnets.reduce<Record<EEmpire, number>>(
+    (acc, magnet) => {
+      acc[magnet.empire] = calculateTurnsLeft(magnet?.endTurn, currFullTurn, turnModulo < magnet?.empire);
+      return acc;
+    },
+    {} as Record<EEmpire, number>,
   );
 
   const valToText = (val: number) => {
@@ -121,12 +133,8 @@ const Overrides = ({ entity }: { entity: Entity }) => {
         <div className="grid grid-cols-2 gap-y-1 text-xs">
           <span className="text-gray-4000">MAGNETS</span>
           <div className="flex flex-row gap-1">
-            {EMPIRES.map((empire, index) => (
-              <IconLabel
-                key={index}
-                imageUri={EmpireEnumToConfig[empire].icons.magnet}
-                text={formatNumber(turnsLeft[empire])}
-              />
+            {empires.entries().map(([empire, data], index) => (
+              <IconLabel key={index} imageUri={data.icons.magnet} text={formatNumber(turnsLeft[empire] ?? 0)} />
             ))}
           </div>
         </div>

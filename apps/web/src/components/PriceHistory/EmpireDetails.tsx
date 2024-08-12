@@ -6,10 +6,11 @@ import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { SmallHistoricalPointGraph } from "@/components/PriceHistory/SmallHistoricalPointGraph";
 import { Price } from "@/components/shared/Price";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
-import { DEFAULT_EMPIRE, EMPIRES } from "@/util/lookups";
+import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 // TODO: Change window size to use time instead of # of updates
 const WINDOW_SIZE = 25;
@@ -66,9 +67,10 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
 };
 
 export const EmpireDetails: React.FC<{ hideGraph?: boolean }> = ({ hideGraph }) => {
+  const empires = useEmpires();
   return (
     <div className="flex flex-col items-start gap-1 text-center">
-      {EMPIRES.map((empire, index) => (
+      {empires.keys().map((empire, index) => (
         <_EmpireDetails key={index} empire={empire} hideGraph={hideGraph} />
       ))}
     </div>

@@ -15,24 +15,32 @@ import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointG
 import { SellPoints } from "@/components/PriceHistory/SellPoints";
 import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
-import { usePointPrice } from "@/hooks/usePointPrice";
+import { useEmpires } from "@/hooks/useEmpires";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
-import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
 interface HistoricalPointPriceModalProps {}
 
 export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
   const { playerAccount } = useAccountClient();
-  const { tables } = useCore();
+  const {
+    tables,
+    utils: { getPointPrice },
+  } = useCore();
   const { pot } = usePot();
   const points = usePoints(playerAccount.entity);
-  const pointCosts = EMPIRES.map((empire) => ({
-    empire,
-    data: usePointPrice(empire, Number(formatEther(points[empire].playerPoints))),
-  }));
+  const empires = useEmpires();
+  const time = tables.Time.use()?.value;
+  const pointCosts = useMemo(
+    () =>
+      Array.from(empires.entries()).map(([empire]) =>
+        getPointPrice(empire, Number(formatEther(points[empire].playerPoints))),
+      ),
+    [empires, points, time],
+  );
 
   const earnings = useMemo(() => {
     const biggestReward = Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
@@ -52,7 +60,7 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
   }, [points, pot]);
 
   const earningsImmediate = useMemo(() => {
-    return pointCosts.reduce((acc, { data }) => acc + data.price, 0n);
+    return pointCosts.reduce((acc, { price }) => acc + price, 0n);
   }, [pointCosts]);
 
   // Calculate KPIs

@@ -8,12 +8,12 @@ import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
-import { usePointPrice } from "@/hooks/usePointPrice";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
-import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
+import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const PlayerReturns = () => {
   const { tables } = useCore();
@@ -68,6 +68,9 @@ const EmpireEndReward = ({
   empirePoints: bigint;
   totalSpent: bigint;
 }) => {
+  const {
+    utils: { getPointPrice },
+  } = useCore();
   const { pot } = usePot();
   const {
     ROOT: { sprite },
@@ -77,7 +80,8 @@ const EmpireEndReward = ({
   const pnl = isProfit ? earnings - totalSpent : totalSpent - earnings;
 
   const imgUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
-  const empireName = EmpireEnumToConfig[empire].name;
+  const empires = useEmpires();
+  const empireName = empires.get(empire)?.name;
   return (
     <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
       <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
@@ -107,15 +111,20 @@ const EmpireEndReward = ({
 };
 
 const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
-  const { tables } = useCore();
+  const {
+    tables,
+    utils: { getPointPrice },
+  } = useCore();
   const points = usePoints(playerId);
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
+  const empires = useEmpires();
+  const time = tables.Time.use();
 
-  const pointCosts = EMPIRES.map((empire) => ({
-    empire,
-    cost: usePointPrice(empire, Number(formatEther(points[empire].playerPoints))).price,
-  }));
-  const totalReward = pointCosts.reduce((sum, { cost }) => sum + cost, 0n);
+  const pointCosts = useMemo(
+    () => empires.keys().map((empire) => getPointPrice(empire, Number(formatEther(points[empire].playerPoints))).price),
+    [empires, points, time],
+  );
+  const totalReward = pointCosts.reduce((sum, cost) => sum + cost, 0n);
 
   const isProfit = totalReward >= totalSpent;
   const pnl = isProfit ? totalReward - totalSpent : totalSpent - totalReward;
