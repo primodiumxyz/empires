@@ -15,74 +15,68 @@ import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { cn } from "@/util/client";
+import { EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
 
 export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }) => {
   const [inputValue, setInputValue] = useState("1");
-  const [empire, setEmpire] = useState<EEmpire | undefined>(undefined);
+  const [empire, setEmpire] = useState<EEmpire>(EEmpire.LENGTH);
   const { tables } = useCore();
   const { placeMagnet } = useContractCalls();
 
-  const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire ?? EEmpire.Red, BigInt(inputValue));
+  const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
 
   const onPlaceMagnet = useCallback(async () => {
-    await placeMagnet(empire ?? EEmpire.Red, planetId, BigInt(inputValue), placeMagnetPriceWei);
+    await placeMagnet(empire, planetId, BigInt(inputValue), placeMagnetPriceWei);
     setInputValue("1");
     tables.SelectedPlanet.remove();
   }, [empire, planetId, inputValue, placeMagnetPriceWei, placeMagnet]);
 
   const pointLockPct = tables.P_MagnetConfig.useWithKeys()?.lockedPointsPercent ?? 0n;
-  const empirePoints = tables.Empire.useWithKeys({ id: empire ?? EEmpire.Red })?.pointsIssued ?? 0n;
+  const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pointsLocked = (empirePoints * pointLockPct) / 10000n;
   const {
     playerAccount: { address, entity },
   } = useAccountClient();
-  const playerPoints =
-    tables.Value_PointsMap.useWithKeys({ empireId: empire ?? EEmpire.Red, playerId: entity })?.value ?? 0n;
+  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
   const playerBalance = useBalance(address).value ?? 0n;
 
-  const magnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: empire ?? EEmpire.Red });
+  const currentMagnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: empire });
   const redMagnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: EEmpire.Red });
   const blueMagnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: EEmpire.Blue });
   const greenMagnetExists = !!tables.Magnet.useWithKeys({ planetId, empireId: EEmpire.Green });
+  const magnetExists = useMemo(
+    () => ({
+      [EEmpire.Red]: redMagnetExists,
+      [EEmpire.Blue]: blueMagnetExists,
+      [EEmpire.Green]: greenMagnetExists,
+      [EEmpire.LENGTH]: false,
+    }),
+    [redMagnetExists, blueMagnetExists, greenMagnetExists, currentMagnetExists],
+  );
 
   const { disabled, message } = useMemo(() => {
     if (playerBalance < placeMagnetPriceWei) return { disabled: true, message: "Not enough money" };
     if (playerPoints < pointsLocked) return { disabled: true, message: "Not enough points" };
-    if (magnetExists) return { disabled: true, message: "Magnet already exists" };
+    if (currentMagnetExists) return { disabled: true, message: "Magnet already exists" };
     return { disabled: false, message: "" };
-  }, [placeMagnetPriceWei, pointsLocked, magnetExists, playerBalance, playerPoints]);
+  }, [placeMagnetPriceWei, pointsLocked, currentMagnetExists, playerBalance, playerPoints]);
 
   return (
     <div className="flex w-full flex-col items-center">
       <div className="flex flex-row items-center gap-2">
         <div className="flex flex-row gap-2">
-          <Button
-            shape="square"
-            size="sm"
-            disabled={redMagnetExists}
-            className={cn(empire === EEmpire.Red && "border border-accent")}
-            onClick={() => setEmpire(EEmpire.Red)}
-          >
-            <IconLabel imageUri={InterfaceIcons.RedMagnet} />
-          </Button>
-          <Button
-            shape="square"
-            size="sm"
-            disabled={blueMagnetExists}
-            className={cn(empire === EEmpire.Blue && "border border-accent")}
-            onClick={() => setEmpire(EEmpire.Blue)}
-          >
-            <IconLabel imageUri={InterfaceIcons.BlueMagnet} />
-          </Button>
-          <Button
-            shape="square"
-            size="sm"
-            disabled={greenMagnetExists}
-            className={cn(empire === EEmpire.Green && "border border-accent")}
-            onClick={() => setEmpire(EEmpire.Green)}
-          >
-            <IconLabel imageUri={InterfaceIcons.GreenMagnet} />
-          </Button>
+          {EMPIRES.map((_empire) => (
+            <Button
+              key={_empire}
+              shape="square"
+              size="sm"
+              disabled={magnetExists[_empire]}
+              className={cn(empire === _empire && "border border-accent")}
+              onClick={() => setEmpire(_empire)}
+            >
+              <IconLabel imageUri={EmpireEnumToConfig[_empire].icons.magnet} />
+            </Button>
+          ))}
         </div>
         <Divider direction="vertical" />
         <div className="flex flex-col items-center justify-start">
@@ -90,7 +84,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
         </div>
       </div>
 
-      {!!empire && (
+      {empire !== EEmpire.LENGTH && (
         <div className="flex">
           <div className="flex flex-col items-center justify-center">
             {message && <p className="px-2 text-xs text-error">{message}</p>}
@@ -114,7 +108,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
           </div>
         </div>
       )}
-      {!empire && <p className="text-xs opacity-50">Select an empire to place a magnet</p>}
+      {empire === EEmpire.LENGTH && <p className="text-xs opacity-50">Select an empire to place a magnet</p>}
     </div>
   );
 };

@@ -141,7 +141,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
           const defaultValue = formatValue(inputType, input.defaultValue).toString();
 
           const filteredOptions = options?.filter((option) =>
-            option.value
+            (option.value ?? "")
               .toString()
               .toLowerCase()
               .includes(searchTerms[inputKey]?.toLowerCase() || ""),
@@ -174,7 +174,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
                   >
                     {filteredOptions?.map((option) => (
                       <Dropdown.Item key={option.id} value={option.id}>
-                        {option.value.toString()}
+                        {option.value?.toString()}
                       </Dropdown.Item>
                     ))}
                   </Dropdown>

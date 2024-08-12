@@ -9,6 +9,7 @@ import { Price } from "@/components/shared/Price";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
+import { DEFAULT_EMPIRE, EMPIRES } from "@/util/lookups";
 
 // TODO: Change window size to use time instead of # of updates
 const WINDOW_SIZE = 25;
@@ -19,7 +20,7 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
     ROOT: { sprite },
   } = useGame();
   const { price: sellPrice } = usePointPrice(empire, 1);
-  const planetCount = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: EEmpire.Red })?.itemKeys.length ?? 0;
+  const planetCount = tables.Keys_EmpirePlanetsSet.useWithKeys({ empireId: empire })?.itemKeys.length ?? 0;
   const citadelPlanets = tables.Keys_CitadelPlanetsSet.useWithKeys()?.itemKeys ?? [];
   // TODO: something better
   const block = tables.BlockNumber.use()?.value ?? 0n;
@@ -67,9 +68,9 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
 export const EmpireDetails: React.FC<{ hideGraph?: boolean }> = ({ hideGraph }) => {
   return (
     <div className="flex flex-col items-start gap-1 text-center">
-      <_EmpireDetails empire={EEmpire.Red} hideGraph={hideGraph} />
-      <_EmpireDetails empire={EEmpire.Green} hideGraph={hideGraph} />
-      <_EmpireDetails empire={EEmpire.Blue} hideGraph={hideGraph} />
+      {EMPIRES.map((empire, index) => (
+        <_EmpireDetails key={index} empire={empire} hideGraph={hideGraph} />
+      ))}
     </div>
   );
 };

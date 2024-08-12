@@ -19,21 +19,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
-import { EmpireEnumToName } from "@/util/lookups";
-
-export const EmpireEnumToFillColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "stroke-blue-400",
-  [EEmpire.Green]: "stroke-green-400",
-  [EEmpire.Red]: "stroke-red-400",
-  [EEmpire.LENGTH]: "",
-};
-
-export const EmpireEnumToTextColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "text-blue-400",
-  [EEmpire.Green]: "text-green-400",
-  [EEmpire.Red]: "text-red-400",
-  [EEmpire.LENGTH]: "",
-};
+import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
 
 interface HistoricalPointPriceModalProps {}
 
@@ -43,12 +29,17 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
   const { tables } = useCore();
   const { pot } = usePot();
   const points = usePoints(playerAccount.entity);
+
   const { price: redPointCost } = usePointPrice(EEmpire.Red, Number(formatEther(points[EEmpire.Red].playerPoints)));
   const { price: bluePointCost } = usePointPrice(EEmpire.Blue, Number(formatEther(points[EEmpire.Blue].playerPoints)));
   const { price: greenPointCost } = usePointPrice(
     EEmpire.Green,
     Number(formatEther(points[EEmpire.Green].playerPoints)),
   );
+  const earningsImmediate = useMemo(() => {
+    return redPointCost + bluePointCost + greenPointCost;
+  }, [redPointCost, bluePointCost, greenPointCost]);
+
   const earnings = useMemo(() => {
     const biggestReward = Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
       (acc, [empire, { playerPoints }]) => {
@@ -57,7 +48,7 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
         }
         return acc;
       },
-      { empire: EEmpire.Red, points: 0n },
+      { empire: DEFAULT_EMPIRE, points: 0n },
     );
 
     const playerPoints = points[biggestReward.empire].playerPoints;
@@ -65,10 +56,6 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
 
     return !!empirePoints ? (pot * playerPoints) / empirePoints : 0n;
   }, [points, pot]);
-
-  const earningsImmediate = useMemo(() => {
-    return redPointCost + bluePointCost + greenPointCost;
-  }, [redPointCost, bluePointCost, greenPointCost]);
 
   // Calculate KPIs
   const walletBalance = useBalance(playerAccount.address).value ?? 0n;
@@ -100,7 +87,7 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
                     .map((_, i) => i + 1)
                     .map((empire) => ({
                       id: empire.toString(),
-                      label: empire === EEmpire.LENGTH ? "ALL EMPIRES" : EmpireEnumToName[empire as EEmpire],
+                      label: EmpireEnumToConfig[empire as EEmpire].name,
                     })),
                 ]}
                 onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}

@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
@@ -9,6 +11,7 @@ import { IconLabel } from "@/components/core/IconLabel";
 import { useCharge } from "@/hooks/useCharge";
 import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
+import { EmpireEnumToConfig, EMPIRES, EMPIRES_COUNT } from "@/util/lookups";
 
 /* --------------------------------- PLANET --------------------------------- */
 export const PlanetSummary = ({ entity, className }: { entity: Entity; className?: string }) => {
@@ -94,14 +97,19 @@ const Overrides = ({ entity }: { entity: Entity }) => {
   const greenMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Green, planetId: entity });
 
   const currTurn = tables.Turn.use()?.value ?? 0n;
-  // if (!redMagnet && !blueMagnet && !greenMagnet) return null;
 
   const currFullTurn = (currTurn - 1n) / 3n;
   const turnModulo = Number(currTurn - 1n) % 3;
 
-  const redTurnsLeft = calculateTurnsLeft(redMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Red);
-  const blueTurnsLeft = calculateTurnsLeft(blueMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Blue);
-  const greenTurnsLeft = calculateTurnsLeft(greenMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Green);
+  const turnsLeft = useMemo(
+    () => ({
+      [EEmpire.Red]: calculateTurnsLeft(redMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Red),
+      [EEmpire.Blue]: calculateTurnsLeft(blueMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Blue),
+      [EEmpire.Green]: calculateTurnsLeft(greenMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Green),
+      [EEmpire.LENGTH]: 0,
+    }),
+    [redMagnet, blueMagnet, greenMagnet, currFullTurn, turnModulo],
+  );
 
   const valToText = (val: number) => {
     if (val >= 1) return "HIGH";
@@ -120,9 +128,13 @@ const Overrides = ({ entity }: { entity: Entity }) => {
         <div className="grid grid-cols-2 gap-y-1 text-xs">
           <span className="text-gray-4000">MAGNETS</span>
           <div className="flex flex-row gap-1">
-            <IconLabel imageUri={InterfaceIcons.RedMagnet} text={formatNumber(redTurnsLeft)} />
-            <IconLabel imageUri={InterfaceIcons.BlueMagnet} text={formatNumber(blueTurnsLeft)} />
-            <IconLabel imageUri={InterfaceIcons.GreenMagnet} text={formatNumber(greenTurnsLeft)} />
+            {EMPIRES.map((empire, index) => (
+              <IconLabel
+                key={index}
+                imageUri={EmpireEnumToConfig[empire].icons.magnet}
+                text={formatNumber(turnsLeft[empire])}
+              />
+            ))}
           </div>
         </div>
       </div>

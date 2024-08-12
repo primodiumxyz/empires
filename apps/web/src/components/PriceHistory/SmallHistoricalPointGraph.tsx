@@ -66,7 +66,6 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
     );
 
     // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
-    // const allEmpires = Array.from(new Array(EEmpire.LENGTH - 1)).map((_, i) => i + 1);
     const timestampMap = new Map<number, { [key: number]: bigint }>();
 
     // grab costs for each timestamp

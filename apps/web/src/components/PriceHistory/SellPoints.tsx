@@ -14,6 +14,7 @@ import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
 
 export const SellPoints = () => {
   const {
@@ -25,7 +26,7 @@ export const SellPoints = () => {
     MAIN: { sprite },
   } = useGame();
   const [amountToSell, setAmountToSell] = useState("0");
-  const [empire, setEmpire] = useState<EEmpire>(EEmpire.Green);
+  const [empire, setEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
   useEffect(() => {
@@ -53,15 +54,14 @@ export const SellPoints = () => {
       <SecondaryCard className="bg-black/10">
         <p className="text-left text-xs opacity-50">EMPIRE</p>
         <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-44">
-          <Dropdown.Item value={EEmpire.Red}>
-            <IconLabel imageUri={sprite.getSprite("PlanetRed")} text="Red" />
-          </Dropdown.Item>
-          <Dropdown.Item value={EEmpire.Green}>
-            <IconLabel imageUri={sprite.getSprite("PlanetGreen")} text="Green" />
-          </Dropdown.Item>
-          <Dropdown.Item value={EEmpire.Blue}>
-            <IconLabel imageUri={sprite.getSprite("PlanetBlue")} text="Blue" />
-          </Dropdown.Item>
+          {EMPIRES.map((empire) => {
+            const { sprites, name } = EmpireEnumToConfig[empire];
+            return (
+              <Dropdown.Item key={empire} value={empire}>
+                <IconLabel imageUri={sprite.getSprite(sprites.planet)} text={name} />
+              </Dropdown.Item>
+            );
+          })}
         </Dropdown>
       </SecondaryCard>
       <SecondaryCard className="grid grow grid-cols-3 items-center gap-5 bg-black/10">

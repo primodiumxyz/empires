@@ -7,7 +7,7 @@ import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
-import { EmpireEnumToName } from "@/util/lookups";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES_COUNT } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
@@ -438,8 +438,11 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name.name,
+        options: empires.map((entity) => ({
+          id: entity,
+          value: EmpireEnumToConfig[Number(entity) as EEmpire].name.name,
+        })),
       },
       amount: {
         label: "Units",
@@ -497,7 +500,8 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
-      const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
+      const turn = tables.Turn.get()?.empire;
+      if (!turn) throw new Error("No empire in turn");
       const empirePlanets = core.utils.getEmpirePlanets(turn);
       const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
       const updateWorldCallParams = {
@@ -658,8 +662,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
       planet: {
         label: "Planet",
@@ -681,7 +685,7 @@ export const setupCheatcodes = (
       const empireId = empire.id as EEmpire;
 
       const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
-      const endTurn = currentTurn + BigInt(turns.value) * BigInt(EEmpire.LENGTH - 1);
+      const endTurn = currentTurn + BigInt(turns.value) * BigInt(EMPIRES_COUNT);
 
       const magnetTurnRemovalOp = _removeMagnetTurnRemoval(empireId, planetId);
       if (magnetTurnRemovalOp) devOps.push(magnetTurnRemovalOp);
@@ -731,8 +735,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
       planet: {
         label: "Planet",
@@ -767,8 +771,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
     },
     execute: async ({ empire }) => {
@@ -1093,11 +1097,11 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[EEmpire.Red],
+        defaultValue: EmpireEnumToConfig[DEFAULT_EMPIRE].name,
         options: [
           ...empires.map((entity) => ({
             id: Number(entity) as EEmpire,
-            value: EmpireEnumToName[Number(entity) as EEmpire],
+            value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
           })),
           {
             id: 0,
