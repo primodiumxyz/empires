@@ -146,8 +146,7 @@ export const setupCheatcodes = (
     bg: CheatcodeToBg["time"],
     inputs: {},
     execute: async () => {
-      await contractCalls.updateWorld();
-      return true;
+      return await _advanceTurns(1);
     },
   });
   // send ships from a planet to another
@@ -515,9 +514,9 @@ export const setupCheatcodes = (
         success = false;
         break;
       }
-
-      return success;
     }
+
+    return success;
   };
 
   // advance turns
