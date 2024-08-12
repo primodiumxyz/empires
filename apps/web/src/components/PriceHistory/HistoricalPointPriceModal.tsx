@@ -29,10 +29,16 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
   const { tables } = useCore();
   const { pot } = usePot();
   const points = usePoints(playerAccount.entity);
-  const pointCosts = EMPIRES.map((empire) => ({
-    empire,
-    data: usePointPrice(empire, Number(formatEther(points[empire].playerPoints))),
-  }));
+
+  const { price: redPointCost } = usePointPrice(EEmpire.Red, Number(formatEther(points[EEmpire.Red].playerPoints)));
+  const { price: bluePointCost } = usePointPrice(EEmpire.Blue, Number(formatEther(points[EEmpire.Blue].playerPoints)));
+  const { price: greenPointCost } = usePointPrice(
+    EEmpire.Green,
+    Number(formatEther(points[EEmpire.Green].playerPoints)),
+  );
+  const earningsImmediate = useMemo(() => {
+    return redPointCost + bluePointCost + greenPointCost;
+  }, [redPointCost, bluePointCost, greenPointCost]);
 
   const earnings = useMemo(() => {
     const biggestReward = Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
@@ -50,10 +56,6 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
 
     return !!empirePoints ? (pot * playerPoints) / empirePoints : 0n;
   }, [points, pot]);
-
-  const earningsImmediate = useMemo(() => {
-    return pointCosts.reduce((acc, { data }) => acc + data.price, 0n);
-  }, [pointCosts]);
 
   // Calculate KPIs
   const walletBalance = useBalance(playerAccount.address).value ?? 0n;

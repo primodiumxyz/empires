@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
@@ -9,7 +11,7 @@ import { IconLabel } from "@/components/core/IconLabel";
 import { useCharge } from "@/hooks/useCharge";
 import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
-import { EmpireEnumToConfig, EMPIRES } from "@/util/lookups";
+import { EmpireEnumToConfig, EMPIRES, EMPIRES_COUNT } from "@/util/lookups";
 
 /* --------------------------------- PLANET --------------------------------- */
 export const PlanetSummary = ({ entity, className }: { entity: Entity; className?: string }) => {
@@ -90,18 +92,23 @@ const Overrides = ({ entity }: { entity: Entity }) => {
   const { utils, tables } = useCore();
   const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
   const overheat = useCharge(entity);
-  const magnets = EMPIRES.map((empire) => ({
-    empire,
-    data: tables.Magnet.useWithKeys({ empireId: empire, planetId: entity }),
-  }));
+  const redMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Red, planetId: entity });
+  const blueMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Blue, planetId: entity });
+  const greenMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Green, planetId: entity });
 
   const currTurn = tables.Turn.use()?.value ?? 0n;
 
   const currFullTurn = (currTurn - 1n) / 3n;
   const turnModulo = Number(currTurn - 1n) % 3;
 
-  const turnsLeft = magnets.map((magnet) =>
-    calculateTurnsLeft(magnet?.data?.endTurn, currFullTurn, turnModulo < magnet?.empire),
+  const turnsLeft = useMemo(
+    () => ({
+      [EEmpire.Red]: calculateTurnsLeft(redMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Red),
+      [EEmpire.Blue]: calculateTurnsLeft(blueMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Blue),
+      [EEmpire.Green]: calculateTurnsLeft(greenMagnet?.endTurn, currFullTurn, turnModulo < EEmpire.Green),
+      [EEmpire.LENGTH]: 0,
+    }),
+    [redMagnet, blueMagnet, greenMagnet, currFullTurn, turnModulo],
   );
 
   const valToText = (val: number) => {

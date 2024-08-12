@@ -76,7 +76,7 @@ const GameOver = () => {
 
   const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
 
-  const empireName = EmpireEnumToConfig[empire ?? DEFAULT_EMPIRE].name;
+  const empireName = EmpireEnumToConfig[empire ?? EEmpire.LENGTH].name;
   if (empire == null) return <div>Something went wrong.</div>;
 
   return (

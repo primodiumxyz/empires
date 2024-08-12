@@ -111,11 +111,13 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const points = usePoints(playerId);
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
 
-  const pointCosts = EMPIRES.map((empire) => ({
-    empire,
-    cost: usePointPrice(empire, Number(formatEther(points[empire].playerPoints))).price,
-  }));
-  const totalReward = pointCosts.reduce((sum, { cost }) => sum + cost, 0n);
+  const { price: redPointCost } = usePointPrice(EEmpire.Red, Number(formatEther(points[EEmpire.Red].playerPoints)));
+  const { price: bluePointCost } = usePointPrice(EEmpire.Blue, Number(formatEther(points[EEmpire.Blue].playerPoints)));
+  const { price: greenPointCost } = usePointPrice(
+    EEmpire.Green,
+    Number(formatEther(points[EEmpire.Green].playerPoints)),
+  );
+  const totalReward = redPointCost + bluePointCost + greenPointCost;
 
   const isProfit = totalReward >= totalSpent;
   const pnl = isProfit ? totalReward - totalSpent : totalSpent - totalReward;

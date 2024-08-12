@@ -12,7 +12,6 @@ import { timeFormat } from "@visx/vendor/d3-time-format";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { SecondaryCard } from "@/components/core/Card";
-import { Join } from "@/components/core/Join";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { EmpireEnumToConfig, EMPIRES, EMPIRES_COUNT } from "@/util/lookups";
 

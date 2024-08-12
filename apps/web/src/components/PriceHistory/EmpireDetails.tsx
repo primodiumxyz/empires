@@ -20,7 +20,7 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
     ROOT: { sprite },
   } = useGame();
   const { price: sellPrice } = usePointPrice(empire, 1);
-  const planetCount = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: DEFAULT_EMPIRE })?.itemKeys.length ?? 0;
+  const planetCount = tables.Keys_EmpirePlanetsSet.useWithKeys({ empireId: empire })?.itemKeys.length ?? 0;
   const citadelPlanets = tables.Keys_CitadelPlanetsSet.useWithKeys()?.itemKeys ?? [];
   // TODO: something better
   const block = tables.BlockNumber.use()?.value ?? 0n;
