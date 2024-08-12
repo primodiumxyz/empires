@@ -2,12 +2,6 @@ export enum EEmpire {
   Red = 1,
   Blue,
   Green,
-  Yellow,
-  Purple,
-  Orange,
-  Pink,
-  Black,
-  White,
   LENGTH,
 }
 

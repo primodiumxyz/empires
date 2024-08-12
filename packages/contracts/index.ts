@@ -1,3 +1,4 @@
+import { OTHER_EMPIRE_COUNT, POINTS_UNIT } from "./config/constants";
 import { EDirection, EEmpire, EMovement, EOrigin, ERoutine } from "./config/enums";
 import mudConfig, { worldInput } from "./mud.config";
 import IWorldAbi from "./out/IWorld.sol/IWorld.abi.json";
@@ -13,6 +14,8 @@ export {
   IWorldAbi,
   IWorldAbiType,
   mudConfig,
+  OTHER_EMPIRE_COUNT,
+  POINTS_UNIT,
   worldInput,
   worldsJson,
 };

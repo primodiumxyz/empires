@@ -40,8 +40,7 @@ contract RewardsSystemTest is PrimodiumTest {
 
   function getEmpireCitadelPlanets(EEmpire empire) internal view returns (uint256) {
     bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
-    uint256 EMPIRE_COUNT = P_GameConfig.getEmpireCount();
-    uint256[] memory citadelPlanetsPerEmpire = new uint256[](EMPIRE_COUNT);
+    uint256[] memory citadelPlanetsPerEmpire = new uint256[](uint256(EEmpire.LENGTH));
     for (uint256 i = 0; i < citadelPlanets.length; i++) {
       EEmpire owningEmpire = Planet.getEmpireId(citadelPlanets[i]);
       citadelPlanetsPerEmpire[uint256(owningEmpire)]++;
