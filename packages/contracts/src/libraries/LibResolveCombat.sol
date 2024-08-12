@@ -123,17 +123,17 @@ library LibResolveCombat {
       }
     }
 
-    // ShipBattleRoutineLog.set(
-    //   eventEntity,
-    //   ShipBattleRoutineLogData({
-    //     turn: Turn.getValue(),
-    //     redShipCount: Arrivals.get(planetId, 1),
-    //     greenShipCount: Arrivals.get(planetId, 3),
-    //     blueShipCount: Arrivals.get(planetId, 2),
-    //     planetId: planetId,
-    //     timestamp: block.timestamp
-    //   })
-    // );
+    ShipBattleRoutineLog.set(
+      eventEntity,
+      ShipBattleRoutineLogData({
+        turn: Turn.getValue(),
+        redShipCount: Arrivals.get(planetId, EEmpire.Red),
+        greenShipCount: Arrivals.get(planetId, EEmpire.Green),
+        blueShipCount: Arrivals.get(planetId, EEmpire.Blue),
+        planetId: planetId,
+        timestamp: block.timestamp
+      })
+    );
 
     uint256 remainingShips = winningCount - secondPlaceCount;
     return (winningEmpire, remainingShips);
