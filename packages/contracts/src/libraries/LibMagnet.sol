@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Turn, Empire, P_MagnetConfig, Magnet, MagnetData, MagnetTurnPlanets } from "codegen/index.sol";
-import { EEmpire } from "codegen/common.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
+import { Turn, Empire, P_MagnetConfig, Magnet, MagnetData, MagnetTurnPlanets, P_GameConfig } from "codegen/index.sol";
 import { PointsMap } from "adts/PointsMap.sol";
-import { console } from "forge-std/console.sol";
+import { EEmpire } from "codegen/common.sol";
 
 /**
  * @title LibMagnet
@@ -34,7 +32,7 @@ library LibMagnet {
     );
 
     uint256 currTurn = Turn.getValue();
-    uint256 endTurn = currTurn + (_fullTurnDuration * EMPIRE_COUNT);
+    uint256 endTurn = currTurn + (_fullTurnDuration * P_GameConfig.getEmpireCount());
 
     Magnet.set(
       _empire,
