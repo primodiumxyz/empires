@@ -1,6 +1,6 @@
 import { Abi, ContractFunctionName } from "viem";
 
-import { AccountClient, Core, TxReceipt, WorldAbiType } from "@core/lib/types";
+import { Core, ExternalAccount, LocalAccount, TxReceipt, WorldAbiType } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { TxQueueOptions } from "@core/tables/types";
 import { _execute } from "@core/txExecute/_execute";
@@ -19,7 +19,7 @@ export type ExecuteCallOptions<abi extends Abi, functionName extends ContractFun
 
 export async function execute<functionName extends ContractFunctionName<WorldAbiType>>({
   core,
-  accountClient: { playerAccount },
+  playerAccount,
   functionName,
   args,
   options: callOptions,
@@ -27,7 +27,7 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
   onComplete,
 }: ExecuteCallOptions<WorldAbiType, functionName> & {
   core: Core;
-  accountClient: AccountClient;
+  playerAccount: ExternalAccount | LocalAccount;
 }): Promise<boolean> {
   console.info(`[Tx] Executing ${functionName} with address ${playerAccount.address.slice(0, 6)}`);
 

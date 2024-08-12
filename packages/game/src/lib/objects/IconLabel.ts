@@ -1,6 +1,6 @@
-import { PrimodiumScene } from "@game/types";
 import { Assets, SpriteKeys, Sprites } from "@primodiumxyz/assets";
 import { Coord } from "@primodiumxyz/engine";
+import { PrimodiumScene } from "@game/types";
 
 export class IconLabel extends Phaser.GameObjects.Container {
   private label: Phaser.GameObjects.Text;
@@ -15,19 +15,14 @@ export class IconLabel extends Phaser.GameObjects.Container {
       fontSize?: number;
       iconSize?: number;
       color?: string;
-    } = {}
+    } = {},
   ) {
     super(scene.phaserScene, coord.x, coord.y);
 
     const { fontSize = 13, iconSize = 22, color = "#00ffff" } = options;
 
     // Create icon
-    this.icon = scene.phaserScene.add.image(
-      0,
-      0,
-      Assets.SpriteAtlas,
-      Sprites[iconKey]
-    );
+    this.icon = scene.phaserScene.add.image(0, 0, Assets.SpriteAtlas, Sprites[iconKey]);
 
     this.icon.displayWidth = iconSize;
     this.icon.scaleY = this.icon.scaleX;
@@ -60,10 +55,7 @@ export class IconLabel extends Phaser.GameObjects.Container {
     const totalWidth = this.icon.displayWidth + this.label.width;
 
     // Set container size
-    this.setSize(
-      totalWidth,
-      Math.max(this.icon.displayHeight, this.label.height)
-    );
+    this.setSize(totalWidth, Math.max(this.icon.displayHeight, this.label.height));
   }
 
   setText(text: string) {

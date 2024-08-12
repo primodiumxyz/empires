@@ -1,14 +1,7 @@
-import { Scene, Coord } from "@primodiumxyz/engine";
-
-import { DepthLayers } from "@game/lib/constants/common";
-import {
-  AnimationKeys,
-  Animations,
-  Assets,
-  SpriteKeys,
-  Sprites,
-} from "@primodiumxyz/assets";
+import { AnimationKeys, Animations, Assets, SpriteKeys, Sprites } from "@primodiumxyz/assets";
 import { getRandomRange } from "@primodiumxyz/core";
+import { Coord, Scene } from "@primodiumxyz/engine";
+import { DepthLayers } from "@game/lib/constants/common";
 
 export const createFxApi = (scene: Scene) => {
   function outline(
@@ -17,7 +10,7 @@ export const createFxApi = (scene: Scene) => {
       thickness?: number;
       color?: number;
       knockout?: boolean;
-    } = {}
+    } = {},
   ) {
     const { thickness = 1.5, color = 0x00ffff, knockout } = options;
 
@@ -51,7 +44,7 @@ export const createFxApi = (scene: Scene) => {
         color: number;
         alpha: number;
       };
-    } = {}
+    } = {},
   ) {
     const {
       color = "#00ffff",
@@ -73,18 +66,10 @@ export const createFxApi = (scene: Scene) => {
       },
     } = options;
     let icon: Phaser.GameObjects.Image | undefined;
-    const container = scene.phaserScene.add
-      .container(coord.x, coord.y)
-      .setScale(0)
-      .setDepth(DepthLayers.Marker);
+    const container = scene.phaserScene.add.container(coord.x, coord.y).setScale(0).setDepth(DepthLayers.Marker);
 
     if (iconSpriteKey) {
-      icon = scene.phaserScene.add.image(
-        0,
-        0,
-        Assets.SpriteAtlas,
-        Sprites[iconSpriteKey]
-      );
+      icon = scene.phaserScene.add.image(0, 0, Assets.SpriteAtlas, Sprites[iconSpriteKey]);
 
       icon.displayWidth = iconSize;
       icon.scaleY = icon.scaleX;
@@ -114,34 +99,22 @@ export const createFxApi = (scene: Scene) => {
       .lineStyle(borderStyle.width, borderStyle.color, borderStyle.alpha);
 
     graphics.fillRoundedRect(
-      -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) /
-        2,
-      (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) -
-        marginY * 2) /
-        2,
+      -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) / 2,
+      (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) - marginY * 2) / 2,
       (icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2,
-      Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) +
-        marginY * 2,
-      6
+      Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) + marginY * 2,
+      6,
     );
 
     graphics.strokeRoundedRect(
-      -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) /
-        2,
-      (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) -
-        marginY * 2) /
-        2,
+      -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) / 2,
+      (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) - marginY * 2) / 2,
       (icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2,
-      Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) +
-        marginY * 2,
-      6
+      Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) + marginY * 2,
+      6,
     );
 
-    container.add(
-      [graphics, floatingText, icon].filter(
-        Boolean
-      ) as Phaser.GameObjects.GameObject[]
-    );
+    container.add([graphics, floatingText, icon].filter(Boolean) as Phaser.GameObjects.GameObject[]);
 
     scene.phaserScene.add
       .timeline([
@@ -216,7 +189,7 @@ export const createFxApi = (scene: Scene) => {
       originY?: number;
       offset?: Coord;
       onComplete?: () => void;
-    }
+    },
   ) {
     const {
       scale = 1,
@@ -230,15 +203,9 @@ export const createFxApi = (scene: Scene) => {
       offset,
     } = options || {};
 
-    const sprite = scene.phaserScene.add.sprite(
-      offset ? offset.x : coord.x,
-      offset ? offset.y : coord.y,
-      "vfx-atlas"
-    );
+    const sprite = scene.phaserScene.add.sprite(offset ? offset.x : coord.x, offset ? offset.y : coord.y, "vfx-atlas");
 
-    const vfx = offset
-      ? scene.phaserScene.add.container(coord.x, coord.y, [sprite])
-      : sprite;
+    const vfx = offset ? scene.phaserScene.add.container(coord.x, coord.y, [sprite]) : sprite;
 
     vfx.setScale(scale);
     vfx.setDepth(depth);
@@ -246,17 +213,11 @@ export const createFxApi = (scene: Scene) => {
     sprite.setBlendMode(blendMode);
     sprite.setOrigin(originX, originY);
 
-    sprite.on(
-      "animationupdate",
-      (
-        animation: Phaser.Animations.Animation,
-        frame: Phaser.Animations.AnimationFrame
-      ) => {
-        if (onFrameChange) {
-          onFrameChange(frame.index);
-        }
+    sprite.on("animationupdate", (animation: Phaser.Animations.Animation, frame: Phaser.Animations.AnimationFrame) => {
+      if (onFrameChange) {
+        onFrameChange(frame.index);
       }
-    );
+    });
 
     sprite.on("animationcomplete", () => {
       vfx.destroy();
@@ -268,12 +229,7 @@ export const createFxApi = (scene: Scene) => {
     sprite.play(Animations[animationKey]);
   }
 
-  function flashSprite(
-    sprite: Phaser.GameObjects.Sprite,
-    duration = 400,
-    wait = 100,
-    repeat = 3
-  ) {
+  function flashSprite(sprite: Phaser.GameObjects.Sprite, duration = 400, wait = 100, repeat = 3) {
     let at = 0;
     scene.phaserScene.add
       .timeline(
@@ -286,7 +242,7 @@ export const createFxApi = (scene: Scene) => {
           at += i % 2 === 0 ? duration : wait;
 
           return event;
-        })
+        }),
       )
       .play();
   }

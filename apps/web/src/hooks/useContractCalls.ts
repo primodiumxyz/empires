@@ -10,6 +10,6 @@ export const useContractCalls = () => {
   const requestDrip = useDripAccount();
 
   return useMemo(() => {
-    return createContractCalls(core, accountClient, requestDrip);
+    return createContractCalls(core, accountClient.playerAccount, requestDrip);
   }, [core, accountClient]);
 };

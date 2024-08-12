@@ -1,26 +1,23 @@
-import { GlobalApi } from "@game/api/global";
 import { Assets, Audio, AudioKeys } from "@primodiumxyz/assets";
-import { Scene } from "@primodiumxyz/engine";
-
-import { Channel } from "@primodiumxyz/engine";
+import { Channel, Scene } from "@primodiumxyz/engine";
+import { GlobalApi } from "@game/api/global";
 
 export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
-  function play(
-    key: AudioKeys,
-    channel: Channel,
-    config?: Phaser.Types.Sound.SoundConfig
-  ) {
+  function play(key: AudioKeys, channel: Channel, config?: Phaser.Types.Sound.SoundConfig) {
     scene.audio[channel].playAudioSprite(Assets.AudioAtlas, Audio[key], {
       ...config,
     });
   }
 
   function initializeAudioVolume() {
-    const volume = globalApi.tables.Volume.get();
+    const masterVolume = globalApi.tables.Volume.get("master");
+    const musicVolume = globalApi.tables.Volume.get("music");
+    const sfxVolume = globalApi.tables.Volume.get("sfx");
+    const uiVolume = globalApi.tables.Volume.get("ui");
 
-    scene.audio.music.setVolume(volume?.master ?? 1 * (volume?.music ?? 1));
-    scene.audio.sfx.setVolume(volume?.master ?? 1 * (volume?.sfx ?? 1));
-    scene.audio.ui.setVolume(volume?.master ?? 1 * (volume?.ui ?? 1));
+    scene.audio.music.setVolume(masterVolume ?? 1 * (musicVolume ?? 1));
+    scene.audio.sfx.setVolume(masterVolume ?? 1 * (sfxVolume ?? 1));
+    scene.audio.ui.setVolume(masterVolume ?? 1 * (uiVolume ?? 1));
   }
 
   function get(key: AudioKeys, channel: Channel) {
@@ -32,12 +29,19 @@ export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
     }
   }
 
+  function getVolume(channel: Channel | "master" = "master") {
+    const masterVolume = globalApi.tables.Volume.get("master");
+    if (channel === "master") return masterVolume;
+
+    return globalApi.tables.Volume.get(channel) * masterVolume;
+  }
+
   function setVolume(volume: number, channel: Channel | "master" = "master") {
     const newVolume = globalApi.tables.Volume.set(volume, channel);
 
-    scene.audio.music.setVolume(newVolume.music ?? 1);
-    scene.audio.sfx.setVolume(newVolume.sfx ?? 1);
-    scene.audio.ui.setVolume(newVolume.ui ?? 1);
+    scene.audio.music.setVolume(newVolume.music * newVolume.master);
+    scene.audio.sfx.setVolume(newVolume.sfx * newVolume.master);
+    scene.audio.ui.setVolume(newVolume.ui * newVolume.master);
   }
 
   function setPauseOnBlur(pause: boolean) {
@@ -51,6 +55,7 @@ export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
     play,
     get,
     setVolume,
+    getVolume,
     setPauseOnBlur,
     initializeAudioVolume,
   };

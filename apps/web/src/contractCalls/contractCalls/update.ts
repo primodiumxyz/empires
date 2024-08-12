@@ -1,6 +1,6 @@
-import { AccountClient, Core, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
+import { Core, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 
-export const createUpdateCalls = (core: Core, { playerAccount }: AccountClient, { execute }: ExecuteFunctions) => {
+export const createUpdateCalls = (core: Core, { execute }: ExecuteFunctions) => {
   const updateWorld = async (options?: Partial<TxQueueOptions>) => {
     const turn = core.tables.Turn.get()?.empire;
     if (!turn) {

@@ -1,18 +1,17 @@
-import { ArrowLeftEndOnRectangleIcon, ExclamationCircleIcon } from "@heroicons/react/24/solid";
+import { ExclamationCircleIcon, UserIcon } from "@heroicons/react/24/solid";
 import { usePrivy } from "@privy-io/react-auth";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatAddress, formatNumber } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Badge } from "@/components/core/Badge";
-import { Button } from "@/components/core/Button";
-import { Card } from "@/components/core/Card";
 import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
+import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 
@@ -23,7 +22,10 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.LENGTH]: "",
 };
 
-export const Account = () => {
+export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: boolean }> = ({
+  hideAccountBalance = false,
+  justifyStart = false,
+}) => {
   const { logout } = usePrivy();
   const { cancelBurner, usingBurner } = useBurnerAccount();
 
@@ -39,33 +41,40 @@ export const Account = () => {
   const balance = useBalance(address).value ?? 0n;
 
   return (
-    <div className="absolute right-2 w-48">
-      <Card noDecor>
-        <div className="flex flex-col justify-center gap-1 text-center">
-          <p className="text-left text-xs font-bold uppercase">Account</p>
-          <p className="flex items-center gap-2">
-            <span className="text-xs">{formatAddress(address)}</span>
-            <Button onClick={handleLogout} variant="neutral" size="sm">
-              <ArrowLeftEndOnRectangleIcon className="size-4" />
-            </Button>
-          </p>
-          <div className="flex flex-col justify-center rounded border border-gray-600 p-2 text-center text-white">
-            <Price wei={balance} />
-          </div>
+    <div className="min-w-42 flex flex-col gap-2 p-2 text-right text-xs">
+      <div className="flex flex-col justify-center gap-1">
+        {!hideAccountBalance && (
+          <>
+            <div className="flex w-full flex-row justify-end gap-2">
+              <UserIcon className="w-4" />
+              <p>{formatAddress(address)}</p>
+            </div>
+            <Price wei={balance} className="text-sm text-accent" />
+            <hr className="my-1 w-full border-secondary/50" />
+          </>
+        )}
 
-          <div className="flex flex-col gap-1">
-            <EmpirePoints empire={EEmpire.Red} playerId={entity} />
-            <EmpirePoints empire={EEmpire.Green} playerId={entity} />
-            <EmpirePoints empire={EEmpire.Blue} playerId={entity} />
-          </div>
-        </div>
-      </Card>
+        <EmpirePoints empire={EEmpire.Red} playerId={entity} justifyStart={justifyStart} />
+        <EmpirePoints empire={EEmpire.Green} playerId={entity} justifyStart={justifyStart} />
+        <EmpirePoints empire={EEmpire.Blue} playerId={entity} justifyStart={justifyStart} />
+      </div>
     </div>
   );
 };
 
-const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
+const EmpirePoints = ({
+  empire,
+  playerId,
+  justifyStart = false,
+}: {
+  empire: EEmpire;
+  playerId: Entity;
+  justifyStart?: boolean;
+}) => {
   const { tables } = useCore();
+  const {
+    ROOT: { sprite },
+  } = useGame();
 
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId })?.value ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
@@ -74,25 +83,26 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
 
   const { price: pointCostWei, message } = usePointPrice(empire, Number(formatEther(playerPoints)));
 
+  const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
+
   return (
-    <Badge
-      variant="glass"
-      size="md"
-      className={cn("flex h-full w-full justify-start gap-3 border-none py-1", EmpireEnumToColor[empire])}
+    <div
+      className={cn(
+        "flex h-full w-full items-center gap-5 border-none py-1",
+        justifyStart ? "justify-start" : "justify-between",
+      )}
     >
-      <div className={cn("mx-1 h-4 w-4 rounded-full", EmpireEnumToColor[empire])} />
-      <div className="pointer-events-auto flex flex-col">
-        <p className="flex items-end justify-start gap-1">
-          {formatEther(playerPoints)}
-          {pct > 0 && <span className="text-xs opacity-70">({formatNumber(pct)}%)</span>}
-        </p>
+      <img src={spriteUrl} className="h-12" />
+      <div className="pointer-events-auto flex flex-col justify-end text-right">
+        <p className="text-base">{formatEther(playerPoints)} pts</p>
         <Tooltip tooltipContent={message} className="w-44 text-xs">
-          <p className="-mt-1 flex items-center justify-start gap-2 text-[11px]">
+          <p className="-mt-1 flex items-center justify-end gap-2 text-xs">
             <Price wei={pointCostWei} />
             {message ? <ExclamationCircleIcon className="size-3" /> : ""}
           </p>
         </Tooltip>
+        {pct > 0 && <p className="text-xs opacity-70">({formatNumber(pct)}%)</p>}
       </div>
-    </Badge>
+    </div>
   );
 };

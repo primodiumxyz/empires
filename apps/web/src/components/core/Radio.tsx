@@ -22,7 +22,7 @@ const RadioButton: React.FC<{
 
         <div
           className={cn(
-            "active:cursor-pointerDown flex aspect-square h-6 w-6 items-center justify-center border-2 border-primary",
+            "flex aspect-square h-6 w-6 items-center justify-center border-2 border-primary active:cursor-pointerDown",
             className,
           )}
         >
@@ -44,7 +44,7 @@ export const RadioGroup: React.FC<{
   onChange: (value: string) => void;
 }> = ({ name, value, options, className, onChange }) => {
   return (
-    <div className={cn("flex w-full gap-8", className)}>
+    <div className={cn("flex w-full gap-2", className)}>
       {options.map((option) => (
         <RadioButton
           key={option.id}

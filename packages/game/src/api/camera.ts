@@ -1,9 +1,5 @@
-import {
-  coordEq,
-  tileCoordToPixelCoord,
-  pixelCoordToTileCoord,
-} from "@primodiumxyz/engine/src/lib/util/coords";
-import { Scene, Coord, PixelCoord } from "@primodiumxyz/engine";
+import { Coord, PixelCoord, Scene } from "@primodiumxyz/engine";
+import { coordEq, pixelCoordToTileCoord, tileCoordToPixelCoord } from "@primodiumxyz/engine/src/lib/util/coords";
 
 export const createCameraApi = (scene: Scene) => {
   function pan(
@@ -11,7 +7,7 @@ export const createCameraApi = (scene: Scene) => {
     options: {
       duration?: number;
       ease?: string;
-    } = {}
+    } = {},
   ) {
     const { phaserScene, camera } = scene;
     const { ease = "Power2", duration = 1000 } = options;
@@ -20,9 +16,7 @@ export const createCameraApi = (scene: Scene) => {
 
     //we want new tween to be active for responsive behavior. New tween are created if on new end coord.
     if (phaserScene.tweens.getTweensOf(camera.phaserCamera).length) {
-      const currentTween = phaserScene.tweens.getTweensOf(
-        camera.phaserCamera
-      )[0];
+      const currentTween = phaserScene.tweens.getTweensOf(camera.phaserCamera)[0];
 
       const endCoord = {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -54,9 +48,7 @@ export const createCameraApi = (scene: Scene) => {
     const { camera } = scene;
 
     camera.phaserCamera.zoomTo(zoom, duration, ease, false, () => {
-      scene.input.phaserInput.activePointer.updateWorldPoint(
-        camera.phaserCamera
-      );
+      scene.input.phaserInput.activePointer.updateWorldPoint(camera.phaserCamera);
       updateWorldView();
     });
   }
@@ -67,11 +59,7 @@ export const createCameraApi = (scene: Scene) => {
     const coord = camera?.phaserCamera.worldView;
     if (!coord) throw new Error("Camera not found.");
 
-    const tileCoord = pixelCoordToTileCoord(
-      coord,
-      tilemap.tileWidth,
-      tilemap.tileHeight
-    );
+    const tileCoord = pixelCoordToTileCoord(coord, tilemap.tileWidth, tilemap.tileHeight);
 
     return {
       x: tileCoord.x,
@@ -91,10 +79,7 @@ export const createCameraApi = (scene: Scene) => {
   function screenCoordToWorldCoord(screenCoord: Coord) {
     const { camera } = scene;
 
-    const pixelCoord = camera.phaserCamera.getWorldPoint(
-      screenCoord.x,
-      screenCoord.y
-    );
+    const pixelCoord = camera.phaserCamera.getWorldPoint(screenCoord.x, screenCoord.y);
 
     return pixelCoord;
   }
@@ -104,12 +89,8 @@ export const createCameraApi = (scene: Scene) => {
 
     //convert canvas screen coord to phaser screen coord
     // Convert world coord to phaser screen coord
-    const screenCoordX =
-      (worldCoord.x - camera.phaserCamera.worldView.x) *
-      camera.phaserCamera.zoom;
-    const screenCoordY =
-      (worldCoord.y - camera.phaserCamera.worldView.y) *
-      camera.phaserCamera.zoom;
+    const screenCoordX = (worldCoord.x - camera.phaserCamera.worldView.x) * camera.phaserCamera.zoom;
+    const screenCoordY = (worldCoord.y - camera.phaserCamera.worldView.y) * camera.phaserCamera.zoom;
 
     return { x: screenCoordX, y: screenCoordY };
   }
@@ -126,9 +107,7 @@ export const createCameraApi = (scene: Scene) => {
     const {
       tiled: { tileHeight, tileWidth },
     } = scene;
-    const pixelCoord = raw
-      ? coord
-      : tileCoordToPixelCoord(coord, tileWidth, tileHeight);
+    const pixelCoord = raw ? coord : tileCoordToPixelCoord(coord, tileWidth, tileHeight);
     pixelCoord.y = raw ? pixelCoord.y : -pixelCoord.y;
 
     const div = document.createElement("div");
@@ -155,14 +134,7 @@ export const createCameraApi = (scene: Scene) => {
               pan(coord, { duration: 300 });
 
               if (blurFx) return;
-              blurFx = scene.camera.phaserCamera.postFX.addTiltShift(
-                0.1,
-                10,
-                0,
-                2,
-                2,
-                1
-              );
+              blurFx = scene.camera.phaserCamera.postFX.addTiltShift(0.1, 10, 0, 2, 2, 1);
             },
           },
           {

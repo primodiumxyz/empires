@@ -1,32 +1,25 @@
-import { PixelCoord } from '@primodiumxyz/engine';
-import { Entity } from '@primodiumxyz/reactive-tables';
-
-import { PrimodiumScene } from '@game/types';
-import { IPrimodiumGameObject } from './interfaces';
-import { Animations, Assets, Sprites } from '@primodiumxyz/assets';
+import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
+import { EEmpire } from "@primodiumxyz/contracts";
+import { calculateAngleBetweenPoints, entityToPlanetName, formatNumber, lerp } from "@primodiumxyz/core";
+import { PixelCoord } from "@primodiumxyz/engine";
+import { Entity } from "@primodiumxyz/reactive-tables";
+import { DepthLayers } from "@game/lib/constants/common";
 import {
   EmpireToConquerAnimationKeys,
   EmpireToDestroyerArcAnimationKeys,
   EmpireToHexSpriteKeys,
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
-} from '@game/lib/mappings';
-import {
-  calculateAngleBetweenPoints,
-  entityToPlanetName,
-  formatNumber,
-  lerp,
-} from '@primodiumxyz/core';
-import { DepthLayers } from '@game/lib/constants/common';
-import { EEmpire } from '@primodiumxyz/contracts';
-import { isValidClick, isValidHover } from '@game/lib/utils/inputGuards';
-import { IconLabel } from '@game/lib/objects/IconLabel';
-import { Progress } from '@game/lib/objects/Progress';
+} from "@game/lib/mappings";
+import { IconLabel } from "@game/lib/objects/IconLabel";
+import { Magnet } from "@game/lib/objects/Magnet";
+import { Overheat } from "@game/lib/objects/Overheat";
+import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
+import { PrimodiumScene } from "@game/types";
 
-export class Planet
-  extends Phaser.GameObjects.Zone
-  implements IPrimodiumGameObject
-{
+import { IPrimodiumGameObject } from "./interfaces";
+
+export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObject {
   readonly id: Entity;
   readonly coord: PixelCoord;
   protected _scene: PrimodiumScene;
@@ -36,21 +29,18 @@ export class Planet
   private hexHoloSprite: Phaser.GameObjects.Sprite;
   private planetName: Phaser.GameObjects.Text;
   private pendingArrow: Phaser.GameObjects.Container;
-  private chargeProgress: Progress;
   private shields: IconLabel;
   private ships: IconLabel;
   private gold: IconLabel;
-  private magnets: [red: IconLabel, blue: IconLabel, green: IconLabel];
+  private overheat: Overheat;
+  private magnets: [red: Magnet, blue: Magnet, green: Magnet];
+  private magnetWaves: Phaser.GameObjects.Sprite;
   private empireId: EEmpire;
+  private citadel: Phaser.GameObjects.Sprite | null;
   private spawned = false;
 
-  constructor(args: {
-    id: Entity;
-    scene: PrimodiumScene;
-    coord: PixelCoord;
-    empire: EEmpire;
-  }) {
-    const { id, scene, coord, empire } = args;
+  constructor(args: { id: Entity; scene: PrimodiumScene; coord: PixelCoord; empire: EEmpire; citadel?: boolean }) {
+    const { id, scene, coord, empire, citadel } = args;
 
     super(scene.phaserScene, coord.x, coord.y);
 
@@ -69,7 +59,7 @@ export class Planet
       coord.x,
       coord.y - 25,
       Assets.SpriteAtlas,
-      Sprites[EmpireToPlanetSpriteKeys[empire] ?? 'PlanetGrey'],
+      Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"],
     ).setDepth(DepthLayers.Planet);
 
     this.hexSprite = new Phaser.GameObjects.Sprite(
@@ -77,22 +67,16 @@ export class Planet
       coord.x,
       coord.y,
       Assets.SpriteAtlas,
-      Sprites[EmpireToHexSpriteKeys[empire] ?? 'HexGrey'],
+      Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"],
     ).setDepth(DepthLayers.Base + coord.y);
 
-    this.planetName = new Phaser.GameObjects.Text(
-      scene.phaserScene,
-      coord.x,
-      coord.y + 25,
-      entityToPlanetName(id),
-      {
-        fontSize: 25,
-        color: 'rgba(255,255,255,0.5)',
-        fontFamily: 'Silkscreen',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        padding: { x: 10 },
-      },
-    )
+    this.planetName = new Phaser.GameObjects.Text(scene.phaserScene, coord.x, coord.y + 25, entityToPlanetName(id), {
+      fontSize: 25,
+      color: "rgba(255,255,255,0.5)",
+      fontFamily: "Silkscreen",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      padding: { x: 10 },
+    })
       .setOrigin(0.5, 0.5)
       .setAlpha(0.25)
       .setDepth(DepthLayers.Planet - 1);
@@ -103,8 +87,8 @@ export class Planet
         x: coord.x - 45,
         y: coord.y + 35,
       },
-      '0',
-      'Shield',
+      "0",
+      "Shield",
     ).setDepth(DepthLayers.Planet - 1);
 
     this.ships = new IconLabel(
@@ -114,8 +98,8 @@ export class Planet
         x: coord.x + 45,
         y: coord.y + 35,
       },
-      '0',
-      'Ship',
+      "0",
+      "Ship",
     ).setDepth(DepthLayers.Planet - 1);
 
     this.gold = new IconLabel(
@@ -124,8 +108,8 @@ export class Planet
         x: coord.x,
         y: coord.y + 60,
       },
-      '0',
-      'Gold',
+      "0",
+      "Gold",
     ).setDepth(DepthLayers.Planet - 1);
 
     this.hexHoloSprite = new Phaser.GameObjects.Sprite(
@@ -133,58 +117,44 @@ export class Planet
       coord.x,
       coord.y + 75,
       Assets.SpriteAtlas,
-      'sprites/hex/holo/Holo_Rough_0.png',
+      "sprites/hex/holo/Holo_Rough_0.png",
     ).setDepth(DepthLayers.Base + coord.y - 1);
 
-    this.pendingArrow = new Phaser.GameObjects.Container(
-      scene.phaserScene,
-      coord.x,
-      coord.y,
-      [
-        new Phaser.GameObjects.Sprite(
-          scene.phaserScene,
-          75,
-          25,
-          Assets.SpriteAtlas,
-        )
-          .play(Animations.PendingBlue)
-          .setBlendMode(Phaser.BlendModes.ADD),
-      ],
-    )
+    this.pendingArrow = new Phaser.GameObjects.Container(scene.phaserScene, coord.x, coord.y, [
+      new Phaser.GameObjects.Sprite(scene.phaserScene, 75, 25, Assets.SpriteAtlas)
+        .play(Animations.PendingBlue)
+        .setBlendMode(Phaser.BlendModes.ADD),
+    ])
       .setDepth(DepthLayers.PendingArrows)
       .setActive(false)
       .setVisible(false);
 
-    this.chargeProgress = new Progress(scene, {
-      x: coord.x,
-      y: coord.y + 5,
-    }).setDepth(DepthLayers.Planet + 1);
+    this.overheat = new Overheat(scene, coord, empire).setDepth(DepthLayers.Base + coord.y);
 
     this.magnets = [
-      new IconLabel(
-        scene,
-        { x: coord.x + 75, y: coord.y - 60 },
-        '0',
-        'Attack',
-        { color: 'red' },
-      )
-        .setDepth(DepthLayers.Planet - 1)
-        .setVisible(false),
-      new IconLabel(
-        scene,
-        { x: coord.x + 75, y: coord.y - 30 },
-        '0',
-        'Attack',
-        { color: 'blue' },
-      )
-        .setDepth(DepthLayers.Planet - 1)
-        .setVisible(false),
-      new IconLabel(scene, { x: coord.x + 75, y: coord.y - 0 }, '0', 'Attack', {
-        color: 'green',
-      })
-        .setDepth(DepthLayers.Planet - 1)
-        .setVisible(false),
+      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Red),
+      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Blue),
+      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Green),
     ];
+    this.magnets.forEach((magnet) => magnet.setDepth(DepthLayers.Magnet));
+
+    this.magnetWaves = new Phaser.GameObjects.Sprite(
+      scene.phaserScene,
+      this.planetSprite.x - 3,
+      this.planetSprite.y + 5,
+      Assets.VfxAtlas,
+    )
+      .setBlendMode(Phaser.BlendModes.ADD)
+      .setDepth(DepthLayers.MagnetWaves)
+      .setActive(false)
+      .setVisible(false);
+
+    this.citadel = citadel
+      ? new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y - 70, Assets.SpriteAtlas, Sprites.Crown)
+          .setOrigin(0.5, 0.5)
+          .setDepth(DepthLayers.Planet + 1)
+          .setScale(1.5)
+      : null;
 
     this._scene = scene;
     this.id = id;
@@ -206,10 +176,10 @@ export class Planet
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
-    this.scene.add.existing(this.chargeProgress);
-    this.magnets.forEach((magnet) => {
-      this.scene.add.existing(magnet);
-    });
+    this.scene.add.existing(this.overheat);
+    if (this.citadel) this.scene.add.existing(this.citadel);
+    this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
+    this.scene.add.existing(this.magnetWaves);
     return this;
   }
 
@@ -226,10 +196,10 @@ export class Planet
     this.shields.setScale(scale);
     this.ships.setScale(scale);
     this.gold.setScale(scale);
-    this.chargeProgress.setScale(scale);
-    this.magnets.forEach((magnet) => {
-      magnet.setScale(scale);
-    });
+    this.overheat.setScale(scale);
+    if (this.citadel) this.citadel.setScale(scale);
+    this.magnets.forEach((magnet) => magnet.setScale(scale));
+    this.magnetWaves.setScale(scale);
     return this;
   }
 
@@ -252,29 +222,23 @@ export class Planet
     this.shields.setAlpha(alpha);
     this.ships.setAlpha(alpha);
     this.gold.setAlpha(alpha);
-    this.chargeProgress.setAlpha(alpha);
-    this.magnets.forEach((magnet) => {
-      magnet.setAlpha(alpha);
-    });
+    this.magnets.forEach((magnet) => magnet.setAlpha(alpha));
     this.planetName.setAlpha(nameAlpha);
   }
 
   updateFaction(empire: EEmpire) {
     if (empire === this.empireId) return;
 
-    this._scene.audio.play('Blaster', 'sfx');
+    this._scene.audio.play("Blaster", "sfx");
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 29 },
-      EmpireToConquerAnimationKeys[empire] ?? 'ConquerBlue',
+      EmpireToConquerAnimationKeys[empire] ?? "ConquerBlue",
       {
         depth: DepthLayers.Marker,
         blendMode: Phaser.BlendModes.ADD,
         onFrameChange: (frameNumber) => {
           if (frameNumber === 6) {
-            this.planetSprite.setTexture(
-              Assets.SpriteAtlas,
-              Sprites[EmpireToPlanetSpriteKeys[empire] ?? 'PlanetGrey'],
-            );
+            this.planetSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]);
           }
         },
       },
@@ -282,30 +246,23 @@ export class Planet
 
     this._scene.fx.flashSprite(this.hexSprite);
 
-    this.hexSprite.setTexture(
-      Assets.SpriteAtlas,
-      Sprites[EmpireToHexSpriteKeys[empire] ?? 'HexGrey'],
-    );
+    this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
 
     this.empireId = empire;
   }
 
   setPendingMove(destinationPlanetId: Entity) {
-    const destinationPlanet =
-      this._scene.objects.planet.get(destinationPlanetId);
+    const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
 
     if (!destinationPlanet) return;
 
-    const angle = calculateAngleBetweenPoints(
-      this.coord,
-      destinationPlanet.coord,
-    );
+    const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
     this.pendingArrow.setRotation(angle.radian);
 
     this.pendingArrow.setVisible(true).setActive(true);
     (this.pendingArrow.getAt(0) as Phaser.GameObjects.Sprite).play(
-      Animations[EmpireToPendingAnimationKeys[this.empireId] ?? 'PendingBlue'],
+      Animations[EmpireToPendingAnimationKeys[this.empireId] ?? "PendingBlue"],
     );
   }
 
@@ -314,21 +271,16 @@ export class Planet
   }
 
   moveDestroyers(destinationPlanetId: Entity) {
-    const destinationPlanet =
-      this._scene.objects.planet.get(destinationPlanetId);
+    const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
 
     if (!destinationPlanet) return;
 
-    const angle = calculateAngleBetweenPoints(
-      this.coord,
-      destinationPlanet.coord,
-    );
+    const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
     //lower
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][0] ??
-        'DestroyerArcLowerRed',
+      EmpireToDestroyerArcAnimationKeys[this.empireId][0] ?? "DestroyerArcLowerRed",
       {
         rotation: angle.radian,
         depth: DepthLayers.Planet + 1,
@@ -345,8 +297,7 @@ export class Planet
     //upper
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][1] ??
-        'DestroyerArcUpperRed',
+      EmpireToDestroyerArcAnimationKeys[this.empireId][1] ?? "DestroyerArcUpperRed",
       {
         rotation: angle.radian + 2 * Math.PI,
         depth: DepthLayers.Planet + 2,
@@ -360,7 +311,7 @@ export class Planet
       },
     );
 
-    this._scene.audio.play('Execute2', 'sfx', { volume: 0.1 });
+    this._scene.audio.play("Execute2", "sfx", { volume: 0.1 });
   }
 
   onClick(fn: (e: Phaser.Input.Pointer) => void) {
@@ -375,24 +326,18 @@ export class Planet
 
   onHoverEnter(fn: (e: Phaser.Input.Pointer) => void) {
     const obj = this.hexSprite.setInteractive();
-    obj.on(
-      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
-      (e: Phaser.Input.Pointer) => {
-        if (!isValidHover(e)) return;
-        fn(e);
-      },
-    );
+    obj.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, (e: Phaser.Input.Pointer) => {
+      if (!isValidHover(e)) return;
+      fn(e);
+    });
     return this;
   }
 
   onHoverExit(fn: (e: Phaser.Input.Pointer) => void) {
     const obj = this.hexSprite.setInteractive();
-    obj.on(
-      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
-      (e: Phaser.Input.Pointer) => {
-        fn(e);
-      },
-    );
+    obj.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, (e: Phaser.Input.Pointer) => {
+      fn(e);
+    });
     return this;
   }
 
@@ -430,18 +375,40 @@ export class Planet
     );
   }
 
-  setChargeProgress(progress: number) {
-    this.chargeProgress.setProgress(progress);
+  setOverheatProgress(progress: number) {
+    this.overheat.setProgress(progress);
   }
 
   setMagnet(empire: EEmpire, turns: number) {
-    const fullTurnLeft = Math.ceil(turns / 3);
-    const subTurnLeft = turns % 3;
-    const text =
-      turns > 2 ? formatNumber(fullTurnLeft) : `${'●'.repeat(subTurnLeft)}`;
-    this.magnets[empire - 1]?.setText(text).setVisible(turns > 0);
+    const magnet = this.magnets[empire - 1];
 
-    return this;
+    // emit only if no magnet is already active
+    if (turns > 0 && !this.magnets.some((magnet) => magnet.isEnabled())) {
+      this.magnetWaves.play(Animations["MagnetWaves"]);
+      this.magnetWaves.setVisible(true).setActive(true);
+    } else if (!turns && this.magnetWaves.visible && this.magnets.every((magnet) => !magnet.isEnabled())) {
+      this.magnetWaves.once("animationrepeat", () => {
+        this.magnetWaves.setVisible(false).setActive(false);
+      });
+    }
+
+    // 1. when turns > 0 it will add/update the magnet & reorder magnets
+    // to give space for the new one if needed
+    // 2. when turns === 0 it will wait for the magnet to be removed
+    // THEN reorder so it doesn't overlap
+    magnet?.setMagnet(turns, (oldTurns, newTurns) => {
+      // reorder only if the magnet is being removed or added
+      if (!oldTurns || !newTurns) this.reorderMagnets();
+    });
+
+    return magnet;
+  }
+
+  private reorderMagnets(): void {
+    const activeMagnets = this.magnets
+      .filter((magnet) => magnet.isEnabled())
+      .sort((a, b) => a.getEmpire() - b.getEmpire());
+    activeMagnets.forEach((magnet, index) => magnet.updatePosition(this.coord.x + 75, this.coord.y - 60 + index * 30));
   }
 
   override destroy() {
@@ -450,7 +417,10 @@ export class Planet
     this.planetUnderglowSprite.destroy();
     this.hexSprite.destroy();
     this.hexHoloSprite.destroy();
+    this.citadel?.destroy();
     this._scene.objects.planet.remove(this.id);
+    this.magnets.forEach((magnet) => magnet.destroy());
+    this.magnetWaves.destroy();
     super.destroy();
   }
 }

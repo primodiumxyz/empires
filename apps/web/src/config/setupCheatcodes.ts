@@ -29,7 +29,7 @@ export const setupCheatcodes = (
 ) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { devCalls, executeBatch, requestDrip, resetGame: _resetGame, tacticalStrike } = contractCalls;
+  const { devCalls, executeBatch, requestDrip, resetGame: _resetGame, tacticalStrike, withdrawRake } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -138,6 +138,17 @@ export const setupCheatcodes = (
       return false;
     }
   };
+
+  const advanceTurn = createCheatcode({
+    title: "Advance turn",
+    caption: "Advance the turn",
+    bg: CheatcodeToBg["time"],
+    inputs: {},
+    execute: async () => {
+      await contractCalls.updateWorld();
+      return true;
+    },
+  });
   // send ships from a planet to another
   const sendShips = createCheatcode({
     title: "Send ships",
@@ -196,6 +207,8 @@ export const setupCheatcodes = (
             `Sent ${shipsToMove} ships from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(toEntity)}`,
           );
           return true;
+        } else {
+          return false;
         }
       } else {
         const conquer = toPlanetData.shipCount < shipsToMove;
@@ -484,7 +497,7 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
-      const turn = tables.Turn.get()?.value ?? 0n;
+      const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
       const empirePlanets = core.utils.getEmpirePlanets(turn);
       const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
       const updateWorldCallParams = {
@@ -557,9 +570,9 @@ export const setupCheatcodes = (
     inputs: {},
     execute: async () => {
       const success = await _resetGame();
+      const planets = tables.Planet.getAll();
 
       if (success) {
-        const planets = tables.Planet.getAll();
         for (const planet of planets) {
           const planetObject = game.MAIN.objects.planet.get(planet);
           const planetEmpire = tables.Planet.get(planet)?.empireId ?? 0;
@@ -568,6 +581,14 @@ export const setupCheatcodes = (
         }
 
         notify("success", "Game reset");
+
+        for (const planet of planets) {
+          const planetObject = game.MAIN.objects.planet.get(planet);
+          const planetEmpire = tables.Planet.get(planet)?.empireId ?? 0;
+
+          planetObject?.updateFaction(planetEmpire);
+        }
+
         return true;
       } else {
         notify("error", "Failed to reset game");
@@ -863,6 +884,20 @@ export const setupCheatcodes = (
       }
     },
   });
+  // trigger all charges
+  const withdrawThatRake = createCheatcode({
+    title: "Withdraw rake",
+    bg: CheatcodeToBg["tacticalStrike"],
+    caption:
+      "The rake is an essential part of the game. It is used to fund the game and is collected from the pot. This cheatcode allows you to withdraw the rake from the pot. That is why it is called withdraw rake.",
+    inputs: {},
+    execute: async () => {
+      const success = await withdrawRake();
+
+      notify("success", `Rake withdrawn`);
+      return true;
+    },
+  });
 
   /* --------------------------------- CONFIG --------------------------------- */
   const updateGameConfig = {
@@ -1043,7 +1078,71 @@ export const setupCheatcodes = (
     }),
   };
 
+  /* --------------------------------- EMPIRE --------------------------------- */
+  const setEmpire = createCheatcode({
+    title: "Set empire",
+    bg: CheatcodeToBg["utils"],
+    caption: "Set the empire of a planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+      },
+      empire: {
+        label: "Empire",
+        inputType: "string",
+        defaultValue: EmpireEnumToName[EEmpire.Red],
+        options: [
+          ...empires.map((entity) => ({
+            id: Number(entity) as EEmpire,
+            value: EmpireEnumToName[Number(entity) as EEmpire],
+          })),
+          {
+            id: 0,
+            value: "none",
+          },
+        ],
+      },
+    },
+    execute: async ({ planet, empire }) => {
+      const planetId = planet.id as Entity;
+      const empireId = empire.id as EEmpire;
+      const currentEmpireId = tables.Planet.get(planetId)?.empireId;
+
+      let devOps: TableOperation[] = [
+        devCalls.createSetProperties({
+          table: tables.Planet,
+          keys: { id: planetId },
+          properties: { empireId },
+        }),
+      ];
+
+      devOps.push(
+        devCalls.createSetProperties({
+          table: tables.Meta_EmpirePlanetsSet,
+          keys: { empireId, planetId },
+          properties: { stored: true, index: BigInt(0) },
+        }),
+      );
+
+      const success = await devCalls.batch(devOps);
+
+      if (success) {
+        const planetObject = game.MAIN.objects.planet.get(planetId);
+        planetObject?.updateFaction(empireId);
+        notify("success", `Set ${planet.value} to ${empire.value}`);
+        return true;
+      } else {
+        notify("error", `Failed to set ${planet.value} to ${empire.value}`);
+        return false;
+      }
+    },
+  });
+
   return [
+    advanceTurn,
     setShips,
     sendShips,
     setShields,
@@ -1060,6 +1159,8 @@ export const setupCheatcodes = (
     resetCharges,
     maxOutCharges,
     triggerCharges,
+    withdrawThatRake,
+    setEmpire,
     ...Object.values(updateGameConfig),
   ];
 };

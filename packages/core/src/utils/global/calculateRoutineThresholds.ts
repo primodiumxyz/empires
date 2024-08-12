@@ -23,7 +23,6 @@ type RoutineOptions = {
 };
 
 export function calculateRoutineThresholds(probabilities: RoutineThresholds): RoutineThresholdsBigInt {
-  console.log(probabilities);
   const goldThreshold = BigInt(Math.round(probabilities.accumulateGold * 10000));
   const shieldThreshold = BigInt(Math.round(probabilities.buyShields * 10000)) + goldThreshold;
   const shipThreshold = BigInt(Math.round(probabilities.buyShips * 10000)) + shieldThreshold;
@@ -75,11 +74,11 @@ export function calculateRoutinePcts(
 
   // Initial likelihoods
   const initialLikelihoods: RoutineThresholds = {
-    buyShields: 0.2,
-    attackEnemy: 0.35,
-    accumulateGold: 0.1,
-    buyShips: 0.2,
-    supportAlly: 0.15,
+    buyShields: 0.1,
+    attackEnemy: 0.4,
+    supportAlly: 0.25,
+    accumulateGold: 0.15,
+    buyShips: 0.1,
   } as const;
 
   // Calculate likelihood adjustments
