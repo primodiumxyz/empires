@@ -79,12 +79,18 @@ export const Dashboard = () => {
                 name="select-empire-chart"
                 className="hidden justify-end lg:flex"
                 value={selectedEmpire.toString()}
-                options={Array.from(empires.keys())
-                  .map((_, i) => i + 1)
-                  .map((empire) => ({
-                    id: empire.toString(),
-                    label: EmpireEnumToConfig[empire as EEmpire].name,
-                  }))}
+                options={[
+                  ...Array.from(empires.keys())
+                    .map((_, i) => i + 1)
+                    .map((empire) => ({
+                      id: empire.toString(),
+                      label: EmpireEnumToConfig[empire as EEmpire].name,
+                    })),
+                  {
+                    id: EEmpire.LENGTH.toString(),
+                    label: "All",
+                  },
+                ]}
                 onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
               />
 

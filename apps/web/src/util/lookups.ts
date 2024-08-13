@@ -3,16 +3,15 @@ import { EEmpire } from "@primodiumxyz/contracts";
 
 export const DEFAULT_EMPIRE = EEmpire.Red;
 
-export const EmpireEnumToConfig: Record<
-  EEmpire,
-  {
-    name: string;
-    textColor: string;
-    chartColor: string;
-    icons: { magnet: string };
-    sprites: { planet: SpriteKeys };
-  }
-> = {
+export type EmpireConfig = {
+  name: string;
+  textColor: string;
+  chartColor: string;
+  icons: { magnet: string };
+  sprites: { planet: SpriteKeys };
+};
+
+export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
   [EEmpire.LENGTH]: {
     name: "Length",
     textColor: "text-gray-400",

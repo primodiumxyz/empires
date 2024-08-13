@@ -14,6 +14,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { SecondaryCard } from "@/components/core/Card";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useEthPrice } from "@/hooks/useEthPrice";
+import { EmpireConfig } from "@/util/lookups";
 
 export const accentColor = "rgba(0,255, 0, .75)";
 export const accentColorDark = "rgba(0,255, 0, .25)";
@@ -177,12 +178,19 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
       [showTooltip, stockValueScale, dateScale, historicalPriceData],
     );
 
+    const filteredEmpires: [EEmpire, EmpireConfig][] = useMemo(() => {
+      if (empire === EEmpire.LENGTH) {
+        return Array.from(empires.entries());
+      }
+      return [[empire, empires.get(empire)!]];
+    }, [empires, empire]);
+
     if (width < 10) return null;
 
     return (
       <div className="pointer-event-auto flex items-center justify-center gap-2 rounded-box bg-black/10">
         <svg width={width} height={height}>
-          {[...empires.entries()].map(([empire, data], index) => (
+          {filteredEmpires.map(([empire, data]) => (
             <LinePath
               key={empire}
               data={historicalPriceData.filter((d) => d.empire === empire)}
