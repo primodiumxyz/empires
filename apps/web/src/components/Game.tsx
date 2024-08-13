@@ -12,7 +12,6 @@ import { PlayerReturns } from "@/components/PlayerReturns";
 import { PriceHistory } from "@/components/PriceHistory";
 import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
-import { TransactionStatus } from "@/components/TransactionStatus";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -99,7 +98,6 @@ export const GameHUD = () => {
         </HUD.TopRight>
 
         <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
-          <TransactionStatus />
           <div className="flex w-full items-center justify-between gap-2">
             <MusicPlayer />
             <Settings />

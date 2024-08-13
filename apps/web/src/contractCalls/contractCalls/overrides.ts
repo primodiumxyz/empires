@@ -4,7 +4,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { EmpireEnumToName } from "@/util/lookups";
-import { notify } from "@/util/notify";
+import { notify, withTransactionStatus } from "@/util/notify";
 
 export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) => {
   const createShip = async (
@@ -13,25 +13,23 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
-    return await execute({
-      functionName: "Empires__createShip",
-      args: [planetId, overrideCount],
-      options: { value: payment, gas: 552401n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-create-ship`,
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__createShip",
+          args: [planetId, overrideCount],
+          options: { value: payment, gas: 552401n * 2n },
+          txQueueOptions: {
+            id: `${planetId}-create-ship`,
+            ...options,
+          },
+        }),
+      {
+        loading: `Supporting ${entityToPlanetName(planetId)}`,
+        success: `Supported ${entityToPlanetName(planetId)} with ${overrideCount} ship${overrideCount > 1 ? "s" : ""}`,
+        error: "Failed to provide support",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify(
-            "success",
-            `Supported with ${overrideCount} ship${overrideCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
-          );
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   const removeShip = async (
@@ -40,25 +38,23 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
-    return await execute({
-      functionName: "Empires__killShip",
-      args: [planetId, overrideCount],
-      options: { value: payment, gas: 739007n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-kill-ship`,
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__killShip",
+          args: [planetId, overrideCount],
+          options: { value: payment, gas: 739007n * 2n },
+          txQueueOptions: {
+            id: `${planetId}-kill-ship`,
+            ...options,
+          },
+        }),
+      {
+        loading: `Attacking ${entityToPlanetName(planetId)}`,
+        success: `Destroyed ${overrideCount} ship${overrideCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
+        error: "Failed to attack",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify(
-            "success",
-            `Removed ${overrideCount} ship${overrideCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
-          );
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   const addShield = async (
@@ -67,25 +63,23 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
-    return await execute({
-      functionName: "Empires__chargeShield",
-      args: [planetId, overrideCount],
-      options: { value: payment, gas: 546063n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-add-shield`,
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__chargeShield",
+          args: [planetId, overrideCount],
+          options: { value: payment, gas: 546063n * 2n },
+          txQueueOptions: {
+            id: `${planetId}-add-shield`,
+            ...options,
+          },
+        }),
+      {
+        loading: `Supporting ${entityToPlanetName(planetId)}`,
+        success: `Supported ${entityToPlanetName(planetId)} with ${overrideCount} shield${overrideCount > 1 ? "s" : ""}`,
+        error: "Failed to provide support",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify(
-            "success",
-            `Added ${overrideCount} shield${overrideCount > 1 ? "s" : ""} to ${entityToPlanetName(planetId)}`,
-          );
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   const removeShield = async (
@@ -94,62 +88,63 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
-    return await execute({
-      functionName: "Empires__drainShield",
-      args: [planetId, overrideCount],
-      options: { value: payment, gas: 738649n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-remove-shield`,
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__drainShield",
+          args: [planetId, overrideCount],
+          options: { value: payment, gas: 738649n * 2n },
+          txQueueOptions: {
+            id: `${planetId}-remove-shield`,
+            ...options,
+          },
+        }),
+      {
+        loading: `Attacking shields on ${entityToPlanetName(planetId)}`,
+        success: `Destroyed ${overrideCount} shield${overrideCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
+        error: "Failed to attack",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify(
-            "success",
-            `Removed ${overrideCount} shield${overrideCount > 1 ? "s" : ""} from ${entityToPlanetName(planetId)}`,
-          );
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
-    return await execute({
-      functionName: "Empires__sellPoints",
-      args: [empire, amount],
-      options: { gas: 151271n * 2n },
-      txQueueOptions: {
-        id: "sell-points",
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__sellPoints",
+          args: [empire, amount],
+          options: { gas: 151271n * 2n },
+          txQueueOptions: {
+            id: "sell-points",
+            ...options,
+          },
+        }),
+      {
+        loading: `Selling points from ${EmpireEnumToName[empire as EEmpire]} empire`,
+        success: `Sold ${formatEther(amount)} points from ${EmpireEnumToName[empire as EEmpire]} empire`,
+        error: "Failed to sell points",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify("success", `Sold ${formatEther(amount)} points from ${EmpireEnumToName[empire as EEmpire]} empire`);
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
+
   const tacticalStrike = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
-    return await execute({
-      functionName: "Empires__tacticalStrike",
-      args: [planetId],
-      options: { gas: 738649n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-tactical-strike`,
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__tacticalStrike",
+          args: [planetId],
+          options: { gas: 738649n * 2n },
+          txQueueOptions: {
+            id: `${planetId}-tactical-strike`,
+            ...options,
+          },
+        }),
+      {
+        loading: `Requesting tactical strike on ${entityToPlanetName(planetId)}`,
+        success: `Tactical strike executed on ${entityToPlanetName(planetId)}`,
+        error: "Failed to execute tactical strike",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify("success", `Tactical strike on ${entityToPlanetName(planetId)}`);
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   const placeMagnet = async (
@@ -159,60 +154,63 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
-    return await execute({
-      functionName: "Empires__placeMagnet",
-      args: [empire, planetId, turnCount],
-      options: { value: payment, gas: 546063n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-place-magnet`,
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__placeMagnet",
+          args: [empire, planetId, turnCount],
+          options: { value: payment, gas: 546063n * 2n },
+          txQueueOptions: {
+            id: `${planetId}-place-magnet`,
+            ...options,
+          },
+        }),
+      {
+        loading: `Placing ${EmpireEnumToName[empire]} magnet on ${entityToPlanetName(planetId)}`,
+        success: `Placed ${EmpireEnumToName[empire]} magnet on ${entityToPlanetName(planetId)} for ${turnCount} turn${turnCount > 1 ? "s" : ""}`,
+        error: "Failed to place magnet",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify("success", `Placed magnet on ${entityToPlanetName(planetId)}`);
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   const boostCharge = async (planetId: Entity, count: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
-    return await execute({
-      functionName: "Empires__boostCharge",
-      args: [planetId, count],
-      options: { value: payment, gas: 738649n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-boost-charge`,
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__boostCharge",
+          args: [planetId, count],
+          options: { value: payment, gas: 738649n * 2n },
+          txQueueOptions: {
+            id: `${planetId}-boost-charge`,
+            ...options,
+          },
+        }),
+      {
+        loading: `Boosting charge on ${entityToPlanetName(planetId)}`,
+        success: `Boosted ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
+        error: "Failed to boost charge",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify("success", `Boosted ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`);
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   const stunCharge = async (planetId: Entity, count: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
-    return await execute({
-      functionName: "Empires__stunCharge",
-      args: [planetId, count],
-      options: { value: payment, gas: 738649n * 2n },
-      txQueueOptions: {
-        id: `${planetId}-stun-charge`,
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__stunCharge",
+          args: [planetId, count],
+          options: { value: payment, gas: 738649n * 2n },
+          txQueueOptions: {
+            id: `${planetId}-stun-charge`,
+            ...options,
+          },
+        }),
+      {
+        loading: `Stunning charge on ${entityToPlanetName(planetId)}`,
+        success: `Stunned ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
+        error: "Failed to stun charge",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify("success", `Stunned ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`);
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   return {
