@@ -14,16 +14,13 @@ import { EmpireDetails } from "@/components/PriceHistory/EmpireDetails";
 import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointGraph";
 import { SellPoints } from "@/components/PriceHistory/SellPoints";
 import { Price } from "@/components/shared/Price";
-import { useBalance } from "@/hooks/useBalance";
 import { useEmpires } from "@/hooks/useEmpires";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
-interface HistoricalPointPriceModalProps {}
-
-export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) => {
+export const Dashboard = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
   const { playerAccount } = useAccountClient();
   const {
@@ -59,34 +56,28 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
     return !!empirePoints ? (pot * playerPoints) / empirePoints : 0n;
   }, [points, pot]);
 
-  const earningsImmediate = useMemo(() => {
-    return pointCosts.reduce((acc, { price }) => acc + price, 0n);
-  }, [pointCosts]);
-
   // Calculate KPIs
-  const walletBalance = useBalance(playerAccount.address).value ?? 0n;
-  const totalInvestment = tables.Value_PlayersMap.get(playerAccount.entity)?.loss ?? 0n;
+  const totalInvestment = tables.Value_PlayersMap.use(playerAccount.entity)?.loss ?? 0n;
+  const totalEarned = tables.Value_PlayersMap.use(playerAccount.entity)?.gain ?? 0n;
   const netTotalPotential = earnings - totalInvestment;
-  const netTotalImmediate = earningsImmediate - totalInvestment;
 
   return (
-    <Modal title="Marketplace">
-      <Modal.Button size="sm" variant="neutral" className="rounded-t-none !border-t-0">
-        <IconLabel imageUri={InterfaceIcons.Trade} text="OPEN MARKET" className="mx-2 text-xs" />
+    <Modal title="Dashboard">
+      <Modal.Button size="md" variant="neutral">
+        <IconLabel imageUri={InterfaceIcons.Trade} text="VIEW DASHBOARD" className="" />
       </Modal.Button>
       <Modal.Content>
-        <div className="grid grid-cols-8 gap-4">
-          <div className="col-span-6 flex flex-col gap-2">
-            <SecondaryCard className="flex-row flex-wrap justify-between gap-2 p-2">
-              <KPICard title="MY WALLET" value={walletBalance} />
-              <KPICard title="TOTAL SPENT" value={totalInvestment} />
-              <KPICard title="NET TOTAL (IMMEDIATE)" value={netTotalImmediate} />
-              <KPICard title="NET TOTAL (POTENTIAL)" value={netTotalPotential} />
+        <div className="grid grid-cols-8 gap-1">
+          <div className="col-span-6 flex flex-col gap-1">
+            <SecondaryCard className="flex flex-col gap-2">
+              <p className="text-xs">SELL POINTS</p>
+              <SellPoints />
             </SecondaryCard>
+
             <SecondaryCard>
               <RadioGroup
                 name="select-empire-chart"
-                className="justify-end"
+                className="hidden justify-end lg:flex"
                 value={selectedEmpire.toString()}
                 options={Array.from(empires.keys())
                   .map((_, i) => i + 1)
@@ -97,31 +88,33 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
                 onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
               />
 
-              <div className="h-96 w-full">
+              <div className="h-40 w-full lg:h-96">
                 <ParentSize>
                   {({ width: visWidth, height: visHeight }) => (
-                    <HistoricalPointGraph empire={selectedEmpire} width={visWidth} height={visHeight} />
+                    <HistoricalPointGraph
+                      empire={selectedEmpire}
+                      width={visWidth}
+                      height={visHeight}
+                      margin={{ top: 20, right: 20, bottom: 30, left: 55 }}
+                    />
                   )}
                 </ParentSize>
               </div>
             </SecondaryCard>
-            <SecondaryCard className="flex flex-col gap-2">
-              <p className="text-sm">SELL POINTS</p>
-              <SellPoints />
+            <SecondaryCard className="hidden justify-between gap-2 p-2 lg:grid lg:grid-cols-3">
+              <KPICard title="SPENT TO DATE" value={totalInvestment} />
+              <KPICard title="EARNED TO DATE" value={totalEarned} />
+              <KPICard title="NET TOTAL (SELL NOW)" value={netTotalPotential} />
             </SecondaryCard>
           </div>
           <div className="col-span-2 flex flex-col gap-2">
             <SecondaryCard>
-              <p className="mb-2 text-sm">YOUR PORTFOLIO</p>
-              <Account hideAccountBalance justifyStart />
+              <p className="mb-2 text-xs">MARKET RATES</p>
+              <EmpireDetails hideGraph hideTitle />
             </SecondaryCard>
-            <SecondaryCard>
-              <p className="mb-2 text-sm">MARKET RATES</p>
-              <EmpireDetails hideGraph />
-            </SecondaryCard>
-            <SecondaryCard className="grow">
-              <p className="mb-2 text-sm">TX HISTORY</p>
-              <p className="mt-5 text-center opacity-25">COMING SOON</p>
+            <SecondaryCard className="hidden lg:flex">
+              <p className="mb-2 text-xs">YOUR PORTFOLIO</p>
+              <Account hideAccountBalance />
             </SecondaryCard>
           </div>
         </div>

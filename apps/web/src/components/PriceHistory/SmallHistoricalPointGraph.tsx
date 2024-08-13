@@ -134,7 +134,11 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
   );
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex max-h-[75vh] flex-col items-center justify-center overflow-auto">
+      <div className={cn("hidden text-xs lg:block", Math.sign(percentChange) >= 0 ? "text-success" : "text-error")}>
+        {formatNumber(percentChange, { fractionDigits: 1 })}%
+      </div>
+
       <svg width={width} height={height}>
         <LinearGradient id={`area-gradient-${empire}`} from={colorFrom} to={colorTo} toOpacity={0.1} />
         <AreaClosed
@@ -148,9 +152,6 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
           curve={curveMonotoneX}
         />
       </svg>
-      <div className={cn("text-xs", Math.sign(percentChange) >= 0 ? "text-success" : "text-error")}>
-        {formatNumber(percentChange, { fractionDigits: 1 })}%
-      </div>
     </div>
   );
 };

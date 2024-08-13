@@ -3,6 +3,7 @@ import { formatEther } from "viem";
 
 import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Dropdown } from "@/components/core/Dropdown";
@@ -54,7 +55,7 @@ export const SellPoints = () => {
     <div className="flex w-full gap-2">
       <SecondaryCard className="bg-black/10">
         <p className="text-left text-xs opacity-50">EMPIRE</p>
-        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-44">
+        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32" variant="topLeft">
           {Array.from(empires.entries()).map(([key, empire]) => (
             <Dropdown.Item key={key} value={key}>
               <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
@@ -62,14 +63,7 @@ export const SellPoints = () => {
           ))}
         </Dropdown>
       </SecondaryCard>
-      <SecondaryCard className="grid grow grid-cols-3 items-center gap-5 bg-black/10">
-        <div className="flex justify-center gap-2 rounded-md bg-primary/50 px-2 py-1 text-lg font-bold uppercase">
-          {message ? (
-            <span className="text-[0.6rem] text-white">{message}</span>
-          ) : (
-            <Price wei={pointsToWei} className="text-white" />
-          )}
-        </div>
+      <SecondaryCard className="justify-center">
         <NumberInput
           count={amountToSell}
           onChange={handleInputChange}
@@ -77,17 +71,21 @@ export const SellPoints = () => {
           max={Number(formatEther(playerPoints))}
           className="place-self-center"
         />
+      </SecondaryCard>
+      <TransactionQueueMask id="sell-points">
+        <Button size="sm" className="w-full" disabled={amountToSell == "0" || !pointsToWei} onClick={handleSubmit}>
+          Sell
+        </Button>
+      </TransactionQueueMask>
 
-        <TransactionQueueMask id="sell-points">
-          <Button
-            size="md"
-            className="w-full px-10"
-            disabled={amountToSell == "0" || !pointsToWei}
-            onClick={handleSubmit}
-          >
-            Sell
-          </Button>
-        </TransactionQueueMask>
+      <SecondaryCard>
+        <Badge size="lg" variant="primary">
+          {message ? (
+            <span className="text-[0.6rem] text-white">{message}</span>
+          ) : (
+            <Price wei={pointsToWei} className="text-white" />
+          )}
+        </Badge>
       </SecondaryCard>
     </div>
   );

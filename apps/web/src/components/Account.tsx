@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { ExclamationCircleIcon, UserIcon } from "@heroicons/react/24/solid";
 import { usePrivy } from "@privy-io/react-auth";
 import { formatEther } from "viem";
@@ -32,11 +33,23 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
     else await logout();
   };
 
+  const { tables } = useCore();
   const balance = useBalance(address).value ?? 0n;
   const empires = useEmpires();
 
+  const time = tables.Time.use() ?? 0n;
+  const sortedEmpires = useMemo(
+    () =>
+      [...empires.keys()].sort((a, b) => {
+        const aPoints = tables.Value_PointsMap.getWithKeys({ empireId: a, playerId: entity })?.value ?? 0n;
+        const bPoints = tables.Value_PointsMap.getWithKeys({ empireId: b, playerId: entity })?.value ?? 0n;
+        return Number(bPoints - aPoints);
+      }),
+    [empires, time],
+  );
+
   return (
-    <div className="min-w-42 flex flex-col gap-2 p-2 text-right text-xs">
+    <div className="min-w-42 flex flex-col gap-2 text-right text-xs">
       <div className="flex flex-col justify-center gap-1">
         {!hideAccountBalance && (
           <>
@@ -46,11 +59,14 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
             </div>
             <Price wei={balance} className="text-sm text-accent" />
             <hr className="my-1 w-full border-secondary/50" />
+            <p className="text-xs opacity-70">Your Portfolio</p>
           </>
         )}
-        {[...empires.keys()].map((empire, index) => (
-          <EmpirePoints key={index} empire={empire} playerId={entity} justifyStart={justifyStart} />
-        ))}
+        <div className="flex max-h-[70vh] flex-col overflow-y-auto">
+          {sortedEmpires.map((empire, index) => (
+            <EmpirePoints key={index} empire={empire} playerId={entity} justifyStart={justifyStart} />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -82,20 +98,22 @@ const EmpirePoints = ({
   return (
     <div
       className={cn(
-        "flex h-16 w-full items-center gap-5 border-none py-1",
+        "flex h-10 w-full items-center gap-5 border-none py-1 lg:h-14",
         justifyStart ? "justify-start" : "justify-between",
       )}
     >
-      <img src={spriteUrl} className="w-12" />
+      <img src={spriteUrl} className="w-6 lg:w-10" />
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>
-        <Tooltip tooltipContent={message} className="w-44 text-xs">
-          <p className="-mt-1 flex items-center justify-end gap-2 text-xs">
-            <Price wei={pointCostWei} />
-            {message ? <ExclamationCircleIcon className="size-3" /> : ""}
-          </p>
-        </Tooltip>
-        {pct > 0 && <p className="text-xs opacity-70">({formatNumber(pct)}%)</p>}
+        <div className="hidden lg:block">
+          <Tooltip tooltipContent={message} className="w-44 text-xs">
+            <p className="-mt-1 flex items-center justify-end gap-2 text-xs">
+              <Price wei={pointCostWei} />
+              {message ? <ExclamationCircleIcon className="size-3" /> : ""}
+            </p>
+          </Tooltip>
+          {pct > 0 && <p className="text-xs opacity-70">({formatNumber(pct)}%)</p>}
+        </div>
       </div>
     </div>
   );

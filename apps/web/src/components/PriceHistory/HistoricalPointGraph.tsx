@@ -182,7 +182,7 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
     return (
       <div className="pointer-event-auto flex items-center justify-center gap-2 rounded-box bg-black/10">
         <svg width={width} height={height}>
-          {empires.entries().map(([empire, data], index) => (
+          {[...empires.entries()].map(([empire, data], index) => (
             <LinePath
               key={empire}
               data={historicalPriceData.filter((d) => d.empire === empire)}
