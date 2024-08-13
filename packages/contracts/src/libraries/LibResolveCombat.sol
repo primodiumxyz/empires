@@ -57,6 +57,7 @@ library LibResolveCombat {
 
         if (defendingEmpire == EEmpire.NULL) {
           Planet_TacticalStrike.setChargeRate(planetId, P_TacticalStrikeConfig.getChargeRate());
+          Planet_TacticalStrike.setLastUpdated(planetId, block.number);
         }
 
         Planet.setShieldCount(planetId, 0);

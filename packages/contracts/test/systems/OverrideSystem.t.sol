@@ -480,12 +480,13 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
     Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
 
-    assertEq(data.chargeRate, 100);
-
     uint256 currentCharge = _getCurrentCharge(planetId);
     console.log(currentCharge, maxCharge);
     uint256 remainingCharge = maxCharge - currentCharge;
     uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
+    if ((remainingCharge * 100) % data.chargeRate != 0) {
+      remainingBlocks += 1;
+    }
     uint256 expectedEndBlock = block.number + remainingBlocks;
 
     vm.roll(expectedEndBlock);

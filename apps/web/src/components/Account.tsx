@@ -13,6 +13,7 @@ import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { cn } from "@/util/client";
 
 export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.Blue]: "bg-blue-600",
@@ -21,7 +22,10 @@ export const EmpireEnumToColor: Record<EEmpire, string> = {
   [EEmpire.LENGTH]: "",
 };
 
-export const Account = () => {
+export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: boolean }> = ({
+  hideAccountBalance = false,
+  justifyStart = false,
+}) => {
   const { logout } = usePrivy();
   const { cancelBurner, usingBurner } = useBurnerAccount();
 
@@ -39,22 +43,34 @@ export const Account = () => {
   return (
     <div className="min-w-42 flex flex-col gap-2 p-2 text-right text-xs">
       <div className="flex flex-col justify-center gap-1">
-        <div className="flex w-full flex-row justify-end gap-2">
-          <UserIcon className="w-4" />
-          <p>{formatAddress(address)}</p>
-        </div>
-        <Price wei={balance} className="text-base" />
-        <hr className="opacity-50" />
+        {!hideAccountBalance && (
+          <>
+            <div className="flex w-full flex-row justify-end gap-2">
+              <UserIcon className="w-4" />
+              <p>{formatAddress(address)}</p>
+            </div>
+            <Price wei={balance} className="text-sm text-accent" />
+            <hr className="my-1 w-full border-secondary/50" />
+          </>
+        )}
 
-        <EmpirePoints empire={EEmpire.Red} playerId={entity} />
-        <EmpirePoints empire={EEmpire.Green} playerId={entity} />
-        <EmpirePoints empire={EEmpire.Blue} playerId={entity} />
+        <EmpirePoints empire={EEmpire.Red} playerId={entity} justifyStart={justifyStart} />
+        <EmpirePoints empire={EEmpire.Green} playerId={entity} justifyStart={justifyStart} />
+        <EmpirePoints empire={EEmpire.Blue} playerId={entity} justifyStart={justifyStart} />
       </div>
     </div>
   );
 };
 
-const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity }) => {
+const EmpirePoints = ({
+  empire,
+  playerId,
+  justifyStart = false,
+}: {
+  empire: EEmpire;
+  playerId: Entity;
+  justifyStart?: boolean;
+}) => {
   const { tables } = useCore();
   const {
     ROOT: { sprite },
@@ -70,7 +86,12 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
 
   return (
-    <div className="flex h-full w-full justify-between gap-5 border-none py-1">
+    <div
+      className={cn(
+        "flex h-full w-full items-center gap-5 border-none py-1",
+        justifyStart ? "justify-start" : "justify-between",
+      )}
+    >
       <img src={spriteUrl} className="h-12" />
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>

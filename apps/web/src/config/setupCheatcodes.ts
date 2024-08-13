@@ -1186,10 +1186,16 @@ export const setupCheatcodes = (
         label: "Empire",
         inputType: "string",
         defaultValue: EmpireEnumToName[EEmpire.Red],
-        options: empires.map((entity) => ({
-          id: Number(entity) as EEmpire,
-          value: EmpireEnumToName[Number(entity) as EEmpire],
-        })),
+        options: [
+          ...empires.map((entity) => ({
+            id: Number(entity) as EEmpire,
+            value: EmpireEnumToName[Number(entity) as EEmpire],
+          })),
+          {
+            id: 0,
+            value: "none",
+          },
+        ],
       },
     },
     execute: async ({ planet, empire }) => {

@@ -29,7 +29,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointCostIncrease: BigInt(POINTS_UNIT * 0.00001),
       },
       P_MagnetConfig: {
-        lockedPointsPercent: scaleMultiplier(0.05),
+        lockedPointsPercent: scaleMultiplier(0.10),
       },
       Turn: {
         nextTurnBlock: 0n,
@@ -38,11 +38,11 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
       P_TacticalStrikeConfig: {
         maxCharge: 100n,
-        chargeRate: 100n, //
+        chargeRate: 1n,
         boostChargeIncrease: 10n,
         stunChargeDecrease: 10n,
-        createShipBoostIncrease: 1n,
-        killShipBoostCostDecrease: 1n,
+        createShipBoostIncrease: 0n,
+        killShipBoostCostDecrease: 0n,
       },
       P_ShieldEaterConfig: {
         detonationThreshold: 10n,
@@ -57,8 +57,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         isProgressOverride: true,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00010),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
       },
     },
   },
@@ -108,9 +108,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00010),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00010),
       },
     },
   },
@@ -120,9 +120,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: false,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
       },
     },
   },
@@ -133,9 +133,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00008),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
       },
     },
   },

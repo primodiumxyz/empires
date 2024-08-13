@@ -66,7 +66,7 @@ export class Overheat extends Phaser.GameObjects.Container {
 
       // Reposition flames at the bottom center of the border
       this.flames.setPosition(0, this.border.height / 2 - 12);
-      this.flames.setAlpha(progress >= 1 ? 0.7 : 1);
+      this.flames.setAlpha(progress >= 1 ? 0.35 : 0.5);
       this.flames.setActive(true).setVisible(true);
       this.flamesAnimation = anim;
     } else {
