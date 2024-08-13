@@ -121,7 +121,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
         }),
       {
         loading: `Selling points from ${EmpireEnumToName[empire as EEmpire]} empire`,
-        success: `Sold ${formatEther(amount)} points from ${EmpireEnumToName[empire as EEmpire]} empire`,
+        success: `Sold ${formatEther(amount)} point${amount > 1e18 ? "s" : ""} from ${EmpireEnumToName[empire as EEmpire]} empire`,
         error: "Failed to sell points",
       },
     );
