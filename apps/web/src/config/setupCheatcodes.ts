@@ -1,6 +1,7 @@
-import { Hex, padHex } from "viem";
+import { Hex, padHex, parseEther } from "viem";
 
 import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
+import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
@@ -11,11 +12,10 @@ import { EmpireEnumToName } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
-  ships: "bg-red-500/10",
-  gold: "bg-yellow-500/10",
-  points: "bg-green-500/10",
+  overrides: "bg-red-500/10",
+  mechanisms: "bg-yellow-500/10",
   time: "bg-blue-500/10",
-  utils: "bg-gray-500/10",
+  utils: "bg-green-500/10",
   magnet: "bg-purple-900/10",
   tacticalStrike: "bg-purple-400/10",
   config: "bg-gray-500/10",
@@ -29,7 +29,14 @@ export const setupCheatcodes = (
 ) => {
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { devCalls, executeBatch, requestDrip, resetGame: _resetGame, tacticalStrike, withdrawRake } = contractCalls;
+  const {
+    devCalls,
+    executeBatch,
+    requestDrip,
+    resetGame: _resetGame,
+    tacticalStrike,
+    withdrawRake: _withdrawRake,
+  } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -45,7 +52,7 @@ export const setupCheatcodes = (
   const setShips = createCheatcode({
     title: "Set ships",
     caption: "Set the amount of ships on a planet",
-    bg: CheatcodeToBg["ships"],
+    bg: CheatcodeToBg["overrides"],
     inputs: {
       planet: {
         label: "Planet",
@@ -60,22 +67,17 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount, planet }) => {
-      const success = await devCalls.setProperties({
+      return await devCalls.setProperties({
         table: tables.Planet,
         keys: {
           id: planet.id as Entity,
         },
         properties: { shipCount: BigInt(amount.value) },
       });
-
-      if (success) {
-        notify("success", `Ships set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
-        return true;
-      } else {
-        notify("error", `Failed to set ships on ${entityToPlanetName(planet.id as Entity)}`);
-        return false;
-      }
     },
+    loading: () => "[CHEATCODE] Setting ships...",
+    success: (args) => `Ships set to ${args.amount.value} on ${entityToPlanetName(args.planet.id as Entity)}`,
+    error: (args) => `Failed to set ships on ${entityToPlanetName(args.planet.id as Entity)}`,
   });
 
   const addPlanetToEmpire = async (empireId: EEmpire, planetId: Hex) => {
@@ -139,20 +141,10 @@ export const setupCheatcodes = (
     }
   };
 
-  const advanceTurn = createCheatcode({
-    title: "Advance turn",
-    caption: "Advance the turn",
-    bg: CheatcodeToBg["time"],
-    inputs: {},
-    execute: async () => {
-      await contractCalls.updateWorld();
-      return true;
-    },
-  });
   // send ships from a planet to another
   const sendShips = createCheatcode({
     title: "Send ships",
-    bg: CheatcodeToBg["ships"],
+    bg: CheatcodeToBg["overrides"],
     caption: "Send ships from one planet to another",
     inputs: {
       from: {
@@ -200,16 +192,7 @@ export const setupCheatcodes = (
           }),
         );
 
-        const success = await devCalls.batch(devOps);
-        if (success) {
-          notify(
-            "success",
-            `Sent ${shipsToMove} ships from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(toEntity)}`,
-          );
-          return true;
-        } else {
-          return false;
-        }
+        return await devCalls.batch(devOps);
       } else {
         const conquer = toPlanetData.shipCount < shipsToMove;
         const remainingShips = conquer ? shipsToMove - toPlanetData.shipCount : toPlanetData.shipCount - shipsToMove;
@@ -230,10 +213,7 @@ export const setupCheatcodes = (
             ])
           ).every(Boolean);
 
-          if (successB) {
-            notify("success", `Conquered ${entityToPlanetName(toEntity)} from ${entityToPlanetName(fromEntity)}`);
-            return true;
-          }
+          return successB;
         }
 
         const success = await devCalls.setProperties({
@@ -242,21 +222,23 @@ export const setupCheatcodes = (
           properties: { shipCount: remainingShips },
         });
 
-        if (success) {
-          notify(
-            "success",
-            `Sent ${shipsToMove} ships from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(toEntity)}`,
-          );
-          return true;
-        } else {
-          notify(
-            "error",
-            `Failed to send ships from ${entityToPlanetName(fromEntity)} to ${entityToPlanetName(toEntity)}`,
-          );
-          return false;
-        }
+        return success;
       }
     },
+    loading: () => "[CHEATCODE] Sending ships...",
+    success: ({ from, to }) => {
+      const fromPlanetData = tables.Planet.get(from.id as Entity);
+      const toPlanetData = tables.Planet.get(to.id as Entity);
+      const conquer =
+        fromPlanetData?.empireId !== toPlanetData?.empireId &&
+        (fromPlanetData?.shipCount ?? 0n) < (toPlanetData?.shipCount ?? 0n);
+      if (conquer)
+        return `Conquered ${entityToPlanetName(to.id as Entity)} from ${entityToPlanetName(from.id as Entity)}`;
+
+      return `Sent ${fromPlanetData?.shipCount} ships from ${entityToPlanetName(from.id as Entity)} to ${entityToPlanetName(to.id as Entity)}`;
+    },
+    error: ({ from, to }) =>
+      `Failed to send ships from ${entityToPlanetName(from.id as Entity)} to ${entityToPlanetName(to.id as Entity)}`,
   });
 
   /* --------------------------------- SHIELDS -------------------------------- */
@@ -264,6 +246,7 @@ export const setupCheatcodes = (
   const setShields = createCheatcode({
     title: "Set shields",
     caption: "Set the amount of shields on a planet",
+    bg: CheatcodeToBg["overrides"],
     inputs: {
       planet: {
         label: "Planet",
@@ -278,27 +261,22 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount, planet }) => {
-      const success = await devCalls.setProperties({
+      return await devCalls.setProperties({
         table: tables.Planet,
         keys: { id: planet.id as Entity },
         properties: { shieldCount: BigInt(amount.value) },
       });
-
-      if (success) {
-        notify("success", `Shields set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
-        return true;
-      } else {
-        notify("error", `Failed to set shields on ${entityToPlanetName(planet.id as Entity)}`);
-        return false;
-      }
     },
+    loading: () => "[CHEATCODE] Setting shields...",
+    success: ({ planet, amount }) => `Shields set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`,
+    error: ({ planet }) => `Failed to set shields on ${entityToPlanetName(planet.id as Entity)}`,
   });
 
-  /* ---------------------------------- GOLD ---------------------------------- */
+  /* ------------------------------- MECHANISMS ------------------------------- */
   // set gold count for a planet
   const setGoldCount = createCheatcode({
     title: "Set gold",
-    bg: CheatcodeToBg["gold"],
+    bg: CheatcodeToBg["mechanisms"],
     caption: "Set the gold count for a planet",
     inputs: {
       planet: {
@@ -314,26 +292,21 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount, planet }) => {
-      const success = await devCalls.setProperties({
+      return await devCalls.setProperties({
         table: tables.Planet,
         keys: { id: planet.id as Entity },
         properties: { goldCount: BigInt(amount.value) },
       });
-
-      if (success) {
-        notify("success", `Gold set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`);
-        return true;
-      } else {
-        notify("error", `Failed to set gold on ${entityToPlanetName(planet.id as Entity)}`);
-        return false;
-      }
     },
+    loading: () => "[CHEATCODE] Setting gold count...",
+    success: ({ planet, amount }) => `Gold set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`,
+    error: ({ planet }) => `Failed to set gold on ${entityToPlanetName(planet.id as Entity)}`,
   });
 
   // generate gold on all planets
   const generateGold = createCheatcode({
     title: "Generate gold",
-    bg: CheatcodeToBg["gold"],
+    bg: CheatcodeToBg["mechanisms"],
     caption: "Give a specified amount of gold to all planets",
     inputs: {
       amount: {
@@ -343,7 +316,7 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
-      const success = await devCalls.batch(
+      return await devCalls.batch(
         planets.map((entity) =>
           devCalls.createSetProperties({
             table: tables.Planet,
@@ -352,18 +325,67 @@ export const setupCheatcodes = (
           }),
         ),
       );
-
-      if (success) {
-        notify("success", `Generated ${amount.value} gold on all planets`);
-        return true;
-      } else {
-        notify("error", `Failed to generate gold on all planets`);
-        return false;
-      }
     },
+    loading: () => "[CHEATCODE] Generating gold...",
+    success: ({ amount }) => `Generated ${amount.value} gold on all planets`,
+    error: () => `Failed to generate gold on all planets`,
   });
 
-  /* --------------------------------- POINTS --------------------------------- */
+  // set empire on planet
+  const setEmpire = createCheatcode({
+    title: "Set empire",
+    bg: CheatcodeToBg["mechanisms"],
+    caption: "Set the empire of a planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+      },
+      empire: {
+        label: "Empire",
+        inputType: "string",
+        defaultValue: EmpireEnumToName[EEmpire.Red],
+        options: [
+          ...empires.map((entity) => ({
+            id: Number(entity) as EEmpire,
+            value: EmpireEnumToName[Number(entity) as EEmpire],
+          })),
+          {
+            id: 0,
+            value: "none",
+          },
+        ],
+      },
+    },
+    execute: async ({ planet, empire }) => {
+      const planetId = planet.id as Entity;
+      const empireId = empire.id as EEmpire;
+
+      let devOps: TableOperation[] = [
+        devCalls.createSetProperties({
+          table: tables.Planet,
+          keys: { id: planetId },
+          properties: { empireId },
+        }),
+      ];
+
+      devOps.push(
+        devCalls.createSetProperties({
+          table: tables.Meta_EmpirePlanetsSet,
+          keys: { empireId, planetId },
+          properties: { stored: true, index: BigInt(0) },
+        }),
+      );
+
+      return await devCalls.batch(devOps);
+    },
+    loading: () => "[CHEATCODE] Setting empire...",
+    success: ({ planet, empire }) => `Empire set to ${empire.value} for ${planet.value}`,
+    error: ({ planet, empire }) => `Failed to set empire to ${empire.value} for ${planet.value}`,
+  });
+
   const setEmpirePlayerPoints = async (playerId: Entity, empireId: EEmpire, value: bigint): Promise<boolean> => {
     try {
       let devOps: TableOperation[] = [];
@@ -432,7 +454,7 @@ export const setupCheatcodes = (
   // mint shares from an empire
   const givePoints = createCheatcode({
     title: "Give points",
-    bg: CheatcodeToBg["points"],
+    bg: CheatcodeToBg["mechanisms"],
     caption: "Give points from an empire to an address",
     inputs: {
       empire: {
@@ -458,9 +480,7 @@ export const setupCheatcodes = (
       const currentPoints = tables.Value_PointsMap.getWithKeys({ empireId, playerId })?.value ?? BigInt(0);
       const currentCost = tables.Empire.getWithKeys({ id: empireId })?.pointCost ?? BigInt(0);
       const increaseCost = pointConfig?.pointCostIncrease ?? BigInt(1);
-
-      const pointsToIssue = BigInt(amount.value) * BigInt(OTHER_EMPIRE_COUNT);
-      const newPoints = currentPoints + pointsToIssue;
+      const newPoints = currentPoints + parseEther(amount.value.toString());
 
       const success = await Promise.all([
         setEmpirePlayerPoints(playerId, empireId, newPoints),
@@ -473,14 +493,12 @@ export const setupCheatcodes = (
         }),
       ]);
 
-      if (success.every(Boolean)) {
-        notify("success", `Gave ${amount.value} points to ${recipient.value} from ${empire.value}`);
-        return true;
-      } else {
-        notify("error", `Failed to give points to ${recipient.value} from ${empire.value}`);
-        return false;
-      }
+      return success.every(Boolean);
     },
+    loading: () => "[CHEATCODE] Giving points...",
+    success: ({ amount, recipient, empire }) =>
+      `Gave ${amount.value} points to ${recipient.value} from ${empire.value}`,
+    error: ({ recipient, empire }) => `Failed to give points to ${recipient.value} from ${empire.value}`,
   });
 
   /* ---------------------------------- TIME ---------------------------------- */
@@ -528,14 +546,11 @@ export const setupCheatcodes = (
         }
       }
 
-      if (success) {
-        notify("success", `Advanced ${amount.value} turns`);
-        return true;
-      } else {
-        notify("error", `Failed to advance turns`);
-        return false;
-      }
+      return success;
     },
+    loading: () => "[CHEATCODE] Advancing turns...",
+    success: ({ amount }) => `Advanced ${amount.value} turns`,
+    error: () => `Failed to advance turns`,
   });
 
   // end game
@@ -545,21 +560,16 @@ export const setupCheatcodes = (
     caption: "End the game",
     inputs: {},
     execute: async () => {
-      const nextBlock = (await playerAccount.publicClient.getBlockNumber()) + BigInt(1);
-      const success = await devCalls.setProperties({
+      const nextBlock = await playerAccount.publicClient.getBlockNumber();
+      return await devCalls.setProperties({
         table: tables.P_GameConfig,
         keys: {},
         properties: { gameOverBlock: nextBlock },
       });
-
-      if (success) {
-        notify("success", `Game ended at block ${nextBlock}`);
-        return true;
-      } else {
-        notify("error", `Failed to end game`);
-        return false;
-      }
     },
+    loading: () => "[CHEATCODE] Ending game...",
+    success: () => `Game ended`,
+    error: () => `Failed to end game`,
   });
 
   // reset game
@@ -579,22 +589,19 @@ export const setupCheatcodes = (
 
           planetObject?.updateFaction(planetEmpire);
         }
-
-        notify("success", "Game reset");
-
         for (const planet of planets) {
           const planetObject = game.MAIN.objects.planet.get(planet);
           const planetEmpire = tables.Planet.get(planet)?.empireId ?? 0;
 
           planetObject?.updateFaction(planetEmpire);
         }
-
-        return true;
-      } else {
-        notify("error", "Failed to reset game");
-        return false;
       }
+
+      return success;
     },
+    loading: () => "[CHEATCODE] Resetting game...",
+    success: () => `Game reset`,
+    error: () => `Failed to reset game`,
   });
 
   /* ---------------------------------- UTILS --------------------------------- */
@@ -606,9 +613,9 @@ export const setupCheatcodes = (
     inputs: {},
     execute: async () => {
       requestDrip?.(accountClient.playerAccount.address);
-      notify("success", "Dripped eth to player account");
       return true;
     },
+    success: () => `Dripped eth to player account`,
   });
 
   /* --------------------------------- MAGNET --------------------------------- */
@@ -711,15 +718,13 @@ export const setupCheatcodes = (
         }),
       );
 
-      const success = await devCalls.batch(devOps);
-      if (success) {
-        notify("success", `Placed magnet on ${planet.value} for ${empire.value} for ${turns.value} turns`);
-        return true;
-      } else {
-        notify("error", `Failed to place magnet on ${planet.value} for ${empire.value} for ${turns.value} turns`);
-        return false;
-      }
+      return await devCalls.batch(devOps);
     },
+    loading: () => "[CHEATCODE] Placing magnet...",
+    success: ({ empire, planet, turns }) =>
+      `Placed magnet on ${planet.value} for ${empire.value} for ${turns.value} turns`,
+    error: ({ empire, planet, turns }) =>
+      `Failed to place magnet on ${planet.value} for ${empire.value} for ${turns.value} turns`,
   });
 
   // remove magnet
@@ -747,15 +752,11 @@ export const setupCheatcodes = (
       const planetId = planet.id as Entity;
       const empireId = empire.id as EEmpire;
 
-      const success = await devCalls.batch(_removeMagnet(empireId, planetId));
-      if (success) {
-        notify("success", `Removed magnet on ${planet.value} for ${empire.value}`);
-        return true;
-      } else {
-        notify("error", `Failed to remove magnet on ${planet.value} for ${empire.value}`);
-        return false;
-      }
+      return await devCalls.batch(_removeMagnet(empireId, planetId));
     },
+    loading: () => "[CHEATCODE] Removing magnet...",
+    success: ({ empire, planet }) => `Removed magnet on ${planet.value} for ${empire.value}`,
+    error: ({ empire, planet }) => `Failed to remove magnet on ${planet.value} for ${empire.value}`,
   });
 
   // remove all magnets
@@ -776,15 +777,11 @@ export const setupCheatcodes = (
       const planets = tables.Planet.getAll();
       const devOps = planets.map((entity) => _removeMagnet(empireId, entity)).flat();
 
-      const success = await devCalls.batch(devOps);
-      if (success) {
-        notify("success", `Removed all magnets for ${empire.value}`);
-        return true;
-      } else {
-        notify("error", `Failed to remove all magnets for ${empire.value}`);
-        return false;
-      }
+      return await devCalls.batch(devOps);
     },
+    loading: () => "[CHEATCODE] Removing all magnets...",
+    success: ({ empire }) => `Removed all magnets for ${empire.value}`,
+    error: ({ empire }) => `Failed to remove all magnets for ${empire.value}`,
   });
 
   /* ----------------------------- TACTICAL STRIKE ---------------------------- */
@@ -808,15 +805,11 @@ export const setupCheatcodes = (
         }),
       );
 
-      const success = await devCalls.batch(devOps);
-      if (success) {
-        notify("success", `Charges reset for ${planets.length} planets`);
-        return true;
-      } else {
-        notify("error", `Failed to reset charges for ${planets.length} planets`);
-        return false;
-      }
+      return await devCalls.batch(devOps);
     },
+    loading: () => "[CHEATCODE] Resetting charges...",
+    success: () => `Charges reset for all planets`,
+    error: () => `Failed to reset charges for all planets`,
   });
 
   // max out all charges
@@ -840,15 +833,11 @@ export const setupCheatcodes = (
         }),
       );
 
-      const success = await devCalls.batch(devOps);
-      if (success) {
-        notify("success", `Charges maxed out for ${planets.length} planets`);
-        return true;
-      } else {
-        notify("error", `Failed to max out charges for ${planets.length} planets`);
-        return false;
-      }
+      return await devCalls.batch(devOps);
     },
+    loading: () => "[CHEATCODE] Maxing out charges...",
+    success: () => `Charges maxed out for all planets`,
+    error: () => `Failed to max out charges for all planets`,
   });
 
   // trigger all charges
@@ -875,28 +864,26 @@ export const setupCheatcodes = (
         });
 
       const success = await Promise.all(planets.map((planet) => tacticalStrike(planet.entity)));
-      if (success) {
-        notify("success", `Charges triggered for ${planets.length} planets`);
-        return true;
-      } else {
-        notify("error", `Failed to trigger charges for ${planets.length} planets`);
-        return false;
-      }
+      return success.every(Boolean);
     },
+    loading: () => "[CHEATCODE] Triggering charges...",
+    success: () => `Charges triggered for all planets`,
+    error: () => `Failed to trigger charges for all planets`,
   });
-  // trigger all charges
-  const withdrawThatRake = createCheatcode({
+
+  // withdraw rake
+  const withdrawRake = createCheatcode({
     title: "Withdraw rake",
     bg: CheatcodeToBg["tacticalStrike"],
     caption:
       "The rake is an essential part of the game. It is used to fund the game and is collected from the pot. This cheatcode allows you to withdraw the rake from the pot. That is why it is called withdraw rake.",
     inputs: {},
     execute: async () => {
-      const success = await withdrawRake();
-
-      notify("success", `Rake withdrawn`);
-      return true;
+      return await _withdrawRake();
     },
+    loading: () => "[CHEATCODE] Withdrawing rake...",
+    success: () => `Rake withdrawn`,
+    error: () => `Failed to withdraw rake`,
   });
 
   /* --------------------------------- CONFIG --------------------------------- */
@@ -937,20 +924,16 @@ export const setupCheatcodes = (
           gameOverBlock: finalBlockFromTimeLeft,
           gameStartTimestamp: BigInt(properties.gameStartTimestamp.value),
         };
-        const success = await devCalls.setProperties({
+
+        return await devCalls.setProperties({
           table: tables.P_GameConfig,
           keys: {},
           properties: newProperties,
         });
-
-        if (success) {
-          notify("success", "Game config updated");
-          return true;
-        } else {
-          notify("error", "Failed to update game config");
-          return false;
-        }
       },
+      loading: () => "[CHEATCODE] Updating game config...",
+      success: () => `Game config updated`,
+      error: () => `Failed to update game config`,
     }),
 
     P_PointConfig: createCheatcode({
@@ -990,20 +973,15 @@ export const setupCheatcodes = (
         },
       },
       execute: async (properties) => {
-        const success = await devCalls.setProperties({
+        return await devCalls.setProperties({
           table: tables.P_PointConfig,
           keys: {},
           properties: Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
         });
-
-        if (success) {
-          notify("success", "Point config updated");
-          return true;
-        } else {
-          notify("error", "Failed to update point config");
-          return false;
-        }
       },
+      loading: () => "[CHEATCODE] Updating point config...",
+      success: () => `Point config updated`,
+      error: () => `Failed to update point config`,
     }),
 
     P_OverrideConfig: createCheatcode({
@@ -1011,6 +989,20 @@ export const setupCheatcodes = (
       bg: CheatcodeToBg["config"],
       caption: "P_OverrideConfig",
       inputs: {
+        overrideAction: {
+          label: "Override action",
+          inputType: "number",
+          defaultValue: EOverride.CreateShip,
+          options: [
+            { id: EOverride.CreateShip, value: "CreateShip" },
+            { id: EOverride.KillShip, value: "KillShip" },
+            { id: EOverride.ChargeShield, value: "ChargeShield" },
+            { id: EOverride.DrainShield, value: "DrainShield" },
+            { id: EOverride.PlaceMagnet, value: "PlaceMagnet" },
+            { id: EOverride.BoostCharge, value: "BoostCharge" },
+            { id: EOverride.StunCharge, value: "StunCharge" },
+          ],
+        },
         overrideGenRate: {
           label: "Override generation rate",
           inputType: "number",
@@ -1033,20 +1025,16 @@ export const setupCheatcodes = (
         },
       },
       execute: async (properties) => {
-        const success = await devCalls.setProperties({
+        const { overrideAction, ...rest } = properties;
+        return await devCalls.setProperties({
           table: tables.P_OverrideConfig,
-          keys: {},
-          properties: Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, BigInt(value.value)])),
+          keys: { overrideAction: overrideAction.id as EOverride },
+          properties: Object.fromEntries(Object.entries(rest).map(([key, value]) => [key, BigInt(value.value)])),
         });
-
-        if (success) {
-          notify("success", "Override config updated");
-          return true;
-        } else {
-          notify("error", "Failed to update override config");
-          return false;
-        }
       },
+      loading: () => "[CHEATCODE] Updating override config...",
+      success: () => `Override config updated`,
+      error: () => `Failed to update override config`,
     }),
 
     P_RoutineCosts: createCheatcode({
@@ -1061,97 +1049,29 @@ export const setupCheatcodes = (
         },
       },
       execute: async ({ buyShips }) => {
-        const success = await devCalls.setProperties({
+        return await devCalls.setProperties({
           table: tables.P_RoutineCosts,
           keys: { routine: ERoutine["BuyShips"] },
           properties: { goldCost: BigInt(buyShips.value) },
         });
-
-        if (success) {
-          notify("success", "Routine costs updated");
-          return true;
-        } else {
-          notify("error", "Failed to update routine costs");
-          return false;
-        }
       },
+      loading: () => "[CHEATCODE] Updating routine costs...",
+      success: () => `Routine costs updated`,
+      error: () => `Failed to update routine costs`,
     }),
   };
 
-  /* --------------------------------- EMPIRE --------------------------------- */
-  const setEmpire = createCheatcode({
-    title: "Set empire",
-    bg: CheatcodeToBg["utils"],
-    caption: "Set the empire of a planet",
-    inputs: {
-      planet: {
-        label: "Planet",
-        inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
-      },
-      empire: {
-        label: "Empire",
-        inputType: "string",
-        defaultValue: EmpireEnumToName[EEmpire.Red],
-        options: [
-          ...empires.map((entity) => ({
-            id: Number(entity) as EEmpire,
-            value: EmpireEnumToName[Number(entity) as EEmpire],
-          })),
-          {
-            id: 0,
-            value: "none",
-          },
-        ],
-      },
-    },
-    execute: async ({ planet, empire }) => {
-      const planetId = planet.id as Entity;
-      const empireId = empire.id as EEmpire;
-      const currentEmpireId = tables.Planet.get(planetId)?.empireId;
-
-      let devOps: TableOperation[] = [
-        devCalls.createSetProperties({
-          table: tables.Planet,
-          keys: { id: planetId },
-          properties: { empireId },
-        }),
-      ];
-
-      devOps.push(
-        devCalls.createSetProperties({
-          table: tables.Meta_EmpirePlanetsSet,
-          keys: { empireId, planetId },
-          properties: { stored: true, index: BigInt(0) },
-        }),
-      );
-
-      const success = await devCalls.batch(devOps);
-
-      if (success) {
-        const planetObject = game.MAIN.objects.planet.get(planetId);
-        planetObject?.updateFaction(empireId);
-        notify("success", `Set ${planet.value} to ${empire.value}`);
-        return true;
-      } else {
-        notify("error", `Failed to set ${planet.value} to ${empire.value}`);
-        return false;
-      }
-    },
-  });
-
   return [
-    advanceTurn,
+    advanceTurns,
+    endGame,
+    resetGame,
     setShips,
     sendShips,
     setShields,
     setGoldCount,
     generateGold,
+    setEmpire,
     givePoints,
-    advanceTurns,
-    endGame,
-    resetGame,
     dripEth,
     placeMagnet,
     removeMagnet,
@@ -1159,8 +1079,7 @@ export const setupCheatcodes = (
     resetCharges,
     maxOutCharges,
     triggerCharges,
-    withdrawThatRake,
-    setEmpire,
+    withdrawRake,
     ...Object.values(updateGameConfig),
   ];
 };
