@@ -82,11 +82,11 @@ const EmpirePoints = ({
   return (
     <div
       className={cn(
-        "flex h-full w-full items-center gap-5 border-none py-1",
+        "flex h-16 w-full items-center gap-5 border-none py-1",
         justifyStart ? "justify-start" : "justify-between",
       )}
     >
-      <img src={spriteUrl} className="h-12" />
+      <img src={spriteUrl} className="w-12" />
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>
         <Tooltip tooltipContent={message} className="w-44 text-xs">

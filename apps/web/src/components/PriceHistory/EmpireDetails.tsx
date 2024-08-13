@@ -10,7 +10,6 @@ import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
-import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 // TODO: Change window size to use time instead of # of updates
 const WINDOW_SIZE = 25;
@@ -21,7 +20,7 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
     ROOT: { sprite },
   } = useGame();
   const { price: sellPrice } = usePointPrice(empire, 1);
-  const planetCount = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: DEFAULT_EMPIRE })?.itemKeys.length ?? 0;
+  const planetCount = tables.Keys_EmpirePlanetsSet.useWithKeys({ empireId: empire })?.itemKeys.length ?? 0;
   const citadelPlanets = tables.Keys_CitadelPlanetsSet.useWithKeys()?.itemKeys ?? [];
   // TODO: something better
   const block = tables.BlockNumber.use()?.value ?? 0n;
@@ -46,11 +45,11 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
   return (
     <div className="flex flex-col justify-center rounded-box text-center text-white">
       <div className="flex items-center justify-between gap-3">
-        <div className="relative">
-          <p className="text-md absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-xs text-accent opacity-75">
+        <div className="relative flex h-16 items-center justify-center">
+          <p className="text-md absolute left-1/2 top-1/2 h-4 w-5 -translate-x-1/2 -translate-y-1/2 rounded-md bg-black text-xs text-accent opacity-75">
             {planetCount}
           </p>
-          <img src={spriteUrl} className="h-12" />
+          <img src={spriteUrl} className="w-10" />
         </div>
 
         <div className={cn("flex flex-col items-start gap-1")}>

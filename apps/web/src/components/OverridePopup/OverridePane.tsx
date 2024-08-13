@@ -56,7 +56,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
   if (!selectedPlanet || !planet) return null;
 
   return (
-    <Tabs className={cn("flex flex-col items-center justify-center gap-2", className)}>
+    <Tabs className={cn("flex flex-col items-center justify-start gap-2", className)}>
       <Buttons />
       <Card noDecor className="relative w-96 flex-row items-center justify-center bg-slate-900">
         <Tabs.Pane index={0} className="w-full items-center gap-4">

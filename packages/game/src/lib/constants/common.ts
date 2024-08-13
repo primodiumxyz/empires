@@ -9,8 +9,8 @@ export const allEmpires = [
   EEmpire.Green,
   EEmpire.Yellow,
   EEmpire.Purple,
-  EEmpire.Orange,
   EEmpire.Pink,
+  EEmpire.Orange,
   EEmpire.Black,
   EEmpire.White,
 ] as const;

@@ -911,6 +911,11 @@ export const setupCheatcodes = (
       bg: CheatcodeToBg["config"],
       caption: "P_GameConfig",
       inputs: {
+        empireCount: {
+          label: "Empire count",
+          inputType: "number",
+          defaultValue: gameConfig?.empireCount ?? 1,
+        },
         turnLengthBlocks: {
           label: "Turn length blocks",
           inputType: "number",
@@ -937,6 +942,7 @@ export const setupCheatcodes = (
         const finalBlockFromTimeLeft =
           BigInt(properties.roundTimeLeftInSeconds.value * currBlock.avgBlockTime) + currBlock.value;
         const newProperties = {
+          empireCount: Number(properties.empireCount.value),
           turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
           goldGenRate: BigInt(properties.goldGenRate.value),
           gameOverBlock: finalBlockFromTimeLeft,
