@@ -1,5 +1,4 @@
 import React from "react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
@@ -40,12 +39,7 @@ export const Buttons: React.FC = () => {
         <OverrideButton index={0} icon="Fleet" axialCoord={{ q: -1, r: 0 }} tooltip="Ships" />
         <OverrideButton index={1} icon="Defense" axialCoord={{ q: 0, r: 0 }} tooltip="Shields" />
       </div>
-      <div className="absolute left-1/2 top-10 z-0 w-fit -translate-x-1/2 scale-75 opacity-75">
-        <p className="mx-auto flex w-72 animate-pulse items-center justify-center gap-2 bg-warning/25 p-1 text-center text-xs text-warning">
-          <ExclamationTriangleIcon className="size-4" />
-          PROCEED WITH CAUTION
-          <ExclamationTriangleIcon className="size-4" />
-        </p>
+      <div className="absolute left-1/2 top-12 z-0 w-fit -translate-x-1/2 scale-75 opacity-75">
         <p className="mx-auto w-72 bg-secondary/25 p-1 text-center text-xl text-accent">SELECT OVERRIDE</p>
       </div>
     </div>

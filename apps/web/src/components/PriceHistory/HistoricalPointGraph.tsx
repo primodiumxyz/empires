@@ -65,6 +65,7 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
     const historicalPriceEntities = tables.HistoricalPointCost.useAll();
     const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
     const ethPrice = useEthPrice().price;
+    const empires = useEmpires();
     const historicalPriceData = useMemo(() => {
       // get data
       let data = historicalPriceEntities
@@ -86,7 +87,6 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
       );
 
       // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
-      const empires = useEmpires();
       const allEmpires = Array.from(new Array(empires.size)).map((_, i) => i + 1);
       const timestampMap = new Map<number, { [key: number]: bigint }>();
 
@@ -125,13 +125,6 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
 
       return filledData;
     }, [historicalPriceEntities, gameStartTimestamp, ethPrice]);
-
-    const [colorFrom, colorTo] = useMemo(() => {
-      const diff = historicalPriceData[historicalPriceData.length - 1].cost - historicalPriceData[0].cost;
-
-      if (diff >= 0) return ["rgba(0,255, 0, .75)", "rgba(0,255, 0, .25)"];
-      return ["rgba(255, 0, 0, .75)", "rgba(255, 0, 0, .25)"];
-    }, [historicalPriceData]);
 
     const { innerWidth, innerHeight } = useMemo(() => {
       return {
@@ -183,7 +176,6 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
       },
       [showTooltip, stockValueScale, dateScale, historicalPriceData],
     );
-    const empires = useEmpires();
 
     if (width < 10) return null;
 

@@ -31,7 +31,7 @@ export function createPriceUtils(tables: Tables) {
    * @return pointCost The cost of all points related to the action.
    */
   function getProgressPointCost(_empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
-    const empires = tables.P_GameConfig.use()?.empireCount ?? 0;
+    const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
     return getPointCost(
       _empireImpacted,
       _overrideCount * BigInt(empires - 1) * (tables.P_PointConfig.get()?.pointUnit ?? 1n),

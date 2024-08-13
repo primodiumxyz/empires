@@ -88,14 +88,12 @@ export const HistoricalPointPriceModal = ({}: HistoricalPointPriceModalProps) =>
                 name="select-empire-chart"
                 className="justify-end"
                 value={selectedEmpire.toString()}
-                options={[
-                  ...Array.from(new Array(EEmpire.LENGTH))
-                    .map((_, i) => i + 1)
-                    .map((empire) => ({
-                      id: empire.toString(),
-                      label: EmpireEnumToConfig[empire as EEmpire].name,
-                    })),
-                ]}
+                options={Array.from(empires.keys())
+                  .map((_, i) => i + 1)
+                  .map((empire) => ({
+                    id: empire.toString(),
+                    label: EmpireEnumToConfig[empire as EEmpire].name,
+                  }))}
                 onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
               />
 

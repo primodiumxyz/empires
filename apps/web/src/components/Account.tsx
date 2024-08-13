@@ -48,8 +48,8 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
             <hr className="my-1 w-full border-secondary/50" />
           </>
         )}
-        {empires.values().map((empire, index) => (
-          <EmpirePoints key={index} empire={Number(empire)} playerId={entity} justifyStart={justifyStart} />
+        {[...empires.keys()].map((empire, index) => (
+          <EmpirePoints key={index} empire={empire} playerId={entity} justifyStart={justifyStart} />
         ))}
       </div>
     </div>

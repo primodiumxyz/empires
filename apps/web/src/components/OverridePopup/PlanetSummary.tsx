@@ -96,7 +96,7 @@ const Overrides = ({ entity }: { entity: Entity }) => {
 
   const magnets = useMemo(
     () =>
-      empires.keys().map((empire) => ({
+      [...empires.keys()].map((empire) => ({
         endTurn: tables.Magnet.getWithKeys({ empireId: empire, planetId: entity })?.endTurn,
         empire: empire,
       })),
@@ -116,29 +116,21 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     {} as Record<EEmpire, number>,
   );
 
-  const valToText = (val: number) => {
-    if (val >= 1) return "HIGH";
-    if (val >= 0) return "MED";
-    return "LOW";
-  };
-
   return (
-    <>
-      <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
-        <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
-        <div className="grid grid-cols-2 gap-y-1 text-xs">
-          <span className="text-gray-4000">OVERHEAT</span>
-          <span className="text-right">{Math.min(overheat.percent, 100).toFixed(0)}%</span>
-        </div>
-        <div className="grid grid-cols-2 gap-y-1 text-xs">
-          <span className="text-gray-4000">MAGNETS</span>
-          <div className="flex flex-row gap-1">
-            {empires.entries().map(([empire, data], index) => (
-              <IconLabel key={index} imageUri={data.icons.magnet} text={formatNumber(turnsLeft[empire] ?? 0)} />
-            ))}
-          </div>
+    <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
+      <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
+      <div className="grid grid-cols-2 gap-y-1 text-xs">
+        <span className="text-gray-4000">OVERHEAT</span>
+        <span className="text-right">{Math.min(overheat.percent, 100).toFixed(0)}%</span>
+      </div>
+      <div className="grid grid-cols-2 gap-y-1 text-xs">
+        <span className="text-gray-4000">MAGNETS</span>
+        <div className="flex flex-row gap-1">
+          {empires.entries().map(([empire, data], index) => (
+            <IconLabel key={index} imageUri={data.icons.magnet} text={formatNumber(turnsLeft[empire] ?? 0)} />
+          ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };

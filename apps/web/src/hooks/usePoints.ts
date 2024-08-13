@@ -12,7 +12,7 @@ export const usePoints = (playerId: Entity): Record<EEmpire, { playerPoints: big
 
   return useMemo(
     () =>
-      empires.keys().reduce(
+      [...empires.keys()].reduce(
         (acc, empire) => {
           acc[empire] = {
             playerPoints: tables.Value_PointsMap.getWithKeys({ empireId: empire, playerId })?.value ?? 0n,

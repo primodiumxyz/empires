@@ -3,7 +3,17 @@ import { EEmpire } from "@primodiumxyz/contracts";
 export const ASSET_PACK = "/assets/pack.json";
 export const KEY = "MAIN";
 
-export const Empires = [EEmpire.Red, EEmpire.Blue, EEmpire.Green];
+export const allEmpires = [
+  EEmpire.Red,
+  EEmpire.Blue,
+  EEmpire.Green,
+  EEmpire.Yellow,
+  EEmpire.Purple,
+  EEmpire.Orange,
+  EEmpire.Pink,
+  EEmpire.Black,
+  EEmpire.White,
+] as const;
 
 export const Scenes = {
   UI: "UI",

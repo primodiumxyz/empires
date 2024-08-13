@@ -121,7 +121,10 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const time = tables.Time.use();
 
   const pointCosts = useMemo(
-    () => empires.keys().map((empire) => getPointPrice(empire, Number(formatEther(points[empire].playerPoints))).price),
+    () =>
+      [...empires.keys()].map(
+        (empire) => getPointPrice(empire, Number(formatEther(points[empire].playerPoints))).price,
+      ),
     [empires, points, time],
   );
   const totalReward = pointCosts.reduce((sum, cost) => sum + cost, 0n);

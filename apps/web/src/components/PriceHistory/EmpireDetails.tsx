@@ -70,7 +70,7 @@ export const EmpireDetails: React.FC<{ hideGraph?: boolean }> = ({ hideGraph }) 
   const empires = useEmpires();
   return (
     <div className="flex flex-col items-start gap-1 text-center">
-      {empires.keys().map((empire, index) => (
+      {[...empires.keys()].map((empire, index) => (
         <_EmpireDetails key={index} empire={empire} hideGraph={hideGraph} />
       ))}
     </div>
