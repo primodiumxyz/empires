@@ -38,6 +38,7 @@ export enum EOverride {
   PlaceMagnet,
   BoostCharge,
   StunCharge,
+  AirdropGold,
   LENGTH,
 }
 
