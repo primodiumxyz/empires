@@ -118,7 +118,7 @@ export const GameHUD = () => {
           </div>
         </HUD.BottomMiddle>
 
-        <HUD.Center>
+        <HUD.Center className="relative z-50">
           <OverridePopup />
           <GameOver />
         </HUD.Center>
