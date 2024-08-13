@@ -16,6 +16,8 @@ import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
 const DEV = import.meta.env.PRI_DEV === "true";
+const PLAYTEST = import.meta.env.PRI_PLAYTEST === "true";
+const PLAYTEST_PASSWORD = import.meta.env.PRI_PLAYTEST_PASSWORD;
 
 const Game = memo(() => {
   const core = useCore();
@@ -84,6 +86,9 @@ const Game = memo(() => {
 });
 
 export const GameHUD = () => {
+  const params = new URLSearchParams(window.location.search);
+  const showCheatcodes = DEV && (PLAYTEST ? params.get("cheatcodesPassword") === PLAYTEST_PASSWORD : true);
+
   return (
     <>
       <HUD pad>
@@ -91,7 +96,7 @@ export const GameHUD = () => {
           <PriceHistory />
         </HUD.TopLeft>
 
-        <HUD.TopMiddle>{DEV && <Cheatcodes />}</HUD.TopMiddle>
+        <HUD.TopMiddle>{showCheatcodes && <Cheatcodes />}</HUD.TopMiddle>
 
         <HUD.TopRight className="flex flex-col gap-2">
           <Account />
