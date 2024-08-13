@@ -55,7 +55,7 @@ export const SellPoints = () => {
     <div className="flex w-full gap-2">
       <SecondaryCard className="bg-black/10">
         <p className="text-left text-xs opacity-50">EMPIRE</p>
-        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32" variant="topLeft">
+        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44" variant="topLeft">
           {Array.from(empires.entries()).map(([key, empire]) => (
             <Dropdown.Item key={key} value={key}>
               <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
@@ -63,29 +63,33 @@ export const SellPoints = () => {
           ))}
         </Dropdown>
       </SecondaryCard>
-      <SecondaryCard className="justify-center">
+      <SecondaryCard className="w-full flex-row items-center justify-around gap-2">
         <NumberInput
           count={amountToSell}
           onChange={handleInputChange}
           min={0}
           max={Number(formatEther(playerPoints))}
-          className="place-self-center"
+          className="w-32 place-self-center"
         />
-      </SecondaryCard>
-      <TransactionQueueMask id="sell-points">
-        <Button size="sm" className="w-full" disabled={amountToSell == "0" || !pointsToWei} onClick={handleSubmit}>
-          Sell
-        </Button>
-      </TransactionQueueMask>
 
-      <SecondaryCard>
-        <Badge size="lg" variant="primary">
+        <Badge size="sm" variant="primary" className="p-4 lg:badge-lg">
           {message ? (
             <span className="text-[0.6rem] text-white">{message}</span>
           ) : (
-            <Price wei={pointsToWei} className="text-white" />
+            <Price wei={pointsToWei} className="text-sm text-white lg:!text-lg" />
           )}
         </Badge>
+
+        <TransactionQueueMask id="sell-points">
+          <Button
+            size="sm"
+            className="w-full lg:btn-md lg:text-lg"
+            disabled={amountToSell == "0" || !pointsToWei}
+            onClick={handleSubmit}
+          >
+            Sell
+          </Button>
+        </TransactionQueueMask>
       </SecondaryCard>
     </div>
   );

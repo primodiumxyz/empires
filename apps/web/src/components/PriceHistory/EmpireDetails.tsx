@@ -97,7 +97,7 @@ export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean 
     });
   }, [empires, tables, time]);
   return (
-    <div className="flex max-h-[80vh] flex-col items-start gap-1 overflow-y-auto text-center">
+    <div className="flex flex-col items-start gap-1 overflow-y-auto text-center">
       {!hideTitle && <p className="text-xs opacity-70">Empires</p>}
       {sortedEmpires.map((empire, index) => (
         <_EmpireDetails key={index} empire={empire} hideGraph={hideGraph} />
