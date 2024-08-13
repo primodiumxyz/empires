@@ -10,13 +10,15 @@ import { SecondaryCard } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
+import { Tabs } from "@/components/core/Tabs";
 import { EmpireDetails } from "@/components/PriceHistory/EmpireDetails";
 import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointGraph";
+import { KPICard } from "@/components/PriceHistory/KPICard";
 import { SellPoints } from "@/components/PriceHistory/SellPoints";
-import { Price } from "@/components/shared/Price";
 import { useEmpires } from "@/hooks/useEmpires";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
@@ -39,32 +41,10 @@ export const Dashboard = () => {
     [empires, points, time],
   );
 
-  const earnings = useMemo(() => {
-    const biggestReward = Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
-      (acc, [empire, { playerPoints }]) => {
-        if (playerPoints > acc.points) {
-          return { empire: Number(empire) as EEmpire, points: playerPoints };
-        }
-        return acc;
-      },
-      { empire: DEFAULT_EMPIRE, points: 0n },
-    );
-
-    const playerPoints = points[biggestReward.empire].playerPoints;
-    const empirePoints = points[biggestReward.empire].empirePoints;
-
-    return !!empirePoints ? (pot * playerPoints) / empirePoints : 0n;
-  }, [points, pot]);
-
-  // Calculate KPIs
-  const totalInvestment = tables.Value_PlayersMap.use(playerAccount.entity)?.loss ?? 0n;
-  const totalEarned = tables.Value_PlayersMap.use(playerAccount.entity)?.gain ?? 0n;
-  const netTotalPotential = earnings - totalInvestment;
-
   return (
     <Modal title="Dashboard">
       <Modal.Button size="md" variant="neutral">
-        <IconLabel imageUri={InterfaceIcons.Trade} text="VIEW DASHBOARD" className="" />
+        <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" className="" />
       </Modal.Button>
       <Modal.Content>
         <div className="grid grid-cols-8 gap-1">
@@ -107,21 +87,10 @@ export const Dashboard = () => {
                 </ParentSize>
               </div>
             </SecondaryCard>
-            <SecondaryCard className="hidden justify-between gap-2 p-2 lg:grid lg:grid-cols-3">
-              <KPICard title="SPENT TO DATE" value={totalInvestment} />
-              <KPICard title="EARNED TO DATE" value={totalEarned} />
-              <KPICard title="NET TOTAL (SELL NOW)" value={netTotalPotential} />
-            </SecondaryCard>
+            <KPICards />
           </div>
           <div className="col-span-2 flex flex-col gap-2">
-            <SecondaryCard>
-              <p className="mb-2 text-xs">MARKET RATES</p>
-              <EmpireDetails hideGraph hideTitle />
-            </SecondaryCard>
-            <SecondaryCard className="hidden lg:flex">
-              <p className="mb-2 text-xs">YOUR PORTFOLIO</p>
-              <Account hideAccountBalance />
-            </SecondaryCard>
+            <Sidebar />
           </div>
         </div>
       </Modal.Content>
@@ -129,25 +98,92 @@ export const Dashboard = () => {
   );
 };
 
-interface KPICardProps {
-  title: string;
-  value: bigint;
-  percentageChange?: bigint;
-}
+const Sidebar: React.FC = () => {
+  const windowWidth = useWindowDimensions().width;
+  const isMobile = windowWidth < 1024;
+  if (isMobile) {
+    return (
+      <Tabs defaultIndex={0}>
+        <div className="mb-1 flex flex-col gap-[1px]">
+          <Tabs.Button index={0} className="text-xs">
+            Market Rates
+          </Tabs.Button>
+          <Tabs.Button index={1}>Portfolio</Tabs.Button>
+          <Tabs.Button index={2}>Earnings</Tabs.Button>
+        </div>
+        <Tabs.Pane index={0}>
+          <EmpireDetails hideGraph hideTitle hidePlanets />
+        </Tabs.Pane>
+        <Tabs.Pane index={1}>
+          <Account hideAccountBalance />
+        </Tabs.Pane>
+        <Tabs.Pane index={2}>
+          <KPICards column size="sm" />
+        </Tabs.Pane>
+      </Tabs>
+    );
+  }
 
-const KPICard: React.FC<KPICardProps> = ({ title, value, percentageChange }) => {
   return (
-    <div className="flex min-w-52 flex-col rounded-box bg-black/10 p-2">
-      <h3 className="text-gray-4000 mb-1 text-xs">{title}</h3>
+    <>
+      <SecondaryCard>
+        <p className="mb-2 text-xs">MARKET RATES</p>
+        <EmpireDetails hideGraph hideTitle />
+      </SecondaryCard>
+      <SecondaryCard>
+        <p className="mb-2 text-xs">YOUR PORTFOLIO</p>
+        <Account hideAccountBalance />
+      </SecondaryCard>
+    </>
+  );
+};
 
-      <Price wei={value} className={cn("text-lg font-bold", value > 0 ? "text-success" : "text-error")} />
-      <Price wei={value} forceBlockchainUnits className="text-sm opacity-50" />
+const KPICards: React.FC<{ column?: boolean; size?: "sm" | "lg" }> = ({ column = false, size = "lg" }) => {
+  const { playerAccount } = useAccountClient();
+  const {
+    tables,
+    utils: { getPointPrice },
+  } = useCore();
+  const { pot } = usePot();
+  const points = usePoints(playerAccount.entity);
+  const empires = useEmpires();
+  const time = tables.Time.use()?.value;
+  const pointCosts = useMemo(
+    () =>
+      Array.from(empires.entries()).map(([empire]) =>
+        getPointPrice(empire, Number(formatEther(points[empire].playerPoints))),
+      ),
+    [empires, points, time],
+  );
 
-      {percentageChange !== undefined && (
-        <p className={cn("text-sm", percentageChange >= 0 ? "text-success" : "text-error")}>
-          {(Number(percentageChange) / 100).toFixed(1)}%
-        </p>
-      )}
-    </div>
+  const earnings = useMemo(() => {
+    const biggestReward = Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
+      (acc, [empire, { playerPoints }]) => {
+        if (playerPoints > acc.points) {
+          return { empire: Number(empire) as EEmpire, points: playerPoints };
+        }
+        return acc;
+      },
+      { empire: DEFAULT_EMPIRE, points: 0n },
+    );
+
+    const playerPoints = points[biggestReward.empire].playerPoints;
+    const empirePoints = points[biggestReward.empire].empirePoints;
+
+    return !!empirePoints ? (pot * playerPoints) / empirePoints : 0n;
+  }, [points, pot]);
+  // Calculate KPIs
+  const totalInvestment = tables.Value_PlayersMap.use(playerAccount.entity)?.loss ?? 0n;
+  const totalEarned = tables.Value_PlayersMap.use(playerAccount.entity)?.gain ?? 0n;
+  const netTotalPotential = earnings - totalInvestment;
+
+  return (
+    <SecondaryCard
+      className={cn("hidden justify-between gap-2 p-2 lg:grid lg:grid-cols-3", column && "flex flex-col gap-2")}
+    >
+      <KPICard title="SPENT TO DATE" value={totalInvestment} size={size} />
+      <KPICard title="EARNED TO DATE" value={totalEarned} size={size} />
+      <KPICard title="NET TOTAL" value={netTotalPotential} size={size} />
+    </SecondaryCard>
   );
 };

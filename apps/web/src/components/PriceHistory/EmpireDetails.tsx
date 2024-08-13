@@ -4,6 +4,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Badge } from "@/components/core/Badge";
 import { SmallHistoricalPointGraph } from "@/components/PriceHistory/SmallHistoricalPointGraph";
 import { Price } from "@/components/shared/Price";
 import { useEmpires } from "@/hooks/useEmpires";
@@ -14,7 +15,11 @@ import { cn } from "@/util/client";
 // TODO: Change window size to use time instead of # of updates
 const WINDOW_SIZE = 25;
 
-const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ empire, hideGraph = false }) => {
+const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean; hidePlanets?: boolean }> = ({
+  empire,
+  hideGraph = false,
+  hidePlanets = false,
+}) => {
   const { tables } = useCore();
   const {
     ROOT: { sprite },
@@ -44,30 +49,35 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean }> = ({ em
   const crownUrl = sprite.getSprite("Crown");
 
   return (
-    <div className="flex flex-col justify-center rounded-box text-center text-white">
-      <div className="flex items-center justify-between gap-3">
-        <div className="relative flex h-10 items-center justify-center lg:h-16">
-          <p className="text-md absolute left-1/2 top-1/2 h-4 w-5 -translate-x-1/2 -translate-y-1/2 rounded-md bg-black text-xs text-accent opacity-75">
-            {planetCount}
-          </p>
-          <img src={spriteUrl} className="w-8 lg:w-10" />
-        </div>
+    <div className="flex h-9 items-center justify-center gap-3 text-white lg:h-14">
+      <img src={spriteUrl} className="w-6 lg:w-10" />
 
-        <div className={cn("flex flex-col items-start")}>
-          <Price wei={sellPrice} />
-
-          <p className="flex items-center gap-1 text-xs opacity-75">
+      <div className={cn("flex flex-col-reverse justify-start text-left", hidePlanets && "!flex-row gap-3")}>
+        <div className="flex items-center gap-1 text-xs opacity-75">
+          <Badge variant="ghost" className="gap-1 px-1">
             <img src={crownUrl} className="w-4" />
             <span>{citadelCount}</span>
-          </p>
+          </Badge>
+
+          {!hidePlanets && (
+            <Badge variant="ghost" className="gap-1 px-1">
+              <img src={spriteUrl} className="w-3" />
+              <span>{planetCount}</span>
+            </Badge>
+          )}
         </div>
-        {!hideGraph && <SmallHistoricalPointGraph width={40} height={25} empire={empire} windowSize={WINDOW_SIZE} />}
+        <Price wei={sellPrice} />
       </div>
+      {!hideGraph && <SmallHistoricalPointGraph width={40} height={25} empire={empire} windowSize={WINDOW_SIZE} />}
     </div>
   );
 };
 
-export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean }> = ({ hideGraph, hideTitle }) => {
+export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean; hidePlanets?: boolean }> = ({
+  hideGraph,
+  hideTitle,
+  hidePlanets,
+}) => {
   const empires = useEmpires();
   const { tables } = useCore();
   const time = tables.BlockNumber.use()?.value ?? 0n;
@@ -97,10 +107,10 @@ export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean 
     });
   }, [empires, tables, time]);
   return (
-    <div className="flex flex-col items-start gap-1 overflow-y-auto text-center">
+    <div className="flex flex-col items-start overflow-y-auto text-center">
       {!hideTitle && <p className="text-xs opacity-70">Empires</p>}
       {sortedEmpires.map((empire, index) => (
-        <_EmpireDetails key={index} empire={empire} hideGraph={hideGraph} />
+        <_EmpireDetails key={index} empire={empire} hideGraph={hideGraph} hidePlanets={hidePlanets} />
       ))}
     </div>
   );

@@ -10,9 +10,9 @@ export const Pot: React.FC<PotProps> = ({ className }) => {
   const { pot } = usePot();
 
   return (
-    <div className={cn("text-center", className)}>
-      <h2 className="font-semibold">Pot</h2>
+    <div className={cn(className)}>
       <Price wei={pot} className="text-2xl text-accent" />
+      <h2 className="ml-1 font-semibold opacity-70">Pot</h2>
     </div>
   );
 };

@@ -92,11 +92,12 @@ export const GameHUD = () => {
       <HUD pad>
         <HUD.TopLeft>
           <PriceHistory />
+          <Pot className="lg:hidden" />
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
           {DEV && <Cheatcodes className="hidden lg:block" />}
-          <Pot className="lg:hidden" />
+          <Dashboard />
         </HUD.TopMiddle>
 
         <HUD.TopRight className="flex flex-col gap-2">
@@ -113,7 +114,6 @@ export const GameHUD = () => {
 
         <HUD.BottomMiddle>
           <div className="flex flex-col gap-2">
-            <Dashboard />
             <TimeLeft />
           </div>
         </HUD.BottomMiddle>

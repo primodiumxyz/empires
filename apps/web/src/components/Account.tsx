@@ -98,7 +98,7 @@ const EmpirePoints = ({
   return (
     <div
       className={cn(
-        "flex h-10 w-full items-center gap-5 border-none py-1 lg:h-14",
+        "flex h-9 w-full items-center gap-5 border-none py-1 lg:h-14",
         justifyStart ? "justify-start" : "justify-between",
       )}
     >

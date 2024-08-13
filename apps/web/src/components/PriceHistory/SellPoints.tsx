@@ -53,8 +53,7 @@ export const SellPoints = () => {
 
   return (
     <div className="flex w-full gap-2">
-      <SecondaryCard className="bg-black/10">
-        <p className="text-left text-xs opacity-50">EMPIRE</p>
+      <SecondaryCard className="justify-center bg-black/10">
         <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44" variant="topLeft">
           {Array.from(empires.entries()).map(([key, empire]) => (
             <Dropdown.Item key={key} value={key}>
@@ -69,7 +68,7 @@ export const SellPoints = () => {
           onChange={handleInputChange}
           min={0}
           max={Number(formatEther(playerPoints))}
-          className="w-32 place-self-center"
+          className="mt-4 w-32 place-self-center"
         />
 
         <Badge size="sm" variant="primary" className="p-4 lg:badge-lg">
