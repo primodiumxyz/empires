@@ -35,7 +35,7 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
       world: systemsWorld,
       onChange: ({ properties: { current } }) => {
         const currTurn = current?.value ?? 1n;
-        const empireCount = tables.P_GameConfig.use()?.empireCount ?? 0;
+        const empireCount = tables.P_GameConfig.get()?.empireCount ?? 0;
 
         allEmpires.slice(0, empireCount).forEach((empire) => {
           updateMagnetForEmpire(empire, currTurn);
