@@ -17,6 +17,9 @@ export const Animations = {
   ConquerBlue: "conquer/blue",
   ConquerGreen: "conquer/green",
   ConquerRed: "conquer/red",
+  ConquerYellow: "conquer/yellow",
+  ConquerPink: "conquer/pink",
+  ConquerPurple: "conquer/purple",
 
   //DESTROYER ARC
   DestroyerArcUpperRed: "destroyer/upper/red",

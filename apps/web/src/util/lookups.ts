@@ -28,8 +28,8 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
   },
   [EEmpire.Blue]: {
     name: "Blue",
-    textColor: "text-blue-400",
-    chartColor: "rgba(0, 0, 255, .75)",
+    textColor: "text-blue-300",
+    chartColor: "rgba(100, 149, 237, .75)",
     icons: { magnet: InterfaceIcons.BlueMagnet },
     sprites: { planet: "PlanetBlue" },
   },
@@ -50,7 +50,8 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
   [EEmpire.Purple]: {
     name: "Purple",
     textColor: "text-purple-400",
-    chartColor: "rgba(128, 0, 128, .75)",
+
+    chartColor: "rgba(160, 32, 240, .75)",
     icons: { magnet: InterfaceIcons.GreenMagnet },
     sprites: { planet: "PlanetPurple" },
   },

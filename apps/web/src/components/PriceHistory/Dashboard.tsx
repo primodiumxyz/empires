@@ -20,7 +20,7 @@ import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { cn } from "@/util/client";
-import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const Dashboard = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
@@ -140,42 +140,12 @@ const Sidebar: React.FC = () => {
 
 const KPICards: React.FC<{ column?: boolean; size?: "sm" | "lg" }> = ({ column = false, size = "lg" }) => {
   const { playerAccount } = useAccountClient();
-  const {
-    tables,
-    utils: { getPointPrice },
-  } = useCore();
-  const { pot } = usePot();
-  const points = usePoints(playerAccount.entity);
-  const empires = useEmpires();
-  const time = tables.Time.use()?.value;
-  const pointCosts = useMemo(
-    () =>
-      Array.from(empires.entries()).map(([empire]) =>
-        getPointPrice(empire, Number(formatEther(points[empire].playerPoints))),
-      ),
-    [empires, points, time],
-  );
+  const { tables } = useCore();
 
-  const earnings = useMemo(() => {
-    const biggestReward = Object.entries(points).reduce<{ empire: EEmpire; points: bigint }>(
-      (acc, [empire, { playerPoints }]) => {
-        if (playerPoints > acc.points) {
-          return { empire: Number(empire) as EEmpire, points: playerPoints };
-        }
-        return acc;
-      },
-      { empire: DEFAULT_EMPIRE, points: 0n },
-    );
-
-    const playerPoints = points[biggestReward.empire].playerPoints;
-    const empirePoints = points[biggestReward.empire].empirePoints;
-
-    return !!empirePoints ? (pot * playerPoints) / empirePoints : 0n;
-  }, [points, pot]);
   // Calculate KPIs
   const totalInvestment = tables.Value_PlayersMap.use(playerAccount.entity)?.loss ?? 0n;
   const totalEarned = tables.Value_PlayersMap.use(playerAccount.entity)?.gain ?? 0n;
-  const netTotalPotential = earnings - totalInvestment;
+  const netTotal = totalEarned - totalInvestment;
 
   return (
     <SecondaryCard
@@ -183,7 +153,7 @@ const KPICards: React.FC<{ column?: boolean; size?: "sm" | "lg" }> = ({ column =
     >
       <KPICard title="SPENT TO DATE" value={totalInvestment} size={size} />
       <KPICard title="EARNED TO DATE" value={totalEarned} size={size} />
-      <KPICard title="NET TOTAL" value={netTotalPotential} size={size} />
+      <KPICard title="NET" value={netTotal} size={size} />
     </SecondaryCard>
   );
 };
