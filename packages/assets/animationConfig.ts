@@ -76,6 +76,37 @@ export const AnimationConfig: Animation[] = [
     prefix: "sprites/magnet/red/Magnet_Red_",
     suffix: ".png",
   },
+  {
+    key: "magnet/yellow",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    startFrame: 1,
+    endFrame: 8,
+    repeat: 0,
+    prefix: "sprites/magnet/yellow/Magnet_Yellow",
+    suffix: ".png",
+  },
+  {
+    key: "magnet/pink",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    startFrame: 1,
+    endFrame: 8,
+    repeat: 0,
+    prefix: "sprites/magnet/pink/Magnet_Pink",
+    suffix: ".png",
+  },
+  {
+    key: "magnet/purple",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    startFrame: 1,
+    endFrame: 8,
+    repeat: 0,
+    prefix: "sprites/magnet/purple/Magnet_Purple",
+    suffix: ".png",
+  },
+
   /* ----------------------------------- VFX ---------------------------------- */
   {
     key: "conquer/blue",

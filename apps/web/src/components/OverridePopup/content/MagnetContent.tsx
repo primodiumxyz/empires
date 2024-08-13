@@ -14,7 +14,6 @@ import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
-import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
 export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }) => {
@@ -63,14 +62,14 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
   return (
     <div className="flex w-full flex-col items-center">
       <div className="flex flex-row items-center gap-2">
-        <div className="flex flex-row gap-2">
+        <div className="grid grid-cols-3 gap-2">
           {magnets.map((magnet, index) => (
             <Button
               key={index}
+              variant={empire === magnet.empire ? "secondary" : "neutral"}
               shape="square"
               size="sm"
               disabled={magnet.exists}
-              className={cn(empire === magnet.empire && "border border-accent")}
               onClick={() => setEmpire(magnet.empire)}
             >
               <IconLabel imageUri={EmpireEnumToConfig[magnet.empire].icons.magnet} />

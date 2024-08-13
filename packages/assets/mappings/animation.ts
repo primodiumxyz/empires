@@ -10,6 +10,9 @@ export const Animations = {
   MagnetBlue: "magnet/blue",
   MagnetGreen: "magnet/green",
   MagnetRed: "magnet/red",
+  MagnetYellow: "magnet/yellow",
+  MagnetPink: "magnet/pink",
+  MagnetPurple: "magnet/purple",
 
   //VFX --------------------------
 
