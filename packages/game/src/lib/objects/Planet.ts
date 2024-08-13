@@ -6,8 +6,8 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { allEmpires, DepthLayers } from "@game/lib/constants/common";
 import {
   EmpireToConquerAnimationKeys,
-  EmpireToDestroyerArcAnimationKeys,
   EmpireToHexSpriteKeys,
+  EmpireToMovementAnimationKeys,
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
@@ -283,9 +283,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
     //lower
+    console.log("moving", EmpireToMovementAnimationKeys[this.empireId]);
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][0] ?? "DestroyerArcLowerRed",
+      EmpireToMovementAnimationKeys[this.empireId] ?? "MovementRed",
       {
         rotation: angle.radian,
         depth: DepthLayers.Planet + 1,
@@ -295,22 +296,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         offset: {
           x: -12,
           y: 10,
-        },
-        scale: 1.3,
-      },
-    );
-    //upper
-    this._scene.fx.emitVfx(
-      { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][1] ?? "DestroyerArcUpperRed",
-      {
-        rotation: angle.radian + 2 * Math.PI,
-        depth: DepthLayers.Planet + 2,
-        originX: 0,
-        originY: 1,
-        offset: {
-          x: -12,
-          y: 15,
         },
         scale: 1.3,
       },

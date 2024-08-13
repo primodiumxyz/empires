@@ -21,13 +21,12 @@ export const Animations = {
   ConquerPink: "conquer/pink",
   ConquerPurple: "conquer/purple",
 
-  //DESTROYER ARC
-  DestroyerArcUpperRed: "destroyer/upper/red",
-  DestroyerArcUpperGreen: "destroyer/upper/green",
-  DestroyerArcUpperBlue: "destroyer/upper/blue",
-  DestroyerArcLowerRed: "destroyer/lower/red",
-  DestroyerArcLowerBlue: "destroyer/lower/blue",
-  DestroyerArcLowerGreen: "destroyer/lower/green",
+  MovementRed: "movement/red",
+  MovementGreen: "movement/green",
+  MovementBlue: "movement/blue",
+  MovementYellow: "movement/yellow",
+  MovementPink: "movement/pink",
+  MovementPurple: "movement/purple",
 
   // Waves
   MagnetWaves: "waves",

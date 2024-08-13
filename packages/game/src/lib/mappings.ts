@@ -53,20 +53,17 @@ export const EmpireToPendingAnimationKeys: Record<EEmpire, AnimationKeys | undef
   [EEmpire.LENGTH]: undefined,
 };
 
-export const EmpireToDestroyerArcAnimationKeys: Record<
-  EEmpire,
-  [lower: AnimationKeys | undefined, upper: AnimationKeys | undefined]
-> = {
-  [EEmpire.Red]: ["DestroyerArcLowerRed", "DestroyerArcUpperRed"],
-  [EEmpire.Green]: ["DestroyerArcLowerGreen", "DestroyerArcUpperGreen"],
-  [EEmpire.Blue]: ["DestroyerArcLowerBlue", "DestroyerArcUpperBlue"],
-  [EEmpire.Yellow]: ["DestroyerArcLowerBlue", "DestroyerArcUpperBlue"],
-  [EEmpire.Pink]: ["DestroyerArcLowerBlue", "DestroyerArcUpperBlue"],
-  [EEmpire.Purple]: ["DestroyerArcLowerBlue", "DestroyerArcUpperBlue"],
-  [EEmpire.Orange]: [undefined, undefined],
-  [EEmpire.Black]: [undefined, undefined],
-  [EEmpire.White]: [undefined, undefined],
-  [EEmpire.LENGTH]: [undefined, undefined],
+export const EmpireToMovementAnimationKeys: Record<EEmpire, AnimationKeys | undefined> = {
+  [EEmpire.Red]: "MovementRed",
+  [EEmpire.Green]: "MovementGreen",
+  [EEmpire.Blue]: "MovementBlue",
+  [EEmpire.Yellow]: "MovementYellow",
+  [EEmpire.Pink]: "MovementPink",
+  [EEmpire.Purple]: "MovementPurple",
+  [EEmpire.Orange]: undefined,
+  [EEmpire.Black]: undefined,
+  [EEmpire.White]: undefined,
+  [EEmpire.LENGTH]: undefined,
 };
 
 export const EmpireToMagnetAnimationKeys: Record<EEmpire, AnimationKeys | undefined> = {
