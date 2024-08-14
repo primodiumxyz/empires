@@ -18,8 +18,6 @@ const dropdownVariants = cva(
       },
       variant: {
         bottomLeft: "origin-top-right right-0",
-        topLeft: "origin-top-left left-0",
-        topRight: "origin-top-right right-0",
         bottomRight: "",
       },
     },

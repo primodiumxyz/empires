@@ -21,7 +21,6 @@ function generateContent() {
   const center = { q: Math.floor((planetMap.width - 1) / 2), r: Math.floor((planetMap.height - 1) / 2) };
   const planets = planetMap.layers[0].data;
   const citadelPlanets = planetMap.layers[1].data;
-  console.log(planets);
 
   return planets
     .map((_empire, i) => {
@@ -32,7 +31,6 @@ function generateContent() {
       const coord = oddrToAxial({ row: r, col: q });
 
       const empireName = EmpireNames[empire] ?? "NULL";
-      console.log(empire, empireName);
       const isCitadel = citadelPlanets[i] === 5;
 
       return `

@@ -113,9 +113,7 @@ export const GameHUD = () => {
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle>
-          <div className="flex flex-col gap-2">
-            <TimeLeft />
-          </div>
+          <TimeLeft />
         </HUD.BottomMiddle>
 
         <HUD.Center className="relative z-50">
