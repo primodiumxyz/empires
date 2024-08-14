@@ -14,30 +14,29 @@ import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
-import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }) => {
   const [inputValue, setInputValue] = useState("1");
-  const [empire, setEmpire] = useState<EEmpire | undefined>(undefined);
+  const [empire, setEmpire] = useState<EEmpire>(EEmpire.LENGTH);
   const { tables } = useCore();
   const { placeMagnet } = useContractCalls();
 
-  const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire ?? DEFAULT_EMPIRE, BigInt(inputValue));
+  const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
 
   const onPlaceMagnet = useCallback(async () => {
-    await placeMagnet(empire ?? DEFAULT_EMPIRE, planetId, BigInt(inputValue), placeMagnetPriceWei);
+    await placeMagnet(empire, planetId, BigInt(inputValue), placeMagnetPriceWei);
     setInputValue("1");
     tables.SelectedPlanet.remove();
   }, [empire, planetId, inputValue, placeMagnetPriceWei, placeMagnet]);
 
   const pointLockPct = tables.P_MagnetConfig.useWithKeys()?.lockedPointsPercent ?? 0n;
-  const empirePoints = tables.Empire.useWithKeys({ id: empire ?? DEFAULT_EMPIRE })?.pointsIssued ?? 0n;
+  const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pointsLocked = (empirePoints * pointLockPct) / 10000n;
   const {
     playerAccount: { address, entity },
   } = useAccountClient();
-  const playerPoints =
-    tables.Value_PointsMap.useWithKeys({ empireId: empire ?? DEFAULT_EMPIRE, playerId: entity })?.value ?? 0n;
+  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
   const playerBalance = useBalance(address).value ?? 0n;
   const empires = useEmpires();
 
@@ -82,7 +81,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
         </div>
       </div>
 
-      {!!empire && (
+      {empire !== EEmpire.LENGTH && (
         <div className="flex">
           <div className="flex flex-col items-center justify-center">
             {message && <p className="px-2 text-xs text-error">{message}</p>}
@@ -106,7 +105,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
           </div>
         </div>
       )}
-      {!empire && <p className="text-xs opacity-50">Select an empire to place a magnet</p>}
+      {empire === EEmpire.LENGTH && <p className="text-xs opacity-50">Select an empire to place a magnet</p>}
     </div>
   );
 };

@@ -501,7 +501,8 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
-      const turn = tables.Turn.get()?.empire ?? DEFAULT_EMPIRE;
+      const turn = tables.Turn.get()?.empire;
+      if (!turn) throw new Error("No empire in turn");
       const empirePlanets = core.utils.getEmpirePlanets(turn);
       const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
       const updateWorldCallParams = {
