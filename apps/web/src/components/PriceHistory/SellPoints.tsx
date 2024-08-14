@@ -54,7 +54,7 @@ export const SellPoints = () => {
   return (
     <div className="flex w-full gap-2">
       <SecondaryCard className="justify-center bg-black/10">
-        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44" variant="topLeft">
+        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44">
           {Array.from(empires.entries()).map(([key, empire]) => (
             <Dropdown.Item key={key} value={key}>
               <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
@@ -73,7 +73,7 @@ export const SellPoints = () => {
 
         <Badge size="sm" variant="primary" className="p-4 lg:badge-lg">
           {message ? (
-            <span className="text-[0.6rem] text-white">{message}</span>
+            <span className="text-center text-[0.6rem] text-white">{message}</span>
           ) : (
             <Price wei={pointsToWei} className="text-sm text-white lg:!text-lg" />
           )}
