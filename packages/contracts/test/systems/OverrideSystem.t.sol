@@ -2,15 +2,18 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, Turn, P_GameConfig, Planet, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire } from "codegen/index.sol";
+import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, Turn, P_GameConfig, Planet, PlanetData, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire, ShieldEater, P_ShieldEaterConfig } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
+import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { addressToId, coordToId } from "src/utils.sol";
+import { CoordData } from "src/Types.sol";
 
 contract OverrideSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -581,5 +584,67 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__stunCharge{ value: cost }(planetId, 5);
     console.log("charge after stunCharge", Planet_TacticalStrike.get(planetId).charge);
     assertEq(Planet_TacticalStrike.get(planetId).charge, 0);
+  }
+
+  /**************************************************************************
+   * Shield Eater
+   *************************************************************************/
+
+  function testDetonateShieldEaterCharged() public {
+    uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 2;
+
+    vm.startPrank(creator);
+    LibShieldEater.initialize();
+
+    for (uint256 i = 0; i < chargeTime; i++) {
+      LibShieldEater.update();
+    }
+
+    PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
+    CoordData memory current = CoordData(currentPlanet.q, currentPlanet.r);
+    planetId = coordToId(current.q, current.r);
+
+    CoordData memory neighbor = CoordData(currentPlanet.q + 1, currentPlanet.r);
+    bytes32 neighborId = coordToId(neighbor.q, neighbor.r);
+    uint256 dirAttempts = 1;
+
+    while (!Planet.getIsPlanet(neighborId)) {
+      if (dirAttempts > 6) {
+        break;
+      }
+      neighbor = LibShieldEater.rotateTargetDirection(neighbor);
+      dirAttempts++;
+    }
+    neighborId = coordToId(neighbor.q, neighbor.r);
+
+    uint256 planetShields = Planet.getShieldCount(planetId);
+    uint256 neighborShields = Planet.getShieldCount(neighborId);
+
+    uint256 planetDamage = P_ShieldEaterConfig.getDetonateCenterDamage();
+    uint256 neighborDamage = P_ShieldEaterConfig.getDetonateAdjacentDamage();
+
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+    world.Empires__detonateShieldEater{ value: cost }();
+
+    uint256 expectedPlanetShields = planetShields - ((planetShields * planetDamage) / 10000);
+    uint256 expectedNeighborShields = neighborShields - ((neighborShields * neighborDamage) / 10000);
+
+    uint256 planetShieldsAfter = Planet.getShieldCount(planetId);
+    uint256 neighborShieldsAfter = Planet.getShieldCount(neighborId);
+
+    assertEq(expectedPlanetShields, planetShieldsAfter, "Center Planet should have correct shields");
+    assertEq(expectedNeighborShields, neighborShieldsAfter, "Neighbor Planet should have correct shields");
+  }
+
+  function testDetonateShieldEaterNotCharged() public {
+    vm.startPrank(creator);
+    LibShieldEater.initialize();
+
+    planetId = ShieldEater.getCurrentPlanet();
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+    vm.expectRevert("[OverrideSystem] ShieldEater not fully charged");
+    world.Empires__detonateShieldEater{ value: cost }();
   }
 }

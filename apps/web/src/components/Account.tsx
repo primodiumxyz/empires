@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { UserIcon } from "@heroicons/react/24/solid";
-import { usePrivy } from "@privy-io/react-auth";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -10,7 +9,6 @@ import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
-import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
@@ -20,17 +18,9 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
   hideAccountBalance = false,
   justifyStart = false,
 }) => {
-  const { logout } = usePrivy();
-  const { cancelBurner, usingBurner } = useBurnerAccount();
-
   const {
     playerAccount: { address, entity },
   } = useAccountClient();
-
-  const handleLogout = async () => {
-    if (usingBurner) cancelBurner();
-    else await logout();
-  };
 
   const balance = useBalance(address).value ?? 0n;
   const empires = useEmpires();

@@ -82,7 +82,7 @@ function createPlanets() {
     shipCount: 0,
     shieldCount: 0,
     empireId: EEmpire.Red,
-    goldCount: 0
+    goldCount: 0,
   });
 
   ${str}

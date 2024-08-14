@@ -45,6 +45,12 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         createShipBoostIncrease: 0n,
         killShipBoostCostDecrease: 0n,
       },
+      P_ShieldEaterConfig: {
+        visitShieldDamage: 1n,
+        detonateCenterDamage: scaleMultiplier(1.00),
+        detonateAdjacentDamage: scaleMultiplier(0.20),
+        detonationThreshold: 8n,
+      }
     },
   },
 
@@ -134,6 +140,32 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         startOverrideCost: BigInt(POINTS_UNIT * 0.0002),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00008),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.0002),
+      },
+    },
+  },
+
+  DetonateShieldEaterOverride: {
+    keys: [{ [EOverride.DetonateShieldEater]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: false,
+        minOverrideCost: 0n,
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00001),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
+      },
+    },
+  },
+
+  AirdropGoldOverride: {
+    keys: [{ [EOverride.AirdropGold]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: true,
+        minOverrideCost: 0n,
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
       },
     },
   },

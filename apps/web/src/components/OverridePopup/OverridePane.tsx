@@ -33,8 +33,8 @@ export const Buttons: React.FC = () => {
   return (
     <div className="w-54 relative flex h-44 w-80 items-center justify-center">
       <div className="relative z-10 translate-y-12">
-        <OverrideButton index={4} icon="Expansion" axialCoord={{ q: -1, r: -1 }} tooltip="Shield Eater" />
-        <OverrideButton index={2} icon="RedMagnet" axialCoord={{ q: 2, r: -1 }} tooltip="Magnets" />
+        <OverrideButton index={4} icon="ShieldEater" axialCoord={{ q: -1, r: -1 }} tooltip="Shield Eater" />
+        <OverrideButton index={2} icon="Magnet" axialCoord={{ q: 2, r: -1 }} tooltip="Magnets" />
         <OverrideButton index={3} icon="Shard" axialCoord={{ q: 1, r: 0 }} tooltip="Overheat" />
         <OverrideButton index={0} icon="Fleet" axialCoord={{ q: -1, r: 0 }} tooltip="Ships" />
         <OverrideButton index={1} icon="Defense" axialCoord={{ q: 0, r: 0 }} tooltip="Shields" />

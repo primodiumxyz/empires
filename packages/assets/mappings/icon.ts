@@ -27,6 +27,7 @@ import Grace from "../icons/UI_Grace.png?url";
 import GreenMagnet from "../icons/UI_GreenMagnet.png?url";
 import Housing from "../icons/UI_Housing.png?url";
 import Leaderboard from "../icons/UI_Leaderboard.png?url";
+import Magnet from "../icons/UI_Magnet.png?url";
 import Navigator from "../icons/UI_Navigator.png?url";
 import NotAllowed from "../icons/UI_NotAllowed.png?url";
 import Objective from "../icons/UI_Objective.png?url";
@@ -39,6 +40,7 @@ import Reports from "../icons/UI_Reports.png?url";
 import Return from "../icons/UI_Return.png?url";
 import Settings from "../icons/UI_Settings.png?url";
 import Shard from "../icons/UI_Shard.png?url";
+import ShieldEater from "../icons/UI_ShieldEater.png?url";
 import EnemyFleet from "../icons/UI_Ship_Enemy.png?url";
 import Spectate from "../icons/UI_Spectate.png?url";
 import Starmap from "../icons/UI_Starmap.png?url";
@@ -79,6 +81,7 @@ export const InterfaceIcons = {
   Grace,
   Housing,
   Leaderboard,
+  Magnet,
   Navigator,
   NotAllowed,
   Objective,
@@ -88,6 +91,7 @@ export const InterfaceIcons = {
   Return,
   Settings,
   Shard,
+  ShieldEater,
   Spectate,
   Starmap,
   Strength,
