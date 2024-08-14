@@ -26,7 +26,7 @@ type WithTransactionStatusOptions = {
   onComplete?: () => void;
 };
 
-const baseOptions = { isLoading: false, autoClose: 5000 };
+const baseOptions = { isLoading: false, autoClose: 3000 };
 export const withTransactionStatus = (fn: () => Promise<boolean>, toastOptions: WithTransactionStatusOptions = {}) => {
   const loadingMsg = toastOptions.loading ?? "Executing transaction...";
   const successMsg = toastOptions.success ?? "Transaction executed successfully";
