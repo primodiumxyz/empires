@@ -12,7 +12,7 @@ import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
   const planet = tables.Planet.use(entity);
-  const planetEmpire = planet?.empireId ?? (0 as EEmpire);
+  const planetEmpire = planet?.empireId ?? EEmpire.NULL;
 
   const shieldEaterPriceWei = 0n;
   const shieldEaterPointsReceived = useOverridePointsReceived(EOverride.LENGTH, planetEmpire, shieldEaterPriceWei);

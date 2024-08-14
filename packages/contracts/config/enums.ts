@@ -1,5 +1,6 @@
 export enum EEmpire {
-  Red = 1,
+  NULL,
+  Red,
   Blue,
   Green,
   Yellow,
@@ -56,7 +57,7 @@ export enum ERoutine {
 }
 
 export const MUDEnums = {
-  EEmpire: enumToArray(EEmpire),
+  EEmpire: enumToArray(EEmpire, { skipNull: true }),
   EOrigin: enumToArray(EOrigin),
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
@@ -64,6 +65,9 @@ export const MUDEnums = {
   EOverride: enumToArray(EOverride),
 };
 
-function enumToArray(enumObj: object): [string] {
-  return ["NULL", ...Object.keys(enumObj).filter((key) => isNaN(Number(key)))] as [string];
+function enumToArray(enumObj: object, options?: { skipNull?: boolean }): [string] {
+  if (options?.skipNull) {
+    return [...Object.keys(enumObj).filter((key) => isNaN(Number(key)))] as [string];
+  }
+  return ["NULL", ...Object.keys(enumObj)] as [string];
 }

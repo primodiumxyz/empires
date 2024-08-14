@@ -21,7 +21,7 @@ export const ChargeContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { charge, maxCharge, percent } = useCharge(entity);
   const { gameOver } = useWinningEmpire();
   const planet = tables.Planet.use(entity);
-  const planetEmpire = planet?.empireId ?? (0 as EEmpire);
+  const planetEmpire = planet?.empireId ?? EEmpire.NULL;
   const [inputValue, setInputValue] = useState("1");
   const boostChargePriceWei = useOverrideCost(EOverride.BoostCharge, planetEmpire, BigInt(inputValue));
   const stunChargePriceWei = useOverrideCost(EOverride.StunCharge, planetEmpire, BigInt(inputValue));

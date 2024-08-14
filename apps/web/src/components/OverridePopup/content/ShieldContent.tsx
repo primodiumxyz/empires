@@ -18,7 +18,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { addShield, removeShield } = useContractCalls();
   const { gameOver } = useWinningEmpire();
   const planet = tables.Planet.use(entity);
-  const planetEmpire = planet?.empireId ?? (0 as EEmpire);
+  const planetEmpire = planet?.empireId ?? EEmpire.NULL;
   const [inputValue, setInputValue] = useState("1");
   const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
   const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));

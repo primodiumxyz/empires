@@ -12,8 +12,15 @@ export type EmpireConfig = {
 };
 
 export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
+  [EEmpire.NULL]: {
+    name: "None",
+    textColor: "text-gray-400",
+    chartColor: "rgba(128, 128, 128, .75)",
+    icons: { magnet: "" },
+    sprites: { planet: "Gold" },
+  },
   [EEmpire.LENGTH]: {
-    name: "Length",
+    name: "None",
     textColor: "text-gray-400",
     chartColor: "rgba(128, 128, 128, .75)",
     icons: { magnet: "" },

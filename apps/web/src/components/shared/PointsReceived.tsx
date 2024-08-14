@@ -16,6 +16,7 @@ export const PointsReceived = ({
   inline?: boolean;
   explicit?: boolean;
 }) => {
+  if (points.targetEmpire === EEmpire.NULL) return null;
   const targetEmpireName = EmpireEnumToConfig[points.targetEmpire].name;
 
   return (

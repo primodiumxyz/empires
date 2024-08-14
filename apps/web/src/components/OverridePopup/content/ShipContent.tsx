@@ -18,7 +18,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { createShip, removeShip } = useContractCalls();
   const { gameOver } = useWinningEmpire();
   const planet = tables.Planet.use(entity);
-  const planetEmpire = planet?.empireId ?? (0 as EEmpire);
+  const planetEmpire = planet?.empireId ?? EEmpire.NULL;
   const [inputValue, setInputValue] = useState("1");
   const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
   const killShipPriceWei = useOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
