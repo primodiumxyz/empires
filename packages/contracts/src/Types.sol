@@ -13,3 +13,8 @@ struct RoutineThresholds {
   bytes32 supportTargetId;
   bytes32 attackTargetId;
 }
+
+struct CoordData {
+  int128 q;
+  int128 r;
+}
