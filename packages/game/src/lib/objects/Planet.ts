@@ -282,8 +282,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
-    //lower
-    console.log("moving", EmpireToMovementAnimationKeys[this.empireId]);
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 25 },
       EmpireToMovementAnimationKeys[this.empireId] ?? "MovementRed",

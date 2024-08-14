@@ -137,7 +137,8 @@ contract UpdateSystemTest is PrimodiumTest {
   }
 
   function _getEndTurn(uint256 turnDuration) internal view returns (uint256) {
-    return block.number + (turnDuration * 3) * P_GameConfig.getTurnLengthBlocks();
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    return block.number + (turnDuration * empireCount) * P_GameConfig.getTurnLengthBlocks();
   }
 
   function testMagnetRemoval() public {

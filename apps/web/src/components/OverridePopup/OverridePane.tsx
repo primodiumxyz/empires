@@ -40,7 +40,7 @@ export const Buttons: React.FC = () => {
         <OverrideButton index={1} icon="Defense" axialCoord={{ q: 0, r: 0 }} tooltip="Shields" />
       </div>
       <div className="absolute left-1/2 top-12 z-0 w-fit -translate-x-1/2 scale-75 opacity-75">
-        <p className="mx-auto w-72 bg-secondary/25 p-1 text-center text-xl text-accent">SELECT OVERRIDE</p>
+        <p className="mx-auto w-72 bg-secondary/25 p-1 text-center text-xl text-accent">SELECT ACTION</p>
       </div>
     </div>
   );

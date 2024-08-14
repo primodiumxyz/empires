@@ -14,7 +14,7 @@ export const OverridePopup = () => {
     <div className="fixed left-0 top-0 z-50 h-screen w-screen bg-slate-900/25 backdrop-blur-md">
       <div className="screen-container pointer-events-auto absolute" onClick={() => tables.SelectedPlanet.remove()} />
       <div className="screen-container flex items-center justify-center gap-2 py-5">
-        <div className="flex h-[30rem] max-h-full items-center justify-center gap-2">
+        <div className="flex h-[30rem] max-h-full items-start justify-center gap-2">
           <PlanetSummary entity={selectedPlanet} className="hidden lg:flex" />
           <OverridePane entity={selectedPlanet} className="flex-row gap-5 lg:flex-col" />
         </div>

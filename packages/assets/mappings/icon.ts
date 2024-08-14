@@ -30,6 +30,8 @@ import Leaderboard from "../icons/UI_Leaderboard.png?url";
 import Navigator from "../icons/UI_Navigator.png?url";
 import NotAllowed from "../icons/UI_NotAllowed.png?url";
 import Objective from "../icons/UI_Objective.png?url";
+import PinkMagnet from "../icons/UI_PinkMagnet.png?url";
+import PurpleMagnet from "../icons/UI_PurpleMagnet.png?url";
 import RedMagnet from "../icons/UI_RedMagnet.png?url";
 import Reinforcements from "../icons/UI_Reinforcements.png?url";
 import RemoveShip from "../icons/UI_RemoveShip.png?url";
@@ -46,6 +48,7 @@ import Transfer from "../icons/UI_Transfer.png?url";
 import Trash from "../icons/UI_Trash.png?url";
 import Vault from "../icons/UI_Vault.png?url";
 import Wormhole from "../icons/UI_WormholeBase.png?url";
+import YellowMagnet from "../icons/UI_YellowMagnet.png?url";
 import Twitter from "../icons/x-twitter.svg?url";
 
 export const InterfaceIcons = {
@@ -97,4 +100,7 @@ export const InterfaceIcons = {
   RedMagnet,
   BlueMagnet,
   GreenMagnet,
+  PurpleMagnet,
+  YellowMagnet,
+  PinkMagnet,
 };
