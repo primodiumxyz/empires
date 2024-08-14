@@ -11,12 +11,10 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useSettings } from "@/hooks/useSettings";
 import { useShieldEater } from "@/hooks/useShieldEater";
-import { msToDuration } from "@/util/time";
 
 export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
   const { detonateShieldEater } = useContractCalls();
-  const { showBlockchainUnits } = useSettings();
   const { currentPlanet, cooldownShields } = useShieldEater();
 
   const planet = tables.Planet.use(entity);
@@ -40,7 +38,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
       <TransactionQueueMask id="detonate-shield-eater">
         <Button
           onClick={async () => {
-            await detonateShieldEater(entity);
+            await detonateShieldEater(entity, detonatePriceWei);
             tables.SelectedPlanet.remove();
           }}
           disabled={detonateDisabled}

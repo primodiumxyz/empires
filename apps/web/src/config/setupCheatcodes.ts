@@ -968,7 +968,7 @@ export const setupCheatcodes = (
 
   // reset shield eater countdown
   const feedShieldEater = createCheatcode({
-    title: "Reset shield eater countdown",
+    title: "Feed shield eater",
     bg: CheatcodeToBg["shieldEater"],
     caption: "Shield eater",
     inputs: {},

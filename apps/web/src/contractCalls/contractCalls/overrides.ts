@@ -216,11 +216,11 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     });
   };
 
-  const detonateShieldEater = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
+  const detonateShieldEater = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await execute({
       functionName: "Empires__detonateShieldEater",
       args: [],
-      options: { gas: 738649n * 2n }, // TODO: get gas estimate
+      options: { value: payment, gas: 738649n * 2n }, // TODO: get gas estimate
       txQueueOptions: {
         id: "detonate-shield-eater",
         ...options,
