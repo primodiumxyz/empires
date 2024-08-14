@@ -20,7 +20,8 @@ contract UpdateSystem is EmpiresSystem {
     bool canUpdate = block.number >= turn.nextTurnBlock;
     if (!canUpdate) revert("[UpdateSystem] Cannot update yet");
     uint256 newNextTurnBlock = block.number + P_GameConfig.getTurnLengthBlocks();
-    EEmpire newEmpire = EEmpire(((uint256(turn.empire) % 3) + 1));
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    EEmpire newEmpire = EEmpire(((uint256(turn.empire) % empireCount) + 1));
     Turn.set(newNextTurnBlock, newEmpire, turn.value + 1);
     return turn.empire;
   }

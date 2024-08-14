@@ -5,6 +5,9 @@ export const Animations = {
   PendingBlue: "pending/blue",
   PendingGreen: "pending/green",
   PendingRed: "pending/red",
+  PendingYellow: "pending/yellow",
+  PendingPink: "pending/pink",
+  PendingPurple: "pending/purple",
 
   // Magnet
   MagnetBlue: "magnet/blue",
