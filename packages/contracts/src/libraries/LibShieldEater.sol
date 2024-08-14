@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
-
-import { ShieldEater, Planet, PlanetData } from "codegen/index.sol";
+import { ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 
 import { pseudorandom, coordToId } from "src/utils.sol";
@@ -72,11 +71,18 @@ library LibShieldEater {
     CoordData memory dst = CoordData(tmpPlanet.q, tmpPlanet.r);
 
     // How do we get there?
+    uint256 dirAttempts = 1;
     CoordData memory offset = getTargetDirection(src, dst);
 
     // If there is a hole in the map here, go around it
-    if (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
+    while (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
+      if (dirAttempts > 6) {
+        // If we've tried all directions, there is no path.
+        // should never happen, but want to prevent infinite loop
+        break;
+      }
       offset = rotateTargetDirection(offset);
+      dirAttempts++;
     }
 
     // Next movement target selected
@@ -87,9 +93,13 @@ library LibShieldEater {
 
     // Eat a little shields if there are any
     uint256 shieldCount = Planet.getShieldCount(planetId);
-    if (shieldCount > 0) {
-      Planet.setShieldCount(planetId, shieldCount - 1);
-      ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + 1);
+    uint256 shieldChange = P_ShieldEaterConfig.getVisitShieldDamage();
+    if (shieldCount > shieldChange) {
+      Planet.setShieldCount(planetId, shieldCount - shieldChange);
+      ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + shieldChange);
+    } else if (shieldCount > 0) {
+      Planet.setShieldCount(planetId, 0);
+      ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + shieldCount);
     }
 
     // If the Shield Eater has reached its destination, select a new destination
@@ -105,43 +115,62 @@ library LibShieldEater {
     PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
     CoordData memory center = CoordData(currentPlanet.q, currentPlanet.r);
 
+    uint256 centerDamage = P_ShieldEaterConfig.getDetonateCenterDamage();
+    uint256 adjacentDamage = P_ShieldEaterConfig.getDetonateAdjacentDamage();
+
+    if (centerDamage > 10000) {
+      centerDamage = 10000;
+    }
+
+    if (adjacentDamage > 10000) {
+      adjacentDamage = 10000;
+    }
+
     // Center
-    Planet.setShieldCount(ShieldEater.getCurrentPlanet(), 0);
+    bytes32 planetId = coordToId(center.q, center.r);
+    uint256 shieldCount = Planet.getShieldCount(planetId);
+    Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * centerDamage) / 10000)));
 
     // East
-    bytes32 planetId = coordToId(center.q + 1, center.r);
+    planetId = coordToId(center.q + 1, center.r);
     if (Planet.getIsPlanet(planetId)) {
-      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
+      shieldCount = Planet.getShieldCount(planetId);
+      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
     }
 
     // Southeast
     planetId = coordToId(center.q, center.r + 1);
     if (Planet.getIsPlanet(planetId)) {
-      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
+      shieldCount = Planet.getShieldCount(planetId);
+      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
     }
 
     // Southwest
     planetId = coordToId(center.q - 1, center.r + 1);
     if (Planet.getIsPlanet(planetId)) {
-      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
+      shieldCount = Planet.getShieldCount(planetId);
+      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
     }
 
     // West
     planetId = coordToId(center.q - 1, center.r);
     if (Planet.getIsPlanet(planetId)) {
-      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
+      shieldCount = Planet.getShieldCount(planetId);
+      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
     }
 
     // Northwest
     planetId = coordToId(center.q, center.r - 1);
     if (Planet.getIsPlanet(planetId)) {
-      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
+      shieldCount = Planet.getShieldCount(planetId);
+      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
     }
 
     // Northeast
     planetId = coordToId(center.q + 1, center.r - 1);
     if (Planet.getIsPlanet(planetId)) {
-      Planet.setShieldCount(planetId, ((Planet.getShieldCount(planetId) * 4) / 5));
+      shieldCount = Planet.getShieldCount(planetId);
+      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
     }
 
     ShieldEater.setCurrentCharge(0);
@@ -166,7 +195,7 @@ library LibShieldEater {
   function getTargetDirection(CoordData memory src, CoordData memory dst) internal pure returns (CoordData memory dir) {
     if (dst.q > src.q) {
       dir.q = 1; // East or Northeast
-      if (dst.r > src.r) {
+      if (dst.r >= src.r) {
         dir.r = 0; // East
       } else {
         dir.r = -1; // Northeast

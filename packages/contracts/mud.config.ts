@@ -48,6 +48,9 @@ export const worldInput = {
     P_ShieldEaterConfig: {
       key: [],
       schema: {
+        visitShieldDamage: "uint256",
+        detonateCenterDamage: "uint256", // percentage, out of 10000
+        detonateAdjacentDamage: "uint256", // percentage, out of 10000
         detonationThreshold: "uint256",
       },
     },

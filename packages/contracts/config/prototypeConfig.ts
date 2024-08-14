@@ -45,7 +45,10 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         killShipBoostCostDecrease: 0n,
       },
       P_ShieldEaterConfig: {
-        detonationThreshold: 10n,
+        visitShieldDamage: 1n,
+        detonateCenterDamage: scaleMultiplier(1.00),
+        detonateAdjacentDamage: scaleMultiplier(0.20),
+        detonationThreshold: 8n,
       }
     },
   },
