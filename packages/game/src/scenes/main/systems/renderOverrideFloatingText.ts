@@ -6,7 +6,6 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) =>
   const {
     tables,
     network: { world },
-    utils: { getAllNeighbors },
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
 
