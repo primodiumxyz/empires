@@ -65,7 +65,6 @@ export const MUDEnums = {
   ERoutine: enumToArray(ERoutine),
   EOverride: enumToArray(EOverride),
 };
-console.log(MUDEnums);
 function enumToArray(enumObj: object, options?: { skipNull?: boolean }): [string] {
   if (options?.skipNull) {
     return [...Object.keys(enumObj).filter((key) => isNaN(Number(key)))] as [string];
