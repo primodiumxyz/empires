@@ -88,7 +88,7 @@ const calculateTurnsLeft = (endTurn: bigint | undefined, globalTurn: bigint, bef
 const Overrides = ({ entity }: { entity: Entity }) => {
   const { utils, tables } = useCore();
   const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
-  const overheat = useCharge(entity);
+  // const overheat = useCharge(entity);
   const redMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Red, planetId: entity });
   const blueMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Blue, planetId: entity });
   const greenMagnet = tables.Magnet.useWithKeys({ empireId: EEmpire.Green, planetId: entity });
@@ -113,10 +113,10 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     <>
       <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
         <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
-        <div className="grid grid-cols-2 gap-y-1 text-xs">
+        {/* <div className="grid grid-cols-2 gap-y-1 text-xs">
           <span className="text-gray-4000">OVERHEAT</span>
           <span className="text-right">{Math.min(overheat.percent, 100).toFixed(0)}%</span>
-        </div>
+        </div> */}
         <div className="grid grid-cols-2 gap-y-1 text-xs">
           <span className="text-gray-4000">MAGNETS</span>
           <div className="flex flex-row gap-1">
