@@ -31,7 +31,7 @@ export const Dashboard = () => {
       <Modal.Content>
         <div className="grid grid-cols-8 gap-1">
           <div className="col-span-6 flex flex-col gap-1">
-            <SecondaryCard className="flex flex-col gap-2">
+            <SecondaryCard className="flex flex-col gap-1">
               <p className="text-xs">SELL POINTS</p>
               <SellPoints />
             </SecondaryCard>
@@ -71,7 +71,7 @@ export const Dashboard = () => {
             </SecondaryCard>
             <KPICards />
           </div>
-          <div className="col-span-2 flex flex-col gap-2">
+          <div className="col-span-2 flex flex-col gap-1">
             <Sidebar />
           </div>
         </div>
@@ -130,9 +130,7 @@ const KPICards: React.FC<{ column?: boolean; size?: "sm" | "lg" }> = ({ column =
   const netTotal = totalEarned - totalInvestment;
 
   return (
-    <SecondaryCard
-      className={cn("hidden justify-between gap-2 p-2 lg:grid lg:grid-cols-3", column && "flex flex-col gap-2")}
-    >
+    <SecondaryCard className={cn("hidden justify-between gap-1 p-2 lg:grid lg:grid-cols-3", column && "flex flex-col")}>
       <KPICard title="SPENT TO DATE" value={totalInvestment} size={size} />
       <KPICard title="EARNED TO DATE" value={totalEarned} size={size} />
       <KPICard title="NET" value={netTotal} size={size} />
