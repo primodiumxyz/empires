@@ -27,7 +27,8 @@ export const useActions = () => {
 
   return useMemo(() => {
     const getPlanetSpan = (planetId: Entity) => {
-      const empireId = tables.Planet.get(planetId)?.empireId ?? EEmpire.LENGTH;
+      const empireId = tables.Planet.get(planetId)?.empireId;
+      if (!empireId) return <span className="text-gray-400">{entityToPlanetName(planetId)}</span>;
       const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
       return <span className={colorClass}>{entityToPlanetName(planetId)}</span>;
     };

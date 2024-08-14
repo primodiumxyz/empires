@@ -1,13 +1,13 @@
 import { Hex, padHex } from "viem";
 
-import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
+import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
-import { DEFAULT_EMPIRE, EmpireEnumToConfig, EMPIRES_COUNT } from "@/util/lookups";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
@@ -438,10 +438,10 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name.name,
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
         options: empires.map((entity) => ({
           id: entity,
-          value: EmpireEnumToConfig[Number(entity) as EEmpire].name.name,
+          value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
         })),
       },
       amount: {
@@ -462,7 +462,8 @@ export const setupCheatcodes = (
       const currentCost = tables.Empire.getWithKeys({ id: empireId })?.pointCost ?? BigInt(0);
       const increaseCost = pointConfig?.pointCostIncrease ?? BigInt(1);
 
-      const pointsToIssue = BigInt(amount.value) * BigInt(OTHER_EMPIRE_COUNT);
+      const empires = tables.P_GameConfig.use()?.empireCount ?? 0;
+      const pointsToIssue = BigInt(amount.value) * BigInt(empires - 1);
       const newPoints = currentPoints + pointsToIssue;
 
       const success = await Promise.all([
@@ -471,7 +472,7 @@ export const setupCheatcodes = (
           table: tables.Empire,
           keys: { id: empireId },
           properties: {
-            pointCost: currentCost + increaseCost * BigInt(OTHER_EMPIRE_COUNT),
+            pointCost: currentCost + increaseCost * BigInt(empires - 1),
           },
         }),
       ]);
@@ -685,7 +686,8 @@ export const setupCheatcodes = (
       const empireId = empire.id as EEmpire;
 
       const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
-      const endTurn = currentTurn + BigInt(turns.value) * BigInt(EMPIRES_COUNT);
+      const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
+      const endTurn = currentTurn + BigInt(turns.value) * BigInt(empires);
 
       const magnetTurnRemovalOp = _removeMagnetTurnRemoval(empireId, planetId);
       if (magnetTurnRemovalOp) devOps.push(magnetTurnRemovalOp);
@@ -910,6 +912,11 @@ export const setupCheatcodes = (
       bg: CheatcodeToBg["config"],
       caption: "P_GameConfig",
       inputs: {
+        empireCount: {
+          label: "Empire count",
+          inputType: "number",
+          defaultValue: gameConfig?.empireCount ?? 1,
+        },
         turnLengthBlocks: {
           label: "Turn length blocks",
           inputType: "number",
@@ -936,6 +943,7 @@ export const setupCheatcodes = (
         const finalBlockFromTimeLeft =
           BigInt(properties.roundTimeLeftInSeconds.value * currBlock.avgBlockTime) + currBlock.value;
         const newProperties = {
+          empireCount: Number(properties.empireCount.value),
           turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
           goldGenRate: BigInt(properties.goldGenRate.value),
           gameOverBlock: finalBlockFromTimeLeft,

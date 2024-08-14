@@ -30,7 +30,7 @@ export const Price = ({
       <div className={cn("flex items-center justify-center gap-1", className)}>
         <span>{formatEther(wei)}ETH</span>
         <Tooltip tooltipContent="Could not retrieve ETH price">
-          <InformationCircleIcon className="text-error" />
+          <InformationCircleIcon className="size-3 text-error" />
         </Tooltip>
       </div>
     );

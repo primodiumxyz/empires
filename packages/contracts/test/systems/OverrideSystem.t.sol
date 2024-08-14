@@ -348,12 +348,12 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__createShip{ value: totalCost }(planetId, 1);
     uint256 points = PointsMap.getValue(empire, aliceId);
     vm.startPrank(creator);
-    PointsMap.setLockedPoints(empire, aliceId, points / 2);
+    PointsMap.setLockedPoints(empire, aliceId, pointUnit);
 
     switchPrank(alice);
-    world.Empires__sellPoints(empire, points / 2);
-    assertEq(PointsMap.getLockedPoints(empire, aliceId), points / 2, "Locked Points should be 50");
-    assertEq(PointsMap.getValue(empire, aliceId), points - (points / 2), "Player Points should be 80");
+    world.Empires__sellPoints(empire, pointUnit);
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), pointUnit, "Locked Points should be 50");
+    assertEq(PointsMap.getValue(empire, aliceId), points - (pointUnit), "Player Points should be 80");
   }
 
   function testPlaceMagnet() public {

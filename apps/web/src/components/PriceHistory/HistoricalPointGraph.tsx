@@ -12,8 +12,9 @@ import { timeFormat } from "@visx/vendor/d3-time-format";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { SecondaryCard } from "@/components/core/Card";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useEthPrice } from "@/hooks/useEthPrice";
-import { EmpireEnumToConfig, EMPIRES, EMPIRES_COUNT } from "@/util/lookups";
+import { EmpireConfig } from "@/util/lookups";
 
 export const accentColor = "rgba(0,255, 0, .75)";
 export const accentColorDark = "rgba(0,255, 0, .25)";
@@ -65,6 +66,7 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
     const historicalPriceEntities = tables.HistoricalPointCost.useAll();
     const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
     const ethPrice = useEthPrice().price;
+    const empires = useEmpires();
     const historicalPriceData = useMemo(() => {
       // get data
       let data = historicalPriceEntities
@@ -86,7 +88,7 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
       );
 
       // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
-      const allEmpires = Array.from(new Array(EMPIRES_COUNT)).map((_, i) => i + 1);
+      const allEmpires = Array.from(new Array(empires.size)).map((_, i) => i + 1);
       const timestampMap = new Map<number, { [key: number]: bigint }>();
 
       // grab costs for each timestamp
@@ -124,13 +126,6 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
 
       return filledData;
     }, [historicalPriceEntities, gameStartTimestamp, ethPrice]);
-
-    const [colorFrom, colorTo] = useMemo(() => {
-      const diff = historicalPriceData[historicalPriceData.length - 1].cost - historicalPriceData[0].cost;
-
-      if (diff >= 0) return ["rgba(0,255, 0, .75)", "rgba(0,255, 0, .25)"];
-      return ["rgba(255, 0, 0, .75)", "rgba(255, 0, 0, .25)"];
-    }, [historicalPriceData]);
 
     const { innerWidth, innerHeight } = useMemo(() => {
       return {
@@ -183,19 +178,26 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
       [showTooltip, stockValueScale, dateScale, historicalPriceData],
     );
 
+    const filteredEmpires: [EEmpire, EmpireConfig][] = useMemo(() => {
+      if (empire === EEmpire.LENGTH) {
+        return Array.from(empires.entries());
+      }
+      return [[empire, empires.get(empire)!]];
+    }, [empires, empire]);
+
     if (width < 10) return null;
 
     return (
       <div className="pointer-event-auto flex items-center justify-center gap-2 rounded-box bg-black/10">
         <svg width={width} height={height}>
-          {EMPIRES.map((empire) => (
+          {filteredEmpires.map(([empire, data]) => (
             <LinePath
               key={empire}
               data={historicalPriceData.filter((d) => d.empire === empire)}
               x={(d) => dateScale(getDate(d)) ?? 0}
               y={(d) => stockValueScale(getPointValue(d)) ?? 0}
               strokeWidth={1}
-              stroke={EmpireEnumToConfig[empire].chartColor}
+              stroke={data.chartColor}
               curve={curveMonotoneX}
             />
           ))}

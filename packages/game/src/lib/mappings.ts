@@ -5,6 +5,12 @@ export const EmpireToPlanetSpriteKeys: Record<EEmpire, SpriteKeys | undefined> =
   [EEmpire.Red]: "PlanetRed",
   [EEmpire.Green]: "PlanetGreen",
   [EEmpire.Blue]: "PlanetBlue",
+  [EEmpire.Yellow]: "PlanetYellow",
+  [EEmpire.Pink]: "PlanetPink",
+  [EEmpire.Purple]: "PlanetPurple",
+  [EEmpire.Orange]: undefined,
+  [EEmpire.Black]: undefined,
+  [EEmpire.White]: undefined,
   [EEmpire.LENGTH]: undefined,
 };
 
@@ -12,6 +18,12 @@ export const EmpireToHexSpriteKeys: Record<EEmpire, SpriteKeys | undefined> = {
   [EEmpire.Red]: "HexRed",
   [EEmpire.Green]: "HexGreen",
   [EEmpire.Blue]: "HexBlue",
+  [EEmpire.Yellow]: "HexYellow",
+  [EEmpire.Pink]: "HexPink",
+  [EEmpire.Purple]: "HexPurple",
+  [EEmpire.Orange]: undefined,
+  [EEmpire.Black]: undefined,
+  [EEmpire.White]: undefined,
   [EEmpire.LENGTH]: undefined,
 };
 
@@ -19,6 +31,12 @@ export const EmpireToConquerAnimationKeys: Record<EEmpire, AnimationKeys | undef
   [EEmpire.Red]: "ConquerRed",
   [EEmpire.Green]: "ConquerGreen",
   [EEmpire.Blue]: "ConquerBlue",
+  [EEmpire.Yellow]: "ConquerYellow",
+  [EEmpire.Pink]: "ConquerPink",
+  [EEmpire.Purple]: "ConquerPurple",
+  [EEmpire.Orange]: undefined,
+  [EEmpire.Black]: undefined,
+  [EEmpire.White]: undefined,
   [EEmpire.LENGTH]: undefined,
 };
 
@@ -26,23 +44,38 @@ export const EmpireToPendingAnimationKeys: Record<EEmpire, AnimationKeys | undef
   [EEmpire.Red]: "PendingRed",
   [EEmpire.Green]: "PendingGreen",
   [EEmpire.Blue]: "PendingBlue",
+  [EEmpire.Yellow]: "PendingYellow",
+  [EEmpire.Pink]: "PendingPink",
+  [EEmpire.Purple]: "PendingPurple",
+  [EEmpire.Orange]: undefined,
+  [EEmpire.Black]: undefined,
+  [EEmpire.White]: undefined,
   [EEmpire.LENGTH]: undefined,
 };
 
-export const EmpireToDestroyerArcAnimationKeys: Record<
-  EEmpire,
-  [lower: AnimationKeys | undefined, upper: AnimationKeys | undefined]
-> = {
-  [EEmpire.Red]: ["DestroyerArcLowerRed", "DestroyerArcUpperRed"],
-  [EEmpire.Green]: ["DestroyerArcLowerGreen", "DestroyerArcUpperGreen"],
-  [EEmpire.Blue]: ["DestroyerArcLowerBlue", "DestroyerArcUpperBlue"],
-  [EEmpire.LENGTH]: [undefined, undefined],
+export const EmpireToMovementAnimationKeys: Record<EEmpire, AnimationKeys | undefined> = {
+  [EEmpire.Red]: "MovementRed",
+  [EEmpire.Green]: "MovementGreen",
+  [EEmpire.Blue]: "MovementBlue",
+  [EEmpire.Yellow]: "MovementYellow",
+  [EEmpire.Pink]: "MovementPink",
+  [EEmpire.Purple]: "MovementPurple",
+  [EEmpire.Orange]: undefined,
+  [EEmpire.Black]: undefined,
+  [EEmpire.White]: undefined,
+  [EEmpire.LENGTH]: undefined,
 };
 
 export const EmpireToMagnetAnimationKeys: Record<EEmpire, AnimationKeys | undefined> = {
   [EEmpire.Red]: "MagnetRed",
   [EEmpire.Green]: "MagnetGreen",
   [EEmpire.Blue]: "MagnetBlue",
+  [EEmpire.Yellow]: "MagnetYellow",
+  [EEmpire.Pink]: "MagnetPink",
+  [EEmpire.Purple]: "MagnetPurple",
+  [EEmpire.Orange]: undefined,
+  [EEmpire.Black]: undefined,
+  [EEmpire.White]: undefined,
   [EEmpire.LENGTH]: undefined,
 };
 
@@ -50,6 +83,12 @@ export const EmpireToHexColor: Record<EEmpire, string> = {
   [EEmpire.Red]: "#ff0000",
   [EEmpire.Green]: "#00ff00",
   [EEmpire.Blue]: "#0000ff",
+  [EEmpire.Yellow]: "#ffff00",
+  [EEmpire.Pink]: "#ff00ff",
+  [EEmpire.Purple]: "#800080",
+  [EEmpire.Orange]: "#ffa500",
+  [EEmpire.Black]: "#000000",
+  [EEmpire.White]: "#ffffff",
   [EEmpire.LENGTH]: "#ffffff",
 };
 
@@ -85,6 +124,36 @@ export const EmpireOverheatThresholdToBorderSpriteKeys: Record<
     5: "OverheatBorderBlue5",
     6: "OverheatBorderBlue6",
   },
+  [EEmpire.Yellow]: {
+    0: "OverheatBorder0",
+    1: "OverheatBorderBlue1",
+    2: "OverheatBorderBlue2",
+    3: "OverheatBorderBlue3",
+    4: "OverheatBorderBlue4",
+    5: "OverheatBorderBlue5",
+    6: "OverheatBorderBlue6",
+  },
+  [EEmpire.Pink]: {
+    0: "OverheatBorder0",
+    1: "OverheatBorderBlue1",
+    2: "OverheatBorderBlue2",
+    3: "OverheatBorderBlue3",
+    4: "OverheatBorderBlue4",
+    5: "OverheatBorderBlue5",
+    6: "OverheatBorderBlue6",
+  },
+  [EEmpire.Purple]: {
+    0: "OverheatBorder0",
+    1: "OverheatBorderBlue1",
+    2: "OverheatBorderBlue2",
+    3: "OverheatBorderBlue3",
+    4: "OverheatBorderBlue4",
+    5: "OverheatBorderBlue5",
+    6: "OverheatBorderBlue6",
+  },
+  [EEmpire.Orange]: undefined,
+  [EEmpire.Black]: undefined,
+  [EEmpire.White]: undefined,
   [EEmpire.LENGTH]: undefined,
 };
 
