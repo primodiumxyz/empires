@@ -1,4 +1,4 @@
-import { Hex, padHex } from "viem";
+import { Address, Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
@@ -21,15 +21,17 @@ export const CheatcodeToBg: Record<string, string> = {
   config: "bg-gray-500/10",
 };
 
-export const setupCheatcodes = (
-  core: Core,
-  game: PrimodiumGame,
-  accountClient: AccountClient,
-  contractCalls: ContractCalls,
-) => {
+export const setupCheatcodes = (options: {
+  core: Core;
+  game: PrimodiumGame;
+  accountClient: AccountClient;
+  contractCalls: ContractCalls;
+  requestDrip?: (address: Address, force?: boolean) => Promise<void>;
+}) => {
+  const { core, game, accountClient, contractCalls, requestDrip } = options;
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { devCalls, executeBatch, requestDrip, resetGame: _resetGame, tacticalStrike, withdrawRake } = contractCalls;
+  const { devCalls, executeBatch, resetGame: _resetGame, tacticalStrike, withdrawRake } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -605,7 +607,7 @@ export const setupCheatcodes = (
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
-      requestDrip?.(accountClient.playerAccount.address);
+      await requestDrip?.(accountClient.playerAccount.address, true);
       notify("success", "Dripped eth to player account");
       return true;
     },
@@ -1142,6 +1144,7 @@ export const setupCheatcodes = (
   });
 
   return [
+    dripEth,
     advanceTurn,
     setShips,
     sendShips,
@@ -1152,7 +1155,6 @@ export const setupCheatcodes = (
     advanceTurns,
     endGame,
     resetGame,
-    dripEth,
     placeMagnet,
     removeMagnet,
     removeAllMagnets,
