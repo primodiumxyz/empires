@@ -156,6 +156,19 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     },
   },
 
+  AirdropGoldOverride: {
+    keys: [{ [EOverride.AirdropGold]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: true,
+        minOverrideCost: 0n,
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
+      },
+    },
+  },
+
   BuyShips: {
     keys: [{ [ERoutine.BuyShips]: "uint8" }],
     tables: {

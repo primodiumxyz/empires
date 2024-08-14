@@ -39,6 +39,7 @@ export enum EOverride {
   BoostCharge,
   StunCharge,
   DetonateShieldEater,
+  AirdropGold,
   LENGTH,
 }
 
