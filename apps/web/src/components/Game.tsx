@@ -116,7 +116,7 @@ export const GameHUD = () => {
           <TimeLeft />
         </HUD.BottomMiddle>
 
-        <HUD.Center className="relative z-50">
+        <HUD.Center>
           <OverridePopup />
           <GameOver />
         </HUD.Center>
