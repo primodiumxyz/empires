@@ -31,7 +31,7 @@ function generateContent() {
       const coord = oddrToAxial({ row: r, col: q });
 
       const empireName = EmpireNames[empire] ?? "NULL";
-      const isCitadel = citadelPlanets[i] === 5;
+      const isCitadel = citadelPlanets[i] === 8;
 
       return `
             /* Planet at (${coord.q}, ${coord.r}) */
