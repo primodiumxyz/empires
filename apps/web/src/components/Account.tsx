@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ExclamationCircleIcon, UserIcon } from "@heroicons/react/24/solid";
+import { UserIcon } from "@heroicons/react/24/solid";
 import { usePrivy } from "@privy-io/react-auth";
 import { formatEther } from "viem";
 
@@ -8,7 +8,6 @@ import { formatAddress, formatNumber } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
@@ -89,7 +88,7 @@ const EmpirePoints = ({
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
 
-  const { price: pointCostWei, message } = usePointPrice(empire, Number(formatEther(playerPoints)));
+  const { price: pointCostWei } = usePointPrice(empire, Number(formatEther(playerPoints)));
 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
 
@@ -104,12 +103,7 @@ const EmpirePoints = ({
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>
         <div className="hidden lg:block">
-          <Tooltip tooltipContent={message} className="w-44 text-xs">
-            <p className="-mt-1 flex items-center justify-end gap-2 text-xs">
-              <Price wei={pointCostWei} />
-              {message ? <ExclamationCircleIcon className="size-3" /> : ""}
-            </p>
-          </Tooltip>
+          <Price wei={pointCostWei} />
           {pct > 0 && <p className="text-xs opacity-70">({formatNumber(pct)}%)</p>}
         </div>
       </div>

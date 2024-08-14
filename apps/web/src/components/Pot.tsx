@@ -11,8 +11,8 @@ export const Pot: React.FC<PotProps> = ({ className }) => {
 
   return (
     <div className={cn(className)}>
-      <Price wei={pot} className="text-2xl text-accent" />
       <h2 className="ml-1 font-semibold opacity-70">Pot</h2>
+      <Price wei={pot} className="text-xl text-accent" />
     </div>
   );
 };
