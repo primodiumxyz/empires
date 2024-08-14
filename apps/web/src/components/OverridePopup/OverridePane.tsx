@@ -56,7 +56,7 @@ export const Buttons: React.FC = () => {
   return (
     <div className="relative flex h-44 w-80 items-center justify-center">
       <div className="relative z-10 translate-y-10">
-        <OverrideButton index={3} icon="ShieldEater" axialCoord={{ q: -1.5, r: 0 }} tooltip="Shield Eater" />
+        <OverrideButton index={4} icon="ShieldEater" axialCoord={{ q: -1.5, r: 0 }} tooltip="Shield Eater" />
         <OverrideButton index={2} icon="Magnet" axialCoord={{ q: 1.5, r: 0 }} tooltip="Magnets" />
         <OverrideButton index={0} icon="Fleet" axialCoord={{ q: -0.5, r: 0 }} tooltip="Ships" />
         <OverrideButton index={1} icon="Defense" axialCoord={{ q: 0.5, r: 0 }} tooltip="Shields" />
