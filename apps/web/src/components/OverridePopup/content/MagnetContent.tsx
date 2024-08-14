@@ -8,12 +8,14 @@ import { Button } from "@/components/core/Button";
 import { Divider } from "@/components/core/Divider";
 import { IconLabel } from "@/components/core/IconLabel";
 import { NumberInput } from "@/components/core/NumberInput";
+import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }) => {
@@ -23,6 +25,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
   const { placeMagnet } = useContractCalls();
 
   const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
+  const placeMagnetPointsReceived = useOverridePointsReceived(EOverride.PlaceMagnet, empire, BigInt(inputValue));
 
   const onPlaceMagnet = useCallback(async () => {
     await placeMagnet(empire, planetId, BigInt(inputValue), placeMagnetPriceWei);
@@ -102,6 +105,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
             <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
               <Price wei={placeMagnetPriceWei} />
             </p>
+            <PointsReceived points={placeMagnetPointsReceived} inline />
           </div>
         </div>
       )}
