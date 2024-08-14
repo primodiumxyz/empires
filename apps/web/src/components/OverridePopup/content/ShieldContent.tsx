@@ -5,10 +5,12 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { NumberInput } from "@/components/core/NumberInput";
+import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
 
 export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
@@ -20,6 +22,8 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const [inputValue, setInputValue] = useState("1");
   const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
   const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
+  const addShieldPointsReceived = useOverridePointsReceived(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const removeShieldPointsReceived = useOverridePointsReceived(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
   const attackDisabled = (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0;
   const supportDisabled = gameOver || Number(planetEmpire) === 0;
@@ -46,6 +50,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
             <Price wei={removeShieldPriceWei} />
           </p>
+          <PointsReceived points={removeShieldPointsReceived} />
         </div>
 
         <div className="flex flex-col items-center gap-1">
@@ -66,6 +71,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           <p className="rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
             <Price wei={addShieldPriceWei} />
           </p>
+          <PointsReceived points={addShieldPointsReceived} />
         </div>
       </div>
     </div>
