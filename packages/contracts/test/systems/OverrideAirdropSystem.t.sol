@@ -31,7 +31,7 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     uint256 assignedIndex = 0;
     for (uint256 i = 0; i < assignedCount.length; i++) {
       for (uint256 j = 0; j < assignedCount[i]; j++) {
-        require(assignedIndex < planetIds.length, "Assigned index is out of bounds, too many assigned by test");
+        assertTrue(assignedIndex < planetIds.length, "Assigned index is out of bounds, too many assigned by test");
         assignPlanetToEmpire(planetIds[assignedIndex], EEmpire(i));
         assignedIndex++;
       }
@@ -46,7 +46,7 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     assignPlanetIdsToEmpires(assignedCount);
 
     uint256 average = OverrideAirdropSystem.getAveragePlanetsPerOpposingEmpire(EEmpire.Red);
-    require(average == 1, "Average does not ignore self");
+    assertEq(average, 1, "Average does not ignore self");
   }
 
   function testGetAveragePlanetsPerOpposingEmpireIgnoreDeadEmpires() public {
@@ -57,7 +57,7 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     assignPlanetIdsToEmpires(assignedCount);
 
     uint256 average = OverrideAirdropSystem.getAveragePlanetsPerOpposingEmpire(EEmpire.Red);
-    require(average == 10, "Average does not ignore dead empires");
+    assertEq(average, 10, "Average does not ignore dead empires");
   }
 
   function testGetAveragePlanetsPerOpposingEmpireRoundUp() public {
@@ -68,7 +68,7 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     assignPlanetIdsToEmpires(assignedCount);
 
     uint256 average = OverrideAirdropSystem.getAveragePlanetsPerOpposingEmpire(EEmpire.Red);
-    require(average == 6, "Average does not round up");
+    assertEq(average, 6, "Average does not round up");
   }
 
   function testAirdropGoldFail() public {
@@ -89,7 +89,7 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     vm.startPrank(creator);
     bytes32[] memory empirePlanetIds = EmpirePlanetsSet.getEmpirePlanetIds(EEmpire.Red);
     for (uint256 i = 0; i < empirePlanetIds.length; i++) {
-        Planet.setEmpireId(empirePlanetIds[i], EEmpire.NULL);
+      Planet.setEmpireId(empirePlanetIds[i], EEmpire.NULL);
     }
     EmpirePlanetsSet.clear(EEmpire.Red);
 
@@ -106,24 +106,24 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     assignPlanetIdsToEmpires(assignedCount);
 
     uint256 totalDistributeGold = OverrideAirdropSystem.getAveragePlanetsPerOpposingEmpire(EEmpire.Red);
-    require(totalDistributeGold == 6, "Average does not round up");
+    assertEq(totalDistributeGold, 6, "Average does not round up");
     uint256 distributePerPlanet = totalDistributeGold / assignedCount[uint256(EEmpire.Red)];
 
     vm.startPrank(creator);
     uint256 initialGoldCount = 10;
     for (uint256 i = 0; i < planetIds.length; i++) {
-        Planet.setGoldCount(planetIds[i], initialGoldCount);
+      Planet.setGoldCount(planetIds[i], initialGoldCount);
     }
 
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Red, 1);
     world.Empires__airdropGold{ value: cost }(EEmpire.Red, 1);
 
     for (uint256 i = 0; i < planetIds.length; i++) {
-        if (i < assignedCount[uint256(EEmpire.Red)]) {
-            require(Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet, "Gold count should be 13");
-        } else {
-            require(Planet.getGoldCount(planetIds[i]) == initialGoldCount, "Gold count should not change");
-        }
+      if (i < assignedCount[uint256(EEmpire.Red)]) {
+        assertEq(Planet.getGoldCount(planetIds[i]), initialGoldCount + distributePerPlanet, "Gold count should be 13");
+      } else {
+        assertEq(Planet.getGoldCount(planetIds[i]), initialGoldCount, "Gold count should not change");
+      }
     }
   }
 
@@ -135,26 +135,26 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     assignPlanetIdsToEmpires(assignedCount);
 
     uint256 totalDistributeGold = OverrideAirdropSystem.getAveragePlanetsPerOpposingEmpire(EEmpire.Red);
-    require(totalDistributeGold == 5, "Average is incorrect");
+    assertEq(totalDistributeGold, 5, "Average is incorrect");
     uint256 distributePerPlanet = totalDistributeGold / assignedCount[uint256(EEmpire.Red)];
 
     vm.startPrank(creator);
     uint256 initialGoldCount = 10;
     for (uint256 i = 0; i < planetIds.length; i++) {
-        Planet.setGoldCount(planetIds[i], initialGoldCount);
+      Planet.setGoldCount(planetIds[i], initialGoldCount);
     }
 
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Red, 1);
     world.Empires__airdropGold{ value: cost }(EEmpire.Red, 1);
 
     for (uint256 i = 0; i < planetIds.length; i++) {
-        if (i < assignedCount[uint256(EEmpire.Red)]) {
-            require(Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet || Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet + 1, "Gold count should be 12 or 13");
-        } else {
-            require(Planet.getGoldCount(planetIds[i]) == initialGoldCount, "Gold count should not change");
-        }
+      if (i < assignedCount[uint256(EEmpire.Red)]) {
+        assertTrue(Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet || Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet + 1, "Gold count should be 12 or 13");
+      } else {
+        assertEq(Planet.getGoldCount(planetIds[i]), initialGoldCount, "Gold count should not change");
+      }
     }
-    require(Planet.getGoldCount(planetIds[0]) + Planet.getGoldCount(planetIds[1]) == initialGoldCount * 2 + totalDistributeGold, "Gold should be fully distributed");
+    assertEq(Planet.getGoldCount(planetIds[0]) + Planet.getGoldCount(planetIds[1]), initialGoldCount * 2 + totalDistributeGold, "Gold should be fully distributed");
   }
 
   function testAirdropGoldMultipleOverrideEven() public {
@@ -166,24 +166,24 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     assignPlanetIdsToEmpires(assignedCount);
 
     uint256 totalDistributeGold = overrideCount * OverrideAirdropSystem.getAveragePlanetsPerOpposingEmpire(EEmpire.Red);
-    require(totalDistributeGold == 6 * overrideCount, "Average does not round up");
+    assertEq(totalDistributeGold, 6 * overrideCount, "Average does not round up");
     uint256 distributePerPlanet = totalDistributeGold / assignedCount[uint256(EEmpire.Red)];
 
     vm.startPrank(creator);
     uint256 initialGoldCount = 10;
     for (uint256 i = 0; i < planetIds.length; i++) {
-        Planet.setGoldCount(planetIds[i], initialGoldCount);
+      Planet.setGoldCount(planetIds[i], initialGoldCount);
     }
 
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Red, overrideCount);
     world.Empires__airdropGold{ value: cost }(EEmpire.Red, overrideCount);
 
     for (uint256 i = 0; i < planetIds.length; i++) {
-        if (i < assignedCount[uint256(EEmpire.Red)]) {
-            require(Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet, "Gold count should be 25");
-        } else {
-            require(Planet.getGoldCount(planetIds[i]) == initialGoldCount, "Gold count should not change");
-        }
+      if (i < assignedCount[uint256(EEmpire.Red)]) {
+        assertEq(Planet.getGoldCount(planetIds[i]), initialGoldCount + distributePerPlanet, "Gold count should be 25");
+      } else {
+        assertEq(Planet.getGoldCount(planetIds[i]), initialGoldCount, "Gold count should not change");
+      }
     }
   }
 
@@ -196,26 +196,26 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     assignPlanetIdsToEmpires(assignedCount);
 
     uint256 totalDistributeGold = overrideCount * OverrideAirdropSystem.getAveragePlanetsPerOpposingEmpire(EEmpire.Red);
-    require(totalDistributeGold == 5 * overrideCount, "Average does not round up");
+    assertEq(totalDistributeGold, 5 * overrideCount, "Average does not round up");
     uint256 distributePerPlanet = totalDistributeGold / assignedCount[uint256(EEmpire.Red)];
 
     vm.startPrank(creator);
     uint256 initialGoldCount = 10;
     for (uint256 i = 0; i < planetIds.length; i++) {
-        Planet.setGoldCount(planetIds[i], initialGoldCount);
+      Planet.setGoldCount(planetIds[i], initialGoldCount);
     }
 
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Red, overrideCount);
     world.Empires__airdropGold{ value: cost }(EEmpire.Red, overrideCount);
 
     for (uint256 i = 0; i < planetIds.length; i++) {
-        if (i < assignedCount[uint256(EEmpire.Red)]) {
-            require(Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet || Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet + 1, "Gold count should be 24 or 25");
-        } else {
-            require(Planet.getGoldCount(planetIds[i]) == initialGoldCount, "Gold count should not change");
-        }
+      if (i < assignedCount[uint256(EEmpire.Red)]) {
+        assertTrue(Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet || Planet.getGoldCount(planetIds[i]) == initialGoldCount + distributePerPlanet + 1, "Gold count should be 24 or 25");
+      } else {
+        assertEq(Planet.getGoldCount(planetIds[i]), initialGoldCount, "Gold count should not change");
+      }
     }
-    require(Planet.getGoldCount(planetIds[0]) + Planet.getGoldCount(planetIds[1]) == initialGoldCount * 2 + totalDistributeGold, "Gold should be fully distributed");
+    assertEq(Planet.getGoldCount(planetIds[0]) + Planet.getGoldCount(planetIds[1]), initialGoldCount * 2 + totalDistributeGold, "Gold should be fully distributed");
   }
   
 
