@@ -2,13 +2,12 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, Turn, AirdropGoldOverrideLog, AirdropGoldOverrideLogData } from "codegen/index.sol";
+import { Planet, Turn, AirdropGoldOverrideLog, AirdropGoldOverrideLogData, P_GameConfig } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
 import { addressToId, pseudorandomEntity, pseudorandom } from "src/utils.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 /**
  * @title OverrideAirdropSystem
@@ -20,10 +19,7 @@ contract OverrideAirdropSystem is EmpiresSystem {
    * @param _empireId The ID of the empire.
    * @param _overrideCount The number of overrides to purchase.
    */
-  function airdropGold(
-    EEmpire _empireId,
-    uint256 _overrideCount
-  ) public payable _onlyNotGameOver _takeRake {
+  function airdropGold(EEmpire _empireId, uint256 _overrideCount) public payable _onlyNotGameOver _takeRake {
     require(_empireId != EEmpire.NULL, "[OverrideSystem] Empire is not owned");
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, _empireId, _overrideCount);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
@@ -33,7 +29,13 @@ contract OverrideAirdropSystem is EmpiresSystem {
     require(planetCount > 0, "[OverrideSystem] Empire has no planets");
     bytes32[] memory planetIds = EmpirePlanetsSet.getEmpirePlanetIds(_empireId);
 
-    LibOverride._purchaseOverride(addressToId(_msgSender()), EOverride.AirdropGold, _empireId, _overrideCount, _msgValue());
+    LibOverride._purchaseOverride(
+      addressToId(_msgSender()),
+      EOverride.AirdropGold,
+      _empireId,
+      _overrideCount,
+      _msgValue()
+    );
 
     // get average planets owned per empire, excluding current empire
     uint256 goldToDistribute = _overrideCount * getAveragePlanetsPerOpposingEmpire(_empireId);
@@ -41,16 +43,22 @@ contract OverrideAirdropSystem is EmpiresSystem {
     // evenly distribute gold to all planets owned by empire.
     uint256 goldToDistributePerPlanet = goldToDistribute / planetCount;
     uint256 goldToDistributeModulo = goldToDistribute % planetCount;
-    
+
     // Generate a random starting index for gold distribution
     uint256 startIndex = pseudorandom(uint256(keccak256("EasterEgg: Smugglers")), planetCount);
-    
+
     for (uint256 i = 0; i < planetCount; i++) {
       uint256 currentIndex = (startIndex + i) % planetCount;
       if (i < goldToDistributeModulo) {
-        Planet.setGoldCount(planetIds[currentIndex], Planet.getGoldCount(planetIds[currentIndex]) + goldToDistributePerPlanet + 1);
+        Planet.setGoldCount(
+          planetIds[currentIndex],
+          Planet.getGoldCount(planetIds[currentIndex]) + goldToDistributePerPlanet + 1
+        );
       } else {
-        Planet.setGoldCount(planetIds[currentIndex], Planet.getGoldCount(planetIds[currentIndex]) + goldToDistributePerPlanet);
+        Planet.setGoldCount(
+          planetIds[currentIndex],
+          Planet.getGoldCount(planetIds[currentIndex]) + goldToDistributePerPlanet
+        );
       }
     }
 
@@ -76,7 +84,8 @@ contract OverrideAirdropSystem is EmpiresSystem {
   function getAveragePlanetsPerOpposingEmpire(EEmpire _empireId) internal view returns (uint256) {
     uint256 survivingEmpireCount = 0;
     uint256 opposingPlanetCount = 0;
-    for (uint256 i = 1; i <= EMPIRE_COUNT; i++) {
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    for (uint256 i = 1; i <= empireCount; i++) {
       if (i != uint256(_empireId)) {
         uint256 empirePlanetCount = EmpirePlanetsSet.size(EEmpire(i));
         if (empirePlanetCount > 0) {

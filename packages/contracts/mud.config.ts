@@ -30,6 +30,7 @@ export const worldInput = {
         goldGenRate: "uint256",
         gameOverBlock: "uint256",
         gameStartTimestamp: "uint256",
+        empireCount: "uint8",
       },
     },
 

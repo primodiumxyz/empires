@@ -188,7 +188,7 @@ export const HUD: FC<HUDProps> & {
   Right: typeof Right;
   Center: typeof Center;
 } = ({ children, scale = 1, pad = false }) => {
-  const paddingClass = pad ? "p-3" : "";
+  const paddingClass = pad ? "p-1 lg:!p-3" : "";
   return (
     <ScaleContext.Provider value={scale}>
       <div className={cn("screen-container pointer-events-none fixed right-0 top-0", paddingClass)}>

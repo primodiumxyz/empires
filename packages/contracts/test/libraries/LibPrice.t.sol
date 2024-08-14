@@ -4,22 +4,23 @@ pragma solidity >=0.8.24;
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
-import { Empire, OverrideCost, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData } from "codegen/index.sol";
+import { P_GameConfig, Empire, OverrideCost, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 contract LibPriceTest is PrimodiumTest {
   P_PointConfigData config;
   P_OverrideConfigData createShipConfig;
   P_OverrideConfigData killShipConfig;
   uint256 pointUnit;
+  uint8 EMPIRE_COUNT;
   function setUp() public override {
     super.setUp();
     config = P_PointConfig.get();
     pointUnit = config.pointUnit;
     createShipConfig = P_OverrideConfig.get(EOverride.CreateShip);
     killShipConfig = P_OverrideConfig.get(EOverride.KillShip);
+    EMPIRE_COUNT = P_GameConfig.getEmpireCount();
 
     // Let's make the kill ship cost different than create ship
     killShipConfig.minOverrideCost = createShipConfig.minOverrideCost * 3;

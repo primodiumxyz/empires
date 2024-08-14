@@ -1,14 +1,13 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import { curveMonotoneX } from "@visx/curve";
-import { localPoint } from "@visx/event";
 import { LinearGradient } from "@visx/gradient";
-import { GridColumns, GridRows } from "@visx/grid";
-import appleStock, { AppleStock } from "@visx/mock-data/lib/mocks/appleStock";
+import appleStock from "@visx/mock-data/lib/mocks/appleStock";
 import { scaleLinear, scaleTime } from "@visx/scale";
-import { AreaClosed, Bar, Line } from "@visx/shape";
-import { bisector, extent, max } from "@visx/vendor/d3-array";
+import { AreaClosed } from "@visx/shape";
+import { extent, max } from "@visx/vendor/d3-array";
 
 import { EEmpire } from "@primodiumxyz/contracts";
+import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { cn } from "@/util/client";
 
@@ -66,7 +65,6 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
     );
 
     // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
-    // const allEmpires = Array.from(new Array(EEmpire.LENGTH - 1)).map((_, i) => i + 1);
     const timestampMap = new Map<number, { [key: number]: bigint }>();
 
     // grab costs for each timestamp
@@ -102,6 +100,7 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
   }, [historicalPriceEntities, gameStartTimestamp]);
 
   const [colorFrom, colorTo, percentChange] = useMemo(() => {
+    if (historicalPriceData.length < 2) return ["rgba(0,255, 0, .75)", "rgba(0,255, 0, .25)", 0];
     const diff = historicalPriceData[historicalPriceData.length - 1].cost - historicalPriceData[0].cost;
     const percentChange = (diff / historicalPriceData[0].cost) * 100;
 
@@ -135,7 +134,11 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
   );
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex max-h-[75vh] flex-col items-center justify-center overflow-auto">
+      <div className={cn("hidden text-xs lg:block", Math.sign(percentChange) >= 0 ? "text-success" : "text-error")}>
+        {formatNumber(percentChange, { fractionDigits: 1 })}%
+      </div>
+
       <svg width={width} height={height}>
         <LinearGradient id={`area-gradient-${empire}`} from={colorFrom} to={colorTo} toOpacity={0.1} />
         <AreaClosed
@@ -149,9 +152,6 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
           curve={curveMonotoneX}
         />
       </svg>
-      <div className={cn("text-xs", Math.sign(percentChange) >= 0 ? "text-success" : "text-error")}>
-        {percentChange.toFixed(2)}%
-      </div>
     </div>
   );
 };
