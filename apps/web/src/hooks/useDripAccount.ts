@@ -6,10 +6,12 @@ import { privateKeyToAccount } from "viem/accounts";
 
 import { minEth } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
+import { Entity } from "@primodiumxyz/reactive-tables";
+import { useSettings } from "@/hooks/useSettings";
 
 export const DEV_CHAIN = import.meta.env.PRI_CHAIN_ID === "dev";
 
-export const useDripAccount = (): ((address: Hex) => void) => {
+export const useDripAccount = (): ((address: Hex, force?: boolean) => Promise<void>) => {
   const { network, config } = useCore();
   const [dripping, setDripping] = useState(false);
 
@@ -29,10 +31,12 @@ export const useDripAccount = (): ((address: Hex) => void) => {
     return { faucet, externalWalletClient };
   }, [config.chain]);
 
+  const { Dripped } = useSettings();
   const dripAccount = useCallback(
-    async (address: Hex) => {
+    async (address: Hex, force?: boolean) => {
       const publicClient = network?.publicClient;
-      if (!publicClient || dripping) return;
+      const allowDrip = force || !Dripped.get(address as Entity)?.value;
+      if (!publicClient || dripping || !allowDrip) return;
       setDripping(true);
       if (faucet) {
         console.info(`[Faucet] ${address.slice(0, 7)} Balance is less than ${formatEther(minEth)}, dripping funds`);
@@ -44,6 +48,7 @@ export const useDripAccount = (): ((address: Hex) => void) => {
         await externalWalletClient.sendTransaction({ chain: config.chain, to: address, value: amountToDrip });
         console.info(`[Dev Drip] Dripped ${formatEther(amountToDrip)} to ${address.slice(0, 7)}`);
       }
+      Dripped.set({ value: true }, address as Entity);
       setDripping(false);
     },
     [externalWalletClient, faucet, network?.publicClient, config.chain],

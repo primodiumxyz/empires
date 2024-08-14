@@ -16,6 +16,8 @@ import "@/index.css";
 
 import { ServerIcon } from "@heroicons/react/24/solid";
 
+import { useDripAccount } from "@/hooks/useDripAccount";
+
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
 /* -------------------------------------------------------------------------- */
@@ -30,7 +32,8 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const game = useGame();
   const accountClient = useAccountClient();
   const contractCalls = useContractCalls();
-  const cheatcodes = setupCheatcodes(core, game, accountClient, contractCalls);
+  const requestDrip = useDripAccount();
+  const cheatcodes = setupCheatcodes({ core, game, accountClient, contractCalls, requestDrip });
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {

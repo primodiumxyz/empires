@@ -1,5 +1,4 @@
 import { ExclamationCircleIcon, UserIcon } from "@heroicons/react/24/solid";
-import { usePrivy } from "@privy-io/react-auth";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -10,33 +9,17 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
-import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
-
-export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "bg-blue-600",
-  [EEmpire.Green]: "bg-green-600",
-  [EEmpire.Red]: "bg-red-600",
-  [EEmpire.LENGTH]: "",
-};
 
 export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: boolean }> = ({
   hideAccountBalance = false,
   justifyStart = false,
 }) => {
-  const { logout } = usePrivy();
-  const { cancelBurner, usingBurner } = useBurnerAccount();
-
   const {
     playerAccount: { address, entity },
   } = useAccountClient();
-
-  const handleLogout = async () => {
-    if (usingBurner) cancelBurner();
-    else await logout();
-  };
 
   const balance = useBalance(address).value ?? 0n;
 

@@ -14,13 +14,6 @@ import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
 
-export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "bg-blue-600",
-  [EEmpire.Green]: "bg-green-600",
-  [EEmpire.Red]: "bg-red-600",
-  [EEmpire.LENGTH]: "",
-};
-
 export const PlayerReturns = () => {
   const { tables } = useCore();
 
