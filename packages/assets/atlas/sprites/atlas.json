@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1723227096655",
+            "image": "atlas.png?timestamp=1723621538581",
             "format": "RGBA8888",
             "size": {
                 "w": 1432,
@@ -1862,7 +1862,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/shard.png",
+                    "filename": "sprites/icons/gold_alt.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1883,7 +1883,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/shield.png",
+                    "filename": "sprites/icons/shard.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1904,7 +1904,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/ship.png",
+                    "filename": "sprites/icons/shield.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1920,6 +1920,27 @@
                     "frame": {
                         "x": 800,
                         "y": 557,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/ship.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 179,
+                        "y": 1364,
                         "w": 32,
                         "h": 32
                     }
