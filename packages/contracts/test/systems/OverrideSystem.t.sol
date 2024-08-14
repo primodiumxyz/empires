@@ -10,15 +10,17 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
+import { addressToId } from "src/utils.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId, coordToId } from "src/utils.sol";
 import { CoordData } from "src/Types.sol";
-import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, EMPIRE_COUNT } from "src/constants.sol";
 
 contract OverrideSystemTest is PrimodiumTest {
   bytes32 planetId;
   bytes32 aliceId;
   bytes32 bobId;
   uint256 pointUnit;
+  uint8 EMPIRE_COUNT;
 
   function setUp() public override {
     super.setUp();
@@ -32,6 +34,7 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.prank(creator);
     P_PointConfig.setPointRake(0);
     pointUnit = P_PointConfig.getPointUnit();
+    EMPIRE_COUNT = P_GameConfig.getEmpireCount();
   }
 
   function _getCurrentCharge(bytes32 _planetId) internal view returns (uint256) {
@@ -348,12 +351,12 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__createShip{ value: totalCost }(planetId, 1);
     uint256 points = PointsMap.getValue(empire, aliceId);
     vm.startPrank(creator);
-    PointsMap.setLockedPoints(empire, aliceId, points / 2);
+    PointsMap.setLockedPoints(empire, aliceId, pointUnit);
 
     switchPrank(alice);
-    world.Empires__sellPoints(empire, points / 2);
-    assertEq(PointsMap.getLockedPoints(empire, aliceId), points / 2, "Locked Points should be 50");
-    assertEq(PointsMap.getValue(empire, aliceId), points - (points / 2), "Player Points should be 80");
+    world.Empires__sellPoints(empire, pointUnit);
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), pointUnit, "Locked Points should be 50");
+    assertEq(PointsMap.getValue(empire, aliceId), points - (pointUnit), "Player Points should be 80");
   }
 
   function testPlaceMagnet() public {

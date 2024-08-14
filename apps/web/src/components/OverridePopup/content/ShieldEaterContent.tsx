@@ -1,15 +1,16 @@
-import React, { useMemo } from "react";
+import React from "react";
 
-import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
+import { EEmpire, EOverride } from "@primodiumxyz/contracts";
 import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
+import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
-import { useSettings } from "@/hooks/useSettings";
+import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { useShieldEater } from "@/hooks/useShieldEater";
 
 export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => {
@@ -22,6 +23,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
 
   const detonatePriceWei = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
   const detonateDisabled = currentPlanet !== entity || !!cooldownShields;
+  const detonatePointsReceived = useOverridePointsReceived(EOverride.LENGTH, planetEmpire, detonatePriceWei);
 
   const caption =
     currentPlanet !== entity
@@ -51,6 +53,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
       <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
         <Price wei={detonatePriceWei} />
       </p>
+      <PointsReceived points={detonatePointsReceived} inline explicit />
     </div>
   );
 };

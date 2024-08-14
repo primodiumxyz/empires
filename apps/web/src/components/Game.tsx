@@ -6,10 +6,13 @@ import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
+import { GameOver } from "@/components/GameOver";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverridePopup } from "@/components/OverridePopup";
 import { PlayerReturns } from "@/components/PlayerReturns";
+import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
+import { Dashboard } from "@/components/PriceHistory/Dashboard";
 import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
 import { GameProvider } from "@/hooks/providers/GameProvider";
@@ -89,16 +92,20 @@ export const GameHUD = () => {
       <HUD pad>
         <HUD.TopLeft>
           <PriceHistory />
+          <Pot className="lg:hidden" />
         </HUD.TopLeft>
 
-        <HUD.TopMiddle>{DEV && <Cheatcodes />}</HUD.TopMiddle>
+        <HUD.TopMiddle>
+          {DEV && <Cheatcodes />}
+          <Dashboard />
+        </HUD.TopMiddle>
 
         <HUD.TopRight className="flex flex-col gap-2">
           <Account />
         </HUD.TopRight>
 
         <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
-          <div className="flex w-full items-center justify-between gap-2">
+          <div className="flex w-full items-center gap-2 lg:justify-between">
             <MusicPlayer />
             <Settings />
           </div>
@@ -111,6 +118,7 @@ export const GameHUD = () => {
 
         <HUD.Center>
           <OverridePopup />
+          <GameOver />
         </HUD.Center>
 
         <HUD.BottomRight className="flex gap-2">

@@ -1,7 +1,14 @@
 export enum EEmpire {
-  Red = 1,
+  NULL,
+  Red,
   Blue,
   Green,
+  Yellow,
+  Purple,
+  Pink,
+  Orange,
+  Black,
+  White,
   LENGTH,
 }
 
@@ -39,6 +46,7 @@ export enum EOverride {
   BoostCharge,
   StunCharge,
   DetonateShieldEater,
+  AirdropGold,
   LENGTH,
 }
 
@@ -50,14 +58,16 @@ export enum ERoutine {
 }
 
 export const MUDEnums = {
-  EEmpire: enumToArray(EEmpire),
+  EEmpire: enumToArray(EEmpire, { skipNull: true }),
   EOrigin: enumToArray(EOrigin),
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
   ERoutine: enumToArray(ERoutine),
   EOverride: enumToArray(EOverride),
 };
-
-function enumToArray(enumObj: object): [string] {
+function enumToArray(enumObj: object, options?: { skipNull?: boolean }): [string] {
+  if (options?.skipNull) {
+    return [...Object.keys(enumObj).filter((key) => isNaN(Number(key)))] as [string];
+  }
   return ["NULL", ...Object.keys(enumObj).filter((key) => isNaN(Number(key)))] as [string];
 }

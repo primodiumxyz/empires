@@ -5,11 +5,17 @@ export const Animations = {
   PendingBlue: "pending/blue",
   PendingGreen: "pending/green",
   PendingRed: "pending/red",
+  PendingYellow: "pending/yellow",
+  PendingPink: "pending/pink",
+  PendingPurple: "pending/purple",
 
   // Magnet
   MagnetBlue: "magnet/blue",
   MagnetGreen: "magnet/green",
   MagnetRed: "magnet/red",
+  MagnetYellow: "magnet/yellow",
+  MagnetPink: "magnet/pink",
+  MagnetPurple: "magnet/purple",
 
   //VFX --------------------------
 
@@ -17,14 +23,16 @@ export const Animations = {
   ConquerBlue: "conquer/blue",
   ConquerGreen: "conquer/green",
   ConquerRed: "conquer/red",
+  ConquerYellow: "conquer/yellow",
+  ConquerPink: "conquer/pink",
+  ConquerPurple: "conquer/purple",
 
-  //DESTROYER ARC
-  DestroyerArcUpperRed: "destroyer/upper/red",
-  DestroyerArcUpperGreen: "destroyer/upper/green",
-  DestroyerArcUpperBlue: "destroyer/upper/blue",
-  DestroyerArcLowerRed: "destroyer/lower/red",
-  DestroyerArcLowerBlue: "destroyer/lower/blue",
-  DestroyerArcLowerGreen: "destroyer/lower/green",
+  MovementRed: "movement/red",
+  MovementGreen: "movement/green",
+  MovementBlue: "movement/blue",
+  MovementYellow: "movement/yellow",
+  MovementPink: "movement/pink",
+  MovementPurple: "movement/purple",
 
   // Waves
   MagnetWaves: "waves",

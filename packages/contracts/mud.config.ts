@@ -30,6 +30,7 @@ export const worldInput = {
         goldGenRate: "uint256",
         gameOverBlock: "uint256",
         gameStartTimestamp: "uint256",
+        empireCount: "uint8",
       },
     },
 
@@ -490,6 +491,22 @@ export const worldInput = {
       },
       type: "offchainTable",
     },
+
+    AirdropGoldOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
+        empireId: "EEmpire",
+        goldDistributed: "uint256",
+        ethSpent: "uint256",
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {

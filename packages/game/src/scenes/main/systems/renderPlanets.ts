@@ -21,6 +21,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       coord: convertAxialToCartesian({ q: Number(q) - 100, r: Number(r) }, 100 + MARGIN),
       empire: planet.empireId,
       citadel: planet.isCitadel,
+      empireCount: tables.P_GameConfig.get()?.empireCount ?? 0,
     });
 
     planetObj

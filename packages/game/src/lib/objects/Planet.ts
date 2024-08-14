@@ -3,11 +3,11 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { calculateAngleBetweenPoints, entityToPlanetName, formatNumber, lerp } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { DepthLayers } from "@game/lib/constants/common";
+import { allEmpires, DepthLayers } from "@game/lib/constants/common";
 import {
   EmpireToConquerAnimationKeys,
-  EmpireToDestroyerArcAnimationKeys,
   EmpireToHexSpriteKeys,
+  EmpireToMovementAnimationKeys,
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
@@ -34,15 +34,22 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private ships: IconLabel;
   private gold: IconLabel;
   private overheat: Overheat;
-  private magnets: [red: Magnet, blue: Magnet, green: Magnet];
+  private magnets: Magnet[];
   private magnetWaves: Phaser.GameObjects.Sprite;
   private shieldEater: ShieldEater;
   private citadel: Phaser.GameObjects.Sprite | null;
   private empireId: EEmpire;
   private spawned = false;
 
-  constructor(args: { id: Entity; scene: PrimodiumScene; coord: PixelCoord; empire: EEmpire; citadel?: boolean }) {
-    const { id, scene, coord, empire, citadel } = args;
+  constructor(args: {
+    id: Entity;
+    scene: PrimodiumScene;
+    coord: PixelCoord;
+    empire: EEmpire;
+    citadel?: boolean;
+    empireCount: number;
+  }) {
+    const { id, scene, coord, empire, citadel, empireCount } = args;
 
     super(scene.phaserScene, coord.x, coord.y);
 
@@ -133,11 +140,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.overheat = new Overheat(scene, coord, empire).setDepth(DepthLayers.Base + coord.y);
 
-    this.magnets = [
-      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Red),
-      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Blue),
-      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Green),
-    ];
+    this.magnets = allEmpires
+      .slice(0, empireCount)
+      .map((empire) => new Magnet(scene, coord.x + 75, coord.y - 60, empire));
     this.magnets.forEach((magnet) => magnet.setDepth(DepthLayers.Magnet));
 
     this.magnetWaves = new Phaser.GameObjects.Sprite(
@@ -286,10 +291,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
-    //lower
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][0] ?? "DestroyerArcLowerRed",
+      EmpireToMovementAnimationKeys[this.empireId] ?? "MovementRed",
       {
         rotation: angle.radian,
         depth: DepthLayers.Planet + 1,
@@ -299,22 +303,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         offset: {
           x: -12,
           y: 10,
-        },
-        scale: 1.3,
-      },
-    );
-    //upper
-    this._scene.fx.emitVfx(
-      { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][1] ?? "DestroyerArcUpperRed",
-      {
-        rotation: angle.radian + 2 * Math.PI,
-        depth: DepthLayers.Planet + 2,
-        originX: 0,
-        originY: 1,
-        offset: {
-          x: -12,
-          y: 15,
         },
         scale: 1.3,
       },

@@ -13,6 +13,9 @@ import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { NamespaceOwner } from "@latticexyz/world/src/codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EEmpire } from "codegen/common.sol";
+import { Planet } from "codegen/index.sol";
+import { PlanetsSet } from "adts/PlanetsSet.sol";
+import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 
 function toString(bytes32 id) pure returns (string memory) {
   return string(abi.encodePacked(id));
@@ -82,5 +85,24 @@ contract PrimodiumTest is MudTest {
 
     vm.prank(from);
     world.call{ value: value }(systemId, abi.encodeCall(system.echoValue, ()));
+  }
+
+  function clearAllEmpirePlanets() public {
+    vm.startPrank(creator);
+    for (uint256 i = 0; i < uint256(EEmpire.LENGTH); i++) {
+      EmpirePlanetsSet.clear(EEmpire(i));
+    }
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    for (uint256 i = 0; i < planetIds.length; i++) {
+      Planet.setEmpireId(planetIds[i], EEmpire.NULL);
+    }
+    vm.stopPrank();
+  }
+
+  function assignPlanetToEmpire(bytes32 planetId, EEmpire empire) public {
+    vm.startPrank(creator);
+    Planet.setEmpireId(planetId, empire);
+    EmpirePlanetsSet.add(empire, planetId);
+    vm.stopPrank();
   }
 }
