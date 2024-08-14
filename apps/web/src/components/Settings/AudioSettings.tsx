@@ -25,7 +25,7 @@ export const AudioSettings = () => {
 
   return (
     <Navigator.Screen title="audio">
-      <SecondaryCard className="w-full space-y-5">
+      <SecondaryCard className="w-full space-y-3">
         <div>
           <p className="pb-1 text-xs font-bold text-accent opacity-50">MASTER</p>
           <Range

@@ -59,6 +59,7 @@ export const useSettings = () => {
     };
   }, []);
 
+  const enabled = ShowBlockchainUnits.use()?.value ?? false;
   return {
     fontStyle: {
       family: fontStyle?.family ?? fontStyleOptions.family[0],
@@ -67,7 +68,7 @@ export const useSettings = () => {
       setSize: setFontStyleSize,
     },
     showBlockchainUnits: {
-      enabled: ShowBlockchainUnits.use()?.value ?? false,
+      enabled,
       setEnabled: (enabled: boolean) => ShowBlockchainUnits.update({ value: enabled }),
     },
     Dripped,

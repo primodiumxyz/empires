@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { BackwardIcon, ForwardIcon, MusicalNoteIcon, PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
+import {
+  BackwardIcon,
+  ForwardIcon,
+  MusicalNoteIcon,
+  PauseIcon,
+  PlayIcon,
+  SpeakerXMarkIcon,
+} from "@heroicons/react/24/solid";
 
 import { Button } from "@/components/core/Button";
-import { Card } from "@/components/core/Card";
 import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
 import { getNextSong, getPrevSong, getRandomSong } from "@/util/soundtrack";
@@ -87,10 +93,13 @@ export const MusicPlayer = () => {
   };
 
   return (
-    <div className={cn("group pointer-events-auto relative w-5/6 text-sm")}>
-      <div className={cn("flex items-center gap-2 transition-all group-hover:opacity-15", !isPlaying && "opacity-15")}>
-        <MusicalNoteIcon className={cn("w-6", isPlaying && "animate-pulse")} />
-        <div className="marquee relative flex grow">
+    <div className={cn("group pointer-events-auto relative text-sm lg:w-5/6")}>
+      <div className={cn("flex items-center gap-2 transition-all", !isPlaying && "opacity-40")}>
+        <Button variant="ghost" size="xs" shape="square" onClick={isPlaying ? handlePause : handlePlay}>
+          {isPlaying && <MusicalNoteIcon className={cn("size-6")} />}
+          {!isPlaying && <SpeakerXMarkIcon className="size-6" />}
+        </Button>
+        <div className="marquee relative hidden grow lg:flex">
           <div className="marquee-text flex">
             <div className="flex px-1">
               <p className="font-bold">{song.title}-</p>
@@ -104,30 +113,30 @@ export const MusicPlayer = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <div
-        className={cn(
-          "absolute inset-0 flex w-full items-center justify-center opacity-0 transition-all group-hover:opacity-100",
-          !isPlaying && "opacity-100",
-        )}
-      >
-        <div className="flex">
-          <Button variant="ghost" shape="square" size="xs" onClick={handlePrev}>
-            <BackwardIcon />
-          </Button>
-          {isPlaying ? (
-            <Button variant="ghost" shape="square" size="xs" onClick={handlePause}>
-              <PauseIcon />
-            </Button>
-          ) : (
-            <Button variant="ghost" shape="square" size="xs" onClick={handlePlay}>
-              <PlayIcon />
-            </Button>
+        <div
+          className={cn(
+            "absolute inset-0 hidden w-full items-center justify-center opacity-0 transition-all group-hover:opacity-100 lg:flex",
+            !isPlaying && "opacity-100",
           )}
-          <Button variant="ghost" shape="square" size="xs" onClick={handleNext}>
-            <ForwardIcon />
-          </Button>
+        >
+          <div className="flex">
+            <Button variant="ghost" shape="square" size="xs" onClick={handlePrev}>
+              <BackwardIcon />
+            </Button>
+            {isPlaying ? (
+              <Button variant="ghost" shape="square" size="xs" onClick={handlePause}>
+                <PauseIcon />
+              </Button>
+            ) : (
+              <Button variant="ghost" shape="square" size="xs" onClick={handlePlay}>
+                <PlayIcon />
+              </Button>
+            )}
+            <Button variant="ghost" shape="square" size="xs" onClick={handleNext}>
+              <ForwardIcon />
+            </Button>
+          </div>
         </div>
       </div>
 

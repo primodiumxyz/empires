@@ -149,7 +149,7 @@ Modal.Content = function ModalContent({ children, className }) {
         className={cn(className, "max-h-screen w-screen max-w-screen-xl space-y-2 p-5 pt-12 md:w-[90%]")}
         ref={modalRef}
       >
-        <Card className="pointer-events-auto h-full w-full shadow-2xl" noMotion>
+        <Card className="pointer-events-auto h-full w-full shadow-2xl">
           <div className="absolute top-0 flex w-full -translate-y-full items-center justify-between p-2">
             <p className="pr-2 font-bold uppercase text-accent">{title}</p>
             {!blockClose && (

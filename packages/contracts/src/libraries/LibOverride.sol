@@ -4,10 +4,9 @@ pragma solidity >=0.8.24;
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 import { addressToId } from "src/utils.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
-import { P_PointConfig, P_OverrideConfig } from "codegen/index.sol";
+import { P_PointConfig, P_OverrideConfig, P_GameConfig } from "codegen/index.sol";
 
 /**
  * @title OverrideSystem
@@ -30,21 +29,22 @@ library LibOverride {
   ) internal {
     PlayersMap.setLoss(playerId, PlayersMap.get(playerId).loss + _spend);
     uint256 pointUnit = P_PointConfig.getPointUnit();
+    uint8 empireCount = P_GameConfig.getEmpireCount();
     bool progressOverride = P_OverrideConfig.getIsProgressOverride(_overrideType);
 
     if (progressOverride) {
-      uint256 numPoints = _overrideCount * (EMPIRE_COUNT - 1) * pointUnit;
+      uint256 numPoints = _overrideCount * (empireCount - 1) * pointUnit;
       LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
       LibPrice.pointCostUp(_empireImpacted, numPoints);
     } else {
       uint256 numPoints = _overrideCount * pointUnit;
       // Iterate through each empire except the impacted one
-      for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
-        if (i == uint256(_empireImpacted)) {
+      for (uint8 i = 1; i <= empireCount; i++) {
+        if (EEmpire(i) == _empireImpacted) {
           continue;
         }
         LibPoint.issuePoints(EEmpire(i), playerId, numPoints);
-        LibPrice.pointCostUp(_empireImpacted, numPoints);
+        LibPrice.pointCostUp(EEmpire(i), numPoints);
       }
     }
     LibPrice.overrideCostUp(_empireImpacted, _overrideType, _overrideCount);
