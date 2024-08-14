@@ -45,6 +45,16 @@ export const worldInput = {
       },
     },
 
+    P_ShieldEaterConfig: {
+      key: [],
+      schema: {
+        visitShieldDamage: "uint256",
+        detonateCenterDamage: "uint256", // percentage, out of 10000
+        detonateAdjacentDamage: "uint256", // percentage, out of 10000
+        detonationThreshold: "uint256",
+      },
+    },
+
     P_PointConfig: {
       key: [],
       schema: {
@@ -169,6 +179,16 @@ export const worldInput = {
         empireId: "EEmpire",
         overrideAction: "EOverride",
         value: "uint256",
+      },
+    },
+
+    ShieldEater: {
+      key: [],
+      schema: {
+        currentPlanet: "bytes32",
+        nextPlanet: "bytes32",
+        destinationPlanet: "bytes32",
+        currentCharge: "uint256",
       },
     },
 
@@ -457,6 +477,20 @@ export const worldInput = {
       type: "offchainTable",
     },
 
+    ShieldEaterDetonateOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
     AirdropGoldOverrideLog: {
       key: ["id"],
       schema: {
@@ -471,6 +505,7 @@ export const worldInput = {
       },
       type: "offchainTable",
     },
+
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {

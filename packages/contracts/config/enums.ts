@@ -38,6 +38,7 @@ export enum EOverride {
   PlaceMagnet,
   BoostCharge,
   StunCharge,
+  DetonateShieldEater,
   AirdropGold,
   LENGTH,
 }
@@ -46,7 +47,6 @@ export enum ERoutine {
   BuyShips = 1,
   BuyShields,
   AccumulateGold,
-
   LENGTH,
 }
 
