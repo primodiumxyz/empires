@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const getIsPortrait = (): boolean => window.innerHeight > window.innerWidth;
 const getIsLandscape = (): boolean => window.innerWidth > window.innerHeight;

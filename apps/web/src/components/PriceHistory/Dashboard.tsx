@@ -1,6 +1,5 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
-import { formatEther } from "viem";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -16,30 +15,13 @@ import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointG
 import { KPICard } from "@/components/PriceHistory/KPICard";
 import { SellPoints } from "@/components/PriceHistory/SellPoints";
 import { useEmpires } from "@/hooks/useEmpires";
-import { usePoints } from "@/hooks/usePoints";
-import { usePot } from "@/hooks/usePot";
 import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { cn } from "@/util/client";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const Dashboard = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
-  const { playerAccount } = useAccountClient();
-  const {
-    tables,
-    utils: { getPointPrice },
-  } = useCore();
-  const { pot } = usePot();
-  const points = usePoints(playerAccount.entity);
   const empires = useEmpires();
-  const time = tables.Time.use()?.value;
-  const pointCosts = useMemo(
-    () =>
-      Array.from(empires.entries()).map(([empire]) =>
-        getPointPrice(empire, Number(formatEther(points[empire].playerPoints))),
-      ),
-    [empires, points, time],
-  );
 
   return (
     <Modal title="Dashboard">

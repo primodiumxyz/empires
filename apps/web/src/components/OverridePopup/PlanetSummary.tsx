@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
@@ -10,6 +8,7 @@ import { IconLabel } from "@/components/core/IconLabel";
 import { useCharge } from "@/hooks/useCharge";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
+import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
 import { cn } from "@/util/client";
 
 /* --------------------------------- PLANET --------------------------------- */
@@ -88,20 +87,11 @@ const calculateTurnsLeft = (endTurn: bigint | undefined, globalTurn: bigint, bef
 };
 
 const Overrides = ({ entity }: { entity: Entity }) => {
-  const { utils, tables } = useCore();
-  const { context, probabilities: p } = utils.getRoutineProbabilities(entity);
+  const { tables } = useCore();
   const overheat = useCharge(entity);
   const empires = useEmpires();
-  const time = tables.Time.use();
 
-  const magnets = useMemo(
-    () =>
-      [...empires.keys()].map((empire) => ({
-        endTurn: tables.Magnet.getWithKeys({ empireId: empire, planetId: entity })?.endTurn,
-        empire: empire,
-      })),
-    [empires, entity, time],
-  );
+  const magnets = usePlanetMagnets(entity);
 
   const currTurn = tables.Turn.use()?.value ?? 0n;
 

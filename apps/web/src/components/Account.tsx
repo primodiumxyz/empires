@@ -33,19 +33,17 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
     else await logout();
   };
 
-  const { tables } = useCore();
   const balance = useBalance(address).value ?? 0n;
   const empires = useEmpires();
 
-  const time = tables.Time.use() ?? 0n;
   const sortedEmpires = useMemo(
     () =>
       [...empires.keys()].sort((a, b) => {
-        const aPoints = tables.Value_PointsMap.getWithKeys({ empireId: a, playerId: entity })?.value ?? 0n;
-        const bPoints = tables.Value_PointsMap.getWithKeys({ empireId: b, playerId: entity })?.value ?? 0n;
+        const aPoints = empires.get(a)?.empirePoints ?? 0n;
+        const bPoints = empires.get(b)?.empirePoints ?? 0n;
         return Number(bPoints - aPoints);
       }),
-    [empires, time],
+    [empires],
   );
 
   return (

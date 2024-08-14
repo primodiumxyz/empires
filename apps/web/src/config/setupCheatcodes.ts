@@ -686,7 +686,7 @@ export const setupCheatcodes = (
       const empireId = empire.id as EEmpire;
 
       const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
-      const empires = tables.P_GameConfig.use()?.empireCount ?? 0;
+      const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
       const endTurn = currentTurn + BigInt(turns.value) * BigInt(empires);
 
       const magnetTurnRemovalOp = _removeMagnetTurnRemoval(empireId, planetId);

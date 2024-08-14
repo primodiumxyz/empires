@@ -16,6 +16,7 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
+import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }) => {
@@ -43,15 +44,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
   const playerBalance = useBalance(address).value ?? 0n;
   const empires = useEmpires();
 
-  const time = tables.Time.use()?.value;
-  const magnets = useMemo(
-    () =>
-      Array.from(empires.keys()).map((empire) => ({
-        empire,
-        exists: !!tables.Magnet.getWithKeys({ planetId, empireId: empire }),
-      })),
-    [empires, planetId, time],
-  );
+  const magnets = usePlanetMagnets(planetId);
   const currentMagnetExists = !!magnets.find((magnet) => magnet.empire === empire)?.exists;
 
   const { disabled, message } = useMemo(() => {
@@ -78,7 +71,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
             </Button>
           ))}
         </div>
-        <Divider direction="vertical" />
+        <Divider direction="vertical" className="self-center" />
         <div className="flex flex-col items-center justify-start">
           <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
         </div>

@@ -96,7 +96,7 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle>
-          {DEV && <Cheatcodes className="hidden lg:block" />}
+          {DEV && <Cheatcodes />}
           <Dashboard />
         </HUD.TopMiddle>
 
