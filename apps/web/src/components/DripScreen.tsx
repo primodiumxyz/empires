@@ -20,11 +20,6 @@ export default function DripScreen() {
     dripAccount(playerAccount.address);
   }, [playerAccount.address, playerBalance.value]);
 
-  useEffect(() => {
-    if (playerBalance.loading || (playerBalance.value ?? 0n) >= minEth) return;
-    dripAccount(playerAccount.address);
-  }, [playerAccount.address, playerBalance.value]);
-
   const dripped = Dripped.use(playerAccount.address as Entity)?.value;
   const balanceReady = useMemo(() => dripped || (playerBalance.value ?? 0n) >= minEth, [playerBalance.value, dripped]);
 

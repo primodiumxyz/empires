@@ -48,8 +48,8 @@ export const useDripAccount = (): ((address: Hex, force?: boolean) => Promise<vo
         await externalWalletClient.sendTransaction({ chain: config.chain, to: address, value: amountToDrip });
         console.info(`[Dev Drip] Dripped ${formatEther(amountToDrip)} to ${address.slice(0, 7)}`);
       }
-      setDripping(false);
       Dripped.set({ value: true }, address as Entity);
+      setDripping(false);
     },
     [externalWalletClient, faucet, network?.publicClient, config.chain],
   );
