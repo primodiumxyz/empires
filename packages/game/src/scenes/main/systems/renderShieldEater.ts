@@ -1,4 +1,4 @@
-import { Core, entityToPlanetName } from "@primodiumxyz/core";
+import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { PrimodiumScene } from "@game/types";
 
