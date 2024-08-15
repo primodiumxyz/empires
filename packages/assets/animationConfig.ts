@@ -349,7 +349,6 @@ export const AnimationConfig: Animation[] = [
     frameRate: 10,
     startFrame: 0,
     endFrame: 14,
-    randomFrame: true,
     zeroPad: 3,
     prefix: "vfx/shield-eater/crack/AOE_Crack_",
     suffix: ".png",
