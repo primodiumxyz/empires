@@ -1085,9 +1085,9 @@ export const setupCheatcodes = (options: {
     placeMagnet,
     removeMagnet,
     removeAllMagnets,
-    resetCharges,
-    maxOutCharges,
-    triggerCharges,
+    // resetCharges,
+    // maxOutCharges,
+    // triggerCharges,
     withdrawRake,
     ...Object.values(updateGameConfig),
   ];
