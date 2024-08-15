@@ -1,13 +1,9 @@
 import { EmpireDetails } from "@/components/PriceHistory/EmpireDetails";
-import { HistoricalPointPriceModal } from "@/components/PriceHistory/HistoricalPointPriceModal";
 
 export const PriceHistory = () => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="pointer-events-auto hidden flex-col items-center lg:flex">
       <EmpireDetails />
-
-      <hr className="mt-2 w-full border-secondary/50" />
-      <HistoricalPointPriceModal />
     </div>
   );
 };

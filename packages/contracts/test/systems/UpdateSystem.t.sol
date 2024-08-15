@@ -11,9 +11,9 @@ import { LibMagnet } from "libraries/LibMagnet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire, ERoutine, EOverride } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 contract UpdateSystemTest is PrimodiumTest {
+  uint8 EMPIRE_COUNT;
   bytes32 planetId;
   bytes32 emptyPlanetId;
   bytes32 targetPlanetId;
@@ -28,7 +28,7 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function setUp() public override {
     super.setUp();
-
+    EMPIRE_COUNT = P_GameConfig.getEmpireCount();
     aliceId = addressToId(alice);
     bobId = addressToId(bob);
     pointUnit = P_PointConfig.getPointUnit();
@@ -137,7 +137,8 @@ contract UpdateSystemTest is PrimodiumTest {
   }
 
   function _getEndTurn(uint256 turnDuration) internal view returns (uint256) {
-    return block.number + (turnDuration * 3) * P_GameConfig.getTurnLengthBlocks();
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    return block.number + (turnDuration * empireCount) * P_GameConfig.getTurnLengthBlocks();
   }
 
   function testMagnetRemoval() public {

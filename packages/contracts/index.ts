@@ -1,5 +1,5 @@
-import { OTHER_EMPIRE_COUNT, POINTS_UNIT } from "./config/constants";
-import { EDirection, EEmpire, EMovement, EOrigin, ERoutine } from "./config/enums";
+import { POINTS_UNIT } from "./config/constants";
+import { EDirection, EEmpire, EMovement, EOrigin, EOverride, ERoutine } from "./config/enums";
 import mudConfig, { worldInput } from "./mud.config";
 import IWorldAbi from "./out/IWorld.sol/IWorld.abi.json";
 import type IWorldAbiType from "./out/IWorld.sol/IWorld.abi.json.d.ts";
@@ -10,11 +10,11 @@ export {
   EEmpire,
   EMovement,
   EOrigin,
+  EOverride,
   ERoutine,
   IWorldAbi,
   IWorldAbiType,
   mudConfig,
-  OTHER_EMPIRE_COUNT,
   POINTS_UNIT,
   worldInput,
   worldsJson,

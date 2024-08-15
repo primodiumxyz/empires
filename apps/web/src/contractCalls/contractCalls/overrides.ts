@@ -3,8 +3,8 @@ import { formatEther } from "viem";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { EmpireEnumToName } from "@/util/lookups";
-import { notify, withTransactionStatus } from "@/util/notify";
+import { EmpireEnumToConfig } from "@/util/lookups";
+import { withTransactionStatus } from "@/util/notify";
 
 export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) => {
   const createShip = async (
@@ -120,8 +120,8 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           },
         }),
       {
-        loading: `Selling points from ${EmpireEnumToName[empire as EEmpire]} empire`,
-        success: `Sold ${formatEther(amount)} point${amount > 1e18 ? "s" : ""} from ${EmpireEnumToName[empire as EEmpire]} empire`,
+        loading: `Selling points from ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
+        success: `Sold ${formatEther(amount)} point${amount > 1e18 ? "s" : ""} from ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
         error: "Failed to sell points",
       },
     );
@@ -166,8 +166,8 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           },
         }),
       {
-        loading: `Placing ${EmpireEnumToName[empire]} magnet on ${entityToPlanetName(planetId)}`,
-        success: `Placed ${EmpireEnumToName[empire]} magnet on ${entityToPlanetName(planetId)} for ${turnCount} turn${turnCount > 1 ? "s" : ""}`,
+        loading: `Placing ${EmpireEnumToConfig[empire as EEmpire].name} magnet on ${entityToPlanetName(planetId)}`,
+        success: `Placed ${EmpireEnumToConfig[empire as EEmpire].name} magnet on ${entityToPlanetName(planetId)} for ${turnCount} turn${turnCount > 1 ? "s" : ""}`,
         error: "Failed to place magnet",
       },
     );

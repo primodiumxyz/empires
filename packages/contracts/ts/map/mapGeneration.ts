@@ -9,7 +9,7 @@ export async function generateMap(outputBaseDirectory: string) {
   await formatAndWriteSolidity(finalContent, fullOutputPath, `Generated terrain`);
 }
 
-const EmpireNames = ["NULL", "Red", "Blue", "Green"];
+const EmpireNames = ["NULL", "Red", "Blue", "Green", "Yellow", "Purple", "Pink"];
 const OFFSET = 100;
 function oddrToAxial(hex: { row: number; col: number }) {
   const q = hex.col - (hex.row - (hex.row & 1)) / 2;
@@ -82,7 +82,7 @@ function createPlanets() {
     shipCount: 0,
     shieldCount: 0,
     empireId: EEmpire.Red,
-    goldCount: 0
+    goldCount: 0,
   });
 
   ${str}

@@ -6,7 +6,6 @@ import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { LibRoutine } from "libraries/LibRoutine.sol";
 import { Planet, P_GameConfig } from "codegen/index.sol";
 import { RoutineThresholds } from "src/Types.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 contract UpdateEmpiresSubsystem is EmpiresSystem {
   function updateEmpires(RoutineThresholds[] memory routineThresholds) public {
@@ -16,7 +15,9 @@ contract UpdateEmpiresSubsystem is EmpiresSystem {
       LibRoutine.executeRoutine(routineThresholds[i].planetId, routineThresholds[i]);
       Planet.setGoldCount(
         routineThresholds[i].planetId,
-        Planet.getGoldCount(routineThresholds[i].planetId) + P_GameConfig.getGoldGenRate() * EMPIRE_COUNT
+        Planet.getGoldCount(routineThresholds[i].planetId) +
+          P_GameConfig.getGoldGenRate() *
+          P_GameConfig.getEmpireCount()
       );
     }
   }
