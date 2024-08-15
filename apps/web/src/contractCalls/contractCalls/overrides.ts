@@ -219,7 +219,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
         execute({
           functionName: "Empires__detonateShieldEater",
           args: [],
-          options: { value: payment, gas: 738649n * 2n }, // TODO: get gas estimate
+          options: { value: payment, gas: 1_000_000n * 2n }, // TODO: get gas estimate
           txQueueOptions: {
             id: "detonate-shield-eater",
             ...options,
