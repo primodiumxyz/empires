@@ -17,6 +17,7 @@ export const worldInput = {
     UpdateMagnetsSubsystem: { openAccess: false },
     UpdatePriceSubsystem: { openAccess: false },
     UpdateShieldEaterSubsystem: { openAccess: false },
+    ResetClearLoopSubsystem: { openAccess: false },
   },
 
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn

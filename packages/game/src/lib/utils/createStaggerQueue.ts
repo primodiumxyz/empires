@@ -2,6 +2,7 @@ import { sleep } from "@primodiumxyz/core";
 
 export type QueuedCallback = () => void | Promise<void>;
 
+export type StaggerQueue = ReturnType<typeof createStaggerQueue>;
 export function createStaggerQueue() {
   const _queue: [QueuedCallback, number][] = [];
   let executing = false;
@@ -29,7 +30,10 @@ export function createStaggerQueue() {
     const [callback, duration] = cb;
     await callback();
 
-    await sleep(duration);
+    const queueLength = _queue.length;
+    const speed = queueLength > 20 ? 0.25 : queueLength > 10 ? 0.5 : 1;
+
+    await sleep(duration * speed);
 
     await _executeQueue();
   }

@@ -21,6 +21,7 @@ function generateContent() {
   const center = { q: Math.floor((planetMap.width - 1) / 2), r: Math.floor((planetMap.height - 1) / 2) };
   const planets = planetMap.layers[0].data;
   const citadelPlanets = planetMap.layers[1].data;
+  const treasurePlanets = planetMap.layers[2].data;
 
   return planets
     .map((_empire, i) => {
@@ -31,7 +32,9 @@ function generateContent() {
       const coord = oddrToAxial({ row: r, col: q });
 
       const empireName = EmpireNames[empire] ?? "NULL";
-      const isCitadel = citadelPlanets[i] === 5;
+      const isCitadel = citadelPlanets[i] === 8;
+      const isGuard = treasurePlanets[i] === 9;
+      const isTreasure = treasurePlanets[i] === 10;
 
       return `
             /* Planet at (${coord.q}, ${coord.r}) */
@@ -39,7 +42,8 @@ function generateContent() {
             planetData.empireId = EEmpire.${empireName};
             planetData.q = ${coord.q};
             planetData.r = ${coord.r};
-            planetData.shieldCount = ${empireName === "NULL" ? 4 : 0};
+            planetData.shieldCount = ${isTreasure ? 0 : isGuard ? 20 : empireName === "NULL" ? 4 : 0};
+            planetData.goldCount = ${isTreasure ? 500 : isGuard ? 50 : 0};
             planetData.isCitadel = ${isCitadel ? "true" : "false"};
             Planet.set(planetId, planetData);
 

@@ -13,7 +13,6 @@ import {
 } from "@game/lib/mappings";
 import { IconLabel } from "@game/lib/objects/IconLabel";
 import { Magnet } from "@game/lib/objects/Magnet";
-import { Overheat } from "@game/lib/objects/Overheat";
 import { ShieldEater } from "@game/lib/objects/ShieldEater";
 import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 import { PrimodiumScene } from "@game/types";
@@ -300,6 +299,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         depth: DepthLayers.Planet + 1,
         originX: 0,
         originY: 1,
+        speed: 1.5,
         blendMode: Phaser.BlendModes.ADD,
         offset: {
           x: -12,

@@ -18,7 +18,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
-        empireCount: 4,
+        empireCount: 6,
       },
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),

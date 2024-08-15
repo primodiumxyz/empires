@@ -28,14 +28,15 @@ const useWinningEmpire = (): { gameOver: boolean; empire: EEmpire | null } => {
     });
 
     // Count total planets for each empire
-    for (let empire = 1; empire < EEmpire.LENGTH; empire++) {
+    const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
+    for (let empire = 1; empire <= empires; empire++) {
       const planets = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: empire })?.itemKeys ?? [];
       empiresTotalPlanets[empire] = planets.length;
     }
 
     // Check for domination victory
     const totalCitadelPlanets = citadelPlanets.length;
-    for (let empire = 1; empire < EEmpire.LENGTH; empire++) {
+    for (let empire = 1; empire <= empires; empire++) {
       if (empiresCitadelCount[empire] === totalCitadelPlanets) {
         return { gameOver: true, empire: empire as EEmpire };
       }
@@ -48,7 +49,7 @@ const useWinningEmpire = (): { gameOver: boolean; empire: EEmpire | null } => {
     // Determine winning empire
     let maxCitadelPlanets = 0;
 
-    for (let empire = 1; empire < EEmpire.LENGTH; empire++) {
+    for (let empire = 1; empire <= empires; empire++) {
       if (empiresCitadelCount[empire] > maxCitadelPlanets) {
         maxCitadelPlanets = empiresCitadelCount[empire];
         winningEmpire = empire;
