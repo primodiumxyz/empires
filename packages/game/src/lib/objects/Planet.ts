@@ -408,11 +408,27 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     activeMagnets.forEach((magnet, index) => magnet.updatePosition(this.coord.x + 75, this.coord.y - 60 + index * 30));
   }
 
-  setShieldEaterLocation(present: boolean): ShieldEater {
-    return this.shieldEater.setShieldEaterLocation(present);
+  setShieldEaterLocation(present: boolean): ShieldEater["location"] {
+    const location = this.shieldEater.setShieldEaterLocation(present);
+
+    if (present) {
+      this.shieldEater.setDepth(DepthLayers.Planet - 1);
+
+      location.on(
+        "animationupdate",
+        (animation: Phaser.Animations.Animation, frame: Phaser.Animations.AnimationFrame) => {
+          if (frame.index === 9) {
+            this.shieldEater.setDepth(DepthLayers.ShieldEater);
+            location.off("animationupdate");
+          }
+        },
+      );
+    }
+
+    return location;
   }
 
-  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater {
+  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater["destination"] {
     return this.shieldEater.setShieldEaterPath(turns, turnsToDestination);
   }
 

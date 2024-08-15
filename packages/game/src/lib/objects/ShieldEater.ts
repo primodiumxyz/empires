@@ -29,13 +29,26 @@ export class ShieldEater extends Phaser.GameObjects.Container {
 
   setShieldEaterLocation(present: boolean) {
     if (present) {
-      this.location.play(Animations["ShieldEaterIdle"]);
-      this.location.setActive(true).setVisible(true);
+      setTimeout(() => {
+        this.location.setActive(true).setVisible(true);
+        this.offsetLocationEnter("offset");
+
+        this.location.play(Animations["ShieldEaterEnter"]);
+        this.location.once("animationcomplete", () => {
+          this.offsetLocationEnter("restore");
+          this.location.play(Animations["ShieldEaterIdle"]);
+        });
+      }, 1500);
     } else {
-      this.location.setActive(false).setVisible(false);
+      this.offsetLocationExit("offset");
+      this.location.play(Animations["ShieldEaterExit"]);
+      this.location.once("animationcomplete", () => {
+        this.location.setActive(false).setVisible(false);
+        this.offsetLocationExit("restore");
+      });
     }
 
-    return this;
+    return this.location;
   }
 
   setShieldEaterPath(turns: number, turnsToDestination?: number) {
@@ -48,7 +61,7 @@ export class ShieldEater extends Phaser.GameObjects.Container {
       this.destination.setActive(false).setVisible(false);
     }
 
-    return this;
+    return this.destination;
   }
 
   shieldEaterDetonate() {
@@ -67,5 +80,31 @@ export class ShieldEater extends Phaser.GameObjects.Container {
     });
 
     return this;
+  }
+
+  private offsetLocationEnter(type: "offset" | "restore") {
+    const offsetX = -26.5;
+    const offsetY = 6;
+
+    if (type === "offset") {
+      this.location.setX(this.location.x + offsetX);
+      this.location.setY(this.location.y + offsetY);
+    } else {
+      this.location.setX(this.location.x - offsetX);
+      this.location.setY(this.location.y - offsetY);
+    }
+  }
+
+  private offsetLocationExit(type: "offset" | "restore") {
+    const offsetX = -97.5;
+    const offsetY = -18.5;
+
+    if (type === "offset") {
+      this.location.setX(this.location.x + offsetX);
+      this.location.setY(this.location.y + offsetY);
+    } else {
+      this.location.setX(this.location.x - offsetX);
+      this.location.setY(this.location.y - offsetY);
+    }
   }
 }

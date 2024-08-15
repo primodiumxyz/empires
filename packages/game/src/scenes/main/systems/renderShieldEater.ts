@@ -14,6 +14,8 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
   tables.ShieldEater.watch({
     world: systemsWorld,
     onChange: ({ properties: { current, prev } }) => {
+      if (prev?.currentPlanet === current?.currentPlanet) return;
+
       // remove previous location
       if (prev) scene.objects.planet.get(prev.currentPlanet as Entity)?.setShieldEaterLocation(false);
 
@@ -30,9 +32,11 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
 
         // add path (including destination)
         tables.Planet.getAll().forEach((planet) => {
-          if (path.includes(planet))
+          if (path.includes(planet)) {
             scene.objects.planet.get(planet)?.setShieldEaterPath(path.indexOf(planet) + 1, turnsToDestination);
-          else scene.objects.planet.get(planet)?.setShieldEaterPath(0);
+          } else {
+            scene.objects.planet.get(planet)?.setShieldEaterPath(0);
+          }
         });
       }
     },
