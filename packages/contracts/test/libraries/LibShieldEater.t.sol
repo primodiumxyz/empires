@@ -193,11 +193,7 @@ contract LibShieldEaterTest is PrimodiumTest {
     // East
     neighbor = CoordData(center.q + 1, center.r);
     if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      assertEq(
-        Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        9,
-        "LibShieldEater: East shieldCount not nine."
-      );
+      assertEq(Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)), 6, "LibShieldEater: East shieldCount not 6.");
     }
 
     // Southeast
@@ -205,8 +201,8 @@ contract LibShieldEaterTest is PrimodiumTest {
     if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
       assertEq(
         Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        10,
-        "LibShieldEater: Southeast shieldCount not ten."
+        6,
+        "LibShieldEater: Southeast shieldCount not 6."
       );
     }
 
@@ -215,19 +211,15 @@ contract LibShieldEaterTest is PrimodiumTest {
     if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
       assertEq(
         Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        11,
-        "LibShieldEater: Southwest shieldCount not eleven."
+        7,
+        "LibShieldEater: Southwest shieldCount not 7."
       );
     }
 
     // West
     neighbor = CoordData(center.q - 1, center.r);
     if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      assertEq(
-        Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        12,
-        "LibShieldEater: West shieldCount not twelve."
-      );
+      assertEq(Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)), 7, "LibShieldEater: West shieldCount not 7.");
     }
 
     // Northwest
@@ -235,8 +227,8 @@ contract LibShieldEaterTest is PrimodiumTest {
     if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
       assertEq(
         Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        12,
-        "LibShieldEater: Northwest shieldCount not twelve."
+        8,
+        "LibShieldEater: Northwest shieldCount not 8."
       );
     }
 
@@ -245,8 +237,8 @@ contract LibShieldEaterTest is PrimodiumTest {
     if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
       assertEq(
         Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        13,
-        "LibShieldEater: Northeast shieldCount not thirteen."
+        8,
+        "LibShieldEater: Northeast shieldCount not 8."
       );
     }
   }
