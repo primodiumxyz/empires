@@ -23,7 +23,11 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
 
   const detonatePriceWei = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
   const detonateDisabled = currentPlanet !== entity || !!cooldownShields;
-  const detonatePointsReceived = useOverridePointsReceived(EOverride.LENGTH, planetEmpire, detonatePriceWei);
+  const detonatePointsReceived = useOverridePointsReceived(
+    EOverride.DetonateShieldEater,
+    planetEmpire,
+    detonatePriceWei,
+  );
 
   const caption =
     currentPlanet !== entity
