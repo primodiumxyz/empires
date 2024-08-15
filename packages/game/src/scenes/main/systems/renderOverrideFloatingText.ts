@@ -1,8 +1,9 @@
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
+import { StaggerQueue } from "@game/lib/utils/createStaggerQueue";
 import { PrimodiumScene } from "@game/types";
 
-export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) => {
+export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { enqueue }: StaggerQueue) => {
   const {
     tables,
     network: { world },
@@ -22,7 +23,6 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) =>
         scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.overrideCount}`, {
           icon: "Shield",
-          delay: 500,
         });
       },
     },
@@ -44,7 +44,6 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) =>
         scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.overrideCount}`, {
           icon: "Ship",
-          delay: 500,
         });
       },
     },
@@ -64,7 +63,6 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) =>
         scene.audio.play("Build", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.boostCount}`, {
           icon: "Boost",
-          delay: 500,
           color: "#ff0000",
         });
       },
@@ -125,7 +123,6 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core) =>
         scene.audio.play("Demolish", "sfx", { volume: 0.25 });
         scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.stunCount}`, {
           icon: "Stun",
-          delay: 500,
         });
       },
     },

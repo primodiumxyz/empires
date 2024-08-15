@@ -183,6 +183,7 @@ export const createFxApi = (scene: Scene) => {
       onFrameChange?: (frameNumber: number) => void;
       scale?: number;
       depth?: number;
+      speed?: number;
       blendMode?: Phaser.BlendModes;
       rotation?: number;
       originX?: number;
@@ -194,6 +195,7 @@ export const createFxApi = (scene: Scene) => {
     const {
       scale = 1,
       depth = DepthLayers.Base,
+      speed = 1,
       onComplete,
       onFrameChange,
       blendMode = Phaser.BlendModes.NORMAL,
@@ -226,6 +228,7 @@ export const createFxApi = (scene: Scene) => {
       }
     });
 
+    sprite.anims.timeScale = speed;
     sprite.play(Animations[animationKey]);
   }
 
