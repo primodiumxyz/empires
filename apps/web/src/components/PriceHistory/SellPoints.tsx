@@ -15,9 +15,10 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
-export const SellPoints = ({ selectedEmpire }: { selectedEmpire?: EEmpire }) => {
+export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmpire; fragment?: boolean }) => {
   const {
     playerAccount: { entity },
   } = useAccountClient();
@@ -64,7 +65,7 @@ export const SellPoints = ({ selectedEmpire }: { selectedEmpire?: EEmpire }) => 
           </Dropdown>
         </SecondaryCard>
       )}
-      <SecondaryCard className="w-full flex-row items-center justify-around gap-2">
+      <SecondaryCard className={cn("w-full flex-row items-center justify-around gap-2", fragment && "bg-none")}>
         <NumberInput
           count={amountToSell}
           onChange={handleInputChange}

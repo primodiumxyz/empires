@@ -1,25 +1,16 @@
 import { useState } from "react";
-import ParentSize from "@visx/responsive/lib/components/ParentSize";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
-import { Account } from "@/components/Account";
 import { Button } from "@/components/core/Button";
-import { SecondaryCard } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
 import { Modal } from "@/components/core/Modal";
-import { RadioGroup } from "@/components/core/Radio";
 import { Tabs } from "@/components/core/Tabs";
-import { EmpireDetails } from "@/components/PriceHistory/EmpireDetails";
-import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointGraph";
-import { KPICard } from "@/components/PriceHistory/KPICard";
+import { BoostEmpire } from "@/components/PriceHistory/BoostEmpire";
 import { SellPoints } from "@/components/PriceHistory/SellPoints";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
-import useWindowDimensions from "@/hooks/useWindowDimensions";
-import { cn } from "@/util/client";
-import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
+import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const QuickTrade = () => {
   const empires = useEmpires();
@@ -34,7 +25,7 @@ export const QuickTrade = () => {
         <IconLabel imageUri={InterfaceIcons.Resource} text="QUICK TRADE" className="" />
       </Modal.Button>
       <Modal.Content>
-        <Tabs defaultIndex={0}>
+        <Tabs defaultIndex={1}>
           <div className="absolute -top-6 left-1/2 mb-2 flex -translate-x-1/2 justify-center">
             <Tabs.Button size="md" index={0}>
               Boost
@@ -45,9 +36,9 @@ export const QuickTrade = () => {
           </div>
           <div className="mt-6">
             <Tabs.Pane index={0}>
-              <EmpireDetails hideGraph hideTitle hidePlanets />
-            </Tabs.Pane>
-            <Tabs.Pane index={1} fragment>
+              <span className="mb-4 block text-center text-xs text-gray-400">
+                Get points for supporting an empire by airdropping gold to its planets
+              </span>
               <div className="mb-4 flex flex-wrap justify-center gap-2">
                 {Array.from(empires.entries()).map(([key, empire]) => (
                   <Button
@@ -59,7 +50,22 @@ export const QuickTrade = () => {
                   </Button>
                 ))}
               </div>
-              <SellPoints selectedEmpire={selectedEmpire} />
+              <BoostEmpire selectedEmpire={selectedEmpire} />
+            </Tabs.Pane>
+            <Tabs.Pane index={1}>
+              <span className="mb-4 block text-center text-xs text-gray-400">Directly sell points from an empire</span>
+              <div className="mb-4 flex flex-wrap justify-center gap-2">
+                {Array.from(empires.entries()).map(([key, empire]) => (
+                  <Button
+                    key={key}
+                    variant={selectedEmpire === key ? "secondary" : "neutral"}
+                    onClick={() => setSelectedEmpire(key)}
+                  >
+                    <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
+                  </Button>
+                ))}
+              </div>
+              <SellPoints selectedEmpire={selectedEmpire} fragment />
             </Tabs.Pane>
           </div>
         </Tabs>

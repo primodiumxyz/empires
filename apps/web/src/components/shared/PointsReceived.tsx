@@ -11,12 +11,14 @@ export const PointsReceived = ({
   inline = false,
   explicit = false,
   allowNullEmpire = false,
+  noCaption = false,
 }: {
   points: OverridePointsReceived;
   className?: string;
   inline?: boolean;
   explicit?: boolean;
   allowNullEmpire?: boolean;
+  noCaption?: boolean;
 }) => {
   const { targetEmpire, value, impactedEmpires } = points;
   if (targetEmpire === EEmpire.NULL && !allowNullEmpire) return null;
@@ -40,7 +42,7 @@ export const PointsReceived = ({
       )}
     >
       <span>+{formatEther(value)} pts</span>
-      <span className="text-[11px] opacity-50">for {caption}</span>
+      {!noCaption && <span className="text-[11px] opacity-50">for {caption}</span>}
     </div>
   );
 };
