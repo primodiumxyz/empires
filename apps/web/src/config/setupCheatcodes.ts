@@ -2,14 +2,13 @@ import { Address, Hex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
+import { AccountClient, addressToEntity, Core, entityToPlanetName, TxReceipt } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
-import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
   overrides: "bg-red-500/10",
@@ -27,7 +26,7 @@ export const setupCheatcodes = (options: {
   game: PrimodiumGame;
   accountClient: AccountClient;
   contractCalls: ContractCalls;
-  requestDrip?: (address: Address, force?: boolean) => Promise<void>;
+  requestDrip?: (address: Address, force?: boolean) => Promise<TxReceipt | undefined>;
 }) => {
   const { core, game, accountClient, contractCalls, requestDrip } = options;
   const { tables } = core;
@@ -620,8 +619,8 @@ export const setupCheatcodes = (options: {
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
-      await requestDrip?.(accountClient.playerAccount.address, true);
-      return true;
+      const receipt = await requestDrip?.(accountClient.playerAccount.address, true);
+      return receipt ?? { success: false, error: "Failed to drip eth" };
     },
     success: () => `Dripped eth to player account`,
   });
