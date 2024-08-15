@@ -47,8 +47,9 @@ export function createPriceUtils(tables: Tables) {
    * @return pointCost The cost of all points related to the action.
    */
   function getRegressPointCost(_empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
+    const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
     let pointCost = 0n;
-    for (let i = 1; i < EEmpire.LENGTH; i++) {
+    for (let i = 1; i <= empires; i++) {
       if (i == _empireImpacted) {
         continue;
       }
