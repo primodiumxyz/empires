@@ -14,7 +14,7 @@ export const runSystems = (scene: PrimodiumScene, game: GlobalApi, core: Core) =
   renderPendingMoves(scene, core);
   renderRoutines(scene, core);
   renderOverrideFloatingText(scene, core);
-  renderOverheat(scene, core);
+  // renderOverheat(scene, core);
   renderMagnets(scene, core);
   renderShieldEater(scene, core);
 };

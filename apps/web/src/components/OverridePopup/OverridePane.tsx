@@ -29,15 +29,36 @@ export const Header: React.FC<{ title: string; description: string; planetName: 
   );
 };
 
+// export const Buttons: React.FC = () => {
+//   return (
+//     <div className="w-54 relative flex h-44 w-80 items-center justify-center">
+//       <div className="relative z-10 translate-y-12">
+//         <OverrideButton index={4} icon="Expansion" axialCoord={{ q: -1, r: -1 }} tooltip="Shield Eater" />
+//         <OverrideButton index={2} icon="RedMagnet" axialCoord={{ q: 2, r: -1 }} tooltip="Magnets" />
+//         <OverrideButton index={3} icon="Shard" axialCoord={{ q: 1, r: 0 }} tooltip="Overheat" />
+//         <OverrideButton index={0} icon="Fleet" axialCoord={{ q: -1, r: 0 }} tooltip="Ships" />
+//         <OverrideButton index={1} icon="Defense" axialCoord={{ q: 0, r: 0 }} tooltip="Shields" />
+//       </div>
+//       <div className="absolute left-1/2 top-10 z-0 w-fit -translate-x-1/2 scale-75 opacity-75">
+//         <p className="mx-auto flex w-72 animate-pulse items-center justify-center gap-2 bg-warning/25 p-1 text-center text-xs text-warning">
+//           <ExclamationTriangleIcon className="size-4" />
+//           PROCEED WITH CAUTION
+//           <ExclamationTriangleIcon className="size-4" />
+//         </p>
+//         <p className="mx-auto w-72 bg-secondary/25 p-1 text-center text-xl text-accent">SELECT OVERRIDE</p>
+//       </div>
+//     </div>
+//   );
+// };
+
 export const Buttons: React.FC = () => {
   return (
-    <div className="w-54 relative flex h-44 w-80 items-center justify-center">
-      <div className="relative z-10 translate-y-12">
-        <OverrideButton index={4} icon="ShieldEater" axialCoord={{ q: -1, r: -1 }} tooltip="Shield Eater" />
-        <OverrideButton index={2} icon="Magnet" axialCoord={{ q: 2, r: -1 }} tooltip="Magnets" />
-        <OverrideButton index={3} icon="Shard" axialCoord={{ q: 1, r: 0 }} tooltip="Overheat" />
-        <OverrideButton index={0} icon="Fleet" axialCoord={{ q: -1, r: 0 }} tooltip="Ships" />
-        <OverrideButton index={1} icon="Defense" axialCoord={{ q: 0, r: 0 }} tooltip="Shields" />
+    <div className="relative flex h-44 w-80 items-center justify-center">
+      <div className="relative z-10 translate-y-10">
+        <OverrideButton index={4} icon="ShieldEater" axialCoord={{ q: -1.5, r: 0 }} tooltip="Shield Eater" />
+        <OverrideButton index={2} icon="Magnet" axialCoord={{ q: 1.5, r: 0 }} tooltip="Magnets" />
+        <OverrideButton index={0} icon="Fleet" axialCoord={{ q: -0.5, r: 0 }} tooltip="Ships" />
+        <OverrideButton index={1} icon="Defense" axialCoord={{ q: 0.5, r: 0 }} tooltip="Shields" />
       </div>
       <div className="absolute left-1/2 top-12 z-0 w-fit -translate-x-1/2 scale-75 opacity-75">
         <p className="mx-auto w-72 bg-secondary/25 p-1 text-center text-xl text-accent">SELECT ACTION</p>

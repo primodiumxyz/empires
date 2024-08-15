@@ -33,7 +33,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private shields: IconLabel;
   private ships: IconLabel;
   private gold: IconLabel;
-  private overheat: Overheat;
+  // private overheat: Overheat;
   private magnets: Magnet[];
   private magnetWaves: Phaser.GameObjects.Sprite;
   private shieldEater: ShieldEater;
@@ -138,7 +138,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
-    this.overheat = new Overheat(scene, coord, empire).setDepth(DepthLayers.Base + coord.y);
+    // this.overheat = new Overheat(scene, coord, empire).setDepth(DepthLayers.Base + coord.y);
 
     this.magnets = allEmpires
       .slice(0, empireCount)
@@ -187,7 +187,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
-    this.scene.add.existing(this.overheat);
+    // this.scene.add.existing(this.overheat);
     this.scene.add.existing(this.shieldEater);
     if (this.citadel) this.scene.add.existing(this.citadel);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
@@ -208,7 +208,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.shields.setScale(scale);
     this.ships.setScale(scale);
     this.gold.setScale(scale);
-    this.overheat.setScale(scale);
+    // this.overheat.setScale(scale);
+    if (this.citadel) this.citadel.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
     this.shieldEater.setScale(scale);
@@ -372,9 +373,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     );
   }
 
-  setOverheatProgress(progress: number) {
-    this.overheat.setProgress(progress);
-  }
+  // setOverheatProgress(progress: number) {
+  //   this.overheat.setProgress(progress);
+  // }
 
   setMagnet(empire: EEmpire, turns: number) {
     const magnet = this.magnets[empire - 1];
