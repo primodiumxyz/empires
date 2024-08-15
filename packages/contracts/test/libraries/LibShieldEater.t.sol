@@ -250,4 +250,6 @@ contract LibShieldEaterTest is PrimodiumTest {
       );
     }
   }
+
+  function testShieldEaterDeepNavSim() public {}
 }
