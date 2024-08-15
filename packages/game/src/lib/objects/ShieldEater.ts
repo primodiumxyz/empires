@@ -42,7 +42,6 @@ export class ShieldEater extends Phaser.GameObjects.Container {
     if (turns > 0) {
       // distribute opacity from 0.3 (furthest) to 1 (destination)
       const opacity = turnsToDestination ? 0.3 + 0.7 * (turns / turnsToDestination) : 1;
-      console.log({ turns, opacity, toDest: turnsToDestination });
       this.destination.play(Animations["ShieldEaterTarget"]);
       this.destination.setActive(true).setVisible(true).setAlpha(opacity);
     } else {
