@@ -32,6 +32,7 @@ function generateContent() {
 
       const empireName = EmpireNames[empire] ?? "NULL";
       const isCitadel = citadelPlanets[i] === 8;
+      const isTreasure = coord.q === 100 && coord.r === 0;
 
       return `
             /* Planet at (${coord.q}, ${coord.r}) */
@@ -39,7 +40,8 @@ function generateContent() {
             planetData.empireId = EEmpire.${empireName};
             planetData.q = ${coord.q};
             planetData.r = ${coord.r};
-            planetData.shieldCount = ${empireName === "NULL" ? 4 : 0};
+            planetData.shieldCount = ${isTreasure ? 30 : empireName === "NULL" ? 4 : 0};
+            planetData.goldCount = ${isTreasure ? 100 : 0};
             planetData.isCitadel = ${isCitadel ? "true" : "false"};
             Planet.set(planetId, planetData);
 
