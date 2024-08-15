@@ -87,6 +87,9 @@ const Game = memo(() => {
 });
 
 export const GameHUD = () => {
+  const params = new URLSearchParams(window.location.search);
+  const showCheatcodes = DEV && !!params.get("showCheatcodes");
+
   return (
     <>
       <HUD pad>

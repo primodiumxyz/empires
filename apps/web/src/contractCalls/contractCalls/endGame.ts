@@ -3,7 +3,7 @@ import { Core, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 
 export const createEndGameCalls = (core: Core, { execute }: ExecuteFunctions) => {
   const withdrawEarnings = async (options?: Partial<TxQueueOptions>) => {
-    await execute({
+    return await execute({
       functionName: "Empires__withdrawEarnings",
       args: [],
       txQueueOptions: {
@@ -14,7 +14,7 @@ export const createEndGameCalls = (core: Core, { execute }: ExecuteFunctions) =>
   };
 
   const withdrawRake = async (options?: Partial<TxQueueOptions>) => {
-    await execute({
+    return await execute({
       functionName: "Admin__withdrawRake",
       args: [],
       txQueueOptions: {
