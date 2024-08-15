@@ -214,22 +214,23 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
   };
 
   const detonateShieldEater = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
-    return await execute({
-      functionName: "Empires__detonateShieldEater",
-      args: [],
-      options: { value: payment, gas: 738649n * 2n }, // TODO: get gas estimate
-      txQueueOptions: {
-        id: "detonate-shield-eater",
-        ...options,
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__detonateShieldEater",
+          args: [],
+          options: { value: payment, gas: 738649n * 2n }, // TODO: get gas estimate
+          txQueueOptions: {
+            id: "detonate-shield-eater",
+            ...options,
+          },
+        }),
+      {
+        loading: `Detonating shield eater on ${entityToPlanetName(planetId)}`,
+        success: `Detonated shield eater on ${entityToPlanetName(planetId)}`,
+        error: "Failed to detonate shield eater",
       },
-      onComplete: ({ success, error }) => {
-        if (success) {
-          notify("success", `Detonated shield eater on ${entityToPlanetName(planetId)}`);
-        } else {
-          notify("error", error || "Unknown error");
-        }
-      },
-    });
+    );
   };
 
   return {

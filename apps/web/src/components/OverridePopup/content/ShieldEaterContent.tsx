@@ -23,11 +23,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
 
   const detonatePriceWei = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
   const detonateDisabled = currentPlanet !== entity || !!cooldownShields;
-  const detonatePointsReceived = useOverridePointsReceived(
-    EOverride.DetonateShieldEater,
-    planetEmpire,
-    detonatePriceWei,
-  );
+  const detonatePointsReceived = useOverridePointsReceived(EOverride.DetonateShieldEater, planetEmpire, 1n);
 
   const caption =
     currentPlanet !== entity
@@ -57,7 +53,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
       <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
         <Price wei={detonatePriceWei} />
       </p>
-      <PointsReceived points={detonatePointsReceived} inline explicit />
+      {currentPlanet === entity && <PointsReceived points={detonatePointsReceived} inline explicit allowNullEmpire />}
     </div>
   );
 };
