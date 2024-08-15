@@ -13,6 +13,7 @@ import { PlayerReturns } from "@/components/PlayerReturns";
 import { Pot } from "@/components/Pot";
 import { PriceHistory } from "@/components/PriceHistory";
 import { Dashboard } from "@/components/PriceHistory/Dashboard";
+import { QuickTrade } from "@/components/PriceHistory/QuickTrade";
 import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
 import { GameProvider } from "@/hooks/providers/GameProvider";
@@ -98,14 +99,24 @@ export const GameHUD = () => {
           <Pot className="lg:hidden" />
         </HUD.TopLeft>
 
-        <HUD.TopMiddle>
-          {DEV && <Cheatcodes />}
-          <Dashboard />
+        <HUD.TopMiddle className="flex flex-col items-center">
+          {showCheatcodes && <Cheatcodes />}
+          <div className="hidden gap-2 lg:flex">
+            <QuickTrade />
+            <Dashboard />
+          </div>
+          <div className="lg:hidden">
+            <Dashboard />
+          </div>
         </HUD.TopMiddle>
 
         <HUD.TopRight className="flex flex-col gap-2">
           <Account />
         </HUD.TopRight>
+
+        <HUD.Left className="lg:hidden">
+          <QuickTrade />
+        </HUD.Left>
 
         <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
           <div className="flex w-full items-center gap-2 lg:justify-between">

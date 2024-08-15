@@ -25,6 +25,7 @@ export const useActions = () => {
   const stunChargeOverrides = tables.StunChargeOverrideLog.useAll();
   const tacticalStrikeOverrides = tables.TacticalStrikeOverrideLog.useAll();
   const detonateShieldEaterOverrides = tables.ShieldEaterDetonateOverrideLog.useAll();
+  const airdropGoldOverrides = tables.AirdropGoldOverrideLog.useAll();
 
   return useMemo(() => {
     const getPlanetSpan = (planetId: Entity) => {
@@ -215,6 +216,19 @@ export const useActions = () => {
       };
     });
 
+    const airdropGoldOverrideEntries = airdropGoldOverrides.map((actionEntity) => {
+      const action = tables.AirdropGoldOverrideLog.get(actionEntity)!;
+      return {
+        timestamp: action.timestamp,
+        element: (
+          <p className="text-xs">
+            {getPlayerSpan(action.playerId)} airdropped {formatNumber(action.goldDistributed)} gold to{" "}
+            {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
+          </p>
+        ),
+      };
+    });
+
     const allActions = [
       ...moveRoutineEntries,
       ...planetBattleRoutineEntries,
@@ -230,6 +244,7 @@ export const useActions = () => {
       ...tacticalStrikeOverrideEntries,
       ...detonateShieldEaterOverrideEntries,
       ...accumulateGoldRoutineEntries,
+      ...airdropGoldOverrideEntries,
     ];
     allActions.sort((a, b) => -Number(b.timestamp - a.timestamp));
     return allActions;
@@ -247,5 +262,6 @@ export const useActions = () => {
     stunChargeOverrides,
     tacticalStrikeOverrides,
     accumulateGoldRoutines,
+    airdropGoldOverrides,
   ]);
 };

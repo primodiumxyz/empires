@@ -127,6 +127,32 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
+  const airdropGold = async (
+    empire: number,
+    overrideCount: bigint,
+    payment: bigint,
+    pointsReceived: bigint,
+    options?: Partial<TxQueueOptions>,
+  ) => {
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__airdropGold",
+          args: [empire, overrideCount],
+          options: { value: payment, gas: 1_000_000n * 2n }, // TODO: get gas estimate
+          txQueueOptions: {
+            id: "airdrop-gold",
+            ...options,
+          },
+        }),
+      {
+        loading: `Airdropping gold to ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
+        success: `Airdropped gold to ${EmpireEnumToConfig[empire as EEmpire].name} empire for ${formatEther(pointsReceived)} points`,
+        error: "Failed to airdrop gold",
+      },
+    );
+  };
+
   const tacticalStrike = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
     return await withTransactionStatus(
       () =>
@@ -239,6 +265,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     addShield,
     removeShield,
     sellPoints,
+    airdropGold,
     tacticalStrike,
     boostCharge,
     stunCharge,
