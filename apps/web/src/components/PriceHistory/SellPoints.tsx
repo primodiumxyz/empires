@@ -17,7 +17,7 @@ import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
-export const SellPoints = () => {
+export const SellPoints = ({ selectedEmpire }: { selectedEmpire?: EEmpire }) => {
   const {
     playerAccount: { entity },
   } = useAccountClient();
@@ -27,7 +27,7 @@ export const SellPoints = () => {
     MAIN: { sprite },
   } = useGame();
   const [amountToSell, setAmountToSell] = useState("0");
-  const [empire, setEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
+  const [empire, setEmpire] = useState<EEmpire>(selectedEmpire ?? DEFAULT_EMPIRE);
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
   useEffect(() => {
@@ -53,15 +53,17 @@ export const SellPoints = () => {
 
   return (
     <div className="flex w-full gap-2">
-      <SecondaryCard className="justify-center bg-black/10">
-        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44">
-          {Array.from(empires.entries()).map(([key, empire]) => (
-            <Dropdown.Item key={key} value={key}>
-              <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
-            </Dropdown.Item>
-          ))}
-        </Dropdown>
-      </SecondaryCard>
+      {!selectedEmpire && (
+        <SecondaryCard className="justify-center bg-black/10">
+          <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44">
+            {Array.from(empires.entries()).map(([key, empire]) => (
+              <Dropdown.Item key={key} value={key}>
+                <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
+              </Dropdown.Item>
+            ))}
+          </Dropdown>
+        </SecondaryCard>
+      )}
       <SecondaryCard className="w-full flex-row items-center justify-around gap-2">
         <NumberInput
           count={amountToSell}
