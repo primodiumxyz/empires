@@ -29,11 +29,12 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
   } = useGame();
   const [amountToSell, setAmountToSell] = useState("0");
   const [empire, setEmpire] = useState<EEmpire>(selectedEmpire ?? DEFAULT_EMPIRE);
-  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
+  const playerPoints =
+    tables.Value_PointsMap.useWithKeys({ empireId: selectedEmpire ?? empire, playerId: entity })?.value ?? 0n;
 
   useEffect(() => {
     setAmountToSell("0");
-  }, [empire]);
+  }, [empire, selectedEmpire]);
 
   const handleInputChange = (_value: string) => {
     const value = Math.floor(Number(_value));
@@ -49,7 +50,7 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
     setAmountToSell("0");
   };
 
-  const { price: pointsToWei, message } = usePointPrice(empire, Number(amountToSell));
+  const { price: pointsToWei, message } = usePointPrice(selectedEmpire ?? empire, Number(amountToSell));
   const empires = useEmpires();
 
   return (
