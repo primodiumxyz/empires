@@ -50,6 +50,10 @@ export const BoostEmpire = ({
   }, [selectedEmpire]);
 
   useEffect(() => {
+    setEmpire(selectedEmpire ?? DEFAULT_EMPIRE);
+  }, [selectedEmpire]);
+
+  useEffect(() => {
     const unsubscribe = tables.Time.watch({
       onChange: () => {
         publicClient.getBalance({ address }).then(setPlayerBalance);

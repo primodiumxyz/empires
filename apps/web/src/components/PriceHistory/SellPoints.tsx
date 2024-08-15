@@ -35,6 +35,10 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
     setAmountToSell("0");
   }, [empire]);
 
+  useEffect(() => {
+    setEmpire(selectedEmpire ?? DEFAULT_EMPIRE);
+  }, [selectedEmpire]);
+
   const handleInputChange = (_value: string) => {
     const value = Math.floor(Number(_value));
     const max = Math.floor(Number(formatEther(playerPoints)));
