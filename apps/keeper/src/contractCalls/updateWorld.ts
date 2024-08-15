@@ -22,7 +22,7 @@ export const updateWorld = async (
     functionName: "Empires__updateWorld",
     args: [routineThresholds],
     options: {
-      gas: 30000000n,
+      gas: 25000000n,
     },
     onComplete,
     core,
