@@ -55,6 +55,13 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__clearLoop",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__createShip",
     "inputs": [
       {
