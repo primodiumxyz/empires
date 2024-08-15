@@ -18,22 +18,13 @@ export const BoostEmpire = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => 
     playerAccount: { address, publicClient },
   } = useAccountClient();
   const calls = useContractCalls();
-  const {
-    tables,
-    utils: { getTotalCost },
-  } = useCore();
+  const { tables } = useCore();
   const time = tables.Time.use();
 
   const [amountToBoost, setAmountToBoost] = useState("0");
+  const [playerBalance, setPlayerBalance] = useState<bigint>(0n);
   const boostPriceWei = useOverrideCost(EOverride.AirdropGold, selectedEmpire, BigInt(amountToBoost));
   const boostPointsReceived = useOverridePointsReceived(EOverride.AirdropGold, selectedEmpire, BigInt(amountToBoost));
-
-  const [playerBalance, setPlayerBalance] = useState<bigint>(0n);
-  //   const max = useMemo(() => {
-  //     const costForOne = getTotalCost(EOverride.AirdropGold, selectedEmpire, 1n);
-  //     return Math.floor(Number(formatEther(playerBalance)) / Number(costForOne));
-  //   }, [playerBalance]);
-  const max = 100;
 
   useEffect(() => {
     setAmountToBoost("0");
@@ -51,7 +42,7 @@ export const BoostEmpire = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => 
 
   const handleInputChange = (_value: string) => {
     const value = Math.floor(Number(_value));
-    if (value >= 0 && value <= max) {
+    if (value >= 0) {
       setAmountToBoost(value.toString());
     }
   };
@@ -64,13 +55,7 @@ export const BoostEmpire = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => 
   return (
     <div className="flex w-full gap-2">
       <SecondaryCard className="w-full flex-row items-center justify-around gap-2 bg-none">
-        <NumberInput
-          count={amountToBoost}
-          onChange={handleInputChange}
-          min={0}
-          max={max}
-          className="mt-4 w-32 place-self-center"
-        />
+        <NumberInput count={amountToBoost} onChange={handleInputChange} min={0} className="w-32 place-self-center" />
 
         <div className="flex gap-2">
           <Badge size="sm" variant="error" className="p-4 lg:badge-lg">
@@ -89,7 +74,7 @@ export const BoostEmpire = ({ selectedEmpire }: { selectedEmpire: EEmpire }) => 
           <Button
             size="sm"
             className="w-full lg:btn-md lg:text-lg"
-            disabled={amountToBoost == "0"}
+            disabled={amountToBoost == "0" || boostPriceWei > playerBalance}
             onClick={handleSubmit}
           >
             Buy
