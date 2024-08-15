@@ -48,7 +48,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_ShieldEaterConfig: {
         visitShieldDamage: 1n,
         detonateCenterDamage: scaleMultiplier(1.00),
-        detonateAdjacentDamage: scaleMultiplier(0.20),
+        detonateAdjacentDamage: scaleMultiplier(0.50),
         detonationThreshold: 8n,
       }
     },

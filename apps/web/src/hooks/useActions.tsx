@@ -24,6 +24,7 @@ export const useActions = () => {
   const boostChargeOverrides = tables.BoostChargeOverrideLog.useAll();
   const stunChargeOverrides = tables.StunChargeOverrideLog.useAll();
   const tacticalStrikeOverrides = tables.TacticalStrikeOverrideLog.useAll();
+  const detonateShieldEaterOverrides = tables.ShieldEaterDetonateOverrideLog.useAll();
 
   return useMemo(() => {
     const getPlanetSpan = (planetId: Entity) => {
@@ -202,6 +203,18 @@ export const useActions = () => {
       };
     });
 
+    const detonateShieldEaterOverrideEntries = detonateShieldEaterOverrides.map((actionEntity) => {
+      const action = tables.ShieldEaterDetonateOverrideLog.get(actionEntity)!;
+      return {
+        timestamp: action.timestamp,
+        element: (
+          <p className="text-xs">
+            {getPlayerSpan(action.playerId)} detonated shield eater on {getPlanetSpan(action.planetId as Entity)}
+          </p>
+        ),
+      };
+    });
+
     const allActions = [
       ...moveRoutineEntries,
       ...planetBattleRoutineEntries,
@@ -215,6 +228,7 @@ export const useActions = () => {
       ...boostChargeOverrideEntries,
       ...stunChargeOverrideEntries,
       ...tacticalStrikeOverrideEntries,
+      ...detonateShieldEaterOverrideEntries,
       ...accumulateGoldRoutineEntries,
     ];
     allActions.sort((a, b) => -Number(b.timestamp - a.timestamp));

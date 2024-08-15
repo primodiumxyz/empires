@@ -213,6 +213,26 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
+  const detonateShieldEater = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__detonateShieldEater",
+          args: [],
+          options: { value: payment, gas: 1_000_000n * 2n }, // TODO: get gas estimate
+          txQueueOptions: {
+            id: "detonate-shield-eater",
+            ...options,
+          },
+        }),
+      {
+        loading: `Detonating shield eater on ${entityToPlanetName(planetId)}`,
+        success: `Detonated shield eater on ${entityToPlanetName(planetId)}`,
+        error: "Failed to detonate shield eater",
+      },
+    );
+  };
+
   return {
     createShip,
     removeShip,
@@ -223,5 +243,6 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     boostCharge,
     stunCharge,
     placeMagnet,
+    detonateShieldEater,
   };
 };

@@ -190,6 +190,11 @@ export type AxialCoord = {
   r: number;
 };
 
+export type AxialCoordBigInt = {
+  q: bigint;
+  r: bigint;
+};
+
 export type TxReceipt =
   | (TransactionReceipt & {
       success: boolean;

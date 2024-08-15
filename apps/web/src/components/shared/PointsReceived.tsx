@@ -10,14 +10,26 @@ export const PointsReceived = ({
   className,
   inline = false,
   explicit = false,
+  allowNullEmpire = false,
 }: {
   points: OverridePointsReceived;
   className?: string;
   inline?: boolean;
   explicit?: boolean;
+  allowNullEmpire?: boolean;
 }) => {
-  if (points.targetEmpire === EEmpire.NULL) return null;
-  const targetEmpireName = EmpireEnumToConfig[points.targetEmpire].name;
+  const { targetEmpire, value, impactedEmpires } = points;
+  if (targetEmpire === EEmpire.NULL && !allowNullEmpire) return null;
+
+  const targetEmpireName = EmpireEnumToConfig[targetEmpire].name;
+  const caption =
+    impactedEmpires.length > 1
+      ? explicit
+        ? targetEmpire === EEmpire.NULL
+          ? "all empires"
+          : `all empires except ${targetEmpireName}`
+        : "other empires"
+      : `${targetEmpireName} empire`;
 
   return (
     <div
@@ -27,15 +39,8 @@ export const PointsReceived = ({
         className,
       )}
     >
-      <span>+{formatEther(points.value)} pts</span>
-      <span className="text-[11px] opacity-50">
-        for{" "}
-        {points.impactedEmpires.length > 1
-          ? explicit
-            ? `all empires except ${targetEmpireName}`
-            : "other empires"
-          : `${targetEmpireName} empire`}
-      </span>
+      <span>+{formatEther(value)} pts</span>
+      <span className="text-[11px] opacity-50">for {caption}</span>
     </div>
   );
 };

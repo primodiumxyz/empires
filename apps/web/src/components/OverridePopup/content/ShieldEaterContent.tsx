@@ -1,33 +1,59 @@
 import React from "react";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts";
+import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { useContractCalls } from "@/hooks/useContractCalls";
+import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
+import { useShieldEater } from "@/hooks/useShieldEater";
 
 export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
-  const planet = tables.Planet.use(entity);
-  const planetEmpire = planet?.empireId ?? EEmpire.NULL;
+  const { detonateShieldEater } = useContractCalls();
+  const { currentPlanet, cooldownShields } = useShieldEater();
 
-  const shieldEaterPriceWei = 0n;
-  const shieldEaterPointsReceived = useOverridePointsReceived(EOverride.LENGTH, planetEmpire, shieldEaterPriceWei);
+  const planet = tables.Planet.use(entity);
+  const planetEmpire = planet?.empireId ?? (0 as EEmpire);
+
+  const detonatePriceWei = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
+  const detonateDisabled = currentPlanet !== entity || !!cooldownShields;
+  const detonatePointsReceived = useOverridePointsReceived(EOverride.DetonateShieldEater, planetEmpire, 1n);
+
+  const caption =
+    currentPlanet && currentPlanet !== entity
+      ? `Shield eater is on ${entityToPlanetName(currentPlanet)}.`
+      : cooldownShields
+        ? `Shield eater is charging, come back after it eats ${cooldownShields.toLocaleString()} more shields.`
+        : undefined;
 
   return (
     <div className="flex flex-col items-center">
-      <TransactionQueueMask id={`${entity}-boost-charge`}>
-        <Button size="sm" variant="error">
+      {!!caption && (
+        <p className="mb-1 rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">{caption}</p>
+      )}
+      <TransactionQueueMask id="detonate-shield-eater">
+        <Button
+          onClick={async () => {
+            await detonateShieldEater(entity, detonatePriceWei);
+            tables.SelectedPlanet.remove();
+          }}
+          disabled={detonateDisabled}
+          size="sm"
+          variant="error"
+        >
           Activate
         </Button>
       </TransactionQueueMask>
       <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
-        <Price wei={0n} />
+        <Price wei={detonatePriceWei} />
       </p>
-      <PointsReceived points={shieldEaterPointsReceived} inline explicit />
+      {currentPlanet === entity && <PointsReceived points={detonatePointsReceived} inline explicit allowNullEmpire />}
     </div>
   );
 };

@@ -115,7 +115,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
         <Tabs.Pane index={4} className="w-full items-center gap-4">
           <Header
             title={"Shield Eater"}
-            description={"Feed the monster to destroy planet and surrounding planet shields"}
+            description={"Tickle the monster to destroy shields on this planet and surrounding planets"}
             planetName={entityToPlanetName(selectedPlanet)}
           />
           <ShieldEaterContent entity={selectedPlanet} />

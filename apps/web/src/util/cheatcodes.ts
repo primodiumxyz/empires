@@ -1,3 +1,5 @@
+import { TxReceipt } from "@primodiumxyz/core";
+
 type Primitive = string | number | bigint | boolean;
 type PrimitiveType = "string" | "number" | "bigint" | "boolean";
 
@@ -18,7 +20,7 @@ export type Cheatcode<T extends CheatcodeInputsBase = CheatcodeInputsBase> = {
   title: string;
   caption: string;
   inputs: T;
-  execute: (args: CheatcodeInputs<T>) => Promise<boolean>;
+  execute: (args: CheatcodeInputs<T>) => Promise<TxReceipt>;
   loading?: (args: CheatcodeInputs<T>) => string;
   success?: (args: CheatcodeInputs<T>) => string;
   error?: (args: CheatcodeInputs<T>) => string;

@@ -19,7 +19,7 @@ export async function executeBatch<functionName extends ContractFunctionName<Wor
   systemCalls: readonly Omit<SystemCall<WorldAbiType, functionName>, "abi" | "systemId">[];
   txQueueOptions?: TxQueueOptions;
   onComplete?: (receipt: TxReceipt) => void;
-}): Promise<boolean> {
+}): Promise<TxReceipt> {
   console.log(`[Tx] Executing batch:${systemCalls.map((system) => ` ${system.functionName}`)}`);
 
   const run = async (): Promise<TxReceipt> => {
@@ -47,5 +47,5 @@ export async function executeBatch<functionName extends ContractFunctionName<Wor
   }
 
   onComplete?.(receipt);
-  return receipt.success;
+  return receipt;
 }

@@ -5,6 +5,7 @@ import { renderOverrideFloatingText } from "@game/scenes/main/systems/renderOver
 import { renderPendingMoves } from "@game/scenes/main/systems/renderPendingMoves";
 import { renderPlanets } from "@game/scenes/main/systems/renderPlanets";
 import { renderRoutines } from "@game/scenes/main/systems/renderRoutines";
+import { renderShieldEater } from "@game/scenes/main/systems/renderShieldEater";
 import { PrimodiumScene } from "@game/types";
 
 export const runSystems = (scene: PrimodiumScene, game: GlobalApi, core: Core) => {
@@ -14,4 +15,5 @@ export const runSystems = (scene: PrimodiumScene, game: GlobalApi, core: Core) =
   renderOverrideFloatingText(scene, core, game.queue);
   // renderOverheat(scene, core);
   renderMagnets(scene, core);
+  renderShieldEater(scene, core);
 };

@@ -2,14 +2,13 @@ import { Address, Hex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
+import { AccountClient, addressToEntity, Core, entityToPlanetName, TxReceipt } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
-import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
   overrides: "bg-red-500/10",
@@ -17,7 +16,8 @@ export const CheatcodeToBg: Record<string, string> = {
   time: "bg-blue-500/10",
   utils: "bg-green-500/10",
   magnet: "bg-purple-900/10",
-  tacticalStrike: "bg-purple-400/10",
+  shieldEater: "bg-purple-400/10",
+  tacticalStrike: "bg-purple-900/10",
   config: "bg-gray-500/10",
 };
 
@@ -26,7 +26,7 @@ export const setupCheatcodes = (options: {
   game: PrimodiumGame;
   accountClient: AccountClient;
   contractCalls: ContractCalls;
-  requestDrip?: (address: Address, force?: boolean) => Promise<void>;
+  requestDrip?: (address: Address, force?: boolean) => Promise<TxReceipt | undefined>;
 }) => {
   const { core, game, accountClient, contractCalls, requestDrip } = options;
   const { tables } = core;
@@ -503,6 +503,41 @@ export const setupCheatcodes = (options: {
   });
 
   /* ---------------------------------- TIME ---------------------------------- */
+  const _advanceTurns = async (amount: number) => {
+    const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
+    const empirePlanets = core.utils.getEmpirePlanets(turn);
+    const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
+    const updateWorldCallParams = {
+      functionName: "Empires__updateWorld" as const,
+      args: [routineThresholds],
+      options: {
+        gas: 15000000n,
+      },
+      txQueueOptions: {
+        id: `update-world`,
+      },
+    };
+
+    const currentBlock = tables.BlockNumber.get()?.value ?? 0n;
+    let success = true;
+
+    for (let i = 0; i < amount; i++) {
+      const setTurnCallsParams = devCalls.createSetPropertiesParams({
+        table: tables.Turn,
+        keys: {},
+        properties: { nextTurnBlock: currentBlock },
+      });
+
+      const txSuccess = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
+      if (!txSuccess) {
+        success = false;
+        break;
+      }
+    }
+
+    return success;
+  };
+
   // advance turns
   const advanceTurns = createCheatcode({
     title: "Advance turns",
@@ -516,37 +551,7 @@ export const setupCheatcodes = (options: {
       },
     },
     execute: async ({ amount }) => {
-      const turn = tables.Turn.get()?.empire;
-      if (!turn) throw new Error("No empire in turn");
-      const empirePlanets = core.utils.getEmpirePlanets(turn);
-      const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
-      const updateWorldCallParams = {
-        functionName: "Empires__updateWorld" as const,
-        args: [routineThresholds],
-        options: {
-          gas: 15000000n,
-        },
-        txQueueOptions: {
-          id: `update-world`,
-        },
-      };
-
-      const currentBlock = tables.BlockNumber.get()?.value ?? 0n;
-      let success = true;
-
-      for (let i = 0; i < amount.value; i++) {
-        const setTurnCallsParams = devCalls.createSetPropertiesParams({
-          table: tables.Turn,
-          keys: {},
-          properties: { nextTurnBlock: currentBlock },
-        });
-
-        const txSuccess = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
-        if (!txSuccess) {
-          success = false;
-          break;
-        }
-      }
+      const success = await _advanceTurns(amount.value);
 
       return success;
     },
@@ -614,8 +619,8 @@ export const setupCheatcodes = (options: {
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
-      await requestDrip?.(accountClient.playerAccount.address, true);
-      return true;
+      const receipt = await requestDrip?.(accountClient.playerAccount.address, true);
+      return receipt ?? { success: false, error: "Failed to drip eth" };
     },
     success: () => `Dripped eth to player account`,
   });
@@ -877,7 +882,7 @@ export const setupCheatcodes = (options: {
   // withdraw rake
   const withdrawRake = createCheatcode({
     title: "Withdraw rake",
-    bg: CheatcodeToBg["tacticalStrike"],
+    bg: CheatcodeToBg["utils"],
     caption:
       "The rake is an essential part of the game. It is used to fund the game and is collected from the pot. This cheatcode allows you to withdraw the rake from the pot. That is why it is called withdraw rake.",
     inputs: {},
@@ -887,6 +892,76 @@ export const setupCheatcodes = (options: {
     loading: () => "[CHEATCODE] Withdrawing rake...",
     success: () => `Rake withdrawn`,
     error: () => `Failed to withdraw rake`,
+  });
+
+  /* ------------------------------ SHIELD EATER ------------------------------ */
+  // place shield eater on planet
+  const moveShieldEater = createCheatcode({
+    title: "Move shield eater",
+    bg: CheatcodeToBg["shieldEater"],
+    caption: "to planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+      },
+    },
+    execute: async ({ planet }) => {
+      return await devCalls.setProperties({
+        table: tables.ShieldEater,
+        keys: {},
+        properties: { currentPlanet: planet.id as Entity },
+      });
+    },
+    loading: () => "[CHEATCODE] Moving shield eater...",
+    success: ({ planet }) => `Shield eater moved to ${planet.value}`,
+    error: ({ planet }) => `Failed to move shield eater to ${planet.value}`,
+  });
+
+  // set shield eater destination
+  const setShieldEaterDestination = createCheatcode({
+    title: "Set shield eater destination",
+    bg: CheatcodeToBg["shieldEater"],
+    caption: "to planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+      },
+    },
+    execute: async ({ planet }) => {
+      return await devCalls.setProperties({
+        table: tables.ShieldEater,
+        keys: {},
+        properties: { destinationPlanet: planet.id as Entity },
+      });
+    },
+    loading: () => "[CHEATCODE] Setting shield eater destination...",
+    success: ({ planet }) => `Shield eater destination set to ${planet.value}`,
+    error: ({ planet }) => `Failed to set shield eater destination to ${planet.value}`,
+  });
+
+  // reset shield eater countdown
+  const feedShieldEater = createCheatcode({
+    title: "Feed shield eater",
+    bg: CheatcodeToBg["shieldEater"],
+    caption: "Shield eater",
+    inputs: {},
+    execute: async () => {
+      const threshold = tables.P_ShieldEaterConfig.get()?.detonationThreshold ?? BigInt(0);
+      return await devCalls.setProperties({
+        table: tables.ShieldEater,
+        keys: {},
+        properties: { currentCharge: threshold },
+      });
+    },
+    loading: () => "[CHEATCODE] Feeding shield eater...",
+    success: () => `Shield eater ready to detonate`,
+    error: () => `Failed to feed shield eater`,
   });
 
   /* --------------------------------- CONFIG --------------------------------- */
@@ -1085,6 +1160,9 @@ export const setupCheatcodes = (options: {
     placeMagnet,
     removeMagnet,
     removeAllMagnets,
+    moveShieldEater,
+    setShieldEaterDestination,
+    feedShieldEater,
     // resetCharges,
     // maxOutCharges,
     // triggerCharges,
