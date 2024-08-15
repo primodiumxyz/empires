@@ -16,8 +16,8 @@ export const CheatcodeToBg: Record<string, string> = {
   time: "bg-blue-500/10",
   utils: "bg-green-500/10",
   magnet: "bg-purple-900/10",
-  tacticalStrike: "bg-purple-400/10",
-  shieldEater: "bg-purple-900/10",
+  shieldEater: "bg-purple-400/10",
+  tacticalStrike: "bg-purple-900/10",
   config: "bg-gray-500/10",
 };
 
@@ -1160,12 +1160,12 @@ export const setupCheatcodes = (options: {
     placeMagnet,
     removeMagnet,
     removeAllMagnets,
-    // resetCharges,
-    // maxOutCharges,
-    // triggerCharges,
     moveShieldEater,
     setShieldEaterDestination,
     feedShieldEater,
+    // resetCharges,
+    // maxOutCharges,
+    // triggerCharges,
     withdrawRake,
     ...Object.values(updateGameConfig),
   ];
