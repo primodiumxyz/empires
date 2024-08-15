@@ -27,7 +27,10 @@ type WithTransactionStatusOptions = {
 };
 
 const baseOptions = { isLoading: false, autoClose: 3000 };
-export const withTransactionStatus = (fn: () => Promise<boolean>, toastOptions: WithTransactionStatusOptions = {}) => {
+export const withTransactionStatus = (
+  fn: () => Promise<TxReceipt>,
+  toastOptions: WithTransactionStatusOptions = {},
+) => {
   const loadingMsg = toastOptions.loading ?? "Executing transaction...";
   const successMsg = toastOptions.success ?? "Transaction executed successfully";
   const errorMsg = toastOptions.error ?? "Transaction failed";
@@ -36,9 +39,9 @@ export const withTransactionStatus = (fn: () => Promise<boolean>, toastOptions: 
     const toastId = toast.loading(loadingMsg);
 
     try {
-      const success = await fn();
+      const receipt = await fn();
 
-      if (success) {
+      if (receipt.success) {
         toast.update(toastId, {
           render: successMsg,
           type: "success",
@@ -46,14 +49,15 @@ export const withTransactionStatus = (fn: () => Promise<boolean>, toastOptions: 
         });
       } else {
         toast.update(toastId, {
-          render: errorMsg,
+          render: receipt.error ?? errorMsg,
           type: "error",
           ...baseOptions,
         });
       }
 
-      return success;
+      return receipt.success;
     } catch (err) {
+      console.error(err);
       toast.update(toastId, {
         render: errorMsg,
         type: "error",

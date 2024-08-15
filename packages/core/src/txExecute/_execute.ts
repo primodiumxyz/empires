@@ -44,7 +44,7 @@ export async function _execute(
       // However, this is not the case for MUDv2, as network.waitForTransaction no longer
       // throws an error if the transaction fails.
       // We should be on the lookout for other errors that could be thrown here.
-      receipt.error = "Unknown error";
+      receipt.error = `${error}`;
       console.error(`${error}`);
     }
   }

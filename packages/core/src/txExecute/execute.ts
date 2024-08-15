@@ -28,7 +28,7 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
 }: ExecuteCallOptions<WorldAbiType, functionName> & {
   core: Core;
   playerAccount: ExternalAccount | LocalAccount;
-}): Promise<boolean> {
+}): Promise<TxReceipt> {
   console.info(`[Tx] Executing ${functionName} with address ${playerAccount.address.slice(0, 6)}`);
 
   const run = async (): Promise<TxReceipt> => {
@@ -56,5 +56,5 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
   }
 
   onComplete?.(receipt);
-  return receipt.success;
+  return receipt;
 }
