@@ -12,13 +12,13 @@ contract InitTest is PrimodiumTest {
   }
 
   function testRedPlanetInit() public {
-    bytes32 redPlanetId = coordToId(99, 1);
+    bytes32 redPlanetId = coordToId(101, -2);
     PlanetData memory planetData = Planet.get(redPlanetId);
     assertTrue(planetData.isPlanet);
     assertEq(planetData.shipCount, 0);
     assertEq(planetData.empireId, EEmpire.Red);
-    assertEq(planetData.q, 99);
-    assertEq(planetData.r, 1);
+    assertEq(planetData.q, 101);
+    assertEq(planetData.r, -2);
     Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(redPlanetId);
     assertEq(planetTacticalStrikeData.chargeRate, P_TacticalStrikeConfig.getChargeRate());
     assertEq(planetTacticalStrikeData.charge, 0);
