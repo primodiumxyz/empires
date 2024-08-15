@@ -42,12 +42,16 @@ export const BoostEmpire = ({
   const [amountToBoost, setAmountToBoost] = useState("0");
   const [empire, setEmpire] = useState<EEmpire>(selectedEmpire ?? DEFAULT_EMPIRE);
   const [playerBalance, setPlayerBalance] = useState<bigint>(0n);
-  const boostPriceWei = useOverrideCost(EOverride.AirdropGold, empire, BigInt(amountToBoost));
-  const boostPointsReceived = useOverridePointsReceived(EOverride.AirdropGold, empire, BigInt(amountToBoost));
+  const boostPriceWei = useOverrideCost(EOverride.AirdropGold, selectedEmpire ?? empire, BigInt(amountToBoost));
+  const boostPointsReceived = useOverridePointsReceived(
+    EOverride.AirdropGold,
+    selectedEmpire ?? empire,
+    BigInt(amountToBoost),
+  );
 
   useEffect(() => {
     setAmountToBoost("0");
-  }, [selectedEmpire]);
+  }, [selectedEmpire, empire]);
 
   useEffect(() => {
     const unsubscribe = tables.Time.watch({
@@ -67,7 +71,7 @@ export const BoostEmpire = ({
   };
 
   const handleSubmit = () => {
-    calls.airdropGold(empire, BigInt(amountToBoost), boostPriceWei, boostPointsReceived.value);
+    calls.airdropGold(selectedEmpire ?? empire, BigInt(amountToBoost), boostPriceWei, boostPointsReceived.value);
     setAmountToBoost("0");
   };
 
