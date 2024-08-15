@@ -2,6 +2,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
+import { allEmpires } from "@game/lib/constants/common";
 import { PrimodiumScene } from "@game/types";
 
 const calculateTurnsLeft = (endTurn: bigint | undefined, currTurn: bigint) => {
@@ -34,10 +35,11 @@ export const renderMagnets = (scene: PrimodiumScene, core: Core) => {
       world: systemsWorld,
       onChange: ({ properties: { current } }) => {
         const currTurn = current?.value ?? 1n;
+        const empireCount = tables.P_GameConfig.get()?.empireCount ?? 0;
 
-        updateMagnetForEmpire(EEmpire.Red, currTurn);
-        updateMagnetForEmpire(EEmpire.Blue, currTurn);
-        updateMagnetForEmpire(EEmpire.Green, currTurn);
+        allEmpires.slice(0, empireCount).forEach((empire) => {
+          updateMagnetForEmpire(empire, currTurn);
+        });
       },
     },
     { runOnInit: false },

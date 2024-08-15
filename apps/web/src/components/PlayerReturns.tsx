@@ -8,18 +8,12 @@ import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
-import { usePointPrice } from "@/hooks/usePointPrice";
 import { usePoints } from "@/hooks/usePoints";
 import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
-
-export const EmpireEnumToColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "bg-blue-600",
-  [EEmpire.Green]: "bg-green-600",
-  [EEmpire.Red]: "bg-red-600",
-  [EEmpire.LENGTH]: "",
-};
+import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const PlayerReturns = () => {
   const { tables } = useCore();
@@ -38,18 +32,17 @@ export const PlayerReturns = () => {
         }
         return acc;
       },
-      { empire: EEmpire.Red, points: 0n },
+      { empire: DEFAULT_EMPIRE, points: 0n },
     );
   }, [points]);
 
   return (
-    <div className="flex w-40 flex-col gap-2">
-      <div className="text-right">
+    <div className="flex gap-2 lg:w-40 lg:flex-col">
+      <div className="hidden text-right lg:block">
         <h2 className="font-semibold">Pot</h2>
         <Price wei={pot} className="text-accent" />
+        <hr className="my-1 w-full border-secondary/50" />
       </div>
-
-      <hr className="my-1 w-full border-secondary/50" />
 
       <EmpireEndReward
         empire={biggestReward.empire}
@@ -57,6 +50,7 @@ export const PlayerReturns = () => {
         empirePoints={points[biggestReward.empire].empirePoints}
         totalSpent={totalSpent}
       />
+      <hr className="mx-1 h-full border-l border-secondary/50 lg:hidden" />
 
       <ImmediateReward playerId={playerId} />
     </div>
@@ -74,6 +68,9 @@ const EmpireEndReward = ({
   empirePoints: bigint;
   totalSpent: bigint;
 }) => {
+  const {
+    utils: { getPointPrice },
+  } = useCore();
   const { pot } = usePot();
   const {
     ROOT: { sprite },
@@ -83,47 +80,56 @@ const EmpireEndReward = ({
   const pnl = isProfit ? earnings - totalSpent : totalSpent - earnings;
 
   const imgUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
-  const empireName = empire === EEmpire.Red ? "Red" : empire === EEmpire.Blue ? "Blue" : "Green";
+  const empires = useEmpires();
+  const empireName = empires.get(empire)?.name;
   return (
-    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
+    <div className="pointer-events-auto flex flex-col rounded-lg">
       <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
         <span className="text-xs">Earn up to</span>
-        <Tooltip
-          tooltipContent={`Projected rewards if ${empireName} empire wins`}
-          direction="left"
-          className="w-56 text-xs"
-        >
-          <ExclamationCircleIcon className="size-3" />
-        </Tooltip>
-      </h2>
-      <div className={cn("flex h-full w-full flex-row items-center justify-end gap-2 border-none py-1 text-sm")}>
-        <div className="flex items-center justify-end gap-2">
-          <img src={imgUrl} className="h-6" />
-          <Price wei={earnings} />
-          {!!totalSpent && (
-            <div className={cn("text-right text-xs", isProfit ? "text-green-400" : "text-red-400")}>
-              {isProfit ? "+" : "-"}
-              <Price wei={pnl} />
-            </div>
-          )}
+        <div className="hidden lg:block">
+          <Tooltip
+            tooltipContent={`Projected rewards if ${empireName} empire wins`}
+            direction="left"
+            className="w-56 text-xs"
+          >
+            <ExclamationCircleIcon className="size-3" />
+          </Tooltip>
         </div>
+      </h2>
+      <div
+        className={cn("flex h-full w-full flex-row items-end justify-end gap-2 border-none text-sm lg:items-center")}
+      >
+        <img src={imgUrl} className="h-6" />
+        <Price wei={earnings} />
+        {!!totalSpent && (
+          <div className={cn("hidden text-right text-xs lg:block", isProfit ? "text-green-400" : "text-red-400")}>
+            {isProfit ? "+" : "-"}
+            <Price wei={pnl} />
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
-  const { tables } = useCore();
+  const {
+    tables,
+    utils: { getPointPrice },
+  } = useCore();
   const points = usePoints(playerId);
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
+  const empires = useEmpires();
+  const time = tables.Time.use();
 
-  const { price: redPointCost } = usePointPrice(EEmpire.Red, Number(formatEther(points[EEmpire.Red].playerPoints)));
-  const { price: bluePointCost } = usePointPrice(EEmpire.Blue, Number(formatEther(points[EEmpire.Blue].playerPoints)));
-  const { price: greenPointCost } = usePointPrice(
-    EEmpire.Green,
-    Number(formatEther(points[EEmpire.Green].playerPoints)),
+  const pointCosts = useMemo(
+    () =>
+      [...empires.keys()].map(
+        (empire) => getPointPrice(empire, Number(formatEther(points[empire].playerPoints))).price,
+      ),
+    [empires, points, time],
   );
-  const totalReward = redPointCost + bluePointCost + greenPointCost;
+  const totalReward = pointCosts.reduce((sum, cost) => sum + cost, 0n);
 
   const isProfit = totalReward >= totalSpent;
   const pnl = isProfit ? totalReward - totalSpent : totalSpent - totalReward;
@@ -132,14 +138,21 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
     <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
       <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
         <span className="text-xs">Sell now</span>
-        <Tooltip tooltipContent="Rewards if you sell all points now" direction="left" className="w-56 text-xs">
-          <ExclamationCircleIcon className="size-3" />
-        </Tooltip>
+
+        <div className="hidden lg:block">
+          <Tooltip
+            tooltipContent="Rewards if you sell all points now"
+            direction="left"
+            className="hidden w-56 text-xs lg:block"
+          >
+            <ExclamationCircleIcon className="hidden size-3 lg:block" />
+          </Tooltip>
+        </div>
       </h2>
-      <div className={cn("flex h-full w-full items-center justify-end gap-1 border-none py-1 text-sm")}>
+      <div className={cn("flex h-full w-full items-end justify-end gap-1 border-none text-sm lg:items-center")}>
         <Price wei={totalReward} />
         {!!totalSpent && (
-          <span className={cn("text-xs", isProfit ? "text-green-400" : "text-red-400")}>
+          <span className={cn("hidden text-xs lg:block", isProfit ? "text-green-400" : "text-red-400")}>
             {isProfit ? "+" : "-"}
             <Price wei={pnl} />
           </span>

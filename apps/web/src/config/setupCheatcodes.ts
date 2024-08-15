@@ -1,13 +1,13 @@
-import { Hex, padHex } from "viem";
+import { Address, Hex, padHex } from "viem";
 
-import { EEmpire, ERoutine, OTHER_EMPIRE_COUNT, POINTS_UNIT } from "@primodiumxyz/contracts";
+import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { AccountClient, addressToEntity, Core, entityToPlanetName } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { createCheatcode } from "@/util/cheatcodes";
-import { EmpireEnumToName } from "@/util/lookups";
+import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 import { notify } from "@/util/notify";
 
 export const CheatcodeToBg: Record<string, string> = {
@@ -21,15 +21,17 @@ export const CheatcodeToBg: Record<string, string> = {
   config: "bg-gray-500/10",
 };
 
-export const setupCheatcodes = (
-  core: Core,
-  game: PrimodiumGame,
-  accountClient: AccountClient,
-  contractCalls: ContractCalls,
-) => {
+export const setupCheatcodes = (options: {
+  core: Core;
+  game: PrimodiumGame;
+  accountClient: AccountClient;
+  contractCalls: ContractCalls;
+  requestDrip?: (address: Address, force?: boolean) => Promise<void>;
+}) => {
+  const { core, game, accountClient, contractCalls, requestDrip } = options;
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const { devCalls, executeBatch, requestDrip, resetGame: _resetGame, tacticalStrike, withdrawRake } = contractCalls;
+  const { devCalls, executeBatch, resetGame: _resetGame, tacticalStrike, withdrawRake } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -438,8 +440,11 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({
+          id: entity,
+          value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
+        })),
       },
       amount: {
         label: "Units",
@@ -459,7 +464,8 @@ export const setupCheatcodes = (
       const currentCost = tables.Empire.getWithKeys({ id: empireId })?.pointCost ?? BigInt(0);
       const increaseCost = pointConfig?.pointCostIncrease ?? BigInt(1);
 
-      const pointsToIssue = BigInt(amount.value) * BigInt(OTHER_EMPIRE_COUNT);
+      const empires = tables.P_GameConfig.use()?.empireCount ?? 0;
+      const pointsToIssue = BigInt(amount.value) * BigInt(empires - 1);
       const newPoints = currentPoints + pointsToIssue;
 
       const success = await Promise.all([
@@ -468,7 +474,7 @@ export const setupCheatcodes = (
           table: tables.Empire,
           keys: { id: empireId },
           properties: {
-            pointCost: currentCost + increaseCost * BigInt(OTHER_EMPIRE_COUNT),
+            pointCost: currentCost + increaseCost * BigInt(empires - 1),
           },
         }),
       ]);
@@ -497,7 +503,8 @@ export const setupCheatcodes = (
       },
     },
     execute: async ({ amount }) => {
-      const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
+      const turn = tables.Turn.get()?.empire;
+      if (!turn) throw new Error("No empire in turn");
       const empirePlanets = core.utils.getEmpirePlanets(turn);
       const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
       const updateWorldCallParams = {
@@ -605,7 +612,7 @@ export const setupCheatcodes = (
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
-      requestDrip?.(accountClient.playerAccount.address);
+      await requestDrip?.(accountClient.playerAccount.address, true);
       notify("success", "Dripped eth to player account");
       return true;
     },
@@ -658,8 +665,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
       planet: {
         label: "Planet",
@@ -681,7 +688,8 @@ export const setupCheatcodes = (
       const empireId = empire.id as EEmpire;
 
       const currentTurn = tables.Turn.get()?.value ?? BigInt(1);
-      const endTurn = currentTurn + BigInt(turns.value) * BigInt(EEmpire.LENGTH - 1);
+      const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
+      const endTurn = currentTurn + BigInt(turns.value) * BigInt(empires);
 
       const magnetTurnRemovalOp = _removeMagnetTurnRemoval(empireId, planetId);
       if (magnetTurnRemovalOp) devOps.push(magnetTurnRemovalOp);
@@ -731,8 +739,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
       planet: {
         label: "Planet",
@@ -767,8 +775,8 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[Number(empires[0]) as EEmpire],
-        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToName[Number(entity) as EEmpire] })),
+        defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+        options: empires.map((entity) => ({ id: entity, value: EmpireEnumToConfig[Number(entity) as EEmpire].name })),
       },
     },
     execute: async ({ empire }) => {
@@ -906,6 +914,11 @@ export const setupCheatcodes = (
       bg: CheatcodeToBg["config"],
       caption: "P_GameConfig",
       inputs: {
+        empireCount: {
+          label: "Empire count",
+          inputType: "number",
+          defaultValue: gameConfig?.empireCount ?? 1,
+        },
         turnLengthBlocks: {
           label: "Turn length blocks",
           inputType: "number",
@@ -932,6 +945,7 @@ export const setupCheatcodes = (
         const finalBlockFromTimeLeft =
           BigInt(properties.roundTimeLeftInSeconds.value * currBlock.avgBlockTime) + currBlock.value;
         const newProperties = {
+          empireCount: Number(properties.empireCount.value),
           turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
           goldGenRate: BigInt(properties.goldGenRate.value),
           gameOverBlock: finalBlockFromTimeLeft,
@@ -1093,11 +1107,11 @@ export const setupCheatcodes = (
       empire: {
         label: "Empire",
         inputType: "string",
-        defaultValue: EmpireEnumToName[EEmpire.Red],
+        defaultValue: EmpireEnumToConfig[DEFAULT_EMPIRE].name,
         options: [
           ...empires.map((entity) => ({
             id: Number(entity) as EEmpire,
-            value: EmpireEnumToName[Number(entity) as EEmpire],
+            value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
           })),
           {
             id: 0,
@@ -1142,6 +1156,7 @@ export const setupCheatcodes = (
   });
 
   return [
+    dripEth,
     advanceTurn,
     setShips,
     sendShips,
@@ -1152,7 +1167,6 @@ export const setupCheatcodes = (
     advanceTurns,
     endGame,
     resetGame,
-    dripEth,
     placeMagnet,
     removeMagnet,
     removeAllMagnets,

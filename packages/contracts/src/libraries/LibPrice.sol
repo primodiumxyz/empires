@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData, OverrideCost } from "codegen/index.sol";
+import { Empire, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_GameConfig, P_OverrideConfig, P_OverrideConfigData, OverrideCost } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
-import { EMPIRE_COUNT } from "src/constants.sol";
 
 /**
  * @title LibPrice
@@ -41,7 +40,8 @@ library LibPrice {
    * @return pointCost The cost of all points related to the override.
    */
   function getProgressPointCost(EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
-    return getPointCost(_empireImpacted, _overrideCount * (EMPIRE_COUNT - 1) * P_PointConfig.getPointUnit());
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    return getPointCost(_empireImpacted, _overrideCount * (empireCount - 1) * P_PointConfig.getPointUnit());
   }
 
   /**
@@ -52,8 +52,9 @@ library LibPrice {
    */
   function getRegressPointCost(EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
     uint256 pointCost;
-    for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
-      if (i == uint256(_empireImpacted)) {
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    for (uint8 i = 1; i <= empireCount; i++) {
+      if (EEmpire(i) == _empireImpacted) {
         continue;
       }
       pointCost += getPointCost(EEmpire(i), _overrideCount * P_PointConfig.getPointUnit());

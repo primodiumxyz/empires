@@ -1,0 +1,20 @@
+import { useMemo } from "react";
+
+import { useCore } from "@primodiumxyz/core/react";
+import { Entity } from "@primodiumxyz/reactive-tables";
+import { useEmpires } from "@/hooks/useEmpires";
+
+export const usePlanetMagnets = (planetId: Entity) => {
+  const { tables } = useCore();
+  const time = tables.Time.use()?.value;
+  const empires = useEmpires();
+  return useMemo(
+    () =>
+      Array.from(empires.keys()).map((empire) => ({
+        empire,
+        exists: !!tables.Magnet.getWithKeys({ planetId, empireId: empire }),
+        endTurn: tables.Magnet.getWithKeys({ planetId, empireId: empire })?.endTurn,
+      })),
+    [empires, planetId, time],
+  );
+};

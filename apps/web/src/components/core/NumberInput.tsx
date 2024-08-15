@@ -34,7 +34,7 @@ export const NumberInput: React.FC<{
   };
 
   return (
-    <div className={cn("relative flex flex-col justify-center gap-2", className)}>
+    <div className={cn("relative flex flex-col justify-center", className)}>
       <div className="flex flex-row gap-2">
         <Button
           size={"xs"}
