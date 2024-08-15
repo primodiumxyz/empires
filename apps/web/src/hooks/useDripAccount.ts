@@ -35,7 +35,8 @@ export const useDripAccount = (): ((address: Hex, force?: boolean) => Promise<Tx
   const dripAccount = useCallback(
     async (address: Hex, force?: boolean) => {
       const publicClient = network?.publicClient;
-      const allowDrip = force || !Dripped.get(address as Entity)?.value;
+      const foundry = config.chain.name === "Foundry";
+      const allowDrip = foundry || force || !Dripped.get(address as Entity)?.value;
       if (!publicClient || dripping || !allowDrip) return;
       setDripping(true);
 
