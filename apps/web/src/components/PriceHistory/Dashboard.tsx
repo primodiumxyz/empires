@@ -5,11 +5,13 @@ import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
+import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { Tabs } from "@/components/core/Tabs";
+import { BoostEmpire } from "@/components/PriceHistory/BoostEmpire";
 import { EmpireDetails } from "@/components/PriceHistory/EmpireDetails";
 import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointGraph";
 import { KPICard } from "@/components/PriceHistory/KPICard";
@@ -21,6 +23,7 @@ import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const Dashboard = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(EEmpire.LENGTH);
+  const [selectedTab, setSelectedTab] = useState<"boost" | "sell">("sell");
   const empires = useEmpires();
 
   return (
@@ -32,8 +35,16 @@ export const Dashboard = () => {
         <div className="grid grid-cols-8 gap-1">
           <div className="col-span-6 flex flex-col gap-1">
             <SecondaryCard className="flex flex-col gap-1">
-              <p className="text-xs">SELL POINTS</p>
-              <SellPoints />
+              <div className="mb-1 flex">
+                <Button selected={selectedTab === "boost"} onClick={() => setSelectedTab("boost")}>
+                  Boost Empire
+                </Button>
+                <Button selected={selectedTab === "sell"} onClick={() => setSelectedTab("sell")}>
+                  Sell Points
+                </Button>
+              </div>
+              {selectedTab === "boost" && <BoostEmpire shrink />}
+              {selectedTab === "sell" && <SellPoints />}
             </SecondaryCard>
 
             <SecondaryCard>

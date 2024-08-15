@@ -37,6 +37,7 @@ import RedMagnet from "../icons/UI_RedMagnet.png?url";
 import Reinforcements from "../icons/UI_Reinforcements.png?url";
 import RemoveShip from "../icons/UI_RemoveShip.png?url";
 import Reports from "../icons/UI_Reports.png?url";
+import Resource from "../icons/UI_Resource.png?url";
 import Return from "../icons/UI_Return.png?url";
 import Settings from "../icons/UI_Settings.png?url";
 import Shard from "../icons/UI_Shard.png?url";
@@ -88,6 +89,7 @@ export const InterfaceIcons = {
   Reinforcements,
   RemoveShip,
   Reports,
+  Resource,
   Return,
   Settings,
   Shard,
