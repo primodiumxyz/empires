@@ -25,7 +25,7 @@ export const QuickTrade = () => {
         <IconLabel imageUri={InterfaceIcons.Resource} text="QUICK TRADE" className="" />
       </Modal.Button>
       <Modal.Content>
-        <Tabs defaultIndex={1}>
+        <Tabs defaultIndex={0}>
           <div className="absolute -top-6 left-1/2 mb-2 flex -translate-x-1/2 justify-center">
             <Tabs.Button size="md" index={0}>
               Boost
