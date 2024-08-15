@@ -19,6 +19,9 @@ export type Cheatcode<T extends CheatcodeInputsBase = CheatcodeInputsBase> = {
   caption: string;
   inputs: T;
   execute: (args: CheatcodeInputs<T>) => Promise<boolean>;
+  loading?: (args: CheatcodeInputs<T>) => string;
+  success?: (args: CheatcodeInputs<T>) => string;
+  error?: (args: CheatcodeInputs<T>) => string;
   bg?: string;
 };
 

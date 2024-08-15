@@ -77,7 +77,7 @@ const App = () => {
                 <BackgroundNebula />
                 <Landing />
                 <ToastContainer
-                  toastClassName={cn("text-xs border text-base-100 bg-neutral border-neutral rounded-box", fontStyle)}
+                  toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
                   progressClassName="bg-primary"
                   position="top-center"
                   autoClose={3000}
