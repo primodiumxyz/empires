@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1723666190456",
+            "image": "atlas.png?timestamp=1723666610217",
             "format": "RGBA8888",
             "size": {
                 "w": 1582,
-                "h": 1534
+                "h": 1608
             },
             "scale": 1,
             "frames": [
@@ -833,7 +833,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_0.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -854,7 +854,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_10.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -875,7 +875,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_11.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_11.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -896,7 +896,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_12.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_12.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -917,7 +917,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_13.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_13.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -938,7 +938,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_14.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_14.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -959,7 +959,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_15.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_15.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -980,7 +980,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_16.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_16.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1001,7 +1001,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_17.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_17.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1022,7 +1022,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_18.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_18.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1043,7 +1043,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_7.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1064,7 +1064,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_8.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1085,7 +1085,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_9.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1967,6 +1967,132 @@
                     }
                 },
                 {
+                    "filename": "sprites/shield-eater/target/Shield_Target_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 952,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1034,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1116,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1198,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1280,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1362,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
                     "filename": "sprites/planet/planet_pink.png",
                     "rotated": false,
                     "trimmed": false,
@@ -1981,8 +2107,8 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 1464,
-                        "y": 952,
+                        "x": 1402,
+                        "y": 1444,
                         "w": 74,
                         "h": 74
                     }
@@ -2002,8 +2128,8 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 1464,
-                        "y": 1026,
+                        "x": 1476,
+                        "y": 1444,
                         "w": 74,
                         "h": 74
                     }
@@ -2023,8 +2149,8 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 1464,
-                        "y": 1100,
+                        "x": 0,
+                        "y": 1534,
                         "w": 74,
                         "h": 74
                     }
@@ -2107,8 +2233,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 283,
-                        "y": 829,
+                        "x": 1550,
+                        "y": 952,
                         "w": 27,
                         "h": 41
                     }
@@ -2128,7 +2254,7 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 310,
+                        "x": 283,
                         "y": 829,
                         "w": 27,
                         "h": 41
@@ -2149,6 +2275,69 @@
                         "h": 41
                     },
                     "frame": {
+                        "x": 1550,
+                        "y": 993,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 310,
+                        "y": 829,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1034,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
                         "x": 337,
                         "y": 829,
                         "w": 27,
@@ -2156,7 +2345,238 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_6.png",
+                    "filename": "sprites/magnet/green/Magnet_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1075,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1116,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1157,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1198,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1239,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1280,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1321,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1362,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1547,
+                        "y": 1403,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1444,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1550,
+                        "y": 1485,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2177,7 +2597,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/blue/Magnet_Blue_7.png",
+                    "filename": "sprites/magnet/pink/Magnet_Pink6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2198,7 +2618,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_0.png",
+                    "filename": "sprites/magnet/pink/Magnet_Pink7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2219,7 +2639,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_1.png",
+                    "filename": "sprites/magnet/pink/Magnet_Pink8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2240,7 +2660,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_2.png",
+                    "filename": "sprites/magnet/purple/Magnet_Purple1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2261,133 +2681,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/green/Magnet_Green_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1538,
-                        "y": 952,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1538,
-                        "y": 993,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1538,
-                        "y": 1034,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1538,
-                        "y": 1075,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1538,
-                        "y": 1116,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1538,
-                        "y": 1157,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink2.png",
+                    "filename": "sprites/magnet/purple/Magnet_Purple2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2408,7 +2702,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/pink/Magnet_Pink3.png",
+                    "filename": "sprites/magnet/purple/Magnet_Purple3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2429,174 +2723,6 @@
                     }
                 },
                 {
-                    "filename": "sprites/magnet/pink/Magnet_Pink4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1464,
-                        "y": 1174,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1491,
-                        "y": 1174,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1518,
-                        "y": 1198,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1545,
-                        "y": 1198,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1464,
-                        "y": 1215,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/purple/Magnet_Purple1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1491,
-                        "y": 1215,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/purple/Magnet_Purple2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1518,
-                        "y": 1239,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/purple/Magnet_Purple3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 1545,
-                        "y": 1239,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
                     "filename": "sprites/magnet/purple/Magnet_Purple4.png",
                     "rotated": false,
                     "trimmed": false,
@@ -2611,8 +2737,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1464,
-                        "y": 1256,
+                        "x": 74,
+                        "y": 1534,
                         "w": 27,
                         "h": 41
                     }
@@ -2632,8 +2758,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1491,
-                        "y": 1256,
+                        "x": 101,
+                        "y": 1534,
                         "w": 27,
                         "h": 41
                     }
@@ -2653,8 +2779,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1518,
-                        "y": 1280,
+                        "x": 128,
+                        "y": 1534,
                         "w": 27,
                         "h": 41
                     }
@@ -2674,8 +2800,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1545,
-                        "y": 1280,
+                        "x": 155,
+                        "y": 1534,
                         "w": 27,
                         "h": 41
                     }
@@ -2695,8 +2821,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1464,
-                        "y": 1297,
+                        "x": 182,
+                        "y": 1534,
                         "w": 27,
                         "h": 41
                     }
@@ -2716,8 +2842,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1491,
-                        "y": 1297,
+                        "x": 209,
+                        "y": 1534,
                         "w": 27,
                         "h": 41
                     }
@@ -2737,8 +2863,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1518,
-                        "y": 1321,
+                        "x": 236,
+                        "y": 1534,
                         "w": 27,
                         "h": 41
                     }
@@ -2758,8 +2884,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1545,
-                        "y": 1321,
+                        "x": 263,
+                        "y": 1534,
                         "w": 27,
                         "h": 41
                     }
@@ -2779,8 +2905,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1464,
-                        "y": 1338,
+                        "x": 1402,
+                        "y": 1364,
                         "w": 27,
                         "h": 41
                     }
@@ -2800,8 +2926,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1491,
-                        "y": 1338,
+                        "x": 1429,
+                        "y": 1364,
                         "w": 27,
                         "h": 41
                     }
@@ -2821,8 +2947,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1402,
-                        "y": 1364,
+                        "x": 290,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -2842,8 +2968,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1429,
-                        "y": 1364,
+                        "x": 317,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -2863,8 +2989,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1518,
-                        "y": 1362,
+                        "x": 344,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -2884,8 +3010,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1545,
-                        "y": 1362,
+                        "x": 371,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -2905,8 +3031,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1456,
-                        "y": 1379,
+                        "x": 398,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -2926,8 +3052,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1483,
-                        "y": 1379,
+                        "x": 425,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -2947,8 +3073,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1402,
-                        "y": 1405,
+                        "x": 452,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -2968,8 +3094,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1429,
-                        "y": 1405,
+                        "x": 479,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -2989,8 +3115,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1510,
-                        "y": 1403,
+                        "x": 506,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -3010,8 +3136,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1537,
-                        "y": 1403,
+                        "x": 533,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -3031,8 +3157,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1456,
-                        "y": 1420,
+                        "x": 560,
+                        "y": 1532,
                         "w": 27,
                         "h": 41
                     }
@@ -3073,8 +3199,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 388,
-                        "y": 1260,
+                        "x": 74,
+                        "y": 1575,
                         "w": 32,
                         "h": 32
                     }
@@ -3094,8 +3220,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 537,
-                        "y": 1375,
+                        "x": 106,
+                        "y": 1575,
                         "w": 32,
                         "h": 32
                     }
@@ -3115,8 +3241,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 625,
-                        "y": 1499,
+                        "x": 138,
+                        "y": 1575,
                         "w": 32,
                         "h": 32
                     }
@@ -3136,8 +3262,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 420,
-                        "y": 1260,
+                        "x": 170,
+                        "y": 1575,
                         "w": 32,
                         "h": 32
                     }
@@ -3157,8 +3283,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 569,
-                        "y": 1375,
+                        "x": 202,
+                        "y": 1575,
                         "w": 32,
                         "h": 32
                     }
@@ -3178,8 +3304,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 657,
-                        "y": 1499,
+                        "x": 234,
+                        "y": 1575,
                         "w": 32,
                         "h": 32
                     }
@@ -3199,8 +3325,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 452,
-                        "y": 1260,
+                        "x": 266,
+                        "y": 1575,
                         "w": 32,
                         "h": 32
                     }
@@ -3416,7 +3542,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_1.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3437,7 +3563,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_19.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_19.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3458,7 +3584,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_2.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3479,7 +3605,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_3.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3500,7 +3626,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_4.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3521,7 +3647,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_5.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3542,7 +3668,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/ShieldEater_Test_Idle_6.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3560,6 +3686,111 @@
                         "y": 0,
                         "w": 143,
                         "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 952,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1034,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1116,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1198,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 1464,
+                        "y": 1280,
+                        "w": 83,
+                        "h": 82
                     }
                 }
             ]

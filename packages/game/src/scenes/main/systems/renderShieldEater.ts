@@ -16,7 +16,7 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
     onChange: ({ properties: { current, prev } }) => {
       // remove previous labels
       if (prev) {
-        scene.objects.planet.get(prev.destinationPlanet as Entity)?.setShieldEaterDestination(0);
+        scene.objects.planet.get(prev.destinationPlanet as Entity)?.setShieldEaterPath(0);
         scene.objects.planet.get(prev.currentPlanet as Entity)?.setShieldEaterLocation(false);
       }
 
@@ -28,15 +28,16 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
         const path = getShieldEaterPath(currPlanet, destPlanet);
         const turnsToDestination = path.length + 1;
 
+        // add current & destination labels
+        scene.objects.planet.get(destPlanet)?.setShieldEaterPath(turnsToDestination, turnsToDestination);
+        scene.objects.planet.get(currPlanet)?.setShieldEaterLocation(true);
+
         // add path labels with turns to arrival
         tables.Planet.getAll().forEach((planet) => {
-          if (path.includes(planet)) scene.objects.planet.get(planet)?.setShieldEaterPath(path.indexOf(planet) + 1);
+          if (path.includes(planet))
+            scene.objects.planet.get(planet)?.setShieldEaterPath(path.indexOf(planet) + 1, turnsToDestination);
           else scene.objects.planet.get(planet)?.setShieldEaterPath(0);
         });
-
-        // add current & destination labels
-        scene.objects.planet.get(destPlanet)?.setShieldEaterDestination(turnsToDestination);
-        scene.objects.planet.get(currPlanet)?.setShieldEaterLocation(true);
       }
     },
   });

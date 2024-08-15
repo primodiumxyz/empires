@@ -412,12 +412,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     return this.shieldEater.setShieldEaterLocation(present);
   }
 
-  setShieldEaterDestination(turns: number): ShieldEater {
-    return this.shieldEater.setShieldEaterDestination(turns);
-  }
-
-  setShieldEaterPath(turns: number): ShieldEater {
-    return this.shieldEater.setShieldEaterPath(turns);
+  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater {
+    return this.shieldEater.setShieldEaterPath(turns, turnsToDestination);
   }
 
   shieldEaterDetonate(): ShieldEater {

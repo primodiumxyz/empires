@@ -5,11 +5,9 @@ import { PrimodiumScene } from "@game/types";
 
 export class ShieldEater extends Phaser.GameObjects.Container {
   private location: Phaser.GameObjects.Sprite;
+  private destination: Phaser.GameObjects.Sprite;
   private _scene: PrimodiumScene;
   private coord: Coord;
-
-  // TODO(SE): temp
-  private destinationLabel: Phaser.GameObjects.Text;
 
   constructor(scene: PrimodiumScene, coord: Coord) {
     super(scene.phaserScene, coord.x, coord.y);
@@ -21,16 +19,12 @@ export class ShieldEater extends Phaser.GameObjects.Container {
       .setActive(false)
       .setVisible(false);
 
-    // TODO(SE): temp
-    this.destinationLabel = scene.phaserScene.add
-      .text(0, -70, "", {
-        fontSize: "24px",
-        color: "white",
-      })
+    this.destination = new Phaser.GameObjects.Sprite(scene.phaserScene, 0, 0, "spriteAtlas")
+      .setOrigin(0.5)
       .setActive(false)
       .setVisible(false);
 
-    this.add([this.location, this.destinationLabel]);
+    this.add([this.location, this.destination]);
   }
 
   setShieldEaterLocation(present: boolean) {
@@ -44,22 +38,16 @@ export class ShieldEater extends Phaser.GameObjects.Container {
     return this;
   }
 
-  setShieldEaterDestination(turns: number) {
-    // TODO(SE): temp
-    this.destinationLabel
-      .setText(`🐍🎯 ${turns.toLocaleString()}`)
-      .setActive(turns > 0)
-      .setVisible(turns > 0);
-
-    return this;
-  }
-
-  setShieldEaterPath(turns: number) {
-    // TODO(SE): temp
-    this.destinationLabel
-      .setText(`🐍 ${turns.toLocaleString()}`)
-      .setActive(turns > 0)
-      .setVisible(turns > 0);
+  setShieldEaterPath(turns: number, turnsToDestination?: number) {
+    if (turns > 0) {
+      // distribute opacity from 0.3 (furthest) to 1 (destination)
+      const opacity = turnsToDestination ? 0.3 + 0.7 * (turns / turnsToDestination) : 1;
+      console.log({ turns, opacity, toDest: turnsToDestination });
+      this.destination.play(Animations["ShieldEaterTarget"]);
+      this.destination.setActive(true).setVisible(true).setAlpha(opacity);
+    } else {
+      this.destination.setActive(false).setVisible(false);
+    }
 
     return this;
   }

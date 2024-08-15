@@ -44,6 +44,7 @@ export const Animations = {
 
   // Shield eater
   ShieldEaterIdle: "shield-eater/idle",
+  ShieldEaterTarget: "shield-eater/target",
   ShieldEaterDetonate: "shield-eater/detonate",
   ShieldEaterCrack: "shield-eater/crack",
 };
