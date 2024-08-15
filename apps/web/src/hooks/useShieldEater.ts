@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 
 import { useCore } from "@primodiumxyz/core/react";
-import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
+import { Entity } from "@primodiumxyz/reactive-tables";
 
 // TODO: provide an estimate of when it will have enough shields to detonate
 export const useShieldEater = (): {
-  currentPlanet: Entity;
+  currentPlanet: Entity | undefined;
   cooldownShields: number;
 } => {
   const { tables } = useCore();
@@ -17,7 +17,7 @@ export const useShieldEater = (): {
   }, [detonationThreshold, shieldEaterData?.currentCharge]);
 
   return {
-    currentPlanet: (shieldEaterData?.currentPlanet as Entity) ?? defaultEntity,
+    currentPlanet: shieldEaterData?.currentPlanet as Entity | undefined,
     cooldownShields,
   };
 };

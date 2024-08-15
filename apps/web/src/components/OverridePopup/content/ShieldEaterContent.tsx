@@ -26,10 +26,10 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
   const detonatePointsReceived = useOverridePointsReceived(EOverride.DetonateShieldEater, planetEmpire, 1n);
 
   const caption =
-    currentPlanet !== entity
-      ? `The shield eater is currently on ${entityToPlanetName(currentPlanet)}.`
+    currentPlanet && currentPlanet !== entity
+      ? `Shield eater is on ${entityToPlanetName(currentPlanet)}.`
       : cooldownShields
-        ? `The shield eater is eating, come back after it ate ${cooldownShields.toLocaleString()} more shields.`
+        ? `Shield eater is charging, come back after it eats ${cooldownShields.toLocaleString()} more shields.`
         : undefined;
 
   return (
