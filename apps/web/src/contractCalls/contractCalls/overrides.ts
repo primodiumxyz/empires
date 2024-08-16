@@ -1,4 +1,4 @@
-import { formatEther, TransactionReceipt } from "viem";
+import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { bigintToNumber, Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
@@ -250,7 +250,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
         execute({
           functionName: "Empires__placeMagnet",
           args: [empire, planetId, turnCount],
-          options: { value: payment, gas: 546063n * 2n },
+          options: { value: payment, gas: 1_000_000n * 2n },
           txQueueOptions: {
             id: `${planetId}-place-magnet`,
             ...options,
