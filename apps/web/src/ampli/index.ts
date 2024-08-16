@@ -52,6 +52,688 @@ export type LoadOptionsWithClientInstance = LoadOptionsBase & { client: { instan
 
 export type LoadOptions = LoadOptionsWithEnvironment | LoadOptionsWithApiKey | LoadOptionsWithClientInstance;
 
+export interface EmpiresAirdropGoldProperties {
+  empires?: {
+    /**
+     * Empire name derived from `empire`, an `EntityId`, with `EmpireEnumToConfig[empire as EEmpire].name`.
+     */
+    empireName?: string;
+    /**
+     * Count of overrides, e.g. for ships.
+     */
+    overrideCount?: number;
+    /**
+     * Amount of gold airdropped in Empires, measured in `wei`.
+     */
+    pointsReceived?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresBoostChargeProperties {
+  empires?: {
+    /**
+     * Count of boosting charges for a planet.
+     */
+    chargeCount?: number;
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresChargeShieldProperties {
+  empires?: {
+    /**
+     * Count of overrides, e.g. for ships.
+     */
+    overrideCount?: number;
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresCreateShipProperties {
+  empires?: {
+    /**
+     * Count of overrides, e.g. for ships.
+     */
+    overrideCount?: number;
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresDetonateShieldEaterProperties {
+  empires?: {
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresDrainShieldProperties {
+  empires?: {
+    /**
+     * Count of overrides, e.g. for ships.
+     */
+    overrideCount?: number;
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresKillShipProperties {
+  empires?: {
+    /**
+     * Count of overrides, e.g. for ships.
+     */
+    overrideCount?: number;
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresPlaceMagnetProperties {
+  empires?: {
+    /**
+     * Empire name derived from `empire`, an `EntityId`, with `EmpireEnumToConfig[empire as EEmpire].name`.
+     */
+    empireName?: string;
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+    /**
+     * Turn count of an Empires round.
+     */
+    turnCount?: number;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresSellPointsProperties {
+  empires?: {
+    /**
+     * Empire name derived from `empire`, an `EntityId`, with `EmpireEnumToConfig[empire as EEmpire].name`.
+     */
+    empireName?: string;
+    /**
+     * `amount` of Ethereum, measured in `wei`.
+     */
+    ethAmount?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresStunChargeProperties {
+  empires?: {
+    /**
+     * Count of boosting charges for a planet.
+     */
+    chargeCount?: number;
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export interface EmpiresTacticalStrikeProperties {
+  empires?: {
+    /**
+     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     */
+    planetName?: string;
+  };
+  /**
+   * The address this transaction is from. On Amplitude, this is also tracked as the user's unique account address initilized with  `ampli.from()`.
+   */
+  transactionFrom?: string;
+  /**
+   * The amount of gas actually used by this transaction.
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   */
+  transactionGasUsed?: number;
+  /**
+   * The hash of the transaction.
+   */
+  transactionHash?: string;
+  /**
+   * The status of a transaction is 1 is successful or 0 if it was reverted. Direcrly read from `receipt.status`, as described in the ethers.js docs (https://docs.ethers.org/v5/api/providers/types/).
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Type | integer |
+   * | Min Value | 0 |
+   * | Max Value | 1 |
+   */
+  transactionStatus?: number;
+  /**
+   * The address this transaction is to. This is `null` if the transaction was an init transaction, used to deploy a contract.
+   *
+   * Since a user will only execute actions on a contract from the frontend, this value will never be null.
+   */
+  transactionTo?: string;
+  /**
+   * If the transaction is recorded on-chain and returns a valid receipt with a transaction hash, whether the transaction reverted or not, `transactionValid` will return `true`. Otherwise, it will return `false`.
+   *
+   *
+   * Note that if `transactionValid` is `true`, `transactionStatus` should be checked if a transaction is successful (status 1) or not (status 0).
+   */
+  transactionValid: boolean;
+}
+
+export class EmpiresAirdropGold implements BaseEvent {
+  event_type = 'empires.airdropGold';
+
+  constructor(
+    public event_properties: EmpiresAirdropGoldProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresBoostCharge implements BaseEvent {
+  event_type = 'empires.boostCharge';
+
+  constructor(
+    public event_properties: EmpiresBoostChargeProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresChargeShield implements BaseEvent {
+  event_type = 'empires.chargeShield';
+
+  constructor(
+    public event_properties: EmpiresChargeShieldProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresCreateShip implements BaseEvent {
+  event_type = 'empires.createShip';
+
+  constructor(
+    public event_properties: EmpiresCreateShipProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresDetonateShieldEater implements BaseEvent {
+  event_type = 'empires.detonateShieldEater';
+
+  constructor(
+    public event_properties: EmpiresDetonateShieldEaterProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresDrainShield implements BaseEvent {
+  event_type = 'empires.drainShield';
+
+  constructor(
+    public event_properties: EmpiresDrainShieldProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresKillShip implements BaseEvent {
+  event_type = 'empires.killShip';
+
+  constructor(
+    public event_properties: EmpiresKillShipProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresPlaceMagnet implements BaseEvent {
+  event_type = 'empires.placeMagnet';
+
+  constructor(
+    public event_properties: EmpiresPlaceMagnetProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresSellPoints implements BaseEvent {
+  event_type = 'empires.sellPoints';
+
+  constructor(
+    public event_properties: EmpiresSellPointsProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresStunCharge implements BaseEvent {
+  event_type = 'empires.stunCharge';
+
+  constructor(
+    public event_properties: EmpiresStunChargeProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class EmpiresTacticalStrike implements BaseEvent {
+  event_type = 'empires.tacticalStrike';
+
+  constructor(
+    public event_properties: EmpiresTacticalStrikeProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
 export type PromiseResult<T> = { promise: Promise<T | void> };
 
 const getVoidPromiseResult = () => ({ promise: Promise.resolve() });
@@ -161,6 +843,192 @@ export class Ampli {
     return this.amplitude!.track(event, undefined, options);
   }
 
+  /**
+   * empires.airdropGold
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.airdropGold)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresAirdropGold(
+    properties: EmpiresAirdropGoldProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresAirdropGold(properties), options);
+  }
+
+  /**
+   * empires.boostCharge
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.boostCharge)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresBoostCharge(
+    properties: EmpiresBoostChargeProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresBoostCharge(properties), options);
+  }
+
+  /**
+   * empires.chargeShield
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.chargeShield)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresChargeShield(
+    properties: EmpiresChargeShieldProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresChargeShield(properties), options);
+  }
+
+  /**
+   * empires.createShip
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.createShip)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresCreateShip(
+    properties: EmpiresCreateShipProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresCreateShip(properties), options);
+  }
+
+  /**
+   * empires.detonateShieldEater
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.detonateShieldEater)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresDetonateShieldEater(
+    properties: EmpiresDetonateShieldEaterProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresDetonateShieldEater(properties), options);
+  }
+
+  /**
+   * empires.drainShield
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.drainShield)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresDrainShield(
+    properties: EmpiresDrainShieldProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresDrainShield(properties), options);
+  }
+
+  /**
+   * empires.killShip
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.killShip)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresKillShip(
+    properties: EmpiresKillShipProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresKillShip(properties), options);
+  }
+
+  /**
+   * empires.placeMagnet
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.placeMagnet)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresPlaceMagnet(
+    properties: EmpiresPlaceMagnetProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresPlaceMagnet(properties), options);
+  }
+
+  /**
+   * empires.sellPoints
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.sellPoints)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresSellPoints(
+    properties: EmpiresSellPointsProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresSellPoints(properties), options);
+  }
+
+  /**
+   * empires.stunCharge
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.stunCharge)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresStunCharge(
+    properties: EmpiresStunChargeProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresStunCharge(properties), options);
+  }
+
+  /**
+   * empires.tacticalStrike
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/primodium/primodium-testnet2/events/main/latest/empires.tacticalStrike)
+   *
+   * Event has no description in tracking plan.
+   *
+   * @param properties The event's properties (e.g. empires)
+   * @param options Amplitude event options.
+   */
+  empiresTacticalStrike(
+    properties: EmpiresTacticalStrikeProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new EmpiresTacticalStrike(properties), options);
+  }
 }
 
 export const ampli = new Ampli();
