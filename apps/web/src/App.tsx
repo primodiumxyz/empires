@@ -15,6 +15,10 @@ import { useSettings } from "@/hooks/useSettings";
 import Landing from "@/screens/Landing";
 import { cn } from "@/util/client";
 
+import { ampli } from "./ampli/index";
+
+const DEV = import.meta.env.PRI_DEV === "true";
+
 const App = () => {
   const settings = useSettings();
   const fontStyle = useMemo(() => {
@@ -31,6 +35,16 @@ const App = () => {
 
     return cn(fontFamily, fontSize);
   }, [settings.fontStyle]);
+
+  // Amplitude Analytics
+  useEffect(() => {
+    if (DEV) {
+      ampli.load({ client: { apiKey: import.meta.env.PRI_AMPLI_API_KEY_DEV } });
+    } else {
+      ampli.load({ client: { apiKey: import.meta.env.PRI_AMPLI_API_KEY_PROD } });
+    }
+  }, []);
+
   const coreRef = useRef<CoreType | null>(null);
   const [core, setCore] = useState<CoreType | null>(null);
 
