@@ -72,7 +72,7 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
           onChange={handleInputChange}
           min={0}
           max={Number(formatEther(playerPoints))}
-          className="w-32 place-self-center lg:mt-4"
+          className="w-40 place-self-center lg:mt-2"
         />
 
         <Badge size="sm" variant="primary" className="p-4 lg:badge-lg">
@@ -86,7 +86,7 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
         <TransactionQueueMask id="sell-points">
           <Button
             size="sm"
-            className="w-full lg:btn-md lg:text-lg"
+            className="w-full md:btn-md"
             disabled={amountToSell == "0" || !pointsToWei}
             onClick={handleSubmit}
           >

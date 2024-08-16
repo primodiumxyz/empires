@@ -28,18 +28,22 @@ export const Dashboard = () => {
 
   return (
     <Modal title="Dashboard">
-      <Modal.Button size="md" variant="neutral" className="z-50 lg:btn-lg">
+      <Modal.Button size="md" variant="neutral" className="z-50 w-56">
         <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" className="" />
       </Modal.Button>
       <Modal.Content>
         <div className="grid grid-cols-8 gap-1">
           <div className="col-span-6 flex flex-col gap-1">
             <SecondaryCard className="flex flex-col gap-1">
-              <div className="mb-1 flex">
-                <Button selected={selectedTab === "boost"} onClick={() => setSelectedTab("boost")}>
+              <div className="m-1 flex">
+                <Button selected={selectedTab === "boost"} 
+                  onClick={() => setSelectedTab("boost")}
+                  className="btn-sm">
                   Boost Empire
                 </Button>
-                <Button selected={selectedTab === "sell"} onClick={() => setSelectedTab("sell")}>
+                <Button selected={selectedTab === "sell"} 
+                  onClick={() => setSelectedTab("sell")}
+                  className="btn-sm">
                   Sell Points
                 </Button>
               </div>
