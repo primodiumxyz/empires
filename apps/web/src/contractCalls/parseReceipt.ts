@@ -1,5 +1,6 @@
 import { TransactionReceipt, zeroAddress } from "viem";
-import { bigintToNumber } from "@primodiumxyz/core";
+
+import { bigintToNumber, TxReceipt } from "@primodiumxyz/core";
 
 // See Amplitude dashboard for more details on the event properties:
 type ParsedReceipt =
@@ -15,8 +16,8 @@ type ParsedReceipt =
       transactionValid: boolean;
     };
 
-export const parseReceipt = (receipt: TransactionReceipt | undefined): ParsedReceipt => {
-  if (receipt === undefined) {
+export const parseReceipt = (receipt: TxReceipt): ParsedReceipt => {
+  if (receipt.success === false) {
     return {
       transactionValid: false,
     };

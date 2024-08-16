@@ -15,7 +15,7 @@ import useWinningEmpire from "@/hooks/useWinningEmpire";
 
 export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
-  const { createShip, removeShip } = useContractCalls();
+  const { createShip, killShip } = useContractCalls();
   const { gameOver } = useWinningEmpire();
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? EEmpire.NULL;
@@ -36,7 +36,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           <TransactionQueueMask id={`${entity}-kill-ship`}>
             <Button
               onClick={async () => {
-                await removeShip(entity, BigInt(inputValue), killShipPriceWei);
+                await killShip(entity, BigInt(inputValue), killShipPriceWei);
                 setInputValue("1");
                 tables.SelectedPlanet.remove();
               }}
