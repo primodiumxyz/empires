@@ -84,13 +84,14 @@ const SellPoints = () => {
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
       <div className="p-2 h-64">
-        <p className="mb-2 text-center text-xs text-gray-400">Sell points for a profit</p><br></br>
+        <p className="my-2 text-center text-xs text-gray-400">Sell points for a profit</p>
         
         <SecondaryCard className="flex-row items-center justify-center gap-4 bg-black/10">
           <Dropdown
             value={selectedEmpire}
             onChange={(value) => setSelectedEmpire(value)}
             variant="bottomRight"
+            justify="start"
             className="w-32 gap-1"
           >
             {Array.from(empires.entries()).map(([key, empire]) => (
@@ -107,6 +108,7 @@ const SellPoints = () => {
             className="mt-4 w-40 place-self-center"
           />
         </SecondaryCard>
+        <br></br>
 
         <div className="mt-2 flex flex-col items-center">
           <TransactionQueueMask id="sell-points">
