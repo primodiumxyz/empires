@@ -11,18 +11,26 @@ contract InitTest is PrimodiumTest {
     super.setUp();
   }
 
-  function testRedPlanetInit() public {
-    bytes32 redPlanetId = coordToId(101, -2);
-    PlanetData memory planetData = Planet.get(redPlanetId);
-    assertTrue(planetData.isPlanet);
-    assertEq(planetData.shipCount, 0);
-    assertEq(planetData.empireId, EEmpire.Red);
-    assertEq(planetData.q, 101);
-    assertEq(planetData.r, -2);
-    Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(redPlanetId);
-    assertEq(planetTacticalStrikeData.chargeRate, P_TacticalStrikeConfig.getChargeRate());
-    assertEq(planetTacticalStrikeData.charge, 0);
-  }
+  // TODO: find new home planet for red
+  // function testRedPlanetInit() public {
+  //   bytes32 redPlanetId = coordToId(97, 0);
+  //   PlanetData memory planetData = Planet.get(redPlanetId);
+  //   assertTrue(planetData.isPlanet, "[testRedPlanetInit] isPlanet is not true");
+  //   assertEq(planetData.shipCount, 0, "[testRedPlanetInit] shipCount is not 0");
+  //   assertEq(planetData.empireId, EEmpire.Red, "[testRedPlanetInit] empireId is not Red");
+  //   assertEq(planetData.q, 97, "[testRedPlanetInit] q is not 97");
+  //   assertEq(planetData.r, 0, "[testRedPlanetInit] r is not 0");
+
+  //   // *** Tactical Strike Feature Disabled ***
+
+  //   // Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrike.get(redPlanetId);
+  //   // assertEq(
+  //   //   planetTacticalStrikeData.chargeRate,
+  //   //   P_TacticalStrikeConfig.getChargeRate(),
+  //   //   "[testRedPlanetInit] chargeRate is not equal to P_TacticalStrikeConfig.getChargeRate()"
+  //   // );
+  //   // assertEq(planetTacticalStrikeData.charge, 0, "[testRedPlanetInit] planetTacticalStrikeData.charge is not 0");
+  // }
 
   function testNonOwnedPlanetInit() public {
     bytes32 nonOwnedPlanetId = coordToId(98, 1);

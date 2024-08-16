@@ -32,29 +32,23 @@ library LibShieldEater {
     // save the top 3 planetIds
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     bytes32[] memory dstOptions = new bytes32[](3);
+    uint256 shieldCount = 0;
 
     for (uint256 i = 0; i < planetIds.length; i++) {
-      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
-        continue;
-      }
-      uint256 shieldCount = Planet.getShieldCount(planetIds[i]);
-      if (shieldCount > Planet.getShieldCount(dstOptions[2])) {
-        dstOptions[2] = planetIds[i];
-        continue;
-      }
-
-      if (shieldCount > Planet.getShieldCount(dstOptions[1])) {
-        dstOptions[1] = planetIds[i];
-        continue;
-      }
-
-      if (shieldCount > Planet.getShieldCount(dstOptions[0])) {
+      shieldCount = Planet.getShieldCount(planetIds[i]);
+      if (shieldCount >= Planet.getShieldCount(dstOptions[0])) {
+        dstOptions[2] = dstOptions[1];
+        dstOptions[1] = dstOptions[0];
         dstOptions[0] = planetIds[i];
-        continue;
+      } else if (shieldCount >= Planet.getShieldCount(dstOptions[1])) {
+        dstOptions[2] = dstOptions[1];
+        dstOptions[1] = planetIds[i];
+      } else if (shieldCount >= Planet.getShieldCount(dstOptions[2])) {
+        dstOptions[2] = planetIds[i];
       }
     }
 
-    uint256 randomIndex = pseudorandom(block.number, 2);
+    uint256 randomIndex = pseudorandom(block.number, 3);
     ShieldEater.setDestinationPlanet(dstOptions[randomIndex]);
   }
 

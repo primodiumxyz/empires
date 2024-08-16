@@ -77,44 +77,56 @@ contract LibShieldEaterTest is PrimodiumTest {
   function testShieldEaterRetarget(uint256 fuzz) public {
     vm.startPrank(creator);
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    bytes32[3] memory testTargets;
+    uint256 maxShieldCount = 0;
+    uint256 i = 0;
 
     // set a random block.number
     fuzz = bound(fuzz, 1000000, 1e36);
     vm.roll(fuzz);
 
     // populate shieldCount for all planets
-    for (uint256 i = 0; i < planetIds.length; i++) {
+    for (i = 0; i < planetIds.length; i++) {
       Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
     }
 
-    // save the top 3 planetIds
-    bytes32[] memory dstOptions = new bytes32[](3);
-
-    for (uint256 i = 0; i < planetIds.length; i++) {
-      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
-        continue;
-      }
-      uint256 shieldCount = Planet.getShieldCount(planetIds[i]);
-      if (shieldCount > Planet.getShieldCount(dstOptions[2])) {
-        dstOptions[2] = planetIds[i];
-        continue;
-      }
-
-      if (shieldCount > Planet.getShieldCount(dstOptions[1])) {
-        dstOptions[1] = planetIds[i];
-        continue;
-      }
-
-      if (shieldCount > Planet.getShieldCount(dstOptions[0])) {
-        dstOptions[0] = planetIds[i];
-        continue;
+    for (i = 0; i < planetIds.length; i++) {
+      if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
+        maxShieldCount = Planet.getShieldCount(planetIds[i]);
+        testTargets[0] = planetIds[i];
       }
     }
 
-    console.log("dstOptions:");
-    console.logBytes32(dstOptions[0]);
-    console.logBytes32(dstOptions[1]);
-    console.logBytes32(dstOptions[2]);
+    maxShieldCount = 0;
+    for (i = 0; i < planetIds.length; i++) {
+      if (planetIds[i] == testTargets[0]) {
+        continue;
+      }
+      if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
+        maxShieldCount = Planet.getShieldCount(planetIds[i]);
+        testTargets[1] = planetIds[i];
+      }
+    }
+
+    maxShieldCount = 0;
+    for (i = 0; i < planetIds.length; i++) {
+      if (planetIds[i] == testTargets[0] || planetIds[i] == testTargets[1]) {
+        continue;
+      }
+      if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
+        maxShieldCount = Planet.getShieldCount(planetIds[i]);
+        testTargets[2] = planetIds[i];
+      }
+    }
+
+    console.log("testTargets:");
+    console.logBytes32(testTargets[0]);
+    console.logBytes32(testTargets[1]);
+    console.logBytes32(testTargets[2]);
+    console.log("testTargets[0]: %s", Planet.getShieldCount(testTargets[0]));
+    console.log("testTargets[1]: %s", Planet.getShieldCount(testTargets[1]));
+    console.log("testTargets[2]: %s", Planet.getShieldCount(testTargets[2]));
+    console.log("---");
 
     // choose a next destination
     LibShieldEater.retarget();
@@ -130,9 +142,9 @@ contract LibShieldEaterTest is PrimodiumTest {
 
     // check that it is one of the top 3 planetIds
     assertTrue(
-      ShieldEater.getDestinationPlanet() == dstOptions[0] ||
-        ShieldEater.getDestinationPlanet() == dstOptions[1] ||
-        ShieldEater.getDestinationPlanet() == dstOptions[2],
+      ShieldEater.getDestinationPlanet() == testTargets[0] ||
+        ShieldEater.getDestinationPlanet() == testTargets[1] ||
+        ShieldEater.getDestinationPlanet() == testTargets[2],
       "LibShieldEater: planetId not one of the top 3"
     );
   }
@@ -243,5 +255,48 @@ contract LibShieldEaterTest is PrimodiumTest {
     }
   }
 
-  function testShieldEaterDeepNavSim() public {}
+  function testShieldEaterDeepNavSim() public {
+    uint256 turn = 1000;
+    vm.startPrank(creator);
+    vm.roll(turn);
+    LibShieldEater.initialize();
+    assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "getCurrentPlanet planetId not contained in PlanetsSet");
+    LibShieldEater.retarget();
+    assertTrue(
+      PlanetsSet.has(ShieldEater.getDestinationPlanet()),
+      "getDestinationPlanet planetId not contained in PlanetsSet"
+    );
+
+    PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
+    PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
+
+    // for (uint256 i = 0; i < 1; i++) {
+    // console2.log("loop[%s]", i);
+    console.log(
+      "dest[%s]: [%s,%s]",
+      destPlanetData.shieldCount,
+      uint256(int256(destPlanetData.q)),
+      uint256(int256(destPlanetData.r))
+    );
+
+    console.log(
+      "curr[%s]: [%s,%s]",
+      currPlanetData.shieldCount,
+      uint256(int256(currPlanetData.q)),
+      uint256(int256(currPlanetData.r))
+    );
+
+    while (currPlanetData.q != destPlanetData.q || currPlanetData.r != destPlanetData.r) {
+      LibShieldEater.update();
+      currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
+      // destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
+      console.log(
+        "curr[%s]: [%s,%s]",
+        currPlanetData.shieldCount,
+        uint256(int256(currPlanetData.q)),
+        uint256(int256(currPlanetData.r))
+      );
+    }
+    // }
+  }
 }
