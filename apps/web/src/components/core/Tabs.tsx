@@ -54,9 +54,7 @@ const Pane: FC<{
 const Button: FC<React.ComponentProps<typeof _Button> & { index: number; togglable?: boolean }> = memo(
   ({ togglable = false, index, ...props }) => {
     const { index: currIndex, setIndex, persistIndexKey } = useIndex();
-    const {
-      tables: { SelectedTab },
-    } = useCore();
+
     const selected = currIndex === index;
 
     return (
@@ -84,9 +82,6 @@ const IconButton: FC<
   }
 > = memo(({ togglable = false, index, icon, text, hideOnSelected = false, ...props }) => {
   const { index: currIndex, setIndex, persistIndexKey } = useIndex();
-  const {
-    tables: { SelectedTab },
-  } = useCore();
   const selected = currIndex === index;
 
   return (
@@ -133,12 +128,27 @@ const NextButton: FC<React.ComponentProps<typeof _Button> & { maxIndex: number }
   );
 });
 
+const CloseButton: FC<React.ComponentProps<typeof _Button>> = memo((props) => {
+  const { setIndex } = useIndex();
+
+  return (
+    <_Button
+      {...props}
+      onClick={(e) => {
+        setIndex(undefined);
+        if (props.onClick) props.onClick(e);
+      }}
+    />
+  );
+});
+
 export const Tabs: FC<TabProps> & {
   Button: typeof Button;
   Pane: typeof Pane;
   IconButton: typeof IconButton;
   PrevButton: typeof PrevButton;
   NextButton: typeof NextButton;
+  CloseButton: typeof CloseButton;
 } = ({ children, defaultIndex = 0, className, onChange, persistIndexKey, id }) => {
   const {
     tables: { SelectedTab },
@@ -182,3 +192,4 @@ Tabs.Pane = Pane;
 Tabs.IconButton = IconButton;
 Tabs.PrevButton = PrevButton;
 Tabs.NextButton = NextButton;
+Tabs.CloseButton = CloseButton;

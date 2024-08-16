@@ -72,7 +72,7 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
           onChange={handleInputChange}
           min={0}
           max={Number(formatEther(playerPoints))}
-          className="mt-4 w-32 place-self-center"
+          className="w-32 place-self-center lg:mt-4"
         />
 
         <Badge size="sm" variant="primary" className="p-4 lg:badge-lg">

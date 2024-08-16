@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { formatEther } from "viem";
 
 import { EEmpire, EOverride, POINTS_UNIT } from "@primodiumxyz/contracts";
@@ -23,33 +24,14 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const QuickTrade = () => {
-  const [tabIndex, setTabIndex] = useState(-1);
   const { tables } = useCore();
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const component = document.getElementById("quick-trade-component");
-      if (component && !component.contains(event.target as Node)) {
-        tables.SelectedTab.set({ value: -1 });
-        setTabIndex(-1);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   return (
     <Tabs
-      defaultIndex={tabIndex}
-      onChange={(index) => setTabIndex(index ?? -1)}
-      className="-top-[4px] left-1/2 flex hidden -translate-x-1/2 flex-col items-center justify-center lg:absolute"
-      id="quick-trade-component"
+      defaultIndex={-1}
+      className="absolute -top-[4px] left-1/2 hidden -translate-x-1/2 flex-col items-center justify-center lg:flex"
     >
-      <Join className="-mt-[5px] flex justify-center">
+      <Join className="flex -rotate-90 justify-center lg:-mt-[5px] lg:rotate-0">
         <Tabs.Button size="sm" index={0} togglable variant="primary" className="mr-1">
           Boost
         </Tabs.Button>
@@ -97,7 +79,10 @@ const SellPoints = () => {
   };
 
   return (
-    <Card>
+    <Card className="relative">
+      <Tabs.CloseButton variant="ghost" shape="square" className="absolute right-2 top-2 opacity-60 hover:opacity-100">
+        <XMarkIcon className="h-4 w-4" />
+      </Tabs.CloseButton>
       <p className="mb-2 text-center text-xs text-gray-400">Sell points for a profit</p>
       <SecondaryCard className="flex-row items-center justify-center gap-4 bg-black/10">
         <Dropdown value={selectedEmpire} onChange={(value) => setSelectedEmpire(value)} className="w-32">
@@ -168,10 +153,15 @@ const BoostEmpire = () => {
     setAmount("0");
   };
   return (
-    <Card noDecor>
-      <span className="mb-2 block text-center text-xs text-gray-400">
-        Gain empire points and airdrop gold to planets
-      </span>
+    <Card className="relative">
+      <Tabs.CloseButton variant="ghost" shape="square" className="absolute right-2 top-2 opacity-60 hover:opacity-100">
+        <XMarkIcon className="h-4 w-4" />
+      </Tabs.CloseButton>
+      <div className="flex items-center justify-center">
+        <p className="mb-2 block w-4/5 text-center text-xs text-gray-400">
+          Gain empire points and airdrop gold to planets
+        </p>
+      </div>
 
       <SecondaryCard className="flex-row justify-center gap-4 bg-black/10">
         <Dropdown value={selectedEmpire} onChange={(value) => setSelectedEmpire(value)} className="w-32">
@@ -196,7 +186,7 @@ const BoostEmpire = () => {
           <Button
             size="sm"
             className="w-24 text-base"
-            disabled={amount == "0" || !boostPriceWei}
+            disabled={amount == "0" || !boostPriceWei || boostPriceWei > (balance.value ?? 0n)}
             onClick={handleSubmit}
           >
             Buy
