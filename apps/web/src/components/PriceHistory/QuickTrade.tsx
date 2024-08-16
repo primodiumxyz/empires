@@ -83,14 +83,15 @@ const SellPoints = () => {
       <Tabs.CloseButton variant="ghost" shape="square" className="absolute right-2 top-2 opacity-60 hover:opacity-100">
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
-      <div className="p-2">
-        <p className="mb-2 text-center text-xs text-gray-400">Sell points for a profit</p>
+      <div className="p-2 h-64">
+        <p className="mb-2 text-center text-xs text-gray-400">Sell points for a profit</p><br></br>
+        
         <SecondaryCard className="flex-row items-center justify-center gap-4 bg-black/10">
           <Dropdown
             value={selectedEmpire}
             onChange={(value) => setSelectedEmpire(value)}
             variant="bottomRight"
-            justify="start"
+            className="w-32 gap-1"
           >
             {Array.from(empires.entries()).map(([key, empire]) => (
               <Dropdown.Item key={key} value={key}>
@@ -103,7 +104,7 @@ const SellPoints = () => {
             onChange={handleInputChange}
             min={0}
             max={Number(formatEther(playerPoints))}
-            className="mt-4 w-32 place-self-center"
+            className="mt-4 w-40 place-self-center"
           />
         </SecondaryCard>
 
@@ -170,7 +171,7 @@ const BoostEmpire = () => {
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
 
-      <div className="p-2">
+      <div className="p-2 h-64">
         <div className="flex items-center justify-center">
           <p className="mb-2 block w-4/5 text-center text-xs text-gray-400">
             Gain empire points and airdrop gold to planets
