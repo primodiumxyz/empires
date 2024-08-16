@@ -35,11 +35,15 @@ export const Dashboard = () => {
         <div className="grid grid-cols-8 gap-1">
           <div className="col-span-6 flex flex-col gap-1">
             <SecondaryCard className="flex flex-col gap-1">
-              <div className="mb-1 flex">
-                <Button selected={selectedTab === "boost"} onClick={() => setSelectedTab("boost")}>
+              <div className="m-1 flex">
+                <Button selected={selectedTab === "boost"} 
+                  onClick={() => setSelectedTab("boost")}
+                  className="btn-sm">
                   Boost Empire
                 </Button>
-                <Button selected={selectedTab === "sell"} onClick={() => setSelectedTab("sell")}>
+                <Button selected={selectedTab === "sell"} 
+                  onClick={() => setSelectedTab("sell")}
+                  className="btn-sm">
                   Sell Points
                 </Button>
               </div>
