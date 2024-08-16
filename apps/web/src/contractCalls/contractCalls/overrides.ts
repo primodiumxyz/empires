@@ -43,7 +43,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
         execute({
           functionName: "Empires__killShip",
           args: [planetId, overrideCount],
-          options: { value: payment, gas: 739007n * 2n },
+          options: { value: payment, gas: 739007n * 3n },
           txQueueOptions: {
             id: `${planetId}-kill-ship`,
             ...options,
