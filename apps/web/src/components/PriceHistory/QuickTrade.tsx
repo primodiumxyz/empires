@@ -125,13 +125,13 @@ const BoostEmpire = () => {
   const empires = useEmpires();
   const { tables } = useCore();
   const {
-    playerAccount: { entity },
+    playerAccount: { address, entity },
   } = useAccountClient();
   const calls = useContractCalls();
   const {
     MAIN: { sprite },
   } = useGame();
-  const balance = useBalance(entity);
+  const balance = useBalance(address);
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: selectedEmpire, playerId: entity })?.value ?? 0n;
 
   const boostPriceWei = useOverrideCost(EOverride.AirdropGold, selectedEmpire, BigInt(amount));
