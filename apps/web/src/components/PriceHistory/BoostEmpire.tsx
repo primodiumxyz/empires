@@ -11,6 +11,7 @@ import { NumberInput } from "@/components/core/NumberInput";
 import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -20,7 +21,7 @@ import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const BoostEmpire = () => {
   const {
-    playerAccount: { address, publicClient },
+    playerAccount: { entity },
   } = useAccountClient();
   const calls = useContractCalls();
   const { tables } = useCore();
@@ -32,23 +33,13 @@ export const BoostEmpire = () => {
 
   const [amountToBoost, setAmountToBoost] = useState("0");
   const [empire, setEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
-  const [playerBalance, setPlayerBalance] = useState<bigint>(0n);
   const boostPriceWei = useOverrideCost(EOverride.AirdropGold, empire, BigInt(amountToBoost));
   const boostPointsReceived = useOverridePointsReceived(EOverride.AirdropGold, empire, BigInt(amountToBoost));
+  const playerBalance = useBalance(entity);
 
   useEffect(() => {
     setAmountToBoost("0");
   }, [empire]);
-
-  useEffect(() => {
-    const unsubscribe = tables.Time.watch({
-      onChange: () => {
-        publicClient.getBalance({ address }).then(setPlayerBalance);
-      },
-    });
-
-    return () => unsubscribe();
-  }, [address, publicClient, time]);
 
   const handleInputChange = (_value: string) => {
     const value = Math.floor(Number(_value));
@@ -74,13 +65,13 @@ export const BoostEmpire = () => {
         </Dropdown>
       </SecondaryCard>
       <SecondaryCard className="w-full flex-row items-center justify-around gap-2">
-        <NumberInput count={amountToBoost} onChange={handleInputChange} min={0} className="w-40 place-self-center" />
+        <NumberInput count={amountToBoost} onChange={handleInputChange} min={0} className="place-self-center" />
 
-        <div className="flex gap-2">
-          <Badge size="sm" variant="error" className="p-4 lg:badge-lg">
+        <div className="grid grid-rows-2 place-items-center gap-2 xl:!grid-cols-2 xl:!grid-rows-1">
+          <Badge size="sm" variant="error" className="w-full xl:badge-lg xl:w-auto xl:p-4">
             <Price wei={boostPriceWei} className=":!text-lg text-sm text-white" />
           </Badge>
-          <Badge size="sm" variant="success" className="p-4 lg:badge-lg">
+          <Badge size="sm" variant="success" className="w-full flex-1 xl:badge-lg xl:w-fit xl:p-4">
             <PointsReceived points={boostPointsReceived} noCaption className="text-sm text-white opacity-100" />
           </Badge>
         </div>
@@ -88,8 +79,8 @@ export const BoostEmpire = () => {
         <TransactionQueueMask id="sell-points">
           <Button
             size="sm"
-            className="w-full lg:btn-md lg:text-lg"
-            disabled={amountToBoost == "0" || boostPriceWei > playerBalance}
+            className="w-full md:btn-md"
+            disabled={amountToBoost == "0" || boostPriceWei > (playerBalance.value ?? 0n)}
             onClick={handleSubmit}
           >
             Buy

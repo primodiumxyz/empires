@@ -79,7 +79,7 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
           {message ? (
             <span className="text-center text-[0.6rem] text-white">{message}</span>
           ) : (
-            <Price wei={pointsToWei} className="text-sm text-white lg:!text-lg" />
+            <Price wei={pointsToWei} className="text-sm text-white" />
           )}
         </Badge>
 
