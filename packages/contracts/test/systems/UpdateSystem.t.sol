@@ -85,6 +85,7 @@ contract UpdateSystemTest is PrimodiumTest {
   function testSpendGoldBuyShipsRoutine() public {
     uint256 shipsRoutine = routineThresholds.buyShips - 1;
     uint256 gold = 9;
+    uint256 startingShips = Planet.getShipCount(planetId);
 
     Planet.setGoldCount(planetId, gold);
 
@@ -97,7 +98,7 @@ contract UpdateSystemTest is PrimodiumTest {
     LibRoutine._executeRoutine(routineThresholds, shipsRoutine);
 
     assertEq(Planet.getGoldCount(planetId), expectedRemainder, "gold count wrong");
-    assertEq(Planet.getShipCount(planetId), expectedShips, "ships wrong");
+    assertEq(Planet.getShipCount(planetId), expectedShips + startingShips, "ships wrong");
   }
 
   function testGeneratePointsAndOverrides() public {

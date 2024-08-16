@@ -45,16 +45,18 @@ contract OverrideSystemTest is PrimodiumTest {
   function testCreateShipSingle() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
     uint256 currentCharge = _getCurrentCharge(planetId);
+    uint256 startingShips = Planet.getShipCount(planetId);
     world.Empires__createShip{ value: cost }(planetId, 1);
-    assertEq(Planet.get(planetId).shipCount, 1);
+    assertEq(Planet.get(planetId).shipCount, 1 + startingShips);
     assertEq(_getCurrentCharge(planetId), currentCharge + P_TacticalStrikeConfig.getCreateShipBoostIncrease());
   }
 
   function testCreateShipMultiple() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 10);
     uint256 currentCharge = _getCurrentCharge(planetId);
+    uint256 startingShips = Planet.getShipCount(planetId);
     world.Empires__createShip{ value: cost }(planetId, 10);
-    assertEq(Planet.get(planetId).shipCount, 10);
+    assertEq(Planet.get(planetId).shipCount, 10 + startingShips);
     assertEq(_getCurrentCharge(planetId), currentCharge + (P_TacticalStrikeConfig.getCreateShipBoostIncrease() * 10));
   }
 
@@ -66,18 +68,18 @@ contract OverrideSystemTest is PrimodiumTest {
 
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 1);
     world.Empires__killShip{ value: cost }(planetId, 1);
-    assertEq(Planet.get(planetId).shipCount, 0);
+    assertEq(Planet.getShipCount(planetId), 0);
     assertEq(_getCurrentCharge(planetId), currentCharge - P_TacticalStrikeConfig.getKillShipBoostCostDecrease());
   }
 
   function testKillShipMultiple() public {
     testCreateShipMultiple();
     uint256 currentCharge = _getCurrentCharge(planetId);
-    uint256 currentShips = Planet.get(planetId).shipCount;
+    uint256 currentShips = Planet.getShipCount(planetId);
 
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 6);
     world.Empires__killShip{ value: cost }(planetId, 6);
-    assertEq(Planet.get(planetId).shipCount, currentShips - 6);
+    assertEq(Planet.getShipCount(planetId), currentShips - 6);
     assertEq(_getCurrentCharge(planetId), currentCharge - (P_TacticalStrikeConfig.getKillShipBoostCostDecrease() * 6));
   }
 
@@ -85,14 +87,14 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 currentShields = Planet.get(planetId).shieldCount;
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, Planet.getEmpireId(planetId), 1);
     world.Empires__chargeShield{ value: cost }(planetId, 1);
-    assertEq(Planet.get(planetId).shieldCount, currentShields + 1);
+    assertEq(Planet.getShieldCount(planetId), currentShields + 1);
   }
 
   function testChargeShieldMultiple() public {
-    uint256 currentShields = Planet.get(planetId).shieldCount;
+    uint256 currentShields = Planet.getShieldCount(planetId);
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, Planet.getEmpireId(planetId), 10);
     world.Empires__chargeShield{ value: cost }(planetId, 10);
-    assertEq(Planet.get(planetId).shieldCount, currentShields + 10);
+    assertEq(Planet.getShieldCount(planetId), currentShields + 10);
   }
 
   function testDrainShieldSingle() public {
@@ -102,25 +104,28 @@ contract OverrideSystemTest is PrimodiumTest {
 
     uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), 1);
     world.Empires__drainShield{ value: cost }(planetId, 1);
-    assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
+    assertEq(Planet.getShieldCount(planetId), currentShields - 1);
   }
 
   function testDrainShieldMultiple() public {
     testChargeShieldMultiple();
 
-    uint256 currentShields = Planet.get(planetId).shieldCount;
+    uint256 currentShields = Planet.getShieldCount(planetId);
     uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), 6);
     world.Empires__drainShield{ value: cost }(planetId, 6);
-    assertEq(Planet.get(planetId).shieldCount, currentShields - 6);
+    assertEq(Planet.getShieldCount(planetId), currentShields - 6);
   }
 
   function testKillShipFailNoShips() public {
+    vm.startPrank(creator);
+    Planet.setShipCount(planetId, 0);
     vm.expectRevert("[OverrideSystem] Not enough ships to kill");
     world.Empires__killShip(planetId, 1);
   }
 
   function testKillShipFailNotEnoughShips() public {
-    testCreateShipSingle();
+    vm.startPrank(creator);
+    Planet.setShipCount(planetId, 1);
     vm.expectRevert("[OverrideSystem] Not enough ships to kill");
     world.Empires__killShip(planetId, 2);
   }

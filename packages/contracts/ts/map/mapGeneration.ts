@@ -42,8 +42,8 @@ function generateContent() {
             planetData.empireId = EEmpire.${empireName};
             planetData.q = ${coord.q};
             planetData.r = ${coord.r};
-            planetData.shieldCount = ${isTreasure ? 0 : isGuard ? 20 : empireName === "NULL" ? 4 : 0};
-            planetData.goldCount = ${isTreasure ? 500 : isGuard ? 50 : 0};
+            planetData.shieldCount = ${isTreasure ? 0 : isGuard ? 50 : empireName === "NULL" ? 4 : 0};
+            planetData.goldCount = ${isTreasure ? 400 : isGuard ? 100 : 0};
             planetData.shipCount = ${empireName === "NULL" ? 0 : 5};
             planetData.isCitadel = ${isCitadel ? "true" : "false"};
             Planet.set(planetId, planetData);
