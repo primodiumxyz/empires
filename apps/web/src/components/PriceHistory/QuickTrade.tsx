@@ -83,37 +83,49 @@ const SellPoints = () => {
       <Tabs.CloseButton variant="ghost" shape="square" className="absolute right-2 top-2 opacity-60 hover:opacity-100">
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
-      <p className="mb-2 text-center text-xs text-gray-400">Sell points for a profit</p>
-      <SecondaryCard className="flex-row items-center justify-center gap-4 bg-black/10">
-        <Dropdown value={selectedEmpire} onChange={(value) => setSelectedEmpire(value)} className="w-32">
-          {Array.from(empires.entries()).map(([key, empire]) => (
-            <Dropdown.Item key={key} value={key}>
-              <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
-            </Dropdown.Item>
-          ))}
-        </Dropdown>
-        <NumberInput
-          count={amount}
-          onChange={handleInputChange}
-          min={0}
-          max={Number(formatEther(playerPoints))}
-          className="mt-4 w-32 place-self-center"
-        />
-      </SecondaryCard>
+      <div className="p-2">
+        <p className="mb-2 text-center text-xs text-gray-400">Sell points for a profit</p>
+        <SecondaryCard className="flex-row items-center justify-center gap-4 bg-black/10">
+          <Dropdown
+            value={selectedEmpire}
+            onChange={(value) => setSelectedEmpire(value)}
+            variant="bottomRight"
+            justify="start"
+          >
+            {Array.from(empires.entries()).map(([key, empire]) => (
+              <Dropdown.Item key={key} value={key}>
+                <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} className="text-xs" />
+              </Dropdown.Item>
+            ))}
+          </Dropdown>
+          <NumberInput
+            count={amount}
+            onChange={handleInputChange}
+            min={0}
+            max={Number(formatEther(playerPoints))}
+            className="mt-4 w-32 place-self-center"
+          />
+        </SecondaryCard>
 
-      <div className="mt-2 flex flex-col items-center">
-        <TransactionQueueMask id="sell-points">
-          <Button size="sm" className="w-24 text-base" disabled={amount == "0" || !pointsToWei} onClick={handleSubmit}>
-            Sell
-          </Button>
-        </TransactionQueueMask>
-        <Badge size="sm" variant="primary" className="rounded-t-none">
-          {message ? (
-            <span className="-none text-center text-[0.6rem] text-white">{message}</span>
-          ) : (
-            <Price wei={pointsToWei} className="text-sm text-white" />
-          )}
-        </Badge>
+        <div className="mt-2 flex flex-col items-center">
+          <TransactionQueueMask id="sell-points">
+            <Button
+              size="md"
+              className="w-28 text-base"
+              disabled={amount == "0" || !pointsToWei}
+              onClick={handleSubmit}
+            >
+              Sell
+            </Button>
+          </TransactionQueueMask>
+          <Badge size="sm" variant="primary" className="rounded-t-none p-3">
+            {message ? (
+              <span className="-none text-center text-[0.6rem] text-white">{message}</span>
+            ) : (
+              <Price wei={pointsToWei} className="text-sm text-white" />
+            )}
+          </Badge>
+        </div>
       </div>
     </Card>
   );
@@ -157,44 +169,52 @@ const BoostEmpire = () => {
       <Tabs.CloseButton variant="ghost" shape="square" className="absolute right-2 top-2 opacity-60 hover:opacity-100">
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
-      <div className="flex items-center justify-center">
-        <p className="mb-2 block w-4/5 text-center text-xs text-gray-400">
-          Gain empire points and airdrop gold to planets
-        </p>
-      </div>
 
-      <SecondaryCard className="flex-row justify-center gap-4 bg-black/10">
-        <Dropdown value={selectedEmpire} onChange={(value) => setSelectedEmpire(value)} className="w-32">
-          {Array.from(empires.entries()).map(([key, empire]) => (
-            <Dropdown.Item key={key} value={key}>
-              <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
-            </Dropdown.Item>
-          ))}
-        </Dropdown>
-        <NumberInput count={amount} onChange={handleInputChange} min={0} className="w-40 place-self-center" />
-      </SecondaryCard>
+      <div className="p-2">
+        <div className="flex items-center justify-center">
+          <p className="mb-2 block w-4/5 text-center text-xs text-gray-400">
+            Gain empire points and airdrop gold to planets
+          </p>
+        </div>
 
-      <div className="flex items-center justify-center gap-2">
-        <Badge size="md" variant="success" className="mt-2 p-4 opacity-80">
-          +{formatEther(boostPointsReceived.value)} PTS
-          {/* todo: add gold amount calculation */}
-          {/* AND {formatEther(boostPriceWei)} GOLD */}
-        </Badge>
-      </div>
-      <div className="mt-2 flex flex-col items-center">
-        <TransactionQueueMask id="sell-points">
-          <Button
-            size="sm"
-            className="w-24 text-base"
-            disabled={amount == "0" || !boostPriceWei || boostPriceWei > (balance.value ?? 0n)}
-            onClick={handleSubmit}
+        <SecondaryCard className="flex-row justify-center gap-4 bg-black/10">
+          <Dropdown
+            value={selectedEmpire}
+            onChange={(value) => setSelectedEmpire(value)}
+            variant="bottomRight"
+            className="w-32 gap-1"
           >
-            Buy
-          </Button>
-        </TransactionQueueMask>
-        <Badge size="sm" variant="primary" className="rounded-t-none">
-          <Price wei={boostPriceWei} className="text-sm text-white" />
-        </Badge>
+            {Array.from(empires.entries()).map(([key, empire]) => (
+              <Dropdown.Item key={key} value={key}>
+                <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} className="text-xs" />
+              </Dropdown.Item>
+            ))}
+          </Dropdown>
+          <NumberInput count={amount} onChange={handleInputChange} min={0} className="w-40 place-self-center" />
+        </SecondaryCard>
+
+        <div className="flex items-center justify-center gap-2">
+          <Badge size="md" variant="success" className="mt-2 p-4 opacity-80">
+            +{formatEther(boostPointsReceived.value)} PTS
+            {/* todo: add gold amount calculation */}
+            {/* AND {formatEther(boostPriceWei)} GOLD */}
+          </Badge>
+        </div>
+        <div className="mt-2 flex flex-col items-center">
+          <TransactionQueueMask id="sell-points">
+            <Button
+              size="md"
+              className="w-28 text-base"
+              disabled={amount == "0" || !boostPriceWei || boostPriceWei > (balance.value ?? 0n)}
+              onClick={handleSubmit}
+            >
+              Buy
+            </Button>
+          </TransactionQueueMask>
+          <Badge size="sm" variant="primary" className="rounded-t-none p-3">
+            <Price wei={boostPriceWei} className="text-sm text-white" />
+          </Badge>
+        </div>
       </div>
     </Card>
   );

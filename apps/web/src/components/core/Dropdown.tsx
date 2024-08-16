@@ -8,7 +8,7 @@ import { SecondaryCard } from "@/components/core/Card";
 import { cn } from "@/util/client";
 
 const dropdownVariants = cva(
-  "z-50 absolute mt-1 p-1 bg-neutral border border-secondary/25 w-44 pointer-events-auto data-[state=close]:pointer-events-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=close]:animate-out data-[state=close]:fade-out fill-mode-forwards",
+  "z-50 absolute mt-1 p-1 bg-neutral border border-secondary/25 pointer-events-auto data-[state=close]:pointer-events-none fill-mode-forwards",
   {
     variants: {
       size: {
@@ -19,11 +19,12 @@ const dropdownVariants = cva(
       variant: {
         bottomLeft: "origin-top-right right-0",
         bottomRight: "",
+        bottomCenter: "origin-top left-1/2 -translate-x-1/2",
       },
     },
     defaultVariants: {
       size: "md",
-      variant: "bottomLeft",
+      variant: "bottomCenter",
     },
   },
 );
@@ -31,6 +32,7 @@ type DropdownValue = string | number | boolean | Entity;
 
 interface DropdownProps<T extends DropdownValue> extends VariantProps<typeof dropdownVariants> {
   children?: React.ReactElement<DropdownItemProps<T>>[];
+  justify?: "center" | "start";
   className?: string;
   value: T;
   onChange?: (value: T) => void;
@@ -39,6 +41,7 @@ export const Dropdown = <T extends DropdownValue>({
   children,
   className,
   variant,
+  justify = "start",
   size = "md",
   value,
   onChange,
@@ -110,12 +113,14 @@ export const Dropdown = <T extends DropdownValue>({
       <SecondaryCard
         ref={menuRef}
         data-state={isOpen ? "open" : "close"}
-        className={cn(dropdownVariants({ variant }), isVisible ? "visible" : "invisible")}
+        className={cn("gap-1", dropdownVariants({ variant }), isVisible ? "visible" : "invisible")}
       >
         {children.map((child, i) => (
           <Button
             key={i}
             variant="ghost"
+            motion="disabled"
+            className={cn(justify === "start" ? "animate-none justify-start transition-none" : "")}
             shape="block"
             onClick={() => {
               closeMenu();

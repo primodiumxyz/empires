@@ -21,7 +21,7 @@ import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const BoostEmpire = () => {
   const {
-    playerAccount: { entity },
+    playerAccount: { entity, address },
   } = useAccountClient();
   const calls = useContractCalls();
   const { tables } = useCore();
@@ -35,7 +35,7 @@ export const BoostEmpire = () => {
   const [empire, setEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const boostPriceWei = useOverrideCost(EOverride.AirdropGold, empire, BigInt(amountToBoost));
   const boostPointsReceived = useOverridePointsReceived(EOverride.AirdropGold, empire, BigInt(amountToBoost));
-  const playerBalance = useBalance(entity);
+  const playerBalance = useBalance(address);
 
   useEffect(() => {
     setAmountToBoost("0");
@@ -56,7 +56,7 @@ export const BoostEmpire = () => {
   return (
     <div className="flex w-full gap-2">
       <SecondaryCard className="justify-center bg-black/10">
-        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44">
+        <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44" justify="start">
           {Array.from(empires.entries()).map(([key, empire]) => (
             <Dropdown.Item key={key} value={key}>
               <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} />
