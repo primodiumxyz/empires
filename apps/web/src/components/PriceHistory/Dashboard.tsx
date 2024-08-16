@@ -28,7 +28,7 @@ export const Dashboard = () => {
 
   return (
     <Modal title="Dashboard">
-      <Modal.Button size="md" variant="neutral">
+      <Modal.Button size="md" variant="neutral" className="z-50 lg:btn-lg">
         <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" className="" />
       </Modal.Button>
       <Modal.Content>
@@ -43,7 +43,7 @@ export const Dashboard = () => {
                   Sell Points
                 </Button>
               </div>
-              {selectedTab === "boost" && <BoostEmpire shrink />}
+              {selectedTab === "boost" && <BoostEmpire />}
               {selectedTab === "sell" && <SellPoints />}
             </SecondaryCard>
 

@@ -72,14 +72,14 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
           onChange={handleInputChange}
           min={0}
           max={Number(formatEther(playerPoints))}
-          className="mt-4 w-32 place-self-center"
+          className="w-32 place-self-center lg:mt-4"
         />
 
         <Badge size="sm" variant="primary" className="p-4 lg:badge-lg">
           {message ? (
             <span className="text-center text-[0.6rem] text-white">{message}</span>
           ) : (
-            <Price wei={pointsToWei} className="text-sm text-white lg:!text-lg" />
+            <Price wei={pointsToWei} className="text-sm text-white" />
           )}
         </Badge>
 
