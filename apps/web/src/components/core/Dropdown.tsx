@@ -120,7 +120,7 @@ export const Dropdown = <T extends DropdownValue>({
             key={i}
             variant="ghost"
             motion="disabled"
-            className={cn(justify === "start" ? "animate-none justify-start transition-none" : "")}
+            className={cn(justify === "start" ? "animate-none justify-start pl-4 transition-none" : "")}
             shape="block"
             onClick={() => {
               closeMenu();
