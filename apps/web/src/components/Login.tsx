@@ -13,19 +13,19 @@ function Login() {
 
   return (
     <div className="z-10 flex flex-col gap-2">
-      <button
+      {/* <button
         disabled={disableLogin}
         onClick={login}
         className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-blue-700"
       >
         Log in with Privy
-      </button>
+      </button> */}
       {DEV && (
         <button
           onClick={() => createBurner()}
           className="rounded bg-secondary px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
-          (Dev only) Play with Burner Account
+          Play with Burner Account
         </button>
       )}
       {usingBurner && (
