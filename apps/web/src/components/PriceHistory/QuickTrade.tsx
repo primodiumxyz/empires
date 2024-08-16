@@ -46,7 +46,7 @@ export const QuickTrade = () => {
     <Tabs
       defaultIndex={tabIndex}
       onChange={(index) => setTabIndex(index ?? -1)}
-      className="-top-[6px] left-1/2 flex hidden -translate-x-1/2 flex-col items-center justify-center lg:absolute"
+      className="-top-[4px] left-1/2 flex hidden -translate-x-1/2 flex-col items-center justify-center lg:absolute"
       id="quick-trade-component"
     >
       <Join className="-mt-[5px] flex justify-center">
