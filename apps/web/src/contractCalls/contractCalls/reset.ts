@@ -5,6 +5,7 @@ export const createResetCalls = (core: Core, { execute }: ExecuteFunctions) => {
     return await execute({
       functionName: "Empires__resetGame",
       args: [],
+      options: { gas: 26_000_000n },
       txQueueOptions: {
         id: `reset-game`,
         ...options,

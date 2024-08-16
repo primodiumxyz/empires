@@ -101,12 +101,11 @@ export const GameHUD = () => {
 
         <HUD.TopMiddle className="flex flex-col items-center">
           {showCheatcodes && <Cheatcodes />}
-          <div className="hidden gap-2 lg:flex">
-            <QuickTrade />
+          <div className="flex flex-col">
             <Dashboard />
-          </div>
-          <div className="lg:hidden">
-            <Dashboard />
+            <div className="relative hidden h-[300px] w-[300px] lg:block">
+              <QuickTrade />
+            </div>
           </div>
         </HUD.TopMiddle>
 

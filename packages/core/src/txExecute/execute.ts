@@ -42,10 +42,10 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
       args: args as any,
     });
     const tx = async () => await playerAccount.worldContract.write.call(params, callOptions);
-    const simulateTx = async () => {
-      await playerAccount.worldContract.simulate.call(params, { ...callOptions, account: playerAccount.address });
-    };
-    return await _execute(core, tx, simulateTx);
+    // const simulateTx = async () => {
+    //   await playerAccount.worldContract.simulate.call(params, { ...callOptions, account: playerAccount.address });
+    // };
+    return await _execute(core, tx, () => {});
   };
 
   let receipt: TxReceipt | undefined = undefined;
