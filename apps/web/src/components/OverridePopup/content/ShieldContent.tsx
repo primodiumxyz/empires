@@ -15,15 +15,19 @@ import useWinningEmpire from "@/hooks/useWinningEmpire";
 
 export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
-  const { addShield, removeShield } = useContractCalls();
+  const { chargeShield, drainShield } = useContractCalls();
   const { gameOver } = useWinningEmpire();
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? EEmpire.NULL;
   const [inputValue, setInputValue] = useState("1");
-  const addShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
-  const removeShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
-  const addShieldPointsReceived = useOverridePointsReceived(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
-  const removeShieldPointsReceived = useOverridePointsReceived(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
+  const chargeShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const drainShieldPriceWei = useOverrideCost(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
+  const chargeShieldPointsReceived = useOverridePointsReceived(
+    EOverride.ChargeShield,
+    planetEmpire,
+    BigInt(inputValue),
+  );
+  const drainShieldPointsReceived = useOverridePointsReceived(EOverride.DrainShield, planetEmpire, BigInt(inputValue));
 
   const attackDisabled = (planet?.shieldCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0;
   const supportDisabled = gameOver || Number(planetEmpire) === 0;
@@ -36,7 +40,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           <TransactionQueueMask id={`${entity}-remove-shield`}>
             <Button
               onClick={async () => {
-                await removeShield(entity, BigInt(inputValue), removeShieldPriceWei);
+                await drainShield(entity, BigInt(inputValue), drainShieldPriceWei);
                 setInputValue("1");
                 tables.SelectedPlanet.remove();
               }}
@@ -48,16 +52,16 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             </Button>
           </TransactionQueueMask>
           <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
-            <Price wei={removeShieldPriceWei} />
+            <Price wei={drainShieldPriceWei} />
           </p>
-          <PointsReceived points={removeShieldPointsReceived} />
+          <PointsReceived points={drainShieldPointsReceived} />
         </div>
 
         <div className="flex flex-col items-center gap-1">
           <TransactionQueueMask id={`${entity}-add-shield`}>
             <Button
               onClick={async () => {
-                await addShield(entity, BigInt(inputValue), addShieldPriceWei);
+                await chargeShield(entity, BigInt(inputValue), chargeShieldPriceWei);
                 setInputValue("1");
                 tables.SelectedPlanet.remove();
               }}
@@ -69,9 +73,9 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             </Button>
           </TransactionQueueMask>
           <p className="rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
-            <Price wei={addShieldPriceWei} />
+            <Price wei={chargeShieldPriceWei} />
           </p>
-          <PointsReceived points={addShieldPointsReceived} />
+          <PointsReceived points={chargeShieldPointsReceived} />
         </div>
       </div>
     </div>

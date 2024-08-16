@@ -32,7 +32,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const removeShip = async (
+  const killShip = async (
     planetId: Entity,
     overrideCount: bigint,
     payment: bigint,
@@ -57,7 +57,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const addShield = async (
+  const chargeShield = async (
     planetId: Entity,
     overrideCount: bigint,
     payment: bigint,
@@ -82,7 +82,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const removeShield = async (
+  const drainShield = async (
     planetId: Entity,
     overrideCount: bigint,
     payment: bigint,
@@ -261,9 +261,9 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
 
   return {
     createShip,
-    removeShip,
-    addShield,
-    removeShield,
+    killShip,
+    chargeShield,
+    drainShield,
     sellPoints,
     airdropGold,
     tacticalStrike,
