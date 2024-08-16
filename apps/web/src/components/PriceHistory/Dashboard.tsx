@@ -123,7 +123,7 @@ const Sidebar: React.FC = () => {
         <p className="mb-2 text-xs">MARKET RATES</p>
         <EmpireDetails hideGraph hideTitle />
       </SecondaryCard>
-      <SecondaryCard>
+      <SecondaryCard className="h-full">
         <p className="mb-2 text-xs">YOUR PORTFOLIO</p>
         <Account hideAccountBalance />
       </SecondaryCard>

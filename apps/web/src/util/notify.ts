@@ -1,6 +1,6 @@
-import { toast } from "react-toastify";
+import { toast, ToastOptions } from "react-toastify";
 
-import { ExecuteFunctions, TxReceipt } from "@primodiumxyz/core";
+import { TxReceipt } from "@primodiumxyz/core";
 
 export const notify = (type: "success" | "error" | "info" | "warning", message: string) => {
   switch (type) {
@@ -19,7 +19,7 @@ export const notify = (type: "success" | "error" | "info" | "warning", message: 
   }
 };
 
-type WithTransactionStatusOptions = {
+type WithTransactionStatusOptions = ToastOptions & {
   loading?: string;
   success?: string;
   error?: string;
@@ -29,14 +29,14 @@ type WithTransactionStatusOptions = {
 const baseOptions = { isLoading: false, autoClose: 3000 };
 export const withTransactionStatus = (
   fn: () => Promise<TxReceipt>,
-  toastOptions: WithTransactionStatusOptions = {},
+  toastOptions: WithTransactionStatusOptions = { position: "bottom-left" },
 ) => {
   const loadingMsg = toastOptions.loading ?? "Executing transaction...";
   const successMsg = toastOptions.success ?? "Transaction executed successfully";
   const errorMsg = toastOptions.error ?? "Transaction failed";
 
   return (async () => {
-    const toastId = toast.loading(loadingMsg);
+    const toastId = toast.loading(loadingMsg, toastOptions);
 
     try {
       const receipt = await fn();
