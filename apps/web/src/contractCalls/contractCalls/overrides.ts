@@ -1,8 +1,10 @@
-import { formatEther } from "viem";
+import { formatEther, TransactionReceipt } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
+import { bigintToNumber, Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { ampli } from "@/ampli";
+import { parseReceipt } from "@/contractCalls/parseReceipt";
 import { EmpireEnumToConfig } from "@/util/lookups";
 import { withTransactionStatus } from "@/util/notify";
 
@@ -22,6 +24,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           txQueueOptions: {
             id: `${planetId}-create-ship`,
             ...options,
+          },
+          onComplete: (receipt) => {
+            ampli.empiresCreateShip({
+              empires: {
+                planetName: entityToPlanetName(planetId),
+                overrideCount: bigintToNumber(overrideCount),
+              },
+              ...parseReceipt(receipt),
+            });
           },
         }),
       {
@@ -48,6 +59,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
             id: `${planetId}-kill-ship`,
             ...options,
           },
+          onComplete: (receipt) => {
+            ampli.empiresKillShip({
+              empires: {
+                planetName: entityToPlanetName(planetId),
+                overrideCount: bigintToNumber(overrideCount),
+              },
+              ...parseReceipt(receipt),
+            });
+          },
         }),
       {
         loading: `Attacking ${entityToPlanetName(planetId)}`,
@@ -72,6 +92,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           txQueueOptions: {
             id: `${planetId}-add-shield`,
             ...options,
+          },
+          onComplete: (receipt) => {
+            ampli.empiresChargeShield({
+              empires: {
+                planetName: entityToPlanetName(planetId),
+                overrideCount: bigintToNumber(overrideCount),
+              },
+              ...parseReceipt(receipt),
+            });
           },
         }),
       {
@@ -98,6 +127,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
             id: `${planetId}-remove-shield`,
             ...options,
           },
+          onComplete: (receipt) => {
+            ampli.empiresDrainShield({
+              empires: {
+                planetName: entityToPlanetName(planetId),
+                overrideCount: bigintToNumber(overrideCount),
+              },
+              ...parseReceipt(receipt),
+            });
+          },
         }),
       {
         loading: `Attacking shields on ${entityToPlanetName(planetId)}`,
@@ -117,6 +155,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           txQueueOptions: {
             id: "sell-points",
             ...options,
+          },
+          onComplete: (receipt) => {
+            ampli.empiresSellPoints({
+              empires: {
+                empireName: EmpireEnumToConfig[empire as EEmpire].name,
+                ethAmount: amount.toString(),
+              },
+              ...parseReceipt(receipt),
+            });
           },
         }),
       {
@@ -144,6 +191,16 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
             id: "airdrop-gold",
             ...options,
           },
+          onComplete: (receipt) => {
+            ampli.empiresAirdropGold({
+              empires: {
+                empireName: EmpireEnumToConfig[empire as EEmpire].name,
+                overrideCount: bigintToNumber(overrideCount),
+                pointsReceived: pointsReceived.toString(),
+              },
+              ...parseReceipt(receipt),
+            });
+          },
         }),
       {
         loading: `Airdropping gold to ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
@@ -163,6 +220,14 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           txQueueOptions: {
             id: `${planetId}-tactical-strike`,
             ...options,
+          },
+          onComplete: (receipt) => {
+            ampli.empiresTacticalStrike({
+              empires: {
+                planetName: entityToPlanetName(planetId),
+              },
+              ...parseReceipt(receipt),
+            });
           },
         }),
       {
@@ -190,6 +255,16 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
             id: `${planetId}-place-magnet`,
             ...options,
           },
+          onComplete: (receipt) => {
+            ampli.empiresPlaceMagnet({
+              empires: {
+                empireName: EmpireEnumToConfig[empire].name,
+                planetName: entityToPlanetName(planetId),
+                turnCount: bigintToNumber(turnCount),
+              },
+              ...parseReceipt(receipt),
+            });
+          },
         }),
       {
         loading: `Placing ${EmpireEnumToConfig[empire as EEmpire].name} magnet on ${entityToPlanetName(planetId)}`,
@@ -209,6 +284,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           txQueueOptions: {
             id: `${planetId}-boost-charge`,
             ...options,
+          },
+          onComplete: (receipt) => {
+            ampli.empiresBoostCharge({
+              empires: {
+                planetName: entityToPlanetName(planetId),
+                chargeCount: bigintToNumber(count),
+              },
+              ...parseReceipt(receipt),
+            });
           },
         }),
       {
@@ -230,6 +314,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
             id: `${planetId}-stun-charge`,
             ...options,
           },
+          onComplete: (receipt) => {
+            ampli.empiresStunCharge({
+              empires: {
+                planetName: entityToPlanetName(planetId),
+                chargeCount: bigintToNumber(count),
+              },
+              ...parseReceipt(receipt),
+            });
+          },
         }),
       {
         loading: `Stunning charge on ${entityToPlanetName(planetId)}`,
@@ -249,6 +342,14 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           txQueueOptions: {
             id: "detonate-shield-eater",
             ...options,
+          },
+          onComplete: (receipt) => {
+            ampli.empiresDetonateShieldEater({
+              empires: {
+                planetName: entityToPlanetName(planetId),
+              },
+              ...parseReceipt(receipt),
+            });
           },
         }),
       {
