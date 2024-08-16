@@ -1,4 +1,4 @@
-import { createContext, FC, memo, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { createContext, FC, memo, ReactNode, useContext, useEffect, useRef } from "react";
 import { toHex } from "viem";
 
 import { useCore } from "@primodiumxyz/core/react";
@@ -14,6 +14,7 @@ interface TabProps {
   className?: string;
   onChange?: (index?: number) => void;
   persistIndexKey?: string;
+  id?: string;
 }
 
 interface IndexContextValue {
@@ -138,7 +139,7 @@ export const Tabs: FC<TabProps> & {
   IconButton: typeof IconButton;
   PrevButton: typeof PrevButton;
   NextButton: typeof NextButton;
-} = ({ children, defaultIndex = 0, className, onChange, persistIndexKey }) => {
+} = ({ children, defaultIndex = 0, className, onChange, persistIndexKey, id }) => {
   const {
     tables: { SelectedTab },
   } = useCore();
@@ -161,7 +162,9 @@ export const Tabs: FC<TabProps> & {
 
   return (
     <IndexContext.Provider value={{ index: currentIndex, setIndex: setCurrentIndex, persistIndexKey }}>
-      <div className={`${className}`}>{children}</div>
+      <div id={id} className={`${className}`}>
+        {children}
+      </div>
     </IndexContext.Provider>
   );
 };

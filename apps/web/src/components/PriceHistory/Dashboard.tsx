@@ -43,7 +43,7 @@ export const Dashboard = () => {
                   Sell Points
                 </Button>
               </div>
-              {selectedTab === "boost" && <BoostEmpire shrink />}
+              {selectedTab === "boost" && <BoostEmpire />}
               {selectedTab === "sell" && <SellPoints />}
             </SecondaryCard>
 

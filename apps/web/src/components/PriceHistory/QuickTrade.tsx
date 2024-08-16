@@ -23,10 +23,31 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const QuickTrade = () => {
+  const [tabIndex, setTabIndex] = useState(-1);
+  const { tables } = useCore();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const component = document.getElementById("quick-trade-component");
+      if (component && !component.contains(event.target as Node)) {
+        tables.SelectedTab.set({ value: -1 });
+        setTabIndex(-1);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <Tabs
-      defaultIndex={-1}
+      defaultIndex={tabIndex}
+      onChange={(index) => setTabIndex(index ?? -1)}
       className="-top-[6px] left-1/2 flex hidden -translate-x-1/2 flex-col items-center justify-center lg:absolute"
+      id="quick-trade-component"
     >
       <Join className="-mt-[5px] flex justify-center">
         <Tabs.Button size="sm" index={0} togglable variant="primary" className="mr-1">
