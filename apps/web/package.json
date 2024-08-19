@@ -22,7 +22,7 @@
     "@primodiumxyz/core": "workspace:*",
     "@primodiumxyz/engine": "workspace:*",
     "@primodiumxyz/game": "workspace:*",
-    "@primodiumxyz/reactive-tables": "^3.5.4",
+    "@primodiumxyz/reactive-tables": "^3.5.5",
     "@privy-io/react-auth": "^1.72.0",
     "@visx/axis": "^3.10.1",
     "@visx/curve": "^3.3.0",
