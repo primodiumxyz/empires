@@ -130,7 +130,7 @@ const MagnetButton = ({
       size="sm"
       disabled={disabled}
       onClick={onClick}
-      tooltip={disabled ? "Not adjacent" : ""}
+      tooltip={disabled ? "No planet adjacent" : ""}
     >
       <IconLabel imageUri={EmpireEnumToConfig[magnetData.empire].icons.magnet} />
     </Button>
