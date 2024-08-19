@@ -28,6 +28,7 @@ export const QuickTrade = () => {
 
   return (
     <Tabs
+      persistIndexKey="quick-trade"
       defaultIndex={-1}
       className="absolute -top-[4px] left-1/2 hidden -translate-x-1/2 flex-col items-center justify-center lg:flex"
     >
@@ -83,9 +84,9 @@ const SellPoints = () => {
       <Tabs.CloseButton variant="ghost" shape="square" className="absolute right-2 top-2 opacity-60 hover:opacity-100">
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
-      <div className="p-2 h-64">
+      <div className="h-64 p-2">
         <p className="my-2 text-center text-xs text-gray-400">Sell points for a profit</p>
-        
+
         <SecondaryCard className="flex-row items-center justify-center gap-4 bg-black/10">
           <Dropdown
             value={selectedEmpire}
@@ -173,7 +174,7 @@ const BoostEmpire = () => {
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
 
-      <div className="p-2 h-64">
+      <div className="h-64 p-2">
         <div className="flex items-center justify-center">
           <p className="mb-2 block w-4/5 text-center text-xs text-gray-400">
             Gain empire points and airdrop gold to planets

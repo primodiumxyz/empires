@@ -35,7 +35,6 @@ export const BoostSell = () => {
   const playerBalance = useBalance(address);
   const [empire, setEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
-  tables.Time.use();
 
   const [amountToBoost, setAmountToBoost] = useState("0");
   const boostPriceWei = useOverrideCost(EOverride.AirdropGold, empire, BigInt(amountToBoost));
@@ -77,7 +76,7 @@ export const BoostSell = () => {
   }, [empire]);
 
   return (
-    <Tabs defaultIndex={0} className="flex flex-col gap-2">
+    <Tabs persistIndexKey="boost-sell" defaultIndex={0} className="flex flex-col gap-2">
       <div className="mb-1 flex justify-center">
         <Tabs.Button index={0} size="sm">
           Boost

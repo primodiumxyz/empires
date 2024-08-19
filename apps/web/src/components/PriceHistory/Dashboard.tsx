@@ -36,14 +36,10 @@ export const Dashboard = () => {
           <div className="col-span-6 flex flex-col gap-1">
             <SecondaryCard className="flex flex-col gap-1">
               <div className="m-1 flex">
-                <Button selected={selectedTab === "boost"} 
-                  onClick={() => setSelectedTab("boost")}
-                  className="btn-sm">
+                <Button selected={selectedTab === "boost"} onClick={() => setSelectedTab("boost")} className="btn-sm">
                   Boost Empire
                 </Button>
-                <Button selected={selectedTab === "sell"} 
-                  onClick={() => setSelectedTab("sell")}
-                  className="btn-sm">
+                <Button selected={selectedTab === "sell"} onClick={() => setSelectedTab("sell")} className="btn-sm">
                   Sell Points
                 </Button>
               </div>
@@ -100,7 +96,7 @@ const Sidebar: React.FC = () => {
   const isMobile = windowWidth < 1024;
   if (isMobile) {
     return (
-      <Tabs defaultIndex={0}>
+      <Tabs persistIndexKey="dashboard" defaultIndex={0}>
         <div className="mb-1 flex flex-col gap-[1px]">
           <Tabs.Button index={0} className="text-xs">
             Market Rates
