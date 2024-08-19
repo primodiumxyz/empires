@@ -17,14 +17,8 @@ export const useActions = () => {
   const accumulateGoldRoutines = tables.AccumulateGoldRoutineLog.useAll();
 
   const createShipOverrides = tables.CreateShipOverrideLog.useAll();
-  const killShipOverrides = tables.KillShipOverrideLog.useAll();
   const chargeShieldsOverrides = tables.ChargeShieldsOverrideLog.useAll();
-  const drainShieldsOverrides = tables.DrainShieldsOverrideLog.useAll();
   const placeMagnetOverrides = tables.PlaceMagnetOverrideLog.useAll();
-  const boostChargeOverrides = tables.BoostChargeOverrideLog.useAll();
-  const stunChargeOverrides = tables.StunChargeOverrideLog.useAll();
-  const tacticalStrikeOverrides = tables.TacticalStrikeOverrideLog.useAll();
-  const detonateShieldEaterOverrides = tables.ShieldEaterDetonateOverrideLog.useAll();
   const airdropGoldOverrides = tables.AirdropGoldOverrideLog.useAll();
 
   return useMemo(() => {
@@ -104,19 +98,6 @@ export const useActions = () => {
       };
     });
 
-    const killShipOverrideEntries = killShipOverrides.map((actionEntity) => {
-      const action = tables.KillShipOverrideLog.get(actionEntity)!;
-      return {
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            {getPlayerSpan(action.playerId)} removed {formatNumber(action.overrideCount)} ship
-            {action.overrideCount === 1n ? "" : "s"} from {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-
     const chargeShieldsOverrideEntries = chargeShieldsOverrides.map((actionEntity) => {
       const action = tables.ChargeShieldsOverrideLog.get(actionEntity)!;
       return {
@@ -125,19 +106,6 @@ export const useActions = () => {
           <p className="text-xs">
             {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount)} shield
             {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-
-    const drainShieldsOverrideEntries = drainShieldsOverrides.map((actionEntity) => {
-      const action = tables.DrainShieldsOverrideLog.get(actionEntity)!;
-      return {
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            {getPlayerSpan(action.playerId)} drained {formatNumber(action.overrideCount)} shield
-            {action.overrideCount === 1n ? "" : "s"} from {getPlanetSpan(action.planetId as Entity)}
           </p>
         ),
       };
@@ -168,54 +136,6 @@ export const useActions = () => {
       };
     });
 
-    const boostChargeOverrideEntries = boostChargeOverrides.map((actionEntity) => {
-      const action = tables.BoostChargeOverrideLog.get(actionEntity)!;
-      return {
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            {getPlayerSpan(action.playerId)} boosted charge on {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-
-    const stunChargeOverrideEntries = stunChargeOverrides.map((actionEntity) => {
-      const action = tables.StunChargeOverrideLog.get(actionEntity)!;
-      return {
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            {getPlayerSpan(action.playerId)} stunned charge on {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-
-    const tacticalStrikeOverrideEntries = tacticalStrikeOverrides.map((actionEntity) => {
-      const action = tables.TacticalStrikeOverrideLog.get(actionEntity)!;
-      return {
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            <span className="text-accent">Tactical Strike</span> performed on {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-
-    const detonateShieldEaterOverrideEntries = detonateShieldEaterOverrides.map((actionEntity) => {
-      const action = tables.ShieldEaterDetonateOverrideLog.get(actionEntity)!;
-      return {
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            {getPlayerSpan(action.playerId)} detonated shield eater on {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-
     const airdropGoldOverrideEntries = airdropGoldOverrides.map((actionEntity) => {
       const action = tables.AirdropGoldOverrideLog.get(actionEntity)!;
       return {
@@ -234,15 +154,9 @@ export const useActions = () => {
       ...planetBattleRoutineEntries,
       ...buyShipsRoutineEntries,
       ...createShipOverrideEntries,
-      ...killShipOverrideEntries,
       ...chargeShieldsOverrideEntries,
-      ...drainShieldsOverrideEntries,
       ...buyShieldsRoutineEntries,
       ...placeMagnetOverrideEntries,
-      ...boostChargeOverrideEntries,
-      ...stunChargeOverrideEntries,
-      ...tacticalStrikeOverrideEntries,
-      ...detonateShieldEaterOverrideEntries,
       ...accumulateGoldRoutineEntries,
       ...airdropGoldOverrideEntries,
     ];
@@ -253,14 +167,9 @@ export const useActions = () => {
     planetBattleRoutines,
     buyShipsRoutines,
     createShipOverrides,
-    killShipOverrides,
     chargeShieldsOverrides,
-    drainShieldsOverrides,
     buyShieldsRoutines,
     placeMagnetOverrides,
-    boostChargeOverrides,
-    stunChargeOverrides,
-    tacticalStrikeOverrides,
     accumulateGoldRoutines,
     airdropGoldOverrides,
   ]);

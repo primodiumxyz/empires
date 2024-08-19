@@ -17,7 +17,6 @@ export const CheatcodeToBg: Record<string, string> = {
   utils: "bg-green-500/10",
   magnet: "bg-purple-900/10",
   shieldEater: "bg-purple-400/10",
-  tacticalStrike: "bg-purple-900/10",
   config: "bg-gray-500/10",
 };
 
@@ -31,14 +30,7 @@ export const setupCheatcodes = (options: {
   const { core, game, accountClient, contractCalls, requestDrip } = options;
   const { tables } = core;
   const { playerAccount } = accountClient;
-  const {
-    devCalls,
-    executeBatch,
-    resetGame: _resetGame,
-    tacticalStrike,
-    withdrawRake: _withdrawRake,
-    updateWorld,
-  } = contractCalls;
+  const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake, updateWorld } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -809,93 +801,6 @@ export const setupCheatcodes = (options: {
     error: ({ empire }) => `Failed to remove all magnets for ${empire.value}`,
   });
 
-  /* ----------------------------- TACTICAL STRIKE ---------------------------- */
-  // reset all charges
-  const resetCharges = createCheatcode({
-    title: "Reset all charges",
-    bg: CheatcodeToBg["tacticalStrike"],
-    caption: "Tactical strike",
-    inputs: {},
-    execute: async () => {
-      const planets = tables.Planet.getAll()
-        .map((entity) => ({ entity, properties: tables.Planet.get(entity) }))
-        .filter((planet) => !!planet.properties?.empireId);
-      const lastUpdated = tables.BlockNumber.get()?.value ?? BigInt(0);
-
-      const devOps = planets.map((planet) =>
-        devCalls.createSetProperties({
-          table: tables.Planet_TacticalStrike,
-          keys: { planetId: planet.entity },
-          properties: { charge: BigInt(0), lastUpdated },
-        }),
-      );
-
-      return await devCalls.batch(devOps);
-    },
-    loading: () => "[CHEATCODE] Resetting charges...",
-    success: () => `Charges reset for all planets`,
-    error: () => `Failed to reset charges for all planets`,
-  });
-
-  // max out all charges
-  const maxOutCharges = createCheatcode({
-    title: "Max out all charges",
-    bg: CheatcodeToBg["tacticalStrike"],
-    caption: "Tactical strike",
-    inputs: {},
-    execute: async () => {
-      const planets = tables.Planet.getAll()
-        .map((entity) => ({ entity, properties: tables.Planet.get(entity) }))
-        .filter((planet) => !!planet.properties?.empireId);
-      const lastUpdated = tables.BlockNumber.get()?.value ?? BigInt(0);
-      const maxCharge = tables.P_TacticalStrikeConfig.get()?.maxCharge ?? BigInt(0);
-
-      const devOps = planets.map((planet) =>
-        devCalls.createSetProperties({
-          table: tables.Planet_TacticalStrike,
-          keys: { planetId: planet.entity },
-          properties: { charge: maxCharge, lastUpdated },
-        }),
-      );
-
-      return await devCalls.batch(devOps);
-    },
-    loading: () => "[CHEATCODE] Maxing out charges...",
-    success: () => `Charges maxed out for all planets`,
-    error: () => `Failed to max out charges for all planets`,
-  });
-
-  // trigger all charges
-  const triggerCharges = createCheatcode({
-    title: "Trigger all charges",
-    bg: CheatcodeToBg["tacticalStrike"],
-    caption: "Tactical strike",
-    inputs: {},
-    execute: async () => {
-      const maxCharge = tables.P_TacticalStrikeConfig.get()?.maxCharge ?? BigInt(0);
-      const blockNumber = tables.BlockNumber.get()?.value ?? BigInt(0);
-
-      const planets = tables.Planet.getAll()
-        .map((entity) => ({ entity, properties: tables.Planet.get(entity) }))
-        .filter((planet) => {
-          const tacticalStrikeData = tables.Planet_TacticalStrike.get(planet.entity);
-          if (!tacticalStrikeData) return false;
-
-          const blocksElapsed = blockNumber - tacticalStrikeData.lastUpdated;
-          const actualCharge = tacticalStrikeData.charge + (blocksElapsed * tacticalStrikeData.chargeRate) / 100n;
-
-          if (actualCharge >= maxCharge) return true;
-          return false;
-        });
-
-      const success = await Promise.all(planets.map((planet) => tacticalStrike(planet.entity)));
-      return success.every(Boolean);
-    },
-    loading: () => "[CHEATCODE] Triggering charges...",
-    success: () => `Charges triggered for all planets`,
-    error: () => `Failed to trigger charges for all planets`,
-  });
-
   // withdraw rake
   const withdrawRake = createCheatcode({
     title: "Withdraw rake",
@@ -1096,12 +1001,8 @@ export const setupCheatcodes = (options: {
           defaultValue: EOverride.CreateShip,
           options: [
             { id: EOverride.CreateShip, value: "CreateShip" },
-            { id: EOverride.KillShip, value: "KillShip" },
             { id: EOverride.ChargeShield, value: "ChargeShield" },
-            { id: EOverride.DrainShield, value: "DrainShield" },
             { id: EOverride.PlaceMagnet, value: "PlaceMagnet" },
-            { id: EOverride.BoostCharge, value: "BoostCharge" },
-            { id: EOverride.StunCharge, value: "StunCharge" },
           ],
         },
         overrideGenRate: {

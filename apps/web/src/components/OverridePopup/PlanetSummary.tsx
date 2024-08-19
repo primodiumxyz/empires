@@ -5,7 +5,6 @@ import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
-import { useCharge } from "@/hooks/useCharge";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
@@ -88,7 +87,6 @@ const calculateTurnsLeft = (endTurn: bigint | undefined, globalTurn: bigint, bef
 
 const Overrides = ({ entity }: { entity: Entity }) => {
   const { tables } = useCore();
-  // const overheat = useCharge(entity);
   const empires = useEmpires();
 
   const magnets = usePlanetMagnets(entity);
@@ -109,10 +107,6 @@ const Overrides = ({ entity }: { entity: Entity }) => {
   return (
     <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
       <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
-      {/* <div className="grid grid-cols-2 gap-y-1 text-xs">
-        <span className="text-gray-4000">OVERHEAT</span>
-        <span className="text-right">{Math.min(overheat.percent, 100).toFixed(0)}%</span>
-      </div> */}
       <div className="grid grid-cols-2 gap-y-1 text-xs">
         <span className="text-gray-4000">MAGNETS</span>
         <div className="flex flex-row gap-1">
