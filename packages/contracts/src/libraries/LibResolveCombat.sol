@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { P_GameConfig, Turn, P_TacticalStrikeConfig, Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
+import { P_GameConfig, Turn, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { pseudorandomEntity } from "src/utils.sol";
 import { EEmpire } from "codegen/common.sol";
@@ -53,11 +53,6 @@ library LibResolveCombat {
       // attackers conquer planet
       else if (attackingShips > totalDefenses) {
         conquer = true;
-
-        if (defendingEmpire == EEmpire.NULL) {
-          Planet_TacticalStrike.setChargeRate(planetId, P_TacticalStrikeConfig.getChargeRate());
-          Planet_TacticalStrike.setLastUpdated(planetId, block.number);
-        }
 
         Planet.setShieldCount(planetId, 0);
         Planet.setShipCount(planetId, attackingShips - totalDefenses);

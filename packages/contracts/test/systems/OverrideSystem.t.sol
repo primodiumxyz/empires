@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, Turn, P_GameConfig, Planet, PlanetData, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire, ShieldEater, P_ShieldEaterConfig } from "codegen/index.sol";
+import { Turn, P_GameConfig, Planet, PlanetData, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire, ShieldEater, P_ShieldEaterConfig } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
@@ -37,27 +37,18 @@ contract OverrideSystemTest is PrimodiumTest {
     EMPIRE_COUNT = P_GameConfig.getEmpireCount();
   }
 
-  function _getCurrentCharge(bytes32 _planetId) internal view returns (uint256) {
-    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(_planetId);
-    return data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
-  }
-
   function testCreateShipSingle() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
-    uint256 currentCharge = _getCurrentCharge(planetId);
     uint256 startingShips = Planet.getShipCount(planetId);
     world.Empires__createShip{ value: cost }(planetId, 1);
     assertEq(Planet.get(planetId).shipCount, 1 + startingShips);
-    assertEq(_getCurrentCharge(planetId), currentCharge + P_TacticalStrikeConfig.getCreateShipBoostIncrease());
   }
 
   function testCreateShipMultiple() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 10);
-    uint256 currentCharge = _getCurrentCharge(planetId);
     uint256 startingShips = Planet.getShipCount(planetId);
     world.Empires__createShip{ value: cost }(planetId, 10);
     assertEq(Planet.get(planetId).shipCount, 10 + startingShips);
-    assertEq(_getCurrentCharge(planetId), currentCharge + (P_TacticalStrikeConfig.getCreateShipBoostIncrease() * 10));
   }
 
   function testChargeShieldSingle() public {
@@ -233,7 +224,6 @@ contract OverrideSystemTest is PrimodiumTest {
   function testSellPointsLockedPoints() public {
     EEmpire empire = Planet.getEmpireId(planetId);
     vm.prank(creator);
-    P_TacticalStrikeConfig.setMaxCharge(10000);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, 1);
 
     vm.startPrank(alice);
@@ -341,138 +331,6 @@ contract OverrideSystemTest is PrimodiumTest {
       initialPoints + ((EMPIRE_COUNT - 1) * pointUnit),
       "Total points should not change"
     );
-  }
-
-  function testTacticalStrikeFailTooEarly() public {
-    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
-    uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
-
-    assertEq(data.chargeRate, P_TacticalStrikeConfig.getChargeRate(), "Charge Rate should be 100");
-
-    uint256 currentCharge = _getCurrentCharge(planetId);
-    if (currentCharge >= maxCharge) {
-      world.Empires__tacticalStrike(planetId);
-    }
-    currentCharge = _getCurrentCharge(planetId);
-    uint256 remainingCharge = maxCharge - currentCharge;
-    uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
-    uint256 expectedEndBlock = block.number + remainingBlocks;
-    assertLt(block.number, expectedEndBlock, "Block number should be less than the expected end block");
-    vm.expectRevert("[TacticalStrikeOverrideSystem] Planet is not ready for a tactical strike");
-    world.Empires__tacticalStrike(planetId);
-  }
-
-  function testTacticalStrike() public {
-    EEmpire empire = Planet.getEmpireId(planetId);
-    vm.prank(creator);
-    P_TacticalStrikeConfig.setMaxCharge(10000);
-    uint256 totalCost = LibPrice.getTotalCost(EOverride.CreateShip, empire, 1);
-
-    vm.startPrank(alice);
-    world.Empires__createShip{ value: totalCost }(planetId, 1);
-
-    uint256 maxCharge = P_TacticalStrikeConfig.getMaxCharge();
-    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
-
-    uint256 currentCharge = _getCurrentCharge(planetId);
-    console.log(currentCharge, maxCharge);
-    uint256 remainingCharge = maxCharge - currentCharge;
-    uint256 remainingBlocks = (remainingCharge * 100) / data.chargeRate;
-    if ((remainingCharge * 100) % data.chargeRate != 0) {
-      remainingBlocks += 1;
-    }
-    uint256 expectedEndBlock = block.number + remainingBlocks;
-
-    vm.roll(expectedEndBlock);
-    world.Empires__tacticalStrike(planetId);
-    assertEq(Planet.get(planetId).shipCount, 0);
-  }
-
-  function testBoostCharge() public {
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 totalCost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 1);
-
-    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
-    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
-    world.Empires__boostCharge{ value: totalCost }(planetId, 1);
-    assertEq(
-      Planet_TacticalStrike.get(planetId).charge,
-      currentCharge + P_TacticalStrikeConfig.getBoostChargeIncrease()
-    );
-  }
-
-  function testBoostChargeMultiple() public {
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 boostCount = 5;
-    uint256 totalCost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, boostCount);
-
-    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
-    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
-    world.Empires__boostCharge{ value: totalCost }(planetId, boostCount);
-    assertEq(
-      Planet_TacticalStrike.get(planetId).charge,
-      currentCharge + (P_TacticalStrikeConfig.getBoostChargeIncrease() * boostCount)
-    );
-  }
-
-  function testStunCharge() public {
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 cost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 5);
-
-    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
-    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
-    world.Empires__boostCharge{ value: cost }(planetId, 5);
-
-    cost = LibPrice.getTotalCost(EOverride.StunCharge, empire, 1);
-    world.Empires__stunCharge{ value: cost }(planetId, 1);
-    assertEq(
-      Planet_TacticalStrike.get(planetId).charge,
-      currentCharge +
-        P_TacticalStrikeConfig.getBoostChargeIncrease() *
-        5 -
-        P_TacticalStrikeConfig.getStunChargeDecrease()
-    );
-  }
-
-  function testStunChargeMultiple() public {
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 cost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 5);
-
-    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
-    uint256 currentCharge = data.charge + (((block.number - data.lastUpdated) * data.chargeRate) / 100);
-    world.Empires__boostCharge{ value: cost }(planetId, 5);
-
-    cost = LibPrice.getTotalCost(EOverride.StunCharge, empire, 1);
-    world.Empires__stunCharge{ value: cost }(planetId, 1);
-    assertEq(
-      Planet_TacticalStrike.get(planetId).charge,
-      currentCharge +
-        P_TacticalStrikeConfig.getBoostChargeIncrease() *
-        5 -
-        P_TacticalStrikeConfig.getStunChargeDecrease()
-    );
-  }
-
-  function testStunChargeUnderflow() public {
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 cost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 1);
-
-    Planet_TacticalStrikeData memory data = Planet_TacticalStrike.get(planetId);
-
-    // update charge to current value
-    world.Empires__boostCharge{ value: cost }(planetId, 1);
-    vm.prank(creator);
-    console.log("charge before boostCharge", data.charge);
-    Planet_TacticalStrike.setCharge(planetId, 0);
-    console.log("charge after setCharge", Planet_TacticalStrike.get(planetId).charge);
-    cost = LibPrice.getTotalCost(EOverride.BoostCharge, empire, 1);
-    world.Empires__boostCharge{ value: cost }(planetId, 1);
-    console.log("charge after boostCharge", Planet_TacticalStrike.get(planetId).charge);
-
-    cost = LibPrice.getTotalCost(EOverride.StunCharge, empire, 5);
-    world.Empires__stunCharge{ value: cost }(planetId, 5);
-    console.log("charge after stunCharge", Planet_TacticalStrike.get(planetId).charge);
-    assertEq(Planet_TacticalStrike.get(planetId).charge, 0);
   }
 
   /**************************************************************************

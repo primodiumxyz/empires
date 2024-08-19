@@ -37,13 +37,6 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         empire: EEmpire.Red,
         value: 1n,
       },
-      P_TacticalStrikeConfig: {
-        maxCharge: 100n,
-        chargeRate: 1n,
-        boostChargeIncrease: 10n,
-        stunChargeDecrease: 10n,
-        createShipBoostIncrease: 0n,
-      },
       P_ShieldEaterConfig: {
         visitShieldDamage: 1n,
         detonateCenterDamage: scaleMultiplier(1.0),
@@ -88,31 +81,6 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         startOverrideCost: BigInt(POINTS_UNIT * 0.0001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.0001),
-      },
-    },
-  },
-  BoostChargeOverride: {
-    keys: [{ [EOverride.BoostCharge]: "uint8" }],
-    tables: {
-      P_OverrideConfig: {
-        isProgressOverride: false,
-        minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.0002),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.0002),
-      },
-    },
-  },
-
-  StunChargeOverride: {
-    keys: [{ [EOverride.StunCharge]: "uint8" }],
-    tables: {
-      P_OverrideConfig: {
-        isProgressOverride: true,
-        minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.0002),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00008),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.0002),
       },
     },
   },
