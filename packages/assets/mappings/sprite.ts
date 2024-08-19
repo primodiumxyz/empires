@@ -28,10 +28,6 @@ export const Sprites = {
   //Background
   StarBg: "sprites/background/star.png",
   Nebula: "sprites/background/nebula.png",
-
-  // TEMP
-  Boost: "sprites/icons/TEMP_Boost.png",
-  Stun: "sprites/icons/TEMP_Stun.png",
 };
 
 export type SpriteKeys = keyof typeof Sprites;
