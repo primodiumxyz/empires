@@ -21,7 +21,7 @@ import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const BoostEmpire = () => {
   const {
-    playerAccount: { entity, address },
+    playerAccount: { address },
   } = useAccountClient();
   const calls = useContractCalls();
   const { tables } = useCore();
@@ -76,7 +76,7 @@ export const BoostEmpire = () => {
           </Badge>
         </div>
 
-        <TransactionQueueMask id="sell-points">
+        <TransactionQueueMask id="boost-empire">
           <Button
             size="sm"
             className="w-full md:btn-md"

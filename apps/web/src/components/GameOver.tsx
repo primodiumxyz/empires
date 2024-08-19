@@ -5,9 +5,10 @@ import { Price } from "@/components/shared/Price";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { usePot } from "@/hooks/usePot";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
+import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
-export const GameOver = () => {
+export const GameOver = ({ className, fragment = false }: { className?: string; fragment?: boolean }) => {
   const calls = useContractCalls();
   const { tables } = useCore();
   const {
@@ -26,7 +27,7 @@ export const GameOver = () => {
   if (empire == null) return null;
 
   return (
-    <Card className="flex flex-col text-center">
+    <Card fragment={fragment} className={cn("flex flex-col text-center", className)}>
       <p>
         Game over. <span className="font-semibold">{empireName}</span> won!
       </p>

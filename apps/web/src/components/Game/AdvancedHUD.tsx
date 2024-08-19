@@ -3,6 +3,7 @@ import { ActionLog } from "@/components/ActionLog";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
 import { GameOver } from "@/components/GameOver";
+import { ModeToggle } from "@/components/ModeToggle";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverridePopup } from "@/components/OverridePopup";
 import { PlayerReturns } from "@/components/PlayerReturns";
@@ -44,7 +45,8 @@ export const AdvancedHUD = () => {
         <QuickTrade />
       </HUD.Left>
 
-      <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
+      <HUD.BottomLeft className="flex w-[300px] flex-col gap-2 lg:items-end">
+        <ModeToggle />
         <div className="flex w-full items-center gap-2 lg:justify-between">
           <MusicPlayer />
           <Settings />

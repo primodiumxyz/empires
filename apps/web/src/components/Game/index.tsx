@@ -42,16 +42,12 @@ const Game = memo(() => {
       const phaserContainer = document.getElementById("phaser-container");
     };
 
-    if (advancedMode) {
-      init();
-    } else {
-      destroy();
-    }
+    init();
 
     return () => {
       destroy();
     };
-  }, [advancedMode]);
+  }, []);
 
   return (
     <>

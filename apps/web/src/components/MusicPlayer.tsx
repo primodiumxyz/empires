@@ -13,7 +13,7 @@ import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
 import { getNextSong, getPrevSong, getRandomSong } from "@/util/soundtrack";
 
-export const MusicPlayer = () => {
+export const MusicPlayer = ({ className }: { className?: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [song, setSong] = useState(getRandomSong());
   const [isPlaying, setIsPlaying] = useState(false);
@@ -93,7 +93,7 @@ export const MusicPlayer = () => {
   };
 
   return (
-    <div className={cn("group pointer-events-auto relative text-sm lg:w-5/6")}>
+    <div className={cn("group pointer-events-auto relative text-sm lg:w-5/6", className)}>
       <div className={cn("flex items-center gap-2 transition-all", !isPlaying && "opacity-40")}>
         <Button variant="ghost" size="xs" shape="square" onClick={isPlaying ? handlePause : handlePlay}>
           {isPlaying && <MusicalNoteIcon className={cn("size-6")} />}
