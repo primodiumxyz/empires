@@ -3,17 +3,17 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { calculateAngleBetweenPoints, entityToPlanetName, formatNumber, lerp } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { DepthLayers } from "@game/lib/constants/common";
+import { allEmpires, DepthLayers } from "@game/lib/constants/common";
 import {
   EmpireToConquerAnimationKeys,
-  EmpireToDestroyerArcAnimationKeys,
   EmpireToHexSpriteKeys,
+  EmpireToMovementAnimationKeys,
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
 import { IconLabel } from "@game/lib/objects/IconLabel";
 import { Magnet } from "@game/lib/objects/Magnet";
-import { Overheat } from "@game/lib/objects/Overheat";
+import { ShieldEater } from "@game/lib/objects/ShieldEater";
 import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 import { PrimodiumScene } from "@game/types";
 
@@ -32,15 +32,23 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private shields: IconLabel;
   private ships: IconLabel;
   private gold: IconLabel;
-  private overheat: Overheat;
-  private magnets: [red: Magnet, blue: Magnet, green: Magnet];
+  // private overheat: Overheat;
+  private magnets: Magnet[];
   private magnetWaves: Phaser.GameObjects.Sprite;
-  private empireId: EEmpire;
+  private shieldEater: ShieldEater;
   private citadel: Phaser.GameObjects.Sprite | null;
+  private empireId: EEmpire;
   private spawned = false;
 
-  constructor(args: { id: Entity; scene: PrimodiumScene; coord: PixelCoord; empire: EEmpire; citadel?: boolean }) {
-    const { id, scene, coord, empire, citadel } = args;
+  constructor(args: {
+    id: Entity;
+    scene: PrimodiumScene;
+    coord: PixelCoord;
+    empire: EEmpire;
+    citadel?: boolean;
+    empireCount: number;
+  }) {
+    const { id, scene, coord, empire, citadel, empireCount } = args;
 
     super(scene.phaserScene, coord.x, coord.y);
 
@@ -129,13 +137,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
-    this.overheat = new Overheat(scene, coord, empire).setDepth(DepthLayers.Base + coord.y);
+    // this.overheat = new Overheat(scene, coord, empire).setDepth(DepthLayers.Base + coord.y);
 
-    this.magnets = [
-      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Red),
-      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Blue),
-      new Magnet(scene, coord.x + 75, coord.y - 60, EEmpire.Green),
-    ];
+    this.magnets = allEmpires
+      .slice(0, empireCount)
+      .map((empire) => new Magnet(scene, coord.x + 75, coord.y - 60, empire));
     this.magnets.forEach((magnet) => magnet.setDepth(DepthLayers.Magnet));
 
     this.magnetWaves = new Phaser.GameObjects.Sprite(
@@ -155,6 +161,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
           .setDepth(DepthLayers.Planet + 1)
           .setScale(1.5)
       : null;
+
+    this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
+      DepthLayers.ShieldEater,
+    );
 
     this._scene = scene;
     this.id = id;
@@ -176,7 +186,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
-    this.scene.add.existing(this.overheat);
+    // this.scene.add.existing(this.overheat);
+    this.scene.add.existing(this.shieldEater);
     if (this.citadel) this.scene.add.existing(this.citadel);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     this.scene.add.existing(this.magnetWaves);
@@ -196,10 +207,12 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.shields.setScale(scale);
     this.ships.setScale(scale);
     this.gold.setScale(scale);
-    this.overheat.setScale(scale);
+    // this.overheat.setScale(scale);
     if (this.citadel) this.citadel.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
+    this.shieldEater.setScale(scale);
+    if (this.citadel) this.citadel.setScale(scale);
     return this;
   }
 
@@ -248,6 +261,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
 
+    // this.overheat.setEmpire(empire);
     this.empireId = empire;
   }
 
@@ -277,35 +291,19 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
-    //lower
     this._scene.fx.emitVfx(
       { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][0] ?? "DestroyerArcLowerRed",
+      EmpireToMovementAnimationKeys[this.empireId] ?? "MovementRed",
       {
         rotation: angle.radian,
         depth: DepthLayers.Planet + 1,
         originX: 0,
         originY: 1,
+        speed: 1.5,
         blendMode: Phaser.BlendModes.ADD,
         offset: {
           x: -12,
           y: 10,
-        },
-        scale: 1.3,
-      },
-    );
-    //upper
-    this._scene.fx.emitVfx(
-      { x: this.coord.x, y: this.coord.y - 25 },
-      EmpireToDestroyerArcAnimationKeys[this.empireId][1] ?? "DestroyerArcUpperRed",
-      {
-        rotation: angle.radian + 2 * Math.PI,
-        depth: DepthLayers.Planet + 2,
-        originX: 0,
-        originY: 1,
-        offset: {
-          x: -12,
-          y: 15,
         },
         scale: 1.3,
       },
@@ -375,9 +373,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     );
   }
 
-  setOverheatProgress(progress: number) {
-    this.overheat.setProgress(progress);
-  }
+  // setOverheatProgress(progress: number) {
+  //   this.overheat.setProgress(progress);
+  // }
 
   setMagnet(empire: EEmpire, turns: number) {
     const magnet = this.magnets[empire - 1];
@@ -409,6 +407,38 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .filter((magnet) => magnet.isEnabled())
       .sort((a, b) => a.getEmpire() - b.getEmpire());
     activeMagnets.forEach((magnet, index) => magnet.updatePosition(this.coord.x + 75, this.coord.y - 60 + index * 30));
+  }
+
+  setShieldEaterLocation(present: boolean): ShieldEater["location"] {
+    const location = this.shieldEater.setShieldEaterLocation(present);
+
+    if (present) {
+      this.shieldEater.setDepth(DepthLayers.Planet - 1);
+
+      location.on(
+        "animationupdate",
+        (animation: Phaser.Animations.Animation, frame: Phaser.Animations.AnimationFrame) => {
+          if (frame.index === 9) {
+            this.shieldEater.setDepth(DepthLayers.ShieldEater);
+            location.off("animationupdate");
+          }
+        },
+      );
+    }
+
+    return location;
+  }
+
+  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater["destination"] {
+    return this.shieldEater.setShieldEaterPath(turns, turnsToDestination);
+  }
+
+  shieldEaterDetonate(): ShieldEater {
+    return this.shieldEater.shieldEaterDetonate();
+  }
+
+  shieldEaterCrack(): ShieldEater {
+    return this.shieldEater.shieldEaterCrack();
   }
 
   override destroy() {

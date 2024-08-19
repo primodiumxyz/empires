@@ -17,6 +17,7 @@ export const worldInput = {
     UpdateMagnetsSubsystem: { openAccess: false },
     UpdatePriceSubsystem: { openAccess: false },
     UpdateShieldEaterSubsystem: { openAccess: false },
+    ResetClearLoopSubsystem: { openAccess: false },
   },
 
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
@@ -30,6 +31,7 @@ export const worldInput = {
         goldGenRate: "uint256",
         gameOverBlock: "uint256",
         gameStartTimestamp: "uint256",
+        empireCount: "uint8",
       },
     },
 
@@ -42,6 +44,16 @@ export const worldInput = {
         stunChargeDecrease: "uint256",
         createShipBoostIncrease: "uint256", // per ship created
         killShipBoostCostDecrease: "uint256", // per ship killed
+      },
+    },
+
+    P_ShieldEaterConfig: {
+      key: [],
+      schema: {
+        visitShieldDamage: "uint256",
+        detonateCenterDamage: "uint256", // percentage, out of 10000
+        detonateAdjacentDamage: "uint256", // percentage, out of 10000
+        detonationThreshold: "uint256",
       },
     },
 
@@ -169,6 +181,16 @@ export const worldInput = {
         empireId: "EEmpire",
         overrideAction: "EOverride",
         value: "uint256",
+      },
+    },
+
+    ShieldEater: {
+      key: [],
+      schema: {
+        currentPlanet: "bytes32",
+        nextPlanet: "bytes32",
+        destinationPlanet: "bytes32",
+        currentCharge: "uint256",
       },
     },
 
@@ -456,6 +478,36 @@ export const worldInput = {
       },
       type: "offchainTable",
     },
+
+    ShieldEaterDetonateOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
+    AirdropGoldOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
+        empireId: "EEmpire",
+        goldDistributed: "uint256",
+        ethSpent: "uint256",
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {

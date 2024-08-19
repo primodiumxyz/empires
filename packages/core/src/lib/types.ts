@@ -166,7 +166,6 @@ export type LocalAccount = _Account<true>;
 export interface AccountClient {
   playerAccount: ExternalAccount | LocalAccount;
   setPlayerAccount: (options: { playerAddress?: Address; playerPrivateKey?: Hex }) => void;
-  requestDrip: (address: Address) => void;
 }
 
 export enum SyncSourceType {
@@ -189,6 +188,11 @@ export type CartesionCoord = {
 export type AxialCoord = {
   q: number;
   r: number;
+};
+
+export type AxialCoordBigInt = {
+  q: bigint;
+  r: bigint;
 };
 
 export type TxReceipt =

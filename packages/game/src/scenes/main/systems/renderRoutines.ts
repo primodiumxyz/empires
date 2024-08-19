@@ -1,15 +1,14 @@
 import { Core, formatNumber, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
-import { createStaggerQueue } from "@game/lib/utils/createStaggerQueue";
+import { StaggerQueue } from "@game/lib/utils/createStaggerQueue";
 import { PrimodiumScene } from "@game/types";
 
-export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
+export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: StaggerQueue) => {
   const {
     tables,
     network: { world },
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
-  const { enqueue } = createStaggerQueue();
 
   tables.BuyShieldsRoutineLog.watch(
     {
@@ -40,7 +39,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
             },
             delay: 500,
           });
-        }, 1000);
+        }, 500);
       },
     },
     {
@@ -77,7 +76,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
               alpha: 0.75,
             },
           });
-        }, 1000);
+        }, 500);
       },
     },
     { runOnInit: false },
@@ -94,7 +93,9 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
 
         if (!planet) return;
 
+        planet.setPendingMove(current.destinationPlanetId as Entity);
         enqueue(async () => {
+          planet.removePendingMove();
           //move destroyers
           planet.moveDestroyers(current.destinationPlanetId as Entity);
 
@@ -105,7 +106,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
               icon: "Ship",
               iconSize: 20,
               fontSize: 16,
-              delay: 750,
+              delay: 375,
               borderStyle: {
                 color: 0x800080,
                 alpha: 0.75,
@@ -114,13 +115,13 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
             },
           );
 
-          await sleep(750);
+          await sleep(375);
 
           //update factions if it changed
           const faction = tables.Planet.get(current.destinationPlanetId as Entity)?.empireId;
 
           if (faction && destinationPlanet) destinationPlanet.updateFaction(faction);
-        }, 2250);
+        }, 250);
       },
     },
     { runOnInit: false },
@@ -148,7 +149,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core) => {
               color: 0xffd700,
             },
           });
-        }, 1000);
+        }, 250);
       },
     },
     { runOnInit: false },

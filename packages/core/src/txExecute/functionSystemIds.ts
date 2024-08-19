@@ -17,9 +17,11 @@ export const functionSystemIds: {
   Empires__chargeShield: getSystemId("OverrideShieldSystem"),
   Empires__drainShield: getSystemId("OverrideShieldSystem"),
   Empires__sellPoints: getSystemId("OverridePointsSystem"),
+  Empires__airdropGold: getSystemId("OverrideAirdropSystem"),
   Empires__tacticalStrike: getSystemId("TacticalStrikeOverrideSystem"),
   Empires__boostCharge: getSystemId("TacticalStrikeOverrideSystem"),
   Empires__stunCharge: getSystemId("TacticalStrikeOverrideSystem"),
+  Empires__detonateShieldEater: getSystemId("OverrideShieldEaterSystem"),
 
   Empires__updateWorld: getSystemId("UpdateSystem"),
 

@@ -2,21 +2,25 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, Turn, P_GameConfig, Planet, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire } from "codegen/index.sol";
+import { P_TacticalStrikeConfig, Planet_TacticalStrikeData, Planet_TacticalStrike, Turn, P_GameConfig, Planet, PlanetData, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire, ShieldEater, P_ShieldEaterConfig } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
+import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
-import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, EMPIRE_COUNT } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { addressToId, coordToId } from "src/utils.sol";
+import { CoordData } from "src/Types.sol";
 
 contract OverrideSystemTest is PrimodiumTest {
   bytes32 planetId;
   bytes32 aliceId;
   bytes32 bobId;
   uint256 pointUnit;
+  uint8 EMPIRE_COUNT;
 
   function setUp() public override {
     super.setUp();
@@ -30,6 +34,7 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.prank(creator);
     P_PointConfig.setPointRake(0);
     pointUnit = P_PointConfig.getPointUnit();
+    EMPIRE_COUNT = P_GameConfig.getEmpireCount();
   }
 
   function _getCurrentCharge(bytes32 _planetId) internal view returns (uint256) {
@@ -40,16 +45,18 @@ contract OverrideSystemTest is PrimodiumTest {
   function testCreateShipSingle() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
     uint256 currentCharge = _getCurrentCharge(planetId);
+    uint256 startingShips = Planet.getShipCount(planetId);
     world.Empires__createShip{ value: cost }(planetId, 1);
-    assertEq(Planet.get(planetId).shipCount, 1);
+    assertEq(Planet.get(planetId).shipCount, 1 + startingShips);
     assertEq(_getCurrentCharge(planetId), currentCharge + P_TacticalStrikeConfig.getCreateShipBoostIncrease());
   }
 
   function testCreateShipMultiple() public {
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 10);
     uint256 currentCharge = _getCurrentCharge(planetId);
+    uint256 startingShips = Planet.getShipCount(planetId);
     world.Empires__createShip{ value: cost }(planetId, 10);
-    assertEq(Planet.get(planetId).shipCount, 10);
+    assertEq(Planet.get(planetId).shipCount, 10 + startingShips);
     assertEq(_getCurrentCharge(planetId), currentCharge + (P_TacticalStrikeConfig.getCreateShipBoostIncrease() * 10));
   }
 
@@ -61,18 +68,18 @@ contract OverrideSystemTest is PrimodiumTest {
 
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 1);
     world.Empires__killShip{ value: cost }(planetId, 1);
-    assertEq(Planet.get(planetId).shipCount, 0);
+    assertEq(Planet.getShipCount(planetId), 0);
     assertEq(_getCurrentCharge(planetId), currentCharge - P_TacticalStrikeConfig.getKillShipBoostCostDecrease());
   }
 
   function testKillShipMultiple() public {
     testCreateShipMultiple();
     uint256 currentCharge = _getCurrentCharge(planetId);
-    uint256 currentShips = Planet.get(planetId).shipCount;
+    uint256 currentShips = Planet.getShipCount(planetId);
 
     uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 6);
     world.Empires__killShip{ value: cost }(planetId, 6);
-    assertEq(Planet.get(planetId).shipCount, currentShips - 6);
+    assertEq(Planet.getShipCount(planetId), currentShips - 6);
     assertEq(_getCurrentCharge(planetId), currentCharge - (P_TacticalStrikeConfig.getKillShipBoostCostDecrease() * 6));
   }
 
@@ -80,14 +87,14 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 currentShields = Planet.get(planetId).shieldCount;
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, Planet.getEmpireId(planetId), 1);
     world.Empires__chargeShield{ value: cost }(planetId, 1);
-    assertEq(Planet.get(planetId).shieldCount, currentShields + 1);
+    assertEq(Planet.getShieldCount(planetId), currentShields + 1);
   }
 
   function testChargeShieldMultiple() public {
-    uint256 currentShields = Planet.get(planetId).shieldCount;
+    uint256 currentShields = Planet.getShieldCount(planetId);
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, Planet.getEmpireId(planetId), 10);
     world.Empires__chargeShield{ value: cost }(planetId, 10);
-    assertEq(Planet.get(planetId).shieldCount, currentShields + 10);
+    assertEq(Planet.getShieldCount(planetId), currentShields + 10);
   }
 
   function testDrainShieldSingle() public {
@@ -97,25 +104,28 @@ contract OverrideSystemTest is PrimodiumTest {
 
     uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), 1);
     world.Empires__drainShield{ value: cost }(planetId, 1);
-    assertEq(Planet.get(planetId).shieldCount, currentShields - 1);
+    assertEq(Planet.getShieldCount(planetId), currentShields - 1);
   }
 
   function testDrainShieldMultiple() public {
     testChargeShieldMultiple();
 
-    uint256 currentShields = Planet.get(planetId).shieldCount;
+    uint256 currentShields = Planet.getShieldCount(planetId);
     uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), 6);
     world.Empires__drainShield{ value: cost }(planetId, 6);
-    assertEq(Planet.get(planetId).shieldCount, currentShields - 6);
+    assertEq(Planet.getShieldCount(planetId), currentShields - 6);
   }
 
   function testKillShipFailNoShips() public {
+    vm.startPrank(creator);
+    Planet.setShipCount(planetId, 0);
     vm.expectRevert("[OverrideSystem] Not enough ships to kill");
     world.Empires__killShip(planetId, 1);
   }
 
   function testKillShipFailNotEnoughShips() public {
-    testCreateShipSingle();
+    vm.startPrank(creator);
+    Planet.setShipCount(planetId, 1);
     vm.expectRevert("[OverrideSystem] Not enough ships to kill");
     world.Empires__killShip(planetId, 2);
   }
@@ -346,12 +356,12 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__createShip{ value: totalCost }(planetId, 1);
     uint256 points = PointsMap.getValue(empire, aliceId);
     vm.startPrank(creator);
-    PointsMap.setLockedPoints(empire, aliceId, points / 2);
+    PointsMap.setLockedPoints(empire, aliceId, pointUnit);
 
     switchPrank(alice);
-    world.Empires__sellPoints(empire, points / 2);
-    assertEq(PointsMap.getLockedPoints(empire, aliceId), points / 2, "Locked Points should be 50");
-    assertEq(PointsMap.getValue(empire, aliceId), points - (points / 2), "Player Points should be 80");
+    world.Empires__sellPoints(empire, pointUnit);
+    assertEq(PointsMap.getLockedPoints(empire, aliceId), pointUnit, "Locked Points should be 50");
+    assertEq(PointsMap.getValue(empire, aliceId), points - (pointUnit), "Player Points should be 80");
   }
 
   function testPlaceMagnet() public {
@@ -579,5 +589,67 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__stunCharge{ value: cost }(planetId, 5);
     console.log("charge after stunCharge", Planet_TacticalStrike.get(planetId).charge);
     assertEq(Planet_TacticalStrike.get(planetId).charge, 0);
+  }
+
+  /**************************************************************************
+   * Shield Eater
+   *************************************************************************/
+
+  function testDetonateShieldEaterCharged() public {
+    uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 2;
+
+    vm.startPrank(creator);
+    LibShieldEater.initialize();
+
+    for (uint256 i = 0; i < chargeTime; i++) {
+      LibShieldEater.update();
+    }
+
+    PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
+    CoordData memory current = CoordData(currentPlanet.q, currentPlanet.r);
+    planetId = coordToId(current.q, current.r);
+
+    CoordData memory neighbor = CoordData(currentPlanet.q + 1, currentPlanet.r);
+    bytes32 neighborId = coordToId(neighbor.q, neighbor.r);
+    uint256 dirAttempts = 1;
+
+    while (!Planet.getIsPlanet(neighborId)) {
+      if (dirAttempts > 6) {
+        break;
+      }
+      neighbor = LibShieldEater.rotateTargetDirection(neighbor);
+      dirAttempts++;
+    }
+    neighborId = coordToId(neighbor.q, neighbor.r);
+
+    uint256 planetShields = Planet.getShieldCount(planetId);
+    uint256 neighborShields = Planet.getShieldCount(neighborId);
+
+    uint256 planetDamage = P_ShieldEaterConfig.getDetonateCenterDamage();
+    uint256 neighborDamage = P_ShieldEaterConfig.getDetonateAdjacentDamage();
+
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+    world.Empires__detonateShieldEater{ value: cost }();
+
+    uint256 expectedPlanetShields = planetShields - ((planetShields * planetDamage) / 10000);
+    uint256 expectedNeighborShields = neighborShields - ((neighborShields * neighborDamage) / 10000);
+
+    uint256 planetShieldsAfter = Planet.getShieldCount(planetId);
+    uint256 neighborShieldsAfter = Planet.getShieldCount(neighborId);
+
+    assertEq(expectedPlanetShields, planetShieldsAfter, "Center Planet should have correct shields");
+    assertEq(expectedNeighborShields, neighborShieldsAfter, "Neighbor Planet should have correct shields");
+  }
+
+  function testDetonateShieldEaterNotCharged() public {
+    vm.startPrank(creator);
+    LibShieldEater.initialize();
+
+    planetId = ShieldEater.getCurrentPlanet();
+    EEmpire empire = Planet.getEmpireId(planetId);
+    uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+    vm.expectRevert("[OverrideSystem] ShieldEater not fully charged");
+    world.Empires__detonateShieldEater{ value: cost }();
   }
 }

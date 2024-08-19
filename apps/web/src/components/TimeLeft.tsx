@@ -2,17 +2,12 @@ import { useMemo } from "react";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatTime } from "@primodiumxyz/core";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
-import { Button } from "@/components/core/Button";
-import { Card } from "@/components/core/Card";
+import { useCore } from "@primodiumxyz/core/react";
 import { Tooltip } from "@/components/core/Tooltip";
-import { Price } from "@/components/shared/Price";
-import { useContractCalls } from "@/hooks/useContractCalls";
-import { usePot } from "@/hooks/usePot";
 import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
-import { EmpireEnumToName } from "@/util/lookups";
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const TimeLeft = () => {
   const { timeLeftMs, blocksLeft } = useTimeLeft();
@@ -31,69 +26,21 @@ export const TimeLeft = () => {
   const timeLeft = formatTime(
     Math.max(0, Number(turn?.nextTurnBlock ?? 0n) - Number(blockNumber)) * Number(avgBlockTime),
   );
-  if (!turn) return null;
+  if (!turn || gameOver) return null;
 
   return (
-    <div className="pointer-events-auto flex w-72 flex-col justify-center gap-1 rounded p-4 text-center">
-      {gameOver && <GameOver />}
-      {!gameOver && (
-        <div className="py-2 text-sm">
-          <div className="flex flex-col">
-            <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
-              <div className="flex flex-col items-center">
-                <p className="text-xs">Round ends in</p>{" "}
-                <p className="text-accent">{formatTime((timeLeftMs ?? 0) / 1000)}</p>
-              </div>
-              <div className="mt-2 flex flex-col gap-2 text-white">
-                <p className="text-xs font-bold">
-                  {EmpireEnumToName[turn.empire as EEmpire]}'s Turn in <span className="text-error">{timeLeft}</span>
-                </p>
-              </div>
-            </Tooltip>
-            {showBlockchainUnits.enabled && !!blocksLeft && (
-              <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
-            )}
-          </div>
-        </div>
+    <div className="flex flex-col justify-center gap-1 text-center">
+      <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
+        <p className="text-sm opacity-90">
+          Round ends in <span className="text-accent">{formatTime((timeLeftMs ?? 0) / 1000)}</span>
+        </p>
+        <p className="text-xs font-bold opacity-80">
+          {EmpireEnumToConfig[turn.empire as EEmpire].name}'s Turn in <span className="text-secondary">{timeLeft}</span>
+        </p>
+      </Tooltip>
+      {showBlockchainUnits.enabled && !!blocksLeft && (
+        <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
       )}
     </div>
-  );
-};
-
-const GameOver = () => {
-  const calls = useContractCalls();
-  const { tables } = useCore();
-  const {
-    playerAccount: { entity },
-  } = useAccountClient();
-  const { pot } = usePot();
-  const { empire } = useWinningEmpire();
-
-  const empirePoints = tables.Empire.useWithKeys({ id: empire ?? 0 })?.pointsIssued ?? 0n;
-  const playerEmpirePoints =
-    tables.Value_PointsMap.useWithKeys({ empireId: empire ?? 0, playerId: entity })?.value ?? 0n;
-
-  const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
-
-  const empireName = empire == EEmpire.Blue ? "Blue" : empire == EEmpire.Green ? "Green" : "Red";
-  if (empire == null) return <div>Something went wrong.</div>;
-
-  return (
-    <Card className="flex flex-col">
-      <p>
-        Game over. <span className="font-semibold">{empireName}</span> won!
-      </p>
-      {playerPot > 0n && (
-        <div className="flex flex-col gap-1">
-          <p>
-            You earned <Price wei={playerPot} />!
-          </p>
-          <Button variant="primary" size="sm" onClick={calls.withdrawEarnings}>
-            Withdraw
-          </Button>
-        </div>
-      )}
-      {playerPot === 0n && <p>You have no earnings to withdraw.</p>}
-    </Card>
   );
 };

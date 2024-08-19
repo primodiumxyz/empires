@@ -5,21 +5,25 @@ import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { NumberInput } from "@/components/core/NumberInput";
+import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
 
 export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
-  const { createShip, removeShip } = useContractCalls();
+  const { createShip, killShip } = useContractCalls();
   const { gameOver } = useWinningEmpire();
   const planet = tables.Planet.use(entity);
-  const planetEmpire = planet?.empireId ?? (0 as EEmpire);
+  const planetEmpire = planet?.empireId ?? EEmpire.NULL;
   const [inputValue, setInputValue] = useState("1");
   const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
   const killShipPriceWei = useOverrideCost(EOverride.KillShip, planetEmpire, BigInt(inputValue));
+  const createShipPointsReceived = useOverridePointsReceived(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const killShipPointsReceived = useOverridePointsReceived(EOverride.KillShip, planetEmpire, BigInt(inputValue));
 
   const attackDisabled = (planet?.shipCount ?? 0n) < BigInt(inputValue) || gameOver || Number(planetEmpire) === 0;
   const supportDisabled = gameOver || Number(planetEmpire) === 0;
@@ -32,7 +36,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           <TransactionQueueMask id={`${entity}-kill-ship`}>
             <Button
               onClick={async () => {
-                await removeShip(entity, BigInt(inputValue), killShipPriceWei);
+                await killShip(entity, BigInt(inputValue), killShipPriceWei);
                 setInputValue("1");
                 tables.SelectedPlanet.remove();
               }}
@@ -46,6 +50,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
             <Price wei={killShipPriceWei} />
           </p>
+          <PointsReceived points={killShipPointsReceived} />
         </div>
 
         <div className="flex flex-col items-center gap-1">
@@ -64,8 +69,9 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             </Button>
           </TransactionQueueMask>
           <p className="rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
-            <Price wei={killShipPriceWei} />
+            <Price wei={createShipPriceWei} />
           </p>
+          <PointsReceived points={createShipPointsReceived} />
         </div>
       </div>
     </div>

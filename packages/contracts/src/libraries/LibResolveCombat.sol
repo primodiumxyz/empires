@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Turn, P_TacticalStrikeConfig, Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
+import { P_GameConfig, Turn, P_TacticalStrikeConfig, Planet_TacticalStrike, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
-import { EEmpire } from "codegen/common.sol";
 import { pseudorandomEntity } from "src/utils.sol";
-import { console } from "forge-std/console.sol";
+import { EEmpire } from "codegen/common.sol";
 
 library LibResolveCombat {
   /**
@@ -85,9 +84,10 @@ library LibResolveCombat {
       );
     }
 
-    Arrivals.deleteRecord(planetId, EEmpire.Green);
-    Arrivals.deleteRecord(planetId, EEmpire.Blue);
-    Arrivals.deleteRecord(planetId, EEmpire.Red);
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+    for (uint8 i = 1; i <= empireCount; i++) {
+      Arrivals.deleteRecord(planetId, EEmpire(i));
+    }
   }
 
   /**
@@ -109,14 +109,15 @@ library LibResolveCombat {
     uint256 winningCount = 0;
     uint256 secondPlaceCount = 0;
 
-    for (uint256 i = 1; i < uint256(EEmpire.LENGTH); i++) {
-      EEmpire empire = EEmpire(i);
-      if (empire == defendingEmpire) continue;
-      uint256 shipCount = Arrivals.get(planetId, empire);
+    uint8 empireCount = P_GameConfig.getEmpireCount();
+
+    for (uint8 empire = 1; empire <= empireCount; empire++) {
+      if (EEmpire(empire) == defendingEmpire) continue;
+      uint256 shipCount = Arrivals.get(planetId, EEmpire(empire));
       if (shipCount > winningCount) {
         secondPlaceCount = winningCount;
         winningCount = shipCount;
-        winningEmpire = empire;
+        winningEmpire = EEmpire(empire);
       } else if (shipCount > secondPlaceCount) {
         secondPlaceCount = shipCount;
       }

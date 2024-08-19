@@ -3,8 +3,6 @@ import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
 
 import { Tables } from "@core/lib";
 
-const OTHER_EMPIRE_COUNT = EEmpire.LENGTH - 2;
-
 export function createPriceUtils(tables: Tables) {
   function getTotalCost(
     _overrideType: EOverride,
@@ -33,9 +31,10 @@ export function createPriceUtils(tables: Tables) {
    * @return pointCost The cost of all points related to the action.
    */
   function getProgressPointCost(_empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
+    const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
     return getPointCost(
       _empireImpacted,
-      _overrideCount * BigInt(OTHER_EMPIRE_COUNT) * (tables.P_PointConfig.get()?.pointUnit ?? 1n),
+      _overrideCount * BigInt(empires - 1) * (tables.P_PointConfig.get()?.pointUnit ?? 1n),
       nextTurn,
     );
   }
@@ -48,8 +47,9 @@ export function createPriceUtils(tables: Tables) {
    * @return pointCost The cost of all points related to the action.
    */
   function getRegressPointCost(_empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
+    const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
     let pointCost = 0n;
-    for (let i = 1; i < EEmpire.LENGTH; i++) {
+    for (let i = 1; i <= empires; i++) {
       if (i == _empireImpacted) {
         continue;
       }
@@ -171,6 +171,26 @@ export function createPriceUtils(tables: Tables) {
   function usdToWei(USD: number, weiToUsd: number): bigint {
     return BigInt(USD / weiToUsd);
   }
+  const getPointPrice = (empire: EEmpire, points: number): { price: bigint; message: string } => {
+    const currentPointCost = tables.Empire.getWithKeys({ id: empire })?.pointCost ?? 0n;
+    const config = tables.P_PointConfig.get();
+    if (!config || currentPointCost == 0n || points == 0) {
+      return { price: 0n, message: "" };
+    }
+
+    const pointsBigInt = BigInt(points);
+    const pointCostDecrease = config?.pointCostIncrease ?? 0n;
+
+    if (currentPointCost < (config?.minPointCost ?? 0n) + pointCostDecrease * pointsBigInt) {
+      return { price: 0n, message: "Selling beyond min price" };
+    }
+
+    const triangleSum = (pointsBigInt * (pointsBigInt + 1n)) / 2n;
+    const totalSaleValue =
+      (currentPointCost - (config?.pointSellTax ?? 0n)) * pointsBigInt - pointCostDecrease * triangleSum;
+
+    return { price: totalSaleValue, message: "" };
+  };
 
   return {
     getTotalCost,
@@ -181,5 +201,6 @@ export function createPriceUtils(tables: Tables) {
     getNextTurnMarginalOverrideCost,
     weiToUsd,
     usdToWei,
+    getPointPrice,
   };
 }

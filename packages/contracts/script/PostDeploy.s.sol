@@ -7,6 +7,7 @@ import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { createPrototypes } from "codegen/Prototypes.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
+import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
 import { Ready, Turn, P_GameConfig } from "codegen/index.sol";
 
@@ -31,10 +32,11 @@ contract PostDeploy is Script {
     createPrototypes(world);
     console.log("Prototypes created");
 
-    P_GameConfig.setGameOverBlock(block.number + 1_500);
+    P_GameConfig.setGameOverBlock(block.number + 1_900);
     P_GameConfig.setGameStartTimestamp(block.timestamp);
 
     createPlanets();
+    LibShieldEater.initialize();
     initPrice();
     Turn.setNextTurnBlock(block.number + P_GameConfig.getTurnLengthBlocks());
 

@@ -1,11 +1,8 @@
-import { createBurnerAccount, transportObserver } from "@latticexyz/common";
-import { createClient as createFaucetClient } from "@latticexyz/faucet";
-import { createContext, ReactNode, useCallback, useMemo, useRef, useState } from "react";
-import { Address, createWalletClient, EIP1193Provider, fallback, formatEther, Hex, http } from "viem";
+import { createContext, ReactNode, useCallback, useRef, useState } from "react";
+import { Address, EIP1193Provider, Hex } from "viem";
 
 import { createExternalAccount } from "@core/account/createExternalAccount";
 import { createLocalAccount } from "@core/account/createLocalAccount";
-import { minEth } from "@core/lib/constants";
 import { AccountClient, ExternalAccount, LocalAccount } from "@core/lib/types";
 import { useCore } from "@core/react/hooks/useCore";
 import { storage } from "@core/utils/global/storage";
@@ -31,55 +28,9 @@ export const AccountClientContext = createContext<AccountClient | undefined>(und
 export function AccountClientProvider({ children, ...options }: AccountProviderProps) {
   if (!options.playerAddress && !options.playerPrivateKey) throw new Error("Must provide address or private key");
   const provider = options.provider;
+
   const core = useCore();
-  const {
-    config,
-    tables,
-    network: { publicClient },
-  } = core;
-
-  const { externalWalletClient, faucet } = useMemo(() => {
-    const externalPKey = config.chain.name === "Foundry" ? config.devPrivateKey : undefined;
-    const faucet = config.chain.faucetUrl ? createFaucetClient({ url: config.chain.faucetUrl }) : undefined;
-
-    const externalWalletClient = externalPKey
-      ? createWalletClient({
-          chain: config.chain,
-          transport: transportObserver(fallback([http()])),
-          pollingInterval: 1000,
-          account: createBurnerAccount(externalPKey as Hex),
-        })
-      : undefined;
-    return { faucet, externalWalletClient };
-  }, [config]);
-
-  const requestDrip = useCallback(
-    async (address: Address) => {
-      if (faucet) {
-        let balance = await publicClient.getBalance({ address });
-        const lowBalance = balance < minEth;
-        if (lowBalance) {
-          console.log("[Faucet] balance:", formatEther(balance));
-          console.info(`[Faucet] Balance is less than ${formatEther(minEth)}, dripping funds`);
-          await faucet.drip.mutate({ address: address });
-          balance = await publicClient.getBalance({ address });
-          console.info(`[Faucet] New balance: ${formatEther(balance)} ETH`);
-        }
-      } else if (externalWalletClient) {
-        const balance = await publicClient.getBalance({ address });
-        const lowBalance = balance < minEth;
-        if (!lowBalance) return;
-        console.log("[Dev Drip] balance:", formatEther(balance));
-        const amountToDrip = 10n * 10n ** 18n;
-        await externalWalletClient.sendTransaction({
-          to: address,
-          value: amountToDrip,
-        });
-        console.info(`[Dev Drip] Dripped ${formatEther(amountToDrip)} to ${address}`);
-      }
-    },
-    [externalWalletClient, faucet, publicClient],
-  );
+  const { config, tables } = core;
 
   /* ----------------------------- Player Account ----------------------------- */
 
@@ -111,8 +62,6 @@ export function AccountClientProvider({ children, ...options }: AccountProviderP
       clearInterval(playerAccountInterval.current);
     }
 
-    requestDrip(account.address);
-    playerAccountInterval.current = setInterval(() => requestDrip(account.address), 4000);
     tables.Account.set({ value: account.entity });
     return account;
   }
@@ -125,11 +74,10 @@ export function AccountClientProvider({ children, ...options }: AccountProviderP
     return account;
   }
 
-  const memoizedUpdatePlayerAccount = useCallback(updatePlayerAccount, [requestDrip]);
+  const memoizedUpdatePlayerAccount = useCallback(updatePlayerAccount, []);
 
   const accountClient: AccountClient = {
     playerAccount,
-    requestDrip,
     setPlayerAccount: memoizedUpdatePlayerAccount,
   };
 

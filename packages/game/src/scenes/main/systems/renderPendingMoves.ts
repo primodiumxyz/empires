@@ -1,8 +1,9 @@
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
+import { StaggerQueue } from "@game/lib/utils/createStaggerQueue";
 import { PrimodiumScene } from "@game/types";
 
-export const renderPendingMoves = (scene: PrimodiumScene, core: Core) => {
+export const renderPendingMoves = (scene: PrimodiumScene, core: Core, { enqueue }: StaggerQueue) => {
   const {
     tables,
     network: { world },
@@ -18,7 +19,9 @@ export const renderPendingMoves = (scene: PrimodiumScene, core: Core) => {
 
       if (!planet) return;
 
-      planet.setPendingMove(current.destinationPlanetId as Entity);
+      enqueue(() => {
+        planet.setPendingMove(current.destinationPlanetId as Entity);
+      }, 100);
     },
     onUpdate: ({ entity, properties: { current } }) => {
       if (!current) return;
@@ -27,7 +30,9 @@ export const renderPendingMoves = (scene: PrimodiumScene, core: Core) => {
 
       if (!planet) return;
 
-      planet.setPendingMove(current.destinationPlanetId as Entity);
+      enqueue(() => {
+        planet.setPendingMove(current.destinationPlanetId as Entity);
+      }, 100);
     },
     onExit: ({ entity }) => {
       const planet = scene.objects.planet.get(entity);

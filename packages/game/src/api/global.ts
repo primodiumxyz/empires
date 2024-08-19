@@ -2,11 +2,13 @@ import { Core } from "@primodiumxyz/core";
 import { Game, Scene } from "@primodiumxyz/engine";
 import { SceneKeys } from "@game/lib/constants/common";
 import { createGameTables } from "@game/lib/tables";
+import { createStaggerQueue } from "@game/lib/utils/createStaggerQueue";
 
 export type GlobalApi = ReturnType<typeof createGlobalApi>;
 
 //api pertaining
 export function createGlobalApi(game: Game, core: Core) {
+  const queue = createStaggerQueue();
   function setResolution(width: number, height: number) {
     const { phaserGame, sceneManager } = game;
 
@@ -86,5 +88,6 @@ export function createGlobalApi(game: Game, core: Core) {
     getScene,
     enableGlobalInput,
     disableGlobalInput,
+    queue,
   };
 }

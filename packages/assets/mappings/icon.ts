@@ -26,17 +26,22 @@ import Fleet from "../icons/UI_Fleet.png?url";
 import Grace from "../icons/UI_Grace.png?url";
 import GreenMagnet from "../icons/UI_GreenMagnet.png?url";
 import Housing from "../icons/UI_Housing.png?url";
+import KillShip from "../icons/UI_KillShip.png?url";
 import Leaderboard from "../icons/UI_Leaderboard.png?url";
+import Magnet from "../icons/UI_Magnet.png?url";
 import Navigator from "../icons/UI_Navigator.png?url";
 import NotAllowed from "../icons/UI_NotAllowed.png?url";
 import Objective from "../icons/UI_Objective.png?url";
+import PinkMagnet from "../icons/UI_PinkMagnet.png?url";
+import PurpleMagnet from "../icons/UI_PurpleMagnet.png?url";
 import RedMagnet from "../icons/UI_RedMagnet.png?url";
 import Reinforcements from "../icons/UI_Reinforcements.png?url";
-import RemoveShip from "../icons/UI_RemoveShip.png?url";
 import Reports from "../icons/UI_Reports.png?url";
+import Resource from "../icons/UI_Resource.png?url";
 import Return from "../icons/UI_Return.png?url";
 import Settings from "../icons/UI_Settings.png?url";
 import Shard from "../icons/UI_Shard.png?url";
+import ShieldEater from "../icons/UI_ShieldEater.png?url";
 import EnemyFleet from "../icons/UI_Ship_Enemy.png?url";
 import Spectate from "../icons/UI_Spectate.png?url";
 import Starmap from "../icons/UI_Starmap.png?url";
@@ -46,6 +51,7 @@ import Transfer from "../icons/UI_Transfer.png?url";
 import Trash from "../icons/UI_Trash.png?url";
 import Vault from "../icons/UI_Vault.png?url";
 import Wormhole from "../icons/UI_WormholeBase.png?url";
+import YellowMagnet from "../icons/UI_YellowMagnet.png?url";
 import Twitter from "../icons/x-twitter.svg?url";
 
 export const InterfaceIcons = {
@@ -76,15 +82,18 @@ export const InterfaceIcons = {
   Grace,
   Housing,
   Leaderboard,
+  Magnet,
   Navigator,
   NotAllowed,
   Objective,
   Reinforcements,
-  RemoveShip,
+  KillShip,
   Reports,
+  Resource,
   Return,
   Settings,
   Shard,
+  ShieldEater,
   Spectate,
   Starmap,
   Strength,
@@ -97,4 +106,7 @@ export const InterfaceIcons = {
   RedMagnet,
   BlueMagnet,
   GreenMagnet,
+  PurpleMagnet,
+  YellowMagnet,
+  PinkMagnet,
 };

@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { ServerIcon } from "@heroicons/react/24/solid";
 
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { AutoSizer } from "@/components/core/AutoSizer";
@@ -8,13 +9,13 @@ import { Modal } from "@/components/core/Modal";
 import { TextInput } from "@/components/core/TextInput";
 import { setupCheatcodes } from "@/config/setupCheatcodes";
 import { useContractCalls } from "@/hooks/useContractCalls";
+import { useDripAccount } from "@/hooks/useDripAccount";
 import { useGame } from "@/hooks/useGame";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
+import { withTransactionStatus } from "@/util/notify";
 
 import "@/index.css";
-
-import { ServerIcon } from "@heroicons/react/24/solid";
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
@@ -30,7 +31,8 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const game = useGame();
   const accountClient = useAccountClient();
   const contractCalls = useContractCalls();
-  const cheatcodes = setupCheatcodes(core, game, accountClient, contractCalls);
+  const requestDrip = useDripAccount();
+  const cheatcodes = setupCheatcodes({ core, game, accountClient, contractCalls, requestDrip });
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
@@ -45,41 +47,43 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   }, [open]);
 
   return (
-    <Modal title="Cheatcodes">
-      <Modal.Button variant="warning">
-        <ServerIcon className="size-6" /> CHEATCODES
-      </Modal.Button>
-      <Modal.Content className={cn(activeTab == undefined && "h-screen")}>
-        {activeTab !== undefined && (
-          <Button
-            variant="primary"
-            size="sm"
-            className="absolute -top-10 right-12"
-            onClick={() => setActiveTab(undefined)}
-          >
-            Back
-          </Button>
-        )}
-        {activeTab === undefined ? (
-          <AutoSizer
-            items={cheatcodes}
-            itemSize={64}
-            render={(item, index) => (
+    <div className={className}>
+      <Modal title="Cheatcodes">
+        <Modal.Button variant="warning">
+          <ServerIcon className="size-6" /> CHEATCODES
+        </Modal.Button>
+        <Modal.Content className={cn(activeTab == undefined && "h-screen")}>
+          {activeTab !== undefined && (
+            <Button
+              variant="primary"
+              size="sm"
+              className="absolute -top-10 right-12"
+              onClick={() => setActiveTab(undefined)}
+            >
+              Back
+            </Button>
+          )}
+          {activeTab === undefined ? (
+            <AutoSizer
+              items={cheatcodes}
+              itemSize={64}
+              render={(item, index) => (
+                // @ts-expect-error wrong type inference -- will fix on base template
+                <Cheatcode cheatcode={item} index={index} activeTab={activeTab} setActiveTab={setActiveTab} />
+              )}
+            />
+          ) : (
+            <Cheatcode
               // @ts-expect-error wrong type inference -- will fix on base template
-              <Cheatcode cheatcode={item} index={index} activeTab={activeTab} setActiveTab={setActiveTab} />
-            )}
-          />
-        ) : (
-          <Cheatcode
-            // @ts-expect-error wrong type inference -- will fix on base template
-            cheatcode={cheatcodes[activeTab]}
-            index={activeTab}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
-        )}
-      </Modal.Content>
-    </Modal>
+              cheatcode={cheatcodes[activeTab]}
+              index={activeTab}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          )}
+        </Modal.Content>
+      </Modal>
+    </div>
   );
 };
 
@@ -94,7 +98,16 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   activeTab: number | undefined;
   setActiveTab: Dispatch<SetStateAction<number | undefined>>;
 }) => {
-  const { title, caption, inputs, execute: _execute, bg = "bg-gray-500/10" } = cheatcode;
+  const {
+    title,
+    caption,
+    inputs,
+    execute: _execute,
+    loading: getLoadingMsg,
+    success: getSuccessMsg,
+    error: getErrorMsg,
+    bg = "bg-gray-500/10",
+  } = cheatcode;
   const [inputValues, setInputValues] = useState<CheatcodeInputs<T>>({} as CheatcodeInputs<T>);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"success" | "error" | undefined>(undefined);
@@ -104,7 +117,12 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
     setLoading(true);
 
     try {
-      const success = await _execute(args);
+      const success = await withTransactionStatus(() => _execute(args), {
+        loading: getLoadingMsg?.(args) ?? "Executing cheatcode...",
+        success: getSuccessMsg?.(args) ?? "Cheatcode executed",
+        error: getErrorMsg?.(args) ?? "Error executing cheatcode",
+      });
+
       setStatus(success ? "success" : "error");
       setTimeout(() => setStatus(undefined), 2000);
     } catch (err) {
@@ -141,7 +159,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
           const defaultValue = formatValue(inputType, input.defaultValue).toString();
 
           const filteredOptions = options?.filter((option) =>
-            option.value
+            (option.value ?? "")
               .toString()
               .toLowerCase()
               .includes(searchTerms[inputKey]?.toLowerCase() || ""),
@@ -170,11 +188,11 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
                         },
                       }));
                     }}
-                    className="h-48 w-full"
+                    className="w-full"
                   >
                     {filteredOptions?.map((option) => (
                       <Dropdown.Item key={option.id} value={option.id}>
-                        {option.value.toString()}
+                        {option.value?.toString()}
                       </Dropdown.Item>
                     ))}
                   </Dropdown>

@@ -1,4 +1,4 @@
-import { convertAxialToCartesian, Core, entityToPlanetName } from "@primodiumxyz/core";
+import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { Planet } from "@game/lib/objects/Planet";
 import { PrimodiumScene } from "@game/types";
@@ -15,16 +15,13 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
     if (!planet) return;
 
     const { q, r } = planet;
-
-    if (planet.isCitadel) {
-      console.log({ planet: entityToPlanetName(entity) });
-    }
     const planetObj = new Planet({
       id: entity,
       scene,
       coord: convertAxialToCartesian({ q: Number(q) - 100, r: Number(r) }, 100 + MARGIN),
       empire: planet.empireId,
       citadel: planet.isCitadel,
+      empireCount: tables.P_GameConfig.get()?.empireCount ?? 0,
     });
 
     planetObj

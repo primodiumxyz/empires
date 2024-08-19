@@ -5,13 +5,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToPlanetName, formatAddress, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
-
-export const EmpireEnumToTextColor: Record<EEmpire, string> = {
-  [EEmpire.Blue]: "text-blue-400",
-  [EEmpire.Green]: "text-green-400",
-  [EEmpire.Red]: "text-red-400",
-  [EEmpire.LENGTH]: "",
-};
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const useActions = () => {
   const { tables } = useCore();
@@ -30,11 +24,14 @@ export const useActions = () => {
   const boostChargeOverrides = tables.BoostChargeOverrideLog.useAll();
   const stunChargeOverrides = tables.StunChargeOverrideLog.useAll();
   const tacticalStrikeOverrides = tables.TacticalStrikeOverrideLog.useAll();
+  const detonateShieldEaterOverrides = tables.ShieldEaterDetonateOverrideLog.useAll();
+  const airdropGoldOverrides = tables.AirdropGoldOverrideLog.useAll();
 
   return useMemo(() => {
     const getPlanetSpan = (planetId: Entity) => {
-      const empireId = tables.Planet.get(planetId)?.empireId ?? EEmpire.LENGTH;
-      const colorClass = EmpireEnumToTextColor[empireId as EEmpire];
+      const empireId = tables.Planet.get(planetId)?.empireId;
+      if (!empireId) return <span className="text-gray-400">{entityToPlanetName(planetId)}</span>;
+      const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
       return <span className={colorClass}>{entityToPlanetName(planetId)}</span>;
     };
 
@@ -207,6 +204,31 @@ export const useActions = () => {
       };
     });
 
+    const detonateShieldEaterOverrideEntries = detonateShieldEaterOverrides.map((actionEntity) => {
+      const action = tables.ShieldEaterDetonateOverrideLog.get(actionEntity)!;
+      return {
+        timestamp: action.timestamp,
+        element: (
+          <p className="text-xs">
+            {getPlayerSpan(action.playerId)} detonated shield eater on {getPlanetSpan(action.planetId as Entity)}
+          </p>
+        ),
+      };
+    });
+
+    const airdropGoldOverrideEntries = airdropGoldOverrides.map((actionEntity) => {
+      const action = tables.AirdropGoldOverrideLog.get(actionEntity)!;
+      return {
+        timestamp: action.timestamp,
+        element: (
+          <p className="text-xs">
+            {getPlayerSpan(action.playerId)} airdropped {formatNumber(action.goldDistributed)} gold to{" "}
+            {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
+          </p>
+        ),
+      };
+    });
+
     const allActions = [
       ...moveRoutineEntries,
       ...planetBattleRoutineEntries,
@@ -220,7 +242,9 @@ export const useActions = () => {
       ...boostChargeOverrideEntries,
       ...stunChargeOverrideEntries,
       ...tacticalStrikeOverrideEntries,
+      ...detonateShieldEaterOverrideEntries,
       ...accumulateGoldRoutineEntries,
+      ...airdropGoldOverrideEntries,
     ];
     allActions.sort((a, b) => -Number(b.timestamp - a.timestamp));
     return allActions;
@@ -238,5 +262,6 @@ export const useActions = () => {
     stunChargeOverrides,
     tacticalStrikeOverrides,
     accumulateGoldRoutines,
+    airdropGoldOverrides,
   ]);
 };

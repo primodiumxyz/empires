@@ -1,6 +1,24 @@
 declare const abi: [
   {
     "type": "function",
+    "name": "Empires__airdropGold",
+    "inputs": [
+      {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
+      },
+      {
+        "name": "_overrideCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__boostCharge",
     "inputs": [
       {
@@ -34,6 +52,13 @@ declare const abi: [
     ],
     "outputs": [],
     "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__clearLoop",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",

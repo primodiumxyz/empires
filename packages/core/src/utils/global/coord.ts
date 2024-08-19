@@ -1,5 +1,5 @@
 import { EDirection } from "@primodiumxyz/contracts";
-import { AxialCoord, CartesionCoord } from "@core/lib";
+import { AxialCoord, AxialCoordBigInt, CartesionCoord } from "@core/lib";
 
 /**
  * Converts axial coords to cartesian assuming pointy top hexagon.
@@ -16,7 +16,10 @@ export function convertAxialToCartesian(axialCoord: AxialCoord, size: number): C
   return { x, y };
 }
 
-export function getNeighbor(q: number, r: number, direction: EDirection): AxialCoord {
+export function getNeighbor(q: bigint | number, r: bigint | number, direction: EDirection): AxialCoord {
+  q = Number(q);
+  r = Number(r);
+
   if (direction == EDirection.East) {
     return { q: q + 1, r };
   } else if (direction == EDirection.Southeast) {
@@ -34,16 +37,21 @@ export function getNeighbor(q: number, r: number, direction: EDirection): AxialC
   }
 }
 
-export function getDirection(fromPlanet: { q: bigint; r: bigint }, toPlanet: { q: bigint; r: bigint }): EDirection {
+export function getDirection(
+  fromPlanet: AxialCoord | AxialCoordBigInt,
+  toPlanet: AxialCoord | AxialCoordBigInt,
+): EDirection {
   const dq = Number(toPlanet.q) - Number(fromPlanet.q);
   const dr = Number(toPlanet.r) - Number(fromPlanet.r);
 
-  if (dq === 1 && dr === 0) return EDirection.East;
-  if (dq === 0 && dr === 1) return EDirection.Southeast;
-  if (dq === -1 && dr === 1) return EDirection.Southwest;
-  if (dq === -1 && dr === 0) return EDirection.West;
-  if (dq === 0 && dr === -1) return EDirection.Northwest;
-  if (dq === 1 && dr === -1) return EDirection.Northeast;
-
-  return EDirection.East; // Default direction if not found
+  if (dq > 0) {
+    if (dr > 0) return EDirection.East;
+    return EDirection.Northeast;
+  } else if (dq === 0) {
+    if (dr > 0) return EDirection.Southeast;
+    return EDirection.Northwest;
+  } else {
+    if (dr > 0) return EDirection.Southwest;
+    return EDirection.West;
+  }
 }
