@@ -74,36 +74,6 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(Planet.getShieldCount(planetId), currentShields + 10);
   }
 
-  function testDrainShieldSingle() public {
-    vm.startPrank(creator);
-    uint256 currentShields = 10;
-    Planet.setShieldCount(planetId, currentShields);
-
-    uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), 1);
-    world.Empires__drainShield{ value: cost }(planetId, 1);
-    assertEq(Planet.getShieldCount(planetId), currentShields - 1);
-  }
-
-  function testDrainShieldMultiple() public {
-    testChargeShieldMultiple();
-
-    uint256 currentShields = Planet.getShieldCount(planetId);
-    uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), 6);
-    world.Empires__drainShield{ value: cost }(planetId, 6);
-    assertEq(Planet.getShieldCount(planetId), currentShields - 6);
-  }
-
-  function testDrainShieldFailNoShield() public {
-    vm.expectRevert("[OverrideSystem] Not enough shields to drain");
-    world.Empires__drainShield(planetId, 1);
-  }
-
-  function testDrainShieldFailNotEnoughShields() public {
-    testChargeShieldSingle();
-    vm.expectRevert("[OverrideSystem] Not enough shields to drain");
-    world.Empires__drainShield(planetId, 2);
-  }
-
   function testCreateFailNotOwned() public {
     bytes32 nonOwnedPlanetId;
     uint256 i = 0;

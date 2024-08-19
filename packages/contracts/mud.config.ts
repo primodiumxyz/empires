@@ -43,7 +43,6 @@ export const worldInput = {
         boostChargeIncrease: "uint256",
         stunChargeDecrease: "uint256",
         createShipBoostIncrease: "uint256", // per ship created
-        killShipBoostCostDecrease: "uint256", // per ship killed
       },
     },
 
@@ -383,35 +382,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    KillShipOverrideLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        turn: "uint256",
-        playerId: "bytes32",
-        planetId: "bytes32",
-        ethSpent: "uint256",
-        overrideCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
     ChargeShieldsOverrideLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        playerId: "bytes32",
-        turn: "uint256",
-        planetId: "bytes32",
-        ethSpent: "uint256",
-        overrideCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
-    DrainShieldsOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",

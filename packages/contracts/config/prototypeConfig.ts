@@ -43,14 +43,13 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         boostChargeIncrease: 10n,
         stunChargeDecrease: 10n,
         createShipBoostIncrease: 0n,
-        killShipBoostCostDecrease: 0n,
       },
       P_ShieldEaterConfig: {
         visitShieldDamage: 1n,
-        detonateCenterDamage: scaleMultiplier(1.00),
-        detonateAdjacentDamage: scaleMultiplier(0.50),
+        detonateCenterDamage: scaleMultiplier(1.0),
+        detonateAdjacentDamage: scaleMultiplier(0.5),
         detonationThreshold: 8n,
-      }
+      },
     },
   },
 
@@ -60,7 +59,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.000040),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.000001),
       },
@@ -73,22 +72,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.000100),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.0001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.000005),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.0000005),
-      },
-    },
-  },
-
-  DrainShieldOverride: {
-    keys: [{ [EOverride.DrainShield]: "uint8" }],
-    tables: {
-      P_OverrideConfig: {
-        isProgressOverride: false,
-        minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.000200),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.000003),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.000001),
       },
     },
   },
@@ -136,10 +122,10 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_OverrideConfig: {
         isProgressOverride: false,
-        minOverrideCost: BigInt(POINTS_UNIT * 0.00050),
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00100),
+        minOverrideCost: BigInt(POINTS_UNIT * 0.0005),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00001),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.0002),
       },
     },
   },

@@ -39,9 +39,7 @@ export enum EMovement {
 
 export enum EOverride {
   CreateShip = 1,
-  KillShip,
   ChargeShield,
-  DrainShield,
   PlaceMagnet,
   BoostCharge,
   StunCharge,
