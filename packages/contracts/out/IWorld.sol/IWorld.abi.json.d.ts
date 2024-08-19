@@ -400,24 +400,6 @@ declare const abi: [
   },
   {
     "type": "function",
-    "name": "Empires__killShip",
-    "inputs": [
-      {
-        "name": "_planetId",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "_overrideCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
     "name": "Empires__pause",
     "inputs": [],
     "outputs": [],

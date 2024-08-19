@@ -67,19 +67,6 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     },
   },
 
-  KillShipOverride: {
-    keys: [{ [EOverride.KillShip]: "uint8" }],
-    tables: {
-      P_OverrideConfig: {
-        isProgressOverride: false,
-        minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.000040),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.000001),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.000002),
-      },
-    },
-  },
-
   ChargeShieldOverride: {
     keys: [{ [EOverride.ChargeShield]: "uint8" }],
     tables: {

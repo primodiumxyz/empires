@@ -60,29 +60,6 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(_getCurrentCharge(planetId), currentCharge + (P_TacticalStrikeConfig.getCreateShipBoostIncrease() * 10));
   }
 
-  function testKillShipSingle() public {
-    testCreateShipSingle();
-    uint256 currentCharge = _getCurrentCharge(planetId);
-    vm.startPrank(creator);
-    Planet.setShipCount(planetId, 1);
-
-    uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 1);
-    world.Empires__killShip{ value: cost }(planetId, 1);
-    assertEq(Planet.getShipCount(planetId), 0);
-    assertEq(_getCurrentCharge(planetId), currentCharge - P_TacticalStrikeConfig.getKillShipBoostCostDecrease());
-  }
-
-  function testKillShipMultiple() public {
-    testCreateShipMultiple();
-    uint256 currentCharge = _getCurrentCharge(planetId);
-    uint256 currentShips = Planet.getShipCount(planetId);
-
-    uint256 cost = LibPrice.getTotalCost(EOverride.KillShip, Planet.getEmpireId(planetId), 6);
-    world.Empires__killShip{ value: cost }(planetId, 6);
-    assertEq(Planet.getShipCount(planetId), currentShips - 6);
-    assertEq(_getCurrentCharge(planetId), currentCharge - (P_TacticalStrikeConfig.getKillShipBoostCostDecrease() * 6));
-  }
-
   function testChargeShieldSingle() public {
     uint256 currentShields = Planet.get(planetId).shieldCount;
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, Planet.getEmpireId(planetId), 1);
@@ -114,20 +91,6 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 cost = LibPrice.getTotalCost(EOverride.DrainShield, Planet.getEmpireId(planetId), 6);
     world.Empires__drainShield{ value: cost }(planetId, 6);
     assertEq(Planet.getShieldCount(planetId), currentShields - 6);
-  }
-
-  function testKillShipFailNoShips() public {
-    vm.startPrank(creator);
-    Planet.setShipCount(planetId, 0);
-    vm.expectRevert("[OverrideSystem] Not enough ships to kill");
-    world.Empires__killShip(planetId, 1);
-  }
-
-  function testKillShipFailNotEnoughShips() public {
-    vm.startPrank(creator);
-    Planet.setShipCount(planetId, 1);
-    vm.expectRevert("[OverrideSystem] Not enough ships to kill");
-    world.Empires__killShip(planetId, 2);
   }
 
   function testDrainShieldFailNoShield() public {
@@ -191,55 +154,6 @@ contract OverrideSystemTest is PrimodiumTest {
       PointsMap.getValue(EEmpire.Red, aliceId),
       overrideCount * (EMPIRE_COUNT - 1) * pointUnit,
       "Player should have received points"
-    );
-  }
-
-  function testPurchaseOverrideRegressSingle() public {
-    testPurchaseOverrideProgressSingle();
-
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 totalCost = LibPrice.getTotalCost(EOverride.KillShip, empire, 1);
-    uint256 overrideCost = OverrideCost.get(empire, EOverride.KillShip);
-    uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
-
-    vm.startPrank(bob);
-    world.Empires__killShip{ value: totalCost }(planetId, 1);
-    assertGt(LibPrice.getTotalCost(EOverride.KillShip, empire, 1), totalCost, "Total Cost should have increased");
-    assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
-    assertEq(PlayersMap.get(bobId).loss, totalCost, "Player should have spent total cost");
-    assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(PointsMap.getValue(EEmpire.Blue, bobId), pointUnit, "Player should have received blue points");
-    assertEq(PointsMap.getValue(EEmpire.Green, bobId), pointUnit, "Player should have received green points");
-  }
-
-  function testPurchaseOverrideRegressMultiple() public {
-    testPurchaseOverrideProgressMultiple();
-
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 overrideCount = 5;
-    uint256 totalCost = LibPrice.getTotalCost(EOverride.KillShip, empire, overrideCount);
-    uint256 overrideCost = OverrideCost.get(empire, EOverride.KillShip);
-    uint256 initBalance = Balances.get(EMPIRES_NAMESPACE_ID);
-
-    vm.startPrank(bob);
-    world.Empires__killShip{ value: totalCost }(planetId, overrideCount);
-    assertGt(
-      LibPrice.getTotalCost(EOverride.KillShip, empire, overrideCount),
-      totalCost,
-      "Total Cost should have increased"
-    );
-    assertGt(OverrideCost.get(empire, EOverride.KillShip), overrideCost, "Override Cost should have increased");
-    assertEq(PlayersMap.get(bobId).loss, totalCost, "Player should have spent total cost");
-    assertEq(Balances.get(EMPIRES_NAMESPACE_ID), initBalance + totalCost, "Namespace should have received the balance");
-    assertEq(
-      PointsMap.getValue(EEmpire.Blue, bobId),
-      overrideCount * pointUnit,
-      "Player should have received blue points"
-    );
-    assertEq(
-      PointsMap.getValue(EEmpire.Green, bobId),
-      overrideCount * pointUnit,
-      "Player should have received green points"
     );
   }
 
