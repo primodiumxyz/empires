@@ -11,14 +11,17 @@ import { NumberInput } from "@/components/core/NumberInput";
 import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
+import { useAdjacentEmpirePlanets } from "@/hooks/useAdjacentEmpirePlanets";
 import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
-import { useEmpires } from "@/hooks/useEmpires";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
+/*
+1. disable magnets if no adjacent planets of current empire
+*/
 export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }) => {
   const [inputValue, setInputValue] = useState("1");
   const [empire, setEmpire] = useState<EEmpire>(EEmpire.LENGTH);
@@ -42,7 +45,6 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
   } = useAccountClient();
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
   const playerBalance = useBalance(address).value ?? 0n;
-  const empires = useEmpires();
 
   const magnets = usePlanetMagnets(planetId);
   const currentMagnetExists = !!magnets.find((magnet) => magnet.empire === empire)?.exists;
@@ -57,20 +59,21 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
   return (
     <div className="flex w-full flex-col items-center">
       <div className="flex flex-row items-center gap-2">
-        <div className="grid grid-cols-3 gap-2">
-          {magnets.map((magnet, index) => (
-            <Button
-              key={index}
-              variant={empire === magnet.empire ? "secondary" : "neutral"}
-              shape="square"
-              size="sm"
-              disabled={magnet.exists}
-              onClick={() => setEmpire(magnet.empire)}
-            >
-              <IconLabel imageUri={EmpireEnumToConfig[magnet.empire].icons.magnet} />
-            </Button>
-          ))}
+        <div>
+          <div className="grid grid-cols-3 gap-2">
+            {magnets.map((magnet, index) => (
+              <MagnetButton
+                key={index}
+                planetId={planetId}
+                selected={empire === magnet.empire}
+                magnetData={magnet}
+                onClick={() => setEmpire(magnet.empire)}
+              />
+            ))}
+          </div>
+          {empire === EEmpire.LENGTH && <p className="text-xs opacity-50">Select empire </p>}
         </div>
+
         <Divider direction="vertical" className="self-center" />
         <div className="flex flex-col items-center justify-start">
           <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
@@ -102,7 +105,34 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
           </div>
         </div>
       )}
-      {empire === EEmpire.LENGTH && <p className="text-xs opacity-50">Select an empire to place a magnet</p>}
     </div>
+  );
+};
+
+type MagnetData = { empire: EEmpire; exists: boolean; endTurn: bigint | undefined };
+const MagnetButton = ({
+  planetId,
+  selected,
+  magnetData,
+  onClick,
+}: {
+  planetId: Entity;
+  selected: boolean;
+  magnetData: MagnetData;
+  onClick: () => void;
+}) => {
+  const hasAdjacentEmpirePlanets = useAdjacentEmpirePlanets(planetId, magnetData.empire);
+  const disabled = hasAdjacentEmpirePlanets.length === 0 || magnetData.exists;
+  return (
+    <Button
+      variant={selected ? "secondary" : "neutral"}
+      shape="square"
+      size="sm"
+      disabled={disabled}
+      onClick={onClick}
+      tooltip={disabled ? "Not adjacent" : ""}
+    >
+      <IconLabel imageUri={EmpireEnumToConfig[magnetData.empire].icons.magnet} />
+    </Button>
   );
 };
