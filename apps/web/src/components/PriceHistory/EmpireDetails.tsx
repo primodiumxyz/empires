@@ -25,25 +25,8 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean; hidePlane
     ROOT: { sprite },
   } = useGame();
   const { price: sellPrice } = usePointPrice(empire, 1);
-  const planetCount = tables.Keys_EmpirePlanetsSet.useWithKeys({ empireId: empire })?.itemKeys.length ?? 0;
-  const citadelPlanets = tables.Keys_CitadelPlanetsSet.useWithKeys()?.itemKeys ?? [];
-  // TODO: something better
-  const block = tables.BlockNumber.use()?.value ?? 0n;
-
-  const citadelCount = useMemo(() => {
-    let count = 0;
-    for (const entity of citadelPlanets) {
-      const planet = tables.Planet.get(entity as Entity);
-
-      if (!planet) continue;
-
-      if (planet.empireId !== empire) continue;
-
-      if (planet.isCitadel) count++;
-    }
-
-    return count;
-  }, [citadelPlanets, empire, block]);
+  const planetCount = tables.Planet.useAllWith({ empireId: empire })?.length ?? 0;
+  const citadelCount = tables.Planet.useAllWith({ empireId: empire, isCitadel: true })?.length ?? 0;
 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
   const crownUrl = sprite.getSprite("Crown");
