@@ -43,6 +43,8 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     version: "1",
   });
 
+  const AdvancedMode = createLocalBoolTable(world, { id: "AdvancedMode", persist: true, version: "1" });
+
   return {
     DoubleCounter,
     BlockNumber,
@@ -53,5 +55,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     SelectedPlanet,
     SelectedTab,
     HoveredPlanet,
+    AdvancedMode,
   };
 }
