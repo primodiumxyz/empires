@@ -1,10 +1,8 @@
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { SecondaryCard } from "@/components/core/Card";
-import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { EmpireData, useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -51,7 +49,7 @@ export const EmpireCard = ({
           <img src={sprite.getSprite(sprites.planet)} className="w-6 lg:w-8" />
         </div>
         <span className="text-sm font-bold text-accent lg:text-lg">{name}</span>
-        <Price wei={pointPrice} className="text-sm lg:text-lg" />
+        <Price wei={pointPrice} className="text-right text-sm lg:text-lg" />
         <div className="flex items-center gap-4 lg:gap-6">
           <div className="flex items-center gap-2">
             <img src={sprite.getSprite("Crown")} className="w-3 lg:w-4" />
@@ -61,18 +59,14 @@ export const EmpireCard = ({
           </div>
           <div className="flex items-center gap-2">
             <img src={sprite.getSprite("PlanetGrey")} className="w-3 lg:w-4" />
-            <span className="text-[10px] lg:text-base">
-              {ownedPlanetCount}/{planetCount}
-            </span>
+            <span className="text-[10px] lg:text-base">{ownedPlanetCount}</span>
           </div>
         </div>
-        <div className="inline-flex items-center gap-2 text-[10px] text-accent lg:text-base">
-          {formatEther(playerPoints)} pts{" "}
-          <Tooltip className="w-44 text-gray-400" direction="left" tooltipContent="Points you own for this empire">
-            <InformationCircleIcon className="size-3 text-gray-400 lg:size-4" />
-          </Tooltip>
+        <div className="items-center gap-0 text-right text-accent lg:text-base">
+          <p className="hidden text-[0.6rem] opacity-50 lg:block">YOU OWN</p>
+          <p className="-mt-2">{formatEther(playerPoints)} pts</p>
         </div>
-        <p className="col-span-3 inline w-full text-[10px] uppercase opacity-75 lg:text-base">win chance: {winRate}%</p>
+        <p className="col-span-2 inline w-full text-xs uppercase opacity-75 lg:!text-sm">win chance: {winRate}%</p>
       </div>
     </SecondaryCard>
   );

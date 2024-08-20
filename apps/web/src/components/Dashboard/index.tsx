@@ -17,7 +17,7 @@ export const Dashboard = () => {
   return (
     <div
       className={cn(
-        "flex h-[75vh] w-[calc(100vw-32px)] max-w-[1200px] transition-opacity duration-300",
+        "flex h-[75vh] w-[calc(100vw-32px)] max-w-[1200px] justify-center transition-opacity duration-300",
         advancedMode ? "opacity-0" : "opacity-100",
       )}
     >
