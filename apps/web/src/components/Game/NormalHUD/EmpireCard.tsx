@@ -5,9 +5,11 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Card, SecondaryCard } from "@/components/core/Card";
+import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { EmpireData } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
+import { useWinRate } from "@/hooks/useWinRate";
 import { EmpireConfig } from "@/util/lookups";
 
 export const EmpireCard = ({
@@ -24,6 +26,7 @@ export const EmpireCard = ({
   const {
     ROOT: { sprite },
   } = useGame();
+  const winRate = useWinRate(empire);
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
 
@@ -53,10 +56,19 @@ export const EmpireCard = ({
           </div>
         </div>
         <div className="inline-flex items-center gap-2 text-accent">
-          {formatEther(playerPoints)} pts <InformationCircleIcon className="size-4 text-gray-400" />
+          {formatEther(playerPoints)} pts{" "}
+          <Tooltip className="w-44 text-gray-400" direction="left" tooltipContent="Points you own for this empire">
+            <InformationCircleIcon className="size-4 text-gray-400" />
+          </Tooltip>
         </div>
         <div className="inline-flex items-center gap-2 opacity-75">
-          win rate: 12% <InformationCircleIcon className="size-4" />
+          win rate: {winRate}%{" "}
+          <Tooltip
+            className="w-64"
+            tooltipContent="Based on the number of planets and citadels owned, as well as how close the game is to the end"
+          >
+            <InformationCircleIcon className="size-4 text-gray-400" />
+          </Tooltip>
         </div>
         <span className="text-xs text-accent">{pct > 0 && `(${formatNumber(pct)}%)`}</span>
       </div>

@@ -44,7 +44,7 @@ const NormalHUDDesktop = () => {
   tables.Time.use();
 
   return (
-    <div className="grid h-screen grid-cols-[1fr_20rem] grid-rows-[auto_auto_auto_auto_1fr] gap-4 p-3">
+    <div className="grid h-screen grid-cols-[1fr_max(25rem,30%)] grid-rows-[auto_auto_auto_auto_1fr] gap-4 p-3">
       {/* HEADER LEFT */}
       {gameOver && <GameOver fragment className="z-10" />}
       {turn && !gameOver && (
@@ -77,7 +77,7 @@ const NormalHUDDesktop = () => {
               </ParentSize>
             </div>
             {/* grid with automatic sizing with just a minimum size of 10rem */}
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(25rem,1fr))] gap-x-8 gap-y-4 px-8">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(25rem,1fr))] gap-x-8 gap-y-4 overflow-y-auto px-8">
               {[...empires.entries()]
                 .sort((a, b) => Number(b[1].playerPoints) - Number(a[1].playerPoints))
                 .map(([key, data]) => (
