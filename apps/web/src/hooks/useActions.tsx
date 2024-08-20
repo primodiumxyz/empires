@@ -19,6 +19,7 @@ export const useActions = () => {
   const createShipOverrides = tables.CreateShipOverrideLog.useAll();
   const chargeShieldsOverrides = tables.ChargeShieldsOverrideLog.useAll();
   const placeMagnetOverrides = tables.PlaceMagnetOverrideLog.useAll();
+  const detonateShieldEaterOverrides = tables.ShieldEaterDetonateOverrideLog.useAll();
   const airdropGoldOverrides = tables.AirdropGoldOverrideLog.useAll();
 
   return useMemo(() => {
@@ -135,7 +136,17 @@ export const useActions = () => {
         ),
       };
     });
-
+    const detonateShieldEaterOverrideEntries = detonateShieldEaterOverrides.map((actionEntity) => {
+      const action = tables.ShieldEaterDetonateOverrideLog.get(actionEntity)!;
+      return {
+        timestamp: action.timestamp,
+        element: (
+          <p className="text-xs">
+            {getPlayerSpan(action.playerId)} detonated shield eater on {getPlanetSpan(action.planetId as Entity)}
+          </p>
+        ),
+      };
+    });
     const airdropGoldOverrideEntries = airdropGoldOverrides.map((actionEntity) => {
       const action = tables.AirdropGoldOverrideLog.get(actionEntity)!;
       return {
@@ -157,6 +168,7 @@ export const useActions = () => {
       ...chargeShieldsOverrideEntries,
       ...buyShieldsRoutineEntries,
       ...placeMagnetOverrideEntries,
+      ...detonateShieldEaterOverrideEntries,
       ...accumulateGoldRoutineEntries,
       ...airdropGoldOverrideEntries,
     ];
@@ -170,6 +182,7 @@ export const useActions = () => {
     chargeShieldsOverrides,
     buyShieldsRoutines,
     placeMagnetOverrides,
+    detonateShieldEaterOverrides,
     accumulateGoldRoutines,
     airdropGoldOverrides,
   ]);
