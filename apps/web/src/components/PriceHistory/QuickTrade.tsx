@@ -21,16 +21,19 @@ import { useGame } from "@/hooks/useGame";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
+import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const QuickTrade = () => {
-  const { tables } = useCore();
+  const { width } = useWindowDimensions();
+  const isMobile = width < 1024;
 
   return (
     <Tabs
       persistIndexKey="quick-trade"
       defaultIndex={-1}
-      className="absolute -top-[4px] left-1/2 hidden -translate-x-1/2 flex-col items-center justify-center lg:flex"
+      className="absolute -top-[4px] left-1.5 -translate-x-1/2 flex-col items-center justify-center lg:left-1/2 lg:flex"
     >
       <Join className="flex -rotate-90 justify-center lg:-mt-[5px] lg:rotate-0">
         <Tabs.Button size="sm" index={0} togglable variant="primary" className="mr-1">
@@ -41,16 +44,16 @@ export const QuickTrade = () => {
         </Tabs.Button>
       </Join>
       <Tabs.Pane index={0} fragment>
-        <BoostEmpire />
+        <BoostEmpire isMobile={isMobile} />
       </Tabs.Pane>
       <Tabs.Pane index={1} fragment>
-        <SellPoints />
+        <SellPoints isMobile={isMobile} />
       </Tabs.Pane>
     </Tabs>
   );
 };
 
-const SellPoints = () => {
+const SellPoints = ({ isMobile }: { isMobile: boolean }) => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const [amount, setAmount] = useState("0");
   const empires = useEmpires();
@@ -80,7 +83,7 @@ const SellPoints = () => {
   };
 
   return (
-    <Card className="relative">
+    <Card className={cn(isMobile ? "absolute bottom-0 left-0 translate-x-1/3 translate-y-1/3" : "relative")}>
       <Tabs.CloseButton variant="ghost" shape="square" className="absolute right-2 top-2 opacity-60 hover:opacity-100">
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
@@ -135,7 +138,7 @@ const SellPoints = () => {
   );
 };
 
-const BoostEmpire = () => {
+const BoostEmpire = ({ isMobile }: { isMobile: boolean }) => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const [amount, setAmount] = useState("0");
   const empires = useEmpires();
@@ -169,7 +172,7 @@ const BoostEmpire = () => {
     setAmount("0");
   };
   return (
-    <Card className="relative">
+    <Card className={cn(isMobile ? "absolute bottom-0 left-0 translate-x-1/3 translate-y-1/3" : "relative")}>
       <Tabs.CloseButton variant="ghost" shape="square" className="absolute right-2 top-2 opacity-60 hover:opacity-100">
         <XMarkIcon className="h-4 w-4" />
       </Tabs.CloseButton>
