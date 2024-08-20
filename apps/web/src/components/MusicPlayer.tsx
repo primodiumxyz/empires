@@ -3,13 +3,15 @@ import { MusicalNoteIcon, PauseIcon } from "@heroicons/react/24/solid";
 
 import { Button } from "@/components/core/Button";
 import { useGame } from "@/hooks/useGame";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 import { getNextSong, getRandomSong } from "@/util/soundtrack";
 
 export const MusicPlayer = ({ className }: { className?: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [song, setSong] = useState(getRandomSong());
-  const [isPlaying, setIsPlaying] = useState(false);
+  const MusicPlaying = useSettings().MusicPlaying;
+  const isPlaying = MusicPlaying.use()?.value ?? true;
 
   const {
     ROOT: { hooks },
@@ -47,14 +49,13 @@ export const MusicPlayer = ({ className }: { className?: string }) => {
   const handlePlay = () => {
     if (!audioRef.current) return;
     audioRef.current.play();
-    setIsPlaying(true);
+    MusicPlaying.set({ value: true });
   };
 
   const handlePause = () => {
-    console.log("pausing");
     if (!audioRef.current) return;
     audioRef.current.pause();
-    setIsPlaying(false);
+    MusicPlaying.set({ value: false });
   };
 
   const handleUpdate = () => {
@@ -65,11 +66,11 @@ export const MusicPlayer = ({ className }: { className?: string }) => {
     }
 
     if (audioRef.current.paused && isPlaying) {
-      setIsPlaying(false);
+      MusicPlaying.set({ value: false });
     }
 
     if (!audioRef.current.paused && !isPlaying) {
-      setIsPlaying(true);
+      MusicPlaying.set({ value: true });
     }
   };
 

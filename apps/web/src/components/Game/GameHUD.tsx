@@ -16,7 +16,7 @@ import { OverridePopup } from "@/components/OverridePopup";
 import { PlayerReturns } from "@/components/PlayerReturns";
 import { Portfolio } from "@/components/Portfolio";
 import { Pot } from "@/components/Pot";
-import { QuickTradeModal } from "@/components/QuickTrade/QuickTrade";
+import { QuickTradeModal, QuickTradeTabs } from "@/components/QuickTrade/QuickTrade";
 import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
 import { cn } from "@/util/client";
@@ -67,6 +67,7 @@ export const GameHUD = () => {
               <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" />
             )}
           </Button>
+          <QuickTradeTabs />
           {showCheatcodes && <Cheatcodes />}
         </HUD.TopMiddle>
         <HUD.Left className="z-10 lg:hidden">

@@ -40,10 +40,7 @@ export const QuickTradeTabs = ({ className }: { className?: string }) => {
     <Tabs
       persistIndexKey="quick-trade"
       defaultIndex={-1}
-      className={cn(
-        "absolute -top-[4px] left-1.5 -translate-x-1/2 flex-col items-center justify-center lg:left-1/2 lg:flex",
-        className,
-      )}
+      className={cn("-mt-1 flex-col items-center justify-center lg:left-1/2 lg:flex", className)}
       onPointerMissed={() => tables.SelectedTab.set({ value: -1 }, toHex("quick-trade") as Entity)}
     >
       <Join className="flex -rotate-90 justify-center lg:-mt-[5px] lg:rotate-0">

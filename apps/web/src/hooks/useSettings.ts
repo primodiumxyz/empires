@@ -42,6 +42,11 @@ const Dripped = createLocalBoolTable(settingsWorld, {
   persist: true,
 });
 
+const MusicPlaying = createLocalBoolTable(settingsWorld, {
+  id: "MusicPlaying",
+  persist: true,
+});
+
 ShowBlockchainUnits.set({ value: false });
 /* -------------------------------------------------------------------------- */
 /*                                  SETTINGS                                  */
@@ -72,5 +77,6 @@ export const useSettings = () => {
       setEnabled: (enabled: boolean) => ShowBlockchainUnits.update({ value: enabled }),
     },
     Dripped,
+    MusicPlaying,
   };
 };
