@@ -31,7 +31,7 @@ library LibOverride {
     uint256 pointUnit = P_PointConfig.getPointUnit();
     uint8 empireCount = P_GameConfig.getEmpireCount();
     bool progressOverride = P_OverrideConfig.getIsProgressOverride(_overrideType);
-    uint256 pointMultiplier = P_PointConfig.getPointMultiplier();
+    uint256 pointMultiplier = P_OverrideConfig.getPointMultiplier(_overrideType);
 
     if (progressOverride) {
       uint256 numPoints = _overrideCount * (empireCount - 1) * pointUnit * pointMultiplier;
