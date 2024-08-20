@@ -8,23 +8,41 @@ export const useWinRate = (empire: EEmpire) => {
   const blockNumber = tables.BlockNumber.use()?.value ?? 0n;
 
   return useMemo(() => {
-    const planetCount = tables.Planet.getAll().length;
-    const citadelCount = tables.Planet.getAllWith({ isCitadel: true }).length;
+    const winningEmpire = tables.WinningEmpire.get()?.empire;
+    if (!!winningEmpire) {
+      return winningEmpire == empire ? 100 : 0;
+    }
 
-    const ownedPlanetCount = tables.Planet.getAllWith({ empireId: empire }).length;
-    const ownedCitadelCount = tables.Planet.getAllWith({ isCitadel: true, empireId: empire }).length;
+    const allPlanets = tables.Planet.getAll().map((planet) => tables.Planet.get(planet)!);
+    const allCitadels = tables.Planet.getAllWith({ isCitadel: true }).map((planet) => tables.Planet.get(planet)!);
 
-    const citadelPercentage = (ownedCitadelCount / citadelCount) * 100;
-    const planetPercentage = (ownedPlanetCount / planetCount) * 100;
+    // Calculate owned planets and citadels for each empire
+    const empireCounts = Object.values(EEmpire).reduce(
+      (acc, emp) => {
+        acc[emp as EEmpire] = {
+          planets: allPlanets.filter((planet) => planet.empireId === emp).length,
+          citadels: allCitadels.filter((planet) => planet.empireId === emp).length,
+        };
+        return acc;
+      },
+      {} as Record<EEmpire, { planets: number; citadels: number }>,
+    );
 
     const gameOverBlock = tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
     const timePercentage = Number((blockNumber * 100n) / gameOverBlock);
 
-    // Adjust weights based on game progress
-    const citadelWeight = 0.6 + (timePercentage / 100) * 0.2; // increases importance of citadels over time
-    const planetWeight = 0.4 - (timePercentage / 100) * 0.2; // decreases importance of total planets over time
+    // Adjust weights based on time
+    const citadelWeight = 0.6 + (timePercentage / 100) * 0.3; // increases from 60% to 90%
+    const planetWeight = 1 - citadelWeight; // decreases from 40% to 10%
 
-    const winRate = citadelPercentage * citadelWeight + planetPercentage * planetWeight;
+    // Calculate total weighted score for all empires
+    const totalScore = Object.values(empireCounts).reduce((total, count) => {
+      return total + (count.citadels * citadelWeight + count.planets * planetWeight);
+    }, 0);
+
+    // Calculate win rate for the specific empire
+    const empireScore = empireCounts[empire].citadels * citadelWeight + empireCounts[empire].planets * planetWeight;
+    const winRate = (empireScore / totalScore) * 100;
 
     return Math.round(winRate);
   }, [empire, blockNumber]);

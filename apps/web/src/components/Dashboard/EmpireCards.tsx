@@ -2,6 +2,7 @@ import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
+import { Badge } from "@/components/core/Badge";
 import { SecondaryCard } from "@/components/core/Card";
 import { Price } from "@/components/shared/Price";
 import { EmpireData, useEmpires } from "@/hooks/useEmpires";
@@ -39,7 +40,6 @@ export const EmpireCard = ({
   } = useGame();
   const winRate = useWinRate(empire);
 
-  const planetCount = tables.Planet.getAll().length ?? 0;
   const citadelCount = tables.Planet.getAllWith({ isCitadel: true }).length ?? 0;
 
   return (
@@ -48,25 +48,27 @@ export const EmpireCard = ({
         <div className="row-span-3 mx-auto">
           <img src={sprite.getSprite(sprites.planet)} className="w-6 lg:w-8" />
         </div>
-        <span className="text-sm font-bold text-accent lg:text-lg">{name}</span>
+        <p className="text-sm font-bold text-accent lg:text-lg">{name}</p>
         <Price wei={pointPrice} className="text-right text-sm lg:text-lg" />
-        <div className="flex items-center gap-4 lg:gap-6">
-          <div className="flex items-center gap-2">
-            <img src={sprite.getSprite("Crown")} className="w-3 lg:w-4" />
-            <span className="text-[10px] lg:text-base">
-              {ownedCitadelCount}/{citadelCount}
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <img src={sprite.getSprite("PlanetGrey")} className="w-3 lg:w-4" />
-            <span className="text-[10px] lg:text-base">{ownedPlanetCount}</span>
-          </div>
-        </div>
+        <p className="inline w-full text-xs uppercase opacity-75 lg:!text-sm">
+          win <span className="hidden lg:inline">chance</span>: {winRate}%
+        </p>
         <div className="items-center gap-0 text-right text-accent lg:text-base">
           <p className="hidden text-[0.6rem] opacity-50 lg:block">YOU OWN</p>
           <p className="-mt-2">{formatEther(playerPoints)} pts</p>
         </div>
-        <p className="col-span-2 inline w-full text-xs uppercase opacity-75 lg:!text-sm">win chance: {winRate}%</p>
+        <div className="flex items-center gap-4 lg:gap-6">
+          <Badge className="gap-1 p-2" variant="neutral">
+            <img src={sprite.getSprite("Crown")} className="w-3 lg:w-4" />
+            <span className="text-xs">
+              {ownedCitadelCount}/{citadelCount}
+            </span>
+          </Badge>
+          <Badge className="gap-1 p-2" variant="neutral">
+            <img src={sprite.getSprite("PlanetGrey")} className="w-3 lg:w-4" />
+            <span className="text-xs">{ownedPlanetCount}</span>
+          </Badge>
+        </div>
       </div>
     </SecondaryCard>
   );
