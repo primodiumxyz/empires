@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { useCore } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { HUD } from "@/components/core/HUD";
-import { OverridePane } from "@/components/OverridePopup/OverridePane";
-import { PlanetSummary } from "@/components/OverridePopup/PlanetSummary";
+import { OverridePane } from "@/components/override-popup/OverridePane";
+import { PlanetSummary } from "@/components/override-popup/PlanetSummary";
 import { Portfolio } from "@/components/Portfolio";
 import { cn } from "@/util/client";
 

@@ -2,7 +2,7 @@ import { memo, useEffect, useRef, useState } from "react";
 
 import { useCore } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
-import { GameHUD } from "@/components/Game/GameHUD";
+import { GameHUD } from "@/components/game/GameHUD";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -12,7 +12,6 @@ const Game = memo(() => {
   const [loading, setLoading] = useState<boolean>(true);
   const gameRef = useRef<PrimodiumGame | null>(null);
   const hasInitialized = useRef(false);
-  const advancedMode = core.tables.AdvancedMode.use()?.value ?? false;
 
   useEffect(() => {
     const init = async () => {
@@ -50,7 +49,7 @@ const Game = memo(() => {
 
   return (
     <>
-      {advancedMode && loading && !gameRef.current && (
+      {loading && !gameRef.current && (
         <div className="absolute flex flex-col items-center justify-center gap-4 text-white">
           <p className="text-white">
             <span className="animate-pulse">LOADING GAME</span>

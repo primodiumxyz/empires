@@ -4,7 +4,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Badge } from "@/components/core/Badge";
-import { SmallHistoricalPointGraph } from "@/components/Dashboard/SmallHistoricalPointGraph";
+import { SmallHistoricalPointGraph } from "@/components/empires/SmallHistoricalPointGraph";
 import { Price } from "@/components/shared/Price";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -14,7 +14,7 @@ import { cn } from "@/util/client";
 // TODO: Change window size to use time instead of # of updates
 const WINDOW_SIZE = 25;
 
-const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean; hidePlanets?: boolean }> = ({
+const Empire: React.FC<{ empire: EEmpire; hideGraph?: boolean; hidePlanets?: boolean }> = ({
   empire,
   hideGraph = false,
   hidePlanets = false,
@@ -55,7 +55,7 @@ const _EmpireDetails: React.FC<{ empire: EEmpire; hideGraph?: boolean; hidePlane
   );
 };
 
-export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean; hidePlanets?: boolean }> = ({
+export const Empires: React.FC<{ hideGraph?: boolean; hideTitle?: boolean; hidePlanets?: boolean }> = ({
   hideGraph,
   hideTitle,
   hidePlanets,
@@ -83,7 +83,7 @@ export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean;
     <div className="flex flex-col items-start overflow-y-auto text-center">
       {!hideTitle && <p className="text-xs opacity-70">Empires</p>}
       {sortedEmpires.map((empire, index) => (
-        <_EmpireDetails key={index} empire={empire} hideGraph={hideGraph} hidePlanets={hidePlanets} />
+        <Empire key={index} empire={empire} hideGraph={hideGraph} hidePlanets={hidePlanets} />
       ))}
     </div>
   );

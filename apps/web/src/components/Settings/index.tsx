@@ -4,8 +4,8 @@ import { usePrivy } from "@privy-io/react-auth";
 import { Button } from "@/components/core/Button";
 import { Modal } from "@/components/core/Modal";
 import { Navigator } from "@/components/core/Navigator";
-import { AudioSettings } from "@/components/Settings/AudioSettings";
-import { GeneralSettings } from "@/components/Settings/GeneralSettings";
+import { AudioSettings } from "@/components/settings/AudioSettings";
+import { GeneralSettings } from "@/components/settings/GeneralSettings";
 import { useBurnerAccount } from "@/hooks/useBurnerAccount";
 
 const params = new URLSearchParams(window.location.search);

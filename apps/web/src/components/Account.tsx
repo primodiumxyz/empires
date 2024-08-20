@@ -14,12 +14,12 @@ export const Account: React.FC<{ className?: string }> = ({ className }) => {
   const balance = useBalance(address).value ?? 0n;
 
   return (
-    <div className={cn("min-w-42 flex flex-col text-right text-xs lg:gap-2", className)}>
+    <div className={cn("min-w-42 flex flex-col text-right text-xs lg:gap-1", className)}>
       <div className="flex w-full flex-row justify-end gap-2">
         <UserIcon className="w-4" />
-        <p>{formatAddress(address)}</p>
+        <p className="lg:text-sm">{formatAddress(address)}</p>
       </div>
-      <Price wei={balance} className="text-sm text-accent" />
+      <Price wei={balance} className="text-sm text-accent lg:!text-lg" />
     </div>
   );
 };

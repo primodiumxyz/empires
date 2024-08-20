@@ -2,7 +2,6 @@ import {
   createLocalBigIntTable,
   createLocalBoolTable,
   createLocalEntityTable,
-  createLocalNumberTable,
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
@@ -38,14 +37,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
 
   const SelectedPlanet = createLocalEntityTable(world, { id: "SelectedPlanet" });
   const HoveredPlanet = createLocalEntityTable(world, { id: "HoveredPlanet" });
-  const SelectedTab = createLocalNumberTable(world, {
-    id: "SelectedTab",
-    persist: true,
-    version: "1",
-  });
-
-  const AdvancedMode = createLocalBoolTable(world, { id: "AdvancedMode", persist: true, version: "1" });
-
   return {
     DoubleCounter,
     BlockNumber,
@@ -54,8 +45,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     CurrentTransaction,
     TransactionQueue,
     SelectedPlanet,
-    SelectedTab,
     HoveredPlanet,
-    AdvancedMode,
   };
 }

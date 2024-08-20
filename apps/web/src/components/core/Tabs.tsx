@@ -1,9 +1,9 @@
 import { createContext, FC, memo, ReactNode, useContext, useEffect, useRef } from "react";
 import { toHex } from "viem";
 
-import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { IconLabel } from "@/components/core/IconLabel";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 import { Button as _Button } from "./Button";
@@ -152,9 +152,7 @@ export const Tabs: FC<TabProps> & {
   NextButton: typeof NextButton;
   CloseButton: typeof CloseButton;
 } = ({ children, defaultIndex = 0, className, onChange, persistIndexKey, id, onPointerMissed }) => {
-  const {
-    tables: { SelectedTab },
-  } = useCore();
+  const { SelectedTab } = useSettings();
   const entity = toHex(persistIndexKey ?? "") as Entity;
   const currentIndex = SelectedTab.use(entity)?.value ?? defaultIndex;
   const setCurrentIndex = (index: number | undefined) => SelectedTab.set({ value: index ?? -1 }, entity);

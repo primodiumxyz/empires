@@ -6,11 +6,11 @@ import { useCore } from "@primodiumxyz/core/react";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
 import { Tabs } from "@/components/core/Tabs";
-import { MagnetContent } from "@/components/OverridePopup/content/MagnetContent";
-import { ShieldContent } from "@/components/OverridePopup/content/ShieldContent";
-import { ShieldEaterContent } from "@/components/OverridePopup/content/ShieldEaterContent";
-import { ShipContent } from "@/components/OverridePopup/content/ShipContent";
-import { OverrideButton } from "@/components/OverridePopup/OverrideButton";
+import { MagnetContent } from "@/components/override-popup/content/MagnetContent";
+import { ShieldContent } from "@/components/override-popup/content/ShieldContent";
+import { ShieldEaterContent } from "@/components/override-popup/content/ShieldEaterContent";
+import { ShipContent } from "@/components/override-popup/content/ShipContent";
+import { OverrideButton } from "@/components/override-popup/OverrideButton";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { cn } from "@/util/client";
 

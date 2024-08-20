@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 
-import { createLocalBoolTable, createLocalTable, createWorld, Type } from "@primodiumxyz/reactive-tables";
+import {
+  createLocalBoolTable,
+  createLocalNumberTable,
+  createLocalTable,
+  createWorld,
+  Type,
+} from "@primodiumxyz/reactive-tables";
 
 const settingsWorld = createWorld();
 
@@ -48,6 +54,15 @@ const MusicPlaying = createLocalBoolTable(settingsWorld, {
 });
 
 ShowBlockchainUnits.set({ value: false });
+
+const SelectedTab = createLocalNumberTable(settingsWorld, {
+  id: "SelectedTab",
+  persist: true,
+  version: "1",
+});
+
+const AdvancedMode = createLocalBoolTable(settingsWorld, { id: "AdvancedMode", persist: true, version: "1" });
+
 /* -------------------------------------------------------------------------- */
 /*                                  SETTINGS                                  */
 /* -------------------------------------------------------------------------- */
@@ -78,5 +93,7 @@ export const useSettings = () => {
     },
     Dripped,
     MusicPlaying,
+    SelectedTab,
+    AdvancedMode,
   };
 };

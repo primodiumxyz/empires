@@ -2,7 +2,6 @@ import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { SecondaryCard } from "@/components/core/Card";
 import { Tooltip } from "@/components/core/Tooltip";
@@ -41,8 +40,6 @@ export const EmpireCard = ({
     ROOT: { sprite },
   } = useGame();
   const winRate = useWinRate(empire);
-  const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
-  const pct = Number(pctTimes10000) / 100;
 
   const planetCount = tables.Planet.getAll().length ?? 0;
   const citadelCount = tables.Planet.getAllWith({ isCitadel: true }).length ?? 0;
@@ -75,9 +72,7 @@ export const EmpireCard = ({
             <InformationCircleIcon className="size-3 text-gray-400 lg:size-4" />
           </Tooltip>
         </div>
-        <p className="text-[10px] uppercase opacity-75 lg:text-base">
-          win chance: {winRate}% <span className="text-[10px] text-accent">{pct > 0 && `(${formatNumber(pct)}%)`}</span>
-        </p>
+        <p className="col-span-3 inline w-full text-[10px] uppercase opacity-75 lg:text-base">win chance: {winRate}%</p>
       </div>
     </SecondaryCard>
   );
