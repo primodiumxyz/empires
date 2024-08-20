@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useCore } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
@@ -6,7 +6,7 @@ import { GameHUD } from "@/components/game/GameHUD";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
-const Game = memo(() => {
+const Game = () => {
   const core = useCore();
   const contractCalls = useContractCalls();
   const [loading, setLoading] = useState<boolean>(true);
@@ -70,6 +70,6 @@ const Game = memo(() => {
       </div>
     </>
   );
-});
+};
 
 export default Game;
