@@ -11,7 +11,7 @@ const badgeVariants = cva("badge rounded-badge flex pointer-events-auto shadow-i
       primary: "badge-primary",
       accent: "badge-accent",
       secondary: "badge-secondary",
-      success: "badge-success",
+      success: "badge-success text-white",
       info: "badge-info",
       warning: "badge-warning",
       error: "badge-error",

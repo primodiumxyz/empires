@@ -14,7 +14,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 15n,
+        turnLengthBlocks: 5n,
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
@@ -24,10 +24,10 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointUnit: BigInt(POINTS_UNIT),
         pointRake: scaleMultiplier(0.05), // out of 1, scales to out of 10000
         pointSellTax: BigInt(POINTS_UNIT * 0),
-        minPointCost: BigInt(POINTS_UNIT * 0.00002),
-        startPointCost: BigInt(POINTS_UNIT * 0.0002),
-        pointGenRate: BigInt(POINTS_UNIT * 0.000015),
-        pointCostIncrease: BigInt(POINTS_UNIT * 0.00001),
+        minPointCost: BigInt(POINTS_UNIT * 0.00001),
+        startPointCost: BigInt(POINTS_UNIT * 0.00004),
+        pointGenRate: BigInt(POINTS_UNIT * 0.000003),
+        pointCostIncrease: BigInt(POINTS_UNIT * 0.000005),
       },
       P_MagnetConfig: {
         lockedPointsPercent: scaleMultiplier(0.1),
@@ -60,9 +60,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.0001),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.000040),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.000001),
       },
     },
   },
@@ -73,9 +73,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: false,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.000040),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.000001),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.000002),
       },
     },
   },
@@ -86,9 +86,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.000100),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.000005),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.0000005),
       },
     },
   },
@@ -99,9 +99,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: false,
         minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00002),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.000200),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.000003),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.000001),
       },
     },
   },
@@ -149,8 +149,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_OverrideConfig: {
         isProgressOverride: false,
-        minOverrideCost: 0n,
-        startOverrideCost: BigInt(POINTS_UNIT * 0.00020),
+        minOverrideCost: BigInt(POINTS_UNIT * 0.00050),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.00100),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00001),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.00020),
       },
@@ -165,7 +165,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00004),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00008),
       },
     },
   },

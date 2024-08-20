@@ -35,6 +35,7 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
     [empires],
   );
 
+  const noPlanets = sortedEmpires.every((empire) => empires.get(empire)?.playerPoints === 0n);
   return (
     <div className="min-w-42 flex flex-col gap-2 text-right text-xs">
       <div className="flex flex-col justify-center gap-1">
@@ -46,9 +47,10 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
             </div>
             <Price wei={balance} className="text-sm text-accent" />
             <hr className="my-1 w-full border-secondary/50" />
-            <p className="text-xs opacity-70">Your Portfolio</p>
+            {!noPlanets && <p className="text-xs opacity-70">Your Portfolio</p>}
           </>
         )}
+        {noPlanets && <p className="text-center text-xs opacity-70">You own no empires</p>}
         <div className="flex max-h-[70vh] flex-col overflow-y-auto">
           {sortedEmpires.map((empire, index) => (
             <EmpirePoints key={index} empire={empire} playerId={entity} justifyStart={justifyStart} />
@@ -81,6 +83,9 @@ const EmpirePoints = ({
   const { price: pointCostWei } = usePointPrice(empire, Number(formatEther(playerPoints)));
 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
+  if (playerPoints === 0n) {
+    return null;
+  }
 
   return (
     <div
