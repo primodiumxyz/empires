@@ -276,33 +276,34 @@ contract LibShieldEaterTest is PrimodiumTest {
     PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
     PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
 
-    // for (uint256 i = 0; i < 1; i++) {
-    // console2.log("loop[%s]", i);
-    console.log(
-      "dest[%s]: [%s,%s]",
-      destPlanetData.shieldCount,
-      uint256(int256(destPlanetData.q)),
-      uint256(int256(destPlanetData.r))
-    );
+    for (uint256 i = 0; i < 10; i++) {
+      console.log("loop[%s]", i);
+      // vm.roll(turn + i);
+      console.log(
+        "dest[%s]: [%s,%s]",
+        destPlanetData.shieldCount,
+        uint256(int256(destPlanetData.q)),
+        uint256(int256(destPlanetData.r))
+      );
 
-    console.log(
-      "curr[%s]: [%s,%s]",
-      currPlanetData.shieldCount,
-      uint256(int256(currPlanetData.q)),
-      uint256(int256(currPlanetData.r))
-    );
-
-    while (currPlanetData.q != destPlanetData.q || currPlanetData.r != destPlanetData.r) {
-      LibShieldEater.update();
-      currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
-      // destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
       console.log(
         "curr[%s]: [%s,%s]",
         currPlanetData.shieldCount,
         uint256(int256(currPlanetData.q)),
         uint256(int256(currPlanetData.r))
       );
+
+      while (currPlanetData.q != destPlanetData.q || currPlanetData.r != destPlanetData.r) {
+        LibShieldEater.update();
+        currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
+        destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
+        console.log(
+          "curr[%s]: [%s,%s]",
+          currPlanetData.shieldCount,
+          uint256(int256(currPlanetData.q)),
+          uint256(int256(currPlanetData.r))
+        );
+      }
     }
-    // }
   }
 }

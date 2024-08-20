@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 import { ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 
-import { pseudorandom, coordToId } from "src/utils.sol";
+import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 import { CoordData } from "src/Types.sol";
 
 import { console } from "forge-std/console.sol";
@@ -20,6 +20,7 @@ library LibShieldEater {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     uint256 randomIndex = pseudorandom(block.number, planetIds.length);
     ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
+    ShieldEater.setPreviousPlanet(planetIds[randomIndex]);
     ShieldEater.setCurrentCharge(0);
     retarget();
 
@@ -32,22 +33,10 @@ library LibShieldEater {
     CoordData memory dst = CoordData(tmpPlanet.q, tmpPlanet.r);
 
     // How do we get there?
-    CoordData memory offset = getTargetDirection(src, dst);
-    uint256 dirAttempts = 1;
-
-    // If there is a hole in the map here, go around it
-    while (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
-      if (dirAttempts > 7) {
-        // If we've tried all directions, there is no path.
-        // should never happen, but want to prevent infinite loop
-        break;
-      }
-      offset = rotateTargetDirection(offset);
-      dirAttempts++;
-    }
+    CoordData memory dir = getTargetDirection(src, dst);
 
     // Save the Next Planet
-    ShieldEater.setNextPlanet(coordToId(src.q + offset.q, src.r + offset.r));
+    ShieldEater.setNextPlanet(coordToId(src.q + dir.q, src.r + dir.r));
   }
 
   /**
@@ -74,7 +63,7 @@ library LibShieldEater {
       }
     }
 
-    uint256 randomIndex = pseudorandom(block.number, 3);
+    uint256 randomIndex = pseudorandom(uint256(pseudorandomEntity()), 3);
     ShieldEater.setDestinationPlanet(dstOptions[randomIndex]);
   }
 
@@ -84,6 +73,7 @@ library LibShieldEater {
   function update() internal {
     // Move the Shield Eater to the next planet
     bytes32 planetId = ShieldEater.getNextPlanet();
+    ShieldEater.setPreviousPlanet(ShieldEater.getCurrentPlanet());
     ShieldEater.setCurrentPlanet(planetId);
 
     // Eat a little shields if there are any
@@ -113,26 +103,26 @@ library LibShieldEater {
     CoordData memory dst = CoordData(tmpPlanet.q, tmpPlanet.r);
 
     // How do we get there?
-    CoordData memory offset = getTargetDirection(src, dst);
-    uint256 dirAttempts = 1;
+    CoordData memory dir = getTargetDirection(src, dst);
+    // uint256 dirAttempts = 1;
 
-    // If there is a hole in the map here, go around it
-    while (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
-      console.log("blocked");
-      if (dirAttempts > 7) {
-        // If we've tried all directions, there is no path.
-        // should never happen, but want to prevent infinite loop
-        break;
-      }
-      offset = rotateTargetDirection(offset);
-      console.log("newDir");
-      console.logInt(offset.q);
-      console.logInt(offset.r);
-      dirAttempts++;
-    }
+    // // If there is a hole in the map here, go around it
+    // while (!Planet.getIsPlanet(coordToId(src.q + offset.q, src.r + offset.r))) {
+    //   console.log("blocked");
+    //   if (dirAttempts > 7) {
+    //     // If we've tried all directions, there is no path.
+    //     // should never happen, but want to prevent infinite loop
+    //     break;
+    //   }
+    //   offset = rotateTargetDirection(offset);
+    //   console.log("newDir");
+    //   console.logInt(offset.q);
+    //   console.logInt(offset.r);
+    //   dirAttempts++;
+    // }
 
     // Save the Next Planet
-    ShieldEater.setNextPlanet(coordToId(src.q + offset.q, src.r + offset.r));
+    ShieldEater.setNextPlanet(coordToId(src.q + dir.q, src.r + dir.r));
 
     // Where is the Shield Eater now?
     // PlanetData memory tmpPlanet = Planet.get(ShieldEater.getCurrentPlanet());
@@ -292,15 +282,31 @@ library LibShieldEater {
         dir.r = 1; // Southwest
       }
     }
-    console.log("dir");
-    console.logInt(dir.q);
-    console.logInt(dir.r);
+    // console.log("dir");
+    // console.logInt(dir.q);
+    // console.logInt(dir.r);
+
+    uint256 dirAttempts = 1;
+
+    // If there is a hole in the map here, go around it
+    while (
+      (!Planet.getIsPlanet(coordToId(src.q + dir.q, src.r + dir.r))) ||
+      (ShieldEater.getPreviousPlanet() == coordToId(src.q + dir.q, src.r + dir.r))
+    ) {
+      if (dirAttempts > 7) {
+        // If we've tried all directions, there is no path.
+        // should never happen, but want to prevent infinite loop
+        break;
+      }
+      dir = rotateTargetDirection(dir, dirAttempts);
+      dirAttempts++;
+    }
   }
   /**
    * @dev Rotates a direction 60 degrees clockwise, to avoid a gap in the planet map.
    */
-  function rotateTargetDirection(CoordData memory dir) internal view returns (CoordData memory newDir) {
-    uint256 rng = pseudorandom(block.number, 10);
+  function rotateTargetDirection(CoordData memory dir, uint256 salt) internal view returns (CoordData memory newDir) {
+    uint256 rng = pseudorandom(block.number + salt, 10);
 
     // We were trying to go east, so we'll try northeast or southeast
     if (dir.q == 1 && dir.r == 0) {
@@ -363,8 +369,8 @@ library LibShieldEater {
       }
     }
 
-    console.log("newDir");
-    console.logInt(newDir.q);
-    console.logInt(newDir.r);
+    // console.log("newDir");
+    // console.logInt(newDir.q);
+    // console.logInt(newDir.r);
   }
 }

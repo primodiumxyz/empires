@@ -614,10 +614,10 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 dirAttempts = 1;
 
     while (!Planet.getIsPlanet(neighborId)) {
-      if (dirAttempts > 6) {
+      if (dirAttempts > 7) {
         break;
       }
-      neighbor = LibShieldEater.rotateTargetDirection(neighbor);
+      neighbor = LibShieldEater.rotateTargetDirection(neighbor, dirAttempts);
       dirAttempts++;
     }
     neighborId = coordToId(neighbor.q, neighbor.r);

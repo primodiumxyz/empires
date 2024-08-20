@@ -190,6 +190,7 @@ export const worldInput = {
         currentPlanet: "bytes32",
         nextPlanet: "bytes32",
         destinationPlanet: "bytes32",
+        previousPlanet: "bytes32",
         currentCharge: "uint256",
       },
     },
