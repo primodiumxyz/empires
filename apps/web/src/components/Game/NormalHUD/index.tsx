@@ -4,27 +4,19 @@ import ParentSize from "@visx/responsive/lib/components/ParentSize";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatAddress } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
-import { Account } from "@/components/Account";
-import { ActionLog } from "@/components/ActionLog";
-import { Cheatcodes } from "@/components/Cheatcodes";
 import { Card } from "@/components/core/Card";
-import { HUD } from "@/components/core/HUD";
-import { Toggle } from "@/components/core/Toggle";
 import { BoostSell } from "@/components/Game/NormalHUD/BoostSell";
+import { EmpireCard } from "@/components/Game/NormalHUD/EmpireCard";
 import { PlayerReturns } from "@/components/Game/NormalHUD/PlayerReturns";
 import { GameOver } from "@/components/GameOver";
 import { ModeToggle } from "@/components/ModeToggle";
 import { MusicPlayer } from "@/components/MusicPlayer";
-import { OverridePopup } from "@/components/OverridePopup";
 import { Pot } from "@/components/Pot";
-import { PriceHistory } from "@/components/PriceHistory";
-import { Dashboard } from "@/components/PriceHistory/Dashboard";
 import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointGraph";
-import { QuickTrade } from "@/components/PriceHistory/QuickTrade";
-import { Settings } from "@/components/Settings";
 import { Price } from "@/components/shared/Price";
 import { TimeLeft } from "@/components/TimeLeft";
 import { useBalance } from "@/hooks/useBalance";
+import { useEmpires } from "@/hooks/useEmpires";
 import useWindowDimensions from "@/hooks/useWindowDimensions";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
 
@@ -45,12 +37,14 @@ const NormalHUDDesktop = () => {
   const {
     playerAccount: { address },
   } = useAccountClient();
+  const empires = useEmpires();
   const { gameOver } = useWinningEmpire();
   const turn = tables.Turn.use();
   const balance = useBalance(address).value ?? 0n;
+  tables.Time.use();
 
   return (
-    <div className="grid h-screen grid-cols-[1fr_20rem] grid-rows-[auto_auto_1fr_auto] gap-2 p-3">
+    <div className="grid h-screen grid-cols-[1fr_20rem] grid-rows-[auto_auto_auto_auto_1fr] gap-4 p-3">
       {/* HEADER LEFT */}
       {gameOver && <GameOver fragment className="z-10" />}
       {turn && !gameOver && (
@@ -67,9 +61,9 @@ const NormalHUDDesktop = () => {
       </div>
 
       {/* BODY LEFT */}
-      <div className="row-span-3 flex flex-col gap-2">
+      <div className="row-span-4">
         <Card noDecor className="h-full bg-gradient-to-b from-black to-[#181818]">
-          <div className="grid h-full grid-rows-[1fr_auto] gap-2">
+          <div className="grid h-full grid-rows-[1fr_auto] gap-8">
             <div className="h-full min-h-40 w-full">
               <ParentSize>
                 {({ width: visWidth, height: visHeight }) => (
@@ -82,7 +76,14 @@ const NormalHUDDesktop = () => {
                 )}
               </ParentSize>
             </div>
-            <div>cards</div>
+            {/* grid with automatic sizing with just a minimum size of 10rem */}
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(25rem,1fr))] gap-x-8 gap-y-4 px-8">
+              {[...empires.entries()]
+                .sort((a, b) => Number(b[1].playerPoints) - Number(a[1].playerPoints))
+                .map(([key, data]) => (
+                  <EmpireCard key={key} empire={key} {...data} />
+                ))}
+            </div>
           </div>
         </Card>
       </div>
@@ -101,9 +102,11 @@ const NormalHUDDesktop = () => {
       </Card>
 
       {/* CENTER RIGHT */}
-      <Card noDecor className="z-[100]">
-        <BoostSell />
-      </Card>
+      <div className="z-[100]">
+        <Card noDecor className="pb-5">
+          <BoostSell />
+        </Card>
+      </div>
 
       {/* BOTTOM RIGHT */}
       <Card noDecor>
