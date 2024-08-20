@@ -19,7 +19,7 @@ async function init(core: Core, calls: ContractCalls): InitResult {
   const globalApi = createGlobalApi(game, core);
 
   return {
-    ROOT: await initRootScene(globalApi, core),
+    ROOT: await initRootScene(globalApi, core, game.phaserGame),
     UI: await initUIScene(globalApi, core),
     GLOBAL: globalApi,
     MAIN: await initMainScene(globalApi, core),

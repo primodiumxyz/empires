@@ -23,6 +23,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   readonly id: Entity;
   readonly coord: PixelCoord;
   protected _scene: PrimodiumScene;
+  private shouldPlayAnims = true;
   private planetUnderglowSprite: Phaser.GameObjects.Image;
   private planetSprite: Phaser.GameObjects.Sprite;
   private hexSprite: Phaser.GameObjects.Sprite;
@@ -439,6 +440,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
   shieldEaterCrack(): ShieldEater {
     return this.shieldEater.shieldEaterCrack();
+  }
+
+  setShouldPlayAnims(shouldPlayAnims: boolean) {
+    this.shouldPlayAnims = shouldPlayAnims;
   }
 
   override destroy() {

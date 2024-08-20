@@ -6,7 +6,7 @@ import { rootSceneConfig } from "@game/lib/config/rootScene";
 import { runSystems as runRootSystems } from "@game/scenes/root/systems";
 import { PrimodiumScene } from "@game/types";
 
-export const initRootScene = async (game: GlobalApi, core: Core): Promise<PrimodiumScene> => {
+export const initRootScene = async (game: GlobalApi, core: Core, phaserGame: Phaser.Game): Promise<PrimodiumScene> => {
   const scene = await game.createScene(rootSceneConfig, true);
 
   const sceneApi = createSceneApi(scene, game);
@@ -14,6 +14,6 @@ export const initRootScene = async (game: GlobalApi, core: Core): Promise<Primod
 
   scene.camera.phaserCamera.centerOn(0, 0);
 
-  const runSystems = () => runRootSystems(sceneApi, game, core);
+  const runSystems = () => runRootSystems(sceneApi, game, core, phaserGame);
   return { ...sceneApi, runSystems };
 };
