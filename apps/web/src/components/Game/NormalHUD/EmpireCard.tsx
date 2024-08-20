@@ -4,7 +4,7 @@ import { formatEther } from "viem";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { Card, SecondaryCard } from "@/components/core/Card";
+import { SecondaryCard } from "@/components/core/Card";
 import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { EmpireData } from "@/hooks/useEmpires";

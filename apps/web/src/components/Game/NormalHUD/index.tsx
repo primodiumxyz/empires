@@ -5,7 +5,6 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { formatAddress } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Card } from "@/components/core/Card";
-import { HUD } from "@/components/core/HUD";
 import { BoostSell } from "@/components/Game/NormalHUD/BoostSell";
 import { EmpireCard } from "@/components/Game/NormalHUD/EmpireCard";
 import { PlayerReturns } from "@/components/Game/NormalHUD/PlayerReturns";
@@ -48,7 +47,7 @@ const NormalHUDDesktop = () => {
   tables.Time.use();
 
   return (
-    <div className="grid h-screen grid-cols-[1fr_max(25rem,30%)] grid-rows-[auto_auto_auto_1fr] gap-4 p-3">
+    <div className="mx-auto grid h-screen max-w-[1400px] grid-cols-[1fr_max(25rem,30%)] grid-rows-[auto_auto_auto_1fr] gap-4 p-3">
       {/* HEADER LEFT */}
       {gameOver && <GameOver fragment className="z-10" />}
       {turn && !gameOver && (
@@ -67,7 +66,7 @@ const NormalHUDDesktop = () => {
       {/* BODY LEFT */}
       <div className="row-span-3">
         <Card noDecor className="h-full bg-gradient-to-b from-black to-[#181818]">
-          <div className="grid h-full grid-rows-[1fr_auto] gap-8">
+          <div className="grid h-full grid-rows-[minmax(20rem,1fr)_auto] gap-8">
             <div className="h-full min-h-40 w-full">
               <ParentSize>
                 {({ width: visWidth, height: visHeight }) => (
@@ -106,9 +105,7 @@ const NormalHUDDesktop = () => {
 
       {/* CENTER RIGHT */}
       <div className="z-[100]">
-        <Card noDecor className="pb-5">
-          <BoostSell />
-        </Card>
+        <BoostSell />
       </div>
 
       {/* BOTTOM RIGHT */}
