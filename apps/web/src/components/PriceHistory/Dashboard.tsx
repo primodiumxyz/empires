@@ -8,6 +8,7 @@ import { Account } from "@/components/Account";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
+import { Join } from "@/components/core/Join";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { Tabs } from "@/components/core/Tabs";
@@ -35,14 +36,14 @@ export const Dashboard = () => {
         <div className="grid grid-cols-8 gap-1">
           <div className="col-span-6 flex flex-col gap-1">
             <SecondaryCard className="flex flex-col gap-1">
-              <div className="m-1 flex">
+              <Join className="m-1 flex">
                 <Button selected={selectedTab === "boost"} onClick={() => setSelectedTab("boost")} className="btn-sm">
                   Boost Empire
                 </Button>
                 <Button selected={selectedTab === "sell"} onClick={() => setSelectedTab("sell")} className="btn-sm">
                   Sell Points
                 </Button>
-              </div>
+              </Join>
               {selectedTab === "boost" && <BoostEmpire />}
               {selectedTab === "sell" && <SellPoints />}
             </SecondaryCard>

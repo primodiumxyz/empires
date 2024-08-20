@@ -7,6 +7,7 @@ import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
 import { IconLabel } from "@/components/core/IconLabel";
+import { Join } from "@/components/core/Join";
 import { NumberInput } from "@/components/core/NumberInput";
 import { Tabs } from "@/components/core/Tabs";
 import { PointsReceived } from "@/components/shared/PointsReceived";
@@ -77,14 +78,14 @@ export const BoostSell = () => {
 
   return (
     <Tabs persistIndexKey="boost-sell" defaultIndex={0} className="flex flex-col gap-2">
-      <div className="mb-1 flex justify-center">
+      <Join className="mb-1 self-center">
         <Tabs.Button index={0} size="sm">
           Boost
         </Tabs.Button>
         <Tabs.Button index={1} size="sm">
           Sell
         </Tabs.Button>
-      </div>
+      </Join>
       <Tabs.Pane index={0} fragment>
         <span className="text-center text-xs text-gray-400">
           Gain points for an empire and airdrop gold to its planets
