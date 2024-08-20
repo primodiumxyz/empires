@@ -100,8 +100,8 @@ export const GameHUD = () => {
         </HUD.Center>
 
         {/* BOTTOM */}
-        <HUD.BottomLeft className="flex w-[300px] flex-col">
-          <div className="flex w-full items-center gap-2 lg:justify-between">
+        <HUD.BottomLeft className="flex flex-col">
+          <div className="flex w-full items-center gap-2">
             <MusicPlayer />
             <Settings />
           </div>
