@@ -36,13 +36,19 @@ contract LibShieldEaterTest is PrimodiumTest {
 
   function testShieldEaterUpdate(uint256 fuzz) public {
     vm.startPrank(creator);
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
 
     // set a random block.number
     fuzz = bound(fuzz, 1000000, 1e36);
     vm.roll(fuzz);
 
+    // populate shieldCount for all planets
+    for (uint256 i = 0; i < planetIds.length; i++) {
+      Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
+    }
+
     LibShieldEater.initialize();
-    LibShieldEater.retarget();
+    // LibShieldEater.retarget();
 
     PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
     PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
