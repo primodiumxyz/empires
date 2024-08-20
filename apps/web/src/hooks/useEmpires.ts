@@ -28,8 +28,8 @@ export const useEmpires = () => {
       const playerPoints = tables.Value_PointsMap.getWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
       const pointPrice = utils.getPointPrice(empire, Number(formatEther(playerPoints))).price;
 
-      const ownedPlanetCount = tables.Planet.useAllWith({ empireId: empire })?.length ?? 0;
-      const ownedCitadelCount = tables.Planet.useAllWith({ empireId: empire, isCitadel: true })?.length ?? 0;
+      const ownedPlanetCount = tables.Planet.getAllWith({ empireId: empire })?.length ?? 0;
+      const ownedCitadelCount = tables.Planet.getAllWith({ empireId: empire, isCitadel: true })?.length ?? 0;
 
       acc.set(empire, {
         ...EmpireEnumToConfig[empire],

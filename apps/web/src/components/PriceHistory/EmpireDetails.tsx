@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
-import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { SmallHistoricalPointGraph } from "@/components/PriceHistory/SmallHistoricalPointGraph";
 import { Price } from "@/components/shared/Price";
@@ -73,8 +72,8 @@ export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean;
         return citadelCountB - citadelCountA; // Sort by citadel count descending
       }
 
-      const planetCountA = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: a })?.itemKeys.length ?? 0;
-      const planetCountB = tables.Keys_EmpirePlanetsSet.getWithKeys({ empireId: b })?.itemKeys.length ?? 0;
+      const planetCountA = tables.Planet.getAllWith({ empireId: a })?.length ?? 0;
+      const planetCountB = tables.Planet.getAllWith({ empireId: b })?.length ?? 0;
 
       return planetCountB - planetCountA; // Then sort by planet count descending
     });
