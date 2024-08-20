@@ -31,7 +31,7 @@ export const GameOver = ({ className }: { className?: string }) => {
 
   return (
     <GlassCard className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
-      <Card noDecor className={cn("flex flex-col !bg-opacity-100 text-center", className)}>
+      <Card noDecor className={cn("flex min-w-[300px] flex-col !bg-opacity-100 text-center", className)}>
         <Button
           variant="ghost"
           size="xs"
