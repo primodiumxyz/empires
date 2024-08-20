@@ -11,7 +11,7 @@ import { ShieldEater } from "codegen/index.sol";
 import { addressToId, pseudorandomEntity } from "src/utils.sol";
 
 /**
- * @title OverrideSystem
+ * @title OverrideShieldEaterSystem
  * @dev A contract that handles overrides related to creating and killing ships on a planet.
  */
 contract OverrideShieldEaterSystem is EmpiresSystem {
