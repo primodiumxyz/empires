@@ -1082,9 +1082,6 @@ export const setupCheatcodes = (options: {
     moveShieldEater,
     setShieldEaterDestination,
     feedShieldEater,
-    // resetCharges,
-    // maxOutCharges,
-    // triggerCharges,
     withdrawRake,
     ...Object.values(updateGameConfig),
   ];

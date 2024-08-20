@@ -30,9 +30,9 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const supportDisabled = gameOver || Number(planetEmpire) === 0;
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-3">
+    <div className="flex w-full flex-col items-center gap-2">
       <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
-      <div className="flex flex-col items-center gap-1">
+      <div className="flex flex-col items-center">
         <TransactionQueueMask id={`${entity}-add-shield`}>
           <Button
             onClick={async () => {
@@ -47,11 +47,11 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             ADD SHIELDS
           </Button>
         </TransactionQueueMask>
-        <p className="rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
+        <p className="-mt-1 w-fit rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
           <Price wei={chargeShieldPriceWei} />
         </p>
-        <PointsReceived points={chargeShieldPointsReceived} />
       </div>
+      <PointsReceived points={chargeShieldPointsReceived} inline />
     </div>
   );
 };
