@@ -1,4 +1,4 @@
-import { formatEther, TransactionReceipt } from "viem";
+import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { bigintToNumber, Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
@@ -43,40 +43,6 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const killShip = async (
-    planetId: Entity,
-    overrideCount: bigint,
-    payment: bigint,
-    options?: Partial<TxQueueOptions>,
-  ) => {
-    return await withTransactionStatus(
-      () =>
-        execute({
-          functionName: "Empires__killShip",
-          args: [planetId, overrideCount],
-          options: { value: payment, gas: 739007n * 3n },
-          txQueueOptions: {
-            id: `${planetId}-kill-ship`,
-            ...options,
-          },
-          onComplete: (receipt) => {
-            ampli.empiresKillShip({
-              empires: {
-                planetName: entityToPlanetName(planetId),
-                overrideCount: bigintToNumber(overrideCount),
-              },
-              ...parseReceipt(receipt),
-            });
-          },
-        }),
-      {
-        loading: `Attacking ${entityToPlanetName(planetId)}`,
-        success: `Destroyed ${overrideCount} ship${overrideCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
-        error: "Failed to attack",
-      },
-    );
-  };
-
   const chargeShield = async (
     planetId: Entity,
     overrideCount: bigint,
@@ -107,40 +73,6 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
         loading: `Supporting ${entityToPlanetName(planetId)}`,
         success: `Supported ${entityToPlanetName(planetId)} with ${overrideCount} shield${overrideCount > 1 ? "s" : ""}`,
         error: "Failed to provide support",
-      },
-    );
-  };
-
-  const drainShield = async (
-    planetId: Entity,
-    overrideCount: bigint,
-    payment: bigint,
-    options?: Partial<TxQueueOptions>,
-  ) => {
-    return await withTransactionStatus(
-      () =>
-        execute({
-          functionName: "Empires__drainShield",
-          args: [planetId, overrideCount],
-          options: { value: payment, gas: 738649n * 2n },
-          txQueueOptions: {
-            id: `${planetId}-remove-shield`,
-            ...options,
-          },
-          onComplete: (receipt) => {
-            ampli.empiresDrainShield({
-              empires: {
-                planetName: entityToPlanetName(planetId),
-                overrideCount: bigintToNumber(overrideCount),
-              },
-              ...parseReceipt(receipt),
-            });
-          },
-        }),
-      {
-        loading: `Attacking shields on ${entityToPlanetName(planetId)}`,
-        success: `Destroyed ${overrideCount} shield${overrideCount > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
-        error: "Failed to attack",
       },
     );
   };
@@ -210,34 +142,6 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const tacticalStrike = async (planetId: Entity, options?: Partial<TxQueueOptions>) => {
-    return await withTransactionStatus(
-      () =>
-        execute({
-          functionName: "Empires__tacticalStrike",
-          args: [planetId],
-          options: { gas: 738649n * 2n },
-          txQueueOptions: {
-            id: `${planetId}-tactical-strike`,
-            ...options,
-          },
-          onComplete: (receipt) => {
-            ampli.empiresTacticalStrike({
-              empires: {
-                planetName: entityToPlanetName(planetId),
-              },
-              ...parseReceipt(receipt),
-            });
-          },
-        }),
-      {
-        loading: `Requesting tactical strike on ${entityToPlanetName(planetId)}`,
-        success: `Tactical strike executed on ${entityToPlanetName(planetId)}`,
-        error: "Failed to execute tactical strike",
-      },
-    );
-  };
-
   const placeMagnet = async (
     empire: EEmpire,
     planetId: Entity,
@@ -274,64 +178,6 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const boostCharge = async (planetId: Entity, count: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
-    return await withTransactionStatus(
-      () =>
-        execute({
-          functionName: "Empires__boostCharge",
-          args: [planetId, count],
-          options: { value: payment, gas: 738649n * 2n },
-          txQueueOptions: {
-            id: `${planetId}-boost-charge`,
-            ...options,
-          },
-          onComplete: (receipt) => {
-            ampli.empiresBoostCharge({
-              empires: {
-                planetName: entityToPlanetName(planetId),
-                chargeCount: bigintToNumber(count),
-              },
-              ...parseReceipt(receipt),
-            });
-          },
-        }),
-      {
-        loading: `Boosting charge on ${entityToPlanetName(planetId)}`,
-        success: `Boosted ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
-        error: "Failed to boost charge",
-      },
-    );
-  };
-
-  const stunCharge = async (planetId: Entity, count: bigint, payment: bigint, options?: Partial<TxQueueOptions>) => {
-    return await withTransactionStatus(
-      () =>
-        execute({
-          functionName: "Empires__stunCharge",
-          args: [planetId, count],
-          options: { value: payment, gas: 738649n * 2n },
-          txQueueOptions: {
-            id: `${planetId}-stun-charge`,
-            ...options,
-          },
-          onComplete: (receipt) => {
-            ampli.empiresStunCharge({
-              empires: {
-                planetName: entityToPlanetName(planetId),
-                chargeCount: bigintToNumber(count),
-              },
-              ...parseReceipt(receipt),
-            });
-          },
-        }),
-      {
-        loading: `Stunning charge on ${entityToPlanetName(planetId)}`,
-        success: `Stunned ${count} charge${count > 1 ? "s" : ""} on ${entityToPlanetName(planetId)}`,
-        error: "Failed to stun charge",
-      },
-    );
-  };
-
   const detonateShieldEater = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
     return await withTransactionStatus(
       () =>
@@ -362,14 +208,9 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
 
   return {
     createShip,
-    killShip,
     chargeShield,
-    drainShield,
     sellPoints,
     airdropGold,
-    tacticalStrike,
-    boostCharge,
-    stunCharge,
     placeMagnet,
     detonateShieldEater,
   };

@@ -110,14 +110,9 @@ contract UpdateSystemTest is PrimodiumTest {
 
     P_OverrideConfigData memory createShipCfg = P_OverrideConfig.get(EOverride.CreateShip);
     uint256 beginCreateShipCost = createShipCfg.minOverrideCost + createShipCfg.overrideGenRate;
-    P_OverrideConfigData memory killShipCfg = P_OverrideConfig.get(EOverride.KillShip);
-    uint256 beginKillShipCost = killShipCfg.minOverrideCost + killShipCfg.overrideGenRate;
     OverrideCost.set(EEmpire.Red, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Red, EOverride.KillShip, beginKillShipCost);
     OverrideCost.set(EEmpire.Blue, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Blue, EOverride.KillShip, beginKillShipCost);
     OverrideCost.set(EEmpire.Green, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Green, EOverride.KillShip, beginKillShipCost);
 
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld(allRoutineThresholds);
@@ -127,14 +122,11 @@ contract UpdateSystemTest is PrimodiumTest {
     assertEq(Empire.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
 
     assertEq(OverrideCost.get(EEmpire.Red, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
-    assertEq(OverrideCost.get(EEmpire.Red, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
     assertEq(OverrideCost.get(EEmpire.Blue, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
-    assertEq(OverrideCost.get(EEmpire.Blue, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
     assertEq(
       OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
       beginCreateShipCost - createShipCfg.overrideGenRate
     );
-    assertEq(OverrideCost.get(EEmpire.Green, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
   }
 
   function _getEndTurn(uint256 turnDuration) internal view returns (uint256) {

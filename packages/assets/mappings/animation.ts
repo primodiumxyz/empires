@@ -37,11 +37,6 @@ export const Animations = {
   // Waves
   MagnetWaves: "waves",
 
-  // Overheat flames
-  OverheatFlamesLow: "overheat/low",
-  OverheatFlamesMedium: "overheat/medium",
-  OverheatFlamesFull: "overheat/full",
-
   // Shield eater
   ShieldEaterIdle: "shield-eater/idle",
   ShieldEaterEnter: "shield-eater/enter",
