@@ -5,15 +5,17 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { formatAddress } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Card } from "@/components/core/Card";
-import { BoostSell } from "@/components/Game/NormalHUD/BoostSell";
-import { EmpireCard } from "@/components/Game/NormalHUD/EmpireCard";
-import { PlayerReturns } from "@/components/Game/NormalHUD/PlayerReturns";
+import { HUD } from "@/components/core/HUD";
+import { BoostSell } from "@/components/Game/BeginnerModeHUD/BoostSell";
+import { EmpireCard } from "@/components/Game/BeginnerModeHUD/EmpireCard";
+import { PlayerReturns } from "@/components/Game/BeginnerModeHUD/PlayerReturns";
 import { GameOver } from "@/components/GameOver";
 import { ModeToggle } from "@/components/ModeToggle";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { Pot } from "@/components/Pot";
 import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointGraph";
 import { QuickTrade } from "@/components/PriceHistory/QuickTrade";
+import { Settings } from "@/components/Settings";
 import { Price } from "@/components/shared/Price";
 import { TimeLeft } from "@/components/TimeLeft";
 import { useBalance } from "@/hooks/useBalance";
@@ -23,19 +25,19 @@ import useWindowDimensions from "@/hooks/useWindowDimensions";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
 import { cn } from "@/util/client";
 
-export const NormalHUD = () => {
+export const BeginnerModeHUD = () => {
   const { width } = useWindowDimensions();
   const isMobile = width < 1024;
 
   return (
     <>
       <div className="absolute inset-0 h-screen w-screen bg-black" />
-      {isMobile ? <NormalHUDMobile /> : <NormalHUDDesktop />}
+      {isMobile ? <BeginnerModeHUDMobile /> : <BeginnerModeHUDDesktop />}
     </>
   );
 };
 
-const NormalHUDDesktop = () => {
+const BeginnerModeHUDDesktop = () => {
   const { tables } = useCore();
   const {
     playerAccount: { address },
@@ -121,7 +123,7 @@ const NormalHUDDesktop = () => {
   );
 };
 
-const NormalHUDMobile = () => {
+const BeginnerModeHUDMobile = () => {
   const { tables } = useCore();
   const {
     playerAccount: { address },
@@ -136,28 +138,24 @@ const NormalHUDMobile = () => {
   tables.Time.use();
 
   return (
-    <div
-      className={cn(
-        "grid h-screen grid-rows-[3rem_1fr_3rem] gap-4 p-1",
-        gameOver && !!playerPot && "grid-rows-[3rem_1fr_4rem]",
-      )}
-    >
+    <HUD pad>
       {/* TOP */}
-      <div className="z-10 flex justify-between">
-        <Pot small className="inline-flex items-baseline gap-4" />
+      <HUD.TopLeft>
+        <Pot />
+      </HUD.TopLeft>
 
-        <div className="flex flex-col items-end">
-          <div className="flex items-center gap-2">
-            <WalletIcon className="size-4 opacity-50" />
-            <Price wei={balance} className="text-sm text-accent" />
-          </div>
-          <PlayerReturns mobile />
+      <HUD.TopRight>
+        <div className="flex items-center gap-2">
+          <WalletIcon className="size-4 opacity-50" />
+          <Price wei={balance} className="text-sm text-accent" />
         </div>
-      </div>
-
+        <PlayerReturns mobile />
+      </HUD.TopRight>
       {/* CENTER */}
-      <div className="relative z-10 flex h-full flex-col">
-        <QuickTrade className="top-1/2 -translate-y-1/2" />
+      <HUD.Left>
+        <QuickTrade />
+      </HUD.Left>
+      <HUD.Center>
         <div className="ml-10 flex h-fit">
           <Card fragment className="h-full w-full">
             <div className="pointer-events-auto grid h-full grid-cols-[1fr_max(17rem,25%)] gap-8">
@@ -188,21 +186,25 @@ const NormalHUDMobile = () => {
             </div>
           </Card>
         </div>
-      </div>
+      </HUD.Center>
 
       {/* BOTTOM */}
-      <div className="z-10 flex w-full items-center justify-between">
-        <ModeToggle />
-
-        <div>
-          {gameOver && (
-            <GameOver fragment className="z-10 grid grid-cols-2 gap-x-1 whitespace-nowrap text-start text-xs" />
-          )}
-          {turn && !gameOver && (
-            <TimeLeft small invert className="pointer-events-auto flex-row items-center gap-8 px-3 text-xs" />
-          )}
+      <HUD.BottomLeft className="flex w-[300px] flex-col">
+        <div className="flex w-full items-center gap-2 lg:justify-between">
+          <MusicPlayer />
+          <Settings />
+          <ModeToggle className="py-0 lg:hidden" />
         </div>
-      </div>
-    </div>
+      </HUD.BottomLeft>
+
+      <HUD.BottomRight>
+        {gameOver && (
+          <GameOver fragment className="z-10 grid grid-cols-2 gap-x-1 whitespace-nowrap text-start text-xs" />
+        )}
+        {turn && !gameOver && (
+          <TimeLeft small invert className="pointer-events-auto flex-row items-center gap-8 px-3 text-xs" />
+        )}
+      </HUD.BottomRight>
+    </HUD>
   );
 };

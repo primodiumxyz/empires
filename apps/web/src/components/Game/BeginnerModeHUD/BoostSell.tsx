@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, EOverride, POINTS_UNIT } from "@primodiumxyz/contracts";
@@ -135,7 +135,7 @@ const BoostCard = ({
   };
 
   return (
-    <>
+    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
       <span className="text-center text-xs text-gray-400">
         Gain points for an empire and airdrop gold to its planets
       </span>
@@ -155,7 +155,7 @@ const BoostCard = ({
         disabled={amountToBoost == "0" || boostPriceWei > (playerBalance.value ?? 0n)}
         buyPrice={boostPriceWei}
       />
-    </>
+    </div>
   );
 };
 

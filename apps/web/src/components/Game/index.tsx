@@ -3,7 +3,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { useCore } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
 import { AdvancedHUD } from "@/components/Game/AdvancedHUD";
-import { NormalHUD } from "@/components/Game/NormalHUD";
+import { BeginnerModeHUD } from "@/components/Game/BeginnerModeHUD";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
@@ -66,7 +66,7 @@ const Game = memo(() => {
           <GameProvider game={gameRef.current}>
             <div className="pointer-events-auto relative">
               {advancedMode && <AdvancedHUD />}
-              {!advancedMode && <NormalHUD />}
+              {!advancedMode && <BeginnerModeHUD />}
             </div>
           </GameProvider>
         )}

@@ -41,10 +41,6 @@ export const AdvancedHUD = () => {
         <Account />
       </HUD.TopRight>
 
-      <HUD.Left className="lg:hidden">
-        <QuickTrade />
-      </HUD.Left>
-
       <HUD.BottomLeft className="flex w-[300px] flex-col gap-2 lg:items-end">
         <ModeToggle className="hidden lg:flex" />
         <div className="flex w-full items-center gap-2 lg:justify-between">

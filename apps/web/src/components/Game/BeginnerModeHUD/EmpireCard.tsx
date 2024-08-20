@@ -62,15 +62,8 @@ export const EmpireCard = ({
           </Tooltip>
         </div>
         <div className="inline-flex items-center gap-2 text-[10px] opacity-75 lg:text-base">
-          win rate: {winRate}%{" "}
-          <Tooltip
-            className="w-64"
-            tooltipContent="Based on the number of planets and citadels owned, as well as how close the game is to the end"
-          >
-            <InformationCircleIcon className="size-3 text-gray-400 lg:size-4" />
-          </Tooltip>
+          win chance: {winRate}% <span className="text-[10px] text-accent">{pct > 0 && `(${formatNumber(pct)}%)`}</span>
         </div>
-        <span className="text-[10px] text-accent">{pct > 0 && `(${formatNumber(pct)}%)`}</span>
       </div>
     </SecondaryCard>
   );

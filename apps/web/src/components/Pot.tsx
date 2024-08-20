@@ -7,13 +7,13 @@ interface PotProps {
   small?: boolean;
 }
 
-export const Pot: React.FC<PotProps> = ({ className, small }) => {
+export const Pot: React.FC<PotProps> = ({ className }) => {
   const { pot } = usePot();
 
   return (
     <div className={cn(className)}>
       <h2 className="ml-1 font-semibold opacity-70">Pot</h2>
-      <Price wei={pot} className={cn("text-accent", !small && "text-xl")} />
+      <Price wei={pot} className={cn("text-xl text-accent")} />
     </div>
   );
 };
