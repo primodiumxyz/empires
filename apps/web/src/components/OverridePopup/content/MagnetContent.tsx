@@ -51,7 +51,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
 
   const { disabled, message } = useMemo(() => {
     if (playerBalance < placeMagnetPriceWei) return { disabled: true, message: "Not enough money" };
-    if (playerPoints < pointsLocked) return { disabled: true, message: "Not enough points" };
+    if (playerPoints < pointsLocked) return { disabled: true, message: `${formatEther(pointsLocked)} points needed` };
     if (currentMagnetExists) return { disabled: true, message: "Magnet already exists" };
     return { disabled: false, message: "" };
   }, [placeMagnetPriceWei, pointsLocked, currentMagnetExists, playerBalance, playerPoints]);
@@ -83,25 +83,27 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
       {empire !== EEmpire.LENGTH && (
         <div className="flex">
           <div className="flex flex-col items-center justify-center">
-            {message && <p className="px-2 text-xs text-error">{message}</p>}
+            {message && (
+              <p className="px-2 py-1 text-xs text-error">
+                {message} <span className="text-success">({formatEther(playerPoints)} AVAIL.)</span>
+              </p>
+            )}
             {!message && (
               <p className="px-2 py-1 text-xs opacity-50">
                 {formatEther(pointsLocked)} POINTS WILL BE LOCKED{" "}
                 <span className="text-success">({formatEther(playerPoints - pointsLocked)} AVAIL.)</span>
               </p>
             )}
-
-            {!message && (
-              <TransactionQueueMask id={`${planetId}-place-magnet`} className="">
-                <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
-                  PLACE MAGNET
-                </Button>
-              </TransactionQueueMask>
-            )}
+            <TransactionQueueMask id={`${planetId}-place-magnet`} className="">
+              <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
+                PLACE MAGNET
+              </Button>
+            </TransactionQueueMask>
             <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
               <Price wei={placeMagnetPriceWei} />
             </p>
-            <PointsReceived points={placeMagnetPointsReceived} inline />
+
+            {!disabled && <PointsReceived points={placeMagnetPointsReceived} inline />}
           </div>
         </div>
       )}
@@ -123,6 +125,8 @@ const MagnetButton = ({
 }) => {
   const hasAdjacentEmpirePlanets = useAdjacentEmpirePlanets(planetId, magnetData.empire);
   const disabled = hasAdjacentEmpirePlanets.length === 0 || magnetData.exists;
+  const errorMessage =
+    hasAdjacentEmpirePlanets.length === 0 ? "No planet adjacent" : magnetData.exists ? "Magnet already exists" : "";
   return (
     <Button
       variant={selected ? "secondary" : "neutral"}
@@ -130,7 +134,7 @@ const MagnetButton = ({
       size="sm"
       disabled={disabled}
       onClick={onClick}
-      tooltip={disabled ? "No planet adjacent" : ""}
+      tooltip={errorMessage}
     >
       <IconLabel imageUri={EmpireEnumToConfig[magnetData.empire].icons.magnet} />
     </Button>
