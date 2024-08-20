@@ -6,6 +6,14 @@ import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { allEmpires } from "@primodiumxyz/game";
 import { EmpireConfig, EmpireEnumToConfig } from "@/util/lookups";
 
+export type EmpireData = {
+  empirePoints: bigint;
+  pointPrice: bigint;
+  playerPoints: bigint;
+  ownedPlanetCount: number;
+  ownedCitadelCount: number;
+};
+
 export const useEmpires = () => {
   const { tables, utils } = useCore();
   const {
@@ -20,8 +28,18 @@ export const useEmpires = () => {
       const playerPoints = tables.Value_PointsMap.getWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
       const pointPrice = utils.getPointPrice(empire, Number(formatEther(playerPoints))).price;
 
-      acc.set(empire, { ...EmpireEnumToConfig[empire], pointPrice, empirePoints, playerPoints });
+      const ownedPlanetCount = tables.Planet.useAllWith({ empireId: empire })?.length ?? 0;
+      const ownedCitadelCount = tables.Planet.useAllWith({ empireId: empire, isCitadel: true })?.length ?? 0;
+
+      acc.set(empire, {
+        ...EmpireEnumToConfig[empire],
+        pointPrice,
+        empirePoints,
+        playerPoints,
+        ownedPlanetCount,
+        ownedCitadelCount,
+      });
       return acc;
-    }, new Map<EEmpire, EmpireConfig & { empirePoints: bigint; pointPrice: bigint; playerPoints: bigint }>());
+    }, new Map<EEmpire, EmpireConfig & EmpireData>());
   }, [empireCount, entity, time]);
 };

@@ -66,18 +66,8 @@ export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean;
   const time = tables.BlockNumber.use()?.value ?? 0n;
   const sortedEmpires = useMemo(() => {
     return [...empires.keys()].sort((a, b) => {
-      const citadelPlanetsA = tables.Keys_CitadelPlanetsSet.getWithKeys()?.itemKeys ?? [];
-      const citadelPlanetsB = tables.Keys_CitadelPlanetsSet.getWithKeys()?.itemKeys ?? [];
-
-      const citadelCountA = citadelPlanetsA.filter(
-        (entity) =>
-          tables.Planet.get(entity as Entity)?.empireId === a && tables.Planet.get(entity as Entity)?.isCitadel,
-      ).length;
-
-      const citadelCountB = citadelPlanetsB.filter(
-        (entity) =>
-          tables.Planet.get(entity as Entity)?.empireId === b && tables.Planet.get(entity as Entity)?.isCitadel,
-      ).length;
+      const citadelCountA = empires.get(a)?.ownedCitadelCount ?? 0;
+      const citadelCountB = empires.get(b)?.ownedCitadelCount ?? 0;
 
       if (citadelCountA !== citadelCountB) {
         return citadelCountB - citadelCountA; // Sort by citadel count descending
@@ -89,6 +79,7 @@ export const EmpireDetails: React.FC<{ hideGraph?: boolean; hideTitle?: boolean;
       return planetCountB - planetCountA; // Then sort by planet count descending
     });
   }, [empires, tables, time]);
+
   return (
     <div className="flex flex-col items-start overflow-y-auto text-center">
       {!hideTitle && <p className="text-xs opacity-70">Empires</p>}
