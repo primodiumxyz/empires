@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { EViewMode } from "@primodiumxyz/core";
 import {
   createLocalBoolTable,
   createLocalNumberTable,
@@ -37,7 +38,6 @@ FontStyle.set({
   size: fontStyleOptions.size[0],
 });
 
-/* -------------------------------- Advanced -------------------------------- */
 const ShowBlockchainUnits = createLocalBoolTable(settingsWorld, {
   id: "ShowBlockchainUnits",
   persist: true,
@@ -61,7 +61,9 @@ const SelectedTab = createLocalNumberTable(settingsWorld, {
   version: "1",
 });
 
-const AdvancedMode = createLocalBoolTable(settingsWorld, { id: "AdvancedMode", persist: true, version: "1" });
+const ViewMode = createLocalNumberTable(settingsWorld, { id: "ViewMode", persist: true, version: "1" });
+
+ViewMode.set({ value: EViewMode.Map });
 
 /* -------------------------------------------------------------------------- */
 /*                                  SETTINGS                                  */
@@ -94,6 +96,6 @@ export const useSettings = () => {
     Dripped,
     MusicPlaying,
     SelectedTab,
-    AdvancedMode,
+    ViewMode,
   };
 };

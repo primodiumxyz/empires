@@ -1,5 +1,5 @@
 import { InterfaceIcons } from "@primodiumxyz/assets";
-import { useCore } from "@primodiumxyz/core/react";
+import { EViewMode } from "@primodiumxyz/core";
 import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
 import { Cheatcodes } from "@/components/cheatcodes/Cheatcodes";
@@ -22,29 +22,24 @@ import { cn } from "@/util/client";
 
 const DEV = import.meta.env.PRI_DEV === "true";
 export const GameHUD = () => {
-  const { tables } = useCore();
-  const { AdvancedMode } = useSettings();
-  const advancedMode = AdvancedMode.use()?.value ?? false;
+  const { ViewMode } = useSettings();
+  const viewMode = ViewMode.use()?.value ?? EViewMode.Map;
   const params = new URLSearchParams(window.location.search);
   const showCheatcodes = DEV && !!params.get("showCheatcodes");
+  const showMap = viewMode === EViewMode.Map;
   return (
     <>
       <div
         className={cn(
           "absolute inset-0 h-screen w-screen bg-black transition-opacity duration-300",
-          advancedMode ? "pointer-events-none opacity-0" : "pointer-events-auto opacity-100",
+          showMap ? "pointer-events-none opacity-0" : "pointer-events-auto opacity-100",
         )}
       />
       <HUD pad>
         {/* TOP */}
         <HUD.TopLeft className="gap-2">
           <Pot />
-          <div
-            className={cn(
-              "hidden transition-opacity duration-300 lg:block",
-              advancedMode ? "opacity-100" : "opacity-0",
-            )}
-          >
+          <div className={cn("hidden transition-opacity duration-300 lg:block", showMap ? "opacity-100" : "opacity-0")}>
             <hr className="my-1 w-full border-secondary/50" />
             <Empires />
           </div>
@@ -55,25 +50,22 @@ export const GameHUD = () => {
             size="md"
             variant="neutral"
             className="z-50 w-56"
-            onClick={() => AdvancedMode.set({ value: !advancedMode })}
+            onClick={() => ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
           >
-            {advancedMode ? (
+            {showMap ? (
               <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" />
             ) : (
               <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" />
             )}
           </Button>
-          {advancedMode && <QuickTradeMapMode className="hidden lg:flex" />}
+          {showMap && <QuickTradeMapMode className="hidden lg:flex" />}
           {showCheatcodes && <Cheatcodes />}
         </HUD.TopMiddle>
 
         <HUD.TopRight className="z-[1000] flex flex-col gap-1">
           <Account className="gap-0" />
           <div
-            className={cn(
-              "flex flex-col gap-1 transition-opacity duration-300",
-              advancedMode ? "opacity-100" : "opacity-0",
-            )}
+            className={cn("flex flex-col gap-1 transition-opacity duration-300", showMap ? "opacity-100" : "opacity-0")}
           >
             <hr className="my-1 w-full border-secondary/50" />
             <Portfolio />
@@ -92,7 +84,7 @@ export const GameHUD = () => {
 
         {/* BOTTOM */}
         <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
-          {advancedMode && <ActionLog className="hidden lg:flex" />}
+          {showMap && <ActionLog className="hidden lg:flex" />}
           <div className="pointer-events-auto flex w-full items-center gap-2">
             <MusicPlayer />
             <Settings />

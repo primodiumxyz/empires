@@ -1,6 +1,7 @@
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 
 import { EEmpire } from "@primodiumxyz/contracts";
+import { EViewMode } from "@primodiumxyz/core";
 import { SecondaryCard } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
 import { Tabs } from "@/components/core/Tabs";
@@ -12,13 +13,15 @@ import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 export const Dashboard = () => {
-  const { AdvancedMode } = useSettings();
-  const advancedMode = AdvancedMode.use()?.value ?? false;
+  const { ViewMode } = useSettings();
+  const viewMode = ViewMode.use()?.value ?? EViewMode.Map;
+  const showMap = viewMode === EViewMode.Map;
+  if (showMap) return null;
   return (
     <div
       className={cn(
         "flex h-[75vh] w-[calc(100vw-32px)] max-w-[1200px] justify-center transition-opacity duration-300",
-        advancedMode ? "opacity-0" : "opacity-100",
+        showMap ? "opacity-0" : "opacity-100",
       )}
     >
       <div className="ml-6 grid grid-cols-3 gap-8 lg:ml-0 lg:!flex lg:w-full lg:flex-col">

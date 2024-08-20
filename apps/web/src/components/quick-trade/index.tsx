@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { toHex } from "viem";
 
+import { EViewMode } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
@@ -35,12 +36,12 @@ export const QuickTradeModal = () => {
 };
 
 export const QuickTradeMapMode = ({ className }: { className?: string }) => {
-  const { SelectedTab, AdvancedMode } = useSettings();
-  const advancedMode = AdvancedMode.use()?.value ?? false;
+  const { SelectedTab, ViewMode } = useSettings();
+  const viewMode = ViewMode.use()?.value ?? EViewMode.Map;
 
   useEffect(() => {
     SelectedTab.set({ value: -1 }, toHex("quick-trade") as Entity);
-  }, [advancedMode]);
+  }, [viewMode]);
 
   return (
     <Tabs
