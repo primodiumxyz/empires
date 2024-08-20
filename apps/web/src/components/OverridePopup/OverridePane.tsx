@@ -37,8 +37,11 @@ export const Buttons: React.FC<{ selectedPlanet: Entity; empire: number }> = ({ 
   const createShieldEaterPriceWei = useOverrideCost(EOverride.DetonateShieldEater, empire, 1n);
 
   return (
-    <div className="relative flex h-44 w-80 items-center justify-center">
-      <div className="relative z-10 translate-y-10">
+    <div className="relative flex h-32 w-80 flex-col items-center justify-center">
+      <p className="absolute left-1/2 top-0 mx-auto w-72 -translate-x-1/2 rounded-lg bg-secondary/25 p-1 text-center text-accent">
+        SELECT ACTION
+      </p>
+      <div className="relative z-10 translate-y-5">
         <OverrideButton
           index={0}
           icon="Fleet"
@@ -68,9 +71,6 @@ export const Buttons: React.FC<{ selectedPlanet: Entity; empire: number }> = ({ 
           price={createShieldEaterPriceWei}
         />
       </div>
-      <div className="absolute left-1/2 top-12 z-0 w-fit -translate-x-1/2 scale-75 opacity-75">
-        <p className="mx-auto w-72 rounded-lg bg-secondary/25 p-1 text-center text-xl text-accent">SELECT ACTION</p>
-      </div>
     </div>
   );
 };
@@ -88,7 +88,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
     <Tabs persistIndexKey="overrides" className={cn("flex flex-col items-center justify-start gap-2", className)}>
       <Buttons selectedPlanet={selectedPlanet} empire={planet.empireId} />
       <Card noDecor className="relative w-96 flex-row items-center justify-center bg-slate-900">
-        <Tabs.Pane index={0} className="w-full items-center gap-6">
+        <Tabs.Pane index={0} className="gap- w-full items-center">
           <Header
             title={"Ships"}
             description={"Attack other planets"}

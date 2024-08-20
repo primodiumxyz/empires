@@ -12,29 +12,46 @@ import { HistoricalPointGraph } from "@/components/Dashboard/HistoricalPointGrap
 import { EmpireCards } from "@/components/Game/BeginnerMode/EmpireCards";
 import { GameOver } from "@/components/GameOver";
 import { MusicPlayer } from "@/components/MusicPlayer";
+import { OverridePopup } from "@/components/OverridePopup";
 import { PlayerReturns } from "@/components/PlayerReturns";
+import { Portfolio } from "@/components/Portfolio";
 import { Pot } from "@/components/Pot";
 import { QuickTradeModal } from "@/components/QuickTrade/QuickTrade";
 import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
+import { cn } from "@/util/client";
 
 const DEV = import.meta.env.PRI_DEV === "true";
-export const BeginnerModeHUD = () => {
+export const GameHUD = () => {
   const { tables } = useCore();
   const advancedMode = tables.AdvancedMode.use()?.value ?? false;
   const params = new URLSearchParams(window.location.search);
   const showCheatcodes = DEV && !!params.get("showCheatcodes");
   return (
     <>
-      <div className="absolute inset-0 h-screen w-screen bg-black" />
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-0 h-screen w-screen bg-black transition-opacity duration-300",
+          advancedMode ? "opacity-0" : "opacity-100",
+        )}
+      />
       <HUD pad>
         {/* TOP */}
         <HUD.TopLeft>
           <Pot />
         </HUD.TopLeft>
 
-        <HUD.TopRight>
+        <HUD.TopRight className="z-[1000] flex flex-col gap-1">
           <Account className="gap-0" />
+          <div
+            className={cn(
+              "flex flex-col gap-1 transition-opacity duration-300",
+              advancedMode ? "opacity-100" : "opacity-0",
+            )}
+          >
+            <hr className="my-1 w-full border-secondary/50" />
+            <Portfolio />
+          </div>
         </HUD.TopRight>
 
         <HUD.TopMiddle className="flex flex-col items-center">
@@ -44,16 +61,25 @@ export const BeginnerModeHUD = () => {
             className="z-50 w-56"
             onClick={() => tables.AdvancedMode.set({ value: !advancedMode })}
           >
-            <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" className="" />
+            {advancedMode ? (
+              <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" />
+            ) : (
+              <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" />
+            )}
           </Button>
           {showCheatcodes && <Cheatcodes />}
         </HUD.TopMiddle>
-        <HUD.Left className="lg:hidden">
+        <HUD.Left className="z-10 lg:hidden">
           <QuickTradeModal />
         </HUD.Left>
-        <HUD.Right className="lg flex h-[75vh] w-[calc(100%-32px)] gap-8 lg:w-full">
-          <div className="flex lg:flex-col">
-            <div className="col-span-2 h-full min-h-40 w-full">
+        <HUD.Right
+          className={cn(
+            "flex h-[75vh] w-full transition-opacity duration-300",
+            advancedMode ? "opacity-0" : "opacity-100",
+          )}
+        >
+          <div className="ml-6 grid w-[calc(100vw-32px)] grid-cols-3 gap-8 lg:ml-0 lg:!flex lg:w-full lg:flex-col">
+            <div className="col-span-2 h-full min-h-40">
               <ParentSize>
                 {({ width: visWidth, height: visHeight }) => (
                   <HistoricalPointGraph
@@ -67,9 +93,11 @@ export const BeginnerModeHUD = () => {
             </div>
             <EmpireCards />
           </div>
-
-          <GameOver className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
         </HUD.Right>
+        <HUD.Center>
+          <OverridePopup />
+          <GameOver />
+        </HUD.Center>
 
         {/* BOTTOM */}
         <HUD.BottomLeft className="flex w-[300px] flex-col">
