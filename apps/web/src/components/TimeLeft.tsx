@@ -30,7 +30,7 @@ export const TimeLeft = ({ className, small, invert }: { className?: string; sma
   if (!turn || gameOver) return null;
 
   return (
-    <div className={cn("flex flex-col justify-center gap-1 text-center", className)}>
+    <div className={cn("flex flex-col justify-center text-center lg:gap-1", className)}>
       {!invert && (
         <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
           <p className={cn("opacity-90", small ? "text-xs" : "text-sm")}>

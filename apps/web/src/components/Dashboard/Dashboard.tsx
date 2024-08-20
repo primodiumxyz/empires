@@ -10,7 +10,6 @@ import { IconLabel } from "@/components/core/IconLabel";
 import { Join } from "@/components/core/Join";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
-import { Tabs } from "@/components/core/Tabs";
 import { BoostEmpireDashboard } from "@/components/Dashboard/BoostEmpireDashboard";
 import { EmpireDetails } from "@/components/Dashboard/EmpireDetails";
 import { HistoricalPointGraph } from "@/components/Dashboard/HistoricalPointGraph";
@@ -18,7 +17,6 @@ import { KPICard } from "@/components/Dashboard/KPICard";
 import { SellPointsDashboard } from "@/components/Dashboard/SellPointsDashboard";
 import { Portfolio } from "@/components/Portfolio";
 import { useEmpires } from "@/hooks/useEmpires";
-import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { cn } from "@/util/client";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
@@ -51,7 +49,7 @@ export const Dashboard = () => {
             <SecondaryCard>
               <RadioGroup
                 name="select-empire-chart"
-                className="hidden justify-end lg:flex"
+                className="flex hidden justify-end"
                 value={selectedEmpire.toString()}
                 options={[
                   ...Array.from(empires.keys())
@@ -68,7 +66,7 @@ export const Dashboard = () => {
                 onChange={(value) => setSelectedEmpire(Number(value) as EEmpire)}
               />
 
-              <div className="h-40 w-full lg:h-96">
+              <div className="h-40 h-96 w-full">
                 <ParentSize>
                   {({ width: visWidth, height: visHeight }) => (
                     <HistoricalPointGraph
@@ -93,31 +91,6 @@ export const Dashboard = () => {
 };
 
 const Sidebar: React.FC = () => {
-  const windowWidth = useWindowDimensions().width;
-  const isMobile = windowWidth < 1024;
-  if (isMobile) {
-    return (
-      <Tabs persistIndexKey="dashboard" defaultIndex={0}>
-        <div className="mb-1 flex flex-col gap-[1px]">
-          <Tabs.Button index={0} className="text-xs">
-            Market Rates
-          </Tabs.Button>
-          <Tabs.Button index={1}>Portfolio</Tabs.Button>
-          <Tabs.Button index={2}>Earnings</Tabs.Button>
-        </div>
-        <Tabs.Pane index={0}>
-          <EmpireDetails hideGraph hideTitle hidePlanets />
-        </Tabs.Pane>
-        <Tabs.Pane index={1}>
-          <Portfolio />
-        </Tabs.Pane>
-        <Tabs.Pane index={2}>
-          <KPICards column size="sm" />
-        </Tabs.Pane>
-      </Tabs>
-    );
-  }
-
   return (
     <>
       <SecondaryCard>
@@ -142,7 +115,7 @@ const KPICards: React.FC<{ column?: boolean; size?: "sm" | "lg" }> = ({ column =
   const netTotal = totalEarned - totalInvestment;
 
   return (
-    <SecondaryCard className={cn("hidden justify-between gap-1 p-2 lg:grid lg:grid-cols-3", column && "flex flex-col")}>
+    <SecondaryCard className={cn("grid hidden grid-cols-3 justify-between gap-1 p-2", column && "flex flex-col")}>
       <KPICard title="SPENT TO DATE" value={totalInvestment} size={size} />
       <KPICard title="EARNED TO DATE" value={totalEarned} size={size} />
       <KPICard title="NET" value={netTotal} size={size} />

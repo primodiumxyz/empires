@@ -1,19 +1,23 @@
 import { UserIcon } from "@heroicons/react/24/solid";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 
+import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatAddress } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
+import { Cheatcodes } from "@/components/Cheatcodes";
+import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { HUD } from "@/components/core/HUD";
+import { IconLabel } from "@/components/core/IconLabel";
 import { HistoricalPointGraph } from "@/components/Dashboard/HistoricalPointGraph";
 import { BoostSell } from "@/components/Game/BeginnerMode/BoostSell";
 import { EmpireCard, EmpireCards } from "@/components/Game/BeginnerMode/EmpireCards";
-import { PlayerReturns } from "@/components/Game/BeginnerMode/PlayerReturns";
 import { GameOver } from "@/components/GameOver";
 import { ModeToggle } from "@/components/ModeToggle";
 import { MusicPlayer } from "@/components/MusicPlayer";
+import { PlayerReturns } from "@/components/PlayerReturns";
 import { Pot } from "@/components/Pot";
 import { QuickTradeModal } from "@/components/QuickTrade/QuickTrade";
 import { Settings } from "@/components/Settings";
@@ -122,7 +126,12 @@ const BeginnerModeHUDDesktop = () => {
   );
 };
 
+const DEV = import.meta.env.PRI_DEV === "true";
 const BeginnerModeHUDMobile = () => {
+  const { tables } = useCore();
+  const advancedMode = tables.AdvancedMode.use()?.value ?? false;
+  const params = new URLSearchParams(window.location.search);
+  const showCheatcodes = DEV && !!params.get("showCheatcodes");
   return (
     <HUD pad>
       {/* TOP */}
@@ -133,7 +142,18 @@ const BeginnerModeHUDMobile = () => {
       <HUD.TopRight>
         <Account className="gap-0" />
       </HUD.TopRight>
-      {/* CENTER */}
+
+      <HUD.TopMiddle className="flex flex-col items-center">
+        <Button
+          size="md"
+          variant="neutral"
+          className="z-50 w-56"
+          onClick={() => tables.AdvancedMode.set({ value: !advancedMode })}
+        >
+          <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" className="" />
+        </Button>
+        {showCheatcodes && <Cheatcodes />}
+      </HUD.TopMiddle>
       <HUD.Left>
         <QuickTradeModal />
       </HUD.Left>
@@ -160,12 +180,15 @@ const BeginnerModeHUDMobile = () => {
         <div className="flex w-full items-center gap-2 lg:justify-between">
           <MusicPlayer />
           <Settings />
-          <ModeToggle className="py-0 lg:hidden" />
         </div>
       </HUD.BottomLeft>
 
+      <HUD.BottomMiddle>
+        <TimeLeft className="gap-0" />
+      </HUD.BottomMiddle>
+
       <HUD.BottomRight>
-        <TimeLeft small invert className="pointer-events-auto flex-row items-center gap-6 text-xs" />
+        <PlayerReturns />
       </HUD.BottomRight>
     </HUD>
   );

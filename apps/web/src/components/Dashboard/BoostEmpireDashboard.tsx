@@ -54,7 +54,7 @@ export const BoostEmpireDashboard = () => {
   };
 
   return (
-    <div className="flex h-20 w-full gap-2">
+    <div className="flex w-full gap-2 lg:h-20">
       <SecondaryCard className="justify-center bg-black/10">
         <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44" justify="start">
           {Array.from(empires.entries()).map(([key, empire]) => (
