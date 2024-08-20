@@ -47,7 +47,7 @@ const NormalHUDDesktop = () => {
   tables.Time.use();
 
   return (
-    <div className="mx-auto grid h-screen max-w-[1400px] grid-cols-[1fr_max(25rem,30%)] grid-rows-[auto_auto_auto_1fr] gap-4 p-3">
+    <div className="grid h-screen grid-cols-[1fr_min(25rem,30%)] grid-rows-[auto_auto_auto_1fr] gap-4 p-3">
       {/* HEADER LEFT */}
       {gameOver && <GameOver fragment className="z-10" />}
       {turn && !gameOver && (
