@@ -51,8 +51,6 @@ function generateContent() {
             PlanetsSet.add(planetId);
             ${empireName === "NULL" ? "" : `EmpirePlanetsSet.add(EEmpire.${empireName}, planetId);`}
             ${isCitadel ? `CitadelPlanetsSet.add(planetId);` : ""}
-
-            createTacticalCharge(planetId, ${empireName === "NULL" ? 0 : "chargeRate"});
             `;
     })
     .join("");
@@ -67,14 +65,13 @@ import { IWorld } from "codegen/world/IWorld.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
-import { Planet, PlanetData, Empire, Planet_TacticalStrikeData, Planet_TacticalStrike, P_TacticalStrikeConfig } from "codegen/index.sol";
+import { Planet, PlanetData, Empire } from "codegen/index.sol";
 import { EEmpire, EOrigin, EOverride } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
 
 function createPlanets() {
 
   bytes32 planetId;
-  uint256 chargeRate = P_TacticalStrikeConfig.getChargeRate();
 
   Empire.set(EEmpire.Red, EOrigin.North, 0, 0);
   Empire.set(EEmpire.Blue, EOrigin.North, 0, 0);
@@ -91,15 +88,6 @@ function createPlanets() {
   });
 
   ${str}
-}
-
-function createTacticalCharge(bytes32 planetId, uint256 chargeRate) {
-  Planet_TacticalStrikeData memory planetTacticalStrikeData = Planet_TacticalStrikeData({
-    lastUpdated: block.number,
-    chargeRate: chargeRate, // out of 100
-    charge: 0
-  });
-  Planet_TacticalStrike.set(planetId, planetTacticalStrikeData);
 }
 `;
 }

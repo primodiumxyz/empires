@@ -29,26 +29,6 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
     { runOnInit: false },
   );
 
-  tables.KillShipOverrideLog.watch(
-    {
-      world: systemsWorld,
-      onEnter: ({ properties: { current } }) => {
-        if (!current) return;
-
-        const planet = scene.objects.planet.get(current.planetId as Entity);
-
-        if (!planet) return;
-
-        scene.audio.play("Demolish", "sfx", { volume: 0.25 });
-        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.overrideCount}`, {
-          icon: "Ship",
-          color: "#ff0000",
-        });
-      },
-    },
-    { runOnInit: false },
-  );
-
   tables.Planet.watch(
     {
       world: systemsWorld,
@@ -81,63 +61,4 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
     },
     { runOnInit: false },
   );
-
-  // tables.BoostChargeOverrideLog.watch(
-  //   {
-  //     world: systemsWorld,
-  //     onEnter: ({ properties: { current } }) => {
-  //       if (!current) return;
-
-  //       const planet = scene.objects.planet.get(current.planetId as Entity);
-
-  //       if (!planet) return;
-
-  //       scene.audio.play("Build", "sfx", { volume: 0.25 });
-  //       scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.boostCount}`, {
-  //         icon: "Boost",
-  //         color: "#ff0000",
-  //       });
-  //     },
-  //   },
-  //   { runOnInit: false },
-  // );
-
-  // tables.StunChargeOverrideLog.watch(
-  //   {
-  //     world: systemsWorld,
-  //     onEnter: ({ properties: { current } }) => {
-  //       if (!current) return;
-
-  //       const planet = scene.objects.planet.get(current.planetId as Entity);
-
-  //       if (!planet) return;
-
-  //       scene.audio.play("Demolish", "sfx", { volume: 0.25 });
-  //       scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.stunCount}`, {
-  //         icon: "Stun",
-  //       });
-  //     },
-  //   },
-  //   { runOnInit: false },
-  // );
-
-  // tables.TacticalStrikeOverrideLog.watch(
-  //   {
-  //     world: systemsWorld,
-  //     onEnter: ({ properties: { current } }) => {
-  //       if (!current) return;
-
-  //       const planet = scene.objects.planet.get(current.planetId as Entity);
-
-  //       if (!planet) return;
-
-  //       scene.audio.play("Demolish", "sfx", { volume: 0.25 });
-  //       scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `ALL SHIPS DESTROYED`, {
-  //         icon: "Ship",
-  //         color: "#ff0000",
-  //       });
-  //     },
-  //   },
-  //   { runOnInit: false },
-  // );
 };

@@ -143,7 +143,6 @@ contract RewardsSystemTest is PrimodiumTest {
     Empire.setPointsIssued(EEmpire.Red, totalPoints);
 
     uint256 alicePrevBalance = alice.balance;
-    uint256 gain = PlayersMap.get(addressToId(alice)).gain;
     vm.stopPrank();
     vm.prank(alice);
     world.Empires__withdrawEarnings();

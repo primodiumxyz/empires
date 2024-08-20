@@ -88,7 +88,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
     <Tabs persistIndexKey="overrides" className={cn("flex flex-col items-center justify-start gap-2", className)}>
       <Buttons selectedPlanet={selectedPlanet} empire={planet.empireId} />
       <Card noDecor className="relative w-96 flex-row items-center justify-center bg-slate-900">
-        <Tabs.Pane index={0} className="gap- w-full items-center">
+        <Tabs.Pane index={0} className="w-full items-center gap-4">
           <Header
             title={"Ships"}
             description={"Attack other planets"}
@@ -99,7 +99,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
         <Tabs.Pane index={1} className="w-full items-center gap-4">
           <Header
             title={"Shields"}
-            description={"Protect planet when under attack"}
+            description={"Defend planet when under attack"}
             planetName={entityToPlanetName(selectedPlanet)}
           />
           <ShieldContent entity={selectedPlanet} />
@@ -107,7 +107,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
         <Tabs.Pane index={2} className="w-full items-center gap-4">
           <Header
             title={"Magnets"}
-            description={"Attracts ships from neighboring planets owned by the same empire"}
+            description={"Attracts ships owned by the same empire"}
             planetName={entityToPlanetName(selectedPlanet)}
           />
           <MagnetContent entity={selectedPlanet} />
@@ -116,7 +116,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
         <Tabs.Pane index={3} className="w-full items-center gap-4">
           <Header
             title={"Shield Eater"}
-            description={"Tickle the monster to destroy shields on this planet and surrounding planets"}
+            description={"Destroy shields on this planet and surrounding planets"}
             planetName={entityToPlanetName(selectedPlanet)}
           />
           <ShieldEaterContent entity={selectedPlanet} />
