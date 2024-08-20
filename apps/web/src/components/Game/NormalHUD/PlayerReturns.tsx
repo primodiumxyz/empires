@@ -1,11 +1,12 @@
 import { useMemo } from "react";
-import { ArrowDownIcon, ArrowUpIcon, ExclamationCircleIcon } from "@heroicons/react/24/solid";
+import { ArrowDownIcon, ArrowUpIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Divider } from "@/components/core/Divider";
 import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
 import { useEmpires } from "@/hooks/useEmpires";
@@ -15,7 +16,7 @@ import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
-export const PlayerReturns = () => {
+export const PlayerReturns = ({ mobile }: { mobile?: boolean }) => {
   const { tables } = useCore();
 
   const {
@@ -36,15 +37,18 @@ export const PlayerReturns = () => {
   }, [points]);
 
   return (
-    <div className="flex justify-around gap-2">
+    <div className="z-10 flex justify-around gap-2">
       <EmpireEndReward
         empire={biggestReward.empire}
         playerPoints={points[biggestReward.empire].playerPoints}
         empirePoints={points[biggestReward.empire].empirePoints}
         totalSpent={totalSpent}
+        mobile={mobile}
       />
 
-      <ImmediateReward playerId={playerId} />
+      {mobile && <Divider direction="vertical" className="mx-1 my-1 border-primary" />}
+
+      <ImmediateReward playerId={playerId} mobile={mobile} />
     </div>
   );
 };
@@ -54,11 +58,13 @@ const EmpireEndReward = ({
   playerPoints,
   empirePoints,
   totalSpent,
+  mobile,
 }: {
   empire: EEmpire;
   playerPoints: bigint;
   empirePoints: bigint;
   totalSpent: bigint;
+  mobile?: boolean;
 }) => {
   const { pot } = usePot();
   const {
@@ -72,17 +78,33 @@ const EmpireEndReward = ({
   const empires = useEmpires();
   const empireName = empires.get(empire)?.name;
 
+  if (mobile)
+    return (
+      <div className="pointer-events-auto flex items-center gap-2 text-xs">
+        <span>Earn up to</span>
+        <img src={imgUrl} className="ml-2 h-6" />
+        <Price wei={earnings} />
+        <Tooltip
+          tooltipContent={`Projected rewards if ${empireName} empire wins`}
+          direction="left"
+          className="w-56 text-xs"
+        >
+          <InformationCircleIcon className="size-3" />
+        </Tooltip>
+      </div>
+    );
+
   return (
     <div className="pointer-events-auto relative flex min-w-32 flex-col rounded-lg border border-gray-600 p-2 pt-3">
       <h2 className="absolute -top-2 left-1 flex items-center justify-end gap-2 bg-neutral px-1 font-semibold text-gray-400">
         <span className="whitespace-nowrap text-xs">Earn up to</span>
-        <div className="hidden lg:block">
+        <div>
           <Tooltip
             tooltipContent={`Projected rewards if ${empireName} empire wins`}
             direction="left"
             className="w-56 text-xs"
           >
-            <ExclamationCircleIcon className="size-3" />
+            <InformationCircleIcon className="size-3" />
           </Tooltip>
         </div>
       </h2>
@@ -104,7 +126,7 @@ const EmpireEndReward = ({
   );
 };
 
-const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
+const ImmediateReward = ({ playerId, mobile }: { playerId: Entity; mobile?: boolean }) => {
   const {
     tables,
     utils: { getPointPrice },
@@ -125,13 +147,24 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const percentageChange = totalSpent > 0n ? ((totalReward - totalSpent) * 10000n) / totalSpent : 0n;
   const isProfit = percentageChange >= 0n;
 
+  if (mobile)
+    return (
+      <div className="pointer-events-auto flex items-center gap-2 text-xs">
+        <span>Sell now</span>
+        <Price wei={totalReward} />
+        <Tooltip tooltipContent="Rewards if you sell all points now" direction="left" className="w-56 text-xs">
+          <InformationCircleIcon className="size-3" />
+        </Tooltip>
+      </div>
+    );
+
   return (
     <div className="pointer-events-auto relative flex min-w-28 flex-col rounded-lg border border-gray-600 p-2 pt-3">
       <h2 className="absolute -top-2 left-1 flex items-center justify-end gap-2 bg-neutral px-1 font-semibold text-gray-400">
         <span className="whitespace-nowrap text-xs">Sell now</span>
-        <div className="hidden lg:block">
+        <div>
           <Tooltip tooltipContent="Rewards if you sell all points now" direction="left" className="w-56 text-xs">
-            <ExclamationCircleIcon className="size-3" />
+            <InformationCircleIcon className="size-3" />
           </Tooltip>
         </div>
       </h2>

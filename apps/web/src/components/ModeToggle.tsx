@@ -1,5 +1,6 @@
 import { useCore } from "@primodiumxyz/core/react";
 import { Toggle } from "@/components/core/Toggle";
+import { cn } from "@/util/client";
 
 export const ModeToggle = ({ className }: { className?: string }) => {
   const { tables } = useCore();
@@ -10,7 +11,7 @@ export const ModeToggle = ({ className }: { className?: string }) => {
       label="Show map"
       defaultChecked={advancedMode}
       onToggle={() => tables.AdvancedMode.set({ value: !advancedMode })}
-      className={className}
+      className={cn(className)}
     />
   );
 };

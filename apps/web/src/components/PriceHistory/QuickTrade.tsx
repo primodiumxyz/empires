@@ -26,7 +26,7 @@ import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
-export const QuickTrade = () => {
+export const QuickTrade = ({ className }: { className?: string }) => {
   const { tables } = useCore();
   const { width } = useWindowDimensions();
   const isMobile = width < 1024;
@@ -35,7 +35,10 @@ export const QuickTrade = () => {
     <Tabs
       persistIndexKey="quick-trade"
       defaultIndex={-1}
-      className="absolute -top-[4px] left-1.5 -translate-x-1/2 flex-col items-center justify-center lg:left-1/2 lg:flex"
+      className={cn(
+        "absolute -top-[4px] left-1.5 -translate-x-1/2 flex-col items-center justify-center lg:left-1/2 lg:flex",
+        className,
+      )}
       onPointerMissed={() => tables.SelectedTab.set({ value: -1 }, toHex("quick-trade") as Entity)}
     >
       <Join className="flex -rotate-90 justify-center lg:-mt-[5px] lg:rotate-0">

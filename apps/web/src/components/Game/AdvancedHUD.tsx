@@ -46,10 +46,11 @@ export const AdvancedHUD = () => {
       </HUD.Left>
 
       <HUD.BottomLeft className="flex w-[300px] flex-col gap-2 lg:items-end">
-        <ModeToggle />
+        <ModeToggle className="hidden lg:flex" />
         <div className="flex w-full items-center gap-2 lg:justify-between">
           <MusicPlayer />
           <Settings />
+          <ModeToggle className="py-0 lg:hidden" />
         </div>
         <ActionLog />
       </HUD.BottomLeft>

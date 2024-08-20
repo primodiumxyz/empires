@@ -32,16 +32,16 @@ export const GameOver = ({ className, fragment = false }: { className?: string; 
         Game over. <span className="font-semibold">{empireName}</span> won!
       </p>
       {playerPot > 0n && (
-        <div className="flex flex-col gap-1">
+        <>
           <p>
             You earned <Price wei={playerPot} />!
           </p>
-          <Button variant="primary" size="sm" onClick={calls.withdrawEarnings}>
+          <Button variant="primary" size="sm" className="col-span-2 mt-1 w-full" onClick={calls.withdrawEarnings}>
             Withdraw
           </Button>
-        </div>
+        </>
       )}
-      {playerPot === 0n && <p className="text-xs opacity-50">You have no earnings to withdraw.</p>}
+      {playerPot === 0n && <p className="col-span-2 text-xs opacity-50">You have no earnings to withdraw.</p>}
     </Card>
   );
 };
