@@ -31,13 +31,14 @@ library LibOverride {
     uint256 pointUnit = P_PointConfig.getPointUnit();
     uint8 empireCount = P_GameConfig.getEmpireCount();
     bool progressOverride = P_OverrideConfig.getIsProgressOverride(_overrideType);
+    uint256 pointMultiplier = P_PointConfig.getPointMultiplier();
 
     if (progressOverride) {
-      uint256 numPoints = _overrideCount * (empireCount - 1) * pointUnit;
+      uint256 numPoints = _overrideCount * (empireCount - 1) * pointUnit * pointMultiplier;
       LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
       LibPrice.pointCostUp(_empireImpacted, numPoints);
     } else {
-      uint256 numPoints = _overrideCount * pointUnit;
+      uint256 numPoints = _overrideCount * pointUnit * pointMultiplier;
       // Iterate through each empire except the impacted one
       for (uint8 i = 1; i <= empireCount; i++) {
         if (EEmpire(i) == _empireImpacted) {
