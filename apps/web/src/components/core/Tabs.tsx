@@ -4,6 +4,7 @@ import { toHex } from "viem";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { IconLabel } from "@/components/core/IconLabel";
+import { cn } from "@/util/client";
 
 import { Button as _Button } from "./Button";
 import { SecondaryCard } from "./Card";
@@ -15,6 +16,7 @@ interface TabProps {
   onChange?: (index?: number) => void;
   persistIndexKey?: string;
   id?: string;
+  onPointerMissed?: () => void;
 }
 
 interface IndexContextValue {
@@ -149,7 +151,7 @@ export const Tabs: FC<TabProps> & {
   PrevButton: typeof PrevButton;
   NextButton: typeof NextButton;
   CloseButton: typeof CloseButton;
-} = ({ children, defaultIndex = 0, className, onChange, persistIndexKey, id }) => {
+} = ({ children, defaultIndex = 0, className, onChange, persistIndexKey, id, onPointerMissed }) => {
   const {
     tables: { SelectedTab },
   } = useCore();
@@ -159,6 +161,7 @@ export const Tabs: FC<TabProps> & {
 
   // Ref to check if it's the first render
   const initialRender = useRef(true);
+  const tabsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // If it's the first render, skip calling onChange
@@ -170,9 +173,24 @@ export const Tabs: FC<TabProps> & {
     if (onChange) onChange(currentIndex);
   }, [currentIndex, onChange]);
 
+  useEffect(() => {
+    if (!onPointerMissed) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (tabsRef.current && !tabsRef.current.contains(event.target as Node)) {
+        onPointerMissed();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onPointerMissed]);
+
   return (
     <IndexContext.Provider value={{ index: currentIndex, setIndex: setCurrentIndex, persistIndexKey }}>
-      <div id={id} className={`${className}`}>
+      <div id={id} className={cn(className)} ref={tabsRef}>
         {children}
       </div>
     </IndexContext.Provider>

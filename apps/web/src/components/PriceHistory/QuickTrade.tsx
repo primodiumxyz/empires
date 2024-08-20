@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { formatEther } from "viem";
+import { formatEther, toHex } from "viem";
 
 import { EEmpire, EOverride, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Card, SecondaryCard } from "@/components/core/Card";
@@ -26,6 +27,7 @@ import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const QuickTrade = () => {
+  const { tables } = useCore();
   const { width } = useWindowDimensions();
   const isMobile = width < 1024;
 
@@ -34,6 +36,7 @@ export const QuickTrade = () => {
       persistIndexKey="quick-trade"
       defaultIndex={-1}
       className="absolute -top-[4px] left-1.5 -translate-x-1/2 flex-col items-center justify-center lg:left-1/2 lg:flex"
+      onPointerMissed={() => tables.SelectedTab.set({ value: -1 }, toHex("quick-trade") as Entity)}
     >
       <Join className="flex -rotate-90 justify-center lg:-mt-[5px] lg:rotate-0">
         <Tabs.Button size="sm" index={0} togglable variant="primary" className="mr-1">
