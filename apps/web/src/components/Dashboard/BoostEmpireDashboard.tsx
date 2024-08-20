@@ -19,7 +19,7 @@ import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
-export const BoostEmpire = () => {
+export const BoostEmpireDashboard = () => {
   const {
     playerAccount: { address },
   } = useAccountClient();
@@ -54,7 +54,7 @@ export const BoostEmpire = () => {
   };
 
   return (
-    <div className="flex w-full gap-2">
+    <div className="flex h-20 w-full gap-2">
       <SecondaryCard className="justify-center bg-black/10">
         <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44" justify="start">
           {Array.from(empires.entries()).map(([key, empire]) => (

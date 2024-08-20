@@ -2,8 +2,8 @@ import { memo, useEffect, useRef, useState } from "react";
 
 import { useCore } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
-import { AdvancedHUD } from "@/components/Game/AdvancedHUD";
-import { BeginnerModeHUD } from "@/components/Game/BeginnerModeHUD";
+import { AdvancedHUD } from "@/components/Game/AdvancedMode";
+import { BeginnerModeHUD } from "@/components/Game/BeginnerMode";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 

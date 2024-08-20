@@ -8,10 +8,10 @@ export const ModeToggle = ({ className }: { className?: string }) => {
 
   return (
     <Toggle
-      label="Show map"
+      label="Show Map"
       defaultChecked={advancedMode}
       onToggle={() => tables.AdvancedMode.set({ value: !advancedMode })}
-      className={cn(className)}
+      className={cn("text-xs", className)}
     />
   );
 };

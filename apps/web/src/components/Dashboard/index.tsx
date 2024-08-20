@@ -1,4 +1,4 @@
-import { EmpireDetails } from "@/components/PriceHistory/EmpireDetails";
+import { EmpireDetails } from "@/components/Dashboard/EmpireDetails";
 
 export const PriceHistory = () => {
   return (

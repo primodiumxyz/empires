@@ -7,10 +7,24 @@ import { useCore } from "@primodiumxyz/core/react";
 import { SecondaryCard } from "@/components/core/Card";
 import { Tooltip } from "@/components/core/Tooltip";
 import { Price } from "@/components/shared/Price";
-import { EmpireData } from "@/hooks/useEmpires";
+import { EmpireData, useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { useWinRate } from "@/hooks/useWinRate";
+import { cn } from "@/util/client";
 import { EmpireConfig } from "@/util/lookups";
+
+export const EmpireCards = () => {
+  const empires = useEmpires();
+  return (
+    <div className={cn("pointer-events-auto flex h-full flex-col gap-2 overflow-y-auto pr-2")}>
+      {[...empires.entries()]
+        .sort((a, b) => Number(b[1].playerPoints) - Number(a[1].playerPoints))
+        .map(([key, data]) => (
+          <EmpireCard key={key} empire={key} {...data} />
+        ))}
+    </div>
+  );
+};
 
 export const EmpireCard = ({
   empire,
@@ -61,9 +75,9 @@ export const EmpireCard = ({
             <InformationCircleIcon className="size-3 text-gray-400 lg:size-4" />
           </Tooltip>
         </div>
-        <div className="inline-flex items-center gap-2 text-[10px] opacity-75 lg:text-base">
+        <p className="text-[10px] uppercase opacity-75 lg:text-base">
           win chance: {winRate}% <span className="text-[10px] text-accent">{pct > 0 && `(${formatNumber(pct)}%)`}</span>
-        </div>
+        </p>
       </div>
     </SecondaryCard>
   );

@@ -4,7 +4,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Badge } from "@/components/core/Badge";
-import { SmallHistoricalPointGraph } from "@/components/PriceHistory/SmallHistoricalPointGraph";
+import { SmallHistoricalPointGraph } from "@/components/Dashboard/SmallHistoricalPointGraph";
 import { Price } from "@/components/shared/Price";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";

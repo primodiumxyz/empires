@@ -52,7 +52,7 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
         <Modal.Button variant="warning">
           <ServerIcon className="size-6" /> CHEATCODES
         </Modal.Button>
-        <Modal.Content className={cn(activeTab == undefined && "h-screen")}>
+        <Modal.Content className={cn("w-1/2", activeTab == undefined && "h-screen")}>
           {activeTab !== undefined && (
             <Button
               variant="primary"

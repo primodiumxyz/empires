@@ -8,7 +8,7 @@ import useWinningEmpire from "@/hooks/useWinningEmpire";
 import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
-export const GameOver = ({ className, fragment = false }: { className?: string; fragment?: boolean }) => {
+export const GameOver = ({ className }: { className?: string }) => {
   const calls = useContractCalls();
   const { tables } = useCore();
   const {
@@ -27,7 +27,7 @@ export const GameOver = ({ className, fragment = false }: { className?: string; 
   if (empire == null) return null;
 
   return (
-    <Card fragment={fragment} className={cn("flex flex-col text-center", className)}>
+    <Card className={cn("flex flex-col text-center", className)}>
       <p>
         Game over. <span className="font-semibold">{empireName}</span> won!
       </p>

@@ -4,7 +4,6 @@ import ParentSize from "@visx/responsive/lib/components/ParentSize";
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
-import { Account } from "@/components/Account";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
@@ -12,11 +11,12 @@ import { Join } from "@/components/core/Join";
 import { Modal } from "@/components/core/Modal";
 import { RadioGroup } from "@/components/core/Radio";
 import { Tabs } from "@/components/core/Tabs";
-import { BoostEmpire } from "@/components/PriceHistory/BoostEmpire";
-import { EmpireDetails } from "@/components/PriceHistory/EmpireDetails";
-import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointGraph";
-import { KPICard } from "@/components/PriceHistory/KPICard";
-import { SellPoints } from "@/components/PriceHistory/SellPoints";
+import { BoostEmpireDashboard } from "@/components/Dashboard/BoostEmpireDashboard";
+import { EmpireDetails } from "@/components/Dashboard/EmpireDetails";
+import { HistoricalPointGraph } from "@/components/Dashboard/HistoricalPointGraph";
+import { KPICard } from "@/components/Dashboard/KPICard";
+import { SellPointsDashboard } from "@/components/Dashboard/SellPointsDashboard";
+import { Portfolio } from "@/components/Portfolio";
 import { useEmpires } from "@/hooks/useEmpires";
 import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { cn } from "@/util/client";
@@ -32,7 +32,7 @@ export const Dashboard = () => {
       <Modal.Button size="md" variant="neutral" className="z-50 w-56">
         <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" className="" />
       </Modal.Button>
-      <Modal.Content>
+      <Modal.Content className="w-full">
         <div className="grid grid-cols-8 gap-1">
           <div className="col-span-6 flex flex-col gap-1">
             <SecondaryCard className="flex flex-col gap-1">
@@ -44,8 +44,8 @@ export const Dashboard = () => {
                   Sell Points
                 </Button>
               </Join>
-              {selectedTab === "boost" && <BoostEmpire />}
-              {selectedTab === "sell" && <SellPoints />}
+              {selectedTab === "boost" && <BoostEmpireDashboard />}
+              {selectedTab === "sell" && <SellPointsDashboard />}
             </SecondaryCard>
 
             <SecondaryCard>
@@ -109,7 +109,7 @@ const Sidebar: React.FC = () => {
           <EmpireDetails hideGraph hideTitle hidePlanets />
         </Tabs.Pane>
         <Tabs.Pane index={1}>
-          <Account hideAccountBalance />
+          <Portfolio />
         </Tabs.Pane>
         <Tabs.Pane index={2}>
           <KPICards column size="sm" />
@@ -126,7 +126,7 @@ const Sidebar: React.FC = () => {
       </SecondaryCard>
       <SecondaryCard className="h-full">
         <p className="mb-2 text-xs">YOUR PORTFOLIO</p>
-        <Account hideAccountBalance />
+        <Portfolio />
       </SecondaryCard>
     </>
   );

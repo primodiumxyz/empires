@@ -1,29 +1,28 @@
-import { UserIcon, WalletIcon } from "@heroicons/react/24/solid";
+import { UserIcon } from "@heroicons/react/24/solid";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatAddress } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { Account } from "@/components/Account";
 import { Card } from "@/components/core/Card";
 import { HUD } from "@/components/core/HUD";
-import { BoostSell } from "@/components/Game/BeginnerModeHUD/BoostSell";
-import { EmpireCard } from "@/components/Game/BeginnerModeHUD/EmpireCard";
-import { PlayerReturns } from "@/components/Game/BeginnerModeHUD/PlayerReturns";
+import { HistoricalPointGraph } from "@/components/Dashboard/HistoricalPointGraph";
+import { BoostSell } from "@/components/Game/BeginnerMode/BoostSell";
+import { EmpireCard, EmpireCards } from "@/components/Game/BeginnerMode/EmpireCards";
+import { PlayerReturns } from "@/components/Game/BeginnerMode/PlayerReturns";
 import { GameOver } from "@/components/GameOver";
 import { ModeToggle } from "@/components/ModeToggle";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { Pot } from "@/components/Pot";
-import { HistoricalPointGraph } from "@/components/PriceHistory/HistoricalPointGraph";
-import { QuickTrade } from "@/components/PriceHistory/QuickTrade";
+import { QuickTradeModal } from "@/components/QuickTrade/QuickTrade";
 import { Settings } from "@/components/Settings";
 import { Price } from "@/components/shared/Price";
 import { TimeLeft } from "@/components/TimeLeft";
 import { useBalance } from "@/hooks/useBalance";
 import { useEmpires } from "@/hooks/useEmpires";
-import { usePot } from "@/hooks/usePot";
 import useWindowDimensions from "@/hooks/useWindowDimensions";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
-import { cn } from "@/util/client";
 
 export const BeginnerModeHUD = () => {
   const { width } = useWindowDimensions();
@@ -51,7 +50,7 @@ const BeginnerModeHUDDesktop = () => {
   return (
     <div className="grid h-screen grid-cols-[1fr_min(25rem,30%)] grid-rows-[auto_auto_auto_1fr] gap-4 p-3">
       {/* HEADER LEFT */}
-      {gameOver && <GameOver fragment className="z-10" />}
+      {gameOver && <GameOver className="z-10" />}
       {turn && !gameOver && (
         <div className="z-10 flex items-end justify-between gap-2">
           <TimeLeft className="px-3 text-start" />
@@ -124,19 +123,6 @@ const BeginnerModeHUDDesktop = () => {
 };
 
 const BeginnerModeHUDMobile = () => {
-  const { tables } = useCore();
-  const {
-    playerAccount: { address },
-  } = useAccountClient();
-  const empires = useEmpires();
-  const balance = useBalance(address).value ?? 0n;
-  const { gameOver, empire } = useWinningEmpire();
-  const { pot } = usePot();
-  const winningEmpire = empire ? empires.get(empire) : { playerPoints: 0n, empirePoints: 0n };
-  const playerPot = winningEmpire?.empirePoints ? (pot * winningEmpire.playerPoints) / winningEmpire.empirePoints : 0n;
-  const turn = tables.Turn.use();
-  tables.Time.use();
-
   return (
     <HUD pad>
       {/* TOP */}
@@ -145,48 +131,29 @@ const BeginnerModeHUDMobile = () => {
       </HUD.TopLeft>
 
       <HUD.TopRight>
-        <div className="flex items-center gap-2">
-          <WalletIcon className="size-4 opacity-50" />
-          <Price wei={balance} className="text-sm text-accent" />
-        </div>
-        <PlayerReturns mobile />
+        <Account className="gap-0" />
       </HUD.TopRight>
       {/* CENTER */}
       <HUD.Left>
-        <QuickTrade />
+        <QuickTradeModal />
       </HUD.Left>
-      <HUD.Center>
-        <div className="ml-10 flex h-fit">
-          <Card fragment className="h-full w-full">
-            <div className="pointer-events-auto grid h-full grid-cols-[1fr_max(17rem,25%)] gap-8">
-              <div className="h-full min-h-40 w-full">
-                <ParentSize>
-                  {({ width: visWidth, height: visHeight }) => (
-                    <HistoricalPointGraph
-                      empire={EEmpire.LENGTH}
-                      width={visWidth}
-                      height={visHeight}
-                      margin={{ top: 20, right: 20, bottom: 30, left: 55 }}
-                    />
-                  )}
-                </ParentSize>
-              </div>
-              <div
-                className={cn(
-                  "pointer-events-auto flex h-[calc(100vh-8rem)] flex-col gap-2 overflow-y-auto pr-2",
-                  gameOver && !!playerPot && "h-[calc(100vh-9rem)]",
-                )}
-              >
-                {[...empires.entries()]
-                  .sort((a, b) => Number(b[1].playerPoints) - Number(a[1].playerPoints))
-                  .map(([key, data]) => (
-                    <EmpireCard key={key} empire={key} {...data} />
-                  ))}
-              </div>
-            </div>
-          </Card>
+      <HUD.Right className="grid h-[75vh] w-[calc(100%-32px)] grid-cols-3 gap-8">
+        <div className="col-span-2 h-full min-h-40 w-full">
+          <ParentSize>
+            {({ width: visWidth, height: visHeight }) => (
+              <HistoricalPointGraph
+                empire={EEmpire.LENGTH}
+                width={visWidth}
+                height={visHeight}
+                margin={{ top: 20, right: 20, bottom: 30, left: 55 }}
+              />
+            )}
+          </ParentSize>
         </div>
-      </HUD.Center>
+        <EmpireCards />
+
+        <GameOver className="absolute left-1/2 top-1/2 -translate-x-[calc(50%+32px)] -translate-y-1/2" />
+      </HUD.Right>
 
       {/* BOTTOM */}
       <HUD.BottomLeft className="flex w-[300px] flex-col">
@@ -198,12 +165,7 @@ const BeginnerModeHUDMobile = () => {
       </HUD.BottomLeft>
 
       <HUD.BottomRight>
-        {gameOver && (
-          <GameOver fragment className="z-10 grid grid-cols-2 gap-x-1 whitespace-nowrap text-start text-xs" />
-        )}
-        {turn && !gameOver && (
-          <TimeLeft small invert className="pointer-events-auto flex-row items-center gap-8 px-3 text-xs" />
-        )}
+        <TimeLeft small invert className="pointer-events-auto flex-row items-center gap-6 text-xs" />
       </HUD.BottomRight>
     </HUD>
   );

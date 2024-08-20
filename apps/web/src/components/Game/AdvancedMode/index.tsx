@@ -2,15 +2,16 @@ import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
 import { Cheatcodes } from "@/components/Cheatcodes";
 import { HUD } from "@/components/core/HUD";
+import { PriceHistory } from "@/components/Dashboard";
+import { Dashboard } from "@/components/Dashboard/Dashboard";
 import { GameOver } from "@/components/GameOver";
 import { ModeToggle } from "@/components/ModeToggle";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverridePopup } from "@/components/OverridePopup";
 import { PlayerReturns } from "@/components/PlayerReturns";
+import { Portfolio } from "@/components/Portfolio";
 import { Pot } from "@/components/Pot";
-import { PriceHistory } from "@/components/PriceHistory";
-import { Dashboard } from "@/components/PriceHistory/Dashboard";
-import { QuickTrade } from "@/components/PriceHistory/QuickTrade";
+import { QuickTradeTabs } from "@/components/QuickTrade/QuickTrade";
 import { Settings } from "@/components/Settings";
 import { TimeLeft } from "@/components/TimeLeft";
 
@@ -32,13 +33,15 @@ export const AdvancedHUD = () => {
         <div className="flex flex-col items-center">
           <Dashboard />
           <div className="relative hidden h-[300px] w-[300px] lg:block">
-            <QuickTrade />
+            <QuickTradeTabs />
           </div>
         </div>
       </HUD.TopMiddle>
 
-      <HUD.TopRight className="flex flex-col gap-2">
+      <HUD.TopRight className="flex flex-col gap-1">
         <Account />
+        <hr className="my-1 w-full border-secondary/50" />
+        <Portfolio />
       </HUD.TopRight>
 
       <HUD.BottomLeft className="flex w-[300px] flex-col gap-2 lg:items-end">

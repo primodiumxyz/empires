@@ -18,7 +18,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
-export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmpire; fragment?: boolean }) => {
+export const SellPointsDashboard = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmpire; fragment?: boolean }) => {
   const {
     playerAccount: { entity },
   } = useAccountClient();
@@ -54,7 +54,7 @@ export const SellPoints = ({ selectedEmpire, fragment }: { selectedEmpire?: EEmp
   const empires = useEmpires();
 
   return (
-    <div className="flex w-full gap-2">
+    <div className="flex h-20 w-full gap-2">
       {!selectedEmpire && (
         <SecondaryCard className="justify-center bg-black/10">
           <Dropdown value={empire} onChange={(value) => setEmpire(value)} className="w-32 lg:w-44">
