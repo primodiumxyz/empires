@@ -91,9 +91,9 @@ const OpenActionLog = () => {
     ROOT: { sprite },
   } = useGame();
   return (
-    <Tabs className="flex" persistIndexKey={"action-log"} defaultIndex={0}>
-      <Join direction="vertical">
-        <Tabs.Button key={"all"} index={0} className="h-8">
+    <Tabs className="flex gap-1" persistIndexKey={"action-log"} defaultIndex={0}>
+      <Join direction="vertical" className="rounded-r">
+        <Tabs.Button key={"all"} index={0} className="h-8 w-11">
           <div>
             <h1>ALL</h1>
           </div>
