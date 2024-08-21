@@ -28,6 +28,9 @@ export const Sprites = {
   //Background
   StarBg: "sprites/background/star.png",
   Nebula: "sprites/background/nebula.png",
+
+  // Citadel
+  CitadelAsteroidBelt: "sprites/citadel/Citadel_Asteroid_Belt.png",
 };
 
 export type SpriteKeys = keyof typeof Sprites;

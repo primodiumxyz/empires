@@ -1,22 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  BackwardIcon,
-  ForwardIcon,
-  MusicalNoteIcon,
-  PauseIcon,
-  PlayIcon,
-  SpeakerXMarkIcon,
-} from "@heroicons/react/24/solid";
+import { MusicalNoteIcon, PauseIcon } from "@heroicons/react/24/solid";
 
 import { Button } from "@/components/core/Button";
 import { useGame } from "@/hooks/useGame";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
-import { getNextSong, getPrevSong, getRandomSong } from "@/util/soundtrack";
+import { getNextSong, getRandomSong } from "@/util/soundtrack";
 
-export const MusicPlayer = () => {
+export const MusicPlayer = ({ className }: { className?: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [song, setSong] = useState(getRandomSong());
-  const [isPlaying, setIsPlaying] = useState(false);
+  const MusicPlaying = useSettings().MusicPlaying;
+  const isPlaying = MusicPlaying.use()?.value ?? true;
 
   const {
     ROOT: { hooks },
@@ -52,92 +47,45 @@ export const MusicPlayer = () => {
   }, [userInteracted]);
 
   const handlePlay = () => {
-    if (audioRef.current) {
-      audioRef.current.play();
-    }
+    if (!audioRef.current) return;
+    audioRef.current.play();
+    MusicPlaying.set({ value: true });
   };
 
   const handlePause = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-  };
-
-  const handleNext = () => {
-    if (audioRef.current) {
-      setSong(getNextSong(song));
-    }
-  };
-
-  const handlePrev = () => {
-    if (audioRef.current) {
-      setSong(getPrevSong(song));
-    }
+    if (!audioRef.current) return;
+    audioRef.current.pause();
+    MusicPlaying.set({ value: false });
   };
 
   const handleUpdate = () => {
-    if (audioRef.current) {
-      //go to next song if current song is done
-      if (audioRef.current.ended) {
-        setSong(getNextSong(song));
-      }
+    if (!audioRef.current) return;
+    //go to next song if current song is done
+    if (audioRef.current.ended) {
+      setSong(getNextSong(song));
+    }
 
-      if (audioRef.current.paused && isPlaying) {
-        setIsPlaying(false);
-      }
+    if (audioRef.current.paused && isPlaying) {
+      MusicPlaying.set({ value: false });
+    }
 
-      if (!audioRef.current.paused) {
-        if (!isPlaying) setIsPlaying(true);
-      }
+    if (!audioRef.current.paused && !isPlaying) {
+      MusicPlaying.set({ value: true });
     }
   };
 
   return (
-    <div className={cn("group pointer-events-auto relative text-sm lg:w-5/6")}>
-      <div className={cn("flex items-center gap-2 transition-all", !isPlaying && "opacity-40")}>
-        <Button variant="ghost" size="xs" shape="square" onClick={isPlaying ? handlePause : handlePlay}>
-          {isPlaying && <MusicalNoteIcon className={cn("size-6")} />}
-          {!isPlaying && <SpeakerXMarkIcon className="size-6" />}
-        </Button>
-        <div className="marquee relative hidden grow lg:flex">
-          <div className="marquee-text flex">
-            <div className="flex px-1">
-              <p className="font-bold">{song.title}-</p>
-              <p className="opacity-70">{song.artist}</p>
-            </div>
-          </div>
-          <div className="marquee-text2 absolute top-0 flex gap-2">
-            <div className="flex px-1">
-              <p className="font-bold">{song.title}-</p>
-              <p className="opacity-70">{song.artist}</p>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className={cn(
-            "absolute inset-0 hidden w-full items-center justify-center opacity-0 transition-all group-hover:opacity-100 lg:flex",
-            !isPlaying && "opacity-100",
-          )}
-        >
-          <div className="flex">
-            <Button variant="ghost" shape="square" size="xs" onClick={handlePrev}>
-              <BackwardIcon />
-            </Button>
-            {isPlaying ? (
-              <Button variant="ghost" shape="square" size="xs" onClick={handlePause}>
-                <PauseIcon />
-              </Button>
-            ) : (
-              <Button variant="ghost" shape="square" size="xs" onClick={handlePlay}>
-                <PlayIcon />
-              </Button>
-            )}
-            <Button variant="ghost" shape="square" size="xs" onClick={handleNext}>
-              <ForwardIcon />
-            </Button>
-          </div>
-        </div>
+    <div className={cn("group pointer-events-auto relative text-sm", className)}>
+      <div className={cn("flex items-center gap-2 transition-all", !isPlaying && "opacity-70")}>
+        {!isPlaying ? (
+          <Button variant="ghost" shape="square" size="xs" onClick={handlePlay}>
+            <PauseIcon />
+          </Button>
+        ) : (
+          <Button variant="ghost" shape="square" size="xs" onClick={handlePause}>
+            <MusicalNoteIcon />
+          </Button>
+        )}
       </div>
 
       <audio
