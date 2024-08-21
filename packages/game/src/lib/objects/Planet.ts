@@ -138,7 +138,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.magnets = allEmpires
       .slice(0, empireCount)
-      .map((empire) => new Magnet(scene, coord.x + 75, coord.y - 60, empire));
+      .map((empire) => new Magnet(scene, coord.x + 75, coord.y - 60, empire, empireCount));
     this.magnets.forEach((magnet) => magnet.setDepth(DepthLayers.Magnet));
 
     this.magnetWaves = new Phaser.GameObjects.Sprite(

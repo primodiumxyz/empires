@@ -6,15 +6,16 @@ import { PrimodiumScene } from "@game/types";
 
 export class Magnet extends Phaser.GameObjects.Container {
   private empire: EEmpire;
+  private empireCount: number;
   private enabled = false;
   private turns = 0;
   private sprite: Phaser.GameObjects.Sprite;
   private label: Phaser.GameObjects.Text;
 
-  constructor(scene: PrimodiumScene, x: number, y: number, empire: EEmpire) {
+  constructor(scene: PrimodiumScene, x: number, y: number, empire: EEmpire, empireCount: number) {
     super(scene.phaserScene, x, y);
     this.empire = empire;
-
+    this.empireCount = empireCount;
     this.sprite = new Phaser.GameObjects.Sprite(scene.phaserScene, 0, 0, "spriteAtlas").setOrigin(0.5);
 
     this.label = new Phaser.GameObjects.Text(scene.phaserScene, 25, 0, "0", {
@@ -48,8 +49,8 @@ export class Magnet extends Phaser.GameObjects.Container {
       this.setActive(true).setVisible(true);
       callback?.(this.turns, turns);
 
-      const fullTurnLeft = Math.ceil(turns / 3);
-      const subTurnLeft = turns % 3;
+      const fullTurnLeft = Math.ceil(turns / this.empireCount);
+      const subTurnLeft = turns % this.empireCount;
       if (!this.sprite.anims.isPlaying && this.turns === 0) {
         this.sprite.play(Animations[EmpireToMagnetAnimationKeys[this.empire] ?? "MagnetRed"]);
       }
