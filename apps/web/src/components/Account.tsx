@@ -3,16 +3,20 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { formatAddress, formatNumber } from "@primodiumxyz/core";
+import { formatAddress, formatNumber, minEth } from "@primodiumxyz/core";
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Button } from "@/components/core/Button";
 import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
+import { useDripAccount } from "@/hooks/useDripAccount";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
+
+const DEV = import.meta.env.PRI_DEV === "true";
 
 export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: boolean }> = ({
   hideAccountBalance = false,
@@ -35,6 +39,8 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
     [empires],
   );
 
+  const requestDrip = useDripAccount();
+
   const noPlanets = sortedEmpires.every((empire) => empires.get(empire)?.playerPoints === 0n);
   return (
     <div className="min-w-42 flex flex-col gap-2 text-right text-xs">
@@ -46,6 +52,7 @@ export const Account: React.FC<{ hideAccountBalance?: boolean; justifyStart?: bo
               <p>{formatAddress(address)}</p>
             </div>
             <Price wei={balance} className="text-sm text-accent" />
+            {DEV && balance < minEth && <Button onClick={() => requestDrip(address, true)}>Rebuy</Button>}
             <hr className="my-1 w-full border-secondary/50" />
             {!noPlanets && <p className="text-xs opacity-70">Your Portfolio</p>}
           </>

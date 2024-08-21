@@ -4,6 +4,5 @@ import { setupGameStateManager } from "@game/scenes/root/systems/setupGameStateM
 import { PrimodiumScene } from "@game/types";
 
 export const runSystems = (scene: PrimodiumScene, game: GlobalApi, core: Core, phaserGame: Phaser.Game) => {
-  // setupAudioEffects(scene, core);
   setupGameStateManager(game, phaserGame);
 };

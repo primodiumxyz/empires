@@ -88,7 +88,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
     <Tabs className={cn("flex flex-col items-center justify-start gap-2", className)}>
       <Buttons selectedPlanet={selectedPlanet} empire={planet.empireId} />
       <Card noDecor className="relative w-96 flex-row items-center justify-center bg-slate-900">
-        <Tabs.Pane index={0} className="w-full items-center gap-6">
+        <Tabs.Pane index={0} className="w-full items-center gap-4">
           <Header
             title={"Ships"}
             description={"Attack other planets"}

@@ -11,7 +11,6 @@ import { LibPrice } from "libraries/LibPrice.sol";
 contract LibPriceTest is PrimodiumTest {
   P_PointConfigData config;
   P_OverrideConfigData createShipConfig;
-  P_OverrideConfigData killShipConfig;
   uint256 pointUnit;
   uint8 EMPIRE_COUNT;
   function setUp() public override {
@@ -19,21 +18,10 @@ contract LibPriceTest is PrimodiumTest {
     config = P_PointConfig.get();
     pointUnit = config.pointUnit;
     createShipConfig = P_OverrideConfig.get(EOverride.CreateShip);
-    killShipConfig = P_OverrideConfig.get(EOverride.KillShip);
     EMPIRE_COUNT = P_GameConfig.getEmpireCount();
 
-    // Let's make the kill ship cost different than create ship
-    killShipConfig.minOverrideCost = createShipConfig.minOverrideCost * 3;
-    killShipConfig.startOverrideCost = createShipConfig.startOverrideCost * 3;
-    killShipConfig.overrideGenRate = createShipConfig.overrideGenRate * 3;
-    killShipConfig.overrideCostIncrease = createShipConfig.overrideCostIncrease * 3;
     vm.startPrank(creator);
-    P_OverrideConfig.set(EOverride.KillShip, killShipConfig);
 
-    // We need to reinitialize price for KillShip, as InitPrice.sol already ran
-    OverrideCost.set(EEmpire.Red, EOverride.KillShip, killShipConfig.startOverrideCost);
-    OverrideCost.set(EEmpire.Blue, EOverride.KillShip, killShipConfig.startOverrideCost);
-    OverrideCost.set(EEmpire.Green, EOverride.KillShip, killShipConfig.startOverrideCost);
     vm.stopPrank();
   }
 
@@ -53,11 +41,6 @@ contract LibPriceTest is PrimodiumTest {
       createShipConfig.startOverrideCost,
       "Starting Green Empire marginal override cost incorrect"
     );
-    assertEq(
-      LibPrice.getMarginalOverrideCost(EOverride.KillShip, EEmpire.Red, 1),
-      killShipConfig.startOverrideCost,
-      "Starting Red Empire regressive marginal override cost incorrect"
-    );
   }
 
   function testGetTwoMarginalOverrideCost() public {
@@ -75,11 +58,6 @@ contract LibPriceTest is PrimodiumTest {
       LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Green, 2),
       createShipConfig.startOverrideCost + (createShipConfig.startOverrideCost + createShipConfig.overrideCostIncrease),
       "Green Empire marginal override cost for 2 overrides incorrect"
-    );
-    assertEq(
-      LibPrice.getMarginalOverrideCost(EOverride.KillShip, EEmpire.Red, 2),
-      killShipConfig.startOverrideCost + (killShipConfig.startOverrideCost + killShipConfig.overrideCostIncrease),
-      "Red Empire regressive marginal override cost for 2 overrides incorrect"
     );
   }
 
@@ -180,24 +158,6 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
-  function testGetTotalCostRegressSingle() public {
-    assertEq(
-      LibPrice.getTotalCost(EOverride.KillShip, EEmpire.Red, 1),
-      LibPrice.getMarginalOverrideCost(EOverride.KillShip, EEmpire.Red, 1) +
-        LibPrice.getRegressPointCost(EEmpire.Red, 1),
-      "Total cost for single override Red Empire incorrect"
-    );
-  }
-
-  function testGetTotalCostRegressMultiple() public {
-    assertEq(
-      LibPrice.getTotalCost(EOverride.KillShip, EEmpire.Red, 2),
-      LibPrice.getMarginalOverrideCost(EOverride.KillShip, EEmpire.Red, 2) +
-        LibPrice.getRegressPointCost(EEmpire.Red, 2),
-      "Total cost for multiple overrides Red Empire incorrect"
-    );
-  }
-
   function testPointCostUp() public {
     vm.startPrank(creator);
     uint256 beginPointCost = LibPrice.getPointCost(EEmpire.Red, 1 * pointUnit);
@@ -241,11 +201,7 @@ contract LibPriceTest is PrimodiumTest {
       nextOverrideCost + createShipConfig.overrideCostIncrease,
       "Second override cost increase incorrect"
     );
-    assertEq(
-      OverrideCost.get(EEmpire.Red, EOverride.KillShip),
-      killShipConfig.startOverrideCost,
-      "Red Empire's other override costs should not change"
-    );
+
     assertEq(
       OverrideCost.get(EEmpire.Blue, EOverride.CreateShip),
       createShipConfig.startOverrideCost,
@@ -350,22 +306,15 @@ contract LibPriceTest is PrimodiumTest {
       EOverride.CreateShip,
       createShipConfig.minOverrideCost + createShipConfig.overrideGenRate
     );
-    OverrideCost.set(EEmpire.Red, EOverride.KillShip, killShipConfig.minOverrideCost + killShipConfig.overrideGenRate);
     OverrideCost.set(
       EEmpire.Blue,
       EOverride.CreateShip,
       createShipConfig.minOverrideCost + createShipConfig.overrideGenRate
     );
-    OverrideCost.set(EEmpire.Blue, EOverride.KillShip, killShipConfig.minOverrideCost + killShipConfig.overrideGenRate);
     OverrideCost.set(
       EEmpire.Green,
       EOverride.CreateShip,
       createShipConfig.minOverrideCost + createShipConfig.overrideGenRate
-    );
-    OverrideCost.set(
-      EEmpire.Green,
-      EOverride.KillShip,
-      killShipConfig.minOverrideCost + killShipConfig.overrideGenRate
     );
 
     LibPrice.empireOverridesCostDown(EEmpire.Red);
@@ -374,29 +323,16 @@ contract LibPriceTest is PrimodiumTest {
       createShipConfig.minOverrideCost,
       "Red Empire override cost down incorrect when matching gen rate"
     );
-    assertEq(
-      OverrideCost.get(EEmpire.Red, EOverride.KillShip),
-      killShipConfig.minOverrideCost,
-      "Red Empire override cost down should affect all overrides of the empire"
-    );
+
     assertEq(
       OverrideCost.get(EEmpire.Blue, EOverride.CreateShip),
       createShipConfig.minOverrideCost + createShipConfig.overrideGenRate,
       "Blue Empire override cost should not change"
     );
-    assertEq(
-      OverrideCost.get(EEmpire.Blue, EOverride.KillShip),
-      killShipConfig.minOverrideCost + killShipConfig.overrideGenRate,
-      "Blue Empire override cost should not change"
-    );
+
     assertEq(
       OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
       createShipConfig.minOverrideCost + createShipConfig.overrideGenRate,
-      "Green Empire override cost should not change"
-    );
-    assertEq(
-      OverrideCost.get(EEmpire.Green, EOverride.KillShip),
-      killShipConfig.minOverrideCost + killShipConfig.overrideGenRate,
       "Green Empire override cost should not change"
     );
 
