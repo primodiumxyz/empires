@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1724226638851",
+            "image": "atlas.png?timestamp=1724226843464",
             "format": "RGBA8888",
             "size": {
                 "w": 1618,
@@ -1253,7 +1253,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/citadel/Citadel_AsteroidBelt.png",
+                    "filename": "sprites/citadel/Citadel_Asteroid_Belt.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {

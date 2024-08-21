@@ -161,6 +161,16 @@ export const AnimationConfig: Animation[] = [
     prefix: "sprites/shield-eater/target/Shield_Target_",
     suffix: ".png",
   },
+  {
+    key: "citadel/crown",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 14,
+    repeat: 0,
+    prefix: "sprites/citadel/crown/Citadel_Crown_",
+    suffix: ".png",
+  },
 
   /* ----------------------------------- VFX ---------------------------------- */
   {
@@ -318,6 +328,15 @@ export const AnimationConfig: Animation[] = [
     endFrame: 14,
     zeroPad: 3,
     prefix: "vfx/shield-eater/crack/AOE_Crack_",
+    suffix: ".png",
+  },
+  {
+    key: "citadel/shine",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 9,
+    prefix: "vfx/citadel/Citadel_Shine_",
     suffix: ".png",
   },
 ];
