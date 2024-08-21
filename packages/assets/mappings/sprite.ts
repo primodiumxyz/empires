@@ -24,6 +24,7 @@ export const Sprites = {
   Gold: "sprites/icons/gold.png",
   Attack: "sprites/icons/attack.png",
   Crown: "sprites/icons/crown.png",
+  ShieldEater: "sprites/icons/shield_eater.png",
 
   //Background
   StarBg: "sprites/background/star.png",

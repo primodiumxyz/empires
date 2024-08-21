@@ -79,7 +79,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"],
     ).setDepth(DepthLayers.Base + coord.y);
 
-    this.planetName = new Phaser.GameObjects.Text(scene.phaserScene, coord.x, coord.y + 25, entityToPlanetName(id), {
+    this.planetName = new Phaser.GameObjects.Text(scene.phaserScene, coord.x, coord.y + 40, entityToPlanetName(id), {
       fontSize: 25,
       color: "rgba(255,255,255,0.5)",
       fontFamily: "Silkscreen",
@@ -87,7 +87,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       padding: { x: 10 },
     })
       .setOrigin(0.5, 0.5)
-      .setAlpha(0.25)
+      .setAlpha(0.5)
       .setDepth(DepthLayers.Planet - 1);
 
     this.shields = new IconLabel(
@@ -140,7 +140,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.magnets = allEmpires
       .slice(0, empireCount)
-      .map((empire) => new Magnet(scene, coord.x + 75, coord.y - 60, empire));
+      .map((empire) => new Magnet(scene, coord.x + 75, coord.y - 60, empire, empireCount));
     this.magnets.forEach((magnet) => magnet.setDepth(DepthLayers.Magnet));
 
     this.magnetWaves = new Phaser.GameObjects.Sprite(
@@ -238,7 +238,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       this._scene.camera.phaserCamera.zoom,
       this._scene.config.camera.minZoom,
       this._scene.config.camera.defaultZoom,
-      0.5,
+      0.8,
       0,
     );
 

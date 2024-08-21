@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { minEth } from "@primodiumxyz/core";
 import { useAccountClient } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import Game from "@/components/game";
+import Game from "@/components/game/index";
 import { useBalance } from "@/hooks/useBalance";
 import { useDripAccount } from "@/hooks/useDripAccount";
 import { useSettings } from "@/hooks/useSettings";
