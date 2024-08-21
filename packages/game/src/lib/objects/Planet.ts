@@ -35,7 +35,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private magnets: Magnet[];
   private magnetWaves: Phaser.GameObjects.Sprite;
   private shieldEater: ShieldEater;
-  private citadel: Phaser.GameObjects.Sprite | null;
+  private citadelCrown: Phaser.GameObjects.Sprite | null = null;
+  private citadelAsteroidBelt: Phaser.GameObjects.Sprite | null = null;
+  private citadelShineInterval: NodeJS.Timeout | null = null;
   private empireId: EEmpire;
   private spawned = false;
 
@@ -152,12 +154,24 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
-    this.citadel = citadel
-      ? new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y - 70, Assets.SpriteAtlas, Sprites.Crown)
-          .setOrigin(0.5, 0.5)
-          .setDepth(DepthLayers.Planet + 1)
-          .setScale(1.5)
-      : null;
+    if (citadel) {
+      this.citadelCrown = new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y - 75, Assets.SpriteAtlas)
+        .setOrigin(0.5, 0.5)
+        .setDepth(DepthLayers.Planet + 1)
+        .play(Animations.CitadelCrown);
+
+      this.citadelAsteroidBelt = new Phaser.GameObjects.Sprite(
+        scene.phaserScene,
+        coord.x,
+        coord.y - 30,
+        Assets.SpriteAtlas,
+        Sprites.CitadelAsteroidBelt,
+      ).setDepth(DepthLayers.Planet + 1);
+
+      this.citadelShineInterval = setInterval(() => {
+        this.citadelShine();
+      }, 10_000);
+    }
 
     this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
       DepthLayers.ShieldEater,
@@ -184,7 +198,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
     this.scene.add.existing(this.shieldEater);
-    if (this.citadel) this.scene.add.existing(this.citadel);
+    if (this.citadelCrown) this.scene.add.existing(this.citadelCrown);
+    if (this.citadelAsteroidBelt) this.scene.add.existing(this.citadelAsteroidBelt);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     this.scene.add.existing(this.magnetWaves);
     return this;
@@ -203,11 +218,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.shields.setScale(scale);
     this.ships.setScale(scale);
     this.gold.setScale(scale);
-    if (this.citadel) this.citadel.setScale(scale);
+    if (this.citadelCrown) this.citadelCrown.setScale(scale);
+    if (this.citadelAsteroidBelt) this.citadelAsteroidBelt.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
     this.shieldEater.setScale(scale);
-    if (this.citadel) this.citadel.setScale(scale);
     return this;
   }
 
@@ -431,13 +446,23 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     return this.shieldEater.shieldEaterCrack();
   }
 
+  citadelShine(): void {
+    this.citadelCrown?.play(Animations.CitadelCrown);
+    this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 25 }, "CitadelShine", {
+      depth: DepthLayers.Planet + 1,
+      blendMode: Phaser.BlendModes.ADD,
+    });
+  }
+
   override destroy() {
     this.pendingArrow.destroy();
     this.planetSprite.destroy();
     this.planetUnderglowSprite.destroy();
     this.hexSprite.destroy();
     this.hexHoloSprite.destroy();
-    this.citadel?.destroy();
+    this.citadelCrown?.destroy();
+    this.citadelAsteroidBelt?.destroy();
+    if (this.citadelShineInterval) clearInterval(this.citadelShineInterval);
     this._scene.objects.planet.remove(this.id);
     this.magnets.forEach((magnet) => magnet.destroy());
     this.magnetWaves.destroy();

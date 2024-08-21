@@ -17,6 +17,9 @@ export const Animations = {
   MagnetPink: "magnet/pink",
   MagnetPurple: "magnet/purple",
 
+  // Citadel
+  CitadelCrown: "citadel/crown",
+
   //VFX --------------------------
 
   //CONQUER
@@ -44,6 +47,9 @@ export const Animations = {
   ShieldEaterTarget: "shield-eater/target",
   ShieldEaterDetonate: "shield-eater/detonate",
   ShieldEaterCrack: "shield-eater/crack",
+
+  // Citadel
+  CitadelShine: "citadel/shine",
 };
 
 export type AnimationKeys = keyof typeof Animations;
