@@ -24,10 +24,14 @@ export const Sprites = {
   Gold: "sprites/icons/gold.png",
   Attack: "sprites/icons/attack.png",
   Crown: "sprites/icons/crown.png",
+  ShieldEater: "sprites/icons/shield_eater.png",
 
   //Background
   StarBg: "sprites/background/star.png",
   Nebula: "sprites/background/nebula.png",
+
+  // Citadel
+  CitadelAsteroidBelt: "sprites/citadel/Citadel_Asteroid_Belt.png",
 };
 
 export type SpriteKeys = keyof typeof Sprites;

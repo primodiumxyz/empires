@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Turn, P_GameConfig, Planet, PlanetData, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire, ShieldEater, P_ShieldEaterConfig } from "codegen/index.sol";
+import { Turn, P_GameConfig, Planet, PlanetData, OverrideCost, P_PointConfig, P_MagnetConfig, Magnet, Empire, ShieldEater, P_ShieldEaterConfig, P_OverrideConfig } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
@@ -328,7 +328,7 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(PointsMap.getLockedPoints(empire, aliceId), expectedLockedPoints, "Incorrect amount of points locked");
     assertEq(
       PointsMap.getValue(empire, aliceId),
-      initialPoints + ((EMPIRE_COUNT - 1) * pointUnit),
+      initialPoints + ((EMPIRE_COUNT - 1) * pointUnit) * P_OverrideConfig.getPointMultiplier(EOverride.PlaceMagnet),
       "Total points should not change"
     );
   }

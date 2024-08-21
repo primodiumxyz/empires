@@ -13,9 +13,9 @@ export function createPriceUtils(tables: Tables) {
     let totalCost = 0n;
 
     if (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.isProgressOverride) {
-      totalCost = getProgressPointCost(_empireImpacted, _overrideCount, nextTurn);
+      totalCost = getProgressPointCost(_overrideType, _empireImpacted, _overrideCount, nextTurn);
     } else {
-      totalCost = getRegressPointCost(_empireImpacted, _overrideCount, nextTurn);
+      totalCost = getRegressPointCost(_overrideType, _empireImpacted, _overrideCount, nextTurn);
     }
 
     totalCost += getMarginalOverrideCost(_overrideType, _empireImpacted, _overrideCount, nextTurn);
@@ -25,35 +25,41 @@ export function createPriceUtils(tables: Tables) {
 
   /**
    * @dev Calculates the cost of purchasing multiple points related to a progressive action that aids an empire.
+   * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the action.
    * @param _overrideCount The number of actions.
    * @param nextTurn Whether to calculate the cost for the next turn.
    * @return pointCost The cost of all points related to the action.
    */
-  function getProgressPointCost(_empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
+  function getProgressPointCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
     const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
+    const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
+    const pointMultiplier = tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
     return getPointCost(
       _empireImpacted,
-      _overrideCount * BigInt(empires - 1) * (tables.P_PointConfig.get()?.pointUnit ?? 1n),
+      _overrideCount * BigInt(empires - 1) * pointUnit * pointMultiplier,
       nextTurn,
     );
   }
 
   /**
    * @dev Calculates the cost of purchasing points related to a regressive action. Points are purchased for all empires except the impacted empire.
+   * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the action.
    * @param _overrideCount The number of actions.
    * @param nextTurn Whether to calculate the cost for the next turn.
    * @return pointCost The cost of all points related to the action.
    */
-  function getRegressPointCost(_empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
+  function getRegressPointCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
     const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
+    const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
+    const pointMultiplier = tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
     let pointCost = 0n;
     for (let i = 1; i <= empires; i++) {
       if (i == _empireImpacted) {
         continue;
       }
-      pointCost += getPointCost(i, _overrideCount * (tables.P_PointConfig.get()?.pointUnit ?? 1n), nextTurn);
+      pointCost += getPointCost(i, _overrideCount * pointUnit * pointMultiplier, nextTurn);
     }
 
     return pointCost;

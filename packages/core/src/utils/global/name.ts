@@ -4,6 +4,73 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { entityToAddress } from "@core/utils/global/common";
 import { hashEntities } from "@core/utils/global/encode";
 
+const prefixes = [
+  "Zy",
+  "Xe",
+  "Vo",
+  "Ne",
+  "Ar",
+  "Io",
+  "Ux",
+  "El",
+  "Ry",
+  "Ka",
+  "Bi",
+  "Mu",
+  "Fy",
+  "Ja",
+  "Lo",
+  "Wi",
+  "Pu",
+  "Sy",
+  "Ga",
+  "Jour",
+  "Zoro",
+  "Waz",
+  "Ord",
+  "Micro",
+  "Macro",
+  "Nano",
+  "Blue",
+  "Femto",
+  "Atto",
+  "Zepto",
+  "Yoto",
+];
+const suffixes = [
+  "thor",
+  "noxia",
+  "ria",
+  "luxo",
+  "ton",
+  "plex",
+  "thoo",
+  "dor",
+  "mira",
+  "zar",
+  "vex",
+  "quin",
+  "fire",
+  "seff",
+  "nova",
+  "fluu",
+  "glow",
+  "roe",
+  "eta",
+  "aura",
+  "olio",
+  "lanta",
+  "sona",
+  "garra",
+  "ra",
+  "bar",
+  "taco",
+  "plex",
+  "zone",
+];
+
+const entityPlanetName = new Map<Entity, string>();
+
 /**
  * Formats a raw name by inserting spaces and handling camelCase.
  * @param rawName - The raw name to format.
@@ -19,7 +86,6 @@ export const formatName = (rawName: string): string => {
     .trimStart();
 };
 
-const entityPlanetName = new Map<Entity, string>();
 /**
  * Converts an entity to a planet name.
  * @param entity - The entity to convert.
@@ -30,14 +96,10 @@ export const entityToPlanetName = (entity: Entity): string => {
 
   const hash = hashEntities(entity);
 
-  const prefix1 = parseInt(hash.substring(0, 4), 16) % 26;
-  const prefix2 = parseInt(hash.substring(4, 8), 16) % 26;
-  const number = parseInt(hash.substring(8, 12), 16) % 251;
-  const suffix = parseInt(hash.substring(12, 16), 16) % 26;
+  const prefixIndex = parseInt(hash.substring(8, 12), 16) % prefixes.length;
+  const suffixIndex = parseInt(hash.substring(4, 8), 16) % suffixes.length;
 
-  const name = `${String.fromCharCode(65 + prefix1)}${String.fromCharCode(
-    65 + prefix2,
-  )} ${number} ${String.fromCharCode(65 + suffix)}`;
+  const name = `${prefixes[prefixIndex]}${suffixes[suffixIndex]}`;
 
   entityPlanetName.set(entity, name);
 

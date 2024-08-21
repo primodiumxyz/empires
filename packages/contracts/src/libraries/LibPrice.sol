@@ -23,9 +23,9 @@ library LibPrice {
   ) internal view returns (uint256) {
     uint256 totalCost = 0;
     if (P_OverrideConfig.getIsProgressOverride(_overrideType)) {
-      totalCost = getProgressPointCost(_empireImpacted, _overrideCount);
+      totalCost = getProgressPointCost(_overrideType, _empireImpacted, _overrideCount);
     } else {
-      totalCost = getRegressPointCost(_empireImpacted, _overrideCount);
+      totalCost = getRegressPointCost(_overrideType, _empireImpacted, _overrideCount);
     }
 
     totalCost += getMarginalOverrideCost(_overrideType, _empireImpacted, _overrideCount);
@@ -35,29 +35,31 @@ library LibPrice {
 
   /**
    * @dev Calculates the cost of purchasing multiple points related to a progressive override that aids an empire.
+   * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the override.
    * @param _overrideCount The number of overrides to be purchased.
    * @return pointCost The cost of all points related to the override.
    */
-  function getProgressPointCost(EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+  function getProgressPointCost(EOverride _overrideType, EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
     uint8 empireCount = P_GameConfig.getEmpireCount();
-    return getPointCost(_empireImpacted, _overrideCount * (empireCount - 1) * P_PointConfig.getPointUnit());
+    return getPointCost(_empireImpacted, _overrideCount * (empireCount - 1) * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType));
   }
 
   /**
    * @dev Calculates the cost of purchasing points related to a regressive override. Points are purchased for all empires except the impacted empire.
+   * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the override.
    * @param _overrideCount The number of overrides to be purchased.
    * @return pointCost The cost of all points related to the override.
    */
-  function getRegressPointCost(EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+  function getRegressPointCost(EOverride _overrideType, EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
     uint256 pointCost;
     uint8 empireCount = P_GameConfig.getEmpireCount();
     for (uint8 i = 1; i <= empireCount; i++) {
       if (EEmpire(i) == _empireImpacted) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), _overrideCount * P_PointConfig.getPointUnit());
+      pointCost += getPointCost(EEmpire(i), _overrideCount * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType));
     }
     return pointCost;
   }
