@@ -63,6 +63,7 @@ export const worldInput = {
       schema: {
         overrideAction: "EOverride",
         isProgressOverride: "bool",
+        pointMultiplier: "uint256",
         minOverrideCost: "uint256",
         startOverrideCost: "uint256",
         overrideGenRate: "uint256",

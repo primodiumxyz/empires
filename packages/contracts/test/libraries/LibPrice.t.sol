@@ -99,16 +99,18 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetRegressPointCostSingle() public {
     uint256 initPointCost = config.startPointCost;
-    uint256 points = initPointCost * (EMPIRE_COUNT - 1);
-    assertEq(LibPrice.getRegressPointCost(EEmpire.Red, 1), points, "Red Empire point cost for 2 points incorrect");
-    assertEq(LibPrice.getRegressPointCost(EEmpire.Blue, 1), points, "Blue Empire point cost for 2 points incorrect");
-    assertEq(LibPrice.getRegressPointCost(EEmpire.Green, 1), points, "Green Empire point cost for 2 points incorrect");
+    vm.startPrank(creator);
+    P_OverrideConfig.setPointMultiplier(EOverride.DetonateShieldEater, 2);
+    uint256 pointCost = (initPointCost + (initPointCost + config.pointCostIncrease)) * (EMPIRE_COUNT - 1);
+    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Red, 1), pointCost, "Red Empire point cost for 2 points incorrect");
+    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Blue, 1), pointCost, "Blue Empire point cost for 2 points incorrect");
+    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Green, 1), pointCost, "Green Empire point cost for 2 points incorrect");
   }
 
   function testGetRegressPointCostMultiple() public {
     assertEq(
-      LibPrice.getRegressPointCost(EEmpire.Red, 2),
-      LibPrice.getPointCost(EEmpire.Red, 2 * pointUnit) * (EMPIRE_COUNT - 1),
+      LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Red, 2),
+      LibPrice.getPointCost(EEmpire.Red, 2 * pointUnit * P_OverrideConfig.getPointMultiplier(EOverride.DetonateShieldEater)) * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 bulk overrides incorrect"
     );
   }
@@ -116,18 +118,18 @@ contract LibPriceTest is PrimodiumTest {
   function testGetProgressPointCostSingle() public {
     uint256 initPointCost = config.startPointCost;
     assertEq(
-      LibPrice.getProgressPointCost(EEmpire.Red, 1),
-      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
+      LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Red, 1),
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2) * P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
       "Red Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
     assertEq(
-      LibPrice.getProgressPointCost(EEmpire.Blue, 1),
-      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
+      LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Blue, 1),
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2) * P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
       "Blue Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
     assertEq(
-      LibPrice.getProgressPointCost(EEmpire.Green, 1),
-      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2),
+      LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Green, 1),
+      (EMPIRE_COUNT - 1) * (initPointCost + ((EMPIRE_COUNT - 2) * config.pointCostIncrease) / 2) * P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
       "Green Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
   }
@@ -135,8 +137,8 @@ contract LibPriceTest is PrimodiumTest {
   function testGetProgressPointCostMultiple() public {
     uint256 initPointCost = config.startPointCost;
     assertEq(
-      LibPrice.getProgressPointCost(EEmpire.Red, 2),
-      2 * (EMPIRE_COUNT - 1) * (initPointCost + ((2 * EMPIRE_COUNT - 3) * config.pointCostIncrease) / 2),
+      LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Red, 2),
+      2 * (EMPIRE_COUNT - 1) * (initPointCost + ((2 * EMPIRE_COUNT - 3) * config.pointCostIncrease) / 2) * P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
       "Red Empire point cost for 2 bulk overrides incorrect"
     );
   }
@@ -144,7 +146,7 @@ contract LibPriceTest is PrimodiumTest {
   function testGetTotalCostProgressSingle() public {
     assertEq(
       LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, 1),
-      createShipConfig.startOverrideCost + LibPrice.getProgressPointCost(EEmpire.Red, 1),
+      createShipConfig.startOverrideCost + LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Red, 1),
       "Total cost for single override Red Empire incorrect"
     );
   }
@@ -153,7 +155,7 @@ contract LibPriceTest is PrimodiumTest {
     assertEq(
       LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, 2),
       LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Red, 2) +
-        LibPrice.getProgressPointCost(EEmpire.Red, 2),
+        LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Red, 2),
       "Total cost for multiple overrides Red Empire incorrect"
     );
   }
