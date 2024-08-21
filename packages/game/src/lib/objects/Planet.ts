@@ -168,15 +168,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         Sprites.CitadelAsteroidBelt,
       ).setDepth(DepthLayers.Planet + 1);
 
-      scene.phaserScene.tweens.add({
-        targets: this.citadelAsteroidBelt,
-        y: { from: coord.y - 30, to: coord.y - 20 },
-        duration: 3000,
-        delay: Math.random() * 4000,
-        repeat: -1,
-        yoyo: true,
-      });
-
       this.citadelShineInterval = setInterval(() => {
         this.citadelShine();
       }, 10_000);
