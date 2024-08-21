@@ -43,6 +43,10 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         detonateAdjacentDamage: scaleMultiplier(0.5),
         detonationThreshold: 8n,
       },
+      P_AcidConfig: {
+        acidDuration: 3n,
+        acidDamagePercent: scaleMultiplier(0.2),
+      },
     },
   },
 
@@ -84,6 +88,20 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         startOverrideCost: BigInt(POINTS_UNIT * 0.0001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.0001),
+      },
+    },
+  },
+
+  AcidOverride: {
+    keys: [{ [EOverride.PlaceAcid]: "uint8" }],
+    tables: {
+      P_OverrideConfig: {
+        isProgressOverride: false,
+        pointMultiplier: 5n,
+        minOverrideCost: BigInt(POINTS_UNIT * 0.0005),
+        startOverrideCost: BigInt(POINTS_UNIT * 0.001),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.00001),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.0002),
       },
     },
   },
