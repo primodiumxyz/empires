@@ -227,7 +227,7 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
             stroke={"rgba(0, 255, 255, .5)"}
             tickStroke={"rgba(0, 255, 255, .5)"}
             tickLabelProps={tickLabelProps}
-            numTicks={width > 750 ? 10 : 5}
+            numTicks={width > 750 ? 8 : 5}
             label={"time"}
             labelProps={{
               x: width + 30,

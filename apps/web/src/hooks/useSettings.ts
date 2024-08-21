@@ -63,7 +63,7 @@ const SelectedTab = createLocalNumberTable(settingsWorld, {
 
 const ViewMode = createLocalNumberTable(settingsWorld, { id: "ViewMode", persist: true, version: "1" });
 
-if (!ViewMode.get()) {
+if (!ViewMode.get()?.value) {
   ViewMode.set({ value: EViewMode.Dashboard });
 }
 

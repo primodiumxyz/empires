@@ -55,7 +55,10 @@ export const EmpireCard = ({
         </p>
         <div className="items-center gap-0 text-right text-accent lg:text-base">
           <p className="hidden text-[0.6rem] opacity-50 lg:block">YOU OWN</p>
-          <p className="-mt-2">{formatEther(playerPoints)} pts</p>
+          <p className="text-sm">
+            {formatEther(playerPoints)}
+            <span className="text-xs">pts</span>
+          </p>
         </div>
         <div className="flex items-center gap-4 lg:gap-6">
           <Badge className="gap-1 p-2" variant="neutral">
