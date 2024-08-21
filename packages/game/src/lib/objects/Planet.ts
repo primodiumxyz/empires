@@ -23,7 +23,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   readonly id: Entity;
   readonly coord: PixelCoord;
   protected _scene: PrimodiumScene;
-  private shouldPlayAnims = true;
+  private playAnims = true;
   private planetUnderglowSprite: Phaser.GameObjects.Image;
   private planetSprite: Phaser.GameObjects.Sprite;
   private hexSprite: Phaser.GameObjects.Sprite;
@@ -266,7 +266,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
     if (!destinationPlanet) return;
 
-    if (!this.shouldPlayAnims) {
+    if (!this.playAnims) {
       this.pendingMove = destinationPlanetId;
       return;
     }
@@ -341,7 +341,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   flashPlanet() {
-    if (!this.shouldPlayAnims) return;
+    if (!this.playAnims) return;
     this._scene.fx.flashSprite(this.planetSprite);
   }
 
@@ -376,7 +376,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   setMagnet(empire: EEmpire, turns: number) {
-    if (!this.shouldPlayAnims) {
+    if (!this.playAnims) {
       this.activeMagnets.set(empire, turns);
       return;
     }
@@ -413,8 +413,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   setShieldEaterLocation(present: boolean): ShieldEater["location"] {
-    const location = this.shieldEater.setShieldEaterLocation(present, this.shouldPlayAnims);
-    if (!this.shouldPlayAnims) return location;
+    const location = this.shieldEater.setShieldEaterLocation(present, this.playAnims);
+    if (!this.playAnims) return location;
 
     if (present) {
       this.shieldEater.setDepth(DepthLayers.Planet - 1);
@@ -445,11 +445,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     return this.shieldEater.shieldEaterCrack();
   }
 
-  setShouldPlayAnims(shouldPlayAnims: boolean) {
-    this.shouldPlayAnims = shouldPlayAnims;
+  setPlayAnims(playAnims: boolean) {
+    this.playAnims = playAnims;
 
     // render the latest pending actions if there are any
-    if (shouldPlayAnims) {
+    if (playAnims) {
       if (this.pendingMove) {
         this.setPendingMove(this.pendingMove);
         this.pendingMove = null;
@@ -458,10 +458,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       this.activeMagnets.forEach((turns, empire) => {
         this.setMagnet(empire, turns);
       });
-
-      if (this.shieldEaterPendingLocation != undefined) this.setShieldEaterLocation(this.shieldEaterPendingLocation);
-      if (this.shieldEaterPendingPath !== undefined)
-        this.setShieldEaterPath(this.shieldEaterPendingPath.turns, this.shieldEaterPendingPath.turnsToDestination);
     }
   }
 

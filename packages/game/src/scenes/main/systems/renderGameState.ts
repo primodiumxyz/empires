@@ -11,7 +11,7 @@ export const renderGameState = (scene: PrimodiumScene, core: Core, game: GlobalA
         const planet = scene.objects.planet.get(entity);
         if (!planet) return;
 
-        planet.setShouldPlayAnims(current.visible);
+        planet.setPlayAnims(current.visible);
       });
     },
   });
