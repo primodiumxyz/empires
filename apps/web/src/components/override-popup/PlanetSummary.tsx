@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToPlanetName, formatNumber, formatTime } from "@primodiumxyz/core";
@@ -46,14 +47,14 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
                 src={sprite.getSprite("Crown")}
                 width={24}
                 height={24}
-                className={cn("absolute top-0", hasShieldEater ? "right-[20%]" : "right-[28%]")}
+                className={cn("absolute left-1/2 -translate-x-1/2", hasShieldEater ? "-top-4" : "top-0")}
               />
             )}
           </div>
           <div className="flex flex-col items-center justify-center">
             <h2 className="text-sm font-semibold text-warning">{entityToPlanetName(entity)}</h2>
             <span className="text-xs text-gray-400">
-              [{planet.q.toLocaleString()}, {planet.r.toLocaleString()}]
+              [{(planet.q - 100n).toLocaleString()}, {planet.r.toLocaleString()}]
             </span>
             <PlanetAssets shipCount={planet.shipCount} shieldCount={planet.shieldCount} goldCount={planet.goldCount} />
           </div>
@@ -93,6 +94,8 @@ const PlanetAssets = ({
 const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { utils } = useCore();
   const { probabilities: p } = utils.getRoutineProbabilities(entity);
+  const [isOpen, setIsOpen] = useState(false);
+
   const probabilities = useMemo(() => {
     return {
       accumulateGold: { label: "ACCUMULATE GOLD", value: p.accumulateGold },
@@ -104,18 +107,23 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   }, [p]);
 
   return (
-    <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
-      <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">ROUTINE PROBABILITIES</h3>
-      <div className="grid grid-cols-2 gap-y-1 text-xs">
-        {Object.entries(probabilities)
-          .sort((a, b) => b[1].value - a[1].value)
-          .map(([key, { label, value }]) => (
-            <Fragment key={key}>
-              <span>{label}</span>
-              <span className="text-right">{(value * 100).toFixed(0)}%</span>
-            </Fragment>
-          ))}
-      </div>
+    <div className="w-full rounded-md border border-base-100 text-xs">
+      <button onClick={() => setIsOpen(!isOpen)} className="flex w-full items-center justify-between p-2 text-left">
+        <h3 className="text-xs">ROUTINE PROBABILITIES</h3>
+        <ChevronDownIcon className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+      {isOpen && (
+        <div className="grid grid-cols-2 gap-y-1 p-2 text-xs">
+          {Object.entries(probabilities)
+            .sort((a, b) => b[1].value - a[1].value)
+            .map(([key, { label, value }]) => (
+              <Fragment key={key}>
+                <span>{label}</span>
+                <span className="text-right">{(value * 100).toFixed(0)}%</span>
+              </Fragment>
+            ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -160,30 +168,47 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     return index === -1 ? undefined : index + 1;
   }, [shieldEater, entity]);
 
+  const hideMagnets = timeLeft.every((t) => t === 0);
+  const hideOverrides = useMemo(() => {
+    return turnsToShieldEater === undefined && hideMagnets;
+  }, [turnsToShieldEater, hideMagnets]);
+
+  if (hideOverrides) return null;
+
   return (
     <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
       <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
       <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-1 text-xs">
-        <span className="text-gray-400">MAGNETS</span>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
-          {magnets.map((magnet, index) => (
-            <IconLabel
-              key={index}
-              imageUri={magnet.icon}
-              text={timeLeft[index] ? formatTime(timeLeft[index], true) : "--"}
-            />
-          ))}
-        </div>
-        <span className="text-gray-400">SHIELD EATER</span>
-        <div>
-          {turnsToShieldEater === 0 && <span className="text-accent">on planet</span>}
-          {!!turnsToShieldEater && (
-            <span className="text-accent">
-              in {turnsToShieldEater} turn{turnsToShieldEater > 1 ? "s" : ""}
-            </span>
-          )}
-          {turnsToShieldEater === undefined && "not on path"}
-        </div>
+        {!hideMagnets && (
+          <>
+            <span className="text-gray-400">MAGNETS</span>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
+              {magnets.map(
+                (magnet, index) =>
+                  timeLeft[index] !== 0 && (
+                    <IconLabel
+                      key={index}
+                      imageUri={magnet.icon}
+                      text={timeLeft[index] ? formatTime(timeLeft[index], true) : "--"}
+                    />
+                  ),
+              )}
+            </div>
+          </>
+        )}
+        {turnsToShieldEater !== undefined && (
+          <>
+            <span className="text-gray-400">SHIELD EATER</span>
+            <div>
+              {turnsToShieldEater === 0 && <span className="text-accent">on planet</span>}
+              {!!turnsToShieldEater && (
+                <span className="text-accent">
+                  in {turnsToShieldEater} turn{turnsToShieldEater > 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

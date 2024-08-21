@@ -6,7 +6,7 @@ import { Cheatcodes } from "@/components/cheatcodes/Cheatcodes";
 import { Button } from "@/components/core/Button";
 import { HUD } from "@/components/core/HUD";
 import { IconLabel } from "@/components/core/IconLabel";
-import { Dashboard } from "@/components/dashboard";
+import { Dashboard } from "@/components/Dashboard";
 import { Empires } from "@/components/empires/Empires";
 import { GameOver } from "@/components/GameOver";
 import { MusicPlayer } from "@/components/MusicPlayer";
