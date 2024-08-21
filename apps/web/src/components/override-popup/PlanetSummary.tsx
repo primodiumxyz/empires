@@ -17,16 +17,36 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
     ROOT: { sprite },
   } = useGame();
   const planet = tables.Planet.use(entity)!;
+  const hasShieldEater = tables.ShieldEater.use(entity)?.currentPlanet === entity;
   const { empireId } = planet;
 
   return (
     <Card noDecor className={cn("hide-scrollbar h-fit max-h-full flex-col items-center overflow-y-auto", className)}>
-      <div className="mb-2 flex w-full flex-col items-center justify-center gap-4">
-        <img
-          src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
-          width={64}
-          height={64}
-        />
+      <div className="mb-2 mt-4 flex w-full flex-col items-center justify-center gap-4">
+        <div className="relative flex h-full w-full items-center justify-center">
+          <img
+            src={sprite.getSprite(EmpireToPlanetSpriteKeys[empireId as EEmpire] ?? "PlanetGrey")}
+            width={64}
+            height={64}
+          />
+          <img
+            src={sprite.getSprite("ShieldEater")}
+            width={116}
+            height={116}
+            className={cn(
+              "absolute left-[52%] top-[41%] -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity",
+              hasShieldEater && "opacity-100",
+            )}
+          />
+          {planet.isCitadel && (
+            <img
+              src={sprite.getSprite("Crown")}
+              width={24}
+              height={24}
+              className={cn("absolute top-0", hasShieldEater ? "right-[20%]" : "right-[28%]")}
+            />
+          )}
+        </div>
         <h2 className="text-sm font-semibold text-warning">{entityToPlanetName(entity)}</h2>
       </div>
 
