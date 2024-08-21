@@ -8,7 +8,7 @@ import { HUD } from "@/components/core/HUD";
 import { IconLabel } from "@/components/core/IconLabel";
 import { Dashboard } from "@/components/dashboard";
 import { Empires } from "@/components/empires/Empires";
-import { GameOver } from "@/components/gameOver";
+import { GameOver } from "@/components/GameOver";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverridePopup } from "@/components/override-popup";
 import { PlayerReturns } from "@/components/PlayerReturns";
