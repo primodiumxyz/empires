@@ -27,7 +27,18 @@ export class ShieldEater extends Phaser.GameObjects.Container {
     this.add([this.location, this.destination]);
   }
 
-  setShieldEaterLocation(present: boolean) {
+  setShieldEaterLocation(present: boolean, playAnims: boolean) {
+    if (!playAnims && present) {
+      this.location.setActive(true).setVisible(true);
+      this.offsetLocationEnter("restore");
+      this.location.play(Animations["ShieldEaterIdle"]);
+      return this.location;
+    } else if (!playAnims && !present) {
+      this.location.setActive(false).setVisible(false);
+      this.offsetLocationExit("restore");
+      return this.location;
+    }
+
     if (present) {
       setTimeout(() => {
         this.location.setActive(true).setVisible(true);
@@ -51,7 +62,7 @@ export class ShieldEater extends Phaser.GameObjects.Container {
     return this.location;
   }
 
-  setShieldEaterPath(turns: number, turnsToDestination?: number) {
+  setShieldEaterPath(turns: number, turnsToDestination: number | undefined) {
     if (turns > 0) {
       // distribute opacity from 0.3 (furthest) to 1 (destination)
       const opacity = turnsToDestination ? 0.3 + 0.7 * (turns / turnsToDestination) : 1;
@@ -87,11 +98,11 @@ export class ShieldEater extends Phaser.GameObjects.Container {
     const offsetY = 6;
 
     if (type === "offset") {
-      this.location.setX(this.location.x + offsetX);
-      this.location.setY(this.location.y + offsetY);
+      this.location.setX(offsetX);
+      this.location.setY(offsetY);
     } else {
-      this.location.setX(this.location.x - offsetX);
-      this.location.setY(this.location.y - offsetY);
+      this.location.setX(0);
+      this.location.setY(0);
     }
   }
 
@@ -100,11 +111,11 @@ export class ShieldEater extends Phaser.GameObjects.Container {
     const offsetY = -18.5;
 
     if (type === "offset") {
-      this.location.setX(this.location.x + offsetX);
-      this.location.setY(this.location.y + offsetY);
+      this.location.setX(offsetX);
+      this.location.setY(offsetY);
     } else {
-      this.location.setX(this.location.x - offsetX);
-      this.location.setY(this.location.y - offsetY);
+      this.location.setX(0);
+      this.location.setY(0);
     }
   }
 }

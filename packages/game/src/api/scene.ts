@@ -18,7 +18,7 @@ export function createSceneApi(scene: Scene, globalApi: GlobalApi) {
     config: scene.config,
     camera: cameraApi,
     dispose: scene.dispose,
-    fx: createFxApi(scene),
+    fx: createFxApi(scene, globalApi),
     hooks: createHooksApi(scene, globalApi),
     input: createInputApi(scene, globalApi),
     objects: createObjectApi(scene),

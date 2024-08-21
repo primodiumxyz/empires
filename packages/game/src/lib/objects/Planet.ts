@@ -39,13 +39,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private activeMagnets: Map<EEmpire, number> = new Map();
   private magnetWaves: Phaser.GameObjects.Sprite;
   private shieldEater: ShieldEater;
-  private shieldEaterPendingLocation: boolean | undefined = undefined;
-  private shieldEaterPendingPath:
-    | {
-        turns: number;
-        turnsToDestination: number | undefined;
-      }
-    | undefined = undefined;
   private citadel: Phaser.GameObjects.Sprite | null;
   private empireId: EEmpire;
   private spawned = false;
@@ -251,11 +244,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
   updateFaction(empire: EEmpire) {
     if (empire === this.empireId) return;
-    if (!this.shouldPlayAnims) {
-      this.planetSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]);
-      this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
-      return;
-    }
 
     this._scene.audio.play("Blaster", "sfx");
     this._scene.fx.emitVfx(
@@ -305,7 +293,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   moveDestroyers(destinationPlanetId: Entity) {
-    if (!this.shouldPlayAnims) return;
     const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
     if (!destinationPlanet) return;
 
@@ -435,15 +422,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     activeMagnets.forEach((magnet, index) => magnet.updatePosition(this.coord.x + 75, this.coord.y - 60 + index * 30));
   }
 
-  setShieldEaterLocation(present: boolean): ShieldEater {
-    if (!this.shouldPlayAnims) {
-      this.shieldEaterPendingLocation = present;
-      return this.shieldEater;
-    }
+  setShieldEaterLocation(present: boolean): ShieldEater["location"] {
+    const location = this.shieldEater.setShieldEaterLocation(present, this.shouldPlayAnims);
+    if (!this.shouldPlayAnims) return location;
 
-    const location = this.shieldEater.setShieldEaterLocation(present);
-
-    if (present && this.shouldPlayAnims) {
+    if (present) {
       this.shieldEater.setDepth(DepthLayers.Planet - 1);
 
       location.on(
@@ -457,37 +440,25 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       );
     }
 
-    this.shieldEaterPendingLocation = undefined;
-    return this.shieldEater;
+    return location;
   }
 
-  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater {
-    if (!this.shouldPlayAnims) {
-      this.shieldEaterPendingPath = { turns, turnsToDestination };
-      return this.shieldEater;
-    }
-
-    this.shieldEater.setShieldEaterPath(turns, turnsToDestination);
-    this.shieldEaterPendingPath = undefined;
-    return this.shieldEater;
+  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater["destination"] {
+    return this.shieldEater.setShieldEaterPath(turns, turnsToDestination);
   }
 
   shieldEaterDetonate(): ShieldEater {
-    if (!this.shouldPlayAnims) return this.shieldEater;
-    this.shieldEater.shieldEaterDetonate();
-    return this.shieldEater;
+    return this.shieldEater.shieldEaterDetonate();
   }
 
   shieldEaterCrack(): ShieldEater {
-    if (!this.shouldPlayAnims) return this.shieldEater;
-    this.shieldEater.shieldEaterCrack();
-    return this.shieldEater;
+    return this.shieldEater.shieldEaterCrack();
   }
 
   setShouldPlayAnims(shouldPlayAnims: boolean) {
     this.shouldPlayAnims = shouldPlayAnims;
 
-    // render the latest pending move if any
+    // render the latest pending actions if there are any
     if (shouldPlayAnims) {
       if (this.pendingMove) {
         this.setPendingMove(this.pendingMove);
@@ -498,8 +469,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         this.setMagnet(empire, turns);
       });
 
-      if (this.shieldEaterPendingLocation) this.setShieldEaterLocation(this.shieldEaterPendingLocation);
-      if (this.shieldEaterPendingPath)
+      if (this.shieldEaterPendingLocation != undefined) this.setShieldEaterLocation(this.shieldEaterPendingLocation);
+      if (this.shieldEaterPendingPath !== undefined)
         this.setShieldEaterPath(this.shieldEaterPendingPath.turns, this.shieldEaterPendingPath.turnsToDestination);
     }
   }
