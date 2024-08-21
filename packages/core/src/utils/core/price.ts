@@ -33,9 +33,11 @@ export function createPriceUtils(tables: Tables) {
    */
   function getProgressPointCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
     const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
+    const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
+    const pointMultiplier = tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
     return getPointCost(
       _empireImpacted,
-      _overrideCount * BigInt(empires - 1) * (tables.P_PointConfig.get()?.pointUnit ?? 1n) * (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n),
+      _overrideCount * BigInt(empires - 1) * pointUnit * pointMultiplier,
       nextTurn,
     );
   }
@@ -50,12 +52,14 @@ export function createPriceUtils(tables: Tables) {
    */
   function getRegressPointCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
     const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
+    const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
+    const pointMultiplier = tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
     let pointCost = 0n;
     for (let i = 1; i <= empires; i++) {
       if (i == _empireImpacted) {
         continue;
       }
-      pointCost += getPointCost(i, _overrideCount * (tables.P_PointConfig.get()?.pointUnit ?? 1n) * (tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n), nextTurn);
+      pointCost += getPointCost(i, _overrideCount * pointUnit * pointMultiplier, nextTurn);
     }
 
     return pointCost;
