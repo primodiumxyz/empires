@@ -1,3 +1,4 @@
+import { EEmpire } from "@primodiumxyz/contracts";
 import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { Planet } from "@game/lib/objects/Planet";
@@ -108,6 +109,21 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
         planet.setShieldCount(current?.shieldCount ?? 0n);
         planet.setShipCount(current?.shipCount ?? 0n);
         planet.setGoldCount(current?.goldCount ?? 0n);
+      }
+    },
+  });
+
+  // Reset empires on game reset
+  tables.P_GameConfig.watch({
+    world: systemsWorld,
+    onChange: ({ properties: { current, prev } }) => {
+      if (current?.gameOverBlock !== prev?.gameOverBlock) {
+        tables.Planet.getAll().forEach((entity) => {
+          const planet = scene.objects.planet.get(entity);
+          const planetData = tables.Planet.get(entity);
+          if (!planet || !planetData) return;
+          planet.updateFaction(planetData.empireId);
+        });
       }
     },
   });
