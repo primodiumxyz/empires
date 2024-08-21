@@ -1,4 +1,3 @@
-import { EEmpire } from "@primodiumxyz/contracts";
 import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { Planet } from "@game/lib/objects/Planet";
@@ -123,6 +122,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
           const planetData = tables.Planet.get(entity);
           if (!planet || !planetData) return;
           planet.updateFaction(planetData.empireId);
+          planet.setMagnet(planetData.empireId, 0);
         });
       }
     },
