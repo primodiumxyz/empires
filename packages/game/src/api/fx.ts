@@ -5,8 +5,6 @@ import { GlobalApi } from "@game/api/global";
 import { DepthLayers } from "@game/lib/constants/common";
 
 export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
-  const shouldSkip = () => !globalApi.tables.GameState.get()?.visible;
-
   function outline(
     gameObject: Phaser.GameObjects.Sprite,
     options: {
@@ -49,7 +47,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       };
     } = {},
   ) {
-    if (shouldSkip()) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
 
     const {
       color = "#00ffff",
@@ -164,7 +162,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function flashScreen(options?: { duration?: number; color?: number }) {
-    if (shouldSkip()) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
 
     function getRGBValues(value: number) {
       const hexValue = value.toString(16).padStart(6, "0");
@@ -199,7 +197,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       onComplete?: () => void;
     },
   ) {
-    if (shouldSkip()) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
 
     const {
       scale = 1,
@@ -242,7 +240,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function flashSprite(sprite: Phaser.GameObjects.Sprite, duration = 400, wait = 100, repeat = 3) {
-    if (shouldSkip()) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
 
     let at = 0;
     scene.phaserScene.add

@@ -3,10 +3,8 @@ import { Channel, Scene } from "@primodiumxyz/engine";
 import { GlobalApi } from "@game/api/global";
 
 export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
-  const shouldSkip = () => !globalApi.tables.GameState.get()?.visible;
-
   function play(key: AudioKeys, channel: Channel, config?: Phaser.Types.Sound.SoundConfig) {
-    if (shouldSkip()) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
     scene.audio[channel].playAudioSprite(Assets.AudioAtlas, Audio[key], {
       ...config,
     });
