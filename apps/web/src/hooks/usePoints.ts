@@ -8,7 +8,6 @@ import { useEmpires } from "@/hooks/useEmpires";
 export const usePoints = (playerId: Entity): Record<EEmpire, { playerPoints: bigint; empirePoints: bigint }> => {
   const { tables } = useCore();
   const empires = useEmpires();
-  const time = tables.Time.use();
 
   return useMemo(
     () =>
@@ -22,6 +21,6 @@ export const usePoints = (playerId: Entity): Record<EEmpire, { playerPoints: big
         },
         {} as Record<EEmpire, { playerPoints: bigint; empirePoints: bigint }>,
       ),
-    [empires, time],
+    [empires],
   );
 };

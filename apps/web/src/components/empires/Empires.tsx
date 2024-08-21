@@ -62,7 +62,6 @@ export const Empires: React.FC<{ hideGraph?: boolean; hideTitle?: boolean; hideP
 }) => {
   const empires = useEmpires();
   const { tables } = useCore();
-  const time = tables.BlockNumber.use()?.value ?? 0n;
   const sortedEmpires = useMemo(() => {
     return [...empires.keys()].sort((a, b) => {
       const citadelCountA = empires.get(a)?.ownedCitadelCount ?? 0;
@@ -77,7 +76,7 @@ export const Empires: React.FC<{ hideGraph?: boolean; hideTitle?: boolean; hideP
 
       return planetCountB - planetCountA; // Then sort by planet count descending
     });
-  }, [empires, tables, time]);
+  }, [empires, tables]);
 
   return (
     <div className="flex flex-col items-start overflow-y-auto text-center">

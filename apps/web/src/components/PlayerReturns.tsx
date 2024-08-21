@@ -112,14 +112,13 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const points = usePoints(playerId);
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
   const empires = useEmpires();
-  const time = tables.Time.use();
 
   const pointCosts = useMemo(
     () =>
       [...empires.keys()].map(
         (empire) => getPointPrice(empire, Number(formatEther(points[empire].playerPoints))).price,
       ),
-    [empires, points, time],
+    [empires, points],
   );
   const totalReward = pointCosts.reduce((sum, cost) => sum + cost, 0n);
   const percentageChange = totalSpent > 0n ? ((totalReward - totalSpent) * 10000n) / totalSpent : 0n;

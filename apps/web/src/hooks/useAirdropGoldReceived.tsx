@@ -7,7 +7,6 @@ import { useEmpires } from "@/hooks/useEmpires";
 export const useAirdropGoldReceived = (empire: EEmpire, overrideCount: bigint): bigint => {
   const { tables } = useCore();
   const empires = useEmpires();
-  const time = tables.Time.use();
 
   return useMemo(() => {
     const ownedPlanets = [...empires.entries()].map(([key, data]) => ({
@@ -28,5 +27,5 @@ export const useAirdropGoldReceived = (empire: EEmpire, overrideCount: bigint): 
       (opposingPlanetCount + BigInt(survivingEmpireCount) - 1n) / BigInt(survivingEmpireCount);
 
     return overrideCount * averagePlanetsPerOpposingEmpire;
-  }, [empire, overrideCount, empires, time]);
+  }, [empire, overrideCount, empires]);
 };
