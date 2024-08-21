@@ -93,7 +93,7 @@ const App = () => {
                 <ToastContainer
                   toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
                   progressClassName="bg-primary"
-                  position="bottom-left"
+                  position="bottom-right"
                   autoClose={3000}
                   hideProgressBar={false}
                   newestOnTop={false}
