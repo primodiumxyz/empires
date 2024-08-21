@@ -51,6 +51,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_OverrideConfig: {
         isProgressOverride: true,
+        pointMultiplier: 1n,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
@@ -64,6 +65,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_OverrideConfig: {
         isProgressOverride: true,
+        pointMultiplier: 1n,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.0001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.000005),
@@ -77,6 +79,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_OverrideConfig: {
         isProgressOverride: true,
+        pointMultiplier: 5n,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.0001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00002),
@@ -90,6 +93,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_OverrideConfig: {
         isProgressOverride: false,
+        pointMultiplier: 5n,
         minOverrideCost: BigInt(POINTS_UNIT * 0.0005),
         startOverrideCost: BigInt(POINTS_UNIT * 0.001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00001),
@@ -103,6 +107,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_OverrideConfig: {
         isProgressOverride: true,
+        pointMultiplier: 2n,
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00004),
         overrideGenRate: BigInt(POINTS_UNIT * 0.00004),
