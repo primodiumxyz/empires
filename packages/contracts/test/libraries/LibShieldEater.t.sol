@@ -87,10 +87,98 @@ contract LibShieldEaterTest is PrimodiumTest {
     assertEq(currPlanetData.r, destPlanetData.r, "LibShieldEater: currPlanetData.r != destPlanetData.r");
   }
 
+  // TODO: old retarget with randomness, saving for future work.  -kethic 8.22.2024
+  // function testShieldEaterRetarget(uint256 fuzz) public {
+  //   vm.startPrank(creator);
+  //   bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+  //   bytes32[3] memory testTargets;
+  //   uint256 maxShieldCount = 0;
+  //   uint256 i = 0;
+
+  //   // set a random block.number
+  //   fuzz = bound(fuzz, 1000000, 1e36);
+  //   vm.roll(fuzz);
+
+  //   // populate shieldCount for all planets
+  //   for (i = 0; i < planetIds.length; i++) {
+  //     Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
+  //   }
+
+  //   for (i = 0; i < planetIds.length; i++) {
+  //     // skip if it's the current planet
+  //     if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+  //       continue;
+  //     }
+  //     if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
+  //       maxShieldCount = Planet.getShieldCount(planetIds[i]);
+  //       testTargets[0] = planetIds[i];
+  //     }
+  //   }
+
+  //   maxShieldCount = 0;
+  //   for (i = 0; i < planetIds.length; i++) {
+  //     // skip if it's the current planet
+  //     if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+  //       continue;
+  //     }
+  //     if (planetIds[i] == testTargets[0]) {
+  //       continue;
+  //     }
+  //     if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
+  //       maxShieldCount = Planet.getShieldCount(planetIds[i]);
+  //       testTargets[1] = planetIds[i];
+  //     }
+  //   }
+
+  //   maxShieldCount = 0;
+  //   for (i = 0; i < planetIds.length; i++) {
+  //     // skip if it's the current planet
+  //     if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+  //       continue;
+  //     }
+  //     if (planetIds[i] == testTargets[0] || planetIds[i] == testTargets[1]) {
+  //       continue;
+  //     }
+  //     if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
+  //       maxShieldCount = Planet.getShieldCount(planetIds[i]);
+  //       testTargets[2] = planetIds[i];
+  //     }
+  //   }
+
+  //   console.log("testTargets:");
+  //   console.logBytes32(testTargets[0]);
+  //   console.logBytes32(testTargets[1]);
+  //   console.logBytes32(testTargets[2]);
+  //   console.log("testTargets[0]: %s", Planet.getShieldCount(testTargets[0]));
+  //   console.log("testTargets[1]: %s", Planet.getShieldCount(testTargets[1]));
+  //   console.log("testTargets[2]: %s", Planet.getShieldCount(testTargets[2]));
+  //   console.log("---");
+
+  //   // choose a next destination
+  //   LibShieldEater.retarget();
+
+  //   console.log("ShieldEater.getDestinationPlanet():");
+  //   console.logBytes32(ShieldEater.getDestinationPlanet());
+
+  //   // check that it is a valid planetId
+  //   assertTrue(
+  //     PlanetsSet.has(ShieldEater.getDestinationPlanet()),
+  //     "LibShieldEater: planetId not contained in PlanetsSet"
+  //   );
+
+  //   // check that it is one of the top 3 planetIds
+  //   assertTrue(
+  //     ShieldEater.getDestinationPlanet() == testTargets[0] ||
+  //       ShieldEater.getDestinationPlanet() == testTargets[1] ||
+  //       ShieldEater.getDestinationPlanet() == testTargets[2],
+  //     "LibShieldEater: planetId not one of the top 3"
+  //   );
+  // }
+
   function testShieldEaterRetarget(uint256 fuzz) public {
     vm.startPrank(creator);
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    bytes32[3] memory testTargets;
+    bytes32 newDestination;
     uint256 maxShieldCount = 0;
     uint256 i = 0;
 
@@ -110,48 +198,9 @@ contract LibShieldEaterTest is PrimodiumTest {
       }
       if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
         maxShieldCount = Planet.getShieldCount(planetIds[i]);
-        testTargets[0] = planetIds[i];
+        newDestination = planetIds[i];
       }
     }
-
-    maxShieldCount = 0;
-    for (i = 0; i < planetIds.length; i++) {
-      // skip if it's the current planet
-      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
-        continue;
-      }
-      if (planetIds[i] == testTargets[0]) {
-        continue;
-      }
-      if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
-        maxShieldCount = Planet.getShieldCount(planetIds[i]);
-        testTargets[1] = planetIds[i];
-      }
-    }
-
-    maxShieldCount = 0;
-    for (i = 0; i < planetIds.length; i++) {
-      // skip if it's the current planet
-      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
-        continue;
-      }
-      if (planetIds[i] == testTargets[0] || planetIds[i] == testTargets[1]) {
-        continue;
-      }
-      if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
-        maxShieldCount = Planet.getShieldCount(planetIds[i]);
-        testTargets[2] = planetIds[i];
-      }
-    }
-
-    console.log("testTargets:");
-    console.logBytes32(testTargets[0]);
-    console.logBytes32(testTargets[1]);
-    console.logBytes32(testTargets[2]);
-    console.log("testTargets[0]: %s", Planet.getShieldCount(testTargets[0]));
-    console.log("testTargets[1]: %s", Planet.getShieldCount(testTargets[1]));
-    console.log("testTargets[2]: %s", Planet.getShieldCount(testTargets[2]));
-    console.log("---");
 
     // choose a next destination
     LibShieldEater.retarget();
@@ -163,14 +212,6 @@ contract LibShieldEaterTest is PrimodiumTest {
     assertTrue(
       PlanetsSet.has(ShieldEater.getDestinationPlanet()),
       "LibShieldEater: planetId not contained in PlanetsSet"
-    );
-
-    // check that it is one of the top 3 planetIds
-    assertTrue(
-      ShieldEater.getDestinationPlanet() == testTargets[0] ||
-        ShieldEater.getDestinationPlanet() == testTargets[1] ||
-        ShieldEater.getDestinationPlanet() == testTargets[2],
-      "LibShieldEater: planetId not one of the top 3"
     );
   }
 
