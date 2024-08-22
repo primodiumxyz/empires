@@ -31,7 +31,7 @@ export const _Account = ({ address, className }: { address: Address; className?:
   const [dripping, setDripping] = useState(false);
 
   const requestDrip = useDripAccount();
-  const playerBalance = useBalance(address, 2000);
+  const playerBalance = useBalance(address);
 
   useEffect(() => {
     if (playerBalance.loading || (playerBalance.value ?? 0n) >= minEth) return;
