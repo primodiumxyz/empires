@@ -30,7 +30,7 @@ export const AutoSizer = <T,>({
           width={width}
           itemCount={items.length}
           itemSize={itemSize}
-          className="hide-scrollbar scroll-smooth"
+          className="scroll-smooth"
         >
           {({ index, style }: { index: number; style: CSSProperties }) => (
             <div key={index} style={style} className="pr-2">
