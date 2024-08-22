@@ -259,6 +259,30 @@ contract LibShieldEaterTest is PrimodiumTest {
     }
   }
 
+  function testGetPath(uint256 fuzz) public {
+    vm.startPrank(creator);
+
+    fuzz = bound(fuzz, 1000000, 1e36);
+    vm.roll(fuzz);
+
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    uint256 randomIndex = pseudorandom(block.number, planetIds.length);
+    ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
+    ShieldEater.setCurrentCharge(0);
+
+    do {
+      LibShieldEater.retarget();
+    } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
+
+    bytes32[] memory foundPath = LibShieldEater.getPath();
+    assertTrue(foundPath.length > 0, "LibShieldEater: foundPath.length is 0");
+
+    for (uint256 i = 0; i < foundPath.length; i++) {
+      assertTrue(PlanetsSet.has(foundPath[i]), "LibShieldEater: planetId not contained in PlanetsSet");
+    }
+  }
+
+  // TODO: saving to finish later. -kethic 8.22.2024
   // function testShieldEaterDeepNavSim() public {
   //   uint256 turn = 1000;
   //   vm.startPrank(creator);
@@ -304,27 +328,4 @@ contract LibShieldEaterTest is PrimodiumTest {
   //     }
   //   }
   // }
-
-  function testGetPath(uint256 fuzz) public {
-    vm.startPrank(creator);
-
-    fuzz = bound(fuzz, 1000000, 1e36);
-    vm.roll(fuzz);
-
-    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    uint256 randomIndex = pseudorandom(block.number, planetIds.length);
-    ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
-    ShieldEater.setCurrentCharge(0);
-
-    do {
-      LibShieldEater.retarget();
-    } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
-
-    bytes32[] memory foundPath = LibShieldEater.getPath();
-    assertTrue(foundPath.length > 0, "LibShieldEater: foundPath.length is 0");
-
-    for (uint256 i = 0; i < foundPath.length; i++) {
-      assertTrue(PlanetsSet.has(foundPath[i]), "LibShieldEater: planetId not contained in PlanetsSet");
-    }
-  }
 }

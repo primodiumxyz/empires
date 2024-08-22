@@ -165,154 +165,23 @@ library LibShieldEater {
     ShieldEater.setCurrentCharge(0);
   }
 
-  // /**
-  //  * @dev Returns the direction to move to advance from the source to the destination.
-  //  */
-  // function getTargetDirection(CoordData memory src, CoordData memory dst) internal view returns (CoordData memory dir) {
-  //   uint256 rng = pseudorandom(block.number, 10);
-  //   if (dst.q > src.q) {
-  //     dir.q = 1;
-  //     // East or Northeast
-  //     if (rng < 5) {
-  //       dir.r = 0; // East
-  //     } else {
-  //       dir.r = -1; // Northeast
-  //     }
-  //   } else if (dst.q == src.q) {
-  //     dir.q = 0;
-  //     // Northwest or Southeast
-  //     if (rng < 5) {
-  //       dir.r = 1; // Southeast
-  //     } else {
-  //       dir.r = -1; // Northwest
-  //     }
-  //   } else {
-  //     // dst.q < src.q
-  //     dir.q = -1; //  West or Southwest
-  //     if (rng < 5) {
-  //       dir.r = 0; // West
-  //     } else {
-  //       dir.r = 1; // Southwest
-  //     }
-  //   }
-  //   // console.log("dir");
-  //   // console.logInt(dir.q);
-  //   // console.logInt(dir.r);
-
-  //   uint256 dirAttempts = 1;
-
-  //   // If there is a hole in the map here, go around it
-  //   while (
-  //     (!Planet.getIsPlanet(coordToId(src.q + dir.q, src.r + dir.r))) ||
-  //     (ShieldEater.getPreviousPlanet() == coordToId(src.q + dir.q, src.r + dir.r))
-  //   ) {
-  //     if (dirAttempts > 7) {
-  //       // If we've tried all directions, there is no path.
-  //       // should never happen, but want to prevent infinite loop
-  //       break;
-  //     }
-  //     dir = rotateTargetDirection(dir, dirAttempts);
-  //     dirAttempts++;
-  //   }
-  // }
-  // /**
-  //  * @dev Rotates a direction 60 degrees clockwise, to avoid a gap in the planet map.
-  //  */
-  // function rotateTargetDirection(CoordData memory dir, uint256 salt) internal view returns (CoordData memory newDir) {
-  //   uint256 rng = pseudorandom(block.number + salt, 10);
-
-  //   // We were trying to go east, so we'll try northeast or southeast
-  //   if (dir.q == 1 && dir.r == 0) {
-  //     if (rng < 5) {
-  //       newDir.q = 1; // Northeast
-  //       newDir.r = -1; // Northeast
-  //     } else {
-  //       newDir.q = 0; // Southeast
-  //       newDir.r = 1; // Southeast
-  //     }
-  //   }
-  //   // We were trying to go southeast, so we'll try east or southwest
-  //   else if (dir.q == 0 && dir.r == 1) {
-  //     if (rng < 5) {
-  //       newDir.q = 1; // Southeast
-  //       newDir.r = 0; // Southeast
-  //     } else {
-  //       newDir.q = -1; // Southwest
-  //       newDir.r = 1; // Southwest
-  //     }
-  //   }
-  //   // We were trying to go southwest, so we'll try southeast or west
-  //   else if (dir.q == -1 && dir.r == 1) {
-  //     if (rng < 5) {
-  //       newDir.q = 0; // Southwest
-  //       newDir.r = 1; // Southwest
-  //     } else {
-  //       newDir.q = -1; // West
-  //       newDir.r = 0; // West
-  //     }
-  //   }
-  //   // We were trying to go west, so we'll try southwest or northwest
-  //   else if (dir.q == -1 && dir.r == 0) {
-  //     if (rng < 5) {
-  //       newDir.q = -1; // West
-  //       newDir.r = 0; // West
-  //     } else {
-  //       newDir.q = 0; // Northwest
-  //       newDir.r = -1; // Northwest
-  //     }
-  //   }
-  //   // We were trying to go northwest, so we'll try west or northeast
-  //   else if (dir.q == 0 && dir.r == -1) {
-  //     if (rng < 5) {
-  //       newDir.q = -1; // Northwest
-  //       newDir.r = 1; // Northwest
-  //     } else {
-  //       newDir.q = 1; // Northeast
-  //       newDir.r = -1; // Northeast
-  //     }
-  //   }
-  //   // We were trying to go northeast, so we'll try northwest or east
-  //   else if (dir.q == 1 && dir.r == -1) {
-  //     if (rng < 5) {
-  //       newDir.q = 1; // Northeast
-  //       newDir.r = -1; // Northeast
-  //     } else {
-  //       newDir.q = 1; // East
-  //       newDir.r = 0; // East
-  //     }
-  //   }
-
-  //   // console.log("newDir");
-  //   // console.logInt(newDir.q);
-  //   // console.logInt(newDir.r);
-  // }
-
   function getNeighbor(bytes32 planetId, EDirection direction) internal view returns (bytes32 neighbor) {
     PlanetData memory planet = Planet.get(planetId);
     if (direction == EDirection.East) {
-      // console.log("Looking East");
       neighbor = coordToId(planet.q + 1, planet.r);
     } else if (direction == EDirection.Southeast) {
-      // console.log("Looking Southeast");
       neighbor = coordToId(planet.q, planet.r + 1);
     } else if (direction == EDirection.Southwest) {
-      // console.log("Looking Southwest");
       neighbor = coordToId(planet.q - 1, planet.r + 1);
     } else if (direction == EDirection.West) {
-      // console.log("Looking West");
       neighbor = coordToId(planet.q - 1, planet.r);
     } else if (direction == EDirection.Northwest) {
-      // console.log("Looking Northwest");
       neighbor = coordToId(planet.q, planet.r - 1);
     } else if (direction == EDirection.Northeast) {
-      // console.log("Looking Northeast");
       neighbor = coordToId(planet.q + 1, planet.r - 1);
     } else {
-      // console.log("Looking Nowhere");
-    }
-
-    if (neighbor == bytes32(0)) {
-      // console.log("No neighbor found in that direction");
+      // we appear to have no neighbors. return the current planet
+      neighbor = planetId;
     }
   }
 
@@ -348,41 +217,30 @@ library LibShieldEater {
       if (Planet.getIsPlanet(nextNode)) {
         // have we visted this already?
         if (onPath(nextNode, path, pathIndex)) {
-          // console.log("Already Visited");
           continue;
         }
         // check distance
         distance = getDistance(nextNode, destinationNode);
-        // console.log("Distance: %s", distance);
 
         // if distance is less than next distance
         if (distance <= minDistance) {
           // save min distance
           minDistance = distance;
+
           // save min distance node
           pathNode = nextNode;
           pathDirection = i;
         }
-      } else {
-        // console.log("Not a planet");
       }
     }
 
-    if (pathDirection == uint256(EDirection.East)) {
-      // console.log("Moving East");
-    } else if (pathDirection == uint256(EDirection.Southeast)) {
-      // console.log("Moving Southeast");
-    } else if (pathDirection == uint256(EDirection.Southwest)) {
-      // console.log("Moving Southwest");
-    } else if (pathDirection == uint256(EDirection.West)) {
-      // console.log("Moving West");
-    } else if (pathDirection == uint256(EDirection.Northwest)) {
-      // console.log("Moving Northwest");
-    } else if (pathDirection == uint256(EDirection.Northeast)) {
-      // console.log("Moving Northeast");
-    } else {
-      // console.log("No Path Found");
-    }
+    if (pathDirection == uint256(EDirection.East)) {} else if (
+      pathDirection == uint256(EDirection.Southeast)
+    ) {} else if (pathDirection == uint256(EDirection.Southwest)) {} else if (
+      pathDirection == uint256(EDirection.West)
+    ) {} else if (pathDirection == uint256(EDirection.Northwest)) {} else if (
+      pathDirection == uint256(EDirection.Northeast)
+    ) {} else {}
   }
 
   function onPath(bytes32 planetId, bytes32[] memory path, uint256 pathIndex) internal pure returns (bool) {
@@ -397,7 +255,6 @@ library LibShieldEater {
   function getPath() internal view returns (bytes32[] memory path) {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     bytes32[] memory tempPath = new bytes32[](planetIds.length);
-    PlanetData memory planetData;
 
     bytes32 startingNode = ShieldEater.getCurrentPlanet();
     bytes32 destinationNode = ShieldEater.getDestinationPlanet();
@@ -406,24 +263,9 @@ library LibShieldEater {
     uint256 pathIndex = 0;
     uint256 loopIndex = 0;
 
-    planetData = Planet.get(startingNode);
-    // console.log("Starting Node [%s,%s]", uint256(int256(planetData.q)), uint256(int256(planetData.r)));
-    // console.log(uint256(startingNode));
-
-    planetData = Planet.get(destinationNode);
-    // console.log("Destination Node [%s,%s]\n", uint256(int256(planetData.q)), uint256(int256(planetData.r)));
-    // console.log(uint256(destinationNode));
-
-    planetData = Planet.get(currentNode);
-    // console.log("currentNode Node [%s,%s]", uint256(int256(planetData.q)), uint256(int256(planetData.r)));
-    // is the current node the destination node?
     while (currentNode != destinationNode) {
       // get the next node
       currentNode = getDirection(currentNode, destinationNode, tempPath, pathIndex);
-
-      planetData = Planet.get(currentNode);
-      // console.log("currentNode Node [%s,%s]", uint256(int256(planetData.q)), uint256(int256(planetData.r)));
-      // console.log(uint256(currentNode));
 
       // add the current node to the path
       tempPath[pathIndex] = currentNode;
@@ -434,6 +276,7 @@ library LibShieldEater {
       }
     }
 
+    // truncate path to save calldata
     path = new bytes32[](pathIndex);
     for (uint256 i = 0; i < pathIndex; i++) {
       path[i] = tempPath[i];
