@@ -36,6 +36,10 @@ library LibShieldEater {
 
     // find the top 3 planets with the most shields
     for (uint256 i = 0; i < planetIds.length; i++) {
+      // skip if it's the current planet
+      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+        continue;
+      }
       shieldCount = Planet.getShieldCount(planetIds[i]);
       if (shieldCount >= Planet.getShieldCount(dstOptions[0])) {
         dstOptions[2] = dstOptions[1];
