@@ -36,11 +36,11 @@ library LibShieldEater {
    * @notice This function is overly complicated due to contract size optimizations.
    */
   function retarget() internal {
-    // save the top 3 planetIds
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     bytes32[] memory dstOptions = new bytes32[](3);
     uint256 shieldCount = 0;
 
+    // find the top 3 planets with the most shields
     for (uint256 i = 0; i < planetIds.length; i++) {
       shieldCount = Planet.getShieldCount(planetIds[i]);
       if (shieldCount >= Planet.getShieldCount(dstOptions[0])) {
@@ -55,7 +55,15 @@ library LibShieldEater {
       }
     }
 
+    // choose of the top 3 planets
     uint256 randomIndex = pseudorandom(uint256(pseudorandomEntity()), 3);
+
+    // if there are no shields on the map, it tends to gravitate towards the bottom center.
+    // this will force it to wander around a bit more even if there's nothing to eat.
+    if (Planet.getShieldCount(dstOptions[randomIndex]) == 0) {
+      randomIndex = pseudorandom(uint256(pseudorandomEntity()), planetIds.length);
+    }
+
     ShieldEater.setDestinationPlanet(dstOptions[randomIndex]);
   }
 
@@ -101,9 +109,6 @@ library LibShieldEater {
    * @dev Detonates the Shield Eater at the current location, wiping out shield on all nearby planets.
    */
   function detonate() internal {
-    PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
-    CoordData memory center = CoordData(currentPlanet.q, currentPlanet.r);
-
     uint256 centerDamage = P_ShieldEaterConfig.getDetonateCenterDamage();
     uint256 adjacentDamage = P_ShieldEaterConfig.getDetonateAdjacentDamage();
 
@@ -116,50 +121,21 @@ library LibShieldEater {
     }
 
     // Center
-    bytes32 planetId = coordToId(center.q, center.r);
+    bytes32 planetId = ShieldEater.getCurrentPlanet();
     uint256 shieldCount = Planet.getShieldCount(planetId);
     Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * centerDamage) / 10000)));
 
-    // East
-    planetId = coordToId(center.q + 1, center.r);
-    if (Planet.getIsPlanet(planetId)) {
-      shieldCount = Planet.getShieldCount(planetId);
-      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
-    }
+    // for each direction
+    bytes32 neighborId;
+    for (uint256 i = 2; i < uint256(EDirection.LENGTH); i++) {
+      // get the neighbor
+      neighborId = getNeighbor(planetId, EDirection(i));
 
-    // Southeast
-    planetId = coordToId(center.q, center.r + 1);
-    if (Planet.getIsPlanet(planetId)) {
-      shieldCount = Planet.getShieldCount(planetId);
-      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
-    }
-
-    // Southwest
-    planetId = coordToId(center.q - 1, center.r + 1);
-    if (Planet.getIsPlanet(planetId)) {
-      shieldCount = Planet.getShieldCount(planetId);
-      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
-    }
-
-    // West
-    planetId = coordToId(center.q - 1, center.r);
-    if (Planet.getIsPlanet(planetId)) {
-      shieldCount = Planet.getShieldCount(planetId);
-      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
-    }
-
-    // Northwest
-    planetId = coordToId(center.q, center.r - 1);
-    if (Planet.getIsPlanet(planetId)) {
-      shieldCount = Planet.getShieldCount(planetId);
-      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
-    }
-
-    // Northeast
-    planetId = coordToId(center.q + 1, center.r - 1);
-    if (Planet.getIsPlanet(planetId)) {
-      shieldCount = Planet.getShieldCount(planetId);
-      Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
+      // if neighbor is a planet
+      if (Planet.getIsPlanet(neighborId)) {
+        shieldCount = Planet.getShieldCount(neighborId);
+        Planet.setShieldCount(neighborId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
+      }
     }
 
     ShieldEater.setCurrentCharge(0);
@@ -233,14 +209,6 @@ library LibShieldEater {
         }
       }
     }
-
-    if (pathDirection == uint256(EDirection.East)) {} else if (
-      pathDirection == uint256(EDirection.Southeast)
-    ) {} else if (pathDirection == uint256(EDirection.Southwest)) {} else if (
-      pathDirection == uint256(EDirection.West)
-    ) {} else if (pathDirection == uint256(EDirection.Northwest)) {} else if (
-      pathDirection == uint256(EDirection.Northeast)
-    ) {} else {}
   }
 
   function onPath(bytes32 planetId, bytes32[] memory path, uint256 pathIndex) internal pure returns (bool) {
