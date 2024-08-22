@@ -6,9 +6,9 @@ import { defineChain } from "viem";
 import "react-toastify/dist/ReactToastify.min.css";
 
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
-import { CoreProvider } from "@primodiumxyz/core/react";
+import { CoreProvider, PlayerAccountProvider } from "@primodiumxyz/core/react";
 import { BackgroundNebula } from "@/components/BackgroundNebula";
-import Core from "@/components/Core";
+import Game from "@/components/game";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
 import { useSettings } from "@/hooks/useSettings";
@@ -87,20 +87,23 @@ const App = () => {
               )}
             >
               <BackgroundNebula />
-              <Core />
-              <ToastContainer
-                toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
-                progressClassName="bg-primary"
-                position="bottom-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-              />
+
+              <PlayerAccountProvider allowBurner={!!DEV}>
+                <Game />
+                <ToastContainer
+                  toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
+                  progressClassName="bg-primary"
+                  position="bottom-right"
+                  autoClose={3000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                />
+              </PlayerAccountProvider>
             </div>
           </CoreProvider>
         </EthPriceProvider>
