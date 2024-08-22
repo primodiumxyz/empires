@@ -19,7 +19,7 @@ export const Account = ({ className }: { className?: string }) => {
 
   if (!address)
     return (
-      <Button size="md" variant="accent" onClick={() => login("burner")}>
+      <Button size="md" variant="accent" onClick={() => login()}>
         Login
       </Button>
     );

@@ -34,6 +34,10 @@ const localKey = "primodium_local_pkey";
  * @returns The account client provider.
  */
 export function PlayerAccountProvider({ children, ...options }: PlayerAccountProviderProps) {
+  if (options.defaultLogin === "burner" && !options.allowBurner) {
+    throw new Error("Burner account not permitted. Please change default login.");
+  }
+
   const { ready: privyReady, login: privyLogin, logout: privyLogout, user, connectOrCreateWallet } = usePrivy();
   const { wallets } = useWallets();
 

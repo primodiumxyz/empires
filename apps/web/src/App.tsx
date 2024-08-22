@@ -5,6 +5,7 @@ import { defineChain } from "viem";
 
 import "react-toastify/dist/ReactToastify.min.css";
 
+import { InterfaceIcons } from "@primodiumxyz/assets";
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider, PlayerAccountProvider } from "@primodiumxyz/core/react";
 import { BackgroundNebula } from "@/components/BackgroundNebula";
@@ -67,11 +68,13 @@ const App = () => {
           // Customize Privy's appearance in your app
           appearance: {
             theme: "dark",
-            accentColor: "#ef4444",
-            logo: "vite.svg",
+            accentColor: "#22d3ee",
+            logo: InterfaceIcons.ShieldEater,
+            landingHeader: "Primodium Empires",
+            loginMessage: "It's free to login!",
           },
           // Create embedded wallets for users who don't have a wallet
-          loginMethods: ["twitter"],
+          loginMethods: ["twitter", "google"],
           embeddedWallets: {
             createOnLogin: "users-without-wallets",
           },
@@ -88,7 +91,7 @@ const App = () => {
             >
               <BackgroundNebula />
 
-              <PlayerAccountProvider allowBurner={!!DEV} defaultLogin="burner">
+              <PlayerAccountProvider allowBurner={!!DEV} defaultLogin="privy">
                 <Game />
                 <ToastContainer
                   toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
