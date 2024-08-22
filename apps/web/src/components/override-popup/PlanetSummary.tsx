@@ -23,6 +23,8 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
   const hasShieldEater = tables.ShieldEater.use()?.currentPlanet === entity;
   const { empireId } = planet;
 
+  const moveCrown = [EEmpire.Purple, EEmpire.Pink, EEmpire.Yellow].includes(empireId as EEmpire);
+
   return (
     <Card noDecor className={cn("hide-scrollbar h-fit max-h-full min-w-80 overflow-y-auto", className)}>
       <div className="flex w-full flex-col items-center gap-4">
@@ -47,7 +49,10 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
                 src={sprite.getSprite("Crown")}
                 width={24}
                 height={24}
-                className={cn("absolute left-1/2 -translate-x-1/2", hasShieldEater ? "-top-4" : "top-0")}
+                className={cn(
+                  "absolute left-1/2 -translate-x-1/2 scale-[150%]",
+                  hasShieldEater || moveCrown ? "-top-4" : "top-0",
+                )}
               />
             )}
           </div>
@@ -107,9 +112,12 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   }, [p]);
 
   return (
-    <div className="w-full rounded-md border border-base-100 text-xs">
-      <button onClick={() => setIsOpen(!isOpen)} className="flex w-full items-center justify-between p-2 text-left">
-        <h3 className="text-xs">ROUTINE PROBABILITIES</h3>
+    <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="absolute left-2 top-0 mb-2 flex -translate-y-1/2 items-center bg-secondary/25 text-left"
+      >
+        <h3 className="text-xs">ROUTINE LIKELIHOODS</h3>
         <ChevronDownIcon className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
       {isOpen && (
@@ -138,7 +146,6 @@ const Overrides = ({ entity }: { entity: Entity }) => {
   const currTurn = tables.Turn.use()?.value ?? 1n;
   const [turnsLeft, setTurnsLeft] = useState<number[]>(magnets.map(() => 0));
   const empireCount = useEmpires().size;
-  console.log({ turnsLeft });
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -146,7 +153,6 @@ const Overrides = ({ entity }: { entity: Entity }) => {
         if (magnet.endTurn !== undefined) {
           const turns = Number(magnet.endTurn - currTurn);
           const turnLeft = Math.ceil(turns / empireCount);
-          console.log({ endTurn: magnet.endTurn, currTurn });
           return turnLeft;
         } else {
           return 0;
@@ -171,8 +177,8 @@ const Overrides = ({ entity }: { entity: Entity }) => {
   const hideMagnets = turnsLeft.every((t) => t === 0);
 
   return (
-    <div className="relative min-h-14 w-full rounded-md border border-base-100 p-2 text-xs">
-      <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
+    <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
+      <h3 className="absolute left-2 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
       <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-1 text-xs">
         {!hideMagnets && (
           <>
