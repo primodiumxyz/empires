@@ -10,7 +10,6 @@ import { CoreProvider } from "@primodiumxyz/core/react";
 import { BackgroundNebula } from "@/components/BackgroundNebula";
 import Core from "@/components/Core";
 import { getCoreConfig } from "@/config/getCoreConfig";
-import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
 import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
@@ -72,41 +71,39 @@ const App = () => {
             logo: "vite.svg",
           },
           // Create embedded wallets for users who don't have a wallet
-          loginMethods: ["wallet", "google", "twitter", "discord"],
+          loginMethods: ["twitter"],
           embeddedWallets: {
             createOnLogin: "users-without-wallets",
           },
           supportedChains: [defineChain(core.config.chain)],
         }}
       >
-        <BurnerAccountProvider>
-          <EthPriceProvider>
-            <CoreProvider {...core}>
-              <div
-                className={cn(
-                  "star-background flex h-screen w-screen cursor-default items-center justify-center",
-                  fontStyle,
-                )}
-              >
-                <BackgroundNebula />
-                <Core />
-                <ToastContainer
-                  toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
-                  progressClassName="bg-primary"
-                  position="bottom-right"
-                  autoClose={3000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                />
-              </div>
-            </CoreProvider>
-          </EthPriceProvider>
-        </BurnerAccountProvider>
+        <EthPriceProvider>
+          <CoreProvider {...core}>
+            <div
+              className={cn(
+                "star-background flex h-screen w-screen cursor-default items-center justify-center",
+                fontStyle,
+              )}
+            >
+              <BackgroundNebula />
+              <Core />
+              <ToastContainer
+                toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
+                progressClassName="bg-primary"
+                position="bottom-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
+            </div>
+          </CoreProvider>
+        </EthPriceProvider>
       </PrivyProvider>
       <div id="modal-root" className={cn("pointer-events-auto fixed top-0 z-50 cursor-default", fontStyle)} />
     </>

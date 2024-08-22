@@ -12,7 +12,7 @@ import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 
-export const Portfolio = ({ entity }: { entity: Entity }) => {
+export const Portfolio = ({ playerId }: { playerId: Entity }) => {
   const empires = useEmpires();
 
   const sortedEmpires = useMemo(
@@ -31,7 +31,7 @@ export const Portfolio = ({ entity }: { entity: Entity }) => {
       {noPlanets && <p className="text-center text-xs opacity-70">You own no empires</p>}
       <div className="flex max-h-[70vh] flex-col overflow-y-auto">
         {sortedEmpires.map((empire, index) => (
-          <EmpirePoints key={index} empire={empire} playerId={entity} />
+          <EmpirePoints key={index} empire={empire} playerId={playerId} />
         ))}
       </div>
     </div>

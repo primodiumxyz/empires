@@ -33,9 +33,6 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const contractCalls = useContractCalls();
   const requestDrip = useDripAccount();
 
-  if (!playerAccount) return null;
-  const cheatcodes = setupCheatcodes({ core, game, playerAccount, contractCalls, requestDrip });
-
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
       if (!open || !modalRef.current || !buttonRef.current) return;
@@ -47,6 +44,9 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
     document.addEventListener("click", closeCheatcodes);
     return () => document.removeEventListener("click", closeCheatcodes);
   }, [open]);
+
+  if (!playerAccount) return null;
+  const cheatcodes = setupCheatcodes({ core, game, playerAccount, contractCalls, requestDrip });
 
   return (
     <div className={className}>

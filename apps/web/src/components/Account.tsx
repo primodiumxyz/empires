@@ -13,11 +13,16 @@ import { cn } from "@/util/client";
 const DEV = import.meta.env.PRI_DEV === "true";
 
 export const Account = ({ className }: { className?: string }) => {
-  const { playerAccount, loggedIn, login } = usePlayerAccount();
+  const { playerAccount, login } = usePlayerAccount();
 
   const address = playerAccount?.address;
 
-  if (!loggedIn || !address) return <Button onClick={() => login({ withPrivy: true })}>Login</Button>;
+  if (!address)
+    return (
+      <Button size="md" variant="accent" onClick={() => login("burner")}>
+        Login
+      </Button>
+    );
   return <_Account address={address} className={className} />;
 };
 

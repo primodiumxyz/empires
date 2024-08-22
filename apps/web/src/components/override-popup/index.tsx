@@ -23,7 +23,7 @@ export const OverridePopup = () => {
           {playerAccount && (
             <>
               <hr className="my-1 w-full border-secondary/50" />
-              <Portfolio entity={playerAccount.entity} />
+              <Portfolio playerId={playerAccount.entity} />
             </>
           )}
         </div>

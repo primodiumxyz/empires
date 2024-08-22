@@ -2,12 +2,18 @@
   "extends": "../../.tsconfigs/bundler/dom/library-monorepo.json",
   "compilerOptions": {
     "paths": {
-      "@core/*": ["./src/*"],
+      "@core/*": ["./src/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["./src/**/*", "./__tests__/**/*", "../game/src/lib/tables/KeybindTable.ts", "../game/src/lib/tables/VolumeTable.ts"],
-  "references": [{ "path": "../engine" }, { "path": "../game" }, { "path": "../contracts"}]
+  "include": [, "../../apps/web/src/hooks/usePlayerAccount.ts"
+    "./src/**/*",
+    "./__tests__/**/*",
+    "../game/src/lib/tables/KeybindTable.ts",
+    "../game/src/lib/tables/VolumeTable.ts",
+    "../../apps/web/src/hooks/providers/PlayerAccountProvider.tsx"
+  ],
+  "references": [{ "path": "../engine" }, { "path": "../game" }, { "path": "../contracts" }]
 }

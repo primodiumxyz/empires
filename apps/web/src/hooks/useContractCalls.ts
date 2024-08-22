@@ -5,7 +5,7 @@ import { createContractCalls } from "@/contractCalls/createContractCalls";
 
 export const useContractCalls = () => {
   const core = useCore();
-  const playerAccount = usePlayerAccount();
+  const { playerAccount } = usePlayerAccount();
 
   return useMemo(() => {
     return createContractCalls(core, playerAccount);
