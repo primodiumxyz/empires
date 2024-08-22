@@ -27,8 +27,7 @@ library LibShieldEater {
       retarget();
     } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
 
-    bytes32[] memory foundPath = LibShieldEater.getPath();
-    ShieldEater.setPath(foundPath);
+    ShieldEater.setPath(getPath());
   }
 
   /**
@@ -99,8 +98,7 @@ library LibShieldEater {
       } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
 
       // What's our new path?
-      bytes32[] memory foundPath = getPath();
-      ShieldEater.setPath(foundPath);
+      ShieldEater.setPath(getPath());
       ShieldEater.setPathIndex(0);
     }
   }
@@ -221,13 +219,11 @@ library LibShieldEater {
   }
 
   function getPath() internal view returns (bytes32[] memory path) {
-    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    bytes32[] memory tempPath = new bytes32[](planetIds.length);
+    uint256 planetCount = PlanetsSet.size();
+    bytes32[] memory tempPath = new bytes32[](planetCount);
 
-    bytes32 startingNode = ShieldEater.getCurrentPlanet();
+    bytes32 currentNode = ShieldEater.getCurrentPlanet();
     bytes32 destinationNode = ShieldEater.getDestinationPlanet();
-
-    bytes32 currentNode = startingNode;
     uint256 pathIndex = 0;
     uint256 loopIndex = 0;
 
@@ -239,7 +235,7 @@ library LibShieldEater {
       tempPath[pathIndex] = currentNode;
       pathIndex++;
       loopIndex++;
-      if (loopIndex >= planetIds.length) {
+      if (loopIndex >= planetCount) {
         break;
       }
     }
