@@ -2,15 +2,15 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToPlanetName, formatNumber, formatTime } from "@primodiumxyz/core";
+import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
-import { useTimeSinceTurnStart } from "@/hooks/useTimeSinceTurnStart";
 import { cn } from "@/util/client";
 
 /* --------------------------------- PLANET --------------------------------- */
@@ -133,31 +133,31 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     tables,
     utils: { getShieldEaterPath },
   } = useCore();
-  const turnLengthBlocks = tables.P_GameConfig.use()?.turnLengthBlocks ?? 1n;
-  const avgBlockTime = tables.BlockNumber.use()?.avgBlockTime ?? 1;
 
   const magnets = usePlanetMagnets(entity);
-  const timeElapsedSinceTurnStart = useTimeSinceTurnStart();
-  const [timeLeft, setTimeLeft] = useState<number[]>(magnets.map(() => 0));
+  const currTurn = tables.Turn.use()?.value ?? 1n;
+  const [turnsLeft, setTurnsLeft] = useState<number[]>(magnets.map(() => 0));
+  const empireCount = useEmpires().size;
+  console.log({ turnsLeft });
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const currTurn = tables.Turn.get()?.value ?? 1n;
-      const newTimeLeft = magnets.map((magnet) => {
+      const newTurnsLeft = magnets.map((magnet) => {
         if (magnet.endTurn !== undefined) {
-          const turnsLeft = Number(magnet.endTurn - currTurn);
-          const secondsLeft = turnsLeft * Number(turnLengthBlocks) * avgBlockTime - timeElapsedSinceTurnStart;
-          return Math.max(0, secondsLeft);
+          const turns = Number(magnet.endTurn - currTurn);
+          const turnLeft = Math.ceil(turns / empireCount);
+          console.log({ endTurn: magnet.endTurn, currTurn });
+          return turnLeft;
         } else {
           return 0;
         }
       });
 
-      setTimeLeft(newTimeLeft);
+      setTurnsLeft(newTurnsLeft);
     };
 
     calculateTimeLeft();
-  }, [magnets, turnLengthBlocks, avgBlockTime, timeElapsedSinceTurnStart]);
+  }, [magnets, currTurn]);
 
   const shieldEater = tables.ShieldEater.use();
   const turnsToShieldEater = useMemo(() => {
@@ -168,15 +168,10 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     return index === -1 ? undefined : index + 1;
   }, [shieldEater, entity]);
 
-  const hideMagnets = timeLeft.every((t) => t === 0);
-  const hideOverrides = useMemo(() => {
-    return turnsToShieldEater === undefined && hideMagnets;
-  }, [turnsToShieldEater, hideMagnets]);
-
-  if (hideOverrides) return null;
+  const hideMagnets = turnsLeft.every((t) => t === 0);
 
   return (
-    <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
+    <div className="relative min-h-14 w-full rounded-md border border-base-100 p-2 text-xs">
       <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
       <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-1 text-xs">
         {!hideMagnets && (
@@ -185,11 +180,11 @@ const Overrides = ({ entity }: { entity: Entity }) => {
             <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
               {magnets.map(
                 (magnet, index) =>
-                  timeLeft[index] !== 0 && (
+                  turnsLeft[index] !== 0 && (
                     <IconLabel
                       key={index}
                       imageUri={magnet.icon}
-                      text={timeLeft[index] ? formatTime(timeLeft[index], true) : "--"}
+                      text={turnsLeft[index] ? formatNumber(turnsLeft[index]) : "--"}
                     />
                   ),
               )}

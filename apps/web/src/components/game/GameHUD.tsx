@@ -53,7 +53,7 @@ export const GameHUD = () => {
             onClick={() => ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
           >
             {showMap ? (
-              <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" />
+              <IconLabel imageUri={InterfaceIcons.Dashboard} text="DASHBOARD" />
             ) : (
               <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" />
             )}
