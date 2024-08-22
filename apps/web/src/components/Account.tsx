@@ -1,7 +1,7 @@
 import { UserIcon } from "@heroicons/react/24/solid";
 
 import { formatAddress, minEth } from "@primodiumxyz/core";
-import { useAccountClient } from "@primodiumxyz/core/react";
+import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Price } from "@/components/shared/Price";
 import { useBalance } from "@/hooks/useBalance";
@@ -11,9 +11,7 @@ import { cn } from "@/util/client";
 const DEV = import.meta.env.PRI_DEV === "true";
 
 export const Account = ({ className }: { className?: string }) => {
-  const {
-    playerAccount: { address },
-  } = useAccountClient();
+  const { address } = usePlayerAccount();
 
   const balance = useBalance(address).value ?? 0n;
 

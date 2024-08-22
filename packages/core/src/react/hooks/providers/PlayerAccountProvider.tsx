@@ -1,21 +1,21 @@
-import { createContext, ReactNode, useCallback, useRef, useState } from "react";
+import { createContext, ReactNode, useMemo, useRef } from "react";
 import { Address, EIP1193Provider, Hex } from "viem";
 
 import { createExternalAccount } from "@core/account/createExternalAccount";
 import { createLocalAccount } from "@core/account/createLocalAccount";
-import { AccountClient, ExternalAccount, LocalAccount } from "@core/lib/types";
+import { ExternalAccount, LocalAccount, PlayerAccount } from "@core/lib/types";
 import { useCore } from "@core/react/hooks/useCore";
 import { storage } from "@core/utils/global/storage";
 
-type AccountClientOptions = {
+type PlayerAccountOptions = {
   playerAddress?: Address;
   playerPrivateKey?: Hex;
   provider?: EIP1193Provider;
 };
 
-type AccountProviderProps = AccountClientOptions & { children: ReactNode };
+type PlayerAccountProviderProps = PlayerAccountOptions & { children: ReactNode };
 
-export const AccountClientContext = createContext<AccountClient | undefined>(undefined);
+export const PlayerAccountContext = createContext<PlayerAccount | undefined>(undefined);
 
 /**
  * Provides the account client context to its children components.
@@ -25,8 +25,7 @@ export const AccountClientContext = createContext<AccountClient | undefined>(und
  * @throws Will throw an error if neither playerAddress nor playerPrivateKey is provided.
  * @returns The account client provider.
  */
-export function AccountClientProvider({ children, ...options }: AccountProviderProps) {
-  if (!options.playerAddress && !options.playerPrivateKey) throw new Error("Must provide address or private key");
+export function PlayerAccountProvider({ children, ...options }: PlayerAccountProviderProps) {
   const provider = options.provider;
 
   const core = useCore();
@@ -36,10 +35,7 @@ export function AccountClientProvider({ children, ...options }: AccountProviderP
 
   const playerAccountInterval = useRef<NodeJS.Timeout | null>(null);
 
-  const [playerAccount, setPlayerAccount] = useState<LocalAccount | ExternalAccount>(
-    // this is a hack to make typescript happy with overloaded function params
-    _updatePlayerAccount(options as { playerAddress: Address }),
-  );
+  const playerAccount = useMemo(() => _updatePlayerAccount(options as { playerAddress: Address }), [options]);
 
   function _updatePlayerAccount(options: { playerAddress: Address }): ExternalAccount;
   function _updatePlayerAccount(options: { playerPrivateKey: Hex }): LocalAccount;
@@ -66,20 +62,5 @@ export function AccountClientProvider({ children, ...options }: AccountProviderP
     return account;
   }
 
-  function updatePlayerAccount(options: { playerAddress?: Address; playerPrivateKey?: Hex }) {
-    if (!options.playerAddress && !options.playerAddress) throw new Error("Must provide address or private key");
-    // this is a hack to make typescript happy with overloaded function params
-    const account = _updatePlayerAccount(options as { playerAddress: Address });
-    setPlayerAccount(account);
-    return account;
-  }
-
-  const memoizedUpdatePlayerAccount = useCallback(updatePlayerAccount, []);
-
-  const accountClient: AccountClient = {
-    playerAccount,
-    setPlayerAccount: memoizedUpdatePlayerAccount,
-  };
-
-  return <AccountClientContext.Provider value={accountClient}>{children}</AccountClientContext.Provider>;
+  return <PlayerAccountContext.Provider value={playerAccount}>{children}</PlayerAccountContext.Provider>;
 }

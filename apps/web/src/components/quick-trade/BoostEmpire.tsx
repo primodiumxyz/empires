@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts";
-import { useAccountClient } from "@primodiumxyz/core/react";
+import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -23,9 +23,7 @@ export const BoostEmpire = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const [amount, setAmount] = useState("0");
   const empires = useEmpires();
-  const {
-    playerAccount: { address, entity },
-  } = useAccountClient();
+  const { address, entity } = usePlayerAccount();
   const calls = useContractCalls();
   const {
     MAIN: { sprite },

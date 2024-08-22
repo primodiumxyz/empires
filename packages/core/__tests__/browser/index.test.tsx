@@ -1,15 +1,10 @@
-import { describe, it, expect } from "vitest";
-import { commonTests, createTestConfig } from "../lib/common";
 import { render, screen } from "@testing-library/react";
-import React from "react";
+import { describe, expect, it } from "vitest";
 
-import {
-  AccountClientProvider,
-  CoreProvider,
-  useCore,
-} from "../../src/react/hooks";
 import { createCore } from "../../src/createCore";
-import { useAccountClient } from "../../src/react/hooks/useAccountClient";
+import { AccountClientProvider, CoreProvider, useCore } from "../../src/react/hooks";
+import { usePlayerAccount } from "../../src/react/hooks/usePlayerAccount";
+import { commonTests, createTestConfig } from "../lib/common";
 
 describe("browser", () => {
   const { coreConfig, address, privateKey } = createTestConfig();
@@ -34,7 +29,7 @@ describe("browser", () => {
       render(
         <CoreProvider {...core}>
           <TestCoreComponent />
-        </CoreProvider>
+        </CoreProvider>,
       );
 
       expect(screen.getAllByText(address)[0]).toBeInTheDocument();
@@ -42,7 +37,7 @@ describe("browser", () => {
 
     it("should contain account client in a hook", () => {
       const TestCoreComponent = () => {
-        const { playerAccount } = useAccountClient();
+        const playerAccount = usePlayerAccount();
         return (
           <div>
             <p>{playerAccount.address}</p>
@@ -57,7 +52,7 @@ describe("browser", () => {
           <AccountClientProvider playerPrivateKey={privateKey}>
             <TestCoreComponent />
           </AccountClientProvider>
-        </CoreProvider>
+        </CoreProvider>,
       );
       expect(screen.getAllByText(address)[0]).toBeInTheDocument();
     });

@@ -162,11 +162,7 @@ type _Account<
 
 export type ExternalAccount = _Account<false>;
 export type LocalAccount = _Account<true>;
-
-export interface AccountClient {
-  playerAccount: ExternalAccount | LocalAccount;
-  setPlayerAccount: (options: { playerAddress?: Address; playerPrivateKey?: Hex }) => void;
-}
+export type PlayerAccount = ExternalAccount | LocalAccount;
 
 export enum SyncSourceType {
   Indexer,

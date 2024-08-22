@@ -32,7 +32,7 @@ pnpm install @primodiumxyz/core
 ### Node
 
 ```js
-import { createCore, chainConfigs } from "@primodiumxyz/core";
+import { chainConfigs, createCore } from "@primodiumxyz/core";
 
 const coreConfig = {
   chain: chainConfigs.dev,
@@ -51,7 +51,7 @@ const time = core.components.Time.get()?.value;
 
 ```js
 import { createCore, chainConfigs } from "@primodiumxyz/core";
-import { CoreProvider, AccountClientProvider, useCore, useAccountClient } from "@primodiumxyz/core/react";
+import { CoreProvider, AccountClientProvider, useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 
 const App = () => {
   const core = createCore(coreConfig);
@@ -69,11 +69,11 @@ const App = () => {
 
 const Content = () => {
   const core = useCore();
-  const account = useAccountClient();
+  const account = usePlayerAccount();
 
   return (
     <div>
-      {account.playerAccount.address}
+      {playerAccount.address}
     </div>
   )
 }

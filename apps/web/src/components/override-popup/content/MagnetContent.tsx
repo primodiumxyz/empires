@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Divider } from "@/components/core/Divider";
@@ -40,9 +40,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
   const pointLockPct = tables.P_MagnetConfig.useWithKeys()?.lockedPointsPercent ?? 0n;
   const empirePoints = tables.Empire.useWithKeys({ id: empire })?.pointsIssued ?? 0n;
   const pointsLocked = (empirePoints * pointLockPct) / 10000n;
-  const {
-    playerAccount: { address, entity },
-  } = useAccountClient();
+  const { address, entity } = usePlayerAccount();
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
   const playerBalance = useBalance(address).value ?? 0n;
 

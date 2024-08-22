@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ServerIcon } from "@heroicons/react/24/solid";
 
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { AutoSizer } from "@/components/core/AutoSizer";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
@@ -29,10 +29,10 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
 
   const core = useCore();
   const game = useGame();
-  const accountClient = useAccountClient();
+  const playerAccount = usePlayerAccount();
   const contractCalls = useContractCalls();
   const requestDrip = useDripAccount();
-  const cheatcodes = setupCheatcodes({ core, game, accountClient, contractCalls, requestDrip });
+  const cheatcodes = setupCheatcodes({ core, game, playerAccount, contractCalls, requestDrip });
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {

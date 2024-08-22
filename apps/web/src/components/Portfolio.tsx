@@ -3,7 +3,7 @@ import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Price } from "@/components/shared/Price";
@@ -13,9 +13,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 
 export const Portfolio = () => {
-  const {
-    playerAccount: { address, entity },
-  } = useAccountClient();
+  const { address, entity } = usePlayerAccount();
   const empires = useEmpires();
 
   const sortedEmpires = useMemo(

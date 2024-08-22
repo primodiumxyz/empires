@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 
 import { minEth } from "@primodiumxyz/core";
-import { useAccountClient } from "@primodiumxyz/core/react";
+import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import Game from "@/components/game/index";
 import { useBalance } from "@/hooks/useBalance";
@@ -10,7 +10,7 @@ import { useSettings } from "@/hooks/useSettings";
 
 export default function DripScreen() {
   const dripAccount = useDripAccount();
-  const { playerAccount } = useAccountClient();
+  const playerAccount = usePlayerAccount();
   const { Dripped } = useSettings();
 
   const playerBalance = useBalance(playerAccount.address, 2000);

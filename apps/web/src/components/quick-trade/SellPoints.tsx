@@ -2,7 +2,7 @@ import { useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -22,9 +22,7 @@ export const SellPoints = () => {
   const [amount, setAmount] = useState("0");
   const empires = useEmpires();
   const { tables } = useCore();
-  const {
-    playerAccount: { entity },
-  } = useAccountClient();
+  const { entity } = usePlayerAccount();
   const calls = useContractCalls();
   const {
     MAIN: { sprite },

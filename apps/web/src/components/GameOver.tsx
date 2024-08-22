@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Card, GlassCard } from "@/components/core/Card";
 import { Price } from "@/components/shared/Price";
@@ -13,9 +13,7 @@ import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 export const GameOver = ({ className }: { className?: string }) => {
   const calls = useContractCalls();
   const { tables } = useCore();
-  const {
-    playerAccount: { entity },
-  } = useAccountClient();
+  const { entity } = usePlayerAccount();
   const { pot } = usePot();
   const { empire } = useWinningEmpire();
   const [closed, setClosed] = useState(false);

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { allEmpires } from "@primodiumxyz/game";
 import { EmpireConfig, EmpireEnumToConfig } from "@/util/lookups";
 
@@ -16,9 +16,7 @@ export type EmpireData = {
 
 export const useEmpires = () => {
   const { tables, utils } = useCore();
-  const {
-    playerAccount: { entity },
-  } = useAccountClient();
+  const { entity } = usePlayerAccount();
   const empireCount = tables.P_GameConfig.use()?.empireCount ?? 0;
 
   const time = tables.Time.use()?.value;

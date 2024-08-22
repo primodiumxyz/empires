@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, EOverride, POINTS_UNIT } from "@primodiumxyz/contracts";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
@@ -109,9 +109,7 @@ const BoostCard = ({
   amountToBoost: string;
   setAmountToBoost: (amount: string) => void;
 }) => {
-  const {
-    playerAccount: { address },
-  } = useAccountClient();
+  const { address } = usePlayerAccount();
   const { airdropGold } = useContractCalls();
   const {
     MAIN: { sprite },
@@ -171,9 +169,7 @@ const SellCard = ({
   setAmountToSell: (amount: string) => void;
 }) => {
   const { tables } = useCore();
-  const {
-    playerAccount: { address, entity },
-  } = useAccountClient();
+  const { entity } = usePlayerAccount();
   const { sellPoints } = useContractCalls();
   const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: empire, playerId: entity })?.value ?? 0n;
 
