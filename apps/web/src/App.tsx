@@ -73,11 +73,9 @@ const App = () => {
             landingHeader: "Primodium Empires",
             loginMessage: "It's free to login!",
           },
+
           // Create embedded wallets for users who don't have a wallet
           loginMethods: ["twitter"],
-          embeddedWallets: {
-            createOnLogin: "users-without-wallets",
-          },
           supportedChains: [defineChain(core.config.chain)],
         }}
       >

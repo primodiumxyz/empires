@@ -14,7 +14,6 @@ const DEV = import.meta.env.PRI_DEV === "true";
 
 export const Account = ({ className }: { className?: string }) => {
   const { playerAccount, login } = usePlayerAccount();
-
   const address = playerAccount?.address;
 
   if (!address)
@@ -23,6 +22,7 @@ export const Account = ({ className }: { className?: string }) => {
         Login
       </Button>
     );
+
   return <_Account address={address} className={className} />;
 };
 

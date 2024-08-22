@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { toast } from "react-toastify";
 import { Address, EIP1193Provider, Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 
@@ -38,8 +39,15 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
     throw new Error("Burner account not permitted. Please change default login.");
   }
 
-  const { ready: privyReady, login: privyLogin, logout: privyLogout, user, connectOrCreateWallet } = usePrivy();
-  const { wallets } = useWallets();
+  const {
+    ready: privyReady,
+    login: privyLogin,
+    authenticated: privyAuthenticated,
+    logout: privyLogout,
+    user,
+    connectWallet,
+  } = usePrivy();
+  const { wallets, ready: walletsReady } = useWallets();
 
   const core = useCore();
   const { config, tables } = core;
@@ -52,7 +60,7 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
   const getTransport = useCallback(async () => {
     if (!privyReady) return null;
     if (wallets.length == 0) {
-      return null;
+      return;
     }
     const wallet = wallets[0];
 
@@ -61,7 +69,8 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
   }, [privyReady, wallets, core.config.chain.id]);
 
   const createPrivy = useCallback(
-    async (address: Address) => {
+    async (address?: Address) => {
+      if (!address) return;
       const provider = await getTransport();
       if (!provider) return;
       const account = createExternalAccount(config, address, { provider: provider as EIP1193Provider });
@@ -84,6 +93,7 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
       storage.setItem("burnerAccount", "true");
       storage.setItem(localKey, localPKey);
 
+      toast.success("Logged in with local account");
       setProviderType("burner");
       setPlayerAccount(playerAccount);
     },
@@ -108,7 +118,8 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
         return;
       }
 
-      privyLogin();
+      if (!privyAuthenticated) privyLogin();
+      else connectWallet();
     } else {
       throw new Error("Invalid login type");
     }
@@ -116,7 +127,7 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
 
   // automatically login with burner account if it exists
   useEffect(() => {
-    if (providerType !== null) return;
+    if (providerType !== null || !options.allowBurner) return;
     const burnerAccount = storage.getItem("burnerAccount");
     if (options.allowBurner && burnerAccount) {
       createBurner(true);
@@ -125,12 +136,23 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
 
   // automatically login with privy if the user is logged in
   useEffect(() => {
-    if (!user || providerType !== null) return;
-    const address = user?.wallet?.address as Address | undefined;
+    if (!user || providerType !== null || wallets.length === 0) return;
 
-    if (!address) connectOrCreateWallet();
-    else createPrivy(address);
-  }, [user, providerType]);
+    createPrivy(wallets[0].address as Address);
+  }, [user, wallets, providerType]);
+
+  useEffect(() => {
+    if (!walletsReady || !privyAuthenticated) return;
+    if (wallets.length === 0) {
+      // logging out
+      setPlayerAccount(null);
+      setProviderType(null);
+      connectWallet();
+      return;
+    } else {
+      createPrivy(wallets[0].address as Address);
+    }
+  }, [wallets, walletsReady, privyAuthenticated]);
 
   const cancelBurner = useCallback(() => {
     storage.removeItem("burnerAccount");
@@ -148,6 +170,7 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
   const logout = () => {
     if (providerType === "burner") cancelBurner();
     else cancelPrivy();
+    toast.success("Logged out");
   };
 
   return (
