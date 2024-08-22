@@ -168,6 +168,7 @@ export const worldInput = {
       schema: {
         currentPlanet: "bytes32",
         destinationPlanet: "bytes32",
+        retargetPending: "bool",
         currentCharge: "uint256",
         pathIndex: "uint256",
         path: "bytes32[]",

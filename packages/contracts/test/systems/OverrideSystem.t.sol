@@ -338,7 +338,7 @@ contract OverrideSystemTest is PrimodiumTest {
    *************************************************************************/
 
   function testDetonateShieldEaterCharged() public {
-    uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 2;
+    uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 5;
 
     vm.startPrank(creator);
     LibShieldEater.initialize();

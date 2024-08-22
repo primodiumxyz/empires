@@ -22,6 +22,7 @@ library LibShieldEater {
     uint256 randomIndex = pseudorandom(block.number, planetIds.length);
     ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
     ShieldEater.setCurrentCharge(0);
+    ShieldEater.setRetargetPending(true);
   }
 
   /**
@@ -64,18 +65,14 @@ library LibShieldEater {
    * @dev Moves the Shield Eater to the next planet en route to the destination planet.
    */
   function update() internal {
-    bytes32 destinationPlanet = ShieldEater.getDestinationPlanet();
-
-    // if we have no destination, find one
-    if (destinationPlanet == bytes32(0)) {
-      do {
-        retarget();
-      } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
-      ShieldEater.setPathIndex(0);
-      bytes32[] memory emptyPath = new bytes32[](0);
-      ShieldEater.setPath(emptyPath);
+    // if retarget pending, find a new destination
+    if (ShieldEater.getRetargetPending()) {
+      retarget();
+      if (ShieldEater.getDestinationPlanet() != ShieldEater.getCurrentPlanet()) {
+        ShieldEater.setRetargetPending(false);
+      }
     } else {
-      // if we have a destination, move to next planet
+      bytes32 destinationPlanet = ShieldEater.getDestinationPlanet();
       bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
 
       // figure out which way to go, move, and save where we've been
@@ -97,7 +94,10 @@ library LibShieldEater {
 
       // we have arrived.  clear the destination so we'll find a new one next update.
       if (planetId == destinationPlanet) {
-        ShieldEater.setDestinationPlanet(bytes32(0));
+        ShieldEater.setPathIndex(0);
+        bytes32[] memory emptyPath = new bytes32[](0);
+        ShieldEater.setPath(emptyPath);
+        ShieldEater.setRetargetPending(true);
       }
     }
   }

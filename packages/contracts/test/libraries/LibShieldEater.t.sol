@@ -66,7 +66,7 @@ contract LibShieldEaterTest is PrimodiumTest {
 
     uint256 loopcount = 0;
 
-    while (destPlanetData.q != 0 || destPlanetData.r != 0) {
+    while (destPlanetData.q != currPlanetData.q || destPlanetData.r != currPlanetData.r) {
       LibShieldEater.update();
       currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
       destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
@@ -83,12 +83,8 @@ contract LibShieldEaterTest is PrimodiumTest {
       }
     }
 
-    bytes32[] memory path = ShieldEater.getPath();
-    uint256 pathIndex = ShieldEater.getPathIndex();
-    PlanetData memory finalPlanetData = Planet.get(path[pathIndex - 1]);
-
-    assertEq(currPlanetData.q, finalPlanetData.q, "LibShieldEater: currPlanetData.q != finalPlanetData.q");
-    assertEq(currPlanetData.r, finalPlanetData.r, "LibShieldEater: currPlanetData.r != finalPlanetData.r");
+    assertEq(currPlanetData.q, destPlanetData.q, "LibShieldEater: currPlanetData.q != destPlanetData.q");
+    assertEq(currPlanetData.r, destPlanetData.r, "LibShieldEater: currPlanetData.r != destPlanetData.r");
   }
 
   function testShieldEaterRetarget(uint256 fuzz) public {
