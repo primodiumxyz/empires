@@ -1,12 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useCore } from "@primodiumxyz/core/react";
+import { useCore, useSyncStatus } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
 import { GameHUD } from "@/components/game/GameHUD";
 import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
 const Game = () => {
+  const { loading } = useSyncStatus();
+  if (loading) {
+    // Do nothing while the PrivyProvider initializes with updated user state
+    return <div className="animate-pulse">Syncing... </div>;
+  }
+  return <_Game />;
+};
+const _Game = () => {
   const core = useCore();
   const contractCalls = useContractCalls();
   const [loading, setLoading] = useState<boolean>(true);

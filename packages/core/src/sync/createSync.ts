@@ -44,7 +44,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
         {
           step: SyncStep.Syncing,
           progress,
-          message: `Hydrating from RPC`,
+          message: `Syncing from RPC...`,
           lastBlockNumberProcessed: blockNumber,
         },
         syncId,
@@ -55,7 +55,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
           {
             step: SyncStep.Complete,
             progress: 1,
-            message: `DONE`,
+            message: `LIVE`,
             lastBlockNumberProcessed: blockNumber,
           },
           syncId,
@@ -101,7 +101,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
       tables.SyncStatus.set({
         step: SyncStep.Live,
         progress: 1,
-        message: "Subscribed to live updates",
+        message: "Live",
         lastBlockNumberProcessed: blockNumber,
       });
     });
@@ -179,7 +179,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
       tables.SyncStatus.set({
         step: SyncStep.Syncing,
         progress,
-        message: `Hydrating from Indexer`,
+        message: `Syncing...`,
         lastBlockNumberProcessed: blockNumber,
       });
 
@@ -215,7 +215,7 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
         {
           step: SyncStep.Syncing,
           progress,
-          message: `Hydrating from Indexer`,
+          message: `Syncing...`,
           lastBlockNumberProcessed: blockNumber,
         },
         syncId,

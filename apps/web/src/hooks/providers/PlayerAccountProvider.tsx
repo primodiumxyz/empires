@@ -120,6 +120,7 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
 
       if (!privyAuthenticated) privyLogin();
       else connectWallet();
+      return;
     } else {
       throw new Error("Invalid login type");
     }
