@@ -42,6 +42,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         detonateCenterDamage: scaleMultiplier(1.0),
         detonateAdjacentDamage: scaleMultiplier(0.5),
         detonationThreshold: 15n,
+        retargetMaxThreshold: 5n,
       },
     },
   },

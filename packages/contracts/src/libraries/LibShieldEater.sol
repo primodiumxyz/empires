@@ -100,15 +100,34 @@ library LibShieldEater {
     } else {
       ShieldEater.setDestinationPlanet(newDestination);
     }
+
+    ShieldEater.setRetargetCount(ShieldEater.getRetargetCount() + 1);
   }
 
   /**
    * @dev Moves the Shield Eater to the next planet en route to the destination planet.
    */
   function update() internal {
+    // on each call, we either find a new destination or move to the next planet in the path
+    // only one of these should happen per update call.
+
     // if retarget pending, find a new destination
     if (ShieldEater.getRetargetPending()) {
+      // how many times have we looped?  If we're stuck, clear the path and try again.
+      if (ShieldEater.getRetargetCount() >= P_ShieldEaterConfig.getRetargetMaxThreshold()) {
+        // we're stuck.  clear the path.
+        ShieldEater.setPathIndex(0);
+        bytes32[] memory emptyPath = new bytes32[](0);
+        ShieldEater.setPath(emptyPath);
+
+        // reset the retarget count
+        ShieldEater.setRetargetCount(0);
+      }
+
+      // find new destination
       retarget();
+
+      // if we found a valid destination, don't retarget on next update call
       if (ShieldEater.getDestinationPlanet() != ShieldEater.getCurrentPlanet()) {
         ShieldEater.setRetargetPending(false);
       }
