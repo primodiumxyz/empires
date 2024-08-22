@@ -23,12 +23,7 @@ export const Leaderboard = () => {
   return (
     <Modal title="Top Point Holders">
       <Modal.Button size="md" tooltip="Top Point Holders" tooltipDirection="bottom">
-        <img
-          src={InterfaceIcons.Leaderboard}
-          alt="Leaderboard"
-          className={`pixel-images w-[1em] scale-150`}
-          draggable="false"
-        />
+        <img src={InterfaceIcons.Leaderboard} alt="Leaderboard" className={`pixel-images w-[2em]`} draggable="false" />
       </Modal.Button>
       <Modal.Content className="h-[600px] w-[550px]">
         <LeaderboardContent />
@@ -93,12 +88,12 @@ const TotalLeaderboard = () => {
   const handleRefresh = () => {
     setRefresh(refresh + 1);
   };
-  const players = tables.Value_PlayersMap.useAll();
   const {
     ROOT: { sprite },
   } = useGame();
 
   const playerData = useMemo(() => {
+    const players = tables.Value_PlayersMap.getAll();
     const unsorted = players.reduce(
       (acc, player) => {
         const playerData = tables.Value_PlayersMap.getWithKeys({ playerId: player });
@@ -161,7 +156,6 @@ const TotalLeaderboard = () => {
 
 const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
   const { tables } = useCore();
-  const players = tables.Value_PlayersMap.useAll();
   const {
     ROOT: { sprite },
   } = useGame();
@@ -173,6 +167,7 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empireId] ?? "PlanetGrey");
   const playerData = useMemo(() => {
+    const players = tables.Value_PlayersMap.getAll();
     const unsorted = players.reduce(
       (acc, player) => {
         const points = tables.Value_PointsMap.getWithKeys({ playerId: player, empireId })?.value ?? 0n;
@@ -186,7 +181,7 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
     );
 
     return Object.entries(unsorted).sort((a, b) => Number(b[1].points) - Number(a[1].points));
-  }, [players, refresh]);
+  }, [refresh]);
 
   return (
     <div className="pointer-events-auto relative flex h-full w-full flex-col overflow-y-hidden pr-4 text-xs">
