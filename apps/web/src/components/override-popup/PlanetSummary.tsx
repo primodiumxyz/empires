@@ -2,15 +2,15 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToPlanetName, formatNumber, formatTime } from "@primodiumxyz/core";
+import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
-import { useTimeSinceTurnStart } from "@/hooks/useTimeSinceTurnStart";
 import { cn } from "@/util/client";
 
 /* --------------------------------- PLANET --------------------------------- */
@@ -22,6 +22,8 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
   const planet = tables.Planet.use(entity)!;
   const hasShieldEater = tables.ShieldEater.use()?.currentPlanet === entity;
   const { empireId } = planet;
+
+  const moveCrown = [EEmpire.Purple, EEmpire.Pink, EEmpire.Yellow].includes(empireId as EEmpire);
 
   return (
     <Card noDecor className={cn("hide-scrollbar h-fit max-h-full min-w-80 overflow-y-auto", className)}>
@@ -47,7 +49,10 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
                 src={sprite.getSprite("Crown")}
                 width={24}
                 height={24}
-                className={cn("absolute left-1/2 -translate-x-1/2", hasShieldEater ? "-top-4" : "top-0")}
+                className={cn(
+                  "absolute left-1/2 -translate-x-1/2 scale-[150%]",
+                  hasShieldEater || moveCrown ? "-top-4" : "top-0",
+                )}
               />
             )}
           </div>
@@ -107,9 +112,12 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   }, [p]);
 
   return (
-    <div className="w-full rounded-md border border-base-100 text-xs">
-      <button onClick={() => setIsOpen(!isOpen)} className="flex w-full items-center justify-between p-2 text-left">
-        <h3 className="text-xs">ROUTINE PROBABILITIES</h3>
+    <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="absolute left-2 top-0 mb-2 flex -translate-y-1/2 items-center bg-secondary/25 text-left"
+      >
+        <h3 className="text-xs">ROUTINE LIKELIHOODS</h3>
         <ChevronDownIcon className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
       {isOpen && (
@@ -133,31 +141,29 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     tables,
     utils: { getShieldEaterPath },
   } = useCore();
-  const turnLengthBlocks = tables.P_GameConfig.use()?.turnLengthBlocks ?? 1n;
-  const avgBlockTime = tables.BlockNumber.use()?.avgBlockTime ?? 1;
 
   const magnets = usePlanetMagnets(entity);
-  const timeElapsedSinceTurnStart = useTimeSinceTurnStart();
-  const [timeLeft, setTimeLeft] = useState<number[]>(magnets.map(() => 0));
+  const currTurn = tables.Turn.use()?.value ?? 1n;
+  const [turnsLeft, setTurnsLeft] = useState<number[]>(magnets.map(() => 0));
+  const empireCount = useEmpires().size;
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const currTurn = tables.Turn.get()?.value ?? 1n;
-      const newTimeLeft = magnets.map((magnet) => {
+      const newTurnsLeft = magnets.map((magnet) => {
         if (magnet.endTurn !== undefined) {
-          const turnsLeft = Number(magnet.endTurn - currTurn);
-          const secondsLeft = turnsLeft * Number(turnLengthBlocks) * avgBlockTime - timeElapsedSinceTurnStart;
-          return Math.max(0, secondsLeft);
+          const turns = Number(magnet.endTurn - currTurn);
+          const turnLeft = Math.ceil(turns / empireCount);
+          return turnLeft;
         } else {
           return 0;
         }
       });
 
-      setTimeLeft(newTimeLeft);
+      setTurnsLeft(newTurnsLeft);
     };
 
     calculateTimeLeft();
-  }, [magnets, turnLengthBlocks, avgBlockTime, timeElapsedSinceTurnStart]);
+  }, [magnets, currTurn]);
 
   const shieldEater = tables.ShieldEater.use();
   const turnsToShieldEater = useMemo(() => {
@@ -168,47 +174,47 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     return index === -1 ? undefined : index + 1;
   }, [shieldEater, entity]);
 
-  const hideMagnets = timeLeft.every((t) => t === 0);
-  const hideOverrides = useMemo(() => {
-    return turnsToShieldEater === undefined && hideMagnets;
-  }, [turnsToShieldEater, hideMagnets]);
-
-  if (hideOverrides) return null;
+  const hideMagnets = turnsLeft.every((t) => t === 0);
 
   return (
-    <div className="relative w-full rounded-md border border-base-100 p-2 text-xs">
-      <h3 className="absolute left-0 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
+    <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
+      <h3 className="absolute left-2 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
       <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-1 text-xs">
-        {!hideMagnets && (
-          <>
-            <span className="text-gray-400">MAGNETS</span>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
-              {magnets.map(
+        <>
+          <span className="text-gray-400 mt-1">MAGNETS</span>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
+            {magnets.length > 0 && turnsLeft.some((t) => t !== 0) ? (
+              magnets.map(
                 (magnet, index) =>
-                  timeLeft[index] !== 0 && (
+                  turnsLeft[index] !== 0 && (
                     <IconLabel
                       key={index}
                       imageUri={magnet.icon}
-                      text={timeLeft[index] ? formatTime(timeLeft[index], true) : "--"}
+                      text={turnsLeft[index] ? formatNumber(turnsLeft[index]) : "--"}
                     />
                   ),
-              )}
-            </div>
-          </>
-        )}
-        {turnsToShieldEater !== undefined && (
+              )
+            ) : (
+              <span className="text-gray-400">-</span>
+            )}
+          </div>
+        </>
+
           <>
             <span className="text-gray-400">SHIELD EATER</span>
             <div>
-              {turnsToShieldEater === 0 && <span className="text-accent">on planet</span>}
-              {!!turnsToShieldEater && (
+            {turnsToShieldEater !== undefined ? (
+              turnsToShieldEater === 0 ?( <span className="text-accent">on planet</span>):(
+
                 <span className="text-accent">
                   in {turnsToShieldEater} turn{turnsToShieldEater > 1 ? "s" : ""}
                 </span>
+                )
+              ) : (
+                <span className="text-gray-400">-</span>
               )}
             </div>
           </>
-        )}
       </div>
     </div>
   );

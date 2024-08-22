@@ -1,9 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { formatEther } from "viem";
 
-import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
-import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Divider } from "@/components/core/Divider";
 import { IconLabel } from "@/components/core/IconLabel";
@@ -18,6 +15,9 @@ import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
 import { EmpireEnumToConfig } from "@/util/lookups";
+import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
+import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { Entity } from "@primodiumxyz/reactive-tables";
 
 /*
 1. disable magnets if no adjacent planets of current empire

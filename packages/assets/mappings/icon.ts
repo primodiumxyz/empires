@@ -17,6 +17,7 @@ import Chat from "../icons/UI_Chat.png?url";
 import Command from "../icons/UI_Command.png?url";
 import Cooldown from "../icons/UI_Cooldown.gif?url";
 import Crosshairs from "../icons/UI_Crosshairs.png?url";
+import Dashboard from "../icons/UI_Dashboard.png?url";
 import Debug from "../icons/UI_Debug.png?url";
 import Defense from "../icons/UI_Defense.png?url";
 import EncryptionBlue from "../icons/UI_Encryption_Blue.png?url";
@@ -109,4 +110,5 @@ export const InterfaceIcons = {
   PurpleMagnet,
   YellowMagnet,
   PinkMagnet,
+  Dashboard,
 };
