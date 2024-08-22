@@ -5,6 +5,7 @@ import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { Turn, Planet, P_AcidConfig, PlaceAcidOverrideLog, PlaceAcidOverrideLogData } from "codegen/index.sol";
 import { EOverride, EEmpire } from "codegen/common.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
+import { LibAcid } from "libraries/LibAcid.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
 import { addressToId, pseudorandomEntity } from "src/utils.sol";
@@ -22,7 +23,10 @@ contract OverrideAcidSystem is EmpiresSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceAcid, empire, 1);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
 
-    AcidPlanetsSet.add(empire, _planetId, P_AcidConfig.getAcidDuration());
+    // instantly apply first cycle of acid
+    LibAcid.applyAcidDamage(_planetId);
+
+    AcidPlanetsSet.add(empire, _planetId, P_AcidConfig.getAcidDuration() - 1);
     LibOverride._purchaseOverride(addressToId(_msgSender()), EOverride.PlaceAcid, empire, 1, _msgValue());
 
     PlaceAcidOverrideLog.set(

@@ -2,9 +2,10 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Turn, Planet, P_AcidConfig } from "codegen/index.sol";
+import { Turn } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
+import { LibAcid } from "libraries/LibAcid.sol";
 
 contract UpdateAcidSubsystem is EmpiresSystem {
   function updateAcid() public {
@@ -15,9 +16,7 @@ contract UpdateAcidSubsystem is EmpiresSystem {
       bytes32 planetId = planetIds[i];
 
       // apply acid to planet, round down
-      uint256 initShips = Planet.getShipCount(planetId);
-      uint256 newShips = (initShips * (10000 - P_AcidConfig.getAcidDamagePercent())) / 10000;
-      Planet.setShipCount(planetId, newShips);
+      LibAcid.applyAcidDamage(planetId);
 
       // decrement acid cycles
       uint256 acidCyclesRemaining = AcidPlanetsSet.getAcidCycles(empire, planetId);
