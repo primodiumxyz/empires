@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts";
+import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -25,6 +26,7 @@ export const BoostEmpire = () => {
   const {
     MAIN: { sprite },
   } = useGame();
+  const { playerAccount, login } = usePlayerAccount();
 
   const boostPriceWei = useOverrideCost(EOverride.AirdropGold, selectedEmpire, BigInt(amount));
   const boostPointsReceived = useOverridePointsReceived(EOverride.AirdropGold, selectedEmpire, BigInt(amount));
@@ -77,16 +79,18 @@ export const BoostEmpire = () => {
           </Badge>
         </div>
         <div className="mt-2 flex flex-col items-center">
-          <TransactionQueueMask id="sell-points">
-            <Button
-              size="md"
-              className="w-28 text-base"
-              disabled={amount == "0" || !boostPriceWei}
-              onClick={handleSubmit}
-            >
-              Buy
+          {!!playerAccount && (
+            <TransactionQueueMask id="sell-points">
+              <Button size="md" className="text-base" disabled={amount == "0" || !boostPriceWei} onClick={handleSubmit}>
+                Buy
+              </Button>
+            </TransactionQueueMask>
+          )}
+          {!playerAccount && (
+            <Button size="md" className="text-base" onClick={() => login()}>
+              Login to Buy
             </Button>
-          </TransactionQueueMask>
+          )}
           <Badge size="sm" variant="primary" className="rounded-t-none p-3">
             <Price wei={boostPriceWei} className="text-sm text-white" />
           </Badge>

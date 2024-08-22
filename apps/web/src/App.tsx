@@ -88,7 +88,7 @@ const App = () => {
             >
               <BackgroundNebula />
 
-              <PlayerAccountProvider allowBurner={!!DEV}>
+              <PlayerAccountProvider allowBurner={!!DEV} defaultLogin="burner">
                 <Game />
                 <ToastContainer
                   toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}

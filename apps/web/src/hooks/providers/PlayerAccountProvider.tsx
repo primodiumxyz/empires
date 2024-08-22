@@ -7,6 +7,7 @@ import { createExternalAccount, createLocalAccount, ExternalAccount, LocalAccoun
 import { useCore } from "@primodiumxyz/core/react";
 
 type PlayerAccountOptions = {
+  defaultLogin: ProviderType;
   allowBurner?: boolean;
 };
 
@@ -14,7 +15,7 @@ type ProviderType = "privy" | "burner";
 
 export type PlayerAccount = {
   playerAccount: ExternalAccount | LocalAccount | null;
-  login: (type: ProviderType) => void;
+  login: (type?: ProviderType) => void;
   logout: () => void;
 };
 
@@ -44,11 +45,8 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
   const [playerAccount, setPlayerAccount] = useState<ExternalAccount | LocalAccount | null>(null);
   const [providerType, setProviderType] = useState<ProviderType | null>(null);
 
-  console.log({ providerType, playerAccount });
-
   const getTransport = useCallback(async () => {
     if (!privyReady) return null;
-    console.log({ wallets });
     if (wallets.length == 0) {
       return null;
     }
@@ -88,25 +86,28 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
     [storage, config],
   );
 
-  const login = async (type: ProviderType) => {
+  const login = async (type?: ProviderType) => {
+    const loginType = type ?? options.defaultLogin;
     if (providerType !== null) {
       console.warn("Provider type already set, ignoring login request");
       return;
     }
 
-    if (type === "burner") {
+    if (loginType === "burner") {
       if (!options.allowBurner) throw new Error("Burner account not permitted");
       createBurner();
       return;
-    }
+    } else if (loginType === "privy") {
+      // login with privy
+      if (!privyReady) {
+        console.error("Privy not ready, skipping login");
+        return;
+      }
 
-    // login with privy
-    if (!privyReady) {
-      console.error("Privy not ready, skipping login");
-      return;
+      privyLogin();
+    } else {
+      throw new Error("Invalid login type");
     }
-
-    privyLogin();
   };
 
   // automatically login with burner account if it exists

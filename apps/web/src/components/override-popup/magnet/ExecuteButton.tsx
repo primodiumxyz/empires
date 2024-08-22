@@ -1,12 +1,10 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Address, formatEther } from "viem";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
-import { useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
-import { Divider } from "@/components/core/Divider";
-import { NumberInput } from "@/components/core/NumberInput";
 import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
@@ -15,21 +13,26 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
+import useWinningEmpire from "@/hooks/useWinningEmpire";
 
 export const ExecuteButton = ({
   planetId,
   empire,
   address,
   entity,
+  inputValue,
+  setInputValue,
 }: {
   planetId: Entity;
   empire: EEmpire;
   address: Address;
   entity: Entity;
+  inputValue: string;
+  setInputValue: (value: string) => void;
 }) => {
-  const [inputValue, setInputValue] = useState("1");
   const { tables } = useCore();
   const { placeMagnet } = useContractCalls();
+  const { playerAccount, login } = usePlayerAccount();
 
   const placeMagnetPriceWei = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
 
@@ -46,6 +49,7 @@ export const ExecuteButton = ({
   const playerBalance = useBalance(address).value ?? 0n;
   const placeMagnetPointsReceived = useOverridePointsReceived(EOverride.PlaceMagnet, empire, BigInt(inputValue));
 
+  const { gameOver } = useWinningEmpire();
   const magnets = usePlanetMagnets(planetId);
   const currentMagnetExists = !!magnets.find((magnet) => magnet.empire === empire)?.exists;
 
@@ -53,6 +57,7 @@ export const ExecuteButton = ({
     if (playerBalance < placeMagnetPriceWei) return { disabled: true, message: "Not enough money" };
     if (playerPoints < pointsLocked) return { disabled: true, message: `${formatEther(pointsLocked)} points needed` };
     if (currentMagnetExists) return { disabled: true, message: "Magnet already exists" };
+    if (gameOver) return { disabled: true, message: "" };
     return { disabled: false, message: "" };
   }, [placeMagnetPriceWei, pointsLocked, currentMagnetExists, playerBalance, playerPoints]);
 
@@ -70,20 +75,23 @@ export const ExecuteButton = ({
             <span className="text-success">({formatEther(playerPoints - pointsLocked)} AVAIL.)</span>
           </p>
         )}
-        <TransactionQueueMask id={`${planetId}-place-magnet`} className="">
-          <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
-            PLACE MAGNET
+        {!!playerAccount && (
+          <TransactionQueueMask id={`${planetId}-place-magnet`} className="">
+            <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
+              PLACE MAGNET
+            </Button>
+          </TransactionQueueMask>
+        )}
+        {!playerAccount && (
+          <Button onClick={() => login()} size="xs" variant="secondary" className="">
+            LOGIN TO PLACE MAGNET
           </Button>
-        </TransactionQueueMask>
+        )}
         <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
           <Price wei={placeMagnetPriceWei} />
         </p>
 
         {!disabled && <PointsReceived points={placeMagnetPointsReceived} inline />}
-      </div>
-      <Divider direction="vertical" className="self-center" />
-      <div className="flex flex-col items-center justify-start">
-        <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
       </div>
     </div>
   );

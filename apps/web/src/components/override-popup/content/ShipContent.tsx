@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
-import { useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { NumberInput } from "@/components/core/NumberInput";
@@ -22,6 +22,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const [inputValue, setInputValue] = useState("1");
   const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
   const createShipPointsReceived = useOverridePointsReceived(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const { playerAccount, login } = usePlayerAccount();
 
   const supportDisabled = gameOver || Number(planetEmpire) === 0;
 
@@ -29,20 +30,27 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
     <div className="flex w-full flex-col items-center gap-2">
       <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
       <div className="flex flex-col items-center">
-        <TransactionQueueMask id={`${entity}-create-ship`}>
-          <Button
-            onClick={async () => {
-              await createShip(entity, BigInt(inputValue), createShipPriceWei);
-              setInputValue("1");
-              tables.SelectedPlanet.remove();
-            }}
-            disabled={supportDisabled}
-            size="xs"
-            variant="secondary"
-          >
-            ADD SHIPS
+        {!!playerAccount && (
+          <TransactionQueueMask id={`${entity}-create-ship`}>
+            <Button
+              onClick={async () => {
+                await createShip(entity, BigInt(inputValue), createShipPriceWei);
+                setInputValue("1");
+                tables.SelectedPlanet.remove();
+              }}
+              disabled={supportDisabled}
+              size="xs"
+              variant="secondary"
+            >
+              ADD SHIPS
+            </Button>
+          </TransactionQueueMask>
+        )}
+        {!playerAccount && (
+          <Button onClick={() => login()} size="xs" variant="secondary">
+            LOGIN TO ADD SHIPS
           </Button>
-        </TransactionQueueMask>
+        )}
         <p className="-mt-1 w-fit rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
           <Price wei={createShipPriceWei} />
         </p>

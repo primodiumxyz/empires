@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
-import { useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { NumberInput } from "@/components/core/NumberInput";
@@ -28,25 +28,33 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   );
 
   const supportDisabled = gameOver || Number(planetEmpire) === 0;
+  const { playerAccount, login } = usePlayerAccount();
 
   return (
     <div className="flex w-full flex-col items-center gap-2">
       <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
       <div className="flex flex-col items-center">
-        <TransactionQueueMask id={`${entity}-add-shield`}>
-          <Button
-            onClick={async () => {
-              await chargeShield(entity, BigInt(inputValue), chargeShieldPriceWei);
-              setInputValue("1");
-              tables.SelectedPlanet.remove();
-            }}
-            disabled={supportDisabled}
-            size="xs"
-            variant="secondary"
-          >
-            ADD SHIELDS
+        {!!playerAccount && (
+          <TransactionQueueMask id={`${entity}-add-shield`}>
+            <Button
+              onClick={async () => {
+                await chargeShield(entity, BigInt(inputValue), chargeShieldPriceWei);
+                setInputValue("1");
+                tables.SelectedPlanet.remove();
+              }}
+              disabled={supportDisabled}
+              size="xs"
+              variant="secondary"
+            >
+              ADD SHIELDS
+            </Button>
+          </TransactionQueueMask>
+        )}
+        {!playerAccount && (
+          <Button onClick={() => login()} disabled={supportDisabled} size="xs" variant="secondary">
+            LOGIN TO ADD SHIELDS
           </Button>
-        </TransactionQueueMask>
+        )}
         <p className="-mt-1 w-fit rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
           <Price wei={chargeShieldPriceWei} />
         </p>

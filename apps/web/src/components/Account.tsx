@@ -34,13 +34,11 @@ export const _Account = ({ address, className }: { address: Address; className?:
   const playerBalance = useBalance(address, 2000);
 
   useEffect(() => {
-    const drip = async () => {
-      if (playerBalance.loading || (playerBalance.value ?? 0n) >= minEth) return;
-      setDripping(true);
-      await requestDrip(address);
-      setDripping(false);
-    };
-    drip();
+    if (playerBalance.loading || (playerBalance.value ?? 0n) >= minEth) return;
+    setDripping(true);
+    requestDrip(address)
+      .catch((e) => console.error(e))
+      .finally(() => setDripping(false));
   }, [address, playerBalance.value]);
 
   return (

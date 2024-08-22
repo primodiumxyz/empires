@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import { EEmpire } from "@primodiumxyz/contracts/config/enums";
 import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Divider } from "@/components/core/Divider";
+import { NumberInput } from "@/components/core/NumberInput";
 import { ExecuteButton } from "@/components/override-popup/magnet/ExecuteButton";
+import { FakeExecuteButton } from "@/components/override-popup/magnet/FakeExecuteButton";
 import { MagnetButton } from "@/components/override-popup/magnet/MagnetButton";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
 
@@ -14,6 +17,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
   const [empire, setEmpire] = useState<EEmpire>(EEmpire.LENGTH);
 
   const { playerAccount } = usePlayerAccount();
+  const [inputValue, setInputValue] = useState("1");
 
   const magnets = usePlanetMagnets(planetId);
 
@@ -34,15 +38,24 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
           </div>
           {empire === EEmpire.LENGTH && <p className="text-xs opacity-50">Select empire </p>}
         </div>
-        {playerAccount && (
-          <ExecuteButton
-            planetId={planetId}
-            empire={empire}
-            address={playerAccount.address}
-            entity={playerAccount.entity}
-          />
-        )}
+        <Divider direction="vertical" className="self-center" />
+        <div className="flex flex-col items-center justify-start">
+          <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
+        </div>
       </div>
+      {playerAccount && (
+        <ExecuteButton
+          planetId={planetId}
+          empire={empire}
+          address={playerAccount.address}
+          entity={playerAccount.entity}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+        />
+      )}
+      {!playerAccount && (
+        <FakeExecuteButton planetId={planetId} empire={empire} inputValue={inputValue} setInputValue={setInputValue} />
+      )}
     </div>
   );
 };
