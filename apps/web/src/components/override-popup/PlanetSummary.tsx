@@ -180,11 +180,11 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
       <h3 className="absolute left-2 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
       <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-1 text-xs">
-        {!hideMagnets && (
-          <>
-            <span className="text-gray-400">MAGNETS</span>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
-              {magnets.map(
+        <>
+          <span className="text-gray-400 mt-1">MAGNETS</span>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
+            {magnets.length > 0 && turnsLeft.some((t) => t !== 0) ? (
+              magnets.map(
                 (magnet, index) =>
                   turnsLeft[index] !== 0 && (
                     <IconLabel
@@ -193,23 +193,28 @@ const Overrides = ({ entity }: { entity: Entity }) => {
                       text={turnsLeft[index] ? formatNumber(turnsLeft[index]) : "--"}
                     />
                   ),
-              )}
-            </div>
-          </>
-        )}
-        {turnsToShieldEater !== undefined && (
+              )
+            ) : (
+              <span className="text-gray-400">-</span>
+            )}
+          </div>
+        </>
+
           <>
             <span className="text-gray-400">SHIELD EATER</span>
             <div>
-              {turnsToShieldEater === 0 && <span className="text-accent">on planet</span>}
-              {!!turnsToShieldEater && (
+            {turnsToShieldEater !== undefined ? (
+              turnsToShieldEater === 0 ?( <span className="text-accent">on planet</span>):(
+
                 <span className="text-accent">
                   in {turnsToShieldEater} turn{turnsToShieldEater > 1 ? "s" : ""}
                 </span>
+                )
+              ) : (
+                <span className="text-gray-400">-</span>
               )}
             </div>
           </>
-        )}
       </div>
     </div>
   );
