@@ -5,7 +5,7 @@ import { formatEther, toHex } from "viem";
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToAddress, formatAddress } from "@primodiumxyz/core";
-import { useCore } from "@primodiumxyz/core/react";
+import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { AutoSizer } from "@/components/core/AutoSizer";
@@ -77,6 +77,9 @@ const TotalLeaderboard = () => {
   const { tables } = useCore();
   const empires = [...useEmpires().keys()];
   const [refresh, setRefresh] = useState(0);
+  const {
+    playerAccount: { entity },
+  } = useAccountClient();
 
   const handleRefresh = () => {
     setRefresh(refresh + 1);
@@ -109,7 +112,25 @@ const TotalLeaderboard = () => {
       {} as Record<string, { player: Entity; profit: bigint; points: bigint; empire: EEmpire }>,
     );
 
-    return Object.values(unsorted).sort((a, b) => Number(b.points) - Number(a.points));
+    const sorted = Object.values(unsorted).sort((a, b) => Number(b.points) - Number(a.points));
+
+    // Add rank to the sorted data
+    let currentRank = 1;
+    let previousPoints = sorted[0]?.points ?? 0n;
+
+    return sorted.map((item, index) => {
+      if (item.points < previousPoints) {
+        currentRank = index + 1;
+        previousPoints = item.points;
+      }
+      return { ...item, rank: currentRank } as {
+        player: Entity;
+        profit: bigint;
+        points: bigint;
+        empire: EEmpire;
+        rank: number;
+      };
+    });
   }, [refresh]);
 
   return (
@@ -129,8 +150,13 @@ const TotalLeaderboard = () => {
           itemSize={30}
           items={playerData}
           render={(item, index) => (
-            <div className="pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr_1fr] flex-col place-items-center justify-between text-xs">
-              <div>{index + 1}</div>
+            <div
+              className={cn(
+                "pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr_1fr] flex-col place-items-center justify-between text-xs",
+                item.player === entity && "rounded bg-primary/40",
+              )}
+            >
+              <div>{item.rank}</div>
               <div className="">{formatAddress(entityToAddress(item.player))}</div>
               <div className={cn("flex items-center gap-2")}>
                 <img src={sprite.getSprite(EmpireToPlanetSpriteKeys[item.empire] ?? "PlanetGrey")} className="w-4" />
@@ -153,6 +179,9 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
     ROOT: { sprite },
   } = useGame();
   const [refresh, setRefresh] = useState(0);
+  const {
+    playerAccount: { entity },
+  } = useAccountClient();
 
   const handleRefresh = () => {
     setRefresh(refresh + 1);
@@ -166,14 +195,27 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
         const points = tables.Value_PointsMap.getWithKeys({ playerId: player, empireId })?.value ?? 0n;
         if (points === 0n) return acc;
         acc[player] = {
+          player,
           points,
         };
         return acc;
       },
-      {} as Record<Entity, { points: bigint }>,
+      {} as Record<Entity, { player: Entity; points: bigint }>,
     );
 
-    return Object.entries(unsorted).sort((a, b) => Number(b[1].points) - Number(a[1].points));
+    const sorted = Object.values(unsorted).sort((a, b) => Number(b.points) - Number(a.points));
+
+    // Add rank to the sorted data
+    let currentRank = 1;
+    let previousPoints = sorted[0]?.points ?? 0n;
+
+    return sorted.map((item, index) => {
+      if (item.points < previousPoints) {
+        currentRank = index + 1;
+        previousPoints = item.points;
+      }
+      return { ...item, rank: currentRank };
+    });
   }, [refresh]);
 
   return (
@@ -193,13 +235,18 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
             <AutoSizer
               itemSize={30}
               items={playerData}
-              render={(item, index) => (
-                <div className="pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr] flex-col place-items-center justify-between text-xs">
-                  <div>{index + 1}</div>
-                  <div className="">{formatAddress(entityToAddress(item[0]))}</div>
+              render={(item) => (
+                <div
+                  className={cn(
+                    "pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr] flex-col place-items-center justify-between text-xs",
+                    item.player === entity && "rounded bg-primary/40",
+                  )}
+                >
+                  <div>{item.rank}</div>
+                  <div className="">{formatAddress(entityToAddress(item.player))}</div>
                   <div className={cn("flex items-center gap-2")}>
                     <img src={spriteUrl} className="w-4" />
-                    <p>{formatEther(item[1].points)}</p>
+                    <p>{formatEther(item.points)}</p>
                   </div>
                 </div>
               )}
