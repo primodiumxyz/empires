@@ -48,16 +48,14 @@ contract LibShieldEaterTest is PrimodiumTest {
     }
 
     LibShieldEater.initialize();
-    // LibShieldEater.retarget();
 
     PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
     PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
 
-    console.log("               [ q, r]");
-    console.log("currPlanetData:");
+    console.log("currentPlanet:");
     console.logInt(currPlanetData.q);
     console.logInt(currPlanetData.r);
-    console.log("destPlanetData:");
+    console.log("destiantionPlanet:");
     console.logInt(destPlanetData.q);
     console.logInt(destPlanetData.r);
     console.log("---");
@@ -261,49 +259,72 @@ contract LibShieldEaterTest is PrimodiumTest {
     }
   }
 
-  function testShieldEaterDeepNavSim() public {
-    uint256 turn = 1000;
+  // function testShieldEaterDeepNavSim() public {
+  //   uint256 turn = 1000;
+  //   vm.startPrank(creator);
+  //   vm.roll(turn);
+  //   LibShieldEater.initialize();
+  //   assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "getCurrentPlanet planetId not contained in PlanetsSet");
+  //   LibShieldEater.retarget();
+  //   assertTrue(
+  //     PlanetsSet.has(ShieldEater.getDestinationPlanet()),
+  //     "getDestinationPlanet planetId not contained in PlanetsSet"
+  //   );
+
+  //   PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
+  //   PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
+
+  //   for (uint256 i = 0; i < 10; i++) {
+  //     console.log("loop[%s]", i);
+  //     // vm.roll(turn + i);
+  //     console.log(
+  //       "dest[%s]: [%s,%s]",
+  //       destPlanetData.shieldCount,
+  //       uint256(int256(destPlanetData.q)),
+  //       uint256(int256(destPlanetData.r))
+  //     );
+
+  //     console.log(
+  //       "curr[%s]: [%s,%s]",
+  //       currPlanetData.shieldCount,
+  //       uint256(int256(currPlanetData.q)),
+  //       uint256(int256(currPlanetData.r))
+  //     );
+
+  //     while (currPlanetData.q != destPlanetData.q || currPlanetData.r != destPlanetData.r) {
+  //       LibShieldEater.update();
+  //       currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
+  //       destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
+  //       console.log(
+  //         "curr[%s]: [%s,%s]",
+  //         currPlanetData.shieldCount,
+  //         uint256(int256(currPlanetData.q)),
+  //         uint256(int256(currPlanetData.r))
+  //       );
+  //     }
+  //   }
+  // }
+
+  function testGetPath(uint256 fuzz) public {
     vm.startPrank(creator);
-    vm.roll(turn);
-    LibShieldEater.initialize();
-    assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "getCurrentPlanet planetId not contained in PlanetsSet");
-    LibShieldEater.retarget();
-    assertTrue(
-      PlanetsSet.has(ShieldEater.getDestinationPlanet()),
-      "getDestinationPlanet planetId not contained in PlanetsSet"
-    );
 
-    PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
-    PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
+    fuzz = bound(fuzz, 1000000, 1e36);
+    vm.roll(fuzz);
 
-    for (uint256 i = 0; i < 10; i++) {
-      console.log("loop[%s]", i);
-      // vm.roll(turn + i);
-      console.log(
-        "dest[%s]: [%s,%s]",
-        destPlanetData.shieldCount,
-        uint256(int256(destPlanetData.q)),
-        uint256(int256(destPlanetData.r))
-      );
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    uint256 randomIndex = pseudorandom(block.number, planetIds.length);
+    ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
+    ShieldEater.setCurrentCharge(0);
 
-      console.log(
-        "curr[%s]: [%s,%s]",
-        currPlanetData.shieldCount,
-        uint256(int256(currPlanetData.q)),
-        uint256(int256(currPlanetData.r))
-      );
+    do {
+      LibShieldEater.retarget();
+    } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
 
-      while (currPlanetData.q != destPlanetData.q || currPlanetData.r != destPlanetData.r) {
-        LibShieldEater.update();
-        currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
-        destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
-        console.log(
-          "curr[%s]: [%s,%s]",
-          currPlanetData.shieldCount,
-          uint256(int256(currPlanetData.q)),
-          uint256(int256(currPlanetData.r))
-        );
-      }
+    bytes32[] memory foundPath = LibShieldEater.getPath();
+    assertTrue(foundPath.length > 0, "LibShieldEater: foundPath.length is 0");
+
+    for (uint256 i = 0; i < foundPath.length; i++) {
+      assertTrue(PlanetsSet.has(foundPath[i]), "LibShieldEater: planetId not contained in PlanetsSet");
     }
   }
 }

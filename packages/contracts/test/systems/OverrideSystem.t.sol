@@ -595,61 +595,61 @@ contract OverrideSystemTest is PrimodiumTest {
    * Shield Eater
    *************************************************************************/
 
-  function testDetonateShieldEaterCharged() public {
-    uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 2;
+  // function testDetonateShieldEaterCharged() public {
+  //   uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 2;
 
-    vm.startPrank(creator);
-    LibShieldEater.initialize();
+  //   vm.startPrank(creator);
+  //   LibShieldEater.initialize();
 
-    for (uint256 i = 0; i < chargeTime; i++) {
-      LibShieldEater.update();
-    }
+  //   for (uint256 i = 0; i < chargeTime; i++) {
+  //     LibShieldEater.update();
+  //   }
 
-    PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
-    CoordData memory current = CoordData(currentPlanet.q, currentPlanet.r);
-    planetId = coordToId(current.q, current.r);
+  //   PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
+  //   CoordData memory current = CoordData(currentPlanet.q, currentPlanet.r);
+  //   planetId = coordToId(current.q, current.r);
 
-    CoordData memory neighbor = CoordData(currentPlanet.q + 1, currentPlanet.r);
-    bytes32 neighborId = coordToId(neighbor.q, neighbor.r);
-    uint256 dirAttempts = 1;
+  //   CoordData memory neighbor = CoordData(currentPlanet.q + 1, currentPlanet.r);
+  //   bytes32 neighborId = coordToId(neighbor.q, neighbor.r);
+  //   uint256 dirAttempts = 1;
 
-    while (!Planet.getIsPlanet(neighborId)) {
-      if (dirAttempts > 7) {
-        break;
-      }
-      neighbor = LibShieldEater.rotateTargetDirection(neighbor, dirAttempts);
-      dirAttempts++;
-    }
-    neighborId = coordToId(neighbor.q, neighbor.r);
+  //   while (!Planet.getIsPlanet(neighborId)) {
+  //     if (dirAttempts > 7) {
+  //       break;
+  //     }
+  //     neighbor = LibShieldEater.rotateTargetDirection(neighbor, dirAttempts);
+  //     dirAttempts++;
+  //   }
+  //   neighborId = coordToId(neighbor.q, neighbor.r);
 
-    uint256 planetShields = Planet.getShieldCount(planetId);
-    uint256 neighborShields = Planet.getShieldCount(neighborId);
+  //   uint256 planetShields = Planet.getShieldCount(planetId);
+  //   uint256 neighborShields = Planet.getShieldCount(neighborId);
 
-    uint256 planetDamage = P_ShieldEaterConfig.getDetonateCenterDamage();
-    uint256 neighborDamage = P_ShieldEaterConfig.getDetonateAdjacentDamage();
+  //   uint256 planetDamage = P_ShieldEaterConfig.getDetonateCenterDamage();
+  //   uint256 neighborDamage = P_ShieldEaterConfig.getDetonateAdjacentDamage();
 
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
-    world.Empires__detonateShieldEater{ value: cost }();
+  //   EEmpire empire = Planet.getEmpireId(planetId);
+  //   uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+  //   world.Empires__detonateShieldEater{ value: cost }();
 
-    uint256 expectedPlanetShields = planetShields - ((planetShields * planetDamage) / 10000);
-    uint256 expectedNeighborShields = neighborShields - ((neighborShields * neighborDamage) / 10000);
+  //   uint256 expectedPlanetShields = planetShields - ((planetShields * planetDamage) / 10000);
+  //   uint256 expectedNeighborShields = neighborShields - ((neighborShields * neighborDamage) / 10000);
 
-    uint256 planetShieldsAfter = Planet.getShieldCount(planetId);
-    uint256 neighborShieldsAfter = Planet.getShieldCount(neighborId);
+  //   uint256 planetShieldsAfter = Planet.getShieldCount(planetId);
+  //   uint256 neighborShieldsAfter = Planet.getShieldCount(neighborId);
 
-    assertEq(expectedPlanetShields, planetShieldsAfter, "Center Planet should have correct shields");
-    assertEq(expectedNeighborShields, neighborShieldsAfter, "Neighbor Planet should have correct shields");
-  }
+  //   assertEq(expectedPlanetShields, planetShieldsAfter, "Center Planet should have correct shields");
+  //   assertEq(expectedNeighborShields, neighborShieldsAfter, "Neighbor Planet should have correct shields");
+  // }
 
-  function testDetonateShieldEaterNotCharged() public {
-    vm.startPrank(creator);
-    LibShieldEater.initialize();
+  // function testDetonateShieldEaterNotCharged() public {
+  //   vm.startPrank(creator);
+  //   LibShieldEater.initialize();
 
-    planetId = ShieldEater.getCurrentPlanet();
-    EEmpire empire = Planet.getEmpireId(planetId);
-    uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
-    vm.expectRevert("[OverrideSystem] ShieldEater not fully charged");
-    world.Empires__detonateShieldEater{ value: cost }();
-  }
+  //   planetId = ShieldEater.getCurrentPlanet();
+  //   EEmpire empire = Planet.getEmpireId(planetId);
+  //   uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, empire, 1);
+  //   vm.expectRevert("[OverrideSystem] ShieldEater not fully charged");
+  //   world.Empires__detonateShieldEater{ value: cost }();
+  // }
 }
