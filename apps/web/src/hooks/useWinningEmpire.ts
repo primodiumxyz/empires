@@ -12,7 +12,7 @@ const useWinningEmpire = (): { gameOver: boolean; empire: EEmpire | null } => {
   const gameOverBlock = tables.P_GameConfig.use()?.gameOverBlock ?? 0n;
   const currentBlock = tables.BlockNumber.use()?.value ?? 0n;
 
-  const citadelPlanets = tables.Keys_CitadelPlanetsSet.use()?.itemKeys ?? [];
+  const citadelPlanets = tables.Planet.useAllWith({ isCitadel: true }) ?? [];
 
   return useMemo(() => {
     if (winningEmpire !== null && winningEmpire !== 0) {

@@ -1,13 +1,16 @@
+import { useState } from "react";
+
 import { useAccountClient, useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
-import { Card } from "@/components/core/Card";
+import { Card, GlassCard } from "@/components/core/Card";
 import { Price } from "@/components/shared/Price";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { usePot } from "@/hooks/usePot";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
+import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
-export const GameOver = () => {
+export const GameOver = ({ className }: { className?: string }) => {
   const calls = useContractCalls();
   const { tables } = useCore();
   const {
@@ -15,6 +18,7 @@ export const GameOver = () => {
   } = useAccountClient();
   const { pot } = usePot();
   const { empire } = useWinningEmpire();
+  const [closed, setClosed] = useState(false);
 
   const empirePoints = tables.Empire.useWithKeys({ id: empire ?? 0 })?.pointsIssued ?? 0n;
   const playerEmpirePoints =
@@ -23,24 +27,35 @@ export const GameOver = () => {
   const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
 
   const empireName = EmpireEnumToConfig[empire ?? DEFAULT_EMPIRE].name;
-  if (empire == null) return null;
+  if (empire == null || closed) return null;
 
   return (
-    <Card className="flex flex-col text-center">
-      <p>
-        Game over. <span className="font-semibold">{empireName}</span> won!
-      </p>
-      {playerPot > 0n && (
-        <div className="flex flex-col gap-1">
-          <p>
-            You earned <Price wei={playerPot} />!
-          </p>
-          <Button variant="primary" size="sm" onClick={calls.withdrawEarnings}>
-            Withdraw
-          </Button>
-        </div>
-      )}
-      {playerPot === 0n && <p className="text-xs opacity-50">You have no earnings to withdraw.</p>}
-    </Card>
+    <GlassCard className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+      <Card noDecor className={cn("flex min-w-[300px] flex-col !bg-opacity-100 text-center", className)}>
+        <Button
+          variant="ghost"
+          size="xs"
+          shape="square"
+          className="absolute right-0 top-0"
+          onClick={() => setClosed(true)}
+        >
+          X
+        </Button>
+        <p className="lg:text-xl">
+          Game over. <span className="font-semibold">{empireName}</span> won!
+        </p>
+        {playerPot > 0n && (
+          <>
+            <p>
+              You earned <Price wei={playerPot} />!
+            </p>
+            <Button variant="primary" size="sm" className="col-span-2 mt-1 w-full" onClick={calls.withdrawEarnings}>
+              Withdraw
+            </Button>
+          </>
+        )}
+        {playerPot === 0n && <p className="col-span-2 text-xs opacity-50">You have no earnings to withdraw.</p>}
+      </Card>
+    </GlassCard>
   );
 };

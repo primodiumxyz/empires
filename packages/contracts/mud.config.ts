@@ -35,18 +35,6 @@ export const worldInput = {
       },
     },
 
-    P_TacticalStrikeConfig: {
-      key: [],
-      schema: {
-        maxCharge: "uint256",
-        chargeRate: "uint256",
-        boostChargeIncrease: "uint256",
-        stunChargeDecrease: "uint256",
-        createShipBoostIncrease: "uint256", // per ship created
-        killShipBoostCostDecrease: "uint256", // per ship killed
-      },
-    },
-
     P_ShieldEaterConfig: {
       key: [],
       schema: {
@@ -75,6 +63,7 @@ export const worldInput = {
       schema: {
         overrideAction: "EOverride",
         isProgressOverride: "bool",
+        pointMultiplier: "uint256",
         minOverrideCost: "uint256",
         startOverrideCost: "uint256",
         overrideGenRate: "uint256",
@@ -152,16 +141,6 @@ export const worldInput = {
         shieldCount: "uint256",
         goldCount: "uint256",
         empireId: "EEmpire",
-      },
-    },
-
-    Planet_TacticalStrike: {
-      key: ["planetId"],
-      schema: {
-        planetId: "bytes32",
-        lastUpdated: "uint256",
-        charge: "uint256",
-        chargeRate: "uint256",
       },
     },
 
@@ -384,35 +363,7 @@ export const worldInput = {
       type: "offchainTable",
     },
 
-    KillShipOverrideLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        turn: "uint256",
-        playerId: "bytes32",
-        planetId: "bytes32",
-        ethSpent: "uint256",
-        overrideCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
     ChargeShieldsOverrideLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        playerId: "bytes32",
-        turn: "uint256",
-        planetId: "bytes32",
-        ethSpent: "uint256",
-        overrideCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
-    DrainShieldsOverrideLog: {
       key: ["id"],
       schema: {
         id: "bytes32",
@@ -436,45 +387,6 @@ export const worldInput = {
         empireId: "EEmpire",
         ethSpent: "uint256",
         overrideCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
-    BoostChargeOverrideLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        playerId: "bytes32",
-        turn: "uint256",
-        planetId: "bytes32",
-        ethSpent: "uint256",
-        boostCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
-    StunChargeOverrideLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        playerId: "bytes32",
-        turn: "uint256",
-        planetId: "bytes32",
-        ethSpent: "uint256",
-        stunCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
-    TacticalStrikeOverrideLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        turn: "uint256",
-        planetId: "bytes32",
         timestamp: "uint256",
       },
       type: "offchainTable",

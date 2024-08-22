@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 
-import { createLocalBoolTable, createLocalTable, createWorld, Type } from "@primodiumxyz/reactive-tables";
+import { EViewMode } from "@primodiumxyz/core";
+import {
+  createLocalBoolTable,
+  createLocalNumberTable,
+  createLocalTable,
+  createWorld,
+  Type,
+} from "@primodiumxyz/reactive-tables";
 
 const settingsWorld = createWorld();
 
@@ -31,7 +38,6 @@ FontStyle.set({
   size: fontStyleOptions.size[0],
 });
 
-/* -------------------------------- Advanced -------------------------------- */
 const ShowBlockchainUnits = createLocalBoolTable(settingsWorld, {
   id: "ShowBlockchainUnits",
   persist: true,
@@ -42,7 +48,25 @@ const Dripped = createLocalBoolTable(settingsWorld, {
   persist: true,
 });
 
+const MusicPlaying = createLocalBoolTable(settingsWorld, {
+  id: "MusicPlaying",
+  persist: true,
+});
+
 ShowBlockchainUnits.set({ value: false });
+
+const SelectedTab = createLocalNumberTable(settingsWorld, {
+  id: "SelectedTab",
+  persist: true,
+  version: "1",
+});
+
+const ViewMode = createLocalNumberTable(settingsWorld, { id: "ViewMode", persist: true, version: "1" });
+
+if (!ViewMode.get()?.value) {
+  ViewMode.set({ value: EViewMode.Dashboard });
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                  SETTINGS                                  */
 /* -------------------------------------------------------------------------- */
@@ -72,5 +96,8 @@ export const useSettings = () => {
       setEnabled: (enabled: boolean) => ShowBlockchainUnits.update({ value: enabled }),
     },
     Dripped,
+    MusicPlaying,
+    SelectedTab,
+    ViewMode,
   };
 };
