@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Address, formatEther } from "viem";
+import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
@@ -12,7 +12,7 @@ import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 
-export const Portfolio = ({ address, entity }: { address: Address; entity: Entity }) => {
+export const Portfolio = ({ entity }: { entity: Entity }) => {
   const empires = useEmpires();
 
   const sortedEmpires = useMemo(

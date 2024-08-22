@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts";
-import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -11,7 +10,6 @@ import { IconLabel } from "@/components/core/IconLabel";
 import { NumberInput } from "@/components/core/NumberInput";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
-import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -23,12 +21,10 @@ export const BoostEmpire = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const [amount, setAmount] = useState("0");
   const empires = useEmpires();
-  const { address, entity } = usePlayerAccount();
   const calls = useContractCalls();
   const {
     MAIN: { sprite },
   } = useGame();
-  const balance = useBalance(address);
 
   const boostPriceWei = useOverrideCost(EOverride.AirdropGold, selectedEmpire, BigInt(amount));
   const boostPointsReceived = useOverridePointsReceived(EOverride.AirdropGold, selectedEmpire, BigInt(amount));
@@ -85,7 +81,7 @@ export const BoostEmpire = () => {
             <Button
               size="md"
               className="w-28 text-base"
-              disabled={amount == "0" || !boostPriceWei || boostPriceWei > (balance.value ?? 0n)}
+              disabled={amount == "0" || !boostPriceWei}
               onClick={handleSubmit}
             >
               Buy

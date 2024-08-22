@@ -22,12 +22,14 @@ export const SellPoints = () => {
   const [amount, setAmount] = useState("0");
   const empires = useEmpires();
   const { tables } = useCore();
-  const { entity } = usePlayerAccount();
+  const { playerAccount } = usePlayerAccount();
+  const entity = playerAccount?.entity;
   const calls = useContractCalls();
   const {
     MAIN: { sprite },
   } = useGame();
-  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: selectedEmpire, playerId: entity })?.value ?? 0n;
+  // const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: selectedEmpire, playerId: entity })?.value ?? 0n;
+  const playerPoints = 0n;
 
   const handleInputChange = (_value: string) => {
     const value = Math.floor(Number(_value));
