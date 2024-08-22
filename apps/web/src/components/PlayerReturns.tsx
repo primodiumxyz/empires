@@ -37,19 +37,19 @@ export const PlayerReturns = () => {
 
   return (
     <div className="z-10 flex justify-around gap-2">
-      <EmpireEndReward
+      <EarnUpTo
         empire={biggestReward.empire}
         playerPoints={points[biggestReward.empire].playerPoints}
         empirePoints={points[biggestReward.empire].empirePoints}
         totalSpent={totalSpent}
       />
 
-      <ImmediateReward playerId={playerId} />
+      <SellNow playerId={playerId} />
     </div>
   );
 };
 
-const EmpireEndReward = ({
+const EarnUpTo = ({
   empire,
   playerPoints,
   empirePoints,
@@ -73,7 +73,7 @@ const EmpireEndReward = ({
   const empireName = empires.get(empire)?.name;
 
   return (
-    <div className="pointer-events-auto relative flex min-w-32 flex-col rounded-md border border-gray-600 p-1 xl:p-2 xl:pt-3">
+    <div className="pointer-events-auto relative flex min-w-32 flex-col rounded-md border border-gray-600 p-1 lg:p-2 lg:pt-4">
       <h2 className="absolute -top-2 left-1 flex items-center justify-end gap-2 bg-neutral px-1 font-semibold text-gray-400">
         <span className="whitespace-nowrap text-xs">Earn up to</span>
         <div>
@@ -87,15 +87,18 @@ const EmpireEndReward = ({
         </div>
       </h2>
       <div className={cn("flex h-full w-full flex-row items-center justify-around border-none text-sm")}>
-        <img src={imgUrl} className="h-4 xl:h-8" />
+        <img src={imgUrl} className="w-4 lg:w-8" />
         <div className="flex flex-col">
           <Price wei={earnings} />
           {!!totalSpent && (
             <div
-              className={cn("flex items-center gap-1 self-end text-xs", isProfit ? "text-green-400" : "text-red-400")}
+              className={cn(
+                "-mt-1 hidden items-center gap-1 self-end text-xs lg:flex",
+                isProfit ? "text-green-400" : "text-red-400",
+              )}
             >
               {isProfit ? <ArrowUpIcon className="size-3" /> : <ArrowDownIcon className="size-3" />}
-              {(Number(percentageChange) / 100).toFixed(2).replace("-", "")}%
+              {(Number(percentageChange) / 100).toFixed(1).replace("-", "")}%
             </div>
           )}
         </div>
@@ -104,7 +107,7 @@ const EmpireEndReward = ({
   );
 };
 
-const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
+const SellNow = ({ playerId }: { playerId: Entity }) => {
   const {
     tables,
     utils: { getPointPrice },
@@ -125,7 +128,7 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const isProfit = percentageChange >= 0n;
 
   return (
-    <div className="pointer-events-auto relative flex min-w-28 flex-col rounded-lg border border-gray-600 xl:p-2 xl:pt-3">
+    <div className="pointer-events-auto relative flex min-w-28 flex-col rounded border border-gray-600 lg:p-2 lg:pt-4">
       <div className="absolute -top-2 left-1 flex items-center justify-end gap-2 bg-neutral px-1 font-semibold text-gray-400">
         <span className="whitespace-nowrap text-xs">Sell now</span>
         <Tooltip tooltipContent="Rewards if you sell all points now" direction="left" className="w-56 text-xs">
@@ -137,10 +140,13 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
           <Price wei={totalReward} />
           {!!totalSpent && (
             <div
-              className={cn("flex items-center gap-1 self-end text-xs", isProfit ? "text-green-400" : "text-red-400")}
+              className={cn(
+                "-mt-1 hidden items-center gap-1 self-end text-xs lg:flex",
+                isProfit ? "text-green-400" : "text-red-400",
+              )}
             >
               {isProfit ? <ArrowUpIcon className="size-3" /> : <ArrowDownIcon className="size-3" />}
-              {(Number(percentageChange) / 100).toFixed(2).replace("-", "")}%
+              {(Number(percentageChange) / 100).toFixed(1).replace("-", "")}%
             </div>
           )}
         </div>
