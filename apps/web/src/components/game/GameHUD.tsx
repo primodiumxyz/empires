@@ -6,9 +6,11 @@ import { Cheatcodes } from "@/components/cheatcodes/Cheatcodes";
 import { Button } from "@/components/core/Button";
 import { HUD } from "@/components/core/HUD";
 import { IconLabel } from "@/components/core/IconLabel";
+import { Join } from "@/components/core/Join";
 import { Dashboard } from "@/components/dashboard";
 import { Empires } from "@/components/empires/Empires";
 import { GameOver } from "@/components/GameOver";
+import { Leaderboard } from "@/components/leaderboard/Leaderboard";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverridePopup } from "@/components/override-popup";
 import { PlayerReturns } from "@/components/PlayerReturns";
@@ -46,18 +48,21 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle className="flex flex-col items-center">
-          <Button
-            size="md"
-            variant="neutral"
-            className="z-50 w-56"
-            onClick={() => ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
-          >
-            {showMap ? (
-              <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" />
-            ) : (
-              <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" />
-            )}
-          </Button>
+          <Join className="z-50">
+            <Button
+              size="md"
+              variant="neutral"
+              className="w-56"
+              onClick={() => ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
+            >
+              {showMap ? (
+                <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" />
+              ) : (
+                <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" />
+              )}
+            </Button>
+            <Leaderboard />
+          </Join>
           {showMap && <QuickTradeMapMode className="hidden lg:flex" />}
           {showCheatcodes && <Cheatcodes />}
         </HUD.TopMiddle>
