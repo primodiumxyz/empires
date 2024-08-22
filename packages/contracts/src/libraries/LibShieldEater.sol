@@ -23,11 +23,11 @@ library LibShieldEater {
     ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
     ShieldEater.setCurrentCharge(0);
 
-    do {
-      retarget();
-    } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
+    // do {
+    //   retarget();
+    // } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
 
-    ShieldEater.setPath(getPath());
+    // ShieldEater.setPath(getPath());
   }
 
   /**
@@ -70,14 +70,25 @@ library LibShieldEater {
    * @dev Moves the Shield Eater to the next planet en route to the destination planet.
    */
   function update() internal {
-    bytes32 planetId;
-    uint256 index = ShieldEater.getPathIndex();
+    bytes32 destinationPlanet = ShieldEater.getDestinationPlanet();
 
-    // Move the Shield Eater to the next planet
-    if (ShieldEater.lengthPath() > index) {
-      planetId = ShieldEater.getItemPath(index);
-      ShieldEater.setPathIndex(index + 1);
+    // if we have no destination, find one
+    if (destinationPlanet == bytes32(0)) {
+      do {
+        retarget();
+      } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
+      ShieldEater.setPathIndex(0);
+      bytes32[] memory emptyPath = new bytes32[](0);
+      ShieldEater.setPath(emptyPath);
+    } else {
+      // if we have a destination, move to next planet
+      bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
+
+      // figure out which way to go, move, and save where we've been
+      bytes32 planetId = getDirection(currentPlanet, destinationPlanet);
       ShieldEater.setCurrentPlanet(planetId);
+      ShieldEater.pushPath(planetId);
+      ShieldEater.setPathIndex(ShieldEater.getPathIndex() + 1);
 
       // Eat a little shields if there are any
       uint256 shieldCount = Planet.getShieldCount(planetId);
@@ -89,17 +100,11 @@ library LibShieldEater {
         Planet.setShieldCount(planetId, 0);
         ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + shieldCount);
       }
-    }
 
-    // If the Shield Eater has reached its destination, or we have no path, select a new destination
-    if (planetId == ShieldEater.getDestinationPlanet()) {
-      do {
-        retarget();
-      } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
-
-      // What's our new path?
-      ShieldEater.setPath(getPath());
-      ShieldEater.setPathIndex(0);
+      // we have arrived.  clear the destination so we'll find a new one next update.
+      if (planetId == destinationPlanet) {
+        ShieldEater.setDestinationPlanet(bytes32(0));
+      }
     }
   }
 
@@ -171,15 +176,12 @@ library LibShieldEater {
     return uint256(int256(qDiff + rDiff + 1));
   }
 
-  function getDirection(
-    bytes32 currentNode,
-    bytes32 destinationNode,
-    bytes32[] memory path,
-    uint256 pathIndex
-  ) internal view returns (bytes32 pathNode) {
+  function getDirection(bytes32 currentNode, bytes32 destinationNode) internal view returns (bytes32 pathNode) {
     bytes32 nextNode;
+
     uint256 distance = getDistance(currentNode, destinationNode);
     uint256 minDistance = 65535;
+
     uint256 pathDirection = 0;
 
     // for each direction
@@ -190,7 +192,7 @@ library LibShieldEater {
       // if neighbor is a planet
       if (Planet.getIsPlanet(nextNode)) {
         // have we visted this already?
-        if (onPath(nextNode, path, pathIndex)) {
+        if (onPath(nextNode)) {
           continue;
         }
         // check distance
@@ -209,7 +211,9 @@ library LibShieldEater {
     }
   }
 
-  function onPath(bytes32 planetId, bytes32[] memory path, uint256 pathIndex) internal pure returns (bool) {
+  function onPath(bytes32 planetId) internal view returns (bool) {
+    bytes32[] memory path = ShieldEater.getPath();
+    uint256 pathIndex = ShieldEater.getPathIndex();
     for (uint256 i = 0; i < pathIndex; i++) {
       if (planetId == path[i]) {
         return true;
@@ -218,32 +222,32 @@ library LibShieldEater {
     return false;
   }
 
-  function getPath() internal view returns (bytes32[] memory path) {
-    uint256 planetCount = PlanetsSet.size();
-    bytes32[] memory tempPath = new bytes32[](planetCount);
+  // function getPath() internal view returns (bytes32[] memory path) {
+  //   uint256 planetCount = PlanetsSet.size();
+  //   bytes32[] memory tempPath = new bytes32[](planetCount);
 
-    bytes32 currentNode = ShieldEater.getCurrentPlanet();
-    bytes32 destinationNode = ShieldEater.getDestinationPlanet();
-    uint256 pathIndex = 0;
-    uint256 loopIndex = 0;
+  //   bytes32 currentNode = ShieldEater.getCurrentPlanet();
+  //   bytes32 destinationNode = ShieldEater.getDestinationPlanet();
+  //   uint256 pathIndex = 0;
+  //   uint256 loopIndex = 0;
 
-    while (currentNode != destinationNode) {
-      // get the next node
-      currentNode = getDirection(currentNode, destinationNode, tempPath, pathIndex);
+  //   while (currentNode != destinationNode) {
+  //     // get the next node
+  //     currentNode = getDirection(currentNode, destinationNode);
 
-      // add the current node to the path
-      tempPath[pathIndex] = currentNode;
-      pathIndex++;
-      loopIndex++;
-      if (loopIndex >= planetCount) {
-        break;
-      }
-    }
+  //     // add the current node to the path
+  //     tempPath[pathIndex] = currentNode;
+  //     pathIndex++;
+  //     loopIndex++;
+  //     if (loopIndex >= planetCount) {
+  //       break;
+  //     }
+  //   }
 
-    // truncate path to save calldata
-    path = new bytes32[](pathIndex);
-    for (uint256 i = 0; i < pathIndex; i++) {
-      path[i] = tempPath[i];
-    }
-  }
+  //   // truncate path to save calldata
+  //   path = new bytes32[](pathIndex);
+  //   for (uint256 i = 0; i < pathIndex; i++) {
+  //     path[i] = tempPath[i];
+  //   }
+  // }
 }

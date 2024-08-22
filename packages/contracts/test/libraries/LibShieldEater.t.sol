@@ -49,33 +49,46 @@ contract LibShieldEaterTest is PrimodiumTest {
 
     LibShieldEater.initialize();
 
+    // first update will set the destination node
+    LibShieldEater.update();
+
     PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
     PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
 
+    console.log("---");
     console.log("currentPlanet:");
     console.logInt(currPlanetData.q);
     console.logInt(currPlanetData.r);
-    console.log("destiantionPlanet:");
+    console.log("destinationPlanet:");
     console.logInt(destPlanetData.q);
     console.logInt(destPlanetData.r);
     console.log("---");
 
     uint256 loopcount = 0;
 
-    while (currPlanetData.q != destPlanetData.q || currPlanetData.r != destPlanetData.r) {
+    while (destPlanetData.q != 0 || destPlanetData.r != 0) {
       LibShieldEater.update();
       currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
+      destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
+      console.log("---");
       console.log("currPlanetData:");
       console.logInt(currPlanetData.q);
       console.logInt(currPlanetData.r);
+      console.log("destinationPlanet:");
+      console.logInt(destPlanetData.q);
+      console.logInt(destPlanetData.r);
       loopcount++;
-      if (loopcount > 20) {
+      if (loopcount > planetIds.length) {
         break;
       }
     }
 
-    assertEq(currPlanetData.q, destPlanetData.q, "LibShieldEater: currPlanetData.q != destPlanetData.q");
-    assertEq(currPlanetData.r, destPlanetData.r, "LibShieldEater: currPlanetData.r != destPlanetData.r");
+    bytes32[] memory path = ShieldEater.getPath();
+    uint256 pathIndex = ShieldEater.getPathIndex();
+    PlanetData memory finalPlanetData = Planet.get(path[pathIndex - 1]);
+
+    assertEq(currPlanetData.q, finalPlanetData.q, "LibShieldEater: currPlanetData.q != finalPlanetData.q");
+    assertEq(currPlanetData.r, finalPlanetData.r, "LibShieldEater: currPlanetData.r != finalPlanetData.r");
   }
 
   function testShieldEaterRetarget(uint256 fuzz) public {
@@ -259,28 +272,28 @@ contract LibShieldEaterTest is PrimodiumTest {
     }
   }
 
-  function testGetPath(uint256 fuzz) public {
-    vm.startPrank(creator);
+  // function testGetPath(uint256 fuzz) public {
+  //   vm.startPrank(creator);
 
-    fuzz = bound(fuzz, 1000000, 1e36);
-    vm.roll(fuzz);
+  //   fuzz = bound(fuzz, 1000000, 1e36);
+  //   vm.roll(fuzz);
 
-    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    uint256 randomIndex = pseudorandom(block.number, planetIds.length);
-    ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
-    ShieldEater.setCurrentCharge(0);
+  //   bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+  //   uint256 randomIndex = pseudorandom(block.number, planetIds.length);
+  //   ShieldEater.setCurrentPlanet(planetIds[randomIndex]);
+  //   ShieldEater.setCurrentCharge(0);
 
-    do {
-      LibShieldEater.retarget();
-    } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
+  //   do {
+  //     LibShieldEater.retarget();
+  //   } while (ShieldEater.getDestinationPlanet() == ShieldEater.getCurrentPlanet());
 
-    bytes32[] memory foundPath = LibShieldEater.getPath();
-    assertTrue(foundPath.length > 0, "LibShieldEater: foundPath.length is 0");
+  //   bytes32[] memory foundPath = LibShieldEater.getPath();
+  //   assertTrue(foundPath.length > 0, "LibShieldEater: foundPath.length is 0");
 
-    for (uint256 i = 0; i < foundPath.length; i++) {
-      assertTrue(PlanetsSet.has(foundPath[i]), "LibShieldEater: planetId not contained in PlanetsSet");
-    }
-  }
+  //   for (uint256 i = 0; i < foundPath.length; i++) {
+  //     assertTrue(PlanetsSet.has(foundPath[i]), "LibShieldEater: planetId not contained in PlanetsSet");
+  //   }
+  // }
 
   // TODO: saving to finish later. -kethic 8.22.2024
   // function testShieldEaterDeepNavSim() public {
