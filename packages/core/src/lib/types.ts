@@ -5,6 +5,7 @@ import {
   Account,
   Address,
   CustomTransport,
+  EIP1193Provider,
   FallbackTransport,
   GetContractReturnType,
   Hex,
@@ -162,7 +163,19 @@ type _Account<
 
 export type ExternalAccount = _Account<false>;
 export type LocalAccount = _Account<true>;
-export type PlayerAccount = ExternalAccount | LocalAccount;
+
+export type PlayerAccount = {
+  playerAccount: ExternalAccount | LocalAccount | null;
+  loggedIn: boolean;
+  login: (options: LoginOptions) => void;
+  logout: () => void;
+};
+
+export type LoginOptions = {
+  withBurnerAccount?: Hex;
+  withPrivy?: boolean;
+  provider?: EIP1193Provider;
+};
 
 export enum SyncSourceType {
   Indexer,

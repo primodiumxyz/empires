@@ -3,7 +3,7 @@ import { ArrowDownIcon, ArrowUpIcon, InformationCircleIcon } from "@heroicons/re
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
+import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tooltip } from "@/components/core/Tooltip";
@@ -15,10 +15,9 @@ import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
-export const PlayerReturns = () => {
+export const PlayerReturns = ({ playerId }: { playerId: Entity }) => {
   const { tables } = useCore();
 
-  const { entity: playerId } = usePlayerAccount();
   const points = usePoints(playerId);
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
   const biggestReward = useMemo(() => {

@@ -1,9 +1,9 @@
-import { createContext, ReactNode, useMemo, useRef } from "react";
+import { createContext, ReactNode, useRef, useState } from "react";
 import { Address, EIP1193Provider, Hex } from "viem";
 
 import { createExternalAccount } from "@core/account/createExternalAccount";
 import { createLocalAccount } from "@core/account/createLocalAccount";
-import { ExternalAccount, LocalAccount, PlayerAccount } from "@core/lib/types";
+import { ExternalAccount, LocalAccount, LoginOptions, PlayerAccount } from "@core/lib/types";
 import { useCore } from "@core/react/hooks/useCore";
 import { storage } from "@core/utils/global/storage";
 
@@ -35,11 +35,10 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
 
   const playerAccountInterval = useRef<NodeJS.Timeout | null>(null);
 
-  const playerAccount = useMemo(() => _updatePlayerAccount(options as { playerAddress: Address }), [options]);
+  const [playerAccount, setPlayerAccount] = useState<ExternalAccount | LocalAccount | null>(null);
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  function _updatePlayerAccount(options: { playerAddress: Address }): ExternalAccount;
-  function _updatePlayerAccount(options: { playerPrivateKey: Hex }): LocalAccount;
-  function _updatePlayerAccount(options: { playerAddress?: Address; playerPrivateKey?: Hex }) {
+  const login = (loginOptions: LoginOptions) => {
     const useLocal = !!options.playerPrivateKey;
     if (!useLocal && !options.playerAddress) throw new Error("Must provide address or private key");
 
@@ -59,8 +58,16 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
     }
 
     tables.Account.set({ value: account.entity });
-    return account;
-  }
+  };
 
-  return <PlayerAccountContext.Provider value={playerAccount}>{children}</PlayerAccountContext.Provider>;
+  const logout = () => {
+    setPlayerAccount(null);
+    setLoggedIn(false);
+  };
+
+  return (
+    <PlayerAccountContext.Provider value={{ playerAccount, loggedIn, login, logout }}>
+      {children}
+    </PlayerAccountContext.Provider>
+  );
 }

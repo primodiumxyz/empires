@@ -8,11 +8,11 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider } from "@primodiumxyz/core/react";
 import { BackgroundNebula } from "@/components/BackgroundNebula";
+import Core from "@/components/Core";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { BurnerAccountProvider } from "@/hooks/providers/BurnerAccountProvider";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
 import { useSettings } from "@/hooks/useSettings";
-import Landing from "@/screens/Landing";
 import { cn } from "@/util/client";
 
 import { ampli } from "./ampli/index";
@@ -89,7 +89,7 @@ const App = () => {
                 )}
               >
                 <BackgroundNebula />
-                <Landing />
+                <Core />
                 <ToastContainer
                   toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
                   progressClassName="bg-primary"

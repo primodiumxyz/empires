@@ -29,9 +29,11 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
 
   const core = useCore();
   const game = useGame();
-  const playerAccount = usePlayerAccount();
+  const { playerAccount } = usePlayerAccount();
   const contractCalls = useContractCalls();
   const requestDrip = useDripAccount();
+
+  if (!playerAccount) return null;
   const cheatcodes = setupCheatcodes({ core, game, playerAccount, contractCalls, requestDrip });
 
   useEffect(() => {
