@@ -104,6 +104,10 @@ contract LibShieldEaterTest is PrimodiumTest {
     }
 
     for (i = 0; i < planetIds.length; i++) {
+      // skip if it's the current planet
+      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+        continue;
+      }
       if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
         maxShieldCount = Planet.getShieldCount(planetIds[i]);
         testTargets[0] = planetIds[i];
@@ -112,6 +116,10 @@ contract LibShieldEaterTest is PrimodiumTest {
 
     maxShieldCount = 0;
     for (i = 0; i < planetIds.length; i++) {
+      // skip if it's the current planet
+      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+        continue;
+      }
       if (planetIds[i] == testTargets[0]) {
         continue;
       }
@@ -123,6 +131,10 @@ contract LibShieldEaterTest is PrimodiumTest {
 
     maxShieldCount = 0;
     for (i = 0; i < planetIds.length; i++) {
+      // skip if it's the current planet
+      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
+        continue;
+      }
       if (planetIds[i] == testTargets[0] || planetIds[i] == testTargets[1]) {
         continue;
       }
