@@ -46,20 +46,13 @@ const LeaderboardContent = () => {
   return (
     <Tabs className="flex h-full w-full gap-1" persistIndexKey={"leaderboard"} defaultIndex={0}>
       <Join direction="vertical" className="rounded-r">
-        <Tabs.Button key={"all"} index={0} size="md" className="flex h-fit flex-col">
+        <Tabs.Button key={"all"} index={0} size="md" className="w-16">
           ALL
         </Tabs.Button>
         {Array.from(empires.entries()).map(([id, emp], i) => {
           const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[id] ?? "PlanetGrey");
           return (
-            <Tabs.Button
-              key={emp.name}
-              index={i + 1}
-              size="md"
-              style={{
-                writingMode: "vertical-lr",
-              }}
-            >
+            <Tabs.Button key={emp.name} index={i + 1} size="md">
               <img src={spriteUrl} className="w-6" />
               {/* <p>{emp.name}</p> */}
             </Tabs.Button>
