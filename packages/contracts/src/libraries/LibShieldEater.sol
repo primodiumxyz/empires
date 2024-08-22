@@ -144,13 +144,16 @@ library LibShieldEater {
       // Eat a little shields if there are any
       uint256 shieldCount = Planet.getShieldCount(planetId);
       uint256 shieldDamage = P_ShieldEaterConfig.getVisitShieldDamage();
+      uint256 addCharge = 1;
       if (shieldCount > shieldDamage) {
         Planet.setShieldCount(planetId, shieldCount - shieldDamage);
-        ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + shieldDamage);
+        addCharge += shieldDamage;
       } else if (shieldCount > 0) {
         Planet.setShieldCount(planetId, 0);
-        ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + shieldCount);
+        addCharge += shieldCount;
       }
+
+      ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + addCharge);
 
       // we have arrived.  clear the destination so we'll find a new one next update.
       if (planetId == destinationPlanet) {
