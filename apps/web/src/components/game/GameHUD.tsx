@@ -48,21 +48,23 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle className="flex flex-col items-center">
+
           <Join className="z-50">
             <Button
               size="md"
               variant="neutral"
-              className="w-56"
+              className="z-50 w-56 -mr-1"
               onClick={() => ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
             >
               {showMap ? (
-                <IconLabel imageUri={InterfaceIcons.Trade} text="DASHBOARD" />
+                <IconLabel imageUri={InterfaceIcons.Dashboard} text="DASHBOARD" />
               ) : (
                 <IconLabel imageUri={InterfaceIcons.Starmap} text="MAP" />
               )}
             </Button>
             <Leaderboard />
           </Join>
+          
           {showMap && <QuickTradeMapMode className="hidden lg:flex" />}
           {showCheatcodes && <Cheatcodes />}
         </HUD.TopMiddle>
