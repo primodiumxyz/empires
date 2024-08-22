@@ -74,7 +74,7 @@ const App = () => {
             loginMessage: "It's free to login!",
           },
           // Create embedded wallets for users who don't have a wallet
-          loginMethods: ["twitter", "google"],
+          loginMethods: ["twitter"],
           embeddedWallets: {
             createOnLogin: "users-without-wallets",
           },
