@@ -111,4 +111,20 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       }
     },
   });
+
+  // Reset empires on game reset
+  tables.P_GameConfig.watch({
+    world: systemsWorld,
+    onChange: ({ properties: { current, prev } }) => {
+      if (current?.gameOverBlock !== prev?.gameOverBlock) {
+        tables.Planet.getAll().forEach((entity) => {
+          const planet = scene.objects.planet.get(entity);
+          const planetData = tables.Planet.get(entity);
+          if (!planet || !planetData) return;
+          planet.updateFaction(planetData.empireId);
+          planet.setMagnet(planetData.empireId, 0);
+        });
+      }
+    },
+  });
 };

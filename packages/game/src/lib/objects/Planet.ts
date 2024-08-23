@@ -23,16 +23,19 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   readonly id: Entity;
   readonly coord: PixelCoord;
   protected _scene: PrimodiumScene;
+  private playAnims = true;
   private planetUnderglowSprite: Phaser.GameObjects.Image;
   private planetSprite: Phaser.GameObjects.Sprite;
   private hexSprite: Phaser.GameObjects.Sprite;
   private hexHoloSprite: Phaser.GameObjects.Sprite;
   private planetName: Phaser.GameObjects.Text;
   private pendingArrow: Phaser.GameObjects.Container;
+  private pendingMove: Entity | null = null;
   private shields: IconLabel;
   private ships: IconLabel;
   private gold: IconLabel;
   private magnets: Magnet[];
+  private activeMagnets: Map<EEmpire, number> = new Map();
   private magnetWaves: Phaser.GameObjects.Sprite;
   private shieldEater: ShieldEater;
   private citadelCrown: Phaser.GameObjects.Sprite | null = null;
@@ -276,8 +279,12 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
   setPendingMove(destinationPlanetId: Entity) {
     const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
-
     if (!destinationPlanet) return;
+
+    if (!this.playAnims) {
+      this.pendingMove = destinationPlanetId;
+      return;
+    }
 
     const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
 
@@ -291,11 +298,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
   removePendingMove() {
     this.pendingArrow.setVisible(false).setActive(false);
+    this.pendingMove = null;
   }
 
   moveDestroyers(destinationPlanetId: Entity) {
     const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
-
     if (!destinationPlanet) return;
 
     const angle = calculateAngleBetweenPoints(this.coord, destinationPlanet.coord);
@@ -349,6 +356,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   flashPlanet() {
+    if (!this.playAnims) return;
     this._scene.fx.flashSprite(this.planetSprite);
   }
 
@@ -383,6 +391,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   setMagnet(empire: EEmpire, turns: number) {
+    if (!this.playAnims) {
+      this.activeMagnets.set(empire, turns);
+      return;
+    }
+
     const magnet = this.magnets[empire - 1];
 
     // emit only if no magnet is already active
@@ -415,7 +428,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   setShieldEaterLocation(present: boolean): ShieldEater["location"] {
-    const location = this.shieldEater.setShieldEaterLocation(present);
+    const location = this.shieldEater.setShieldEaterLocation(present, this.playAnims);
+    if (!this.playAnims) return location;
 
     if (present) {
       this.shieldEater.setDepth(DepthLayers.Planet - 1);
@@ -452,6 +466,22 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       depth: DepthLayers.Planet + 1,
       blendMode: Phaser.BlendModes.ADD,
     });
+  }
+
+  setPlayAnims(playAnims: boolean) {
+    this.playAnims = playAnims;
+
+    // render the latest pending actions if there are any
+    if (playAnims) {
+      if (this.pendingMove) {
+        this.setPendingMove(this.pendingMove);
+        this.pendingMove = null;
+      }
+
+      this.activeMagnets.forEach((turns, empire) => {
+        this.setMagnet(empire, turns);
+      });
+    }
   }
 
   override destroy() {
