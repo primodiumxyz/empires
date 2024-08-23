@@ -5,7 +5,7 @@ import { formatEther, toHex } from "viem";
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToAddress, formatAddress } from "@primodiumxyz/core";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { AutoSizer } from "@/components/core/AutoSizer";
@@ -77,9 +77,7 @@ const TotalLeaderboard = () => {
   const { tables } = useCore();
   const empires = [...useEmpires().keys()];
   const [refresh, setRefresh] = useState(0);
-  const {
-    playerAccount: { entity },
-  } = useAccountClient();
+  const { playerAccount } = usePlayerAccount();
 
   const handleRefresh = () => {
     setRefresh(refresh + 1);
@@ -153,7 +151,7 @@ const TotalLeaderboard = () => {
             <div
               className={cn(
                 "pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr_1fr] flex-col place-items-center justify-between text-xs",
-                item.player === entity && "rounded bg-primary/40",
+                item.player === playerAccount?.entity && "rounded bg-primary/40",
               )}
             >
               <div>{item.rank}</div>
@@ -179,9 +177,7 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
     ROOT: { sprite },
   } = useGame();
   const [refresh, setRefresh] = useState(0);
-  const {
-    playerAccount: { entity },
-  } = useAccountClient();
+  const { playerAccount } = usePlayerAccount();
 
   const handleRefresh = () => {
     setRefresh(refresh + 1);
@@ -239,7 +235,7 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
                 <div
                   className={cn(
                     "pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr] flex-col place-items-center justify-between text-xs",
-                    item.player === entity && "rounded bg-primary/40",
+                    item.player === playerAccount?.entity && "rounded bg-primary/40",
                   )}
                 >
                   <div>{item.rank}</div>

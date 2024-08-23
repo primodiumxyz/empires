@@ -15,11 +15,15 @@ export async function executeBatch<functionName extends ContractFunctionName<Wor
   playerAccount,
 }: {
   core: Core;
-  playerAccount: LocalAccount | ExternalAccount;
+  playerAccount: LocalAccount | ExternalAccount | null;
   systemCalls: readonly Omit<SystemCall<WorldAbiType, functionName>, "abi" | "systemId">[];
   txQueueOptions?: TxQueueOptions;
   onComplete?: (receipt: TxReceipt) => void;
 }): Promise<TxReceipt> {
+  if (playerAccount === null) {
+    console.error("Player account is required");
+    return Promise.resolve({} as TxReceipt);
+  }
   console.log(`[Tx] Executing batch:${systemCalls.map((system) => ` ${system.functionName}`)}`);
 
   const run = async (): Promise<TxReceipt> => {

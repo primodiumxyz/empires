@@ -3,7 +3,7 @@ import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Price } from "@/components/shared/Price";
@@ -12,10 +12,7 @@ import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
 
-export const Portfolio = () => {
-  const {
-    playerAccount: { address, entity },
-  } = useAccountClient();
+export const Portfolio = ({ playerId }: { playerId: Entity }) => {
   const empires = useEmpires();
 
   const sortedEmpires = useMemo(
@@ -34,7 +31,7 @@ export const Portfolio = () => {
       {noPlanets && <p className="text-center text-xs opacity-70">You own no empires</p>}
       <div className="flex max-h-[70vh] flex-col overflow-y-auto">
         {sortedEmpires.map((empire, index) => (
-          <EmpirePoints key={index} empire={empire} playerId={entity} />
+          <EmpirePoints key={index} empire={empire} playerId={playerId} />
         ))}
       </div>
     </div>

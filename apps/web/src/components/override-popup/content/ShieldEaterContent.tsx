@@ -1,8 +1,7 @@
 import React from "react";
 
 import { EEmpire, EOverride } from "@primodiumxyz/contracts";
-import { entityToPlanetName } from "@primodiumxyz/core";
-import { useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { PointsReceived } from "@/components/shared/PointsReceived";
@@ -17,6 +16,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
   const { tables } = useCore();
   const { detonateShieldEater } = useContractCalls();
   const { currentPlanet, cooldownShields } = useShieldEater();
+  const { playerAccount, login } = usePlayerAccount();
 
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? (0 as EEmpire);
@@ -27,29 +27,34 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
 
   const caption =
     currentPlanet && currentPlanet !== entity
-      ? `Shield eater is on ${entityToPlanetName(currentPlanet)}.`
+      ? `Not on current planet.`
       : cooldownShields
         ? `Shield eater is charging, come back after it eats ${cooldownShields.toLocaleString()} more shields.`
         : undefined;
 
   return (
     <div className="flex flex-col items-center">
-      {!!caption && (
-        <p className="mb-1 rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">{caption}</p>
+      {!!caption && <p className="mb-1 rounded-box bg-error/25 p-1 text-center text-xs opacity-75">{caption}</p>}
+      {!!playerAccount && (
+        <TransactionQueueMask id="detonate-shield-eater">
+          <Button
+            onClick={async () => {
+              await detonateShieldEater(entity, detonatePriceWei);
+              tables.SelectedPlanet.remove();
+            }}
+            disabled={detonateDisabled}
+            size="sm"
+            variant="error"
+          >
+            Activate
+          </Button>
+        </TransactionQueueMask>
       )}
-      <TransactionQueueMask id="detonate-shield-eater">
-        <Button
-          onClick={async () => {
-            await detonateShieldEater(entity, detonatePriceWei);
-            tables.SelectedPlanet.remove();
-          }}
-          disabled={detonateDisabled}
-          size="sm"
-          variant="error"
-        >
-          Activate
+      {!playerAccount && (
+        <Button onClick={() => login()} size="xs" variant="secondary">
+          LOGIN TO ACTIVATE
         </Button>
-      </TransactionQueueMask>
+      )}
       <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
         <Price wei={detonatePriceWei} />
       </p>

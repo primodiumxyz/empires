@@ -2,7 +2,7 @@ import { useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -21,15 +21,13 @@ export const SellPoints = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const [amount, setAmount] = useState("0");
   const empires = useEmpires();
-  const { tables } = useCore();
-  const {
-    playerAccount: { entity },
-  } = useAccountClient();
+  const { playerAccount, login } = usePlayerAccount();
   const calls = useContractCalls();
   const {
     MAIN: { sprite },
   } = useGame();
-  const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: selectedEmpire, playerId: entity })?.value ?? 0n;
+  // const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: selectedEmpire, playerId: entity })?.value ?? 0n;
+  const playerPoints = 0n;
 
   const handleInputChange = (_value: string) => {
     const value = Math.floor(Number(_value));
@@ -76,16 +74,18 @@ export const SellPoints = () => {
         <br></br>
 
         <div className="mt-2 flex flex-col items-center">
-          <TransactionQueueMask id="sell-points">
-            <Button
-              size="md"
-              className="w-28 text-base"
-              disabled={amount == "0" || !pointsToWei}
-              onClick={handleSubmit}
-            >
-              Sell
+          {!!playerAccount && (
+            <TransactionQueueMask id="sell-points">
+              <Button size="md" className="text-base" disabled={amount == "0" || !pointsToWei} onClick={handleSubmit}>
+                Sell
+              </Button>
+            </TransactionQueueMask>
+          )}
+          {!playerAccount && (
+            <Button size="md" className="text-base" onClick={() => login()}>
+              Login to Sell
             </Button>
-          </TransactionQueueMask>
+          )}
           <Badge size="sm" variant="primary" className="rounded-t-none p-3">
             {message ? (
               <span className="-none text-center text-[0.6rem] text-white">{message}</span>

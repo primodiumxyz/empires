@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 
-import { useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { HUD } from "@/components/core/HUD";
 import { OverridePane } from "@/components/override-popup/OverridePane";
@@ -11,6 +11,7 @@ import { cn } from "@/util/client";
 export const OverridePopup = () => {
   const { tables } = useCore();
   const selectedPlanet = tables.SelectedPlanet.use()?.value;
+  const { playerAccount } = usePlayerAccount();
 
   if (!selectedPlanet) return null;
 
@@ -19,8 +20,12 @@ export const OverridePopup = () => {
       <HUD.TopRight className="z-[1000] flex flex-col gap-1 p-1 lg:!p-3">
         <Account className="gap-0" />
         <div className={cn("flex flex-col gap-1 transition-opacity duration-300")}>
-          <hr className="my-1 w-full border-secondary/50" />
-          <Portfolio />
+          {playerAccount && (
+            <>
+              <hr className="my-1 w-full border-secondary/50" />
+              <Portfolio playerId={playerAccount.entity} />
+            </>
+          )}
         </div>
       </HUD.TopRight>
       <div className="screen-container pointer-events-auto absolute" onClick={() => tables.SelectedPlanet.remove()} />

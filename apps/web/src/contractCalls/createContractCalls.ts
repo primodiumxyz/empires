@@ -7,7 +7,7 @@ import { createUpdateCalls } from "@/contractCalls/contractCalls/update";
 
 export type ContractCalls = ReturnType<typeof createContractCalls>;
 
-export const createContractCalls = (core: Core, playerAccount: ExternalAccount | LocalAccount) => {
+export const createContractCalls = (core: Core, playerAccount: ExternalAccount | LocalAccount | null) => {
   const execute = createExecute(core, playerAccount);
   const devCalls = createDevCalls(execute);
 

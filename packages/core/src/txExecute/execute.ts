@@ -27,8 +27,12 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
   onComplete,
 }: ExecuteCallOptions<WorldAbiType, functionName> & {
   core: Core;
-  playerAccount: ExternalAccount | LocalAccount;
+  playerAccount: ExternalAccount | LocalAccount | null;
 }): Promise<TxReceipt> {
+  if (playerAccount === null) {
+    console.error("Player account is required");
+    return Promise.resolve({} as TxReceipt);
+  }
   console.info(`[Tx] Executing ${functionName} with address ${playerAccount.address.slice(0, 6)}`);
 
   const run = async (): Promise<TxReceipt> => {
