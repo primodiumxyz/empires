@@ -4,7 +4,7 @@ import { formatEther, toHex } from "viem";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToAddress, formatAddress } from "@primodiumxyz/core";
+import { entityToAddress } from "@primodiumxyz/core";
 import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -14,6 +14,7 @@ import { Join } from "@/components/core/Join";
 import { Modal } from "@/components/core/Modal";
 import { Tabs } from "@/components/core/Tabs";
 import { Price } from "@/components/shared/Price";
+import { Username } from "@/components/shared/Username";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { useSettings } from "@/hooks/useSettings";
@@ -155,7 +156,7 @@ const TotalLeaderboard = () => {
               )}
             >
               <div>{item.rank}</div>
-              <div className="">{formatAddress(entityToAddress(item.player))}</div>
+              <Username address={entityToAddress(item.player)} />
               <div className={cn("flex items-center gap-2")}>
                 <img src={sprite.getSprite(EmpireToPlanetSpriteKeys[item.empire] ?? "PlanetGrey")} className="w-4" />
                 <p>{formatEther(item.points)}</p>
@@ -239,7 +240,7 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
                   )}
                 >
                   <div>{item.rank}</div>
-                  <div className="">{formatAddress(entityToAddress(item.player))}</div>
+                  <Username address={entityToAddress(item.player)} />
                   <div className={cn("flex items-center gap-2")}>
                     <img src={spriteUrl} className="w-4" />
                     <p>{formatEther(item.points)}</p>
