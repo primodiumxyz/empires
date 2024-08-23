@@ -18,11 +18,11 @@ contract OverrideAcidSystem is EmpiresSystem {
   function placeAcid(bytes32 _planetId) public payable _onlyNotGameOver _takeRake {
     bytes32 playerId = addressToId(_msgSender());
     EEmpire empire = Planet.getEmpireId(_planetId);
-
+    require(empire != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
     require(AcidPlanetsSet.has(empire, _planetId) == false, "[OverrideSystem] Planet already has acid");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceAcid, empire, 1);
     require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
-
+    
     // instantly apply first cycle of acid
     LibAcid.applyAcidDamage(_planetId);
 
