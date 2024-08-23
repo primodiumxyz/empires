@@ -5,9 +5,8 @@ import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
 
 import { Empire, P_PointConfig, ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
-import { EEmpire } from "codegen/common.sol";
+import { EEmpire, EDirection } from "codegen/common.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 
 import { pseudorandom, coordToId } from "src/utils.sol";
@@ -44,7 +43,7 @@ contract LibShieldEaterTest is PrimodiumTest {
 
     // populate shieldCount for all planets
     for (uint256 i = 0; i < planetIds.length; i++) {
-      Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
+      Planet.setShieldCount(planetIds[i], 1);
     }
 
     LibShieldEater.initialize();
@@ -55,125 +54,42 @@ contract LibShieldEaterTest is PrimodiumTest {
     PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
     PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
 
-    console.log("---");
-    console.log("currentPlanet:");
-    console.logInt(currPlanetData.q);
-    console.logInt(currPlanetData.r);
-    console.log("destinationPlanet:");
-    console.logInt(destPlanetData.q);
-    console.logInt(destPlanetData.r);
-    console.log("---");
-
     uint256 loopcount = 0;
 
     while (destPlanetData.q != currPlanetData.q || destPlanetData.r != currPlanetData.r) {
       LibShieldEater.update();
       currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
       destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
-      console.log("---");
-      console.log("currPlanetData:");
-      console.logInt(currPlanetData.q);
-      console.logInt(currPlanetData.r);
-      console.log("destinationPlanet:");
-      console.logInt(destPlanetData.q);
-      console.logInt(destPlanetData.r);
       loopcount++;
-      if (loopcount > planetIds.length) {
-        break;
+
+      // if we've reached the destination, then the path has been cleared
+      // so only run these checks if we're still en route
+      if (ShieldEater.getCurrentPlanet() != ShieldEater.getDestinationPlanet()) {
+        // the current planet was already pushed to the path, so we should find it once, but not twice
+        bytes32[] memory path = ShieldEater.getPath();
+        uint256 foundCount = 0;
+        for (uint256 i = 0; i < path.length; i++) {
+          if (path[i] == ShieldEater.getCurrentPlanet()) {
+            foundCount++;
+          }
+        }
+        assertFalse(foundCount == 0, "LibShieldEater: ShieldEater did not log current plan into path.");
+        assertFalse(foundCount > 1, "LibShieldEater: ShieldEater walked over its own path.");
       }
+
+      // and that it eats the correct number of shields along the way
+      assertTrue(ShieldEater.getCurrentCharge() == loopcount * 2, "LibShieldEater: CurrentCharge != loopcount");
     }
+
+    assertTrue(loopcount < planetIds.length, "LibShieldEater: loopcount exceeded planetIds.length");
 
     assertEq(currPlanetData.q, destPlanetData.q, "LibShieldEater: currPlanetData.q != destPlanetData.q");
     assertEq(currPlanetData.r, destPlanetData.r, "LibShieldEater: currPlanetData.r != destPlanetData.r");
+
+    assertTrue(ShieldEater.getRetargetPending(), "LibShieldEater: RetargetPending not true.");
+    assertTrue(ShieldEater.getPath().length == 0, "LibShieldEater: Path not empty.");
+    assertTrue(ShieldEater.getPathIndex() == 0, "LibShieldEater: PathIndex not zero.");
   }
-
-  // TODO: old retarget with randomness, saving for future work.  -kethic 8.22.2024
-  // function testShieldEaterRetarget(uint256 fuzz) public {
-  //   vm.startPrank(creator);
-  //   bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-  //   bytes32[3] memory testTargets;
-  //   uint256 maxShieldCount = 0;
-  //   uint256 i = 0;
-
-  //   // set a random block.number
-  //   fuzz = bound(fuzz, 1000000, 1e36);
-  //   vm.roll(fuzz);
-
-  //   // populate shieldCount for all planets
-  //   for (i = 0; i < planetIds.length; i++) {
-  //     Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
-  //   }
-
-  //   for (i = 0; i < planetIds.length; i++) {
-  //     // skip if it's the current planet
-  //     if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
-  //       continue;
-  //     }
-  //     if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
-  //       maxShieldCount = Planet.getShieldCount(planetIds[i]);
-  //       testTargets[0] = planetIds[i];
-  //     }
-  //   }
-
-  //   maxShieldCount = 0;
-  //   for (i = 0; i < planetIds.length; i++) {
-  //     // skip if it's the current planet
-  //     if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
-  //       continue;
-  //     }
-  //     if (planetIds[i] == testTargets[0]) {
-  //       continue;
-  //     }
-  //     if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
-  //       maxShieldCount = Planet.getShieldCount(planetIds[i]);
-  //       testTargets[1] = planetIds[i];
-  //     }
-  //   }
-
-  //   maxShieldCount = 0;
-  //   for (i = 0; i < planetIds.length; i++) {
-  //     // skip if it's the current planet
-  //     if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
-  //       continue;
-  //     }
-  //     if (planetIds[i] == testTargets[0] || planetIds[i] == testTargets[1]) {
-  //       continue;
-  //     }
-  //     if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
-  //       maxShieldCount = Planet.getShieldCount(planetIds[i]);
-  //       testTargets[2] = planetIds[i];
-  //     }
-  //   }
-
-  //   console.log("testTargets:");
-  //   console.logBytes32(testTargets[0]);
-  //   console.logBytes32(testTargets[1]);
-  //   console.logBytes32(testTargets[2]);
-  //   console.log("testTargets[0]: %s", Planet.getShieldCount(testTargets[0]));
-  //   console.log("testTargets[1]: %s", Planet.getShieldCount(testTargets[1]));
-  //   console.log("testTargets[2]: %s", Planet.getShieldCount(testTargets[2]));
-  //   console.log("---");
-
-  //   // choose a next destination
-  //   LibShieldEater.retarget();
-
-  //   console.log("ShieldEater.getDestinationPlanet():");
-  //   console.logBytes32(ShieldEater.getDestinationPlanet());
-
-  //   // check that it is a valid planetId
-  //   assertTrue(
-  //     PlanetsSet.has(ShieldEater.getDestinationPlanet()),
-  //     "LibShieldEater: planetId not contained in PlanetsSet"
-  //   );
-
-  //   // check that it is one of the top 3 planetIds
-  //   assertTrue(
-  //     ShieldEater.getDestinationPlanet() == testTargets[0] ||
-  //       ShieldEater.getDestinationPlanet() == testTargets[1] ||
-  //       ShieldEater.getDestinationPlanet() == testTargets[2],
-  //     "LibShieldEater: planetId not one of the top 3"
-  //   );
-  // }
 
   function testShieldEaterRetarget(uint256 fuzz) public {
     vm.startPrank(creator);
@@ -191,6 +107,7 @@ contract LibShieldEaterTest is PrimodiumTest {
       Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
     }
 
+    // find planet with highest shields
     for (i = 0; i < planetIds.length; i++) {
       // skip if it's the current planet
       if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
@@ -202,7 +119,7 @@ contract LibShieldEaterTest is PrimodiumTest {
       }
     }
 
-    // choose a next destination
+    // choose a next destination (which should be the planet with highest shields)
     LibShieldEater.retarget();
 
     console.log("ShieldEater.getDestinationPlanet():");
@@ -215,6 +132,56 @@ contract LibShieldEaterTest is PrimodiumTest {
     );
   }
 
+  function testShieldEaterRetargetSecondHighest(uint256 fuzz) public {
+    vm.startPrank(creator);
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    uint256 i = 0;
+
+    // set a random block.number
+    fuzz = bound(fuzz, 1000000, 1e36);
+    vm.roll(fuzz);
+
+    // populate shieldCount for all planets
+    for (i = 0; i < planetIds.length; i++) {
+      Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
+    }
+
+    bytes32 highest;
+    bytes32 secondHighest;
+
+    uint256 highShieldCount = 0;
+
+    // find planet with highest shields
+    for (i = 0; i < planetIds.length; i++) {
+      if (Planet.getShieldCount(planetIds[i]) >= highShieldCount) {
+        highShieldCount = Planet.getShieldCount(planetIds[i]);
+        highest = planetIds[i];
+      }
+    }
+
+    // place the SheidlEater on planet with highest shield count
+    ShieldEater.setCurrentPlanet(highest);
+
+    // find planet with second highest shields
+    highShieldCount = 0;
+    for (i = 0; i < planetIds.length; i++) {
+      // skip highest
+      if (planetIds[i] == highest) {
+        continue;
+      }
+      if (Planet.getShieldCount(planetIds[i]) >= highShieldCount) {
+        highShieldCount = Planet.getShieldCount(planetIds[i]);
+        secondHighest = planetIds[i];
+      }
+    }
+
+    // choose a next destination (which should be the planet with second highest shields)
+    LibShieldEater.retarget();
+
+    // destination should be second highest
+    assertEq(ShieldEater.getDestinationPlanet(), secondHighest, "LibShieldEater: destination not second highest.");
+  }
+
   function testShieldEaterDetonate(uint256 fuzz) public {
     vm.startPrank(creator);
 
@@ -222,149 +189,52 @@ contract LibShieldEaterTest is PrimodiumTest {
     fuzz = bound(fuzz, 1000000, 1e36);
     vm.roll(fuzz);
 
-    PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
-    CoordData memory center = CoordData(currentPlanet.q, currentPlanet.r);
+    uint256 adjacentDamage = P_ShieldEaterConfig.getDetonateAdjacentDamage();
+    if (adjacentDamage > 10000) {
+      adjacentDamage = 10000;
+    }
+
+    bytes32 centerPlanet = ShieldEater.getCurrentPlanet();
+    bytes32 neighborPlanet;
+
+    uint256 baseShieldCount = 10;
+    uint256 preShieldCount;
+    uint256 postShieldCount;
 
     // Center
-    Planet.setShieldCount(ShieldEater.getCurrentPlanet(), 10);
+    Planet.setShieldCount(centerPlanet, baseShieldCount);
 
-    // East
-    CoordData memory neighbor = CoordData(center.q + 1, center.r);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 11);
-    }
+    for (uint256 i = 2; i < uint256(EDirection.LENGTH); i++) {
+      // get the neighbor
+      neighborPlanet = LibShieldEater.getNeighbor(centerPlanet, EDirection(i));
 
-    // Southeast
-    neighbor = CoordData(center.q, center.r + 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 12);
-    }
-
-    // Southwest
-    neighbor = CoordData(center.q - 1, center.r + 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 13);
-    }
-
-    // West
-    neighbor = CoordData(center.q - 1, center.r);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 14);
-    }
-
-    // Northwest
-    neighbor = CoordData(center.q, center.r - 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 15);
-    }
-
-    // Northeast
-    neighbor = CoordData(center.q + 1, center.r - 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      Planet.setShieldCount(coordToId(neighbor.q, neighbor.r), 16);
+      // if neighbor is a planet
+      if (Planet.getIsPlanet(neighborPlanet)) {
+        Planet.setShieldCount(neighborPlanet, baseShieldCount + i);
+      }
     }
 
     LibShieldEater.detonate();
 
-    assertEq(Planet.getShieldCount(ShieldEater.getCurrentPlanet()), 0, "LibShieldEater: Center shieldCount not zero.");
+    assertEq(Planet.getShieldCount(centerPlanet), 0, "LibShieldEater: Center shieldCount not zero.");
+    assertEq(ShieldEater.getCurrentCharge(), 0, "LibShieldEater: CurrentCharge not zero.");
 
-    // East
-    neighbor = CoordData(center.q + 1, center.r);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      assertEq(Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)), 6, "LibShieldEater: East shieldCount not 6.");
-    }
+    for (uint256 i = 2; i < uint256(EDirection.LENGTH); i++) {
+      // get the neighbor
+      neighborPlanet = LibShieldEater.getNeighbor(centerPlanet, EDirection(i));
 
-    // Southeast
-    neighbor = CoordData(center.q, center.r + 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      assertEq(
-        Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        6,
-        "LibShieldEater: Southeast shieldCount not 6."
-      );
-    }
+      // if neighbor is a planet
+      if (Planet.getIsPlanet(neighborPlanet)) {
+        preShieldCount = baseShieldCount + i;
+        postShieldCount = Planet.getShieldCount(neighborPlanet);
 
-    // Southwest
-    neighbor = CoordData(center.q - 1, center.r + 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      assertEq(
-        Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        7,
-        "LibShieldEater: Southwest shieldCount not 7."
-      );
-    }
-
-    // West
-    neighbor = CoordData(center.q - 1, center.r);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      assertEq(Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)), 7, "LibShieldEater: West shieldCount not 7.");
-    }
-
-    // Northwest
-    neighbor = CoordData(center.q, center.r - 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      assertEq(
-        Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        8,
-        "LibShieldEater: Northwest shieldCount not 8."
-      );
-    }
-
-    // Northeast
-    neighbor = CoordData(center.q + 1, center.r - 1);
-    if (Planet.getIsPlanet(coordToId(neighbor.q, neighbor.r))) {
-      assertEq(
-        Planet.getShieldCount(coordToId(neighbor.q, neighbor.r)),
-        8,
-        "LibShieldEater: Northeast shieldCount not 8."
-      );
+        assertTrue(
+          postShieldCount == preShieldCount - ((preShieldCount * adjacentDamage) / 10000),
+          "LibShieldEater: incorrect shield damage."
+        );
+      }
     }
   }
 
-  // TODO: saving to finish later. -kethic 8.22.2024
-  // function testShieldEaterDeepNavSim() public {
-  //   uint256 turn = 1000;
-  //   vm.startPrank(creator);
-  //   vm.roll(turn);
-  //   LibShieldEater.initialize();
-  //   assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "getCurrentPlanet planetId not contained in PlanetsSet");
-  //   LibShieldEater.retarget();
-  //   assertTrue(
-  //     PlanetsSet.has(ShieldEater.getDestinationPlanet()),
-  //     "getDestinationPlanet planetId not contained in PlanetsSet"
-  //   );
-
-  //   PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
-  //   PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
-
-  //   for (uint256 i = 0; i < 10; i++) {
-  //     console.log("loop[%s]", i);
-  //     // vm.roll(turn + i);
-  //     console.log(
-  //       "dest[%s]: [%s,%s]",
-  //       destPlanetData.shieldCount,
-  //       uint256(int256(destPlanetData.q)),
-  //       uint256(int256(destPlanetData.r))
-  //     );
-
-  //     console.log(
-  //       "curr[%s]: [%s,%s]",
-  //       currPlanetData.shieldCount,
-  //       uint256(int256(currPlanetData.q)),
-  //       uint256(int256(currPlanetData.r))
-  //     );
-
-  //     while (currPlanetData.q != destPlanetData.q || currPlanetData.r != destPlanetData.r) {
-  //       LibShieldEater.update();
-  //       currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
-  //       destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
-  //       console.log(
-  //         "curr[%s]: [%s,%s]",
-  //         currPlanetData.shieldCount,
-  //         uint256(int256(currPlanetData.q)),
-  //         uint256(int256(currPlanetData.r))
-  //       );
-  //     }
-  //   }
-  // }
+  function testShieldEaterGetDirection() public {}
 }

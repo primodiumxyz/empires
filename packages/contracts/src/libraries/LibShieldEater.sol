@@ -25,49 +25,6 @@ library LibShieldEater {
     ShieldEater.setRetargetPending(true);
   }
 
-  // TODO: old retarget with randomness, saving for future work.  -kethic 8.22.2024
-
-  // /**
-  //  * @dev Selects a destination for the Shield Eater, from the top 3 planets with the most shields.
-  //  * @notice This function is overly complicated due to contract size optimizations.
-  //  */
-  // function retarget() internal {
-  //   bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-  //   bytes32[] memory dstOptions = new bytes32[](3);
-  //   uint256 shieldCount = 0;
-  //   bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
-
-  //   // find the top 3 planets with the most shields
-  //   for (uint256 i = 0; i < planetIds.length; i++) {
-  //     // skip if it's the current planet
-  //     if (planetIds[i] == currentPlanet) {
-  //       continue;
-  //     }
-  //     shieldCount = Planet.getShieldCount(planetIds[i]);
-  //     if (shieldCount >= Planet.getShieldCount(dstOptions[0])) {
-  //       dstOptions[2] = dstOptions[1];
-  //       dstOptions[1] = dstOptions[0];
-  //       dstOptions[0] = planetIds[i];
-  //     } else if (shieldCount >= Planet.getShieldCount(dstOptions[1])) {
-  //       dstOptions[2] = dstOptions[1];
-  //       dstOptions[1] = planetIds[i];
-  //     } else if (shieldCount >= Planet.getShieldCount(dstOptions[2])) {
-  //       dstOptions[2] = planetIds[i];
-  //     }
-  //   }
-
-  //   // choose of the top 3 planets
-  //   uint256 randomIndex = pseudorandom(uint256(pseudorandomEntity()), 3);
-
-  //   // if there are no shields on the map, it tends to gravitate towards the bottom center.
-  //   // this will force it to wander around a bit more even if there's nothing to eat.
-  //   if (Planet.getShieldCount(dstOptions[randomIndex]) == 0) {
-  //     randomIndex = pseudorandom(uint256(pseudorandomEntity()), planetIds.length);
-  //   }
-
-  //   ShieldEater.setDestinationPlanet(dstOptions[randomIndex]);
-  // }
-
   /**
    * @dev Selects a destination for the Shield Eater, from the top 3 planets with the most shields.
    * @notice This function is overly complicated due to contract size optimizations.
