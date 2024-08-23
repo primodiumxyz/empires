@@ -22,7 +22,7 @@ export type ExecuteFunctions = {
   }) => Promise<TxReceipt>;
 };
 
-export function createExecute(core: Core, account: ExternalAccount | LocalAccount): ExecuteFunctions {
+export function createExecute(core: Core, account: LocalAccount | ExternalAccount | null): ExecuteFunctions {
   async function execute<functionName extends ContractFunctionName<WorldAbiType>>(
     callOptions: ExecuteCallOptions<WorldAbiType, functionName>,
   ) {

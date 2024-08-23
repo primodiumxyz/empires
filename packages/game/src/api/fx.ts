@@ -1,9 +1,10 @@
 import { AnimationKeys, Animations, Assets, SpriteKeys, Sprites } from "@primodiumxyz/assets";
 import { getRandomRange } from "@primodiumxyz/core";
 import { Coord, Scene } from "@primodiumxyz/engine";
+import { GlobalApi } from "@game/api/global";
 import { DepthLayers } from "@game/lib/constants/common";
 
-export const createFxApi = (scene: Scene) => {
+export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
   function outline(
     gameObject: Phaser.GameObjects.Sprite,
     options: {
@@ -46,6 +47,8 @@ export const createFxApi = (scene: Scene) => {
       };
     } = {},
   ) {
+    if (!globalApi.tables.GameState.get()?.visible) return;
+
     const {
       color = "#00ffff",
       duration = 4000,
@@ -159,6 +162,8 @@ export const createFxApi = (scene: Scene) => {
   }
 
   function flashScreen(options?: { duration?: number; color?: number }) {
+    if (!globalApi.tables.GameState.get()?.visible) return;
+
     function getRGBValues(value: number) {
       const hexValue = value.toString(16).padStart(6, "0");
       const red = parseInt(hexValue.slice(0, 2), 16);
@@ -192,6 +197,8 @@ export const createFxApi = (scene: Scene) => {
       onComplete?: () => void;
     },
   ) {
+    if (!globalApi.tables.GameState.get()?.visible) return;
+
     const {
       scale = 1,
       depth = DepthLayers.Base,
@@ -233,6 +240,8 @@ export const createFxApi = (scene: Scene) => {
   }
 
   function flashSprite(sprite: Phaser.GameObjects.Sprite, duration = 400, wait = 100, repeat = 3) {
+    if (!globalApi.tables.GameState.get()?.visible) return;
+
     let at = 0;
     scene.phaserScene.add
       .timeline(

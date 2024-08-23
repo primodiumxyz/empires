@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Card, GlassCard } from "@/components/core/Card";
 import { Price } from "@/components/shared/Price";
@@ -11,20 +12,10 @@ import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
 export const GameOver = ({ className }: { className?: string }) => {
-  const calls = useContractCalls();
-  const { tables } = useCore();
-  const {
-    playerAccount: { entity },
-  } = useAccountClient();
-  const { pot } = usePot();
   const { empire } = useWinningEmpire();
   const [closed, setClosed] = useState(false);
 
-  const empirePoints = tables.Empire.useWithKeys({ id: empire ?? 0 })?.pointsIssued ?? 0n;
-  const playerEmpirePoints =
-    tables.Value_PointsMap.useWithKeys({ empireId: empire ?? 0, playerId: entity })?.value ?? 0n;
-
-  const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
+  const { playerAccount } = usePlayerAccount();
 
   const empireName = EmpireEnumToConfig[empire ?? DEFAULT_EMPIRE].name;
   if (empire == null || closed) return null;
@@ -44,18 +35,33 @@ export const GameOver = ({ className }: { className?: string }) => {
         <p className="lg:text-xl">
           Game over. <span className="font-semibold">{empireName}</span> won!
         </p>
-        {playerPot > 0n && (
-          <>
-            <p>
-              You earned <Price wei={playerPot} />!
-            </p>
-            <Button variant="primary" size="sm" className="col-span-2 mt-1 w-full" onClick={calls.withdrawEarnings}>
-              Withdraw
-            </Button>
-          </>
-        )}
-        {playerPot === 0n && <p className="col-span-2 text-xs opacity-50">You have no earnings to withdraw.</p>}
+        {playerAccount && <PlayerPot entity={playerAccount.entity} />}
       </Card>
     </GlassCard>
   );
+};
+
+const PlayerPot = ({ entity }: { entity: Entity }) => {
+  const { empire } = useWinningEmpire();
+  const { tables } = useCore();
+  const { pot } = usePot();
+  const calls = useContractCalls();
+  const playerEmpirePoints =
+    tables.Value_PointsMap.useWithKeys({ empireId: empire ?? 0, playerId: entity })?.value ?? 0n;
+
+  const empirePoints = tables.Empire.useWithKeys({ id: empire ?? 0 })?.pointsIssued ?? 0n;
+  const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
+
+  if (playerPot > 0n)
+    return (
+      <>
+        <p>
+          You earned <Price wei={playerPot} />!
+        </p>
+        <Button variant="primary" size="sm" className="col-span-2 mt-1 w-full" onClick={calls.withdrawEarnings}>
+          Withdraw
+        </Button>
+      </>
+    );
+  if (playerPot === 0n) return <p className="col-span-2 text-xs opacity-50">You have no earnings to withdraw.</p>;
 };

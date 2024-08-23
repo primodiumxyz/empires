@@ -1,5 +1,6 @@
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EViewMode } from "@primodiumxyz/core";
+import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
 import { Cheatcodes } from "@/components/cheatcodes/Cheatcodes";
@@ -29,6 +30,7 @@ export const GameHUD = () => {
   const params = new URLSearchParams(window.location.search);
   const showCheatcodes = DEV && !!params.get("showCheatcodes");
   const showMap = viewMode === EViewMode.Map;
+  const { playerAccount } = usePlayerAccount();
   return (
     <>
       <div
@@ -74,8 +76,12 @@ export const GameHUD = () => {
           <div
             className={cn("flex flex-col gap-1 transition-opacity duration-300", showMap ? "opacity-100" : "opacity-0")}
           >
-            <hr className="my-1 w-full border-secondary/50" />
-            <Portfolio />
+            {playerAccount && (
+              <>
+                <hr className="my-1 w-full border-secondary/50" />
+                <Portfolio playerId={playerAccount.entity} />
+              </>
+            )}
           </div>
         </HUD.TopRight>
 
@@ -89,7 +95,6 @@ export const GameHUD = () => {
           <Dashboard />
         </HUD.Center>
 
-        {/* BOTTOM */}
         <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
           {showMap && <ActionLog className="hidden lg:flex" />}
           <div className="pointer-events-auto flex w-full items-center gap-2">
@@ -102,9 +107,11 @@ export const GameHUD = () => {
           <TimeLeft className="gap-0" />
         </HUD.BottomMiddle>
 
-        <HUD.BottomRight>
-          <PlayerReturns />
-        </HUD.BottomRight>
+        {playerAccount && (
+          <HUD.BottomRight>
+            <PlayerReturns playerId={playerAccount.entity} />
+          </HUD.BottomRight>
+        )}
       </HUD>
     </>
   );

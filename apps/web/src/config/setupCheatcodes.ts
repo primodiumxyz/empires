@@ -2,7 +2,14 @@ import { Address, Hex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import { AccountClient, addressToEntity, Core, entityToPlanetName, TxReceipt } from "@primodiumxyz/core";
+import {
+  addressToEntity,
+  Core,
+  entityToPlanetName,
+  ExternalAccount,
+  LocalAccount,
+  TxReceipt,
+} from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
@@ -23,13 +30,12 @@ export const CheatcodeToBg: Record<string, string> = {
 export const setupCheatcodes = (options: {
   core: Core;
   game: PrimodiumGame;
-  accountClient: AccountClient;
+  playerAccount: ExternalAccount | LocalAccount;
   contractCalls: ContractCalls;
   requestDrip?: (address: Address, force?: boolean) => Promise<TxReceipt | undefined>;
 }) => {
-  const { core, game, accountClient, contractCalls, requestDrip } = options;
+  const { core, game, playerAccount, contractCalls, requestDrip } = options;
   const { tables } = core;
-  const { playerAccount } = accountClient;
   const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake, updateWorld } = contractCalls;
 
   // game
