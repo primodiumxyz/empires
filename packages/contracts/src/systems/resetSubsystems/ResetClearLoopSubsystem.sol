@@ -6,6 +6,7 @@ import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
+import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { PendingMove, WinningEmpire, HistoricalPointCost, Magnet, P_GameConfig } from "codegen/index.sol";
@@ -28,6 +29,7 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
       }
 
       EmpirePlanetsSet.clear(empire);
+      AcidPlanetsSet.clear(empire);
       PointsMap.clear(empire);
       PlayersMap.clear();
       PlanetsSet.clear();

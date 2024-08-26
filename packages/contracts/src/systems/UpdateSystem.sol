@@ -35,6 +35,7 @@ contract UpdateSystem is EmpiresSystem {
     world.Empires__updateEmpires(routineThresholds);
     world.Empires__updateCombat();
     world.Empires__updateMagnets();
+    world.Empires__updateAcid();
     world.Empires__updateShieldEater();
     world.Empires__updatePrice();
     _updateTurn();

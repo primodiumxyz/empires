@@ -16,7 +16,7 @@ import { IWorld } from "codegen/world/IWorld.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 
 /**
- * @title OverrideSystem
+ * @title OverrideShipSystem
  * @dev A contract that handles overrides related to creating and killing ships on a planet.
  */
 contract OverrideShipSystem is EmpiresSystem {

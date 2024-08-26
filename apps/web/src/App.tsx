@@ -57,8 +57,10 @@ const App = () => {
   }, []);
 
   if (!core) {
-    return <></>;
+    return <>Loading...</>;
   }
+
+  const usingFoundry = core.config.chain.name === "Foundry";
 
   return (
     <>
@@ -89,7 +91,7 @@ const App = () => {
             >
               <BackgroundNebula />
 
-              <PlayerAccountProvider allowBurner={!!DEV} defaultLogin="burner">
+              <PlayerAccountProvider allowBurner={!!DEV} defaultLogin={usingFoundry ? "burner" : "privy"}>
                 <Game />
                 <ToastContainer
                   toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}

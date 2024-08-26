@@ -3,6 +3,7 @@ pragma solidity >=0.8.24;
 
 import { P_GameConfig, Turn, PendingMove, Arrivals, Planet, PlanetData, ShipBattleRoutineLog, ShipBattleRoutineLogData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
+import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { pseudorandomEntity } from "src/utils.sol";
 import { EEmpire } from "codegen/common.sol";
 
@@ -59,6 +60,7 @@ library LibResolveCombat {
 
         EmpirePlanetsSet.add(attackingEmpire, planetId);
         EmpirePlanetsSet.remove(defendingEmpire, planetId);
+        AcidPlanetsSet.changeEmpire(defendingEmpire, attackingEmpire, planetId);
         Planet.setEmpireId(planetId, attackingEmpire);
         PendingMove.deleteRecord(planetId);
       } else {

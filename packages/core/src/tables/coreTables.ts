@@ -37,6 +37,20 @@ export default function setupCoreTables(network: CreateNetworkResult) {
 
   const SelectedPlanet = createLocalEntityTable(world, { id: "SelectedPlanet" });
   const HoveredPlanet = createLocalEntityTable(world, { id: "HoveredPlanet" });
+
+  const Username = createLocalTable(
+    world,
+    {
+      username: Type.String,
+      lastFetched: Type.Number,
+      hasTwitter: Type.Boolean,
+    },
+    {
+      id: "Username",
+      persist: true,
+    },
+  );
+
   return {
     DoubleCounter,
     BlockNumber,
@@ -46,5 +60,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     TransactionQueue,
     SelectedPlanet,
     HoveredPlanet,
+    Username,
   };
 }
