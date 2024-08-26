@@ -5,6 +5,7 @@ import { createNavUtils } from "@core/utils/core/nav";
 import { createNpcUtils } from "@core/utils/core/npc";
 import { createPriceUtils } from "@core/utils/core/price";
 import { createShieldEaterUtils } from "@core/utils/core/shieldEater";
+import { createUsernameUtils } from "@core/utils/core/username";
 
 export const createUtils = (tables: Tables) => {
   const priceUtils = createPriceUtils(tables);
@@ -13,6 +14,15 @@ export const createUtils = (tables: Tables) => {
   const empireUtils = createEmpireUtils(tables);
   const shieldEaterUtils = createShieldEaterUtils(tables);
   const citadelUtils = createCitadelUtils(tables);
+  const usernameUtils = createUsernameUtils(tables);
 
-  return { ...priceUtils, ...navUtils, ...npcUtils, ...empireUtils, ...shieldEaterUtils, ...citadelUtils };
+  return {
+    ...priceUtils,
+    ...navUtils,
+    ...npcUtils,
+    ...empireUtils,
+    ...shieldEaterUtils,
+    ...citadelUtils,
+    ...usernameUtils,
+  };
 };
