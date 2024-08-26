@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
+import { ArrowDownIcon, ArrowUpIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tooltip } from "@/components/core/Tooltip";
@@ -15,13 +15,9 @@ import { usePot } from "@/hooks/usePot";
 import { cn } from "@/util/client";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
-export const PlayerReturns = () => {
+export const PlayerReturns = ({ playerId }: { playerId: Entity }) => {
   const { tables } = useCore();
 
-  const { pot } = usePot();
-  const {
-    playerAccount: { entity: playerId },
-  } = useAccountClient();
   const points = usePoints(playerId);
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
   const biggestReward = useMemo(() => {
@@ -37,27 +33,20 @@ export const PlayerReturns = () => {
   }, [points]);
 
   return (
-    <div className="flex gap-2 lg:w-40 lg:flex-col">
-      <div className="hidden text-right lg:block">
-        <h2 className="font-semibold">Pot</h2>
-        <Price wei={pot} className="text-accent" />
-        <hr className="my-1 w-full border-secondary/50" />
-      </div>
-
-      <EmpireEndReward
+    <div className="z-10 flex justify-around gap-2">
+      <EarnUpTo
         empire={biggestReward.empire}
         playerPoints={points[biggestReward.empire].playerPoints}
         empirePoints={points[biggestReward.empire].empirePoints}
         totalSpent={totalSpent}
       />
-      <hr className="mx-1 h-full border-l border-secondary/50 lg:hidden" />
 
-      <ImmediateReward playerId={playerId} />
+      <SellNow playerId={playerId} />
     </div>
   );
 };
 
-const EmpireEndReward = ({
+const EarnUpTo = ({
   empire,
   playerPoints,
   empirePoints,
@@ -68,51 +57,54 @@ const EmpireEndReward = ({
   empirePoints: bigint;
   totalSpent: bigint;
 }) => {
-  const {
-    utils: { getPointPrice },
-  } = useCore();
   const { pot } = usePot();
   const {
     ROOT: { sprite },
   } = useGame();
   const earnings = !!empirePoints ? (pot * playerPoints) / empirePoints : 0n;
-  const isProfit = earnings >= totalSpent;
-  const pnl = isProfit ? earnings - totalSpent : totalSpent - earnings;
+  const percentageChange = totalSpent > 0n ? ((earnings - totalSpent) * 10000n) / totalSpent : 0n;
+  const isProfit = percentageChange >= 0n;
 
   const imgUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
   const empires = useEmpires();
   const empireName = empires.get(empire)?.name;
+
   return (
-    <div className="pointer-events-auto flex flex-col rounded-lg">
-      <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
-        <span className="text-xs">Earn up to</span>
-        <div className="hidden lg:block">
+    <div className="pointer-events-auto relative flex min-w-32 flex-col rounded-md border border-gray-600 p-1 lg:p-2 lg:pt-4">
+      <h2 className="absolute -top-2 left-1 flex items-center justify-end gap-2 bg-neutral px-1 font-semibold text-gray-400">
+        <span className="whitespace-nowrap text-xs">Earn up to</span>
+        <div>
           <Tooltip
             tooltipContent={`Projected rewards if ${empireName} empire wins`}
             direction="left"
             className="w-56 text-xs"
           >
-            <ExclamationCircleIcon className="size-3" />
+            <InformationCircleIcon className="size-3" />
           </Tooltip>
         </div>
       </h2>
-      <div
-        className={cn("flex h-full w-full flex-row items-end justify-end gap-2 border-none text-sm lg:items-center")}
-      >
-        <img src={imgUrl} className="h-6" />
-        <Price wei={earnings} />
-        {!!totalSpent && (
-          <div className={cn("hidden text-right text-xs lg:block", isProfit ? "text-green-400" : "text-red-400")}>
-            {isProfit ? "+" : "-"}
-            <Price wei={pnl} />
-          </div>
-        )}
+      <div className={cn("flex h-full w-full flex-row items-center justify-around border-none text-sm")}>
+        <img src={imgUrl} className="w-4 lg:w-8" />
+        <div className="flex flex-col">
+          <Price wei={earnings} />
+          {!!totalSpent && (
+            <div
+              className={cn(
+                "-mt-1 hidden items-center gap-1 self-end text-xs lg:flex",
+                isProfit ? "text-green-400" : "text-red-400",
+              )}
+            >
+              {isProfit ? <ArrowUpIcon className="size-3" /> : <ArrowDownIcon className="size-3" />}
+              {(Number(percentageChange) / 100).toFixed(1).replace("-", "")}%
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
+const SellNow = ({ playerId }: { playerId: Entity }) => {
   const {
     tables,
     utils: { getPointPrice },
@@ -120,43 +112,41 @@ const ImmediateReward = ({ playerId }: { playerId: Entity }) => {
   const points = usePoints(playerId);
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
   const empires = useEmpires();
-  const time = tables.Time.use();
 
   const pointCosts = useMemo(
     () =>
       [...empires.keys()].map(
         (empire) => getPointPrice(empire, Number(formatEther(points[empire].playerPoints))).price,
       ),
-    [empires, points, time],
+    [empires, points],
   );
   const totalReward = pointCosts.reduce((sum, cost) => sum + cost, 0n);
-
-  const isProfit = totalReward >= totalSpent;
-  const pnl = isProfit ? totalReward - totalSpent : totalSpent - totalReward;
+  const percentageChange = totalSpent > 0n ? ((totalReward - totalSpent) * 10000n) / totalSpent : 0n;
+  const isProfit = percentageChange >= 0n;
 
   return (
-    <div className="pointer-events-auto flex flex-col gap-1 rounded-lg">
-      <h2 className="flex items-center justify-end gap-2 font-semibold text-gray-400">
-        <span className="text-xs">Sell now</span>
-
-        <div className="hidden lg:block">
-          <Tooltip
-            tooltipContent="Rewards if you sell all points now"
-            direction="left"
-            className="hidden w-56 text-xs lg:block"
-          >
-            <ExclamationCircleIcon className="hidden size-3 lg:block" />
-          </Tooltip>
+    <div className="pointer-events-auto relative flex min-w-28 flex-col rounded border border-gray-600 lg:p-2 lg:pt-4">
+      <div className="absolute -top-2 left-1 flex items-center justify-end gap-2 bg-neutral px-1 font-semibold text-gray-400">
+        <span className="whitespace-nowrap text-xs">Sell now</span>
+        <Tooltip tooltipContent="Rewards if you sell all points now" direction="left" className="w-56 text-xs">
+          <InformationCircleIcon className="size-3" />
+        </Tooltip>
+      </div>
+      <div className={cn("flex h-full w-full items-center justify-center border-none text-sm")}>
+        <div className="flex flex-col">
+          <Price wei={totalReward} />
+          {!!totalSpent && (
+            <div
+              className={cn(
+                "-mt-1 hidden items-center gap-1 self-end text-xs lg:flex",
+                isProfit ? "text-green-400" : "text-red-400",
+              )}
+            >
+              {isProfit ? <ArrowUpIcon className="size-3" /> : <ArrowDownIcon className="size-3" />}
+              {(Number(percentageChange) / 100).toFixed(1).replace("-", "")}%
+            </div>
+          )}
         </div>
-      </h2>
-      <div className={cn("flex h-full w-full items-end justify-end gap-1 border-none text-sm lg:items-center")}>
-        <Price wei={totalReward} />
-        {!!totalSpent && (
-          <span className={cn("hidden text-xs lg:block", isProfit ? "text-green-400" : "text-red-400")}>
-            {isProfit ? "+" : "-"}
-            <Price wei={pnl} />
-          </span>
-        )}
       </div>
     </div>
   );

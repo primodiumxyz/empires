@@ -3,9 +3,10 @@ pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
-import { MagnetTurnPlanets, Magnet, P_MagnetConfig, Turn, P_RoutineCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData, OverrideCost, Empire } from "codegen/index.sol";
+import { MagnetTurnPlanets, Magnet, P_MagnetConfig, Turn, P_RoutineCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData, P_AcidConfig, OverrideCost, Empire, PendingMove, PendingMoveData, Arrivals } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
+import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { LibRoutine } from "libraries/LibRoutine.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
@@ -110,14 +111,9 @@ contract UpdateSystemTest is PrimodiumTest {
 
     P_OverrideConfigData memory createShipCfg = P_OverrideConfig.get(EOverride.CreateShip);
     uint256 beginCreateShipCost = createShipCfg.minOverrideCost + createShipCfg.overrideGenRate;
-    P_OverrideConfigData memory killShipCfg = P_OverrideConfig.get(EOverride.KillShip);
-    uint256 beginKillShipCost = killShipCfg.minOverrideCost + killShipCfg.overrideGenRate;
     OverrideCost.set(EEmpire.Red, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Red, EOverride.KillShip, beginKillShipCost);
     OverrideCost.set(EEmpire.Blue, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Blue, EOverride.KillShip, beginKillShipCost);
     OverrideCost.set(EEmpire.Green, EOverride.CreateShip, beginCreateShipCost);
-    OverrideCost.set(EEmpire.Green, EOverride.KillShip, beginKillShipCost);
 
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld(allRoutineThresholds);
@@ -127,14 +123,11 @@ contract UpdateSystemTest is PrimodiumTest {
     assertEq(Empire.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
 
     assertEq(OverrideCost.get(EEmpire.Red, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
-    assertEq(OverrideCost.get(EEmpire.Red, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
     assertEq(OverrideCost.get(EEmpire.Blue, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
-    assertEq(OverrideCost.get(EEmpire.Blue, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
     assertEq(
       OverrideCost.get(EEmpire.Green, EOverride.CreateShip),
       beginCreateShipCost - createShipCfg.overrideGenRate
     );
-    assertEq(OverrideCost.get(EEmpire.Green, EOverride.KillShip), beginKillShipCost - killShipCfg.overrideGenRate);
   }
 
   function _getEndTurn(uint256 turnDuration) internal view returns (uint256) {
@@ -274,5 +267,75 @@ contract UpdateSystemTest is PrimodiumTest {
     // Verify first magnet is removed, second is not
     assertFalse(Magnet.get(empire, planetId).isMagnet, "First magnet should be removed");
     assertTrue(Magnet.get(empire, emptyPlanetId).isMagnet, "Second magnet should not be removed yet");
+  }
+
+  function testAcidUpdate() public {
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    uint256 acidDuration = 3;
+    vm.startPrank(creator);
+    P_AcidConfig.setAcidDuration(acidDuration);
+    P_AcidConfig.setAcidDamagePercent(1000); // out of 10000, 10%
+
+    assignPlanetToEmpire(planetIds[0], EEmpire.Red);
+    assignPlanetToEmpire(planetIds[1], EEmpire.Red);
+    assignPlanetToEmpire(planetIds[5], EEmpire.Blue);
+    vm.startPrank(creator);
+
+    AcidPlanetsSet.add(EEmpire.Red, planetIds[0], acidDuration - 1); // two cycles left
+    AcidPlanetsSet.add(EEmpire.Red, planetIds[1], 1); // one cycle left
+    AcidPlanetsSet.add(EEmpire.Blue, planetIds[5], acidDuration - 1); // index is 5 just to add some space to prevent conquers
+
+    Planet.setShipCount(planetIds[0], 10);
+    Planet.setShipCount(planetIds[1], 10);
+    Planet.setShipCount(planetIds[5], 10);
+
+    Turn.setEmpire(EEmpire.Red);
+    vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
+    world.Empires__updateWorld(allRoutineThresholds);
+    uint256 acidCyclesRedPlanetA = AcidPlanetsSet.getAcidCycles(EEmpire.Red, planetIds[0]);
+    uint256 acidCyclesRedPlanetB = AcidPlanetsSet.getAcidCycles(EEmpire.Red, planetIds[1]);
+    uint256 acidCyclesBlue = AcidPlanetsSet.getAcidCycles(EEmpire.Blue, planetIds[5]);
+    assertEq(acidCyclesRedPlanetA, acidDuration - 2, "Red Empire Planet A Acid cycles should have decremented");
+    assertEq(acidCyclesRedPlanetB, 0, "Red Empire Planet B Acid cycles should be removed");
+    assertEq(acidCyclesBlue, acidDuration - 1, "Blue Empire Planet Acid cycles should not have changed");
+
+    assertFalse(AcidPlanetsSet.has(EEmpire.Red, planetIds[1]), "Red Empire Planet B should not be in set anymore");
+
+    assertEq(Planet.getShipCount(planetIds[0]), 9, "Red Empire Planet A should have lost 1 ship");
+    assertEq(Planet.getShipCount(planetIds[1]), 9, "Red Empire Planet B should have lost 1 ship");
+    assertEq(Planet.getShipCount(planetIds[5]), 10, "Blue Empire Planet should not have lost any ships");
+  }
+
+  function testUpdateAcidConquerChangeEmpire() public {
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    uint256 acidDuration = 3;
+    vm.startPrank(creator);
+    P_AcidConfig.setAcidDuration(acidDuration);
+    P_AcidConfig.setAcidDamagePercent(1000); // out of 10000, 10%
+
+    assignPlanetToEmpire(planetIds[0], EEmpire.Red);
+    vm.startPrank(creator);
+    AcidPlanetsSet.add(EEmpire.Red, planetIds[0], acidDuration - 1); // two cycles left
+
+    uint256 initShips = 5;
+    uint256 incomingShips = 7;
+    Planet.setShipCount(planetIds[0], initShips);
+    Planet.setShieldCount(planetIds[0], 0);
+    Arrivals.set(planetIds[0], EEmpire.Blue, incomingShips);
+
+    Turn.setEmpire(EEmpire.Blue);
+    vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
+    world.Empires__updateWorld(allRoutineThresholds);
+
+    assertEq(
+      Planet.getShipCount(planetIds[0]),
+      incomingShips - initShips - 1,
+      "Ship count should be 1 due to conquer and instant acid update"
+    );
+    assertEq(Planet.getEmpireId(planetIds[0]), EEmpire.Blue, "Planet should be conquered by blue");
+    assertEq(AcidPlanetsSet.getAcidCycles(EEmpire.Red, planetIds[0]), 0, "Planet not owned by red anymore, acid data should be removed");
+    assertFalse(AcidPlanetsSet.has(EEmpire.Red, planetIds[0]), "Planet not owned by red anymore, acid data should be removed");
+    assertEq(AcidPlanetsSet.getAcidCycles(EEmpire.Blue, planetIds[0]), acidDuration - 2, "Planet conquered by blue and experienced an acid cycle, should have 1 cycle left");
+    assertTrue(AcidPlanetsSet.has(EEmpire.Blue, planetIds[0]), "Planet conquered by blue, acid data should be added");
   }
 }

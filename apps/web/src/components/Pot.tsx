@@ -4,6 +4,7 @@ import { cn } from "@/util/client";
 
 interface PotProps {
   className?: string;
+  small?: boolean;
 }
 
 export const Pot: React.FC<PotProps> = ({ className }) => {
@@ -12,7 +13,7 @@ export const Pot: React.FC<PotProps> = ({ className }) => {
   return (
     <div className={cn(className)}>
       <h2 className="ml-1 font-semibold opacity-70">Pot</h2>
-      <Price wei={pot} className="text-xl text-accent" />
+      <Price wei={pot} className={cn("text-xl text-accent")} />
     </div>
   );
 };

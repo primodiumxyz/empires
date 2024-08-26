@@ -1,7 +1,10 @@
-export { AccountClientContext, AccountClientProvider } from "./providers/AccountClientProvider";
+export {
+  PlayerAccountContext,
+  PlayerAccountProvider,
+} from "../../../../../apps/web/src/hooks/providers/PlayerAccountProvider";
 export { CoreContext, CoreProvider } from "./providers/CoreProvider";
 
-export { useAccountClient } from "./useAccountClient";
+export { usePlayerAccount } from "../../../../../apps/web/src/hooks/usePlayerAccount";
 export { useCore } from "./useCore";
 export { usePlayerName } from "./usePlayerName";
 export { useSyncStatus } from "./useSyncStatus";

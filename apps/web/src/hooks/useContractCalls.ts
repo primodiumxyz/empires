@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { createContractCalls } from "@/contractCalls/createContractCalls";
 
 export const useContractCalls = () => {
   const core = useCore();
-  const accountClient = useAccountClient();
+  const { playerAccount } = usePlayerAccount();
 
   return useMemo(() => {
-    return createContractCalls(core, accountClient.playerAccount);
-  }, [core, accountClient]);
+    return createContractCalls(core, playerAccount);
+  }, [core, playerAccount]);
 };

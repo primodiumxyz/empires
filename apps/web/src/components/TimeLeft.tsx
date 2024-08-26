@@ -7,9 +7,10 @@ import { Tooltip } from "@/components/core/Tooltip";
 import { useSettings } from "@/hooks/useSettings";
 import { useTimeLeft } from "@/hooks/useTimeLeft";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
+import { cn } from "@/util/client";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
-export const TimeLeft = () => {
+export const TimeLeft = ({ className, small, invert }: { className?: string; small?: boolean; invert?: boolean }) => {
   const { timeLeftMs, blocksLeft } = useTimeLeft();
   const { gameOver } = useWinningEmpire();
   const { showBlockchainUnits } = useSettings();
@@ -29,17 +30,26 @@ export const TimeLeft = () => {
   if (!turn || gameOver) return null;
 
   return (
-    <div className="flex flex-col justify-center gap-1 text-center">
-      <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
-        <p className="text-sm opacity-90">
-          Round ends in <span className="text-accent">{formatTime((timeLeftMs ?? 0) / 1000)}</span>
-        </p>
-        <p className="text-xs font-bold opacity-80">
-          {EmpireEnumToConfig[turn.empire as EEmpire].name}'s Turn in <span className="text-secondary">{timeLeft}</span>
-        </p>
-      </Tooltip>
+    <div className={cn("flex flex-col justify-center text-center lg:gap-1", className)}>
+      {!invert && (
+        <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
+          <p className={cn("opacity-90", small ? "text-xs" : "text-sm")}>
+            Round ends in <span className="text-accent">{formatTime((timeLeftMs ?? 0) / 1000)}</span>
+          </p>
+        </Tooltip>
+      )}
+      <p className="text-xs font-bold opacity-80">
+        {EmpireEnumToConfig[turn.empire as EEmpire].name}'s Turn in <span className="text-secondary">{timeLeft}</span>
+      </p>
       {showBlockchainUnits.enabled && !!blocksLeft && (
         <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
+      )}
+      {invert && (
+        <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
+          <p className={cn("opacity-90", small ? "text-xs" : "text-sm")}>
+            Round ends in <span className="text-accent">{formatTime((timeLeftMs ?? 0) / 1000)}</span>
+          </p>
+        </Tooltip>
       )}
     </div>
   );
