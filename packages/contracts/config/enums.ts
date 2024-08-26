@@ -41,6 +41,7 @@ export enum EOverride {
   CreateShip = 1,
   ChargeShield,
   PlaceMagnet,
+  PlaceAcid,
   DetonateShieldEater,
   AirdropGold,
   LENGTH,

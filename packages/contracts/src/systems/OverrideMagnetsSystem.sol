@@ -10,7 +10,7 @@ import { LibOverride } from "libraries/LibOverride.sol";
 import { addressToId, pseudorandomEntity } from "src/utils.sol";
 
 /**
- * @title OverrideSystem
+ * @title OverrideMagnetsSystem
  * @dev A contract that handles overrides related to creating and killing ships on a planet.
  */
 contract OverrideMagnetsSystem is EmpiresSystem {
