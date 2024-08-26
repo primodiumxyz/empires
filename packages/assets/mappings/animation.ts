@@ -19,6 +19,8 @@ export const Animations = {
 
   // Citadel
   CitadelCrown: "citadel/crown",
+  // Treasure
+  TreasurePlanet: "planet/treasure",
 
   //VFX --------------------------
 
@@ -50,6 +52,9 @@ export const Animations = {
 
   // Citadel
   CitadelShine: "citadel/shine",
+
+  // Gold
+  GoldAdd: "gold/add",
 };
 
 export type AnimationKeys = keyof typeof Animations;

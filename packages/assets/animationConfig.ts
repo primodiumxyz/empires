@@ -153,7 +153,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/enter",
     assetKey: "sprite-atlas",
-    frameRate: 7,
+    frameRate: 8,
     startFrame: 0,
     endFrame: 13,
     prefix: "sprites/shield-eater/enter/ShieldEater_Enter_",
@@ -162,7 +162,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/exit",
     assetKey: "sprite-atlas",
-    frameRate: 7,
+    frameRate: 8,
     startFrame: 0,
     endFrame: 15,
     prefix: "sprites/shield-eater/exit/ShieldEater_Leave_",
@@ -205,6 +205,16 @@ export const AnimationConfig: Animation[] = [
     endFrame: 14,
     repeat: 0,
     prefix: "sprites/citadel/crown/Citadel_Crown_",
+    suffix: ".png",
+  },
+  {
+    key: "planet/treasure",
+    assetKey: "sprite-atlas",
+    frameRate: 5,
+    startFrame: 0,
+    endFrame: 6,
+    repeat: -1,
+    prefix: "sprites/planet/treasure/Treasure_",
     suffix: ".png",
   },
 
@@ -336,6 +346,15 @@ export const AnimationConfig: Animation[] = [
     startFrame: 0,
     endFrame: 9,
     prefix: "vfx/citadel/Citadel_Shine_",
+    suffix: ".png",
+  },
+  {
+    key: "gold/add",
+    assetKey: "vfx-atlas",
+    frameRate: 5,
+    startFrame: 0,
+    endFrame: 9,
+    prefix: "vfx/gold-add/Gold_Add_",
     suffix: ".png",
   },
 ];
