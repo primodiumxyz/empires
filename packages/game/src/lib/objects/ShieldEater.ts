@@ -91,7 +91,7 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
           this.offsetLocationIdle("offset");
           this.location.play(Animations["ShieldEaterIdle"]);
         });
-      }, 2000);
+      }, 3000);
     } else {
       this.offsetLocationIdle("restore");
       this.location.play(Animations["ShieldEaterExit"]);

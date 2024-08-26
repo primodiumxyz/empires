@@ -153,7 +153,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/enter",
     assetKey: "sprite-atlas",
-    frameRate: 10,
+    frameRate: 7,
     startFrame: 0,
     endFrame: 13,
     prefix: "sprites/shield-eater/enter/ShieldEater_Enter_",
@@ -162,7 +162,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/exit",
     assetKey: "sprite-atlas",
-    frameRate: 10,
+    frameRate: 7,
     startFrame: 0,
     endFrame: 15,
     prefix: "sprites/shield-eater/exit/ShieldEater_Leave_",
@@ -180,7 +180,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/target",
     assetKey: "sprite-atlas",
-    frameRate: 10,
+    frameRate: 5,
     startFrame: 0,
     endFrame: 12,
     randomFrame: true,
