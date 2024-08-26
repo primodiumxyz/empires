@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1724251692219",
+            "image": "atlas.png?timestamp=1724676562900",
             "format": "RGBA8888",
             "size": {
                 "w": 1618,
@@ -2072,7 +2072,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/target/Shield_Target_2.png",
+                    "filename": "sprites/shield-eater/target/Shield_Target_10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4046,7 +4046,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/target/Shield_Target_10.png",
+                    "filename": "sprites/shield-eater/target/Shield_Target_12.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4067,7 +4067,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/target/Shield_Target_9.png",
+                    "filename": "sprites/shield-eater/target/Shield_Target_11.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4088,7 +4088,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/target/Shield_Target_8.png",
+                    "filename": "sprites/shield-eater/target/Shield_Target_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4109,7 +4109,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/target/Shield_Target_7.png",
+                    "filename": "sprites/shield-eater/target/Shield_Target_9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4130,7 +4130,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/target/Shield_Target_6.png",
+                    "filename": "sprites/shield-eater/target/Shield_Target_8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4145,6 +4145,48 @@
                     },
                     "frame": {
                         "x": 249,
+                        "y": 1534,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 332,
+                        "y": 1534,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 332,
                         "y": 1534,
                         "w": 83,
                         "h": 82

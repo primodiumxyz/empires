@@ -143,7 +143,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/idle",
     assetKey: "sprite-atlas",
-    frameRate: 10,
+    frameRate: 5,
     startFrame: 0,
     endFrame: 19,
     repeat: -1,
@@ -153,9 +153,9 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/target",
     assetKey: "sprite-atlas",
-    frameRate: 10,
+    frameRate: 5,
     startFrame: 0,
-    endFrame: 10,
+    endFrame: 12,
     randomFrame: true,
     repeat: -1,
     prefix: "sprites/shield-eater/target/Shield_Target_",
