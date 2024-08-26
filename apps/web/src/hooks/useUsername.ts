@@ -5,9 +5,6 @@ import { formatAddress } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 
-export const REFRESH_INTERVAL = 1000 * 60 * 60 * 24 * 7; // 7 days
-export const NO_TWITTER_REFRESH_INTERVAL = 1000 * 30; //  30 seconds
-
 export const useUsername = (address: Address) => {
   const { utils, tables } = useCore();
 
@@ -21,9 +18,11 @@ export const useUsername = (address: Address) => {
   const time = tables.Time.use();
 
   useMemo(async () => {
+    const refreshInterval = hasTwitter
+      ? utils.usernameSettings.REFRESH_INTERVAL
+      : utils.usernameSettings.NO_TWITTER_REFRESH_INTERVAL;
     const valid = isAddress(address);
-    const shouldRefresh =
-      !localUsername || Date.now() - (lastFetched ?? 0) > (hasTwitter ? REFRESH_INTERVAL : NO_TWITTER_REFRESH_INTERVAL);
+    const shouldRefresh = !localUsername || Date.now() - (lastFetched ?? 0) > refreshInterval;
 
     if (shouldRefresh && valid) {
       await utils.refreshUsername(address, import.meta.env.PRI_ACCOUNT_LINK_VERCEL_URL);
@@ -32,5 +31,8 @@ export const useUsername = (address: Address) => {
     }
   }, [address, time, localUsername, lastFetched, hasTwitter]);
 
-  return { username: localUsername ?? formatAddress(address), hasTwitter };
+  return {
+    username: localUsername ?? formatAddress(address),
+    hasTwitter,
+  };
 };

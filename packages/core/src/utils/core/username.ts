@@ -4,10 +4,9 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tables } from "@core/lib";
 import { formatAddress } from "@core/utils";
 
-export const REFRESH_INTERVAL = 1000 * 60 * 60 * 24 * 7; // 7 days
-export const NO_TWITTER_REFRESH_INTERVAL = 1000 * 30; //  30 seconds
-
 export const createUsernameUtils = (tables: Tables) => {
+  const REFRESH_INTERVAL = 1000 * 60 * 60 * 24 * 7; // 7 days
+  const NO_TWITTER_REFRESH_INTERVAL = 1000 * 60 * 10; // 10 minutes
   const refreshUsername = async (address: Address, accountLinkUrl?: string) => {
     const addressEntity = address as Entity;
     try {
@@ -65,5 +64,6 @@ export const createUsernameUtils = (tables: Tables) => {
   return {
     getUsername,
     refreshUsername,
+    usernameSettings: { REFRESH_INTERVAL, NO_TWITTER_REFRESH_INTERVAL },
   };
 };
