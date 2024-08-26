@@ -143,7 +143,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/idle",
     assetKey: "sprite-atlas",
-    frameRate: 5,
+    frameRate: 10,
     startFrame: 0,
     endFrame: 19,
     repeat: -1,
@@ -153,12 +153,21 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/target",
     assetKey: "sprite-atlas",
-    frameRate: 5,
+    frameRate: 10,
     startFrame: 0,
     endFrame: 12,
     randomFrame: true,
     repeat: -1,
     prefix: "sprites/shield-eater/target/Shield_Target_",
+    suffix: ".png",
+  },
+  {
+    key: "shield-eater/crack",
+    assetKey: "sprite-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 3,
+    prefix: "sprites/shield-eater/crack/Cracks_",
     suffix: ".png",
   },
   {
@@ -296,7 +305,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/enter",
     assetKey: "vfx-atlas",
-    frameRate: 5,
+    frameRate: 10,
     startFrame: 0,
     endFrame: 13,
     prefix: "vfx/shield-eater/enter/ShieldEater_Enter_",
@@ -305,7 +314,7 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/exit",
     assetKey: "vfx-atlas",
-    frameRate: 5,
+    frameRate: 10,
     startFrame: 0,
     endFrame: 15,
     prefix: "vfx/shield-eater/exit/ShieldEater_Leave_",
@@ -314,20 +323,10 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/detonate",
     assetKey: "vfx-atlas",
-    frameRate: 5,
+    frameRate: 10,
     startFrame: 0,
     endFrame: 14,
     prefix: "vfx/shield-eater/detonate/ShieldEater_Detonate_",
-    suffix: ".png",
-  },
-  {
-    key: "shield-eater/crack",
-    assetKey: "vfx-atlas",
-    frameRate: 5,
-    startFrame: 0,
-    endFrame: 3,
-    zeroPad: 3,
-    prefix: "vfx/shield-eater/crack/Cracks_",
     suffix: ".png",
   },
   {

@@ -1,5 +1,5 @@
 import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
-import { EEmpire } from "@primodiumxyz/contracts";
+import { EDirection, EEmpire } from "@primodiumxyz/contracts";
 import { calculateAngleBetweenPoints, entityToPlanetName, formatNumber, lerp } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -176,7 +176,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       }, 10_000);
     }
 
-    this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
+    this.shieldEater = new ShieldEater(scene, id, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
       DepthLayers.ShieldEater,
     );
 
@@ -200,7 +200,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
-    this.scene.add.existing(this.shieldEater);
     if (this.citadelCrown) this.scene.add.existing(this.citadelCrown);
     if (this.citadelAsteroidBelt) this.scene.add.existing(this.citadelAsteroidBelt);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
@@ -428,24 +427,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   setShieldEaterLocation(present: boolean): ShieldEater["location"] {
-    const location = this.shieldEater.setShieldEaterLocation(present, this.playAnims);
-    if (!this.playAnims) return location;
-
-    if (present) {
-      this.shieldEater.setDepth(DepthLayers.Planet - 1);
-
-      location.on(
-        "animationupdate",
-        (animation: Phaser.Animations.Animation, frame: Phaser.Animations.AnimationFrame) => {
-          if (frame.index === 9) {
-            this.shieldEater.setDepth(DepthLayers.ShieldEater);
-            location.off("animationupdate");
-          }
-        },
-      );
-    }
-
-    return location;
+    return this.shieldEater.setShieldEaterLocation(present, this.playAnims);
   }
 
   setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater["destination"] {
@@ -456,8 +438,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     return this.shieldEater.shieldEaterDetonate();
   }
 
-  shieldEaterCrack(): ShieldEater {
-    return this.shieldEater.shieldEaterCrack();
+  shieldEaterCrack(direction: EDirection): ShieldEater {
+    return this.shieldEater.shieldEaterCrack(direction);
   }
 
   citadelShine(): void {

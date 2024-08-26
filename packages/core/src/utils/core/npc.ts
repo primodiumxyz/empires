@@ -91,7 +91,7 @@ export const createNpcUtils = (tables: Tables) => {
     const planetData = tables.Planet.get(planetId);
     if (!planetData) return 0;
 
-    const neighbors: Entity[] = getAllNeighbors(planetId);
+    const neighbors: Entity[] = getAllNeighbors(planetId).map(({ entity }) => entity);
     if (neighbors.length === 0) return 1;
 
     const enemyStrengths = neighbors.reduce(
@@ -200,7 +200,7 @@ export const createNpcUtils = (tables: Tables) => {
     const planetData = tables.Planet.get(planetId);
     if (!planetData || planetData.empireId === 0) return { target: undefined, multiplier: 0 };
 
-    const allNeighbors = getAllNeighbors(planetId);
+    const allNeighbors = getAllNeighbors(planetId).map(({ entity }) => entity);
     if (allNeighbors.length === 0) return { target: undefined, multiplier: 0 };
 
     const enemyNeighbors = allNeighbors.filter((neighbor) => {
@@ -258,7 +258,7 @@ export const createNpcUtils = (tables: Tables) => {
     const planetData = tables.Planet.get(planetId);
     if (!planetData || planetData.empireId === 0) return { target: undefined, multiplier: 0 };
 
-    const allNeighbors = getAllNeighbors(planetId);
+    const allNeighbors = getAllNeighbors(planetId).map(({ entity }) => entity);
     if (allNeighbors.length === 0) return { target: undefined, multiplier: 0 };
 
     const allyNeighbors = allNeighbors.filter((neighbor) => {
@@ -316,12 +316,13 @@ export const createNpcUtils = (tables: Tables) => {
    * Note: This function should be moved to a more general utils file in the future,
    * as it's not specific to NPC behavior and could be useful in other contexts.
    */
-  const getAllNeighbors = (planetId: Entity): Entity[] => {
+  const getAllNeighbors = (planetId: Entity): { entity: Entity; direction: EDirection }[] => {
     const planetData = tables.Planet.get(planetId);
     const allPlanets = tables.Keys_PlanetsSet.get()?.itemKeys.map((planet) => {
       return { planetId: planet, ...tables.Planet.get(planet as Entity)! };
     });
     if (!planetData || !allPlanets) return [];
+
     return [
       EDirection.East,
       EDirection.Southeast,
@@ -335,9 +336,9 @@ export const createNpcUtils = (tables: Tables) => {
         const neighbor = allPlanets.find((planet) => {
           return Number(planet.q) === coords.q && Number(planet.r) === coords.r;
         });
-        return neighbor?.planetId;
+        return { entity: neighbor?.planetId, direction };
       })
-      .filter((planetId): planetId is Entity => planetId !== undefined);
+      .filter(({ entity }) => entity !== undefined) as { entity: Entity; direction: EDirection }[];
   };
 
   const getDirectionWeights = (planetId: Entity, radius: number = 2): Record<EDirection, number> => {
