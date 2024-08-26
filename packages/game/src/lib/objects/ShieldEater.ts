@@ -65,12 +65,10 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
   setShieldEaterLocation(present: boolean, playAnims: boolean) {
     if (!playAnims && present) {
       this.location.setActive(true).setVisible(true);
-      this.offsetLocationEnter("restore");
       this.location.play(Animations["ShieldEaterIdle"]);
       return this.location;
     } else if (!playAnims && !present) {
       this.location.setActive(false).setVisible(false);
-      this.offsetLocationExit("restore");
       return this.location;
     }
 
@@ -78,7 +76,6 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
       setTimeout(() => {
         this.location.setActive(true).setVisible(true);
         this.location.setDepth(DepthLayers.Planet - 1);
-        this.offsetLocationEnter("offset");
 
         this.location.play(Animations["ShieldEaterEnter"]);
         this.location.on(
@@ -91,18 +88,15 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
           },
         );
         this.location.once("animationcomplete", () => {
-          this.offsetLocationEnter("restore");
           this.offsetLocationIdle("offset");
           this.location.play(Animations["ShieldEaterIdle"]);
         });
       }, 2000);
     } else {
-      this.offsetLocationExit("offset");
       this.offsetLocationIdle("restore");
       this.location.play(Animations["ShieldEaterExit"]);
       this.location.once("animationcomplete", () => {
         this.location.setActive(false).setVisible(false);
-        this.offsetLocationExit("restore");
       });
     }
 
@@ -123,9 +117,13 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
   }
 
   shieldEaterDetonate() {
-    this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y }, "ShieldEaterDetonate", {
-      depth: DepthLayers.ShieldEater,
-      blendMode: Phaser.BlendModes.ADD,
+    this.offsetLocationIdle("restore");
+    this.location.play(Animations["ShieldEaterDetonate"]);
+    this.location.once("animationcomplete", () => {
+      this.location.play(Animations["ShieldEaterExit"]);
+      this.location.once("animationcomplete", () => {
+        this.location.setActive(false).setVisible(false);
+      });
     });
 
     return this;
@@ -141,11 +139,18 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
 
     setTimeout(() => {
       this.crack.setActive(true).setVisible(true);
+      this.crack.setAlpha(1);
       this.crack.play(Animations["ShieldEaterCrack"]);
       this.crack.once("animationcomplete", () => {
-        setTimeout(() => {
-          this.crack.setActive(false).setVisible(false);
-        }, 2000);
+        this.scene.tweens.add({
+          targets: this.crack,
+          alpha: 0,
+          duration: 2000,
+          ease: "Linear",
+          onComplete: () => {
+            this.crack.setActive(false).setVisible(false);
+          },
+        });
       });
     }, this.crackDelay);
 
@@ -207,29 +212,5 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
       this.location.setX(this.coord.x + OFFSET_X);
       this.location.setY(this.coord.y + OFFSET_Y);
     }
-  }
-
-  private offsetLocationEnter(type: "offset" | "restore") {
-    // const offsetX = this.coord.x - 26.5;
-    // const offsetY = this.coord.y + 6;
-    // if (type === "offset") {
-    //   this.location.setX(offsetX);
-    //   this.location.setY(offsetY);
-    // } else {
-    //   this.location.setX(this.coord.x);
-    //   this.location.setY(this.coord.y);
-    // }
-  }
-
-  private offsetLocationExit(type: "offset" | "restore") {
-    // const offsetX = this.coord.x - 97.5;
-    // const offsetY = this.coord.y - 18.5;
-    // if (type === "offset") {
-    //   this.location.setX(offsetX);
-    //   this.location.setY(offsetY);
-    // } else {
-    //   this.location.setX(this.coord.x);
-    //   this.location.setY(this.coord.y);
-    // }
   }
 }
