@@ -1,6 +1,12 @@
 import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
-import { calculateAngleBetweenPoints, entityToPlanetName, formatNumber, lerp } from "@primodiumxyz/core";
+import {
+  calculateAngleBetweenPoints,
+  entityToPlanetName,
+  formatNumber,
+  lerp,
+  TREASURE_PLANET_GOLD_TRESHOLD,
+} from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { allEmpires, DepthLayers } from "@game/lib/constants/common";
@@ -38,6 +44,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private activeMagnets: Map<EEmpire, number> = new Map();
   private magnetWaves: Phaser.GameObjects.Sprite;
   private shieldEater: ShieldEater;
+  private treasurePlanetDecoration: Phaser.GameObjects.Sprite;
   private citadelCrown: Phaser.GameObjects.Sprite | null = null;
   private citadelAsteroidBelt: Phaser.GameObjects.Sprite | null = null;
   private citadelShineInterval: NodeJS.Timeout | null = null;
@@ -157,10 +164,21 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
+    this.treasurePlanetDecoration = new Phaser.GameObjects.Sprite(
+      scene.phaserScene,
+      coord.x,
+      coord.y - 35,
+      Assets.SpriteAtlas,
+    )
+      .setBlendMode(Phaser.BlendModes.NORMAL)
+      .setDepth(DepthLayers.Planet + 1)
+      .setActive(false)
+      .setVisible(false);
+
     if (citadel) {
       this.citadelCrown = new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y - 75, Assets.SpriteAtlas)
         .setOrigin(0.5, 0.5)
-        .setDepth(DepthLayers.Planet + 1)
+        .setDepth(DepthLayers.Citadel)
         .play(Animations.CitadelCrown);
 
       this.citadelAsteroidBelt = new Phaser.GameObjects.Sprite(
@@ -169,7 +187,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         coord.y - 30,
         Assets.SpriteAtlas,
         Sprites.CitadelAsteroidBelt,
-      ).setDepth(DepthLayers.Planet + 1);
+      ).setDepth(DepthLayers.Citadel);
 
       this.citadelShineInterval = setInterval(() => {
         this.citadelShine();
@@ -204,6 +222,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     if (this.citadelAsteroidBelt) this.scene.add.existing(this.citadelAsteroidBelt);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     this.scene.add.existing(this.magnetWaves);
+    this.scene.add.existing(this.treasurePlanetDecoration);
     return this;
   }
 
@@ -225,6 +244,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
     this.shieldEater.setScale(scale);
+    this.treasurePlanetDecoration.setScale(scale);
     return this;
   }
 
@@ -387,6 +407,13 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         fractionDigits: 2,
       }),
     );
+
+    if (count >= TREASURE_PLANET_GOLD_TRESHOLD) {
+      this.treasurePlanetDecoration.setVisible(true).setActive(true);
+      this.treasurePlanetDecoration.play(Animations.TreasurePlanet);
+    } else {
+      this.treasurePlanetDecoration.setVisible(false).setActive(false);
+    }
   }
 
   setMagnet(empire: EEmpire, turns: number) {
