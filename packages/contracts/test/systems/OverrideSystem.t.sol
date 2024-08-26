@@ -9,7 +9,7 @@ import { PlayersMap } from "adts/PlayersMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
-import { EEmpire, EOverride } from "codegen/common.sol";
+import { EEmpire, EOverride, EDirection } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { addressToId, coordToId } from "src/utils.sol";
@@ -338,7 +338,7 @@ contract OverrideSystemTest is PrimodiumTest {
    *************************************************************************/
 
   function testDetonateShieldEaterCharged() public {
-    uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 2;
+    uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 5;
 
     vm.startPrank(creator);
     LibShieldEater.initialize();
@@ -347,22 +347,18 @@ contract OverrideSystemTest is PrimodiumTest {
       LibShieldEater.update();
     }
 
-    PlanetData memory currentPlanet = Planet.get(ShieldEater.getCurrentPlanet());
-    CoordData memory current = CoordData(currentPlanet.q, currentPlanet.r);
-    planetId = coordToId(current.q, current.r);
+    planetId = ShieldEater.getCurrentPlanet();
+    bytes32 neighborId;
 
-    CoordData memory neighbor = CoordData(currentPlanet.q + 1, currentPlanet.r);
-    bytes32 neighborId = coordToId(neighbor.q, neighbor.r);
-    uint256 dirAttempts = 1;
+    for (uint256 i = 2; i < uint256(EDirection.LENGTH); i++) {
+      // get the neighbor
+      neighborId = LibShieldEater.getNeighbor(planetId, EDirection(i));
 
-    while (!Planet.getIsPlanet(neighborId)) {
-      if (dirAttempts > 6) {
+      // if neighbor is a planet
+      if (Planet.getIsPlanet(neighborId)) {
         break;
       }
-      neighbor = LibShieldEater.rotateTargetDirection(neighbor);
-      dirAttempts++;
     }
-    neighborId = coordToId(neighbor.q, neighbor.r);
 
     uint256 planetShields = Planet.getShieldCount(planetId);
     uint256 neighborShields = Planet.getShieldCount(neighborId);

@@ -43,6 +43,7 @@ export const worldInput = {
         detonateCenterDamage: "uint256", // percentage, out of 10000
         detonateAdjacentDamage: "uint256", // percentage, out of 10000
         detonationThreshold: "uint256",
+        retargetMaxThreshold: "uint256",
       },
     },
 
@@ -176,9 +177,12 @@ export const worldInput = {
       key: [],
       schema: {
         currentPlanet: "bytes32",
-        nextPlanet: "bytes32",
         destinationPlanet: "bytes32",
+        retargetPending: "bool",
+        retargetCount: "uint256",
         currentCharge: "uint256",
+        pathIndex: "uint256",
+        path: "bytes32[]",
       },
     },
 

@@ -41,7 +41,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         visitShieldDamage: 1n,
         detonateCenterDamage: scaleMultiplier(1.0),
         detonateAdjacentDamage: scaleMultiplier(0.5),
-        detonationThreshold: 8n,
+        detonationThreshold: 18n,
+        retargetMaxThreshold: 5n,
       },
       P_AcidConfig: {
         acidDuration: 3n,
