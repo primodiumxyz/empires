@@ -101,7 +101,7 @@ const OpenActionLog = () => {
         {Array.from(empires.entries()).map(([id, emp], i) => {
           const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[id] ?? "PlanetGrey");
           return (
-            <Tabs.Button key={emp.name} index={i + 1} className="h-8">
+            <Tabs.Button key={emp.name} index={i + 1} className="-mb-[1px] h-8">
               <img src={spriteUrl} className="w-4" />
             </Tabs.Button>
           );
