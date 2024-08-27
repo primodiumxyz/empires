@@ -377,6 +377,21 @@ export const useMostRecentOverride = () => {
         });
       },
     });
+    const placeAcidSub = tables.PlaceAcidOverrideLog.watch({
+      onChange: ({ entity }) => {
+        const action = tables.PlaceAcidOverrideLog.get(entity)!;
+        const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
+        setOverride({
+          empireId: empire as EEmpire,
+          timestamp: action.timestamp,
+          element: (
+            <div className="text-xs">
+              {getPlayerSpan(action.playerId)} placed acid rain on {getPlanetSpan(action.planetId as Entity)}
+            </div>
+          ),
+        });
+      },
+    });
     const airdropGoldSub = tables.AirdropGoldOverrideLog.watch({
       onChange: ({ entity }) => {
         const action = tables.AirdropGoldOverrideLog.get(entity)!;
@@ -398,6 +413,7 @@ export const useMostRecentOverride = () => {
       chargeShieldsSub();
       placeMagnetSub();
       detonateShieldEaterSub();
+      placeAcidSub();
       airdropGoldSub();
     };
   }, []);
