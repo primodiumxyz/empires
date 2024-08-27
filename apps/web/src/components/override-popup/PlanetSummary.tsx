@@ -22,6 +22,8 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
   } = useGame();
   const planet = tables.Planet.use(entity)!;
   const hasShieldEater = tables.ShieldEater.use()?.currentPlanet === entity;
+  const { cycles } = useAcidRain(entity, planet.empireId);
+  const hasAcidRain = cycles > 0n;
   const { empireId } = planet;
 
   const moveCrown = [EEmpire.Purple, EEmpire.Pink, EEmpire.Yellow].includes(empireId as EEmpire);
@@ -53,6 +55,17 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
                 className={cn(
                   "absolute left-1/2 -translate-x-1/2 scale-[150%]",
                   hasShieldEater || moveCrown ? "-top-4" : "top-0",
+                )}
+              />
+            )}
+            {hasAcidRain && (
+              <img
+                src={sprite.getSprite("AcidRain")}
+                width={132}
+                height={132}
+                className={cn(
+                  "absolute left-[50%] top-[45%] -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity",
+                  hasAcidRain && "opacity-100",
                 )}
               />
             )}

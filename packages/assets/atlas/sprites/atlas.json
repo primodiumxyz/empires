@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1724750793600",
+            "image": "atlas.png?timestamp=1724781324975",
             "format": "RGBA8888",
             "size": {
                 "w": 2252,
@@ -4757,6 +4757,27 @@
                         "y": 558,
                         "w": 32,
                         "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/acid_rain.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 2092,
+                        "y": 330,
+                        "w": 160,
+                        "h": 110
                     }
                 },
                 {
