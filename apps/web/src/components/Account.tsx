@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { UserIcon } from "@heroicons/react/24/solid";
 import { Address } from "viem";
 
-import { formatAddress, minEth } from "@primodiumxyz/core";
+import { minEth } from "@primodiumxyz/core";
 import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Price } from "@/components/shared/Price";
+import { Username } from "@/components/shared/Username";
 import { useBalance } from "@/hooks/useBalance";
 import { useDripAccount } from "@/hooks/useDripAccount";
 import { cn } from "@/util/client";
@@ -45,7 +46,7 @@ export const _Account = ({ address, className }: { address: Address; className?:
     <div className={cn("min-w-42 flex flex-col text-right text-xs lg:gap-1", className)}>
       <div className="flex w-full flex-row justify-end gap-2">
         <UserIcon className="w-4" />
-        <p className="lg:text-sm">{formatAddress(address)}</p>
+        <Username address={address} />
       </div>
       {dripping ? (
         <p className="text-sm text-accent">Dripping Eth</p>

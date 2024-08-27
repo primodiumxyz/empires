@@ -41,6 +41,7 @@ export enum EOverride {
   CreateShip = 1,
   ChargeShield,
   PlaceMagnet,
+  PlaceAcid,
   DetonateShieldEater,
   AirdropGold,
   LENGTH,
@@ -53,6 +54,13 @@ export enum ERoutine {
   LENGTH,
 }
 
+export enum EShieldEaterDamageType {
+  Eat = 1,
+  Detonate,
+  Collateral,
+  LENGTH,
+}
+
 export const MUDEnums = {
   EEmpire: enumToArray(EEmpire, { skipNull: true }),
   EOrigin: enumToArray(EOrigin),
@@ -60,6 +68,7 @@ export const MUDEnums = {
   EMovement: enumToArray(EMovement),
   ERoutine: enumToArray(ERoutine),
   EOverride: enumToArray(EOverride),
+  EShieldEaterDamageType: enumToArray(EShieldEaterDamageType),
 };
 function enumToArray(enumObj: object, options?: { skipNull?: boolean }): [string] {
   if (options?.skipNull) {

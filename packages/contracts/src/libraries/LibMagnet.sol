@@ -11,7 +11,6 @@ import { EEmpire } from "codegen/common.sol";
  */
 library LibMagnet {
   function removeMagnet(EEmpire _empire, bytes32 _planetId) internal {
-    // todo: remove magnet from planet. remove locked points from player.
     MagnetData memory magnetData = Magnet.get(_empire, _planetId);
     if (!magnetData.isMagnet) return;
 

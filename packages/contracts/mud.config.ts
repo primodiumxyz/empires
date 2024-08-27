@@ -14,6 +14,7 @@ export const worldInput = {
   systems: {
     UpdateCombatSubsystem: { openAccess: false },
     UpdateEmpiresSubsystem: { openAccess: false },
+    UpdateAcidSubsystem: { openAccess: false },
     UpdateMagnetsSubsystem: { openAccess: false },
     UpdatePriceSubsystem: { openAccess: false },
     UpdateShieldEaterSubsystem: { openAccess: false },
@@ -42,6 +43,7 @@ export const worldInput = {
         detonateCenterDamage: "uint256", // percentage, out of 10000
         detonateAdjacentDamage: "uint256", // percentage, out of 10000
         detonationThreshold: "uint256",
+        retargetMaxThreshold: "uint256",
       },
     },
 
@@ -75,6 +77,14 @@ export const worldInput = {
       key: [],
       schema: {
         lockedPointsPercent: "uint256", // out of 10000
+      },
+    },
+
+    P_AcidConfig: {
+      key: [],
+      schema: {
+        acidDuration: "uint256",
+        acidDamagePercent: "uint256", // out of 10000
       },
     },
 
@@ -167,9 +177,12 @@ export const worldInput = {
       key: [],
       schema: {
         currentPlanet: "bytes32",
-        nextPlanet: "bytes32",
         destinationPlanet: "bytes32",
+        retargetPending: "bool",
+        retargetCount: "uint256",
         currentCharge: "uint256",
+        pathIndex: "uint256",
+        path: "bytes32[]",
       },
     },
 
@@ -256,6 +269,23 @@ export const worldInput = {
         endTurn: "uint256",
         planetIds: "bytes32[]",
       },
+    },
+
+    /* ----------------------------- Acid ---------------------------- */
+
+    Keys_AcidPlanetsSet: {
+      key: ["empireId"],
+      schema: { empireId: "EEmpire", itemKeys: "bytes32[]" },
+    },
+
+    Meta_AcidPlanetsSet: {
+      key: ["empireId", "planetId"],
+      schema: { empireId: "EEmpire", planetId: "bytes32", stored: "bool", index: "uint256" },
+    },
+
+    Value_AcidPlanetsSet: {
+      key: ["empireId", "planetId"],
+      schema: { empireId: "EEmpire", planetId: "bytes32", value: "uint256" },
     },
 
     /* ----------------------------- Offchain Tables ---------------------------- */
@@ -391,6 +421,20 @@ export const worldInput = {
       type: "offchainTable",
     },
 
+    PlaceAcidOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
+        planetId: "bytes32",
+        ethSpent: "uint256",
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
     ShieldEaterDetonateOverrideLog: {
       key: ["id"],
       schema: {
@@ -418,6 +462,17 @@ export const worldInput = {
         timestamp: "uint256",
       },
       type: "offchainTable",
+    },
+
+    // Override impact logs
+    ShieldEaterDamageOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        shieldsDestroyed: "uint256",
+        damageType: "EShieldEaterDamageType",
+      },
     },
 
     /* ----------------------------- Historical data ---------------------------- */

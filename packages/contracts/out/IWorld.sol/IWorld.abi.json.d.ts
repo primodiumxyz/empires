@@ -371,6 +371,19 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__placeAcid",
+    "inputs": [
+      {
+        "name": "_planetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__placeMagnet",
     "inputs": [
       {
@@ -420,6 +433,13 @@ declare const abi: [
   {
     "type": "function",
     "name": "Empires__unpause",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__updateAcid",
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
