@@ -217,6 +217,33 @@ export const AnimationConfig: Animation[] = [
     prefix: "sprites/planet/treasure/Treasure_",
     suffix: ".png",
   },
+  {
+    key: "acid-rain/enter",
+    assetKey: "sprite-atlas",
+    frameRate: 5,
+    startFrame: 0,
+    endFrame: 4,
+    prefix: "sprites/acid-rain/enter/AcidRain_Enter_",
+    suffix: ".png",
+  },
+  {
+    key: "acid-rain/exit",
+    assetKey: "sprite-atlas",
+    frameRate: 5,
+    startFrame: 0,
+    endFrame: 3,
+    prefix: "sprites/acid-rain/exit/AcidRain_Fade_",
+    suffix: ".png",
+  },
+  {
+    key: "acid-rain/idle/large",
+    assetKey: "sprite-atlas",
+    frameRate: 3,
+    startFrame: 0,
+    endFrame: 2,
+    prefix: "sprites/acid-rain/idle/large/AcidRain_Large_",
+    suffix: ".png",
+  },
 
   /* ----------------------------------- VFX ---------------------------------- */
   {

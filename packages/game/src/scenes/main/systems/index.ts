@@ -1,5 +1,6 @@
 import { Core } from "@primodiumxyz/core";
 import { GlobalApi } from "@game/api/global";
+import { renderAcidRain } from "@game/scenes/main/systems/renderAcidRain";
 import { renderGameState } from "@game/scenes/main/systems/renderGameState";
 import { renderMagnets } from "@game/scenes/main/systems/renderMagnets";
 import { renderOverrideFloatingText } from "@game/scenes/main/systems/renderOverrideFloatingText";
@@ -17,4 +18,5 @@ export const runSystems = (scene: PrimodiumScene, game: GlobalApi, core: Core) =
   renderOverrideFloatingText(scene, core, game.queue);
   renderMagnets(scene, core);
   renderShieldEater(scene, core);
+  renderAcidRain(scene, core);
 };
