@@ -85,7 +85,7 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
         const delay =
           current.damageType === EShieldEaterDamageType.Eat
             ? // delay until shield eater bites planet
-              2200
+              3000
             : current.damageType === EShieldEaterDamageType.Detonate
               ? 1000
               : // EShieldEaterDamageType.Collateral
