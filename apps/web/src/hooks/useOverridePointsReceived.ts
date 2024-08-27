@@ -25,13 +25,13 @@ export const useOverridePointsReceived = (
       return {
         targetEmpire: empireImpacted,
         impactedEmpires: [empireImpacted],
-        value: overrideCount * BigInt(empires.size - 1) * pointUnit,
+        value: overrideCount * BigInt(empires.size - 1) * pointUnit * config.pointMultiplier,
       };
     } else {
       return {
         targetEmpire: empireImpacted,
         impactedEmpires: [...empires.keys()].filter((empire) => empire !== empireImpacted),
-        value: overrideCount * pointUnit,
+        value: overrideCount * pointUnit * (config?.pointMultiplier ?? 1n),
       };
     }
   }, [config, pointUnit, overrideCount, empireImpacted, empires]);
