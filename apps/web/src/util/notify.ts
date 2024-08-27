@@ -28,7 +28,7 @@ type WithTransactionStatusOptions = ToastOptions & {
 
 const baseOptions = { isLoading: false, autoClose: 3000 };
 export const withTransactionStatus = (
-  fn: () => Promise<TxReceipt>,
+  fn: () => Promise<TxReceipt | { success: boolean; error?: string }>,
   toastOptions: WithTransactionStatusOptions = { position: "bottom-left" },
 ) => {
   const loadingMsg = toastOptions.loading ?? "Executing transaction...";

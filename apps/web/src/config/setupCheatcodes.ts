@@ -1,4 +1,4 @@
-import { Address, Hex } from "viem";
+import { Address, Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
@@ -24,6 +24,7 @@ export const CheatcodeToBg: Record<string, string> = {
   utils: "bg-green-500/10",
   magnet: "bg-purple-900/10",
   shieldEater: "bg-purple-400/10",
+  acidRain: "bg-purple-900/10",
   config: "bg-gray-500/10",
 };
 
@@ -166,13 +167,13 @@ export const setupCheatcodes = (options: {
       const toPlanetData = tables.Planet.get(toEntity);
       if (!fromPlanetData || !toPlanetData) {
         console.log("[CHEATCODE] Send ships: invalid planets");
-        return false;
+        return { success: false, error: "Invalid planets" };
       }
 
       const shipsToMove = fromPlanetData.shipCount ?? BigInt(0);
       if (shipsToMove === BigInt(0)) {
         console.log("[CHEATCODE] Send ships: no ships to send");
-        return false;
+        return { success: false, error: "No ships to send" };
       }
 
       let devOps: TableOperation[] = [
@@ -199,7 +200,7 @@ export const setupCheatcodes = (options: {
 
         if (conquer) {
           const successA = await devCalls.batch(devOps);
-          if (!successA) return false;
+          if (!successA) return { success: false, error: "Failed to send ships" };
 
           const successB = (
             await Promise.all([
@@ -213,16 +214,14 @@ export const setupCheatcodes = (options: {
             ])
           ).every(Boolean);
 
-          return successB;
+          return { success: successB, error: "Failed to send ships" };
         }
 
-        const success = await devCalls.setProperties({
+        return await devCalls.setProperties({
           table: tables.Planet,
           keys: { id: toEntity },
           properties: { shipCount: remainingShips },
         });
-
-        return success;
       }
     },
     loading: () => "[CHEATCODE] Sending ships...",
@@ -386,7 +385,11 @@ export const setupCheatcodes = (options: {
     error: ({ planet, empire }) => `Failed to set empire to ${empire.value} for ${planet.value}`,
   });
 
-  const setEmpirePlayerPoints = async (playerId: Entity, empireId: EEmpire, value: bigint): Promise<boolean> => {
+  const setEmpirePlayerPoints = async (
+    playerId: Entity,
+    empireId: EEmpire,
+    value: bigint,
+  ): Promise<TxReceipt | { success: boolean; error?: string }> => {
     try {
       let devOps: TableOperation[] = [];
 
@@ -447,7 +450,7 @@ export const setupCheatcodes = (options: {
       return await devCalls.batch(devOps);
     } catch (e) {
       console.log(e);
-      return false;
+      return { success: false, error: "Failed to set points" };
     }
   };
 
@@ -499,7 +502,7 @@ export const setupCheatcodes = (options: {
         }),
       ]);
 
-      return success.every(Boolean);
+      return { success: success.every(Boolean), error: "Failed to give points" };
     },
     loading: () => "[CHEATCODE] Giving points...",
     success: ({ amount, recipient, empire }) =>
@@ -557,8 +560,7 @@ export const setupCheatcodes = (options: {
     },
     execute: async ({ amount }) => {
       const success = await _advanceTurns(amount.value);
-
-      return success;
+      return { success: success, error: "Failed to advance turns" };
     },
     loading: () => "[CHEATCODE] Advancing turns...",
     success: ({ amount }) => `Advanced ${amount.value} turns`,
@@ -624,7 +626,7 @@ export const setupCheatcodes = (options: {
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
-      const receipt = await requestDrip?.(accountClient.playerAccount.address, true);
+      const receipt = await requestDrip?.(playerAccount.address, true);
       return receipt ?? { success: false, error: "Failed to drip eth" };
     },
     success: () => `Dripped eth to player account`,
@@ -877,7 +879,7 @@ export const setupCheatcodes = (options: {
   const feedShieldEater = createCheatcode({
     title: "Feed shield eater",
     bg: CheatcodeToBg["shieldEater"],
-    caption: "Shield eater",
+    caption: "set ready to detonate",
     inputs: {},
     execute: async () => {
       const threshold = tables.P_ShieldEaterConfig.get()?.detonationThreshold ?? BigInt(0);
@@ -890,6 +892,69 @@ export const setupCheatcodes = (options: {
     loading: () => "[CHEATCODE] Feeding shield eater...",
     success: () => `Shield eater ready to detonate`,
     error: () => `Failed to feed shield eater`,
+  });
+
+  /* -------------------------------- ACID RAIN ------------------------------- */
+  // TODO: make it work
+  // remove acid rain from planet
+  const removeAcidRain = createCheatcode({
+    title: "Remove acid rain",
+    bg: CheatcodeToBg["acidRain"],
+    caption: "from planet",
+    inputs: {
+      planet: {
+        label: "Planet",
+        inputType: "string",
+        defaultValue: entityToPlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+      },
+    },
+    execute: async ({ planet }) => {
+      const planetId = planet.id as Entity;
+      const empireId = tables.Planet.get(planetId)?.empireId;
+
+      if (!empireId) return { success: true };
+      if (!tables.Meta_AcidPlanetsSet.hasWithKeys({ empireId, planetId })) return { success: true };
+
+      let devOps: TableOperation[] = [];
+
+      if (tables.Keys_AcidPlanetsSet.getWithKeys({ empireId })?.itemKeys.length === 1) {
+        devOps = [
+          devCalls.createRemove({ table: tables.Meta_AcidPlanetsSet, keys: { empireId, planetId } }),
+          devCalls.createRemove({ table: tables.Value_AcidPlanetsSet, keys: { empireId, planetId } }),
+          devCalls.createRemove({ table: tables.Keys_AcidPlanetsSet, keys: { empireId } }),
+        ];
+      } else {
+        const index = tables.Meta_AcidPlanetsSet.getWithKeys({ empireId, planetId })?.index;
+        const currElems = tables.Keys_AcidPlanetsSet.getWithKeys({ empireId })?.itemKeys ?? [];
+        if (!index || currElems.length === 0) return { success: true };
+        const replacement = currElems[currElems.length - 1];
+
+        // update replacement data
+        currElems[Number(index)] = replacement;
+        currElems.pop();
+
+        devOps = [
+          devCalls.createSetProperties({
+            table: tables.Keys_AcidPlanetsSet,
+            keys: { empireId },
+            properties: { itemKeys: currElems },
+          }),
+          devCalls.createSetProperties({
+            table: tables.Meta_AcidPlanetsSet,
+            keys: { empireId, planetId: replacement },
+            properties: { stored: true, index: BigInt(index) },
+          }),
+          devCalls.createRemove({ table: tables.Meta_AcidPlanetsSet, keys: { empireId, planetId } }),
+          devCalls.createRemove({ table: tables.Value_AcidPlanetsSet, keys: { empireId, planetId } }),
+        ];
+      }
+
+      return await devCalls.batch(devOps);
+    },
+    loading: () => "[CHEATCODE] Removing acid rain...",
+    success: () => `Acid rain removed`,
+    error: () => `Failed to remove acid rain`,
   });
 
   /* --------------------------------- CONFIG --------------------------------- */
@@ -1088,6 +1153,7 @@ export const setupCheatcodes = (options: {
     moveShieldEater,
     setShieldEaterDestination,
     feedShieldEater,
+    removeAcidRain,
     withdrawRake,
     ...Object.values(updateGameConfig),
   ];

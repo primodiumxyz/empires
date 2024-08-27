@@ -134,7 +134,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
         <Tabs.Pane index={4} className="w-full items-center gap-4">
           <Header
             title={"Acid Rain"}
-            description={"Acid Rain decays ships by 20% each cycle"}
+            description={"Acid Rain decays ships by 20% each turn"}
             planetName={entityToPlanetName(selectedPlanet)}
           />
           <AcidRainContent entity={selectedPlanet} />
