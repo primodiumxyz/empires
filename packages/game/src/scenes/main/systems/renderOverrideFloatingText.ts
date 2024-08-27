@@ -1,3 +1,4 @@
+import { EShieldEaterDamageType } from "@primodiumxyz/contracts";
 import { Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { StaggerQueue } from "@game/lib/utils/createStaggerQueue";
@@ -52,6 +53,50 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
     { runOnInit: false },
   );
 
+  const shieldsDestroyed = (planetId: Entity, shieldsDestroyed: bigint, delay?: number) => {
+    const planet = scene.objects.planet.get(planetId);
+    if (!planet) return;
+
+    enqueue(() => {
+      scene.audio.play("Demolish", "sfx", { volume: 0.25, delay: delay ?? 500 });
+      scene.fx.emitFloatingText(
+        { x: planet.coord.x, y: planet.coord.y - 20 },
+        `-${shieldsDestroyed.toLocaleString()}`,
+        {
+          icon: "Shield",
+          color: "#ff0000",
+          // blue background
+          fillStyle: {
+            color: 0x112344,
+            alpha: 0.75,
+          },
+          delay: delay ?? 500,
+        },
+      );
+    }, 50);
+  };
+
+  tables.ShieldEaterDamageOverrideLog.watch(
+    {
+      world: systemsWorld,
+      onEnter: ({ properties: { current } }) => {
+        if (!current) return;
+
+        const delay =
+          current.damageType === EShieldEaterDamageType.Eat
+            ? // delay until shield eater bites planet
+              3000
+            : current.damageType === EShieldEaterDamageType.Detonate
+              ? 1000
+              : // EShieldEaterDamageType.Collateral
+                1200;
+
+        shieldsDestroyed(current.planetId as Entity, current.shieldsDestroyed, delay);
+      },
+    },
+    { runOnInit: false },
+  );
+
   tables.AcidDamageOverrideLog.watch(
     {
       world: systemsWorld,
@@ -79,6 +124,4 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
     },
     { runOnInit: false },
   );
-
-  // TODO: shield eater minus shields on both planet detonated & surrounding planets
 };

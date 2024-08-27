@@ -474,6 +474,16 @@ export const worldInput = {
       },
     },
 
+    ShieldEaterDamageOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        shieldsDestroyed: "uint256",
+        damageType: "EShieldEaterDamageType",
+      },
+    },
+
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {
