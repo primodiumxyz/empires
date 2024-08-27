@@ -138,7 +138,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
 
         if (!planet) return;
 
-        enqueue(() => {
+        enqueue(async () => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
 
           scene.fx.emitVfx({ x: planet.coord.x + 5, y: planet.coord.y - 45 }, "GoldAdd", {
@@ -146,18 +146,18 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
             blendMode: Phaser.BlendModes.NORMAL,
           });
 
-          setTimeout(() => {
-            scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
-              icon: "Gold",
-              fontSize: 16,
-              iconSize: 20,
-              borderStyle: {
-                alpha: 0.75,
-                width: 2,
-                color: 0xffd700,
-              },
-            });
-          }, 250);
+          await sleep(1000);
+
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
+            icon: "Gold",
+            fontSize: 16,
+            iconSize: 20,
+            borderStyle: {
+              alpha: 0.75,
+              width: 2,
+              color: 0xffd700,
+            },
+          });
         }, 250);
       },
     },
