@@ -1,10 +1,11 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Address } from "viem";
+import { Address, Hex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToPlanetName, formatAddress, formatNumber } from "@primodiumxyz/core";
+import { entityToAddress, entityToPlanetName, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Username } from "@/components/shared/Username";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const useActions = (
@@ -42,7 +43,11 @@ export const useActions = (
     [],
   );
 
-  const getPlayerSpan = (playerId: Address) => <span className="text-yellow-400">{formatAddress(playerId, true)}</span>;
+  const getPlayerSpan = (playerId: Entity | Hex) => (
+    <span className="text-yellow-400">
+      <Username address={entityToAddress(playerId)} />
+    </span>
+  );
   useEffect(() => {
     if (debouncedIn > Date.now()) return;
     setDebouncedIn(Date.now() + 1000);
@@ -255,7 +260,11 @@ export const useMostRecentOverride = () => {
     return <span className={colorClass}>{entityToPlanetName(planetId)}</span>;
   };
 
-  const getPlayerSpan = (playerId: Address) => <span className="text-yellow-400">{formatAddress(playerId, true)}</span>;
+  const getPlayerSpan = (playerId: Address) => (
+    <span className="text-yellow-400">
+      <Username address={entityToAddress(playerId)} />
+    </span>
+  );
 
   // populate initial state
   useEffect(() => {

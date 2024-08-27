@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { ConnectedWallet, usePrivy, useWallets } from "@privy-io/react-auth";
 import { toast } from "react-toastify";
 import { Address, EIP1193Provider, Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
@@ -57,23 +57,24 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
   const [playerAccount, setPlayerAccount] = useState<ExternalAccount | LocalAccount | null>(null);
   const [providerType, setProviderType] = useState<ProviderType | null>(null);
 
-  const getTransport = useCallback(async () => {
-    if (!privyReady) return null;
-    if (wallets.length == 0) {
-      return;
-    }
-    const wallet = wallets[0];
+  const getTransport = useCallback(
+    async (wallet: ConnectedWallet) => {
+      if (!privyReady) return null;
 
-    await wallet.switchChain(core.config.chain.id);
-    return await wallet.getEthereumProvider();
-  }, [privyReady, wallets, core.config.chain.id]);
+      await wallet.switchChain(core.config.chain.id);
+      if (!wallet.linked) await wallet.loginOrLink();
+      return await wallet.getEthereumProvider();
+    },
+    [privyReady, wallets, core.config.chain.id],
+  );
 
   const createPrivy = useCallback(
-    async (address?: Address) => {
-      if (!address) return;
-      const provider = await getTransport();
+    async (wallet: ConnectedWallet) => {
+      const provider = await getTransport(wallet);
       if (!provider) return;
-      const account = createExternalAccount(config, address, { provider: provider as EIP1193Provider });
+      const account = createExternalAccount(config, wallet.address as Address, {
+        provider: provider as EIP1193Provider,
+      });
       setPlayerAccount(account);
       setProviderType("privy");
       tables.Account.set({ value: account.entity });
@@ -139,7 +140,7 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
   useEffect(() => {
     if (!user || providerType !== null || wallets.length === 0) return;
 
-    createPrivy(wallets[0].address as Address);
+    createPrivy(wallets[0]);
   }, [user, wallets, providerType]);
 
   useEffect(() => {
@@ -151,7 +152,7 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
       connectWallet();
       return;
     } else {
-      createPrivy(wallets[0].address as Address);
+      createPrivy(wallets[0]);
     }
   }, [wallets, walletsReady, privyAuthenticated]);
 
