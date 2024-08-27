@@ -4,6 +4,7 @@ import CategoryMilitary from "../icons/category/military.png?url";
 import CategoryProduction from "../icons/category/production.png?url";
 import CategoryStorage from "../icons/category/storage.png?url";
 import Discord from "../icons/discord.svg?url";
+import AcidRain from "../icons/UI_AcidRain.png?url";
 import Add from "../icons/UI_Add.png?url";
 import Alliance from "../icons/UI_Alliance.png?url";
 import Asteroid from "../icons/UI_Asteroid.png?url";
@@ -56,6 +57,7 @@ import YellowMagnet from "../icons/UI_YellowMagnet.png?url";
 import Twitter from "../icons/x-twitter.svg?url";
 
 export const InterfaceIcons = {
+  AcidRain,
   Add,
   Alliance,
   Asteroid,

@@ -1,4 +1,4 @@
-import { formatEther } from "viem";
+import { formatEther, Hex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { bigintToNumber, Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
@@ -19,7 +19,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       () =>
         execute({
           functionName: "Empires__createShip",
-          args: [planetId, overrideCount],
+          args: [planetId as Hex, overrideCount],
           options: { value: payment, gas: 552401n * 2n },
           txQueueOptions: {
             id: `${planetId}-create-ship`,
@@ -53,7 +53,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       () =>
         execute({
           functionName: "Empires__chargeShield",
-          args: [planetId, overrideCount],
+          args: [planetId as Hex, overrideCount],
           options: { value: payment, gas: 546063n * 2n },
           txQueueOptions: {
             id: `${planetId}-add-shield`,
@@ -153,7 +153,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       () =>
         execute({
           functionName: "Empires__placeMagnet",
-          args: [empire, planetId, turnCount],
+          args: [empire, planetId as Hex, turnCount],
           options: { value: payment, gas: 1_000_000n * 2n },
           txQueueOptions: {
             id: `${planetId}-place-magnet`,
@@ -206,6 +206,35 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
+  const placeAcidRain = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    return await withTransactionStatus(
+      () =>
+        execute({
+          functionName: "Empires__placeAcid",
+          args: [planetId as Hex],
+          options: { value: payment, gas: 1_000_000n * 2n }, // TODO: get gas estimate
+          txQueueOptions: {
+            id: `${planetId}-place-acid`,
+            ...options,
+          },
+          onComplete: (receipt) => {
+            // TODO: add acid rain ampli event
+            // ampli.empiresPlaceAcid({
+            //   empires: {
+            //     planetName: entityToPlanetName(planetId),
+            //   },
+            //   ...parseReceipt(receipt),
+            // });
+          },
+        }),
+      {
+        loading: `Placing acid rain on ${entityToPlanetName(planetId)}`,
+        success: `Placed acid rain on ${entityToPlanetName(planetId)}`,
+        error: "Failed to place acid rain",
+      },
+    );
+  };
+
   return {
     createShip,
     chargeShield,
@@ -213,5 +242,6 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     airdropGold,
     placeMagnet,
     detonateShieldEater,
+    placeAcidRain,
   };
 };
