@@ -20,45 +20,65 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
 
         if (!planet) return;
 
-        scene.audio.play("Build", "sfx", { volume: 0.25 });
-        scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.overrideCount}`, {
-          icon: "Ship",
-        });
+        enqueue(() => {
+          scene.audio.play("Build", "sfx", { volume: 0.25 });
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.overrideCount}`, {
+            icon: "Ship",
+          });
+        }, 50);
       },
     },
     { runOnInit: false },
   );
 
-  tables.Planet.watch(
+  tables.BuyShieldsRoutineLog.watch(
     {
       world: systemsWorld,
-      onUpdate: ({ entity, properties: { current, prev } }) => {
-        if (!current || !prev) return;
-        if (current.shieldCount === prev.shieldCount) return;
+      onEnter: ({ properties: { current } }) => {
+        if (!current) return;
 
-        const planet = scene.objects.planet.get(entity);
+        const planet = scene.objects.planet.get(current.planetId as Entity);
+
         if (!planet) return;
 
-        if (current.shieldCount < prev.shieldCount) {
-          const diff = prev.shieldCount - current.shieldCount;
-          scene.audio.play("Demolish", "sfx", { volume: 0.25 });
-          scene.fx.emitFloatingText(
-            { x: planet.coord.x, y: planet.coord.y - 20 },
-            current.shieldCount === 0n ? `ALL SHIELDS DESTROYED` : `-${diff}`,
-            {
-              icon: "Shield",
-              color: "#ff0000",
-            },
-          );
-        } else {
-          const diff = current.shieldCount - prev.shieldCount;
+        enqueue(() => {
           scene.audio.play("Build", "sfx", { volume: 0.25 });
-          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${diff}`, {
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.shieldBought}`, {
             icon: "Shield",
           });
-        }
+        }, 50);
       },
     },
     { runOnInit: false },
   );
+
+  tables.AcidDamageOverrideLog.watch(
+    {
+      world: systemsWorld,
+      onEnter: ({ properties: { current } }) => {
+        if (!current) return;
+
+        const planet = scene.objects.planet.get(current.planetId as Entity);
+        if (!planet) return;
+
+        enqueue(() => {
+          const delay = 500;
+          scene.audio.play("Demolish", "sfx", { volume: 0.25, delay });
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.shipsDestroyed}`, {
+            icon: "Ship",
+            color: "#ff0000",
+            // green background
+            fillStyle: {
+              color: 0x114411,
+              alpha: 0.75,
+            },
+            delay,
+          });
+        }, 50);
+      },
+    },
+    { runOnInit: false },
+  );
+
+  // TODO: shield eater minus shields on both planet detonated & surrounding planets
 };

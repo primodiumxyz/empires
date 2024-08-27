@@ -146,18 +146,17 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
             blendMode: Phaser.BlendModes.NORMAL,
           });
 
-          setTimeout(() => {
-            scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
-              icon: "Gold",
-              fontSize: 16,
-              iconSize: 20,
-              borderStyle: {
-                alpha: 0.75,
-                width: 2,
-                color: 0xffd700,
-              },
-            });
-          }, 250);
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
+            icon: "Gold",
+            fontSize: 16,
+            iconSize: 20,
+            delay: 500,
+            borderStyle: {
+              alpha: 0.75,
+              width: 2,
+              color: 0xffd700,
+            },
+          });
         }, 250);
       },
     },
