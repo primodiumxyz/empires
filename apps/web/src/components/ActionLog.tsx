@@ -56,7 +56,7 @@ export const ActionLog = ({ className }: { className: string }) => {
 
 const ClosedActionLog = () => {
   const override = useMostRecentOverride();
-  const action = override ? override.element : <p className="text-xs opacity-70">No actions</p>;
+  const action = override ? override.element : <p className="text-xs opacity-70">No player actions</p>;
 
   const [currentAction, setCurrentAction] = useState(0n);
   const [flashing, setFlashing] = useState(false);
