@@ -24,7 +24,6 @@ export const CheatcodeToBg: Record<string, string> = {
   utils: "bg-green-500/10",
   magnet: "bg-purple-900/10",
   shieldEater: "bg-purple-400/10",
-  acidRain: "bg-purple-900/10",
   config: "bg-gray-500/10",
 };
 
@@ -894,69 +893,6 @@ export const setupCheatcodes = (options: {
     error: () => `Failed to feed shield eater`,
   });
 
-  /* -------------------------------- ACID RAIN ------------------------------- */
-  // TODO: make it work
-  // remove acid rain from planet
-  const removeAcidRain = createCheatcode({
-    title: "Remove acid rain",
-    bg: CheatcodeToBg["acidRain"],
-    caption: "from planet",
-    inputs: {
-      planet: {
-        label: "Planet",
-        inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
-      },
-    },
-    execute: async ({ planet }) => {
-      const planetId = planet.id as Entity;
-      const empireId = tables.Planet.get(planetId)?.empireId;
-
-      if (!empireId) return { success: true };
-      if (!tables.Meta_AcidPlanetsSet.hasWithKeys({ empireId, planetId })) return { success: true };
-
-      let devOps: TableOperation[] = [];
-
-      if (tables.Keys_AcidPlanetsSet.getWithKeys({ empireId })?.itemKeys.length === 1) {
-        devOps = [
-          devCalls.createRemove({ table: tables.Meta_AcidPlanetsSet, keys: { empireId, planetId } }),
-          devCalls.createRemove({ table: tables.Value_AcidPlanetsSet, keys: { empireId, planetId } }),
-          devCalls.createRemove({ table: tables.Keys_AcidPlanetsSet, keys: { empireId } }),
-        ];
-      } else {
-        const index = tables.Meta_AcidPlanetsSet.getWithKeys({ empireId, planetId })?.index;
-        const currElems = tables.Keys_AcidPlanetsSet.getWithKeys({ empireId })?.itemKeys ?? [];
-        if (!index || currElems.length === 0) return { success: true };
-        const replacement = currElems[currElems.length - 1];
-
-        // update replacement data
-        currElems[Number(index)] = replacement;
-        currElems.pop();
-
-        devOps = [
-          devCalls.createSetProperties({
-            table: tables.Keys_AcidPlanetsSet,
-            keys: { empireId },
-            properties: { itemKeys: currElems },
-          }),
-          devCalls.createSetProperties({
-            table: tables.Meta_AcidPlanetsSet,
-            keys: { empireId, planetId: replacement },
-            properties: { stored: true, index: BigInt(index) },
-          }),
-          devCalls.createRemove({ table: tables.Meta_AcidPlanetsSet, keys: { empireId, planetId } }),
-          devCalls.createRemove({ table: tables.Value_AcidPlanetsSet, keys: { empireId, planetId } }),
-        ];
-      }
-
-      return await devCalls.batch(devOps);
-    },
-    loading: () => "[CHEATCODE] Removing acid rain...",
-    success: () => `Acid rain removed`,
-    error: () => `Failed to remove acid rain`,
-  });
-
   /* --------------------------------- CONFIG --------------------------------- */
   const updateGameConfig = {
     P_GameConfig: createCheatcode({
@@ -1153,7 +1089,6 @@ export const setupCheatcodes = (options: {
     moveShieldEater,
     setShieldEaterDestination,
     feedShieldEater,
-    removeAcidRain,
     withdrawRake,
     ...Object.values(updateGameConfig),
   ];
