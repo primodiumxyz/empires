@@ -123,6 +123,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
           if (!planet || !planetData) return;
           planet.updateFaction(planetData.empireId);
           planet.setMagnet(planetData.empireId, 0);
+          planet.setAcid(0, false);
         });
       }
     },

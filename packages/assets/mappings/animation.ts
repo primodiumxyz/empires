@@ -50,6 +50,11 @@ export const Animations = {
   ShieldEaterDetonate: "shield-eater/detonate",
   ShieldEaterCrack: "shield-eater/crack",
 
+  // Acid Rain
+  AcidRainLarge: "acid-rain/idle/large",
+  AcidRainEnter: "acid-rain/enter",
+  AcidRainExit: "acid-rain/exit",
+
   // Citadel
   CitadelShine: "citadel/shine",
 

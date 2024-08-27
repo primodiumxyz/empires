@@ -30,6 +30,7 @@ export const DepthLayers = {
   Citadel: 3000,
   MagnetWaves: 4000,
   ShieldEater: 5000,
-  Magnet: 6000,
-  Marker: 7000,
+  AcidRain: 6000,
+  Magnet: 7000,
+  Marker: 8000,
 } as const;

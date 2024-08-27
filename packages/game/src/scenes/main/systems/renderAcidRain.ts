@@ -11,14 +11,29 @@ export const renderAcidRain = (scene: PrimodiumScene, core: Core) => {
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
 
+  const getSubTurnsLeft = (empire: EEmpire) => {
+    const empireCount = tables.P_GameConfig.get()?.empireCount ?? 0;
+    const empireTurn = tables.Turn.get()?.empire;
+    if (!empireTurn) return 0n;
+
+    // empire = 3 & empireTurn = 1 => 2
+    // empire = 3 & empireTurn = 4 & empireCount = 6 => 5
+    const subTurnsLeft = empire >= empireTurn ? empire - empireTurn : empireCount - empireTurn + empire;
+
+    return BigInt(subTurnsLeft);
+  };
+
   const updateAcidForEmpire = (empire: EEmpire) => {
     const planets = tables.Planet.getAllWith({ empireId: empire });
     planets.forEach((entity) => {
       const planet = scene.objects.planet.get(entity);
       if (!planet) return;
 
-      const cyclesLeft = tables.Value_AcidPlanetsSet.getWithKeys({ planetId: entity, empireId: empire });
-      planet.setAcid(cyclesLeft);
+      const cyclesLeft = tables.Value_AcidPlanetsSet.getWithKeys({ planetId: entity, empireId: empire })?.value ?? 0n;
+
+      // expiring means that there are only 2 empire turns ("sub" turns) left
+      const subTurnsLeft = cyclesLeft === 1n ? getSubTurnsLeft(empire) : 0n;
+      planet.setAcid(Number(cyclesLeft), cyclesLeft === 1n && subTurnsLeft <= 2n);
     });
   };
 
@@ -53,7 +68,7 @@ export const renderAcidRain = (scene: PrimodiumScene, core: Core) => {
         if (!planet) return;
 
         const acidDuration = (tables.P_AcidConfig.get()?.acidDuration ?? 1n) - 1n;
-        planet.setAcid(acidDuration);
+        planet.setAcid(Number(acidDuration), false);
       },
     },
     { runOnInit: false },

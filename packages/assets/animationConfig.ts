@@ -241,6 +241,7 @@ export const AnimationConfig: Animation[] = [
     frameRate: 3,
     startFrame: 0,
     endFrame: 2,
+    repeat: -1,
     prefix: "sprites/acid-rain/idle/large/AcidRain_Large_",
     suffix: ".png",
   },
