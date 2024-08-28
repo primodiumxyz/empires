@@ -137,10 +137,8 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         const planet = scene.objects.planet.get(current.planetId as Entity);
 
         if (!planet) return;
-        console.log("AccumulateGoldRoutineLog");
 
         enqueue(async () => {
-          console.log("AccumulateGoldRoutineLog 2");
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
 
           scene.fx.emitVfx({ x: planet.coord.x + 5, y: planet.coord.y - 45 }, "GoldAdd", {

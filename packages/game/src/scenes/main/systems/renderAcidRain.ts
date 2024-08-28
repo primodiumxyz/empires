@@ -4,24 +4,16 @@ import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { allEmpires } from "@game/lib/constants/common";
 import { PrimodiumScene } from "@game/types";
 
+// At how many turns left it starts expiring
+const EXPIRE_TURNS = 2n;
+
 export const renderAcidRain = (scene: PrimodiumScene, core: Core) => {
   const {
     tables,
     network: { world },
+    utils: { getNextTurn: getNextEmpireTurn, getEmpireInTurns },
   } = core;
   const systemsWorld = namespaceWorld(world, "systems");
-
-  const getSubTurnsLeft = (empire: EEmpire) => {
-    const empireCount = tables.P_GameConfig.get()?.empireCount ?? 0;
-    const empireTurn = tables.Turn.get()?.empire;
-    if (!empireTurn) return 0n;
-
-    // empire = 3 & empireTurn = 1 => 2
-    // empire = 3 & empireTurn = 4 & empireCount = 6 => 5
-    const subTurnsLeft = empire >= empireTurn ? empire - empireTurn : empireCount - empireTurn + empire;
-
-    return BigInt(subTurnsLeft);
-  };
 
   const updateAcidForEmpire = (empire: EEmpire) => {
     const planets = tables.Planet.getAllWith({ empireId: empire });
@@ -32,8 +24,8 @@ export const renderAcidRain = (scene: PrimodiumScene, core: Core) => {
       const cyclesLeft = tables.Value_AcidPlanetsSet.getWithKeys({ planetId: entity, empireId: empire })?.value ?? 0n;
 
       // expiring means that there are only 2 empire turns ("sub" turns) left
-      const subTurnsLeft = cyclesLeft === 1n ? getSubTurnsLeft(empire) : 0n;
-      planet.setAcid(Number(cyclesLeft), cyclesLeft === 1n && subTurnsLeft <= 2n);
+      const subTurnsLeft = getNextEmpireTurn(empire);
+      planet.setAcid(Number(cyclesLeft), cyclesLeft === 1n && subTurnsLeft <= EXPIRE_TURNS);
     });
   };
 
@@ -41,10 +33,8 @@ export const renderAcidRain = (scene: PrimodiumScene, core: Core) => {
   const empireCount = tables.P_GameConfig.get()?.empireCount ?? 0;
   allEmpires.slice(0, empireCount).forEach((empire) => updateAcidForEmpire(empire));
 
-  // 2. update acid rain on new turn
-  // 3. update acid rain on placement
-
   // 2. Update acid rain for all planets of an empire after its turn was resolved
+  // Also update acid rain for empire in EXPIRE_TURNS turns (in case some should expire)
   tables.Turn.watch(
     {
       world: systemsWorld,
@@ -53,6 +43,7 @@ export const renderAcidRain = (scene: PrimodiumScene, core: Core) => {
         if (!prevEmpire) return;
 
         updateAcidForEmpire(prevEmpire);
+        updateAcidForEmpire(getEmpireInTurns(EXPIRE_TURNS));
       },
     },
     { runOnInit: false },

@@ -52,7 +52,11 @@ export const Animations = {
 
   // Acid Rain
   AcidRainLarge: "acid-rain/idle/large",
-  AcidRainEnter: "acid-rain/enter",
+  AcidRainMedium: "acid-rain/idle/medium",
+  AcidRainSmall: "acid-rain/idle/small",
+  AcidRainEnterLarge: "acid-rain/enter/large",
+  AcidRainEnterMedium: "acid-rain/enter/medium",
+  AcidRainEnterSmall: "acid-rain/enter/small",
   AcidRainExit: "acid-rain/exit",
 
   // Citadel
