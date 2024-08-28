@@ -103,6 +103,7 @@ export function calculateRoutinePcts(
   if (multipliers.buyShipMultiplier !== undefined) finalLikelihoods.buyShips *= multipliers.buyShipMultiplier;
   if (multipliers.buyShieldMultiplier !== undefined) finalLikelihoods.buyShields *= multipliers.buyShieldMultiplier;
   if (multipliers.moveShipsMultiplier !== undefined) finalLikelihoods.moveShips *= multipliers.moveShipsMultiplier;
+
   if (multipliers.accumulateGoldMultiplier !== undefined)
     finalLikelihoods.accumulateGold *= multipliers.accumulateGoldMultiplier;
 
