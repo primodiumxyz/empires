@@ -3,6 +3,7 @@ import { EViewMode } from "@primodiumxyz/core";
 import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
+import { Banner } from "@/components/Banner";
 import { Cheatcodes } from "@/components/cheatcodes/Cheatcodes";
 import { Button } from "@/components/core/Button";
 import { HUD } from "@/components/core/HUD";
@@ -50,12 +51,11 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle className="flex flex-col items-center">
-
           <Join className="z-50">
             <Button
               size="md"
               variant="neutral"
-              className="z-50 w-56 -mr-1"
+              className="z-50 -mr-1 w-56"
               onClick={() => ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
             >
               {showMap ? (
@@ -66,7 +66,7 @@ export const GameHUD = () => {
             </Button>
             <Leaderboard />
           </Join>
-          
+
           {showMap && <QuickTradeMapMode className="hidden lg:flex" />}
           {showCheatcodes && <Cheatcodes />}
         </HUD.TopMiddle>
@@ -103,7 +103,8 @@ export const GameHUD = () => {
           </div>
         </HUD.BottomLeft>
 
-        <HUD.BottomMiddle>
+        <HUD.BottomMiddle className="flex flex-col items-center gap-2">
+          <Banner />
           <TimeLeft className="gap-0" />
         </HUD.BottomMiddle>
 
