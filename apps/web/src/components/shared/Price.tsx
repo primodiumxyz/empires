@@ -8,10 +8,12 @@ export const Price = ({
   wei,
   className,
   forceBlockchainUnits,
+  precision,
 }: {
   wei: bigint;
   className?: string;
   forceBlockchainUnits?: boolean;
+  precision?: number;
 }) => {
   const {
     utils: { weiToUsd },
@@ -23,5 +25,5 @@ export const Price = ({
   if (showBlockchainUnits.enabled) return <span className={className}>{formatEther(wei)}ETH</span>;
   if (loading) return <span className={className}>...</span>;
   if (!price) return <span className={className}>{formatEther(wei)}ETH</span>;
-  return <span className={className}>{weiToUsd(wei, price)}</span>;
+  return <span className={className}>{weiToUsd(wei, price, { precision })}</span>;
 };
