@@ -17,6 +17,7 @@ export const functionSystemIds: {
   Empires__sellPoints: getSystemId("OverridePointsSystem"),
   Empires__airdropGold: getSystemId("OverrideAirdropSystem"),
   Empires__detonateShieldEater: getSystemId("OverrideShieldEaterSystem"),
+  Empires__placeAcid: getSystemId("OverrideAcidSystem"),
 
   Empires__updateWorld: getSystemId("UpdateSystem"),
 

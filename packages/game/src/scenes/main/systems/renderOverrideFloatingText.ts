@@ -96,4 +96,32 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
     },
     { runOnInit: false },
   );
+
+  tables.AcidDamageOverrideLog.watch(
+    {
+      world: systemsWorld,
+      onEnter: ({ properties: { current } }) => {
+        if (!current) return;
+
+        const planet = scene.objects.planet.get(current.planetId as Entity);
+        if (!planet) return;
+
+        enqueue(() => {
+          const delay = 500;
+          scene.audio.play("Demolish", "sfx", { volume: 0.25, delay });
+          scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.shipsDestroyed}`, {
+            icon: "Ship",
+            color: "#ff0000",
+            // green background
+            fillStyle: {
+              color: 0x114411,
+              alpha: 0.75,
+            },
+            delay,
+          });
+        }, 50);
+      },
+    },
+    { runOnInit: false },
+  );
 };

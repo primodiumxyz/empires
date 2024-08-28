@@ -43,7 +43,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
           <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
         </div>
       </div>
-      {playerAccount && (
+      {playerAccount && empire !== EEmpire.LENGTH && (
         <ExecuteButton
           planetId={planetId}
           empire={empire}
@@ -53,7 +53,7 @@ export const MagnetContent: React.FC<{ entity: Entity }> = ({ entity: planetId }
           setInputValue={setInputValue}
         />
       )}
-      {!playerAccount && (
+      {!playerAccount && empire !== EEmpire.LENGTH && (
         <FakeExecuteButton planetId={planetId} empire={empire} inputValue={inputValue} setInputValue={setInputValue} />
       )}
     </div>
