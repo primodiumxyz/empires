@@ -67,7 +67,7 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
 
         <div className="flex w-full flex-col gap-6">
           <Overrides entity={entity} />
-          <RoutineProbabilities entity={entity} />
+          {empireId !== EEmpire.NULL && <RoutineProbabilities entity={entity} />}
         </div>
       </div>
     </Card>

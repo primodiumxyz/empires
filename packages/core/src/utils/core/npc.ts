@@ -37,7 +37,7 @@ export const createNpcUtils = (tables: Tables) => {
       moveMultiplier: !moveTargetId || shipCount === 0n ? 0 : moveTargetId.multiplier,
       buyShipMultiplier,
       buyShieldMultiplier,
-      accumulateGoldMultiplier: 1,
+      accumulateGoldMultiplier: lotsOfGold ? 0 : 1,
     };
 
     return {
