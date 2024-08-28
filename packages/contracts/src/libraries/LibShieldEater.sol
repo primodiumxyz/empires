@@ -176,7 +176,7 @@ library LibShieldEater {
       // if neighbor is a planet
       if (Planet.getIsPlanet(neighborId)) {
         shieldCount = Planet.getShieldCount(neighborId);
-        uint256 shieldsDestroyed = (shieldCount * adjacentDamage) / 10000;
+        shieldsDestroyed = (shieldCount * adjacentDamage) / 10000;
         Planet.setShieldCount(neighborId, (shieldCount - shieldsDestroyed));
         ShieldEaterDamageOverrideLog.set(
           pseudorandomEntity(),

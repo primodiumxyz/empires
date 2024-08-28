@@ -266,58 +266,11 @@ export const useMostRecentOverride = () => {
     </span>
   );
 
-  // populate initial state
-  useEffect(() => {
-    const createShipOverrideEntries = tables.CreateShipOverrideLog.getAll().map((actionEntity) => {
-      const action = tables.CreateShipOverrideLog.get(actionEntity)!;
-      const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
-      return {
-        empireId: empire as EEmpire,
-        timestamp: action.timestamp,
-        element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount, { showZero: true })} ship
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </div>
-        ),
-      };
-    });
-    const chargeShieldsOverrideEntries = tables.ChargeShieldsOverrideLog.getAll().map((actionEntity) => {
-      const action = tables.ChargeShieldsOverrideLog.get(actionEntity)!;
-      const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
-      return {
-        empireId: empire as EEmpire,
-        timestamp: action.timestamp,
-        element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount, { showZero: true })} shield
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </div>
-        ),
-      };
-    });
-    const placeMagnetOverrideEntries = tables.PlaceMagnetOverrideLog.getAll().map((actionEntity) => {
-      const action = tables.PlaceMagnetOverrideLog.get(actionEntity)!;
-      const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
-      return {
-        empireId: empire as EEmpire,
-        timestamp: action.timestamp,
-        element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} placed a magnet on {getPlanetSpan(action.planetId as Entity)}
-          </div>
-        ),
-      };
-    });
-    const detonateShieldEaterOverrideEntries = tables.ShieldEaterDetonateOverrideLog.getAll();
-    const airdropGoldOverrideEntries = tables.AirdropGoldOverrideLog.getAll();
-  }, []);
-
   // subscribe to updates
   useEffect(() => {
     const createSub = tables.CreateShipOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.CreateShipOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
@@ -332,8 +285,8 @@ export const useMostRecentOverride = () => {
       },
     });
     const chargeShieldsSub = tables.ChargeShieldsOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.ChargeShieldsOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
@@ -348,8 +301,8 @@ export const useMostRecentOverride = () => {
       },
     });
     const placeMagnetSub = tables.PlaceMagnetOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.PlaceMagnetOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
@@ -363,8 +316,8 @@ export const useMostRecentOverride = () => {
       },
     });
     const detonateShieldEaterSub = tables.ShieldEaterDetonateOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.ShieldEaterDetonateOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
@@ -378,8 +331,8 @@ export const useMostRecentOverride = () => {
       },
     });
     const placeAcidSub = tables.PlaceAcidOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.PlaceAcidOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
@@ -393,8 +346,8 @@ export const useMostRecentOverride = () => {
       },
     });
     const airdropGoldSub = tables.AirdropGoldOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.AirdropGoldOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         setOverride({
           empireId: action.empireId as EEmpire,
           timestamp: action.timestamp,

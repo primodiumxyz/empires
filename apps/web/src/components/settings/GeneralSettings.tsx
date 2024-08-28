@@ -4,7 +4,7 @@ import { Toggle } from "@/components/core/Toggle";
 import { fontStyleOptions, useSettings } from "@/hooks/useSettings";
 
 export const GeneralSettings = () => {
-  const { fontStyle, showBlockchainUnits } = useSettings();
+  const { fontStyle, showBlockchainUnits, showBanner } = useSettings();
 
   return (
     <Navigator.Screen title="general" className="flex flex-col gap-4">
@@ -43,6 +43,11 @@ export const GeneralSettings = () => {
           defaultChecked={showBlockchainUnits.enabled}
           onToggle={() => showBlockchainUnits.setEnabled(!showBlockchainUnits.enabled)}
         />
+      </div>
+      <div className="flex flex-col">
+        <h2 className="font-semibold text-gray-400">Show banner</h2>
+        <span className="text-xs text-gray-400/70">Show banner with world events</span>
+        <Toggle defaultChecked={showBanner.enabled} onToggle={() => showBanner.setEnabled(!showBanner.enabled)} />
       </div>
       <Navigator.BackButton />
     </Navigator.Screen>
