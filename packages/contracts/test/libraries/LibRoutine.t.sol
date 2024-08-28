@@ -22,10 +22,8 @@ contract LibRoutineTest is PrimodiumTest {
       accumulateGold: 2000,
       buyShields: 4000,
       buyShips: 6000,
-      attackEnemy: 8000,
-      supportAlly: 10000,
-      attackTargetId: bytes32(""),
-      supportTargetId: bytes32("")
+      moveShips: 10000,
+      targetPlanetId: bytes32("")
     });
   function setUp() public override {
     super.setUp();

@@ -39,14 +39,8 @@ library LibRoutine {
       _buyShields(routineThresholds.planetId);
     } else if (value < routineThresholds.buyShips) {
       _buyShips(routineThresholds.planetId);
-    } else if (
-      value < routineThresholds.supportAlly && routineThresholds.supportTargetId != routineThresholds.planetId
-    ) {
-      LibMoveShips.createPendingMove(routineThresholds.planetId, routineThresholds.supportTargetId);
-    } else if (
-      value < routineThresholds.attackEnemy && routineThresholds.attackTargetId != routineThresholds.planetId
-    ) {
-      LibMoveShips.createPendingMove(routineThresholds.planetId, routineThresholds.attackTargetId);
+    } else if (value < routineThresholds.moveShips && routineThresholds.targetPlanetId != routineThresholds.planetId) {
+      LibMoveShips.createPendingMove(routineThresholds.planetId, routineThresholds.targetPlanetId);
     } else {
       revert("Invalid routineThresholds");
     }

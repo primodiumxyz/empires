@@ -481,22 +481,12 @@
             "internalType": "uint256"
           },
           {
-            "name": "supportAlly",
+            "name": "moveShips",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "attackEnemy",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "supportTargetId",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "attackTargetId",
+            "name": "targetPlanetId",
             "type": "bytes32",
             "internalType": "bytes32"
           }
@@ -557,22 +547,12 @@
             "internalType": "uint256"
           },
           {
-            "name": "supportAlly",
+            "name": "moveShips",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "attackEnemy",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "supportTargetId",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "attackTargetId",
+            "name": "targetPlanetId",
             "type": "bytes32",
             "internalType": "bytes32"
           }
