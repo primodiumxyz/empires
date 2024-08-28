@@ -26,7 +26,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointSellTax: BigInt(POINTS_UNIT * 0),
         minPointCost: BigInt(POINTS_UNIT * 0.000001),
         startPointCost: BigInt(POINTS_UNIT * 0.000004),
-        pointGenRate: BigInt(POINTS_UNIT * 0.0000003),
+        pointGenRate: BigInt(POINTS_UNIT * 0.0000004),
         pointCostIncrease: BigInt(POINTS_UNIT * 0.0000005),
       },
       P_MagnetConfig: {
@@ -39,8 +39,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       },
       P_ShieldEaterConfig: {
         visitShieldDamage: 1n,
-        detonateCenterDamage: scaleMultiplier(1.0),
-        detonateAdjacentDamage: scaleMultiplier(0.5),
+        detonateCenterDamage: scaleMultiplier(0.5),
+        detonateAdjacentDamage: scaleMultiplier(0.25),
         detonationThreshold: 18n,
         retargetMaxThreshold: 5n,
       },
@@ -57,9 +57,9 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_OverrideConfig: {
         isProgressOverride: true,
         pointMultiplier: 1n,
-        minOverrideCost: 0n,
+        minOverrideCost: BigInt(POINTS_UNIT * 0.0000001),
         startOverrideCost: BigInt(POINTS_UNIT * 0.000004),
-        overrideGenRate: BigInt(POINTS_UNIT * 0.000004),
+        overrideGenRate: BigInt(POINTS_UNIT * 0.000001),
         overrideCostIncrease: BigInt(POINTS_UNIT * 0.0000001),
       },
     },
