@@ -74,7 +74,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         minOverrideCost: 0n,
         startOverrideCost: BigInt(POINTS_UNIT * 0.00001),
         overrideGenRate: BigInt(POINTS_UNIT * 0.0000005),
-        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00000005),
+        overrideCostIncrease: BigInt(POINTS_UNIT * 0.00000004),
       },
     },
   },
