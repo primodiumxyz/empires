@@ -510,7 +510,7 @@ export const setupCheatcodes = (options: {
   });
 
   /* ---------------------------------- TIME ---------------------------------- */
-  const _advanceTurns = async (amount: number) => {
+  const _advanceTurns = async (amount: number): Promise<TxReceipt> => {
     const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
     const empirePlanets = core.utils.getEmpirePlanets(turn);
     const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
@@ -526,7 +526,7 @@ export const setupCheatcodes = (options: {
     };
 
     const currentBlock = tables.BlockNumber.get()?.value ?? 0n;
-    let success = true;
+    let receipt: TxReceipt | undefined;
 
     for (let i = 0; i < amount; i++) {
       const setTurnCallsParams = devCalls.createSetPropertiesParams({
@@ -535,14 +535,11 @@ export const setupCheatcodes = (options: {
         properties: { nextTurnBlock: currentBlock },
       });
 
-      const txSuccess = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
-      if (!txSuccess) {
-        success = false;
-        break;
-      }
+      receipt = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
+      if (!receipt.success) break;
     }
 
-    return success;
+    return receipt ?? { success: false, error: "Failed to advance turns" };
   };
 
   // advance turns
@@ -558,8 +555,7 @@ export const setupCheatcodes = (options: {
       },
     },
     execute: async ({ amount }) => {
-      const success = await _advanceTurns(amount.value);
-      return { success: success, error: "Failed to advance turns" };
+      return await _advanceTurns(amount.value);
     },
     loading: () => "[CHEATCODE] Advancing turns...",
     success: ({ amount }) => `Advanced ${amount.value} turns`,
