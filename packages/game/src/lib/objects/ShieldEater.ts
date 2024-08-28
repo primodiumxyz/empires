@@ -10,7 +10,7 @@ const OFFSET_Y = -14;
 
 export class ShieldEater extends Phaser.GameObjects.Zone {
   private location: Phaser.GameObjects.Sprite;
-  private destination: Phaser.GameObjects.Sprite;
+  private path: Phaser.GameObjects.Sprite;
   private crack: Phaser.GameObjects.Sprite;
   private crackDelay: number;
   private _scene: PrimodiumScene;
@@ -32,8 +32,8 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
       .setActive(false)
       .setVisible(false);
 
-    this.destination = new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y, "spriteAtlas")
-      .setDepth(DepthLayers.ShieldEater)
+    this.path = new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y, "spriteAtlas")
+      .setDepth(DepthLayers.Planet + 1)
       .setOrigin(0.5)
       .setActive(false)
       .setVisible(false);
@@ -46,7 +46,7 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
       .setVisible(false);
 
     this.scene.add.existing(this.location);
-    this.scene.add.existing(this.destination);
+    this.scene.add.existing(this.path);
     this.scene.add.existing(this.crack);
 
     const detonateConfig = AnimationConfig.find((anim) => anim.key === Animations["ShieldEaterDetonate"]);
@@ -55,7 +55,7 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
 
   override setScale(scale: number) {
     this.location.setScale(scale);
-    this.destination.setScale(scale);
+    this.path.setScale(scale);
     this.crack.setScale(scale);
     super.setScale(scale);
 
@@ -91,7 +91,7 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
           this.offsetLocationIdle("offset");
           this.location.play(Animations["ShieldEaterIdle"]);
         });
-      }, 2000);
+      }, 3000);
     } else {
       this.offsetLocationIdle("restore");
       this.location.play(Animations["ShieldEaterExit"]);
@@ -107,13 +107,13 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
     if (turns > 0) {
       // distribute opacity from 0.3 (furthest) to 1 (destination)
       const opacity = turnsToDestination ? 0.3 + 0.7 * (turns / turnsToDestination) : 1;
-      this.destination.play(Animations["ShieldEaterTarget"]);
-      this.destination.setActive(true).setVisible(true).setAlpha(opacity);
+      this.path.play(Animations["ShieldEaterTarget"]);
+      this.path.setActive(true).setVisible(true).setAlpha(opacity);
     } else {
-      this.destination.setActive(false).setVisible(false);
+      this.path.setActive(false).setVisible(false);
     }
 
-    return this.destination;
+    return this.path;
   }
 
   shieldEaterDetonate() {
