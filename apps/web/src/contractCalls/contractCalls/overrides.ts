@@ -153,7 +153,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       () =>
         execute({
           functionName: "Empires__placeMagnet",
-          args: [empire, planetId, turnCount],
+          args: [empire, planetId as Hex, turnCount],
           options: { value: payment, gas: 1_500_000n * 2n },
           txQueueOptions: {
             id: `${planetId}-place-magnet`,
