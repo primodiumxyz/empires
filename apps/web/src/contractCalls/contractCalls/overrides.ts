@@ -118,7 +118,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
         execute({
           functionName: "Empires__airdropGold",
           args: [empire, overrideCount],
-          options: { value: payment, gas: 1_200_000n * 2n }, // TODO: get gas estimate
+          options: { value: payment, gas: 1_500_000n * 2n }, // TODO: get gas estimate
           txQueueOptions: {
             id: "airdrop-gold",
             ...options,
@@ -154,7 +154,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
         execute({
           functionName: "Empires__placeMagnet",
           args: [empire, planetId, turnCount],
-          options: { value: payment, gas: 1_200_000n * 2n },
+          options: { value: payment, gas: 1_500_000n * 2n },
           txQueueOptions: {
             id: `${planetId}-place-magnet`,
             ...options,
