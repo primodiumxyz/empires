@@ -59,7 +59,7 @@ export const QuickTradeMapMode = ({ className }: { className?: string }) => {
         </Tabs.Button>
       </Join>
       <Tabs.Pane index={0} fragment>
-        <Card className="pointer-events-auto">
+        <Card className="pointer-events-auto w-[430px]">
           <Tabs.CloseButton
             variant="ghost"
             shape="square"
@@ -71,7 +71,7 @@ export const QuickTradeMapMode = ({ className }: { className?: string }) => {
         </Card>
       </Tabs.Pane>
       <Tabs.Pane index={1} fragment>
-        <Card className="pointer-events-auto">
+        <Card className="pointer-events-auto w-[430px]">
           <Tabs.CloseButton
             variant="ghost"
             shape="square"

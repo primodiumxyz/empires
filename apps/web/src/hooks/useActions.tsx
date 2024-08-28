@@ -275,10 +275,10 @@ export const useMostRecentOverride = () => {
         empireId: empire as EEmpire,
         timestamp: action.timestamp,
         element: (
-          <p className="text-xs">
+          <div className="text-xs">
             {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount, { showZero: true })} ship
             {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </p>
+          </div>
         ),
       };
     });
@@ -289,10 +289,10 @@ export const useMostRecentOverride = () => {
         empireId: empire as EEmpire,
         timestamp: action.timestamp,
         element: (
-          <p className="text-xs">
+          <div className="text-xs">
             {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount, { showZero: true })} shield
             {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </p>
+          </div>
         ),
       };
     });
@@ -303,9 +303,9 @@ export const useMostRecentOverride = () => {
         empireId: empire as EEmpire,
         timestamp: action.timestamp,
         element: (
-          <p className="text-xs">
+          <div className="text-xs">
             {getPlayerSpan(action.playerId)} placed a magnet on {getPlanetSpan(action.planetId as Entity)}
-          </p>
+          </div>
         ),
       };
     });
@@ -323,10 +323,10 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount, { showZero: true })} ship
               {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-            </p>
+            </div>
           ),
         });
       },
@@ -339,10 +339,10 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount, { showZero: true })} shield
               {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-            </p>
+            </div>
           ),
         });
       },
@@ -355,9 +355,9 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} placed a magnet on {getPlanetSpan(action.planetId as Entity)}
-            </p>
+            </div>
           ),
         });
       },
@@ -370,9 +370,24 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} detonated shield eater on {getPlanetSpan(action.planetId as Entity)}
-            </p>
+            </div>
+          ),
+        });
+      },
+    });
+    const placeAcidSub = tables.PlaceAcidOverrideLog.watch({
+      onChange: ({ entity }) => {
+        const action = tables.PlaceAcidOverrideLog.get(entity)!;
+        const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
+        setOverride({
+          empireId: empire as EEmpire,
+          timestamp: action.timestamp,
+          element: (
+            <div className="text-xs">
+              {getPlayerSpan(action.playerId)} placed acid rain on {getPlanetSpan(action.planetId as Entity)}
+            </div>
           ),
         });
       },
@@ -384,10 +399,10 @@ export const useMostRecentOverride = () => {
           empireId: action.empireId as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} airdropped {formatNumber(action.goldDistributed, { showZero: true })}{" "}
               gold to {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
-            </p>
+            </div>
           ),
         });
       },
@@ -398,6 +413,7 @@ export const useMostRecentOverride = () => {
       chargeShieldsSub();
       placeMagnetSub();
       detonateShieldEaterSub();
+      placeAcidSub();
       airdropGoldSub();
     };
   }, []);

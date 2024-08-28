@@ -2,7 +2,8 @@ import { useState } from "react";
 import { formatEther } from "viem";
 
 import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
-import { usePlayerAccount } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
+import { defaultEntity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -18,6 +19,7 @@ import { usePointPrice } from "@/hooks/usePointPrice";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const SellPoints = () => {
+  const { tables } = useCore();
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
   const [amount, setAmount] = useState("0");
   const empires = useEmpires();
@@ -26,8 +28,9 @@ export const SellPoints = () => {
   const {
     MAIN: { sprite },
   } = useGame();
-  // const playerPoints = tables.Value_PointsMap.useWithKeys({ empireId: selectedEmpire, playerId: entity })?.value ?? 0n;
-  const playerPoints = 0n;
+  const playerPoints = playerAccount
+    ? tables.Value_PointsMap.getWithKeys({ empireId: selectedEmpire, playerId: playerAccount.entity })?.value ?? 0n
+    : 0n;
 
   const handleInputChange = (_value: string) => {
     const value = Math.floor(Number(_value));
@@ -47,9 +50,9 @@ export const SellPoints = () => {
   return (
     <SecondaryCard>
       <div className="h-64 p-2">
-        <p className="my-2 text-center text-xs text-gray-400">Sell points for a profit</p>
+        <p className="mb-4 mt-2 text-center text-xs text-gray-400">Sell points for a profit</p>
 
-        <SecondaryCard className="flex-row items-center justify-center gap-4 bg-black/10">
+        <SecondaryCard className="flex-row items-center justify-center gap-4 bg-black/10 py-4">
           <Dropdown
             value={selectedEmpire}
             onChange={(value) => setSelectedEmpire(value)}
@@ -68,7 +71,7 @@ export const SellPoints = () => {
             onChange={handleInputChange}
             min={0}
             max={Number(formatEther(playerPoints))}
-            className="mt-4 w-40 place-self-center"
+            className="w-40 translate-y-3 place-self-center"
           />
         </SecondaryCard>
         <br></br>
