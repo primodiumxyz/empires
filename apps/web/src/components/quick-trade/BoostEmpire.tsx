@@ -55,11 +55,12 @@ export const BoostEmpire = () => {
           </p>
         </div>
 
-        <SecondaryCard className="flex-row justify-center gap-4 bg-black/10">
+        <SecondaryCard className="flex-row justify-center gap-4 bg-black/10 py-4">
           <Dropdown
             value={selectedEmpire}
             onChange={(value) => setSelectedEmpire(value)}
             variant="bottomRight"
+            justify="start"
             className="w-32 gap-1"
           >
             {Array.from(empires.entries()).map(([key, empire]) => (

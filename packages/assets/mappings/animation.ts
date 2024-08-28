@@ -19,6 +19,8 @@ export const Animations = {
 
   // Citadel
   CitadelCrown: "citadel/crown",
+  // Treasure
+  TreasurePlanet: "planet/treasure",
 
   //VFX --------------------------
 
@@ -48,8 +50,20 @@ export const Animations = {
   ShieldEaterDetonate: "shield-eater/detonate",
   ShieldEaterCrack: "shield-eater/crack",
 
+  // Acid Rain
+  AcidRainLarge: "acid-rain/idle/large",
+  AcidRainMedium: "acid-rain/idle/medium",
+  AcidRainSmall: "acid-rain/idle/small",
+  AcidRainEnterLarge: "acid-rain/enter/large",
+  AcidRainEnterMedium: "acid-rain/enter/medium",
+  AcidRainEnterSmall: "acid-rain/enter/small",
+  AcidRainExit: "acid-rain/exit",
+
   // Citadel
   CitadelShine: "citadel/shine",
+
+  // Gold
+  GoldAdd: "gold/add",
 };
 
 export type AnimationKeys = keyof typeof Animations;

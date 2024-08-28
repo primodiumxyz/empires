@@ -9,7 +9,7 @@ export function useAdjacentEmpirePlanets(planetId: Entity, empire: EEmpire) {
   const time = tables.Time.use()?.value;
 
   const adjacentEmpirePlanets = useMemo(() => {
-    const allNeighbors = utils.getAllNeighbors(planetId);
+    const allNeighbors = utils.getAllNeighbors(planetId).map(({ entity }) => entity);
 
     return allNeighbors.filter((neighborId) => {
       const neighborPlanet = tables.Planet.get(neighborId);

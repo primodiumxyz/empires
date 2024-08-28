@@ -50,12 +50,15 @@ export const renderShieldEater = (scene: PrimodiumScene, core: Core) => {
         if (!current) return;
 
         const planetEntity = current.planetId as Entity;
-        const neighborPlanetEntities = getAllNeighbors(planetEntity);
+        const neighborPlanetsData = getAllNeighbors(planetEntity);
         const planet = scene.objects.planet.get(planetEntity);
-        const neighborPlanets = neighborPlanetEntities.map((planet) => scene.objects.planet.get(planet));
+        const neighborPlanets = neighborPlanetsData.map(({ entity, direction }) => ({
+          obj: scene.objects.planet.get(entity),
+          direction,
+        }));
 
         planet?.shieldEaterDetonate();
-        neighborPlanets.forEach((planet) => planet?.shieldEaterCrack());
+        neighborPlanets.forEach(({ obj, direction }) => obj?.shieldEaterCrack(direction));
       },
     },
     { runOnInit: false },

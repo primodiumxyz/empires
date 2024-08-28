@@ -1,4 +1,4 @@
-import { Address, Hex } from "viem";
+import { Address, Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
@@ -166,13 +166,13 @@ export const setupCheatcodes = (options: {
       const toPlanetData = tables.Planet.get(toEntity);
       if (!fromPlanetData || !toPlanetData) {
         console.log("[CHEATCODE] Send ships: invalid planets");
-        return false;
+        return { success: false, error: "Invalid planets" };
       }
 
       const shipsToMove = fromPlanetData.shipCount ?? BigInt(0);
       if (shipsToMove === BigInt(0)) {
         console.log("[CHEATCODE] Send ships: no ships to send");
-        return false;
+        return { success: false, error: "No ships to send" };
       }
 
       let devOps: TableOperation[] = [
@@ -199,7 +199,7 @@ export const setupCheatcodes = (options: {
 
         if (conquer) {
           const successA = await devCalls.batch(devOps);
-          if (!successA) return false;
+          if (!successA) return { success: false, error: "Failed to send ships" };
 
           const successB = (
             await Promise.all([
@@ -213,16 +213,14 @@ export const setupCheatcodes = (options: {
             ])
           ).every(Boolean);
 
-          return successB;
+          return { success: successB, error: "Failed to send ships" };
         }
 
-        const success = await devCalls.setProperties({
+        return await devCalls.setProperties({
           table: tables.Planet,
           keys: { id: toEntity },
           properties: { shipCount: remainingShips },
         });
-
-        return success;
       }
     },
     loading: () => "[CHEATCODE] Sending ships...",
@@ -386,7 +384,11 @@ export const setupCheatcodes = (options: {
     error: ({ planet, empire }) => `Failed to set empire to ${empire.value} for ${planet.value}`,
   });
 
-  const setEmpirePlayerPoints = async (playerId: Entity, empireId: EEmpire, value: bigint): Promise<boolean> => {
+  const setEmpirePlayerPoints = async (
+    playerId: Entity,
+    empireId: EEmpire,
+    value: bigint,
+  ): Promise<TxReceipt | { success: boolean; error?: string }> => {
     try {
       let devOps: TableOperation[] = [];
 
@@ -447,7 +449,7 @@ export const setupCheatcodes = (options: {
       return await devCalls.batch(devOps);
     } catch (e) {
       console.log(e);
-      return false;
+      return { success: false, error: "Failed to set points" };
     }
   };
 
@@ -499,7 +501,7 @@ export const setupCheatcodes = (options: {
         }),
       ]);
 
-      return success.every(Boolean);
+      return { success: success.every(Boolean), error: "Failed to give points" };
     },
     loading: () => "[CHEATCODE] Giving points...",
     success: ({ amount, recipient, empire }) =>
@@ -508,7 +510,7 @@ export const setupCheatcodes = (options: {
   });
 
   /* ---------------------------------- TIME ---------------------------------- */
-  const _advanceTurns = async (amount: number) => {
+  const _advanceTurns = async (amount: number): Promise<TxReceipt> => {
     const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
     const empirePlanets = core.utils.getEmpirePlanets(turn);
     const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
@@ -524,7 +526,7 @@ export const setupCheatcodes = (options: {
     };
 
     const currentBlock = tables.BlockNumber.get()?.value ?? 0n;
-    let success = true;
+    let receipt: TxReceipt | undefined;
 
     for (let i = 0; i < amount; i++) {
       const setTurnCallsParams = devCalls.createSetPropertiesParams({
@@ -533,14 +535,11 @@ export const setupCheatcodes = (options: {
         properties: { nextTurnBlock: currentBlock },
       });
 
-      const txSuccess = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
-      if (!txSuccess) {
-        success = false;
-        break;
-      }
+      receipt = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
+      if (!receipt.success) break;
     }
 
-    return success;
+    return receipt ?? { success: false, error: "Failed to advance turns" };
   };
 
   // advance turns
@@ -556,9 +555,7 @@ export const setupCheatcodes = (options: {
       },
     },
     execute: async ({ amount }) => {
-      const success = await _advanceTurns(amount.value);
-
-      return success;
+      return await _advanceTurns(amount.value);
     },
     loading: () => "[CHEATCODE] Advancing turns...",
     success: ({ amount }) => `Advanced ${amount.value} turns`,
@@ -624,7 +621,7 @@ export const setupCheatcodes = (options: {
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
-      const receipt = await requestDrip?.(accountClient.playerAccount.address, true);
+      const receipt = await requestDrip?.(playerAccount.address, true);
       return receipt ?? { success: false, error: "Failed to drip eth" };
     },
     success: () => `Dripped eth to player account`,
@@ -877,7 +874,7 @@ export const setupCheatcodes = (options: {
   const feedShieldEater = createCheatcode({
     title: "Feed shield eater",
     bg: CheatcodeToBg["shieldEater"],
-    caption: "Shield eater",
+    caption: "set ready to detonate",
     inputs: {},
     execute: async () => {
       const threshold = tables.P_ShieldEaterConfig.get()?.detonationThreshold ?? BigInt(0);

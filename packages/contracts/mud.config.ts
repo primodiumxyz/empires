@@ -464,6 +464,26 @@ export const worldInput = {
       type: "offchainTable",
     },
 
+    // Override impact logs
+    AcidDamageOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        shipsDestroyed: "uint256",
+      },
+    },
+
+    ShieldEaterDamageOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        shieldsDestroyed: "uint256",
+        damageType: "EShieldEaterDamageType",
+      },
+    },
+
     /* ----------------------------- Historical data ---------------------------- */
 
     HistoricalPointCost: {

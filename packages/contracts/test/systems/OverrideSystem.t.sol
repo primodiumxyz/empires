@@ -270,6 +270,33 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(PointsMap.getLockedPoints(empire, aliceId), pointsToStake, "Player Points should be 80");
   }
 
+  function testPlaceMagnetMultipleTurnsGas() public {
+    vm.startPrank(creator);
+    P_MagnetConfig.setLockedPointsPercent(1000);
+    
+    uint256 turns = 3;
+    EEmpire empire = EEmpire.Blue;
+    uint256 initGas;
+    uint256 gasUsed;
+    uint256 maxGasUsed = 0;
+    for (uint256 i = 0; i < 10; i++) {
+      planetId = PlanetsSet.getPlanetIds()[i];  
+      assignPlanetToEmpire(planetId, empire);
+      uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, turns);
+      uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
+      
+      vm.prank(alice);
+      initGas = gasleft();
+      world.Empires__placeMagnet{ value: totalCost }(empire, planetId, turns);
+      gasUsed = initGas - gasleft();
+      console.log("Gas used: ", gasUsed);
+      if (gasUsed > maxGasUsed) {
+        maxGasUsed = gasUsed;
+      }
+    }
+    console.log("Max gas used: ", maxGasUsed);
+  }
+
   function testPlaceMagnetFailExistingMagnet() public {
     EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);

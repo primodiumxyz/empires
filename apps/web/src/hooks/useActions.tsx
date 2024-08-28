@@ -1,10 +1,11 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Address } from "viem";
+import { Address, Hex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToPlanetName, formatAddress, formatNumber } from "@primodiumxyz/core";
+import { entityToAddress, entityToPlanetName, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { Username } from "@/components/shared/Username";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const useActions = (
@@ -42,7 +43,11 @@ export const useActions = (
     [],
   );
 
-  const getPlayerSpan = (playerId: Address) => <span className="text-yellow-400">{formatAddress(playerId, true)}</span>;
+  const getPlayerSpan = (playerId: Entity | Hex) => (
+    <span className="text-yellow-400">
+      <Username address={entityToAddress(playerId)} />
+    </span>
+  );
   useEffect(() => {
     if (debouncedIn > Date.now()) return;
     setDebouncedIn(Date.now() + 1000);
@@ -255,130 +260,102 @@ export const useMostRecentOverride = () => {
     return <span className={colorClass}>{entityToPlanetName(planetId)}</span>;
   };
 
-  const getPlayerSpan = (playerId: Address) => <span className="text-yellow-400">{formatAddress(playerId, true)}</span>;
-
-  // populate initial state
-  useEffect(() => {
-    const createShipOverrideEntries = tables.CreateShipOverrideLog.getAll().map((actionEntity) => {
-      const action = tables.CreateShipOverrideLog.get(actionEntity)!;
-      const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
-      return {
-        empireId: empire as EEmpire,
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount, { showZero: true })} ship
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-    const chargeShieldsOverrideEntries = tables.ChargeShieldsOverrideLog.getAll().map((actionEntity) => {
-      const action = tables.ChargeShieldsOverrideLog.get(actionEntity)!;
-      const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
-      return {
-        empireId: empire as EEmpire,
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount, { showZero: true })} shield
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-    const placeMagnetOverrideEntries = tables.PlaceMagnetOverrideLog.getAll().map((actionEntity) => {
-      const action = tables.PlaceMagnetOverrideLog.get(actionEntity)!;
-      const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
-      return {
-        empireId: empire as EEmpire,
-        timestamp: action.timestamp,
-        element: (
-          <p className="text-xs">
-            {getPlayerSpan(action.playerId)} placed a magnet on {getPlanetSpan(action.planetId as Entity)}
-          </p>
-        ),
-      };
-    });
-    const detonateShieldEaterOverrideEntries = tables.ShieldEaterDetonateOverrideLog.getAll();
-    const airdropGoldOverrideEntries = tables.AirdropGoldOverrideLog.getAll();
-  }, []);
+  const getPlayerSpan = (playerId: Address) => (
+    <span className="text-yellow-400">
+      <Username address={entityToAddress(playerId)} />
+    </span>
+  );
 
   // subscribe to updates
   useEffect(() => {
     const createSub = tables.CreateShipOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.CreateShipOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount, { showZero: true })} ship
               {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-            </p>
+            </div>
           ),
         });
       },
     });
     const chargeShieldsSub = tables.ChargeShieldsOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.ChargeShieldsOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount, { showZero: true })} shield
               {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-            </p>
+            </div>
           ),
         });
       },
     });
     const placeMagnetSub = tables.PlaceMagnetOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.PlaceMagnetOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} placed a magnet on {getPlanetSpan(action.planetId as Entity)}
-            </p>
+            </div>
           ),
         });
       },
     });
     const detonateShieldEaterSub = tables.ShieldEaterDetonateOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.ShieldEaterDetonateOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
         setOverride({
           empireId: empire as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} detonated shield eater on {getPlanetSpan(action.planetId as Entity)}
-            </p>
+            </div>
+          ),
+        });
+      },
+    });
+    const placeAcidSub = tables.PlaceAcidOverrideLog.watch({
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
+        const empire = tables.Planet.get(action.planetId as Entity)?.empireId;
+        setOverride({
+          empireId: empire as EEmpire,
+          timestamp: action.timestamp,
+          element: (
+            <div className="text-xs">
+              {getPlayerSpan(action.playerId)} placed acid rain on {getPlanetSpan(action.planetId as Entity)}
+            </div>
           ),
         });
       },
     });
     const airdropGoldSub = tables.AirdropGoldOverrideLog.watch({
-      onChange: ({ entity }) => {
-        const action = tables.AirdropGoldOverrideLog.get(entity)!;
+      onChange: ({ properties: { current } }) => {
+        const action = current!;
         setOverride({
           empireId: action.empireId as EEmpire,
           timestamp: action.timestamp,
           element: (
-            <p className="text-xs">
+            <div className="text-xs">
               {getPlayerSpan(action.playerId)} airdropped {formatNumber(action.goldDistributed, { showZero: true })}{" "}
               gold to {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
-            </p>
+            </div>
           ),
         });
       },
@@ -389,6 +366,7 @@ export const useMostRecentOverride = () => {
       chargeShieldsSub();
       placeMagnetSub();
       detonateShieldEaterSub();
+      placeAcidSub();
       airdropGoldSub();
     };
   }, []);

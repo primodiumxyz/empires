@@ -32,7 +32,7 @@ export const Dashboard = () => {
                 empire={EEmpire.LENGTH}
                 width={visWidth}
                 height={visHeight}
-                margin={{ top: 20, right: 20, bottom: 30, left: 55 }}
+                margin={{ top: 20, right: 20, bottom: 30, left: 70 }}
               />
             )}
           </ParentSize>
