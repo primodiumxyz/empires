@@ -12,21 +12,36 @@ export const createNpcUtils = (tables: Tables) => {
     const vulnerability = getVulnerability(planetId);
     const planetStrength = getPlanetStrength(planetId);
     const empireStrength = getEmpireStrength(planetId);
-    const moveTargetId = getAttackTarget(planetId);
+
+    const { multipliers, moveTargetId } = getRoutineMultipliers(planetId);
+    const probabilities = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, multipliers);
+    return {
+      context: { vulnerability, planetStrength, empireStrength },
+      probabilities,
+      moveTargetId,
+    };
+  };
+
+  const getRoutineMultipliers = (planetId: Entity) => {
     const shipPrice = tables.P_RoutineCosts.getWithKeys({ routine: ERoutine.BuyShips })?.goldCost ?? 0n;
     const shieldPrice = tables.P_RoutineCosts.getWithKeys({ routine: ERoutine.BuyShields })?.goldCost ?? 0n;
     const shipCount = tables.Planet.get(planetId)?.shipCount ?? 0n;
     const goldCount = tables.Planet.get(planetId)?.goldCount ?? 0n;
+    const moveTargetId = getAttackTarget(planetId);
 
-    const options = {
+    const lotsOfGold = 30n;
+    const buyShipMultiplier = goldCount < shipPrice ? 0 : goldCount > lotsOfGold ? 2 : 1;
+    const buyShieldMultiplier = goldCount < shieldPrice ? 0 : goldCount > lotsOfGold ? 2 : 1;
+
+    const multipliers = {
       moveMultiplier: !moveTargetId || shipCount === 0n ? 0 : moveTargetId.multiplier,
-      buyShipMultiplier: goldCount < shipPrice ? 0 : 1,
-      buyShieldMultiplier: goldCount < shieldPrice ? 0 : 1,
+      buyShipMultiplier,
+      buyShieldMultiplier,
+      accumulateGoldMultiplier: 1,
     };
-    const probabilities = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, options);
+
     return {
-      context: { vulnerability, planetStrength, empireStrength },
-      probabilities,
+      multipliers,
       moveTargetId,
     };
   };

@@ -13,11 +13,11 @@ type RoutineThresholdsBigInt = {
   moveShips: bigint;
 };
 
-type RoutineOptions = {
+type RoutineMultipliers = {
   buyShipMultiplier?: number;
   buyShieldMultiplier?: number;
-  attackMultiplier?: number;
-  supportMultiplier?: number;
+  moveShipsMultiplier?: number;
+  accumulateGoldMultiplier: number;
 };
 
 export function calculateRoutineThresholds(probabilities: RoutineThresholds): RoutineThresholdsBigInt {
@@ -37,19 +37,19 @@ export function calculateRoutinePcts(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
-  options: RoutineOptions,
+  multipliers: RoutineMultipliers,
 ): RoutineThresholds {
   // Input variables and their multipliers
-  const multipliers: {
+  const modifiers: {
     vulnerability: RoutineThresholds;
     planetStrength: RoutineThresholds;
     empireStrength: RoutineThresholds;
   } = {
     vulnerability: {
-      buyShields: 0.35,
-      moveShips: -0.2,
-      accumulateGold: -0.05,
-      buyShips: -0.05,
+      buyShields: 0.5,
+      moveShips: -0.15,
+      accumulateGold: -0.1,
+      buyShips: 0,
     },
     planetStrength: {
       buyShields: -0.2,
@@ -59,7 +59,7 @@ export function calculateRoutinePcts(
     },
     empireStrength: {
       buyShields: -0.04,
-      moveShips: -0.11,
+      moveShips: -0.08,
       accumulateGold: 0.11,
       buyShips: -0.05,
     },
@@ -67,10 +67,10 @@ export function calculateRoutinePcts(
 
   // Initial likelihoods
   const initialLikelihoods: RoutineThresholds = {
-    buyShields: 0.1,
-    moveShips: 0.4,
-    accumulateGold: 0.15,
-    buyShips: 0.1,
+    buyShields: 0.16,
+    moveShips: 0.47,
+    accumulateGold: 0.21,
+    buyShips: 0.16,
   } as const;
 
   // Calculate likelihood adjustments
@@ -83,9 +83,9 @@ export function calculateRoutinePcts(
   for (const _category in initialLikelihoods) {
     const category = _category as keyof RoutineThresholds;
     adjustments[category] =
-      vulnerability * multipliers.vulnerability[category] +
-      planetStrength * multipliers.planetStrength[category] +
-      empireStrength * multipliers.empireStrength[category];
+      vulnerability * modifiers.vulnerability[category] +
+      planetStrength * modifiers.planetStrength[category] +
+      empireStrength * modifiers.empireStrength[category];
   }
 
   // Calculate final likelihoods
@@ -99,8 +99,12 @@ export function calculateRoutinePcts(
     const category = _category as keyof RoutineThresholds;
     finalLikelihoods[category] = Math.max(0, initialLikelihoods[category] + adjustments[category]);
   }
-  if (options?.buyShipMultiplier !== undefined) finalLikelihoods.buyShips *= options.buyShipMultiplier;
-  if (options?.buyShieldMultiplier !== undefined) finalLikelihoods.buyShields *= options.buyShieldMultiplier;
+
+  if (multipliers.buyShipMultiplier !== undefined) finalLikelihoods.buyShips *= multipliers.buyShipMultiplier;
+  if (multipliers.buyShieldMultiplier !== undefined) finalLikelihoods.buyShields *= multipliers.buyShieldMultiplier;
+  if (multipliers.moveShipsMultiplier !== undefined) finalLikelihoods.moveShips *= multipliers.moveShipsMultiplier;
+  if (multipliers.accumulateGoldMultiplier !== undefined)
+    finalLikelihoods.accumulateGold *= multipliers.accumulateGoldMultiplier;
 
   // Normalize likelihoods
   const normalizedLikelihoods: RoutineThresholds = {
