@@ -1,5 +1,5 @@
 import { EDirection } from "@primodiumxyz/contracts";
-import { AxialCoord, AxialCoordBigInt, CartesionCoord } from "@core/lib";
+import { AxialCoord, CartesionCoord } from "@core/lib";
 
 /**
  * Converts axial coords to cartesian assuming pointy top hexagon.
@@ -37,21 +37,21 @@ export function getNeighbor(q: bigint | number, r: bigint | number, direction: E
   }
 }
 
-export function getDirection(
-  fromPlanet: AxialCoord | AxialCoordBigInt,
-  toPlanet: AxialCoord | AxialCoordBigInt,
-): EDirection {
-  const dq = Number(toPlanet.q) - Number(fromPlanet.q);
-  const dr = Number(toPlanet.r) - Number(fromPlanet.r);
+export const directions: EDirection[] = [
+  EDirection.East,
+  EDirection.Southeast,
+  EDirection.Southwest,
+  EDirection.West,
+  EDirection.Northwest,
+  EDirection.Northeast,
+];
 
-  if (dq > 0) {
-    if (dr > 0) return EDirection.East;
-    return EDirection.Northeast;
-  } else if (dq === 0) {
-    if (dr > 0) return EDirection.Southeast;
-    return EDirection.Northwest;
-  } else {
-    if (dr > 0) return EDirection.Southwest;
-    return EDirection.West;
-  }
+export function hexDistance(a: { q: number; r: number }, b: { q: number; r: number }): number {
+  return (Math.abs(a.q - b.q) + Math.abs(a.q + a.r - b.q - b.r) + Math.abs(a.r - b.r)) / 2;
+}
+
+export function getDirection(from: { q: number; r: number }, to: { q: number; r: number }): EDirection {
+  const angle = Math.atan2(to.r - from.r, to.q - from.q);
+  const sector = Math.round((angle / (Math.PI / 3) + 6) % 6);
+  return directions[sector] || EDirection.East;
 }

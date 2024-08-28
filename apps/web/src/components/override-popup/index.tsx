@@ -1,12 +1,13 @@
 import ReactDOM from "react-dom";
 
-import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { HUD } from "@/components/core/HUD";
+import { InfluenceMap } from "@/components/override-popup/InfluenceMap";
 import { OverridePane } from "@/components/override-popup/OverridePane";
 import { PlanetSummary } from "@/components/override-popup/PlanetSummary";
 import { Portfolio } from "@/components/Portfolio";
 import { cn } from "@/util/client";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 
 export const OverridePopup = () => {
   const { tables } = useCore();
@@ -33,6 +34,7 @@ export const OverridePopup = () => {
         <div className="mr-1/3 flex h-[30rem] max-h-full items-start justify-center gap-2">
           <PlanetSummary entity={selectedPlanet} className="hidden lg:flex" />
           <OverridePane entity={selectedPlanet} className="" />
+          <InfluenceMap sourcePlanet={selectedPlanet} />
         </div>
       </div>
     </div>,

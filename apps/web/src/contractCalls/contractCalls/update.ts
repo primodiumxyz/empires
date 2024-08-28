@@ -8,6 +8,7 @@ export const createUpdateCalls = (core: Core, { execute }: ExecuteFunctions) => 
     }
     const empirePlanets = core.utils.getEmpirePlanets(turn);
     const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
+    console.log(routineThresholds);
     return await execute({
       functionName: "Empires__updateWorld",
       args: [routineThresholds],
