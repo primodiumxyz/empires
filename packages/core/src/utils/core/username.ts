@@ -29,6 +29,14 @@ export const createUsernameUtils = (tables: Tables) => {
       );
     } catch (error) {
       console.error(error);
+      tables.Username.set(
+        {
+          username: formatAddress(address),
+          lastFetched: Date.now(),
+          hasTwitter: false,
+        },
+        addressEntity,
+      );
     }
   };
   const getUsername = async (

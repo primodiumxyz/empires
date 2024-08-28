@@ -44,7 +44,7 @@ export class AcidRain extends Phaser.GameObjects.Container {
       // 4. Expired: exit
       if (playAnims) {
         this.cloud.play(Animations["AcidRainExit"]);
-        this.cloud.on("animationcomplete", () => {
+        this.cloud.once("animationcomplete", () => {
           this.cloud.setActive(false).setVisible(false);
         });
       } else {
@@ -63,10 +63,10 @@ export class AcidRain extends Phaser.GameObjects.Container {
 
     if (playAnims) {
       this.cloud.play(Animations[from]);
-      this.cloud.on("animationcomplete", () => {
+      this.cloud.once("animationcomplete", () => {
         if (insert) {
           this.cloud.play(Animations[insert]);
-          this.cloud.on("animationcomplete", () => {
+          this.cloud.once("animationcomplete", () => {
             this.cloud.play(Animations[to]);
           });
         } else {

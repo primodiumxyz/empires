@@ -28,11 +28,9 @@ export const SellPoints = () => {
   const {
     MAIN: { sprite },
   } = useGame();
-  const playerPoints =
-    tables.Value_PointsMap.useWithKeys({
-      empireId: selectedEmpire,
-      playerId: playerAccount?.entity ?? defaultEntity,
-    })?.value ?? 0n;
+  const playerPoints = playerAccount
+    ? tables.Value_PointsMap.getWithKeys({ empireId: selectedEmpire, playerId: playerAccount.entity })?.value ?? 0n
+    : 0n;
 
   const handleInputChange = (_value: string) => {
     const value = Math.floor(Number(_value));
