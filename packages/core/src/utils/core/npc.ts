@@ -12,16 +12,14 @@ export const createNpcUtils = (tables: Tables) => {
     const vulnerability = getVulnerability(planetId);
     const planetStrength = getPlanetStrength(planetId);
     const empireStrength = getEmpireStrength(planetId);
-    const attackTargetId = getAttackTarget(planetId);
-    const supportTargetId = getSupportTarget(planetId);
+    const moveTargetId = getAttackTarget(planetId);
     const shipPrice = tables.P_RoutineCosts.getWithKeys({ routine: ERoutine.BuyShips })?.goldCost ?? 0n;
     const shieldPrice = tables.P_RoutineCosts.getWithKeys({ routine: ERoutine.BuyShields })?.goldCost ?? 0n;
     const shipCount = tables.Planet.get(planetId)?.shipCount ?? 0n;
     const goldCount = tables.Planet.get(planetId)?.goldCount ?? 0n;
 
     const options = {
-      attackMultiplier: !attackTargetId || shipCount === 0n ? 0 : attackTargetId.multiplier,
-      supportMultiplier: !supportTargetId || shipCount === 0n ? 0 : supportTargetId.multiplier,
+      moveMultiplier: !moveTargetId || shipCount === 0n ? 0 : moveTargetId.multiplier,
       buyShipMultiplier: goldCount < shipPrice ? 0 : 1,
       buyShieldMultiplier: goldCount < shieldPrice ? 0 : 1,
     };
@@ -29,18 +27,17 @@ export const createNpcUtils = (tables: Tables) => {
     return {
       context: { vulnerability, planetStrength, empireStrength },
       probabilities,
-      attackTargetId,
-      supportTargetId,
+      moveTargetId,
     };
   };
+
   const getRoutineThresholds = (planetId: Entity) => {
     const data = getRoutineProbabilities(planetId);
     const thresholds = calculateRoutineThresholds(data.probabilities);
     return {
       ...thresholds,
       planetId,
-      attackTargetId: data.attackTargetId.target ?? planetId,
-      supportTargetId: data.supportTargetId.target ?? planetId,
+      moveTargetId: data.moveTargetId.target ?? planetId,
     };
   };
 
