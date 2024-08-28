@@ -8,6 +8,7 @@ import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
+import { useAcidRain } from "@/hooks/useAcidRain";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
@@ -21,6 +22,8 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
   } = useGame();
   const planet = tables.Planet.use(entity)!;
   const hasShieldEater = tables.ShieldEater.use()?.currentPlanet === entity;
+  const { cycles } = useAcidRain(entity, planet.empireId);
+  const hasAcidRain = cycles > 0n;
   const { empireId } = planet;
 
   const moveCrown = [EEmpire.Purple, EEmpire.Pink, EEmpire.Yellow].includes(empireId as EEmpire);
@@ -52,6 +55,17 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
                 className={cn(
                   "absolute left-1/2 -translate-x-1/2 scale-[150%]",
                   hasShieldEater || moveCrown ? "-top-4" : "top-0",
+                )}
+              />
+            )}
+            {hasAcidRain && (
+              <img
+                src={sprite.getSprite("AcidRain")}
+                width={132}
+                height={132}
+                className={cn(
+                  "absolute left-[50%] top-[45%] -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity",
+                  hasAcidRain && "opacity-100",
                 )}
               />
             )}
@@ -142,6 +156,8 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     utils: { getShieldEaterPath },
   } = useCore();
 
+  const planet = tables.Planet.use(entity)!;
+  const { cycles } = useAcidRain(entity, planet.empireId);
   const magnets = usePlanetMagnets(entity);
   const currTurn = tables.Turn.use()?.value ?? 1n;
   const [turnsLeft, setTurnsLeft] = useState<number[]>(magnets.map(() => 0));
@@ -174,14 +190,12 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     return index === -1 ? undefined : index + 1;
   }, [shieldEater, entity]);
 
-  const hideMagnets = turnsLeft.every((t) => t === 0);
-
   return (
     <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
       <h3 className="absolute left-2 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
       <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-1 text-xs">
         <>
-          <span className="text-gray-400 mt-1">MAGNETS</span>
+          <span className="mt-1 text-gray-400">MAGNETS</span>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
             {magnets.length > 0 && turnsLeft.some((t) => t !== 0) ? (
               magnets.map(
@@ -200,21 +214,35 @@ const Overrides = ({ entity }: { entity: Entity }) => {
           </div>
         </>
 
-          <>
-            <span className="text-gray-400">SHIELD EATER</span>
-            <div>
+        <>
+          <span className="text-gray-400">SHIELD EATER</span>
+          <div>
             {turnsToShieldEater !== undefined ? (
-              turnsToShieldEater === 0 ?( <span className="text-accent">on planet</span>):(
-
+              turnsToShieldEater === 0 ? (
+                <span className="text-accent">on planet</span>
+              ) : (
                 <span className="text-accent">
                   in {turnsToShieldEater} turn{turnsToShieldEater > 1 ? "s" : ""}
                 </span>
-                )
-              ) : (
-                <span className="text-gray-400">-</span>
-              )}
-            </div>
-          </>
+              )
+            ) : (
+              <span className="text-gray-400">-</span>
+            )}
+          </div>
+        </>
+
+        <>
+          <span className="text-gray-400">ACID RAIN</span>
+          <div>
+            {cycles !== 0n ? (
+              <span className="text-accent">
+                {cycles.toLocaleString()} turn{cycles > 1n ? "s" : ""} left
+              </span>
+            ) : (
+              <span className="text-gray-400">-</span>
+            )}
+          </div>
+        </>
       </div>
     </div>
   );

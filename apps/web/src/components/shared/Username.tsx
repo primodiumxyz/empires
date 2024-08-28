@@ -6,7 +6,7 @@ import { cn } from "@/util/client";
 export const Username = ({ address, className }: { address: Address; className?: string }) => {
   const { username, hasTwitter } = useUsername(address);
 
-  if (!hasTwitter) return <p className={cn("lg:text-sm", className)}>{username}</p>;
+  if (!hasTwitter) return <span className={cn("lg:text-sm", className)}>{username}</span>;
 
   return (
     <a

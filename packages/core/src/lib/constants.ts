@@ -20,3 +20,5 @@ export enum EViewMode {
 }
 
 export const TREASURE_PLANET_GOLD_TRESHOLD = 100n;
+
+export const PRICE_PRECISION = 4;

@@ -17,6 +17,7 @@ import {
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
+import { AcidRain } from "@game/lib/objects/AcidRain";
 import { IconLabel } from "@game/lib/objects/IconLabel";
 import { Magnet } from "@game/lib/objects/Magnet";
 import { ShieldEater } from "@game/lib/objects/ShieldEater";
@@ -44,6 +45,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private activeMagnets: Map<EEmpire, number> = new Map();
   private magnetWaves: Phaser.GameObjects.Sprite;
   private shieldEater: ShieldEater;
+  private acidRain: AcidRain;
   private treasurePlanetDecoration: Phaser.GameObjects.Sprite;
   private citadelCrown: Phaser.GameObjects.Sprite | null = null;
   private citadelAsteroidBelt: Phaser.GameObjects.Sprite | null = null;
@@ -198,6 +200,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       DepthLayers.ShieldEater,
     );
 
+    this.acidRain = new AcidRain(scene, id, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
+      DepthLayers.AcidRain,
+    );
+
     this._scene = scene;
     this.id = id;
     this.coord = coord;
@@ -222,6 +228,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     if (this.citadelAsteroidBelt) this.scene.add.existing(this.citadelAsteroidBelt);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     this.scene.add.existing(this.magnetWaves);
+    this.scene.add.existing(this.acidRain);
     this.scene.add.existing(this.treasurePlanetDecoration);
     return this;
   }
@@ -244,6 +251,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
     this.shieldEater.setScale(scale);
+    this.acidRain.setScale(scale);
     this.treasurePlanetDecoration.setScale(scale);
     return this;
   }
@@ -457,7 +465,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     return this.shieldEater.setShieldEaterLocation(present, this.playAnims);
   }
 
-  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater["destination"] {
+  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater["path"] {
     return this.shieldEater.setShieldEaterPath(turns, turnsToDestination);
   }
 
@@ -475,6 +483,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       depth: DepthLayers.Planet + 1,
       blendMode: Phaser.BlendModes.ADD,
     });
+  }
+
+  setAcid(cycles: number, expiring: boolean) {
+    this.acidRain.setAcid(cycles, expiring, this.playAnims);
   }
 
   setPlayAnims(playAnims: boolean) {

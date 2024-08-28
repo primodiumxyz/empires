@@ -1,7 +1,7 @@
 import { formatEther } from "viem";
 import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
 
-import { Tables } from "@core/lib";
+import { PRICE_PRECISION, Tables } from "@core/lib";
 
 export function createPriceUtils(tables: Tables) {
   function getTotalCost(
@@ -31,15 +31,17 @@ export function createPriceUtils(tables: Tables) {
    * @param nextTurn Whether to calculate the cost for the next turn.
    * @return pointCost The cost of all points related to the action.
    */
-  function getProgressPointCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
+  function getProgressPointCost(
+    _overrideType: EOverride,
+    _empireImpacted: EEmpire,
+    _overrideCount: bigint,
+    nextTurn = false,
+  ): bigint {
     const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
-    const pointMultiplier = tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
-    return getPointCost(
-      _empireImpacted,
-      _overrideCount * BigInt(empires - 1) * pointUnit * pointMultiplier,
-      nextTurn,
-    );
+    const pointMultiplier =
+      tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
+    return getPointCost(_empireImpacted, _overrideCount * BigInt(empires - 1) * pointUnit * pointMultiplier, nextTurn);
   }
 
   /**
@@ -50,10 +52,16 @@ export function createPriceUtils(tables: Tables) {
    * @param nextTurn Whether to calculate the cost for the next turn.
    * @return pointCost The cost of all points related to the action.
    */
-  function getRegressPointCost(_overrideType: EOverride, _empireImpacted: EEmpire, _overrideCount: bigint, nextTurn = false): bigint {
+  function getRegressPointCost(
+    _overrideType: EOverride,
+    _empireImpacted: EEmpire,
+    _overrideCount: bigint,
+    nextTurn = false,
+  ): bigint {
     const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
-    const pointMultiplier = tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
+    const pointMultiplier =
+      tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
     let pointCost = 0n;
     for (let i = 1; i <= empires; i++) {
       if (i == _empireImpacted) {
@@ -159,19 +167,19 @@ export function createPriceUtils(tables: Tables) {
     return overrideCost;
   }
 
-  function weiToUsd<N extends boolean = false>(
-    wei: bigint,
-    weiToUsd: number,
-    asNumber?: N,
-  ): N extends true ? number : string {
+  function weiToUsd(wei: bigint, weiToUsd: number, options?: { precision?: number }): string {
+    const { precision = PRICE_PRECISION } = options ?? {};
     const balance = Number(formatEther(wei));
-    if (isNaN(balance))
-      return asNumber ? (0 as N extends true ? number : string) : ("0.00" as N extends true ? number : string);
+    if (isNaN(balance)) return "$0.00";
     const balanceInUsd = balance * weiToUsd;
-    if (asNumber) return balanceInUsd as N extends true ? number : string;
-    return balanceInUsd.toLocaleString("en-US", { style: "currency", currency: "USD" }) as N extends true
-      ? number
-      : string;
+
+    const maxPrecision = balanceInUsd < 0.01 ? precision : 2;
+
+    return balanceInUsd.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: maxPrecision,
+    });
   }
 
   function usdToWei(USD: number, weiToUsd: number): bigint {
