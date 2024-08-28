@@ -167,22 +167,19 @@ export function createPriceUtils(tables: Tables) {
     return overrideCost;
   }
 
-  function weiToUsd<N extends boolean = false>(
-    wei: bigint,
-    weiToUsd: number,
-    options?: { asNumber?: N; precision?: number },
-  ): N extends true ? number : string {
-    const { asNumber, precision } = options ?? {};
+  function weiToUsd(wei: bigint, weiToUsd: number, options?: { precision?: number }): string {
+    const { precision = PRICE_PRECISION } = options ?? {};
     const balance = Number(formatEther(wei));
-    if (isNaN(balance))
-      return asNumber ? (0 as N extends true ? number : string) : ("0.00" as N extends true ? number : string);
+    if (isNaN(balance)) return "$0.00";
     const balanceInUsd = balance * weiToUsd;
-    if (asNumber) return balanceInUsd as N extends true ? number : string;
+
+    const maxPrecision = balanceInUsd < 0.01 ? precision : 2;
+
     return balanceInUsd.toLocaleString("en-US", {
       style: "currency",
       currency: "USD",
-      maximumFractionDigits: precision ?? PRICE_PRECISION,
-    }) as N extends true ? number : string;
+      maximumFractionDigits: maxPrecision,
+    });
   }
 
   function usdToWei(USD: number, weiToUsd: number): bigint {
