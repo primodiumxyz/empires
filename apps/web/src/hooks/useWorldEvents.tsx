@@ -8,6 +8,7 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
 import { Price } from "@/components/shared/Price";
 import { Username } from "@/components/shared/Username";
+import { useSettings } from "@/hooks/useSettings";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
 const { enabled, thresholds } = WORLD_EVENTS;
@@ -25,6 +26,7 @@ export type WorldEvent = {
  */
 export function useWorldEvents() {
   const { tables } = useCore();
+  const { showBanner } = useSettings();
   const callbackRef = useRef<((event: WorldEvent) => void) | undefined>(undefined);
 
   const emit = useCallback((event: WorldEvent) => {
@@ -53,6 +55,8 @@ export function useWorldEvents() {
   );
 
   useEffect(() => {
+    if (!showBanner.enabled) return;
+
     const unsubscribes = [
       // A player making a large transaction
       // - buying a lot of ships
@@ -258,7 +262,7 @@ export function useWorldEvents() {
     return () => {
       unsubscribes.forEach((unsub) => unsub?.());
     };
-  }, [tables, emit]);
+  }, [tables, emit, showBanner]);
 
   return { onEvent };
 }
