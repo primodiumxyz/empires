@@ -486,7 +486,7 @@
             "internalType": "uint256"
           },
           {
-            "name": "targetPlanetId",
+            "name": "moveTargetId",
             "type": "bytes32",
             "internalType": "bytes32"
           }
@@ -552,7 +552,7 @@
             "internalType": "uint256"
           },
           {
-            "name": "targetPlanetId",
+            "name": "moveTargetId",
             "type": "bytes32",
             "internalType": "bytes32"
           }

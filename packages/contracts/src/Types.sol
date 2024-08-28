@@ -8,7 +8,7 @@ struct RoutineThresholds {
   uint256 buyShields;
   uint256 buyShips;
   uint256 moveShips;
-  bytes32 targetPlanetId;
+  bytes32 moveTargetId;
 }
 
 struct CoordData {

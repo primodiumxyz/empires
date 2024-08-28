@@ -56,7 +56,7 @@ contract UpdateSystemTest is PrimodiumTest {
       buyShields: 4000,
       buyShips: 6000,
       moveShips: 10000,
-      targetPlanetId: targetPlanetId
+      moveTargetId: targetPlanetId
     });
     allRoutineThresholds.push(routineThresholds);
   }

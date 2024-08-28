@@ -23,7 +23,7 @@ contract LibRoutineTest is PrimodiumTest {
       buyShields: 4000,
       buyShips: 6000,
       moveShips: 10000,
-      targetPlanetId: bytes32("")
+      moveTargetId: bytes32("")
     });
   function setUp() public override {
     super.setUp();
