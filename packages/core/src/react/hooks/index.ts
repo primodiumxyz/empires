@@ -8,3 +8,4 @@ export { usePlayerAccount } from "../../../../../apps/web/src/hooks/usePlayerAcc
 export { useCore } from "./useCore";
 export { usePlayerName } from "./usePlayerName";
 export { useSyncStatus } from "./useSyncStatus";
+export { useWorldEvents, type WorldEvent } from "./useWorldEvents";
