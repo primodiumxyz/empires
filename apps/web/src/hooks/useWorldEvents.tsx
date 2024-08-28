@@ -1,4 +1,5 @@
 import { ReactNode, useCallback, useEffect, useRef } from "react";
+import { Address } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { entityToAddress, entityToPlanetName, WORLD_EVENTS } from "@primodiumxyz/core";
@@ -147,10 +148,11 @@ export function useWorldEvents() {
       // Planets captures
       tables.Planet.watch(
         {
-          onChange: ({ properties: { current, prev } }) => {
+          onChange: ({ entity, properties: { current, prev } }) => {
             if (current?.empireId === prev?.empireId) return;
-            const prevEmpire = prev?.empireId ? EmpireEnumToConfig[prev.empireId].name : undefined;
-            const newEmpire = EmpireEnumToConfig[current.empireId].name;
+            const { id: planetId } = decodeEntity(tables.Planet.metadata.abiKeySchema, entity);
+            const prevEmpire = prev?.empireId ? EmpireEnumToConfig[prev.empireId as EEmpire].name : undefined;
+            const newEmpire = EmpireEnumToConfig[current!.empireId as EEmpire].name;
 
             // - a citadel being captured/changing ownership
             const isCitadel = current?.isCitadel;
@@ -158,13 +160,13 @@ export function useWorldEvents() {
               emit({
                 content: prevEmpire ? (
                   <div>
-                    {getEmpireSpan(current.empireId as EEmpire)} captured a citadel (
-                    {getPlanetSpan(current.planetId as Entity)}) from {getEmpireSpan(prev.empireId as EEmpire)}
+                    {getEmpireSpan(current.empireId as EEmpire)} captured a citadel ({getPlanetSpan(planetId as Entity)}
+                    ) from {getEmpireSpan(prev!.empireId as EEmpire)}
                   </div>
                 ) : (
                   <div>
                     {getEmpireSpan(current.empireId as EEmpire)} was first to capture the{" "}
-                    {getPlanetSpan(current.planetId as Entity)} citadel
+                    {getPlanetSpan(planetId as Entity)} citadel
                   </div>
                 ),
                 type: "citadel",
