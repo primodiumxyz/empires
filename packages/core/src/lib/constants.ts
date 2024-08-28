@@ -18,3 +18,5 @@ export enum EViewMode {
   Map,
   Dashboard,
 }
+
+export const TREASURE_PLANET_GOLD_TRESHOLD = 100n;

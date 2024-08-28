@@ -1,5 +1,6 @@
 import { Core, formatNumber, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
+import { DepthLayers } from "@game/lib/constants/common";
 import { StaggerQueue } from "@game/lib/utils/createStaggerQueue";
 import { PrimodiumScene } from "@game/types";
 
@@ -137,8 +138,16 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
 
         if (!planet) return;
 
-        enqueue(() => {
+        enqueue(async () => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
+
+          scene.fx.emitVfx({ x: planet.coord.x + 5, y: planet.coord.y - 45 }, "GoldAdd", {
+            depth: DepthLayers.Marker,
+            blendMode: Phaser.BlendModes.NORMAL,
+          });
+
+          await sleep(1000);
+
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
             icon: "Gold",
             fontSize: 16,
