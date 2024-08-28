@@ -15,6 +15,8 @@ export type WorldEvent = {
   type: "whale" | "acidRain" | "shieldEater" | "citadel" | "planet" | "opportunity";
 };
 
+// TODO: use threshold in dollar instead of eth
+// TODO: empire taking the lead in planet count
 /**
  * Prepare world events and emit them under a single stream.
  *
@@ -215,7 +217,7 @@ export function useWorldEvents() {
                   emit({
                     content: (
                       <div>
-                        Acid Rain destroyed {current.shipsDestroyed} ships on{" "}
+                        An acid Rain destroyed {current.shipsDestroyed.toLocaleString()} ships on{" "}
                         {getPlanetSpan(current.planetId as Entity)}
                       </div>
                     ),
@@ -237,7 +239,7 @@ export function useWorldEvents() {
                   emit({
                     content: (
                       <div>
-                        Shield Eater destroyed {current.shieldsDestroyed} shields on{" "}
+                        Shield Eater destroyed {current.shieldsDestroyed.toLocaleString()} shields on{" "}
                         {getPlanetSpan(current.planetId as Entity)}
                       </div>
                     ),
