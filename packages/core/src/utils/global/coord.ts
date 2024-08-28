@@ -50,8 +50,16 @@ export function hexDistance(a: { q: number; r: number }, b: { q: number; r: numb
   return (Math.abs(a.q - b.q) + Math.abs(a.q + a.r - b.q - b.r) + Math.abs(a.r - b.r)) / 2;
 }
 
-export function getDirection(from: { q: number; r: number }, to: { q: number; r: number }): EDirection {
-  const angle = Math.atan2(to.r - from.r, to.q - from.q);
-  const sector = Math.round((angle / (Math.PI / 3) + 6) % 6);
+export function getDirection(
+  from: { q: bigint | number; r: bigint | number },
+  to: { q: bigint | number; r: bigint | number },
+): EDirection {
+  const fromQ = Number(from.q);
+  const fromR = Number(from.r);
+  const toQ = Number(to.q);
+  const toR = Number(to.r);
+
+  const angle = Math.atan2(toR - fromR, toQ - fromQ);
+  const sector = Math.floor((angle / (Math.PI / 3) + 6) % 6);
   return directions[sector] || EDirection.East;
 }

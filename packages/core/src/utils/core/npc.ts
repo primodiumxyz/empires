@@ -75,7 +75,7 @@ export const createNpcUtils = (tables: Tables) => {
       const movePlanetEmpire = tables.Planet.get(movePlanetId as Entity)?.empireId;
       return movePlanetId === planetId && movePlanetEmpire !== planetData.empireId;
     });
-    if (pendingMoves.length === 0) return -1;
+    if (pendingMoves.length === 0) return 0;
 
     if (
       pendingMoves.find((move) => {
@@ -86,9 +86,9 @@ export const createNpcUtils = (tables: Tables) => {
         );
       })
     ) {
-      return 1;
+      return 2;
     }
-    return 0;
+    return 1;
   };
 
   /**
@@ -232,10 +232,14 @@ export const createNpcUtils = (tables: Tables) => {
         return; // Exit the loop early as magnet has highest priority
       }
 
-      // Priority 2: Neutral planet
-      if (neighborData.empireId === EEmpire.NULL && highestPriority < 2) {
+      // Priority 2: Neutral planet in the direction of highest weight
+      if (
+        neighborData.empireId === EEmpire.NULL &&
+        (highestPriority < 2 || (highestPriority === 2 && weight > highestWeight))
+      ) {
         bestTarget = neighbor;
         highestPriority = 2;
+        highestWeight = weight;
         multiplier = 1.5;
       }
 
@@ -244,15 +248,19 @@ export const createNpcUtils = (tables: Tables) => {
         neighborData.empireId !== planetData.empireId &&
         neighborData.empireId !== EEmpire.NULL &&
         neighborData.shipCount < planetData.shipCount &&
-        highestPriority < 1
+        (highestPriority < 1 || (highestPriority === 1 && weight > highestWeight))
       ) {
         bestTarget = neighbor;
         highestPriority = 1;
+        highestWeight = weight;
         multiplier = 1;
       }
 
       // Priority 4: Highest weight direction (when surrounded by friendly planets)
-      else if (neighborData.empireId === planetData.empireId && highestPriority < 0) {
+      else if (
+        neighborData.empireId === planetData.empireId &&
+        (highestPriority < 0 || (highestPriority === 0 && weight > highestWeight))
+      ) {
         if (weight > highestWeight) {
           bestTarget = neighbor;
           highestWeight = weight;
@@ -364,6 +372,7 @@ export const createNpcUtils = (tables: Tables) => {
   return {
     getRoutineProbabilities,
     getRoutineThresholds,
+    getRoutineMultipliers,
     getVulnerability,
     getPlanetStrength,
     getEmpireStrength,
