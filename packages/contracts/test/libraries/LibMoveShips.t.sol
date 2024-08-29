@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { Arrivals, PendingMove, Planet, PlanetData, P_GameConfig } from "codegen/index.sol";
+import { PendingMove, Planet, PlanetData, P_GameConfig } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
@@ -44,8 +44,11 @@ contract LibMoveShipsTest is PrimodiumTest {
   }
 
   function testExecuteMove() public {
-    Planet.setEmpireId(planetId, EEmpire.Red);
+    assignPlanetToEmpire(planetId, EEmpire.Red);
+    assignPlanetToEmpire(targetPlanet, EEmpire.Red);
+    vm.startPrank(creator);
     Planet.setShipCount(planetId, 1);
+    Planet.setShipCount(targetPlanet, 2);
     bool moved = LibMoveShips.createPendingMove(planetId, targetPlanet);
     assertTrue(moved, "should have moved");
 
@@ -54,9 +57,7 @@ contract LibMoveShipsTest is PrimodiumTest {
     LibMoveShips.executePendingMoves(planetId);
 
     assertEq(Planet.getShipCount(planetId), 0, "ship count should be 0");
-    assertEq(Arrivals.get(destination, EEmpire.Red), 1, "red should have 1 ship");
-    assertEq(Arrivals.get(destination, EEmpire.Blue), 0, "blue should have 0 ships");
-    assertEq(Arrivals.get(destination, EEmpire.Green), 0, "green should have 0 ships");
+    assertEq(Planet.getShipCount(targetPlanet), 3, "target planet should have 3 ships");
 
     assertTrue(PendingMove.get(planetId).empireId == EEmpire.NULL);
     assertEq(PendingMove.get(planetId).destinationPlanetId, bytes32(0));
