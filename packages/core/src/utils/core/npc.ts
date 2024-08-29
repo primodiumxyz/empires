@@ -334,7 +334,7 @@ export const createNpcUtils = (tables: Tables) => {
 
     // Weight factors
     const weights = {
-      friendly: -1,
+      friendly: 0,
       neutral: 2,
       enemy: 1,
     };

@@ -12,6 +12,7 @@ import { useAcidRain } from "@/hooks/useAcidRain";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 /* --------------------------------- PLANET --------------------------------- */
@@ -113,7 +114,9 @@ const PlanetAssets = ({
 const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { utils } = useCore();
   const { probabilities: p } = utils.getRoutineProbabilities(entity);
-  const [isOpen, setIsOpen] = useState(false);
+  const { OpenRoutineProbabilities } = useSettings();
+  const isOpen = OpenRoutineProbabilities.use()?.value ?? false;
+  console.log({ isOpen });
 
   const probabilities = useMemo(() => {
     return {
@@ -127,7 +130,7 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   return (
     <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => OpenRoutineProbabilities.set({ value: !isOpen })}
         className="absolute left-2 top-0 mb-2 flex -translate-y-1/2 items-center bg-secondary/25 text-left"
       >
         <h3 className="text-xs">ROUTINE LIKELIHOODS</h3>

@@ -63,6 +63,8 @@ const SelectedTab = createLocalNumberTable(settingsWorld, {
 
 const ViewMode = createLocalNumberTable(settingsWorld, { id: "ViewMode", persist: true, version: "1" });
 
+const OpenRoutineProbabilities = createLocalBoolTable(settingsWorld, { id: "OpenRoutineProbabilities", persist: true });
+
 if (!ViewMode.get()?.value) {
   ViewMode.set({ value: EViewMode.Dashboard });
 }
@@ -108,5 +110,6 @@ export const useSettings = () => {
     MusicPlaying,
     SelectedTab,
     ViewMode,
+    OpenRoutineProbabilities,
   };
 };
