@@ -36,7 +36,7 @@ export const setupCheatcodes = (options: {
 }) => {
   const { core, game, playerAccount, contractCalls, requestDrip } = options;
   const { tables } = core;
-  const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake, updateWorld } = contractCalls;
+  const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake } = contractCalls;
 
   // game
   const empires = tables.Empire.getAll();
@@ -666,16 +666,6 @@ export const setupCheatcodes = (options: {
     return devOps;
   };
 
-  const updateTurn = createCheatcode({
-    title: "Update turn",
-    bg: CheatcodeToBg["time"],
-    caption: "Update the turn",
-    inputs: {},
-    execute: async () => {
-      const success = await updateWorld();
-      return success;
-    },
-  });
   const placeMagnet = createCheatcode({
     title: "Place magnet",
     bg: CheatcodeToBg["magnet"],
@@ -1067,7 +1057,6 @@ export const setupCheatcodes = (options: {
   };
 
   return [
-    updateTurn,
     advanceTurns,
     endGame,
     resetGame,
