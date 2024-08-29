@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useRef } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
 import { Address } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -8,6 +8,7 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
 import { Price } from "@/components/shared/Price";
 import { Username } from "@/components/shared/Username";
+import { useEthPrice } from "@/hooks/useEthPrice";
 import { useSettings } from "@/hooks/useSettings";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
@@ -17,7 +18,6 @@ export type WorldEvent = {
   type: "whale" | "acidRain" | "shieldEater" | "citadel" | "planet" | "opportunity";
 };
 
-// TODO: use threshold in dollar instead of eth
 // TODO: empire taking the lead in planet count
 /**
  * Prepare world events and emit them under a single stream.
@@ -25,9 +25,15 @@ export type WorldEvent = {
  * @returns A stream of world events to subscribe to
  */
 export function useWorldEvents() {
-  const { tables } = useCore();
+  const {
+    tables,
+    utils: { usdToWei },
+  } = useCore();
   const { showBanner } = useSettings();
   const callbackRef = useRef<((event: WorldEvent) => void) | undefined>(undefined);
+
+  const { price } = useEthPrice();
+  const ethSpentThreshold = useMemo(() => usdToWei(thresholds.dollarSpent, price ?? 0), [price]);
 
   const emit = useCallback((event: WorldEvent) => {
     if (callbackRef.current) callbackRef.current(event);
@@ -66,7 +72,7 @@ export function useWorldEvents() {
               onEnter: ({ properties: { current } }) => {
                 if (!current) return;
 
-                if (current.ethSpent >= thresholds.ethSpent) {
+                if (current.ethSpent >= ethSpentThreshold) {
                   emit({
                     content: (
                       <div>
@@ -89,7 +95,7 @@ export function useWorldEvents() {
               onEnter: ({ properties: { current } }) => {
                 if (!current) return;
 
-                if (current.ethSpent >= thresholds.ethSpent) {
+                if (current.ethSpent >= ethSpentThreshold) {
                   emit({
                     content: (
                       <div>
@@ -111,7 +117,7 @@ export function useWorldEvents() {
             {
               onEnter: ({ properties: { current } }) => {
                 if (!current) return;
-                if (current.ethSpent >= thresholds.ethSpent) {
+                if (current.ethSpent >= ethSpentThreshold) {
                   emit({
                     content: (
                       <div>
@@ -134,7 +140,7 @@ export function useWorldEvents() {
             {
               onChange: ({ entity, properties: { current, prev } }) => {
                 const gain = (current?.gain ?? 0n) - (prev?.gain ?? 0n);
-                if (gain >= thresholds.ethSpent) {
+                if (gain >= ethSpentThreshold) {
                   emit({
                     content: (
                       <div>

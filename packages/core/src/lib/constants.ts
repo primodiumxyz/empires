@@ -42,7 +42,7 @@ export const WORLD_EVENTS = {
   },
   thresholds: {
     // a transaction with an ETH value greater than this treshold happened (buy ships/shields, airdrop gold, sell points)
-    ethSpent: parseEther("0.01"), // ~$25 at ETH $2,500
+    dollarSpent: 25, // $25
     // events with a ship destroy count greater than this treshold (acid rain)
     shipsDestroyed: 30n,
     // events with a shield destroy count greater than this treshold (shield eater)
