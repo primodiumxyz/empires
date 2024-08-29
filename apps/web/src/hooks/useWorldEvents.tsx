@@ -217,7 +217,6 @@ export function useWorldEvents() {
         ? tables.AcidDamageOverrideLog.watch(
             {
               onEnter: ({ properties: { current } }) => {
-                console.log("AcidDamageOverrideLog", current);
                 if (!current) return;
                 if (current?.shipsDestroyed >= thresholds.shipsDestroyed) {
                   emit({
