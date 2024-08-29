@@ -48,19 +48,19 @@ export const useBanner = () => {
       /* ------------------------------------ - ----------------------------------- */
       // TODO: TEMP switch to test out banner/toast
       // * 1. Banner:
-      queueEvent({ content: e.content, iconUri: getIcon(e.type) });
-      processQueue(setShow, setContent, setIconUri);
+      // queueEvent({ content: e.content, iconUri: getIcon(e.type) });
+      // processQueue(setShow, setContent, setIconUri);
       // * 2. Toast:
-      // toast.info(e.content, {
-      //   icon: () => (
-      //     <img
-      //       src={getIcon(e.type)}
-      //       alt="Banner icon"
-      //       className="pixel-images m-1 w-[1.25em] scale-150"
-      //       draggable="false"
-      //     />
-      //   ),
-      // });
+      toast.info(e.content, {
+        icon: () => (
+          <img
+            src={getIcon(e.type)}
+            alt="Banner icon"
+            className="pixel-images m-1 w-[1.25em] scale-150"
+            draggable="false"
+          />
+        ),
+      });
       /* ------------------------------------ - ----------------------------------- */
     });
   }, [onEvent, queueEvent, processQueue]);
