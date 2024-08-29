@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { useWorldEvents, WorldEvent } from "@/hooks/useWorldEvents";
@@ -44,8 +45,23 @@ export const useBanner = () => {
 
   useEffect(() => {
     onEvent((e) => {
+      /* ------------------------------------ - ----------------------------------- */
+      // TODO: TEMP switch to test out banner/toast
+      // * 1. Banner:
       queueEvent({ content: e.content, iconUri: getIcon(e.type) });
       processQueue(setShow, setContent, setIconUri);
+      // * 2. Toast:
+      // toast.info(e.content, {
+      //   icon: () => (
+      //     <img
+      //       src={getIcon(e.type)}
+      //       alt="Banner icon"
+      //       className="pixel-images m-1 w-[1.25em] scale-150"
+      //       draggable="false"
+      //     />
+      //   ),
+      // });
+      /* ------------------------------------ - ----------------------------------- */
     });
   }, [onEvent, queueEvent, processQueue]);
 

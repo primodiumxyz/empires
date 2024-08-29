@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-
-import { InterfaceIcons } from "@primodiumxyz/assets";
 import { useBanner } from "@/hooks/useBanner";
 import { cn } from "@/util/client";
 
