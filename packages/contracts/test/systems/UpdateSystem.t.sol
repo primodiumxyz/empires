@@ -268,7 +268,7 @@ contract UpdateSystemTest is PrimodiumTest {
     assertTrue(Magnet.get(empire, emptyPlanetId).isMagnet, "Second magnet should not be removed yet");
   }
 
-  function testAcidUpdate() public {
+  function testAcidUpdate() public {    
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     uint256 acidDuration = 3;
     vm.startPrank(creator);
@@ -307,6 +307,14 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function testUpdateAcidConquerChangeEmpire() public {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    allRoutineThresholds.push(RoutineThresholds({
+      planetId: planetIds[1],
+      accumulateGold: 2000,
+      buyShields: 4000,
+      buyShips: 6000,
+      moveShips: 10000,
+      moveTargetId: planetIds[0]
+    }));
     uint256 acidDuration = 3;
     vm.startPrank(creator);
     P_AcidConfig.setAcidDuration(acidDuration);
