@@ -3,37 +3,33 @@ type RoutineThresholds = {
   accumulateGold: number;
   buyShields: number;
   buyShips: number;
-  supportAlly: number;
-  attackEnemy: number;
+  moveShips: number;
 };
 
 type RoutineThresholdsBigInt = {
   accumulateGold: bigint;
   buyShields: bigint;
   buyShips: bigint;
-  supportAlly: bigint;
-  attackEnemy: bigint;
+  moveShips: bigint;
 };
 
-type RoutineOptions = {
+type RoutineMultipliers = {
   buyShipMultiplier?: number;
   buyShieldMultiplier?: number;
-  attackMultiplier?: number;
-  supportMultiplier?: number;
+  moveShipsMultiplier?: number;
+  accumulateGoldMultiplier: number;
 };
 
 export function calculateRoutineThresholds(probabilities: RoutineThresholds): RoutineThresholdsBigInt {
   const goldThreshold = BigInt(Math.round(probabilities.accumulateGold * 10000));
   const shieldThreshold = BigInt(Math.round(probabilities.buyShields * 10000)) + goldThreshold;
   const shipThreshold = BigInt(Math.round(probabilities.buyShips * 10000)) + shieldThreshold;
-  const supportThreshold = BigInt(Math.round(probabilities.supportAlly * 10000)) + shipThreshold;
-  const attackThreshold = BigInt(Math.round(probabilities.attackEnemy * 10000)) + supportThreshold;
+  const moveThreshold = BigInt(Math.round(probabilities.moveShips * 10000)) + shipThreshold;
   return {
     accumulateGold: goldThreshold,
     buyShields: shieldThreshold,
     buyShips: shipThreshold,
-    attackEnemy: attackThreshold,
-    supportAlly: supportThreshold,
+    moveShips: moveThreshold,
   };
 }
 
@@ -41,95 +37,90 @@ export function calculateRoutinePcts(
   vulnerability: number,
   planetStrength: number,
   empireStrength: number,
-  options: RoutineOptions,
+  multipliers: RoutineMultipliers,
 ): RoutineThresholds {
   // Input variables and their multipliers
-  const multipliers: {
+  const modifiers: {
     vulnerability: RoutineThresholds;
     planetStrength: RoutineThresholds;
     empireStrength: RoutineThresholds;
   } = {
     vulnerability: {
-      buyShields: 0.35,
-      attackEnemy: -0.2,
-      accumulateGold: -0.05,
-      buyShips: -0.05,
-      supportAlly: -0.05,
+      buyShields: 0.5,
+      moveShips: -0.15,
+      accumulateGold: -0.1,
+      buyShips: 0,
     },
     planetStrength: {
       buyShields: -0.2,
-      attackEnemy: 0.08,
+      moveShips: 0.08,
       accumulateGold: 0.04,
       buyShips: 0.04,
-      supportAlly: 0.04,
     },
     empireStrength: {
       buyShields: -0.04,
-      attackEnemy: -0.11,
+      moveShips: -0.08,
       accumulateGold: 0.11,
       buyShips: -0.05,
-      supportAlly: 0.09,
     },
   } as const;
 
   // Initial likelihoods
   const initialLikelihoods: RoutineThresholds = {
-    buyShields: 0.1,
-    attackEnemy: 0.4,
-    supportAlly: 0.25,
-    accumulateGold: 0.15,
-    buyShips: 0.1,
+    buyShields: 0.16,
+    moveShips: 0.47,
+    accumulateGold: 0.21,
+    buyShips: 0.16,
   } as const;
 
   // Calculate likelihood adjustments
   const adjustments: RoutineThresholds = {
     buyShields: 0,
-    attackEnemy: 0,
+    moveShips: 0,
     accumulateGold: 0,
     buyShips: 0,
-    supportAlly: 0,
   };
   for (const _category in initialLikelihoods) {
     const category = _category as keyof RoutineThresholds;
     adjustments[category] =
-      vulnerability * multipliers.vulnerability[category] +
-      planetStrength * multipliers.planetStrength[category] +
-      empireStrength * multipliers.empireStrength[category];
+      vulnerability * modifiers.vulnerability[category] +
+      planetStrength * modifiers.planetStrength[category] +
+      empireStrength * modifiers.empireStrength[category];
   }
 
   // Calculate final likelihoods
   const finalLikelihoods: RoutineThresholds = {
     buyShields: 0,
-    attackEnemy: 0,
+    moveShips: 0,
     accumulateGold: 0,
     buyShips: 0,
-    supportAlly: 0,
   };
   for (const _category in initialLikelihoods) {
     const category = _category as keyof RoutineThresholds;
     finalLikelihoods[category] = Math.max(0, initialLikelihoods[category] + adjustments[category]);
   }
-  if (options?.attackMultiplier !== undefined) finalLikelihoods.attackEnemy *= options.attackMultiplier;
-  if (options?.supportMultiplier !== undefined) finalLikelihoods.supportAlly *= options.supportMultiplier;
-  if (options?.buyShipMultiplier !== undefined) finalLikelihoods.buyShips *= options.buyShipMultiplier;
-  if (options?.buyShieldMultiplier !== undefined) finalLikelihoods.buyShields *= options.buyShieldMultiplier;
+
+  if (multipliers.buyShipMultiplier !== undefined) finalLikelihoods.buyShips *= multipliers.buyShipMultiplier;
+  if (multipliers.buyShieldMultiplier !== undefined) finalLikelihoods.buyShields *= multipliers.buyShieldMultiplier;
+  if (multipliers.moveShipsMultiplier !== undefined) finalLikelihoods.moveShips *= multipliers.moveShipsMultiplier;
+
+  if (multipliers.accumulateGoldMultiplier !== undefined)
+    finalLikelihoods.accumulateGold *= multipliers.accumulateGoldMultiplier;
 
   // Normalize likelihoods
   const normalizedLikelihoods: RoutineThresholds = {
     buyShields: 0,
-    attackEnemy: 0,
+    moveShips: 0,
     accumulateGold: 0,
     buyShips: 0,
-    supportAlly: 0,
   };
   const totalPositive = Object.values(finalLikelihoods).reduce((sum, value) => sum + Math.max(0, value), 0);
   if (totalPositive == 0) {
     return {
       accumulateGold: 1,
       buyShields: 0,
-      attackEnemy: 0,
       buyShips: 0,
-      supportAlly: 0,
+      moveShips: 0,
     };
   }
 

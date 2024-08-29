@@ -12,6 +12,7 @@ import { useAcidRain } from "@/hooks/useAcidRain";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
+import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 /* --------------------------------- PLANET --------------------------------- */
@@ -81,7 +82,7 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
 
         <div className="flex w-full flex-col gap-6">
           <Overrides entity={entity} />
-          <RoutineProbabilities entity={entity} />
+          {empireId !== EEmpire.NULL && <RoutineProbabilities entity={entity} />}
         </div>
       </div>
     </Card>
@@ -113,22 +114,23 @@ const PlanetAssets = ({
 const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { utils } = useCore();
   const { probabilities: p } = utils.getRoutineProbabilities(entity);
-  const [isOpen, setIsOpen] = useState(false);
+  const { OpenRoutineProbabilities } = useSettings();
+  const isOpen = OpenRoutineProbabilities.use()?.value ?? false;
+  console.log({ isOpen });
 
   const probabilities = useMemo(() => {
     return {
       accumulateGold: { label: "ACCUMULATE GOLD", value: p.accumulateGold },
       buyShips: { label: "BUY SHIPS", value: p.buyShips },
       buyShields: { label: "BUY SHIELDS", value: p.buyShields },
-      supportAlly: { label: "SUPPORT", value: p.supportAlly },
-      attackEnemy: { label: "ATTACK", value: p.attackEnemy },
+      moveShips: { label: "MOVE SHIPS", value: p.moveShips },
     };
   }, [p]);
 
   return (
     <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => OpenRoutineProbabilities.set({ value: !isOpen })}
         className="absolute left-2 top-0 mb-2 flex -translate-y-1/2 items-center bg-secondary/25 text-left"
       >
         <h3 className="text-xs">ROUTINE LIKELIHOODS</h3>
@@ -194,55 +196,49 @@ const Overrides = ({ entity }: { entity: Entity }) => {
     <div className="relative min-h-8 w-full rounded-md border border-base-100 p-2 text-xs">
       <h3 className="absolute left-2 top-0 mb-2 -translate-y-1/2 bg-secondary/25 text-xs">OVERRIDES</h3>
       <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-1 text-xs">
-        <>
-          <span className="mt-1 text-gray-400">MAGNETS</span>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
-            {magnets.length > 0 && turnsLeft.some((t) => t !== 0) ? (
-              magnets.map(
-                (magnet, index) =>
-                  turnsLeft[index] !== 0 && (
-                    <IconLabel
-                      key={index}
-                      imageUri={magnet.icon}
-                      text={turnsLeft[index] ? formatNumber(turnsLeft[index]) : "--"}
-                    />
-                  ),
-              )
-            ) : (
-              <span className="text-gray-400">-</span>
-            )}
-          </div>
-        </>
+        <span className="mt-1 text-gray-400">MAGNETS</span>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-1">
+          {magnets.length > 0 && turnsLeft.some((t) => t !== 0) ? (
+            magnets.map(
+              (magnet, index) =>
+                turnsLeft[index] !== 0 && (
+                  <IconLabel
+                    key={index}
+                    imageUri={magnet.icon}
+                    text={turnsLeft[index] ? formatNumber(turnsLeft[index]) : "--"}
+                  />
+                ),
+            )
+          ) : (
+            <span className="text-gray-400">-</span>
+          )}
+        </div>
 
-        <>
-          <span className="text-gray-400">SHIELD EATER</span>
-          <div>
-            {turnsToShieldEater !== undefined ? (
-              turnsToShieldEater === 0 ? (
-                <span className="text-accent">on planet</span>
-              ) : (
-                <span className="text-accent">
-                  in {turnsToShieldEater} turn{turnsToShieldEater > 1 ? "s" : ""}
-                </span>
-              )
+        <span className="text-gray-400">SHIELD EATER</span>
+        <div>
+          {turnsToShieldEater !== undefined ? (
+            turnsToShieldEater === 0 ? (
+              <span className="text-accent">on planet</span>
             ) : (
-              <span className="text-gray-400">-</span>
-            )}
-          </div>
-        </>
-
-        <>
-          <span className="text-gray-400">ACID RAIN</span>
-          <div>
-            {cycles !== 0n ? (
               <span className="text-accent">
-                {cycles.toLocaleString()} turn{cycles > 1n ? "s" : ""} left
+                in {turnsToShieldEater} turn{turnsToShieldEater > 1 ? "s" : ""}
               </span>
-            ) : (
-              <span className="text-gray-400">-</span>
-            )}
-          </div>
-        </>
+            )
+          ) : (
+            <span className="text-gray-400">-</span>
+          )}
+        </div>
+
+        <span className="text-gray-400">ACID RAIN</span>
+        <div>
+          {cycles !== 0n ? (
+            <span className="text-accent">
+              {cycles.toLocaleString()} turn{cycles > 1n ? "s" : ""} left
+            </span>
+          ) : (
+            <span className="text-gray-400">-</span>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { ERoutine } from "@primodiumxyz/contracts/config/enums";
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tables } from "@core/lib";
-import { getDirection, getNeighbor } from "@core/utils/global/coord";
+import { directions, getDirection, getNeighbor, hexDistance } from "@core/utils/global/coord";
 
 import { calculateRoutinePcts, calculateRoutineThresholds } from "../global/calculateRoutineThresholds";
 
@@ -12,35 +12,47 @@ export const createNpcUtils = (tables: Tables) => {
     const vulnerability = getVulnerability(planetId);
     const planetStrength = getPlanetStrength(planetId);
     const empireStrength = getEmpireStrength(planetId);
-    const attackTargetId = getAttackTarget(planetId);
-    const supportTargetId = getSupportTarget(planetId);
+
+    const { multipliers, moveTargetId } = getRoutineMultipliers(planetId);
+    const probabilities = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, multipliers);
+    return {
+      context: { vulnerability, planetStrength, empireStrength },
+      probabilities,
+      moveTargetId,
+    };
+  };
+
+  const getRoutineMultipliers = (planetId: Entity) => {
     const shipPrice = tables.P_RoutineCosts.getWithKeys({ routine: ERoutine.BuyShips })?.goldCost ?? 0n;
     const shieldPrice = tables.P_RoutineCosts.getWithKeys({ routine: ERoutine.BuyShields })?.goldCost ?? 0n;
     const shipCount = tables.Planet.get(planetId)?.shipCount ?? 0n;
     const goldCount = tables.Planet.get(planetId)?.goldCount ?? 0n;
+    const moveTargetId = getMoveTarget(planetId);
 
-    const options = {
-      attackMultiplier: !attackTargetId || shipCount === 0n ? 0 : attackTargetId.multiplier,
-      supportMultiplier: !supportTargetId || shipCount === 0n ? 0 : supportTargetId.multiplier,
-      buyShipMultiplier: goldCount < shipPrice ? 0 : 1,
-      buyShieldMultiplier: goldCount < shieldPrice ? 0 : 1,
+    const lotsOfGold = 30n;
+    const buyShipMultiplier = goldCount < shipPrice ? 0 : goldCount > lotsOfGold ? 2 : 1;
+    const buyShieldMultiplier = goldCount < shieldPrice ? 0 : goldCount > lotsOfGold ? 2 : 1;
+
+    const multipliers = {
+      moveShipsMultiplier: !moveTargetId || shipCount === 0n ? 0 : moveTargetId.multiplier,
+      buyShipMultiplier,
+      buyShieldMultiplier,
+      accumulateGoldMultiplier: lotsOfGold ? 0 : 1,
     };
-    const probabilities = calculateRoutinePcts(vulnerability, planetStrength, empireStrength, options);
+
     return {
-      context: { vulnerability, planetStrength, empireStrength },
-      probabilities,
-      attackTargetId,
-      supportTargetId,
+      multipliers,
+      moveTargetId,
     };
   };
+
   const getRoutineThresholds = (planetId: Entity) => {
     const data = getRoutineProbabilities(planetId);
     const thresholds = calculateRoutineThresholds(data.probabilities);
     return {
       ...thresholds,
       planetId,
-      attackTargetId: data.attackTargetId.target ?? planetId,
-      supportTargetId: data.supportTargetId.target ?? planetId,
+      moveTargetId: data.moveTargetId.target ?? planetId,
     };
   };
 
@@ -63,7 +75,7 @@ export const createNpcUtils = (tables: Tables) => {
       const movePlanetEmpire = tables.Planet.get(movePlanetId as Entity)?.empireId;
       return movePlanetId === planetId && movePlanetEmpire !== planetData.empireId;
     });
-    if (pendingMoves.length === 0) return -1;
+    if (pendingMoves.length === 0) return 0;
 
     if (
       pendingMoves.find((move) => {
@@ -74,9 +86,9 @@ export const createNpcUtils = (tables: Tables) => {
         );
       })
     ) {
-      return 1;
+      return 2;
     }
-    return 0;
+    return 1;
   };
 
   /**
@@ -184,115 +196,77 @@ export const createNpcUtils = (tables: Tables) => {
   };
 
   /**
-   * Determines the best planet to attack from the neighbors of a given planet.
+   * Determines the best move target for a given planet based on neighboring planets and priorities.
    *
-   * @param {Entity} planetId - The ID of the planet from which to launch the attack.
-   * @returns {Entity | undefined} The ID of the weakest enemy neighbor planet, or undefined if no valid target is found.
-   *
-   * This function performs the following steps:
-   * 1. Retrieves the data for the given planet.
-   * 2. Gets all neighboring planets.
-   * 3. Filters out neighbors that belong to the same empire as the given planet.
-   * 4. Among the enemy neighbors, finds the one with the weakest defense (lowest sum of ships and shields).
-   * 5. Returns the ID of the weakest enemy planet, or undefined if no valid target is found.
+   * @param {Entity} planetId - The ID of the planet for which to find the move target.
+   * @returns {{ target: Entity | undefined; multiplier: number }} An object containing the best target planet and a multiplier value.
    */
-  const getAttackTarget = (planetId: Entity): { target: Entity | undefined; multiplier: number } => {
+  const getMoveTarget = (planetId: Entity): { target: Entity | undefined; multiplier: number } => {
     const planetData = tables.Planet.get(planetId);
-    if (!planetData || planetData.empireId === 0) return { target: undefined, multiplier: 0 };
+    if (!planetData || planetData.empireId === 0 || planetData.shipCount === 0n)
+      return { target: undefined, multiplier: 0 };
 
     const allNeighbors = getAllNeighbors(planetId).map(({ entity }) => entity);
     if (allNeighbors.length === 0) return { target: undefined, multiplier: 0 };
-
-    const enemyNeighbors = allNeighbors.filter((neighbor) => {
-      const neighborData = tables.Planet.get(neighbor);
-      return neighborData?.empireId !== planetData.empireId;
-    });
-    if (enemyNeighbors.length === 0) return { target: undefined, multiplier: 0 };
-
-    // check for magnets and select random one
-    const magnetizedPlanets = enemyNeighbors.filter((neighbor) =>
-      tables.Magnet.hasWithKeys({ planetId: neighbor, empireId: planetData.empireId }),
-    );
-    if (magnetizedPlanets.length > 0) {
-      const randomIndex = Math.floor(Math.random() * magnetizedPlanets.length);
-      return { target: magnetizedPlanets[randomIndex], multiplier: 4 };
-    }
     // Get direction weights
-    const directionWeights = getDirectionWeights(planetId);
+    const directionWeights = createHeatmap(planetId);
     // find weakest attack target, considering direction weights
     let bestTarget: Entity | undefined;
-    let lowestWeightedDefense = Infinity;
+    let highestPriority = -1;
+    let highestWeight = -Infinity;
+    let multiplier = 1;
 
-    enemyNeighbors.forEach((neighbor) => {
+    allNeighbors.forEach((neighbor) => {
       const neighborData = tables.Planet.get(neighbor);
       if (!neighborData) return;
 
-      const enemyDefense = neighborData.shipCount + neighborData.shieldCount;
-      const direction = getNeighborDirection(planetId, neighbor);
-      const weight = directionWeights[direction] || 1;
-      const weightedDefense = Number(enemyDefense) / weight;
+      const planetPosition = { q: Number(planetData.q), r: Number(planetData.r) };
+      const neighborPosition = { q: Number(neighborData.q), r: Number(neighborData.r) };
+      const direction = getDirection(planetPosition, neighborPosition);
+      const weight = directionWeights.heatmap.get(direction) || 1;
 
-      if (weightedDefense < lowestWeightedDefense) {
+      // Priority 1: Magnet
+      if (tables.Magnet.hasWithKeys({ planetId: neighbor, empireId: planetData.empireId })) {
         bestTarget = neighbor;
-        lowestWeightedDefense = weightedDefense;
+        multiplier = 6;
+        return; // Exit the loop early as magnet has highest priority
       }
-    });
 
-    return { target: bestTarget, multiplier: 1 };
-  };
-
-  /**
-   * Determines the best planet to support from the neighbors of a given planet.
-   *
-   * @param {Entity} planetId - The ID of the planet from which to launch the support.
-   * @returns {Entity | undefined} The ID of the weakest ally neighbor planet, or undefined if no valid target is found.
-   *
-   * This function performs the following steps:
-   * 1. Retrieves the data for the given planet.
-   * 2. Gets all neighboring planets.
-   * 3. Filters out neighbors that do not belong to the same empire as the given planet.
-   * 4. Among the ally neighbors, finds the one with the weakest defense (lowest sum of ships and shields).
-   * 5. Returns the ID of the weakest ally planet, or undefined if no valid target is found.
-   */
-  const getSupportTarget = (planetId: Entity): { target: Entity | undefined; multiplier: number } => {
-    const planetData = tables.Planet.get(planetId);
-    if (!planetData || planetData.empireId === 0) return { target: undefined, multiplier: 0 };
-
-    const allNeighbors = getAllNeighbors(planetId).map(({ entity }) => entity);
-    if (allNeighbors.length === 0) return { target: undefined, multiplier: 0 };
-
-    const allyNeighbors = allNeighbors.filter((neighbor) => {
-      const neighborData = tables.Planet.get(neighbor);
-      return neighborData?.empireId === planetData.empireId && neighbor !== planetId;
-    });
-    // check for magnets and select random one
-    const magnetizedPlanets = allyNeighbors.filter((neighbor) =>
-      tables.Magnet.hasWithKeys({ planetId: neighbor, empireId: planetData.empireId }),
-    );
-    if (magnetizedPlanets.length > 0) {
-      const randomIndex = Math.floor(Math.random() * magnetizedPlanets.length);
-      return { target: magnetizedPlanets[randomIndex], multiplier: 3 };
-    }
-    const multiplier = allyNeighbors.length > 4 ? 2 : 1;
-    // Get direction weights
-    const directionWeights = getDirectionWeights(planetId);
-
-    // find weakest support target, considering direction weights
-    let bestTarget: Entity | undefined;
-    let lowestWeightedDefense = Infinity;
-
-    allyNeighbors.forEach((neighbor) => {
-      const neighborData = tables.Planet.get(neighbor);
-      if (!neighborData) return;
-
-      const allyDefense = neighborData.shipCount + neighborData.shieldCount;
-      const direction = getNeighborDirection(planetId, neighbor);
-      const weight = directionWeights[direction] || 1;
-      const weightedDefense = Number(allyDefense) * weight; // Invert weight for support
-
-      if (weightedDefense < lowestWeightedDefense) {
+      // Priority 2: Neutral planet in the direction of highest weight
+      if (
+        neighborData.empireId === EEmpire.NULL &&
+        (highestPriority < 2 || (highestPriority === 2 && weight > highestWeight))
+      ) {
         bestTarget = neighbor;
-        lowestWeightedDefense = weightedDefense;
+        highestPriority = 2;
+        highestWeight = weight;
+        multiplier = 1.5;
+      }
+
+      // Priority 3: Weak enemy planet
+      else if (
+        neighborData.empireId !== planetData.empireId &&
+        neighborData.empireId !== EEmpire.NULL &&
+        neighborData.shipCount < planetData.shipCount &&
+        (highestPriority < 1 || (highestPriority === 1 && weight > highestWeight))
+      ) {
+        bestTarget = neighbor;
+        highestPriority = 1;
+        highestWeight = weight;
+        multiplier = 1;
+      }
+
+      // Priority 4: Highest weight direction (when surrounded by friendly planets)
+      else if (
+        neighborData.empireId === planetData.empireId &&
+        (highestPriority < 0 || (highestPriority === 0 && weight > highestWeight))
+      ) {
+        if (weight > highestWeight) {
+          bestTarget = neighbor;
+          highestWeight = weight;
+          highestPriority = 0;
+          multiplier = 1;
+        }
       }
     });
 
@@ -341,66 +315,68 @@ export const createNpcUtils = (tables: Tables) => {
       .filter(({ entity }) => entity !== undefined) as { entity: Entity; direction: EDirection }[];
   };
 
-  const getDirectionWeights = (planetId: Entity, radius: number = 2): Record<EDirection, number> => {
-    const planetData = tables.Planet.get(planetId);
-    if (!planetData) return {} as Record<EDirection, number>;
+  /**
+   * Creates a heatmap based on the influence of neighboring planets around the given source planet.
+   *
+   * @param {Entity} sourcePlanet - The ID of the source planet.
+   * @returns {Map<EDirection, number>} A map representing the heatmap with directions and influence values.
+   */
+  function createHeatmap(sourcePlanet: Entity): {
+    heatmap: Map<EDirection, number>;
+    influenceMap: Map<Entity, number>;
+  } {
+    const heatmap = new Map<EDirection, number>();
+    const influenceMap = new Map<Entity, number>();
+    const sourcePlanetData = tables.Planet.get(sourcePlanet);
+    if (!sourcePlanetData) return { heatmap, influenceMap };
+    // Initialize heatmap
+    directions.forEach((dir) => heatmap.set(dir, 0));
 
-    const directions = [
-      EDirection.East,
-      EDirection.Southeast,
-      EDirection.Southwest,
-      EDirection.West,
-      EDirection.Northwest,
-      EDirection.Northeast,
-    ];
-
-    const allPlanets =
-      tables.Keys_PlanetsSet.get()?.itemKeys.map((planet) => {
-        return { planetId: planet, ...tables.Planet.get(planet as Entity)! };
-      }) ?? [];
-
-    const countEnemyPlanets = (q: number, r: number, steps: number): number => {
-      if (steps === 0) return 0;
-
-      const neighbor = allPlanets.find((planet) => Number(planet.q) === q && Number(planet.r) === r);
-      if (!neighbor) return 0;
-      const isEnemy = neighbor.empireId !== planetData.empireId ? 1 : 0;
-
-      return (
-        isEnemy +
-        directions.reduce((sum, dir) => {
-          const nextCoords = getNeighbor(q, r, dir);
-          return sum + countEnemyPlanets(nextCoords.q, nextCoords.r, steps - 1);
-        }, 0)
-      );
+    // Weight factors
+    const weights = {
+      friendly: 0,
+      neutral: 2,
+      enemy: 1,
     };
 
-    const enemyCounts = directions.map((dir) => {
-      const coords = getNeighbor(Number(planetData.q), Number(planetData.r), dir);
-      return countEnemyPlanets(coords.q, coords.r, radius);
+    const planets = tables.Planet.getAll();
+    // Calculate influence for each planet
+    planets.forEach((planet) => {
+      const planetData = tables.Planet.get(planet);
+      if (!planetData) return;
+      const npcPosition = { q: Number(sourcePlanetData.q), r: Number(sourcePlanetData.r) };
+      const targetPosition = { q: Number(planetData.q), r: Number(planetData.r) };
+      const distance = hexDistance(npcPosition, targetPosition);
+      if (distance === 0) return; // Skip if it's the NPC's position
+
+      const planetType =
+        planetData.empireId === sourcePlanetData.empireId
+          ? "friendly"
+          : planetData.empireId === EEmpire.NULL
+            ? "neutral"
+            : "enemy";
+
+      const hasMagnet = tables.Magnet.hasWithKeys({ planetId: planet, empireId: sourcePlanetData.empireId });
+      const magnetBonus = hasMagnet ? 2 : 1;
+
+      const influence = (weights[planetType] / distance) * magnetBonus;
+      const direction = getDirection(npcPosition, targetPosition);
+
+      heatmap.set(direction, (heatmap.get(direction) || 0) + influence);
+      influenceMap.set(planet, influence);
     });
 
-    const maxCount = Math.max(...enemyCounts, 1);
-    const weights = enemyCounts.map((count) => count / maxCount); // Higher weight for more enemy planets
-
-    return Object.fromEntries(directions.map((dir, index) => [dir, weights[index]])) as Record<EDirection, number>;
-  };
-
-  const getNeighborDirection = (from: Entity, to: Entity) => {
-    const fromPlanet = tables.Planet.get(from);
-    const toPlanet = tables.Planet.get(to);
-    if (!fromPlanet || !toPlanet) return EDirection.East;
-
-    return getDirection({ q: fromPlanet.q, r: fromPlanet.r }, { q: toPlanet.q, r: toPlanet.r });
-  };
+    return { heatmap, influenceMap };
+  }
 
   return {
     getRoutineProbabilities,
     getRoutineThresholds,
+    getRoutineMultipliers,
     getVulnerability,
     getPlanetStrength,
     getEmpireStrength,
     getAllNeighbors,
-    getDirectionWeights,
+    createHeatmap,
   };
 };

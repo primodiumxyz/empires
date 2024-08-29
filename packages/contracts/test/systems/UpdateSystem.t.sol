@@ -55,10 +55,8 @@ contract UpdateSystemTest is PrimodiumTest {
       accumulateGold: 2000,
       buyShields: 4000,
       buyShips: 6000,
-      supportAlly: 8000,
-      attackEnemy: 10000,
-      attackTargetId: targetPlanetId,
-      supportTargetId: targetPlanetId
+      moveShips: 10000,
+      moveTargetId: targetPlanetId
     });
     allRoutineThresholds.push(routineThresholds);
   }
@@ -333,9 +331,20 @@ contract UpdateSystemTest is PrimodiumTest {
       "Ship count should be 1 due to conquer and instant acid update"
     );
     assertEq(Planet.getEmpireId(planetIds[0]), EEmpire.Blue, "Planet should be conquered by blue");
-    assertEq(AcidPlanetsSet.getAcidCycles(EEmpire.Red, planetIds[0]), 0, "Planet not owned by red anymore, acid data should be removed");
-    assertFalse(AcidPlanetsSet.has(EEmpire.Red, planetIds[0]), "Planet not owned by red anymore, acid data should be removed");
-    assertEq(AcidPlanetsSet.getAcidCycles(EEmpire.Blue, planetIds[0]), acidDuration - 2, "Planet conquered by blue and experienced an acid cycle, should have 1 cycle left");
+    assertEq(
+      AcidPlanetsSet.getAcidCycles(EEmpire.Red, planetIds[0]),
+      0,
+      "Planet not owned by red anymore, acid data should be removed"
+    );
+    assertFalse(
+      AcidPlanetsSet.has(EEmpire.Red, planetIds[0]),
+      "Planet not owned by red anymore, acid data should be removed"
+    );
+    assertEq(
+      AcidPlanetsSet.getAcidCycles(EEmpire.Blue, planetIds[0]),
+      acidDuration - 2,
+      "Planet conquered by blue and experienced an acid cycle, should have 1 cycle left"
+    );
     assertTrue(AcidPlanetsSet.has(EEmpire.Blue, planetIds[0]), "Planet conquered by blue, acid data should be added");
   }
 }
