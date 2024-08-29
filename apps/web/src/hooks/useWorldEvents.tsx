@@ -18,7 +18,6 @@ export type WorldEvent = {
   type: "whale" | "acidRain" | "shieldEater" | "citadel" | "planet" | "opportunity";
 };
 
-// TODO: empire taking the lead in planet count
 /**
  * Prepare world events and emit them under a single stream.
  *
@@ -134,6 +133,7 @@ export function useWorldEvents() {
             { runOnInit: false },
           )
         : undefined,
+
       // Selling points for a large amount of ETH
       enabled.sellPoints
         ? tables.Value_PlayersMap.watch(
@@ -155,6 +155,7 @@ export function useWorldEvents() {
             { runOnInit: false },
           )
         : undefined,
+
       // Planets captures
       tables.Planet.watch(
         {
@@ -183,20 +184,58 @@ export function useWorldEvents() {
               });
             }
 
-            // TODO: an empire just took the lead in planet count
-            // Emit only if the top planet just took the lead
-            // if (enabled.planetCountLead) {
-            //   const allPlanets = tables.Planet.getAll().map((entity) => tables.Planet.get(entity));
-            //   const planetCounts = allPlanets.reduce((acc, planet) => {
-            //     const empireId = planet?.empireId;
-            //     if (!empireId) return acc;
-            //     acc[empireId] = (acc[empireId] || 0) + 1;
-            //     return acc;
-            //   }, {} as Record<EEmpire, number>);
+            // - an empire just took the lead in planet count
+            if (enabled.planetCountLead) {
+              if (!current || !prev) return;
+
+              // count the number of planets each empire has
+              const allPlanets = tables.Planet.getAll().map((entity) => tables.Planet.get(entity));
+              const planetCounts = allPlanets.reduce(
+                (acc, planet) => {
+                  const empireId = planet?.empireId as EEmpire;
+                  if (!empireId) return acc;
+                  acc[empireId] = (acc[empireId] || 0) + 1;
+                  return acc;
+                },
+                {} as Record<EEmpire, number>,
+              );
+
+              // grab the two leading empires
+              const sortedEmpires = Object.entries(planetCounts).sort((a, b) => b[1] - a[1]);
+              const [leadingEmpire, secondEmpire, thirdEmpire] = sortedEmpires;
+
+              const leadingEmpireId = leadingEmpire ? (Number(leadingEmpire[0]) as EEmpire) : undefined;
+              // we're only interested if:
+              if (
+                leadingEmpire &&
+                secondEmpire &&
+                // a. the difference between them is 1 planet (otherwise this is not the update we're looking for)
+                leadingEmpire[1] - secondEmpire[1] === 1 &&
+                // b. the leading empire just captured this planet (meaning this is the actual leadership change)
+                current.empireId === leadingEmpireId &&
+                prev.empireId !== leadingEmpireId
+              ) {
+                emit({
+                  content:
+                    thirdEmpire && secondEmpire[1] !== thirdEmpire[1] ? (
+                      <div>
+                        {getEmpireSpan(leadingEmpireId)} has taken the lead with {leadingEmpire[1]} planets, closely
+                        followed by {getEmpireSpan(Number(secondEmpire[0]) as EEmpire)}!
+                      </div>
+                    ) : (
+                      <div>
+                        {getEmpireSpan(leadingEmpireId)} has taken the lead with {leadingEmpire[1]} planets!
+                      </div>
+                    ),
+                  type: "planet",
+                });
+              }
+            }
           },
         },
         { runOnInit: false },
       ),
+
       // Points for an empire became super cheap
       enabled.pointsCheap
         ? tables.Empire.watch(
@@ -218,6 +257,7 @@ export function useWorldEvents() {
             { runOnInit: false },
           )
         : undefined,
+
       // An acid rain destroyed a large amount of ships
       enabled.acidRain
         ? tables.AcidDamageOverrideLog.watch(
@@ -240,6 +280,7 @@ export function useWorldEvents() {
             { runOnInit: false },
           )
         : undefined,
+
       // The shield eater destroyed a large amount of shields
       enabled.shieldEater
         ? tables.ShieldEaterDamageOverrideLog.watch(
