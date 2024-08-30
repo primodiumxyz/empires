@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { ArrowDownIcon, ArrowsPointingInIcon, ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowDownIcon,
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
+  EyeIcon,
+  EyeSlashIcon,
+} from "@heroicons/react/24/solid";
 import ScrollToBottom, { useScrollToBottom, useSticky } from "react-scroll-to-bottom";
 import { toHex } from "viem";
 
@@ -10,6 +16,7 @@ import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
 import { Tabs } from "@/components/core/Tabs";
+import { Tooltip } from "@/components/core/Tooltip";
 import { useActions, useMostRecentOverride } from "@/hooks/useActions";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -37,7 +44,7 @@ export const ActionLog = ({ className }: { className: string }) => {
   return (
     <SecondaryCard
       className={cn(
-        "pointer--events-auto relative hidden h-[300px] flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block",
+        "pointer--events-auto relative hidden h-[300px] flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
         open ? "" : "translate-y-2/3",
         className,
       )}
@@ -80,11 +87,12 @@ const ClosedActionLog = () => {
 
 const OpenActionLog = () => {
   const empires = useEmpires();
-  const { SelectedTab } = useSettings();
+  const { SelectedTab, ShowRoutineLogs } = useSettings();
+  const showRoutineLogs = ShowRoutineLogs.use()?.value ?? false;
   const persistKey = toHex("action-log") as Entity;
   const selectedTab = SelectedTab.use(persistKey)?.value ?? 0;
   const selectedEmpire = selectedTab === 0 ? undefined : (selectedTab as EEmpire);
-  const actions = useActions(selectedEmpire, { max: 300 });
+  const actions = useActions(selectedEmpire, { max: 300, filterRoutines: !showRoutineLogs });
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
   const {
@@ -92,7 +100,7 @@ const OpenActionLog = () => {
   } = useGame();
   return (
     <Tabs className="flex gap-1" persistIndexKey={"action-log"} defaultIndex={0}>
-      <Join direction="vertical" className="rounded-r">
+      <Join direction="vertical" className="h-full rounded-r">
         <Tabs.Button key={"all"} index={0} className="h-8 w-11">
           <div>
             <h1>ALL</h1>
@@ -126,6 +134,22 @@ const OpenActionLog = () => {
           <ArrowDownIcon className="h-4 w-4" />
         </Button>
       )}
+      <Button
+        className="absolute bottom-2 left-5"
+        variant="ghost"
+        shape="square"
+        onClick={() => ShowRoutineLogs.update({ value: !showRoutineLogs })}
+      >
+        {showRoutineLogs ? (
+          <Tooltip tooltipContent="Click to hide routine logs" direction="right">
+            <EyeIcon className="size-4" />
+          </Tooltip>
+        ) : (
+          <Tooltip tooltipContent="Click to show routine logs" direction="right">
+            <EyeSlashIcon className="size-4 opacity-50" />
+          </Tooltip>
+        )}
+      </Button>
     </Tabs>
   );
 };
