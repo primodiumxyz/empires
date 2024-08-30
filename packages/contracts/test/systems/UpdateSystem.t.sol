@@ -3,12 +3,13 @@ pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 import { addressToId } from "src/utils.sol";
-import { MagnetTurnPlanets, Magnet, P_MagnetConfig, Turn, P_RoutineCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData, P_AcidConfig, OverrideCost, Empire, PendingMove, PendingMoveData, Arrivals } from "codegen/index.sol";
+import { MagnetTurnPlanets, Magnet, P_MagnetConfig, Turn, P_RoutineCosts, Turn, P_GameConfig, Planet, P_GameConfig, P_PointConfig, P_PointConfigData, P_OverrideConfig, P_OverrideConfigData, P_AcidConfig, OverrideCost, Empire, PendingMove, PendingMoveData } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { LibRoutine } from "libraries/LibRoutine.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
+import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { EEmpire, ERoutine, EOverride } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";
@@ -267,7 +268,7 @@ contract UpdateSystemTest is PrimodiumTest {
     assertTrue(Magnet.get(empire, emptyPlanetId).isMagnet, "Second magnet should not be removed yet");
   }
 
-  function testAcidUpdate() public {
+  function testAcidUpdate() public {    
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     uint256 acidDuration = 3;
     vm.startPrank(creator);
@@ -306,12 +307,21 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function testUpdateAcidConquerChangeEmpire() public {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    allRoutineThresholds.push(RoutineThresholds({
+      planetId: planetIds[1],
+      accumulateGold: 2000,
+      buyShields: 4000,
+      buyShips: 6000,
+      moveShips: 10000,
+      moveTargetId: planetIds[0]
+    }));
     uint256 acidDuration = 3;
     vm.startPrank(creator);
     P_AcidConfig.setAcidDuration(acidDuration);
     P_AcidConfig.setAcidDamagePercent(1000); // out of 10000, 10%
 
     assignPlanetToEmpire(planetIds[0], EEmpire.Red);
+    assignPlanetToEmpire(planetIds[1], EEmpire.Blue);
     vm.startPrank(creator);
     AcidPlanetsSet.add(EEmpire.Red, planetIds[0], acidDuration - 1); // two cycles left
 
@@ -319,7 +329,8 @@ contract UpdateSystemTest is PrimodiumTest {
     uint256 incomingShips = 7;
     Planet.setShipCount(planetIds[0], initShips);
     Planet.setShieldCount(planetIds[0], 0);
-    Arrivals.set(planetIds[0], EEmpire.Blue, incomingShips);
+    Planet.setShipCount(planetIds[1], incomingShips);
+    LibMoveShips.createPendingMove(planetIds[1], planetIds[0]);
 
     Turn.setEmpire(EEmpire.Blue);
     vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());

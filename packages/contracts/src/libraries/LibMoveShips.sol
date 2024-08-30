@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Turn, PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveRoutineLog, MoveRoutineLogData, Arrivals } from "codegen/index.sol";
+import { Turn, PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveRoutineLog, MoveRoutineLogData } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
+import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
 
 library LibMoveShips {
   /**
@@ -32,9 +33,10 @@ library LibMoveShips {
    * 1. Retrieves the current planet data and the destination planet ID.
    * 2. If there's no valid destination, the function returns early.
    * 3. Calculates the number of ships to move and the total ships arriving at the destination.
-   * 4. Updates the ship count on the origin planet and the arrivals on the destination planet.
-   * 5. Clears the pending move record.
-   * 6. Logs the move for off-chain tracking.
+   * 4. Updates the ship count on the origin planet 
+   * 5. Executes combat on the destination planet.
+   * 6. Clears the pending move record.
+   * 7. Logs the move for off-chain tracking.
    */
   function executePendingMoves(bytes32 planetId) internal {
     PlanetData memory planetData = Planet.get(planetId);
@@ -49,7 +51,7 @@ library LibMoveShips {
 
     // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
-    Arrivals.set(destinationPlanetId, planetData.empireId, shipsToMove);
+    LibResolveCombat.resolveCombat(planetData.empireId, shipsToMove, destinationPlanetId);
 
     // Log the move
     MoveRoutineLog.set(

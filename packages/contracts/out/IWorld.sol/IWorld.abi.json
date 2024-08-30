@@ -446,13 +446,6 @@
   },
   {
     "type": "function",
-    "name": "Empires__updateCombat",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "Empires__updateEmpires",
     "inputs": [
       {
