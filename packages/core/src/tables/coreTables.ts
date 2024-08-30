@@ -61,6 +61,18 @@ export default function setupCoreTables(network: CreateNetworkResult) {
       id: "PlanetName",
     },
   );
+
+  const EmpireLogo = createLocalTable(
+    world,
+    {
+      uri: Type.String,
+      lastFetched: Type.Number,
+    },
+    {
+      id: "EmpireName",
+    },
+  );
+
   return {
     DoubleCounter,
     BlockNumber,
@@ -72,5 +84,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     HoveredPlanet,
     Username,
     PlanetName,
+    EmpireLogo,
   };
 }

@@ -1,15 +1,15 @@
 import { ReactNode, useCallback, useEffect, useRef } from "react";
-import { Address } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToAddress, WORLD_EVENTS } from "@primodiumxyz/core";
+import { WORLD_EVENTS } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
 import { Price } from "@/components/shared/Price";
-import { Username } from "@/components/shared/Username";
 import { useSettings } from "@/hooks/useSettings";
 import { EmpireEnumToConfig } from "@/util/lookups";
+
+import { EmpireSpan, PlanetSpan, PlayerSpan } from "./useActions";
 
 const { enabled, thresholds } = WORLD_EVENTS;
 export type WorldEvent = {
@@ -37,29 +37,6 @@ export function useWorldEvents() {
     callbackRef.current = cb;
   }, []);
 
-  const getPlanetSpan = (planetId: Entity) => {
-    const planetName = tables.PlanetName.use(planetId)?.name;
-
-    useEffect(() => {
-      utils.getPlanetName(planetId);
-    }, []);
-
-    const empireId = tables.Planet.get(planetId)?.empireId;
-    if (!empireId) return <span className="text-gray-400">{planetName}</span>;
-    const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
-    return <span className={colorClass}>{planetName}</span>;
-  };
-
-  const getEmpireSpan = (empireId: EEmpire) => (
-    <span className={EmpireEnumToConfig[empireId].textColor}>{EmpireEnumToConfig[empireId].name} empire</span>
-  );
-
-  const getPlayerSpan = (playerId: Address) => (
-    <span className="text-yellow-400">
-      <Username address={entityToAddress(playerId)} />
-    </span>
-  );
-
   useEffect(() => {
     if (!showBanner.enabled) return;
 
@@ -76,8 +53,9 @@ export function useWorldEvents() {
                   emit({
                     content: (
                       <div>
-                        {getPlayerSpan(current.playerId)} bought <Price wei={current.ethSpent} className="font-bold" />{" "}
-                        worth of ships on {getPlanetSpan(current.planetId as Entity)}
+                        <PlayerSpan playerId={current.playerId} /> bought{" "}
+                        <Price wei={current.ethSpent} className="font-bold" /> worth of ships on{" "}
+                        <PlanetSpan planetId={current.planetId as Entity} />
                       </div>
                     ),
                     type: "whale",
@@ -99,8 +77,9 @@ export function useWorldEvents() {
                   emit({
                     content: (
                       <div>
-                        {getPlayerSpan(current.playerId)} bought <Price wei={current.ethSpent} className="font-bold" />{" "}
-                        worth of shields on {getPlanetSpan(current.planetId as Entity)}
+                        <PlayerSpan playerId={current.playerId} /> bought{" "}
+                        <Price wei={current.ethSpent} className="font-bold" /> worth of shields on{" "}
+                        <PlanetSpan planetId={current.planetId as Entity} />
                       </div>
                     ),
                     type: "whale",
@@ -121,9 +100,10 @@ export function useWorldEvents() {
                   emit({
                     content: (
                       <div>
-                        {getPlayerSpan(current.playerId)} distributed {current.goldDistributed.toLocaleString()} gold
-                        for <Price wei={current.ethSpent} className="font-bold" /> to{" "}
-                        {getEmpireSpan(current.empireId as EEmpire)}
+                        <PlayerSpan playerId={current.playerId} /> distributed{" "}
+                        {current.goldDistributed.toLocaleString()} gold for{" "}
+                        <Price wei={current.ethSpent} className="font-bold" /> to{" "}
+                        <EmpireSpan empireId={current.empireId as EEmpire} />
                       </div>
                     ),
                     type: "whale",
@@ -144,7 +124,8 @@ export function useWorldEvents() {
                   emit({
                     content: (
                       <div>
-                        {getPlayerSpan(entity)} just sold <Price wei={gain} className="font-bold" /> worth of points
+                        <PlayerSpan playerId={entity} /> just sold <Price wei={gain} className="font-bold" /> worth of
+                        points
                       </div>
                     ),
                     type: "whale",
@@ -170,13 +151,14 @@ export function useWorldEvents() {
               emit({
                 content: prevEmpire ? (
                   <div>
-                    {getEmpireSpan(current.empireId as EEmpire)} captured a citadel ({getPlanetSpan(planetId as Entity)}
-                    ) from {getEmpireSpan(prev!.empireId as EEmpire)}
+                    <EmpireSpan empireId={current.empireId as EEmpire} /> captured a citadel (
+                    <PlanetSpan planetId={planetId as Entity} />
+                    ) from <EmpireSpan empireId={prev!.empireId as EEmpire} />
                   </div>
                 ) : (
                   <div>
-                    {getEmpireSpan(current.empireId as EEmpire)} was first to capture the{" "}
-                    {getPlanetSpan(planetId as Entity)} citadel
+                    <EmpireSpan empireId={current.empireId as EEmpire} /> was first to capture the{" "}
+                    <PlanetSpan planetId={planetId as Entity} /> citadel
                   </div>
                 ),
                 type: "citadel",
@@ -209,7 +191,11 @@ export function useWorldEvents() {
                   const { id: empireId } = decodeEntity(tables.Empire.metadata.abiKeySchema, entity);
 
                   emit({
-                    content: <div>The price to support {getEmpireSpan(empireId as EEmpire)} could not be lower!</div>,
+                    content: (
+                      <div>
+                        The price to support <EmpireSpan empireId={empireId as EEmpire} /> could not be lower!
+                      </div>
+                    ),
                     type: "opportunity",
                   });
                 }
@@ -230,7 +216,7 @@ export function useWorldEvents() {
                     content: (
                       <div>
                         An acid Rain destroyed {current.shipsDestroyed.toLocaleString()} ships on{" "}
-                        {getPlanetSpan(current.planetId as Entity)}
+                        <PlanetSpan planetId={current.planetId as Entity} />
                       </div>
                     ),
                     type: "acidRain",
@@ -252,7 +238,7 @@ export function useWorldEvents() {
                     content: (
                       <div>
                         Shield Eater destroyed {current.shieldsDestroyed.toLocaleString()} shields on{" "}
-                        {getPlanetSpan(current.planetId as Entity)}
+                        <PlanetSpan planetId={current.planetId as Entity} />
                       </div>
                     ),
                     type: "shieldEater",

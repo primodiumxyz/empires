@@ -218,13 +218,12 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       clearInterval(this.updatePlanetNameInterval);
     }
 
-    // Set up a new interval
-    const newName = await this.updatePlanetName();
-    this.planetName.setText(newName);
-    this.updatePlanetNameInterval = setInterval(async () => {
+    const update = async () => {
       const newName = await this.updatePlanetName();
       this.planetName.setText(newName);
-    }, interval);
+    };
+    update();
+    this.updatePlanetNameInterval = setInterval(update, interval);
   }
 
   spawn() {

@@ -1,6 +1,7 @@
 import { CoreConfig, Tables } from "@core/lib/types";
 import { createCitadelUtils } from "@core/utils/core/citadel";
 import { createEmpireUtils } from "@core/utils/core/empire";
+import { createEmpireLogoUtils } from "@core/utils/core/empireLogo";
 import { createNavUtils } from "@core/utils/core/nav";
 import { createNpcUtils } from "@core/utils/core/npc";
 import { createPlanetNameUtils } from "@core/utils/core/planetName";
@@ -17,6 +18,7 @@ export const createUtils = (tables: Tables, config: CoreConfig) => {
   const citadelUtils = createCitadelUtils(tables);
   const usernameUtils = createUsernameUtils(tables);
   const planetNameUtils = createPlanetNameUtils(tables, config);
+  const empireLogoUtils = createEmpireLogoUtils(tables, config);
 
   return {
     ...priceUtils,
@@ -27,5 +29,6 @@ export const createUtils = (tables: Tables, config: CoreConfig) => {
     ...citadelUtils,
     ...usernameUtils,
     ...planetNameUtils,
+    ...empireLogoUtils,
   };
 };

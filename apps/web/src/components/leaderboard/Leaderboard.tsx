@@ -16,6 +16,7 @@ import { Tabs } from "@/components/core/Tabs";
 import ImageUploader from "@/components/leaderboard/ImageUploader";
 import { Price } from "@/components/shared/Price";
 import { Username } from "@/components/shared/Username";
+import { useEmpireLogo } from "@/hooks/useEmpireLogo";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { useSettings } from "@/hooks/useSettings";
@@ -36,9 +37,6 @@ export const Leaderboard = () => {
 
 const LeaderboardContent = () => {
   const empires = useEmpires();
-  const {
-    ROOT: { sprite },
-  } = useGame();
 
   const { tables } = useCore();
   const { SelectedTab } = useSettings();
@@ -51,15 +49,9 @@ const LeaderboardContent = () => {
         <Tabs.Button key={"all"} index={0} size="md" className="w-16">
           ALL
         </Tabs.Button>
-        {Array.from(empires.entries()).map(([id, emp], i) => {
-          const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[id] ?? "PlanetGrey");
-          return (
-            <Tabs.Button key={emp.name} index={i + 1} size="md">
-              <img src={spriteUrl} className="w-6" />
-              {/* <p>{emp.name}</p> */}
-            </Tabs.Button>
-          );
-        })}
+        {Array.from(empires.entries()).map(([id, emp], i) => (
+          <EmpireTabButton key={emp.name} empireId={id} index={i + 1} />
+        ))}
       </Join>
       <Tabs.Pane key={"ALL"} index={0} className="w-full">
         <TotalLeaderboard />
@@ -75,6 +67,16 @@ const LeaderboardContent = () => {
   );
 };
 
+const EmpireTabButton = ({ empireId, index }: { empireId: EEmpire; index: number }) => {
+  const empireLogo = useEmpireLogo(empireId);
+
+  return (
+    <Tabs.Button key={empireId} index={index} size="md">
+      <img src={empireLogo} className="w-6" />
+    </Tabs.Button>
+  );
+};
+
 const TotalLeaderboard = () => {
   const { tables } = useCore();
   const empires = [...useEmpires().keys()];
@@ -84,9 +86,6 @@ const TotalLeaderboard = () => {
   const handleRefresh = () => {
     setRefresh(refresh + 1);
   };
-  const {
-    ROOT: { sprite },
-  } = useGame();
 
   const playerData = useMemo(() => {
     const players = tables.Value_PlayersMap.getAll();
@@ -149,24 +148,27 @@ const TotalLeaderboard = () => {
         <AutoSizer
           itemSize={30}
           items={playerData}
-          render={(item, index) => (
-            <div
-              className={cn(
-                "pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr_1fr] flex-col place-items-center justify-between text-xs",
-                item.player === playerAccount?.entity && "rounded bg-primary/40",
-              )}
-            >
-              <div>{item.rank}</div>
-              <Username address={entityToAddress(item.player)} />
-              <div className={cn("flex items-center gap-2")}>
-                <img src={sprite.getSprite(EmpireToPlanetSpriteKeys[item.empire] ?? "PlanetGrey")} className="w-4" />
-                <p>{formatEther(item.points)}</p>
+          render={(item, index) => {
+            const empireLogo = useEmpireLogo(item.empire);
+            return (
+              <div
+                className={cn(
+                  "pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr_1fr] flex-col place-items-center justify-between text-xs",
+                  item.player === playerAccount?.entity && "rounded bg-primary/40",
+                )}
+              >
+                <div>{item.rank}</div>
+                <Username address={entityToAddress(item.player)} />
+                <div className={cn("flex items-center gap-2")}>
+                  <img src={empireLogo} className="w-4" />
+                  <p>{formatEther(item.points)}</p>
+                </div>
+                <div className={cn("flex items-center gap-2")}>
+                  <Price wei={item.profit} className={cn("text-sm text-success", item.profit < 0n && "text-error")} />
+                </div>
               </div>
-              <div className={cn("flex items-center gap-2")}>
-                <Price wei={item.profit} className={cn("text-sm text-success", item.profit < 0n && "text-error")} />
-              </div>
-            </div>
-          )}
+            );
+          }}
         />
       </div>
     </div>
@@ -186,6 +188,7 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
   };
 
   const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empireId] ?? "PlanetGrey");
+  const empireLogo = useEmpireLogo(empireId);
   const playerData = useMemo(() => {
     const players = tables.Value_PlayersMap.getAll();
     const unsorted = players.reduce(
@@ -234,21 +237,24 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
             <AutoSizer
               itemSize={30}
               items={playerData}
-              render={(item) => (
-                <div
-                  className={cn(
-                    "pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr] flex-col place-items-center justify-between text-xs",
-                    item.player === playerAccount?.entity && "rounded bg-primary/40",
-                  )}
-                >
-                  <div>{item.rank}</div>
-                  <Username address={entityToAddress(item.player)} />
-                  <div className={cn("flex items-center gap-2")}>
-                    <img src={spriteUrl} className="w-4" />
-                    <p>{formatEther(item.points)}</p>
+              render={(item) => {
+                return (
+                  <div
+                    className={cn(
+                      "pointer-events-auto grid h-full grid-cols-[4rem_1fr_1fr] flex-col place-items-center justify-between text-xs",
+                      item.player === playerAccount?.entity && "rounded bg-primary/40",
+                    )}
+                  >
+                    <div>{item.rank}</div>
+                    <Username address={entityToAddress(item.player)} />
+                    <div className={cn("flex items-center gap-2")}>
+                      <img src={spriteUrl} className="w-4" />
+                      <img src={empireLogo} className="w-4" />
+                      <p>{formatEther(item.points)}</p>
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              }}
             />
           </div>
         </>
@@ -260,23 +266,15 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
 };
 
 const HomePage: React.FC<{ empireId: EEmpire }> = ({ empireId }) => {
-  const { config } = useCore();
+  const { config, utils } = useCore();
   const [image, setImage] = useState<File | null>(null);
 
   const url = `${config.accountLinkUrl}/empire-logo/${empireId}?worldAddress=1`;
 
   const handleImageFetch = async () => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const blob = await response.blob();
-      const file = new File([blob], "empire_logo.png", { type: "image/png" });
-      setImage(file);
-    } catch (error) {
-      console.error("Error fetching image:", error);
-    }
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => setImage(data.image));
   };
 
   const handleImageSubmit = async (file: File) => {
@@ -291,9 +289,9 @@ const HomePage: React.FC<{ empireId: EEmpire }> = ({ empireId }) => {
       });
 
       const data = await response.json();
-      console.log({ data, response });
       if (response.ok) {
         console.log("Image uploaded successfully");
+        utils.refreshEmpireLogo(empireId);
       } else {
         console.error("Failed to upload image");
       }
@@ -305,7 +303,7 @@ const HomePage: React.FC<{ empireId: EEmpire }> = ({ empireId }) => {
   return (
     <div className="container mx-auto px-4">
       <h1 className="mb-4 text-2xl font-bold">Upload Planet Image</h1>
-      {image && <img src={URL.createObjectURL(image)} alt="Uploaded" />}
+      {image && <img src={URL.createObjectURL(image)} alt="Uploaded" className="w-10" />}
       <Button onClick={handleImageFetch}>Fetch Current Image</Button>
       <ImageUploader onSubmit={handleImageSubmit} />
     </div>

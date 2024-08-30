@@ -27,7 +27,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onSubmit }) => {
     <form onSubmit={handleSubmit} className="mx-auto mt-8 max-w-md">
       <div className="mb-4">
         <label htmlFor="image-upload" className="mb-2 block text-sm font-medium text-gray-700">
-          Choose an image
+          Choose an image (must be smaller than 64kb)
         </label>
         <input
           type="file"
@@ -39,7 +39,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onSubmit }) => {
       </div>
       {previewUrl && (
         <div className="mb-4">
-          <img src={previewUrl} alt="Preview" className="h-auto max-w-full rounded-lg" />
+          <img src={previewUrl} alt="Preview" className="h-auto max-w-32 rounded-lg" />
         </div>
       )}
       <button
