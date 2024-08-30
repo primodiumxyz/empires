@@ -464,6 +464,20 @@ export const worldInput = {
       type: "offchainTable",
     },
 
+    SellPointsOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
+        empireId: "EEmpire",
+        ethReceived: "uint256",
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
     // Override impact logs
     AcidDamageOverrideLog: {
       key: ["id"],
@@ -471,6 +485,7 @@ export const worldInput = {
         id: "bytes32",
         planetId: "bytes32",
         shipsDestroyed: "uint256",
+        timestamp: "uint256",
       },
     },
 
@@ -481,6 +496,7 @@ export const worldInput = {
         planetId: "bytes32",
         shieldsDestroyed: "uint256",
         damageType: "EShieldEaterDamageType",
+        timestamp: "uint256",
       },
     },
 
