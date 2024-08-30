@@ -183,7 +183,7 @@ export function createPriceUtils(tables: Tables) {
   }
 
   function usdToWei(USD: number, weiToUsd: number): bigint {
-    return parseEther((USD / weiToUsd).toString());
+    return parseEther((USD / (weiToUsd || 1)).toString());
   }
   const getPointPrice = (empire: EEmpire, points: number): { price: bigint; message: string } => {
     const currentPointCost = tables.Empire.getWithKeys({ id: empire })?.pointCost ?? 0n;
