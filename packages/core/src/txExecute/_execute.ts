@@ -22,10 +22,6 @@ export async function _execute(
       await simulateTxPromise({
         blockNumber: txReceipt.blockNumber,
       });
-
-      // const errorMessage = data.error?.message || "Unknown error";
-      // console.error(`[Transaction Failed] ${errorMessage}`);
-      // receipt.error = data.error?.message || "Transaction failed. Please try again.";
     }
   } catch (error) {
     console.error(error);
@@ -58,7 +54,7 @@ export async function _execute(
   if (receipt.error)
     receipt.error = receipt.error.replace(
       /^The contract function "\w+" reverted with the following reason:\s*/,
-      "Error executing transaction: ",
+      "Error completing action: ",
     );
   return receipt;
 }
