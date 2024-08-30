@@ -18,11 +18,10 @@ export async function _execute(
     if (!receipt.success) {
       // Fetch the transaction details to get the revert reason
 
-      const data = await simulateTxPromise({
+      // this should throw with the revert reason as the error
+      await simulateTxPromise({
         blockNumber: txReceipt.blockNumber,
       });
-
-      console.log({ data });
 
       // const errorMessage = data.error?.message || "Unknown error";
       // console.error(`[Transaction Failed] ${errorMessage}`);
