@@ -5,7 +5,7 @@ import { Core, TxReceipt } from "@core/lib/types";
 export async function _execute(
   { network: { publicClient } }: Core,
   txPromise: () => Promise<Hex>,
-  simulateTxPromise: () => Promise<void>,
+  simulateTxPromise: (options?: { blockNumber?: bigint }) => Promise<void>,
 ): Promise<TxReceipt> {
   let receipt: TxReceipt = { success: false, error: "" };
 
@@ -15,10 +15,18 @@ export async function _execute(
     const txReceipt = await publicClient.waitForTransactionReceipt({ hash: txHash });
     receipt = { success: txReceipt.status === "success", ...txReceipt };
 
-    // If the transaction failed BUT the simulation didn't throw, it's most likely a gas issue
     if (!receipt.success) {
-      console.error("[Insufficient Gas Limit] You're moving fast! Please wait a moment and then try again.");
-      receipt.error = "Insufficient Gas Limit";
+      // Fetch the transaction details to get the revert reason
+
+      const data = await simulateTxPromise({
+        blockNumber: txReceipt.blockNumber,
+      });
+
+      console.log({ data });
+
+      // const errorMessage = data.error?.message || "Unknown error";
+      // console.error(`[Transaction Failed] ${errorMessage}`);
+      // receipt.error = data.error?.message || "Transaction failed. Please try again.";
     }
   } catch (error) {
     console.error(error);
@@ -48,6 +56,10 @@ export async function _execute(
       console.error(`${error}`);
     }
   }
-
+  if (receipt.error)
+    receipt.error = receipt.error.replace(
+      /^The contract function "\w+" reverted with the following reason:\s*/,
+      "Error executing transaction: ",
+    );
   return receipt;
 }
