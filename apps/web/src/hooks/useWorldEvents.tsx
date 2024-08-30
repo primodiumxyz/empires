@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useEffect, useRef } from "react";
 import { Address } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToAddress, entityToPlanetName, WORLD_EVENTS } from "@primodiumxyz/core";
+import { entityToAddress, WORLD_EVENTS } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
@@ -25,7 +25,7 @@ export type WorldEvent = {
  * @returns A stream of world events to subscribe to
  */
 export function useWorldEvents() {
-  const { tables } = useCore();
+  const { tables, utils } = useCore();
   const { showBanner } = useSettings();
   const callbackRef = useRef<((event: WorldEvent) => void) | undefined>(undefined);
 
@@ -38,10 +38,16 @@ export function useWorldEvents() {
   }, []);
 
   const getPlanetSpan = (planetId: Entity) => {
+    const planetName = tables.PlanetName.use(planetId)?.name;
+
+    useEffect(() => {
+      utils.getPlanetName(planetId);
+    }, []);
+
     const empireId = tables.Planet.get(planetId)?.empireId;
-    if (!empireId) return <span className="text-gray-400">{entityToPlanetName(planetId)}</span>;
+    if (!empireId) return <span className="text-gray-400">{planetName}</span>;
     const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
-    return <span className={colorClass}>{entityToPlanetName(planetId)}</span>;
+    return <span className={colorClass}>{planetName}</span>;
   };
 
   const getEmpireSpan = (empireId: EEmpire) => (

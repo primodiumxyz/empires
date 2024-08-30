@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToPlanetName, formatNumber } from "@primodiumxyz/core";
+import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -12,6 +12,7 @@ import { useAcidRain } from "@/hooks/useAcidRain";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
+import { usePlanetName } from "@/hooks/usePlanetName";
 import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
@@ -26,6 +27,7 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
   const { cycles } = useAcidRain(entity, planet.empireId);
   const hasAcidRain = cycles > 0n;
   const { empireId } = planet;
+  const planetName = usePlanetName(entity);
 
   const moveCrown = [EEmpire.Purple, EEmpire.Pink, EEmpire.Yellow].includes(empireId as EEmpire);
 
@@ -72,7 +74,7 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
             )}
           </div>
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-sm font-semibold text-warning">{entityToPlanetName(entity)}</h2>
+            <h2 className="text-sm font-semibold text-warning">{planetName}</h2>
             <span className="text-xs text-gray-400">
               [{(planet.q - 100n).toLocaleString()}, {planet.r.toLocaleString()}]
             </span>

@@ -9,12 +9,13 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
   const { tables } = core;
   const systemsWorld = namespaceWorld(core.network.world, "systems");
 
-  tables.Planet.getAll().forEach((entity) => {
+  tables.Planet.getAll().forEach(async (entity) => {
     const planet = tables.Planet.get(entity);
 
     if (!planet) return;
 
     const { q, r } = planet;
+
     const planetObj = new Planet({
       id: entity,
       scene,
@@ -22,6 +23,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       empire: planet.empireId,
       citadel: planet.isCitadel,
       empireCount: tables.P_GameConfig.get()?.empireCount ?? 0,
+      updatePlanetName: async () => await core.utils.getPlanetName(entity),
     });
 
     planetObj

@@ -1,8 +1,8 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Address, Hex } from "viem";
+import { Hex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { entityToAddress, entityToPlanetName, formatNumber } from "@primodiumxyz/core";
+import { entityToAddress, formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Username } from "@/components/shared/Username";
@@ -12,7 +12,7 @@ export const useActions = (
   empireId?: EEmpire,
   options?: { filterRoutines?: boolean; laterThan?: number; max?: number },
 ) => {
-  const { tables } = useCore();
+  const { tables, utils } = useCore();
 
   const moveRoutines = tables.MoveRoutineLog.useAll();
   const planetBattleRoutines = tables.PlanetBattleRoutineLog.useAll();
@@ -32,16 +32,22 @@ export const useActions = (
     setDebouncedIn(0);
   }, [empireId]);
 
-  const getPlanetSpan = (planetId: Entity) => {
-    const empireId = tables.Planet.get(planetId)?.empireId;
-    if (!empireId) return <span className="text-gray-400">{entityToPlanetName(planetId)}</span>;
-    const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
-    return <span className={colorClass}>{entityToPlanetName(planetId)}</span>;
-  };
-
   const [actions, setActions] = useState<{ timestamp: bigint; element: ReactNode; empireId: EEmpire | undefined }[]>(
     [],
   );
+
+  const getPlanetSpan = (planetId: Entity) => {
+    const planetName = tables.PlanetName.use(planetId)?.name;
+
+    useEffect(() => {
+      utils.getPlanetName(planetId);
+    }, []);
+
+    const empireId = tables.Planet.get(planetId)?.empireId;
+    if (!empireId) return <span className="text-gray-400">{planetName}</span>;
+    const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
+    return <span className={colorClass}>{planetName}</span>;
+  };
 
   const getPlayerSpan = (playerId: Entity | Hex) => (
     <span className="text-yellow-400">
@@ -249,18 +255,23 @@ export const useActions = (
 };
 
 export const useMostRecentOverride = () => {
-  const { tables } = useCore();
+  const { tables, utils } = useCore();
   const [override, setOverride] = useState<{ timestamp: bigint; element: ReactNode; empireId: EEmpire } | null>(null);
   const [actions, setActions] = useState<{ timestamp: bigint; element: ReactNode; empireId: EEmpire }[]>([]);
-
   const getPlanetSpan = (planetId: Entity) => {
+    const planetName = tables.PlanetName.use(planetId)?.name;
+
+    useEffect(() => {
+      utils.getPlanetName(planetId);
+    }, []);
+
     const empireId = tables.Planet.get(planetId)?.empireId;
-    if (!empireId) return <span className="text-gray-400">{entityToPlanetName(planetId)}</span>;
+    if (!empireId) return <span className="text-gray-400">{planetName}</span>;
     const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
-    return <span className={colorClass}>{entityToPlanetName(planetId)}</span>;
+    return <span className={colorClass}>{planetName}</span>;
   };
 
-  const getPlayerSpan = (playerId: Address) => (
+  const getPlayerSpan = (playerId: Entity | Hex) => (
     <span className="text-yellow-400">
       <Username address={entityToAddress(playerId)} />
     </span>

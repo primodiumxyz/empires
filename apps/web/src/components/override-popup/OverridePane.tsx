@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { EOverride } from "@primodiumxyz/contracts";
-import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
+import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { Tabs } from "@/components/core/Tabs";
+import { TextInput } from "@/components/core/TextInput";
 import { AcidRainContent } from "@/components/override-popup/content/AcidRainContent";
 import { ShieldContent } from "@/components/override-popup/content/ShieldContent";
 import { ShieldEaterContent } from "@/components/override-popup/content/ShieldEaterContent";
@@ -13,6 +14,7 @@ import { ShipContent } from "@/components/override-popup/content/ShipContent";
 import { MagnetContent } from "@/components/override-popup/magnet";
 import { OverrideButton } from "@/components/override-popup/OverrideButton";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { usePlanetName } from "@/hooks/usePlanetName";
 import { cn } from "@/util/client";
 
 export const Header: React.FC<{ title: string; description: string; planetName: string }> = ({
@@ -88,8 +90,41 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
   entity: selectedPlanet,
   className,
 }) => {
-  const { tables } = useCore();
+  const { tables, utils } = useCore();
   const planet = tables.Planet.use(selectedPlanet ?? defaultEntity);
+  const [newName, setNewName] = useState("");
+  const planetName = usePlanetName(selectedPlanet);
+
+  useEffect(() => {
+    setNewName(planetName);
+  }, [planetName]);
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`http://localhost:3002/planet/${selectedPlanet}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          planetName: newName,
+          worldAddress: "1",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update planet name");
+      }
+
+      const result = await response.json();
+      // You might want to add some user feedback here, e.g., a toast notification
+    } catch (error) {
+      console.error("Error updating planet name:", error);
+      // Handle the error, e.g., show an error message to the user
+    } finally {
+      utils.refreshPlanetName(selectedPlanet);
+    }
+  };
 
   if (!selectedPlanet || !planet) return null;
 
@@ -100,29 +135,28 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
       defaultIndex={1}
     >
       <Buttons selectedPlanet={selectedPlanet} empire={planet.empireId} />
+      <div className="pointer-events-auto z-50 flex w-full items-center gap-2">
+        <TextInput
+          maxLength={9}
+          placeholder="update planet name"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+        />
+        <Button onClick={handleSubmit} size="sm" disabled={newName === planetName} className="h-full">
+          Update
+        </Button>
+      </div>
       <Card noDecor className="relative w-96 flex-row items-center justify-center bg-slate-900">
         <Tabs.Pane index={0} className="w-full items-center gap-4">
-          <Header
-            title={"Ships"}
-            description={"Attack other planets"}
-            planetName={entityToPlanetName(selectedPlanet)}
-          />
+          <Header title={"Ships"} description={"Attack other planets"} planetName={planetName} />
           <ShipContent entity={selectedPlanet} />
         </Tabs.Pane>
         <Tabs.Pane index={1} className="w-full items-center gap-4">
-          <Header
-            title={"Shields"}
-            description={"Defend planet when under attack"}
-            planetName={entityToPlanetName(selectedPlanet)}
-          />
+          <Header title={"Shields"} description={"Defend planet when under attack"} planetName={planetName} />
           <ShieldContent entity={selectedPlanet} />
         </Tabs.Pane>
         <Tabs.Pane index={2} className="w-full items-center gap-4">
-          <Header
-            title={"Magnets"}
-            description={"Attracts ships owned by the same empire"}
-            planetName={entityToPlanetName(selectedPlanet)}
-          />
+          <Header title={"Magnets"} description={"Attracts ships owned by the same empire"} planetName={planetName} />
           <MagnetContent entity={selectedPlanet} />
         </Tabs.Pane>
 
@@ -130,17 +164,13 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
           <Header
             title={"Shield Eater"}
             description={"Destroy shields on this planet and surrounding planets"}
-            planetName={entityToPlanetName(selectedPlanet)}
+            planetName={planetName}
           />
           <ShieldEaterContent entity={selectedPlanet} />
         </Tabs.Pane>
 
         <Tabs.Pane index={4} className="w-full items-center gap-4">
-          <Header
-            title={"Acid Rain"}
-            description={"Acid Rain decays ships by 20% each turn"}
-            planetName={entityToPlanetName(selectedPlanet)}
-          />
+          <Header title={"Acid Rain"} description={"Acid Rain decays ships by 20% each turn"} planetName={planetName} />
           <AcidRainContent entity={selectedPlanet} />
         </Tabs.Pane>
       </Card>
