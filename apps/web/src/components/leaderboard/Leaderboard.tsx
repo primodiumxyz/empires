@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { formatEther, toHex } from "viem";
 
@@ -13,6 +13,7 @@ import { Button } from "@/components/core/Button";
 import { Join } from "@/components/core/Join";
 import { Modal } from "@/components/core/Modal";
 import { Tabs } from "@/components/core/Tabs";
+import ImageUploader from "@/components/leaderboard/ImageUploader";
 import { Price } from "@/components/shared/Price";
 import { Username } from "@/components/shared/Username";
 import { useEmpires } from "@/hooks/useEmpires";
@@ -220,6 +221,7 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
       <Button onClick={handleRefresh} className="absolute right-0 top-0" size="xs" shape="square">
         <ArrowPathIcon className="w-4" />
       </Button>
+      <HomePage empireId={empireId} />
       {playerData.length > 0 ? (
         <>
           <div className={`grid w-full grid-cols-[4rem_1fr_1fr] place-items-center items-end py-2 font-bold uppercase`}>
@@ -256,3 +258,58 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
     </div>
   );
 };
+
+const HomePage: React.FC<{ empireId: EEmpire }> = ({ empireId }) => {
+  const { config } = useCore();
+  const [image, setImage] = useState<File | null>(null);
+
+  const url = `${config.accountLinkUrl}/empire-logo/${empireId}?worldAddress=1`;
+
+  const handleImageFetch = async () => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const blob = await response.blob();
+      const file = new File([blob], "empire_logo.png", { type: "image/png" });
+      setImage(file);
+    } catch (error) {
+      console.error("Error fetching image:", error);
+    }
+  };
+
+  const handleImageSubmit = async (file: File) => {
+    const formData = new FormData();
+    formData.append("logo", file);
+    formData.append("worldAddress", "1");
+
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        body: formData,
+      });
+
+      const data = await response.json();
+      console.log({ data, response });
+      if (response.ok) {
+        console.log("Image uploaded successfully");
+      } else {
+        console.error("Failed to upload image");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  return (
+    <div className="container mx-auto px-4">
+      <h1 className="mb-4 text-2xl font-bold">Upload Planet Image</h1>
+      {image && <img src={URL.createObjectURL(image)} alt="Uploaded" />}
+      <Button onClick={handleImageFetch}>Fetch Current Image</Button>
+      <ImageUploader onSubmit={handleImageSubmit} />
+    </div>
+  );
+};
+
+export default HomePage;

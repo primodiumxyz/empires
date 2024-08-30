@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import { EOverride } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
@@ -112,15 +113,12 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update planet name");
-      }
-
       const result = await response.json();
-      // You might want to add some user feedback here, e.g., a toast notification
+      if (!response.ok) {
+        throw new Error(`Error: ${result.error}`);
+      }
     } catch (error) {
-      console.error("Error updating planet name:", error);
-      // Handle the error, e.g., show an error message to the user
+      toast.error((error as Error).message);
     } finally {
       utils.refreshPlanetName(selectedPlanet);
     }
