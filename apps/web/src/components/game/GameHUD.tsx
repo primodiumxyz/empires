@@ -3,7 +3,6 @@ import { EViewMode } from "@primodiumxyz/core";
 import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
-import { Banner } from "@/components/Banner";
 import { Cheatcodes } from "@/components/cheatcodes/Cheatcodes";
 import { Button } from "@/components/core/Button";
 import { HUD } from "@/components/core/HUD";
@@ -104,7 +103,6 @@ export const GameHUD = () => {
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle className="flex flex-col items-center gap-2">
-          <Banner />
           <TimeLeft className="gap-0" />
         </HUD.BottomMiddle>
 
