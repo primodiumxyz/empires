@@ -39,6 +39,8 @@ export const Animations = {
   MovementPink: "movement/pink",
   MovementPurple: "movement/purple",
 
+  Combat: "combat",
+
   // Waves
   MagnetWaves: "waves",
 
