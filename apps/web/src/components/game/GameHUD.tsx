@@ -50,7 +50,7 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle className="flex flex-col items-center">
-          <Join className="z-50">
+          <Join className="z-50 hover:bg-transparent">
             <Button
               size="md"
               variant="neutral"
@@ -96,7 +96,7 @@ export const GameHUD = () => {
 
         <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
           {showMap && <ActionLog className="hidden lg:flex" />}
-          <div className="pointer-events-auto flex w-full items-center gap-2">
+          <div className="pointer-events-auto flex w-full items-center gap-2 lg:ml-2">
             <MusicPlayer />
             <Settings />
           </div>

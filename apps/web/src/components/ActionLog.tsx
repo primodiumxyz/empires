@@ -16,7 +16,6 @@ import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
 import { Tabs } from "@/components/core/Tabs";
-import { Tooltip } from "@/components/core/Tooltip";
 import { useActions, useMostRecentOverride } from "@/hooks/useActions";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -44,8 +43,8 @@ export const ActionLog = ({ className }: { className: string }) => {
   return (
     <SecondaryCard
       className={cn(
-        "pointer--events-auto relative hidden h-[300px] flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
-        open ? "" : "translate-y-2/3",
+        "pointer--events-auto relative hidden h-[290px] w-80 flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
+        open ? "pr-0 hover:bg-black/75" : "translate-y-2/3",
         className,
       )}
     >
@@ -65,21 +64,29 @@ const ClosedActionLog = () => {
   const override = useMostRecentOverride();
   const action = override ? override.element : <p className="text-xs opacity-70">No player actions</p>;
 
-  const [currentAction, setCurrentAction] = useState(0n);
+  const [currentAction, setCurrentAction] = useState("");
   const [flashing, setFlashing] = useState(false);
 
   useEffect(() => {
     if (!override) return;
-    setCurrentAction(override.timestamp);
-    if (currentAction === 0n) return;
-    if (currentAction === override.timestamp) return;
+    setCurrentAction(override.id);
+    if (currentAction === "") return;
+    if (currentAction === override.id) return;
     setFlashing(true);
     setTimeout(() => setFlashing(false), 500);
   }, [override, currentAction]);
 
   const colorClass = override ? EmpireEnumToConfig[override.empireId as EEmpire].bgColor : "bg-gray-600";
   return (
-    <SecondaryCard className={cn(flashing ? `scale-105 ${colorClass} transition-transform duration-500` : "")}>
+    <SecondaryCard
+      className={cn(
+        flashing
+          ? `scale-105 ${colorClass} transition-transform duration-500`
+          : override?.highlight
+            ? "border border-accent/75 hover:border-accent/100"
+            : "",
+      )}
+    >
       {action}
     </SecondaryCard>
   );
@@ -98,9 +105,10 @@ const OpenActionLog = () => {
   const {
     ROOT: { sprite },
   } = useGame();
+
   return (
-    <Tabs className="flex gap-1" persistIndexKey={"action-log"} defaultIndex={0}>
-      <Join direction="vertical" className="h-full rounded-r">
+    <Tabs className="grid grid-cols-[auto_1fr] gap-y-1" persistIndexKey={"action-log"} defaultIndex={0}>
+      <Join direction="vertical" className="h-full rounded-r !pr-0 hover:bg-transparent">
         <Tabs.Button key={"all"} index={0} className="h-8 w-11">
           <div>
             <h1>ALL</h1>
@@ -115,11 +123,17 @@ const OpenActionLog = () => {
           );
         })}
       </Join>
-      <ScrollToBottom className="h-[230px] w-full">
+      <ScrollToBottom className="mt-1 h-[212px] w-full">
         {actions.map((action, i) => (
-          <div className="flex flex-col" key={`${Number(action.timestamp)}-${i}`}>
+          <div
+            className={cn(
+              "pl-2",
+              i % 2 === 0 ? "bg-secondary/20" : "bg-black/20",
+              action.highlight && "border border-accent/75",
+            )}
+            key={`${Number(action.timestamp)}-${i}`}
+          >
             {action.element}
-            <hr className="w-full border-secondary/50" />
           </div>
         ))}
       </ScrollToBottom>
@@ -134,22 +148,25 @@ const OpenActionLog = () => {
           <ArrowDownIcon className="h-4 w-4" />
         </Button>
       )}
-      <Button
-        className="absolute bottom-2 left-5"
-        variant="ghost"
-        shape="square"
-        onClick={() => ShowRoutineLogs.update({ value: !showRoutineLogs })}
-      >
-        {showRoutineLogs ? (
-          <Tooltip tooltipContent="Click to hide routine logs" direction="right">
-            <EyeIcon className="size-4" />
-          </Tooltip>
-        ) : (
-          <Tooltip tooltipContent="Click to show routine logs" direction="right">
-            <EyeSlashIcon className="size-4 opacity-50" />
-          </Tooltip>
-        )}
-      </Button>
+      <div className="col-span-2">
+        <Button
+          className="flex items-center gap-2 text-xs text-gray-400"
+          variant="ghost"
+          onClick={() => ShowRoutineLogs.set({ value: !showRoutineLogs })}
+        >
+          {showRoutineLogs ? (
+            <>
+              <EyeSlashIcon className="size-4" />
+              <span className="text-xs">Hide routines</span>
+            </>
+          ) : (
+            <>
+              <EyeIcon className="size-4 opacity-70" />
+              <span className="text-xs opacity-70">Show routines</span>
+            </>
+          )}
+        </Button>
+      </div>
     </Tabs>
   );
 };
