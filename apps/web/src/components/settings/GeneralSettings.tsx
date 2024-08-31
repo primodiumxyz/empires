@@ -19,7 +19,14 @@ export const GeneralSettings = () => {
               label: family,
             })),
           ]}
-          onChange={(value) => fontStyle.setFamily(value as (typeof fontStyleOptions.family)[number])}
+          onChange={(value) => {
+            fontStyle.setFamily(value as (typeof fontStyleOptions.family)[number]);
+            fontStyle.setFamilyRaw(
+              fontStyleOptions.familyRaw[
+                fontStyleOptions.family.indexOf(value as (typeof fontStyleOptions.family)[number])
+              ],
+            );
+          }}
           className="grid grid-cols-[8rem_8rem]"
         />
         <h2 className="col-span-2 font-semibold text-gray-400">Font size</h2>

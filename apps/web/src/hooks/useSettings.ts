@@ -20,6 +20,7 @@ const FontStyle = createLocalTable(
   settingsWorld,
   {
     family: Type.String,
+    familyRaw: Type.String,
     size: Type.String,
   },
   {
@@ -30,11 +31,13 @@ const FontStyle = createLocalTable(
 
 export const fontStyleOptions = {
   family: ["pixel", "mono"],
+  familyRaw: ["Silkscreen", "Space Mono"],
   size: ["sm", "md"],
 } as const;
 
 FontStyle.set({
   family: fontStyleOptions.family[0],
+  familyRaw: fontStyleOptions.familyRaw[0],
   size: fontStyleOptions.size[0],
 });
 
@@ -80,7 +83,8 @@ export const useSettings = () => {
   const fontStyle = FontStyle.use();
   const setFontStyleFamily = (family: (typeof fontStyleOptions.family)[number]) => FontStyle.update({ family });
   const setFontStyleSize = (size: (typeof fontStyleOptions.size)[number]) => FontStyle.update({ size });
-
+  const setFontStyleFamilyRaw = (familyRaw: (typeof fontStyleOptions.familyRaw)[number]) =>
+    FontStyle.update({ familyRaw });
   useEffect(() => {
     return () => {
       settingsWorld.dispose();
@@ -92,7 +96,9 @@ export const useSettings = () => {
     fontStyle: {
       family: fontStyle?.family ?? fontStyleOptions.family[0],
       size: fontStyle?.size ?? fontStyleOptions.size[0],
+      familyRaw: fontStyle?.familyRaw ?? fontStyleOptions.familyRaw[0],
       setFamily: setFontStyleFamily,
+      setFamilyRaw: setFontStyleFamilyRaw,
       setSize: setFontStyleSize,
     },
     showBlockchainUnits: {
