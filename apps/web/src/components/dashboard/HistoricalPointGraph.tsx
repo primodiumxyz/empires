@@ -1,15 +1,13 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import { curveMonotoneX } from "@visx/curve";
 import { ColorType, createChart, LineStyle, LineType, Time } from "lightweight-charts";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
-import { Card, SecondaryCard } from "@/components/core/Card";
-import { useEmpires } from "@/hooks/useEmpires";
+import { allEmpires } from "@primodiumxyz/game";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useSettings } from "@/hooks/useSettings";
-import { EmpireConfig, EmpireEnumToConfig } from "@/util/lookups";
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const accentColor = "rgba(0,255, 0, .75)";
 export const accentColorDark = "rgba(0,255, 0, .25)";
@@ -48,7 +46,10 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
   const historicalPriceEntities = tables.HistoricalPointCost.useAll();
   const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
   const ethPrice = useEthPrice().price;
-  const empires = useEmpires();
+
+  const empireCount = tables.P_GameConfig.use()?.empireCount ?? 0;
+  const empires = allEmpires.slice(0, empireCount);
+
   const historicalPriceData = useMemo(() => {
     // get data
     let data = historicalPriceEntities
@@ -70,7 +71,6 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
     );
 
     // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
-    const allEmpires = Array.from(new Array(empires.size)).map((_, i) => i + 1);
     const timestampMap = new Map<number, { [key: number]: bigint }>();
 
     // grab costs for each timestamp

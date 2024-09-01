@@ -1,8 +1,10 @@
+import { useMemo } from "react";
 import { toHex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { CANDLESTICK_INTERVALS, EChartMode, EViewMode } from "@primodiumxyz/core";
-import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
+import { useCore } from "@primodiumxyz/core/react";
+import { allEmpires, EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -12,7 +14,6 @@ import { EmpireCards } from "@/components/dashboard/EmpireCards";
 import { HistoricalPointGraph } from "@/components/dashboard/HistoricalPointGraph";
 import { BoostEmpire } from "@/components/quick-trade/BoostEmpire";
 import { SellPoints } from "@/components/quick-trade/SellPoints";
-import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
@@ -25,90 +26,95 @@ export const Dashboard = () => {
   const {
     MAIN: { sprite },
   } = useGame();
+  const { tables } = useCore();
   const persistKey = toHex("trading-chart") as Entity;
   const selectedTab = SelectedTab.use(persistKey)?.value ?? 0;
   const selectedEmpire = selectedTab === 0 ? EEmpire.LENGTH : (selectedTab as EEmpire);
   const chartConfig = ChartConfig.use();
-  const empires = useEmpires();
+  const empireCount = tables.P_GameConfig.use()?.empireCount ?? 0;
 
-  if (showMap) return null;
-  return (
-    <div
-      className={cn(
-        "flex h-[75vh] w-[calc(100vw-32px)] max-w-[1200px] justify-center transition-opacity duration-300",
-        showMap ? "opacity-0" : "opacity-100",
-      )}
-    >
-      <div className="ml-6 grid grid-cols-3 gap-2 lg:ml-0 lg:w-full lg:grid-cols-1">
-        <div className="relative col-span-2 h-full min-h-40 lg:pr-2">
-          <SecondaryCard noDecor className="h-full">
-            <div className="grid grid-cols-[1fr_auto]">
-              <Tabs persistIndexKey="trading-chart" defaultIndex={0}>
-                <Join direction="horizontal" className="rounded-r !pr-0 hover:bg-transparent">
-                  <Tabs.Button key="all" index={0} className="h-8 w-11">
-                    <div>
-                      <h1>ALL</h1>
-                    </div>
-                  </Tabs.Button>
-                  {Array.from(empires.entries()).map(([id, emp], i) => {
-                    const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[id] ?? "PlanetGrey");
-                    return (
-                      <Tabs.Button key={emp.name} index={i + 1} className="-mb-[1px] h-8">
-                        <img src={spriteUrl} className="w-4" />
-                      </Tabs.Button>
-                    );
-                  })}
-                </Join>
-              </Tabs>
-              {selectedEmpire !== EEmpire.LENGTH && (
-                <Join direction="horizontal" className="rounded-r hover:bg-transparent">
-                  <Button
-                    variant={chartConfig?.mode === EChartMode.Lines ? "primary" : "neutral"}
-                    selected={chartConfig?.mode === EChartMode.Lines}
-                    onClick={() => ChartConfig.update({ mode: EChartMode.Lines })}
-                  >
-                    Lines
-                  </Button>
-                  <Button
-                    variant={chartConfig?.mode === EChartMode.Candlestick ? "primary" : "neutral"}
-                    selected={chartConfig?.mode === EChartMode.Candlestick}
-                    onClick={() => ChartConfig.update({ mode: EChartMode.Candlestick })}
-                  >
-                    Candles
-                  </Button>
-                </Join>
-              )}
-              {chartConfig?.mode === EChartMode.Candlestick && selectedEmpire !== EEmpire.LENGTH && (
-                <Join
-                  direction="horizontal"
-                  className="col-span-2 -mt-2 justify-self-end rounded-r hover:bg-transparent"
-                >
-                  {CANDLESTICK_INTERVALS.map((interval) => (
+  const DashboardContent = useMemo(() => {
+    if (showMap) return null;
+    return (
+      <div
+        className={cn(
+          "flex h-[75vh] w-[calc(100vw-32px)] max-w-[1200px] justify-center transition-opacity duration-300",
+          showMap ? "opacity-0" : "opacity-100",
+        )}
+      >
+        <div className="ml-6 grid grid-cols-3 gap-2 lg:ml-0 lg:w-full lg:grid-cols-1">
+          <div className="relative col-span-2 h-full min-h-40 lg:pr-2">
+            <SecondaryCard noDecor className="h-full">
+              <div className="grid grid-cols-[1fr_auto]">
+                <Tabs persistIndexKey="trading-chart" defaultIndex={0}>
+                  <Join direction="horizontal" className="rounded-r !pr-0 hover:bg-transparent">
+                    <Tabs.Button key="all" index={0} className="h-8 w-11">
+                      <div>
+                        <h1>ALL</h1>
+                      </div>
+                    </Tabs.Button>
+                    {allEmpires.slice(0, empireCount).map((empire) => {
+                      const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
+                      return (
+                        <Tabs.Button key={empire} index={empire} className="-mb-[1px] h-8">
+                          <img src={spriteUrl} className="w-4" />
+                        </Tabs.Button>
+                      );
+                    })}
+                  </Join>
+                </Tabs>
+                {selectedEmpire !== EEmpire.LENGTH && (
+                  <Join direction="horizontal" className="rounded-r hover:bg-transparent">
                     <Button
-                      key={interval.value}
-                      size="xs"
-                      variant={chartConfig?.tickInterval === interval.value ? "neutral" : "ghost"}
-                      selected={chartConfig?.tickInterval === interval.value}
-                      onClick={() => ChartConfig.update({ tickInterval: interval.value })}
+                      variant={chartConfig?.mode === EChartMode.Lines ? "primary" : "neutral"}
+                      selected={chartConfig?.mode === EChartMode.Lines}
+                      onClick={() => ChartConfig.update({ mode: EChartMode.Lines })}
                     >
-                      {interval.label}
+                      Lines
                     </Button>
-                  ))}
-                </Join>
-              )}
-            </div>
-            <HistoricalPointGraph
-              empire={selectedEmpire}
-              candlesticks={chartConfig?.mode === EChartMode.Candlestick}
-              tickInterval={chartConfig?.tickInterval ?? 60}
-            />
-          </SecondaryCard>
+                    <Button
+                      variant={chartConfig?.mode === EChartMode.Candlestick ? "primary" : "neutral"}
+                      selected={chartConfig?.mode === EChartMode.Candlestick}
+                      onClick={() => ChartConfig.update({ mode: EChartMode.Candlestick })}
+                    >
+                      Candles
+                    </Button>
+                  </Join>
+                )}
+                {chartConfig?.mode === EChartMode.Candlestick && selectedEmpire !== EEmpire.LENGTH && (
+                  <Join
+                    direction="horizontal"
+                    className="col-span-2 -mt-2 justify-self-end rounded-r hover:bg-transparent"
+                  >
+                    {CANDLESTICK_INTERVALS.map((interval) => (
+                      <Button
+                        key={interval.value}
+                        size="xs"
+                        variant={chartConfig?.tickInterval === interval.value ? "neutral" : "ghost"}
+                        selected={chartConfig?.tickInterval === interval.value}
+                        onClick={() => ChartConfig.update({ tickInterval: interval.value })}
+                      >
+                        {interval.label}
+                      </Button>
+                    ))}
+                  </Join>
+                )}
+              </div>
+              <HistoricalPointGraph
+                empire={selectedEmpire}
+                candlesticks={chartConfig?.mode === EChartMode.Candlestick}
+                tickInterval={chartConfig?.tickInterval ?? 60}
+              />
+            </SecondaryCard>
+          </div>
+          <EmpireCards />
         </div>
-        <EmpireCards />
+        <Sidebar />
       </div>
-      <Sidebar />
-    </div>
-  );
+    );
+  }, [showMap, chartConfig, selectedEmpire, empireCount]);
+
+  return DashboardContent;
 };
 
 const Sidebar = () => {
