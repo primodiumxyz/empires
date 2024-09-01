@@ -35,7 +35,11 @@ const tickLabelProps = {
   textAnchor: "middle",
 } as const;
 
-export const HistoricalPointGraph: React.FC<{ empire: EEmpire }> = ({ empire }) => {
+export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boolean; tickInterval: number }> = ({
+  empire,
+  candlesticks,
+  tickInterval,
+}) => {
   const {
     tables,
     utils: { weiToUsd },
@@ -108,6 +112,37 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire }> = ({ empire }) 
     return empireData;
   }, [historicalPriceEntities, gameStartTimestamp, ethPrice]);
 
+  const candlestickData = useMemo(() => {
+    if (!historicalPriceData[empire] || historicalPriceData[empire].length === 0) {
+      return [];
+    }
+
+    const data = historicalPriceData[empire].reduce(
+      (acc, item) => {
+        const tickIndex = Math.floor(Number(item.time) / tickInterval);
+
+        if (!acc[tickIndex]) {
+          acc[tickIndex] = {
+            time: (tickIndex * tickInterval) as Time,
+            open: item.value,
+            high: item.value,
+            low: item.value,
+            close: item.value,
+          };
+        } else {
+          acc[tickIndex].high = Math.max(acc[tickIndex].high, item.value);
+          acc[tickIndex].low = Math.min(acc[tickIndex].low, item.value);
+          acc[tickIndex].close = item.value;
+        }
+
+        return acc;
+      },
+      {} as Record<number, { time: Time; open: number; high: number; low: number; close: number }>,
+    );
+
+    return Object.values(data);
+  }, [historicalPriceData, empire]);
+
   const chartContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleResize = () => {
@@ -167,11 +202,13 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire }> = ({ empire }) 
         newSeries.setData(data);
       });
     } else {
-      const newSeries = chart.addLineSeries({
-        color: EmpireEnumToConfig[empire].chartColor,
-        lineType: LineType.Curved,
-      });
-      newSeries.setData(historicalPriceData[empire]);
+      const newSeries = candlesticks
+        ? chart.addCandlestickSeries()
+        : chart.addLineSeries({
+            color: EmpireEnumToConfig[empire].chartColor,
+            lineType: LineType.Curved,
+          });
+      newSeries.setData(candlesticks ? candlestickData : historicalPriceData[empire]);
     }
 
     window.addEventListener("resize", handleResize);
@@ -180,7 +217,7 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire }> = ({ empire }) 
       window.removeEventListener("resize", handleResize);
       chart.remove();
     };
-  }, [empires, empire, historicalPriceData]);
+  }, [empires, empire, historicalPriceData, candlesticks]);
 
-  return <div ref={chartContainerRef} className="h-full min-h-[300px] w-full" />;
+  return <div ref={chartContainerRef} className="h-full min-h-64 w-full" />;
 };

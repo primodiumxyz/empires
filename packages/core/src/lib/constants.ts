@@ -19,6 +19,18 @@ export enum EViewMode {
   Dashboard,
 }
 
+export enum EChartMode {
+  Lines,
+  Candlestick,
+}
+
+// 1m, 5m, 10m
+export const CANDLESTICK_INTERVALS = [
+  { value: 60, label: "1min" },
+  { value: 300, label: "5min" },
+  { value: 600, label: "10min" },
+];
+
 export const TREASURE_PLANET_GOLD_TRESHOLD = 100n;
 
 export const PRICE_PRECISION = 4;

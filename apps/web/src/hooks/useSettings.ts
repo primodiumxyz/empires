@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { EViewMode } from "@primodiumxyz/core";
+import { EChartMode, EViewMode } from "@primodiumxyz/core";
 import {
   createLocalBoolTable,
   createLocalNumberTable,
@@ -72,6 +72,16 @@ if (!ViewMode.get()?.value) {
   ViewMode.set({ value: EViewMode.Dashboard });
 }
 
+const ChartConfig = createLocalTable(
+  settingsWorld,
+  { mode: Type.Number, tickInterval: Type.Number },
+  { id: "ChartConfig", persist: true, version: "1" },
+);
+
+if (!ChartConfig.get()?.mode) {
+  ChartConfig.set({ mode: EChartMode.Lines, tickInterval: 60 });
+}
+
 // Display routine logs in the action log
 const ShowRoutineLogs = createLocalBoolTable(settingsWorld, { id: "ShowRoutineLogs", persist: true });
 /* -------------------------------------------------------------------------- */
@@ -109,6 +119,7 @@ export const useSettings = () => {
     MusicPlaying,
     SelectedTab,
     ViewMode,
+    ChartConfig,
     OpenRoutineProbabilities,
     ShowRoutineLogs,
   };
