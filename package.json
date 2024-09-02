@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "turbo dev dev:indexer --continue",
     "build": "turbo build",
+    "clean": "rm -rf ./node_modules && rm -rf ./packages/assets/node_modules && rm -rf ./packages/contracts/node_modules && rm -rf ./packages/contracts/src/codegen && rm -rf ./packages/core/node_modules && rm -rf ./packages/engine/node_modules && rm -rf ./packages/game/node_modules",
     "clean:indexer": "pnpm clean-local-docker-indexer",
     "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
     "build:contracts": "turbo --filter @primodiumxyz/contracts build",
