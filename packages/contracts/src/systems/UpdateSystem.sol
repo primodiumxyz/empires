@@ -33,7 +33,6 @@ contract UpdateSystem is EmpiresSystem {
   function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver _onlyAdmin {
     IWorld world = IWorld(_world());
     world.Empires__updateEmpires(routineThresholds);
-    world.Empires__updateCombat();
     world.Empires__updateMagnets();
     world.Empires__updateAcid();
     world.Empires__updateShieldEater();
