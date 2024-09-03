@@ -27,7 +27,6 @@ export const CHART_TIME_SCALES = [
 ];
 export const CHART_TICK_INTERVALS = [
   { value: 60, label: "1min" },
-  { value: 300, label: "5min" },
   { value: 600, label: "10min" },
   { value: 3_600, label: "1h" },
 ];

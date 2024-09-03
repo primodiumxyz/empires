@@ -138,9 +138,10 @@ export const HistoricalPointGraph: React.FC<{
           const tickIndex = Math.floor(Number(item.time) / tickInterval);
 
           if (!acc[tickIndex]) {
+            const previousTick = acc[tickIndex - 1];
             acc[tickIndex] = {
               time: (tickIndex * tickInterval) as Time,
-              open: item.value,
+              open: previousTick?.close ?? item.value,
               high: item.value,
               low: item.value,
               close: item.value,
@@ -257,6 +258,7 @@ export const HistoricalPointGraph: React.FC<{
       });
 
       const candlestickData = formatCandlestickData(initialHistoricalPriceData);
+      console.log(candlestickData);
       newSeries.setData(candlestickData);
       seriesRefs.current?.push(newSeries);
     }
