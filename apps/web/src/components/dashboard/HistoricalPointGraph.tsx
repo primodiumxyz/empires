@@ -218,9 +218,11 @@ export const HistoricalPointGraph: React.FC<{
           showBlockchainUnits
             ? formatEther(BigInt(price.toFixed(0)))
             : weiToUsd(BigInt(price.toFixed(0)), ethPrice ?? 0, { precision: 3, forcePrecision: true }),
+        timeFormatter: (time: number) => new Date(time * 1000).toLocaleString(),
       },
       timeScale: {
         timeVisible: true,
+        tickMarkFormatter: (time: number) => new Date(time * 1000).toLocaleTimeString(),
       },
       crosshair: {
         vertLine: {
