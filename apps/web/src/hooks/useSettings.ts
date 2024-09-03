@@ -90,13 +90,6 @@ const ShowRoutineLogs = createLocalBoolTable(settingsWorld, { id: "ShowRoutineLo
 
 export type Settings = ReturnType<typeof useSettings>;
 export const useSettings = () => {
-  // font
-  const fontStyle = FontStyle.use();
-  const setFontStyleFamily = (family: (typeof fontStyleOptions.family)[number]) => FontStyle.update({ family });
-  const setFontStyleSize = (size: (typeof fontStyleOptions.size)[number]) => FontStyle.update({ size });
-  const setFontStyleFamilyRaw = (familyRaw: (typeof fontStyleOptions.familyRaw)[number]) =>
-    FontStyle.update({ familyRaw });
-
   const enabled = ShowBlockchainUnits.use()?.value ?? false;
 
   useEffect(() => {
@@ -106,14 +99,7 @@ export const useSettings = () => {
   }, []);
 
   return {
-    fontStyle: {
-      family: fontStyle?.family ?? fontStyleOptions.family[0],
-      size: fontStyle?.size ?? fontStyleOptions.size[0],
-      familyRaw: fontStyle?.familyRaw ?? fontStyleOptions.familyRaw[0],
-      setFamily: setFontStyleFamily,
-      setFamilyRaw: setFontStyleFamilyRaw,
-      setSize: setFontStyleSize,
-    },
+    FontStyle,
     showBlockchainUnits: {
       enabled,
       setEnabled: (enabled: boolean) => ShowBlockchainUnits.update({ value: enabled }),

@@ -20,21 +20,25 @@ import { ampli } from "./ampli/index";
 const DEV = import.meta.env.PRI_DEV === "true";
 
 const App = () => {
-  const settings = useSettings();
-  const fontStyle = useMemo(() => {
-    const { family, size } = settings.fontStyle;
-    const fontFamily = {
-      pixel: "font-pixel",
-      mono: "font-mono",
-    }[family];
+  const { FontStyle } = useSettings();
+  const fontStyle = FontStyle.use();
+  const fontFamily = useMemo(
+    () =>
+      ({
+        pixel: "font-pixel",
+        mono: "font-mono",
+      })[fontStyle?.family ?? "pixel"],
+    [fontStyle],
+  );
 
-    const fontSize = {
-      sm: "text-sm",
-      md: "text-md",
-    }[size];
-
-    return cn(fontFamily, fontSize);
-  }, [settings.fontStyle]);
+  const fontSize = useMemo(
+    () =>
+      ({
+        sm: "text-sm",
+        md: "text-md",
+      })[fontStyle?.size ?? "md"],
+    [fontStyle],
+  );
 
   // Amplitude Analytics
   useEffect(() => {
@@ -86,7 +90,8 @@ const App = () => {
             <div
               className={cn(
                 "star-background flex h-screen w-screen cursor-default items-center justify-center",
-                fontStyle,
+                fontFamily,
+                fontSize,
               )}
             >
               <BackgroundNebula />
@@ -94,7 +99,11 @@ const App = () => {
               <PlayerAccountProvider allowBurner={!!DEV} defaultLogin={usingFoundry ? "burner" : "privy"}>
                 <Game />
                 <ToastContainer
-                  toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
+                  toastClassName={cn(
+                    fontFamily,
+                    fontSize,
+                    "text-xs border text-base-100 bg-neutral border-neutral rounded-box",
+                  )}
                   progressClassName="bg-primary"
                   position="bottom-right"
                   autoClose={3000}

@@ -4,7 +4,15 @@ import { Toggle } from "@/components/core/Toggle";
 import { fontStyleOptions, useSettings } from "@/hooks/useSettings";
 
 export const GeneralSettings = () => {
-  const { fontStyle, showBlockchainUnits } = useSettings();
+  const { FontStyle, showBlockchainUnits } = useSettings();
+  const fontStyle = FontStyle.use();
+  const fontFamily = fontStyle?.family ?? "pixel";
+  const fontSize = fontStyle?.size ?? "md";
+
+  const setFontStyleFamily = (family: (typeof fontStyleOptions.family)[number]) => FontStyle.update({ family });
+  const setFontStyleSize = (size: (typeof fontStyleOptions.size)[number]) => FontStyle.update({ size });
+  const setFontStyleFamilyRaw = (familyRaw: (typeof fontStyleOptions.familyRaw)[number]) =>
+    FontStyle.update({ familyRaw });
 
   return (
     <Navigator.Screen title="general" className="flex flex-col gap-4">
@@ -12,7 +20,7 @@ export const GeneralSettings = () => {
         <h2 className="col-span-2 font-semibold text-gray-400">Font family</h2>
         <RadioGroup
           name="settings-font-family"
-          value={fontStyle.family.toString()}
+          value={fontFamily}
           options={[
             ...fontStyleOptions.family.map((family) => ({
               id: family,
@@ -20,8 +28,8 @@ export const GeneralSettings = () => {
             })),
           ]}
           onChange={(value) => {
-            fontStyle.setFamily(value as (typeof fontStyleOptions.family)[number]);
-            fontStyle.setFamilyRaw(
+            setFontStyleFamily(value as (typeof fontStyleOptions.family)[number]);
+            setFontStyleFamilyRaw(
               fontStyleOptions.familyRaw[
                 fontStyleOptions.family.indexOf(value as (typeof fontStyleOptions.family)[number])
               ],
@@ -32,14 +40,14 @@ export const GeneralSettings = () => {
         <h2 className="col-span-2 font-semibold text-gray-400">Font size</h2>
         <RadioGroup
           name="settings-font-size"
-          value={fontStyle.size.toString()}
+          value={fontSize}
           options={[
             ...fontStyleOptions.size.map((size) => ({
               id: size,
               label: size,
             })),
           ]}
-          onChange={(value) => fontStyle.setSize(value as (typeof fontStyleOptions.size)[number])}
+          onChange={(value) => setFontStyleSize(value as (typeof fontStyleOptions.size)[number])}
           className="grid grid-cols-[8rem_8rem]"
         />
       </div>
