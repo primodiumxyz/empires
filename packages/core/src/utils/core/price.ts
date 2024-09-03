@@ -167,13 +167,13 @@ export function createPriceUtils(tables: Tables) {
     return overrideCost;
   }
 
-  function weiToUsd(wei: bigint, weiToUsd: number, options?: { precision?: number }): string {
-    const { precision = PRICE_PRECISION } = options ?? {};
+  function weiToUsd(wei: bigint, weiToUsd: number, options?: { precision?: number; forcePrecision?: boolean }): string {
+    const { precision = PRICE_PRECISION, forcePrecision = false } = options ?? {};
     const balance = Number(formatEther(wei));
     if (isNaN(balance)) return "$0.00";
     const balanceInUsd = balance * weiToUsd;
 
-    const maxPrecision = balanceInUsd < 0.01 ? precision : 2;
+    const maxPrecision = balanceInUsd < 0.01 || forcePrecision ? precision : 2;
 
     return balanceInUsd.toLocaleString("en-US", {
       style: "currency",
