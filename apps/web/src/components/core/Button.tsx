@@ -8,7 +8,7 @@ import { Tooltip, TooltipDirection } from "@/components/core/Tooltip";
 import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "btn join-item items-center justify-center whitespace-nowrap ring-offset-background focus-visible:outline-none relative",
   {
     variants: {
