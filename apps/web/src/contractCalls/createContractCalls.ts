@@ -1,4 +1,5 @@
 import { Core, createExecute, ExternalAccount, LocalAccount } from "@primodiumxyz/core";
+import { createAdminCalls } from "@/contractCalls/contractCalls/admin";
 import { createDevCalls } from "@/contractCalls/contractCalls/dev";
 import { createEndGameCalls } from "@/contractCalls/contractCalls/endGame";
 import { createOverrideCalls } from "@/contractCalls/contractCalls/overrides";
@@ -15,6 +16,7 @@ export const createContractCalls = (core: Core, playerAccount: ExternalAccount |
   const updateCalls = createUpdateCalls(core, execute);
   const resetCalls = createResetCalls(core, execute);
   const endGameCalls = createEndGameCalls(core, execute);
+  const adminCalls = createAdminCalls(core, execute);
 
   return {
     ...execute,
@@ -23,5 +25,6 @@ export const createContractCalls = (core: Core, playerAccount: ExternalAccount |
     ...updateCalls,
     ...resetCalls,
     ...endGameCalls,
+    ...adminCalls,
   };
 };
