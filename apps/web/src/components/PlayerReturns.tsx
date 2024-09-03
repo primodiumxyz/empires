@@ -6,8 +6,8 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tooltip } from "@/components/core/Tooltip";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { Price } from "@/components/shared/Price";
-import { useEmpireLogo } from "@/hooks/useEmpireLogo";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePoints } from "@/hooks/usePoints";
@@ -67,7 +67,6 @@ const EarnUpTo = ({
 
   const empires = useEmpires();
   const empireName = empires.get(empire)?.name;
-  const empireLogo = useEmpireLogo(empire);
 
   return (
     <div className="pointer-events-auto relative flex min-w-32 flex-col rounded-md border border-gray-600 p-1 lg:p-2 lg:pt-4">
@@ -83,8 +82,8 @@ const EarnUpTo = ({
           </Tooltip>
         </div>
       </h2>
-      <div className={cn("flex h-full w-full flex-row items-center justify-around border-none text-sm")}>
-        <img src={empireLogo} className="w-4 lg:w-8" />
+      <div className={cn("flex h-full w-full flex-row items-center justify-around border-none pt-1 text-sm")}>
+        <EmpireLogo empireId={empire} size="sm" />
         <div className="flex flex-col">
           <Price wei={earnings} />
           {!!totalSpent && (

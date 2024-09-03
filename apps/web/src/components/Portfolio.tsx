@@ -5,8 +5,8 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { Price } from "@/components/shared/Price";
-import { useEmpireLogo } from "@/hooks/useEmpireLogo";
 import { useEmpires } from "@/hooks/useEmpires";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { cn } from "@/util/client";
@@ -46,14 +46,13 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
   const pct = Number(pctTimes10000) / 100;
 
   const { price: pointCostWei } = usePointPrice(empire, Number(formatEther(playerPoints)));
-  const empireLogo = useEmpireLogo(empire);
   if (playerPoints === 0n) {
     return null;
   }
 
   return (
     <div className={cn("flex h-9 w-full items-center justify-between gap-5 border-none py-1 lg:h-14")}>
-      <img src={empireLogo} className="w-6 lg:w-10" />
+      <EmpireLogo empireId={empire} size="xs" />
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>
         <div className="hidden lg:block">

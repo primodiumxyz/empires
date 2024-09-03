@@ -4,11 +4,12 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { EEmpire } from "@primodiumxyz/contracts";
 import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
+import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
 import { IconLabel } from "@/components/core/IconLabel";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { useAcidRain } from "@/hooks/useAcidRain";
-import { useEmpireLogo } from "@/hooks/useEmpireLogo";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
@@ -26,18 +27,18 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
   const hasShieldEater = tables.ShieldEater.use()?.currentPlanet === entity;
   const { cycles } = useAcidRain(entity, planet.empireId);
   const hasAcidRain = cycles > 0n;
-  const { empireId } = planet;
+  const { empireId } = planet as { empireId: EEmpire };
   const planetName = usePlanetName(entity);
-  const empireLogo = useEmpireLogo(empireId);
+  const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empireId] ?? "PlanetGrey");
 
-  const moveCrown = [EEmpire.Purple, EEmpire.Pink, EEmpire.Yellow].includes(empireId as EEmpire);
+  const moveCrown = [EEmpire.Purple, EEmpire.Pink, EEmpire.Yellow].includes(empireId);
 
   return (
-    <Card noDecor className={cn("hide-scrollbar h-fit max-h-full min-w-80 overflow-y-auto", className)}>
+    <Card noDecor className={cn("hide-scrollbar relative h-fit max-h-full min-w-80 overflow-y-auto", className)}>
       <div className="flex w-full flex-col items-center gap-4">
         <div className="mb-2 mt-4 flex w-full flex-col items-center justify-center gap-4">
           <div className="relative flex h-full w-full items-center justify-center">
-            <img src={empireLogo} width={64} height={64} />
+            <img src={spriteUrl} width={64} height={64} />
             <img
               src={sprite.getSprite("ShieldEater")}
               width={116}
@@ -71,10 +72,14 @@ export const PlanetSummary = ({ entity, className }: { entity: Entity; className
             )}
           </div>
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-sm font-semibold text-warning">{planetName}</h2>
-            <span className="text-xs text-gray-400">
+            <div className="flex items-center gap-1">
+              <h2 className="text-base font-semibold text-warning">{planetName}</h2>
+              <EmpireLogo empireId={empireId} size="xs" />
+            </div>
+            <p className="flex items-center gap-1 text-xs text-gray-400">
               [{(planet.q - 100n).toLocaleString()}, {planet.r.toLocaleString()}]
-            </span>
+            </p>
+
             <PlanetAssets shipCount={planet.shipCount} shieldCount={planet.shieldCount} goldCount={planet.goldCount} />
           </div>
         </div>

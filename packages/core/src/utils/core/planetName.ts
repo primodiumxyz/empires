@@ -73,11 +73,24 @@ export const createPlanetNameUtils = (tables: Tables, config: CoreConfig) => {
    * @param entity - The entity to convert.
    * @returns The planet name.
    */
+  let noConnection = false;
   const refreshPlanetName = async (entity: Entity) => {
-    if (!config.accountLinkUrl) return;
+    if (!config.accountLinkUrl || noConnection) {
+      tables.PlanetName.set(
+        {
+          name: generatePlanetName(entity),
+          lastFetched: Date.now(),
+        },
+        entity,
+      );
+      return;
+    }
     try {
       let fetchedName: string | null = null;
       const res = await fetch(`${config.accountLinkUrl}/planet/${entity}?worldAddress=1`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const content = (await res.json()) as {
         planetName: string | null;
       };
@@ -93,6 +106,7 @@ export const createPlanetNameUtils = (tables: Tables, config: CoreConfig) => {
       );
     } catch (error) {
       console.error(error);
+      noConnection = true;
       tables.PlanetName.set(
         {
           name: generatePlanetName(entity),

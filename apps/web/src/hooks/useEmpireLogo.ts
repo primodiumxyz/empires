@@ -25,7 +25,7 @@ export const useEmpireLogo = (empireId?: EEmpire) => {
   }, [empireId]);
 
   return useMemo(
-    () => logo ?? sprite.getSprite(EmpireToPlanetSpriteKeys[empireId ?? 0] ?? "PlanetGrey"),
+    () => logo || sprite.getSprite(EmpireToPlanetSpriteKeys[empireId ?? 0] ?? "PlanetGrey"),
     [logo, empireId],
   );
 };

@@ -2,6 +2,8 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { CoreConfig, Tables } from "@core/lib";
 
+let noConnection = false;
+
 export const createEmpireLogoUtils = (tables: Tables, config: CoreConfig) => {
   /**
    * Converts an entity to a planet name.
@@ -10,12 +12,23 @@ export const createEmpireLogoUtils = (tables: Tables, config: CoreConfig) => {
    */
 
   const refreshEmpireLogo = async (empire: EEmpire) => {
-    if (!config.accountLinkUrl) return;
+    if (!config.accountLinkUrl || noConnection) {
+      tables.EmpireLogo.set(
+        {
+          uri: "",
+          lastFetched: Date.now(),
+        },
+        empire.toString() as Entity,
+      );
+      return;
+    }
     try {
       const res = await fetch(`${config.accountLinkUrl}/empire-logo/${empire}?worldAddress=1`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
 
       const blob = await res.blob();
-
       const file = new File([blob], "empire_logo.png", { type: "image/png" });
 
       tables.EmpireLogo.set(
@@ -27,6 +40,7 @@ export const createEmpireLogoUtils = (tables: Tables, config: CoreConfig) => {
       );
     } catch (error) {
       console.error(error);
+      noConnection = true;
       tables.EmpireLogo.set(
         {
           uri: "",
