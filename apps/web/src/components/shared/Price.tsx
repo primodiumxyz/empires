@@ -19,10 +19,11 @@ export const Price = ({
     utils: { weiToUsd },
   } = useCore();
   const { price, loading } = useEthPrice();
-  const { showBlockchainUnits } = useSettings();
+  const { ShowBlockchainUnits } = useSettings();
+  const showBlockchainUnits = ShowBlockchainUnits.use()?.value ?? false;
 
   if (forceBlockchainUnits) return <span className={className}>{formatEther(wei)}ETH</span>;
-  if (showBlockchainUnits.enabled) return <span className={className}>{formatEther(wei)}ETH</span>;
+  if (showBlockchainUnits) return <span className={className}>{formatEther(wei)}ETH</span>;
   if (loading) return <span className={className}>...</span>;
   if (!price) return <span className={className}>{formatEther(wei)}ETH</span>;
   return <span className={className}>{weiToUsd(wei, price, { precision })}</span>;

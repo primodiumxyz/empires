@@ -13,7 +13,8 @@ import { EmpireEnumToConfig } from "@/util/lookups";
 export const TimeLeft = ({ className, small, invert }: { className?: string; small?: boolean; invert?: boolean }) => {
   const { timeLeftMs, blocksLeft } = useTimeLeft();
   const { gameOver } = useWinningEmpire();
-  const { showBlockchainUnits } = useSettings();
+  const { ShowBlockchainUnits } = useSettings();
+  const showBlockchainUnits = ShowBlockchainUnits.use()?.value ?? false;
   const { tables } = useCore();
 
   const endTime = useMemo(() => {
@@ -41,9 +42,7 @@ export const TimeLeft = ({ className, small, invert }: { className?: string; sma
       <p className="text-xs font-bold opacity-80">
         {EmpireEnumToConfig[turn.empire as EEmpire].name}'s Turn in <span className="text-secondary">{timeLeft}</span>
       </p>
-      {showBlockchainUnits.enabled && !!blocksLeft && (
-        <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>
-      )}
+      {showBlockchainUnits && !!blocksLeft && <span className="text-xs">({blocksLeft.toLocaleString()} blocks)</span>}
       {invert && (
         <Tooltip tooltipContent={endTime.toLocaleString()} direction="top">
           <p className={cn("opacity-90", small ? "text-xs" : "text-sm")}>

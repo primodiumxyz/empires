@@ -4,10 +4,11 @@ import { Toggle } from "@/components/core/Toggle";
 import { fontStyleOptions, useSettings } from "@/hooks/useSettings";
 
 export const GeneralSettings = () => {
-  const { FontStyle, showBlockchainUnits } = useSettings();
+  const { FontStyle, ShowBlockchainUnits } = useSettings();
   const fontStyle = FontStyle.use();
   const fontFamily = fontStyle?.family ?? "pixel";
   const fontSize = fontStyle?.size ?? "md";
+  const showBlockchainUnits = ShowBlockchainUnits.use()?.value ?? false;
 
   const setFontStyleFamily = (family: (typeof fontStyleOptions.family)[number]) => FontStyle.update({ family });
   const setFontStyleSize = (size: (typeof fontStyleOptions.size)[number]) => FontStyle.update({ size });
@@ -55,8 +56,8 @@ export const GeneralSettings = () => {
         <h2 className="font-semibold text-gray-400">Blockchain units</h2>
         <span className="text-xs text-gray-400/70">Display values in blockchain units (ETH, blocks)</span>
         <Toggle
-          defaultChecked={showBlockchainUnits.enabled}
-          onToggle={() => showBlockchainUnits.setEnabled(!showBlockchainUnits.enabled)}
+          defaultChecked={showBlockchainUnits}
+          onToggle={() => ShowBlockchainUnits.update({ value: !showBlockchainUnits })}
         />
       </div>
       <Navigator.BackButton />

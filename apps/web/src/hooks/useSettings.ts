@@ -90,8 +90,6 @@ const ShowRoutineLogs = createLocalBoolTable(settingsWorld, { id: "ShowRoutineLo
 
 export type Settings = ReturnType<typeof useSettings>;
 export const useSettings = () => {
-  const enabled = ShowBlockchainUnits.use()?.value ?? false;
-
   useEffect(() => {
     return () => {
       settingsWorld.dispose();
@@ -100,10 +98,7 @@ export const useSettings = () => {
 
   return {
     FontStyle,
-    showBlockchainUnits: {
-      enabled,
-      setEnabled: (enabled: boolean) => ShowBlockchainUnits.update({ value: enabled }),
-    },
+    ShowBlockchainUnits,
     Dripped,
     MusicPlaying,
     SelectedTab,
