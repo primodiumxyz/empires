@@ -2,6 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
+import { NamespaceOwner } from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import { Ready, P_PointConfig, P_GameConfig, WinningEmpire, Role } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
@@ -28,7 +29,11 @@ contract EmpiresSystem is System {
 
   // Modifier to restrict access to admin only
   modifier _onlyAdmin() {
-    require(Role.get(_msgSender()) == ERole.Admin, "[EmpiresSystem] Only admin");
+    address sender = _msgSender();
+    require(
+      Role.get(sender) == ERole.Admin || NamespaceOwner.get(EMPIRES_NAMESPACE_ID) == sender,
+      "[EmpiresSystem] Only admin"
+    );
     _;
   }
 
