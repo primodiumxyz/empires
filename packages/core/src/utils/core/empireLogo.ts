@@ -22,8 +22,9 @@ export const createEmpireLogoUtils = (tables: Tables, config: CoreConfig) => {
       );
       return;
     }
+    const worldAddress = config.worldAddress;
     try {
-      const res = await fetch(`${config.accountLinkUrl}/empire-logo/${empire}?worldAddress=1`);
+      const res = await fetch(`${config.accountLinkUrl}/empire-logo/${empire}?worldAddress=${worldAddress}`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }

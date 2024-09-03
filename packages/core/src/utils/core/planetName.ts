@@ -87,7 +87,7 @@ export const createPlanetNameUtils = (tables: Tables, config: CoreConfig) => {
     }
     try {
       let fetchedName: string | null = null;
-      const res = await fetch(`${config.accountLinkUrl}/planet/${entity}?worldAddress=1`);
+      const res = await fetch(`${config.accountLinkUrl}/planet/${entity}?worldAddress=${config.worldAddress}`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }

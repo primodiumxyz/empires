@@ -91,7 +91,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
   entity: selectedPlanet,
   className,
 }) => {
-  const { tables, utils } = useCore();
+  const { tables, utils, config } = useCore();
   const planet = tables.Planet.use(selectedPlanet ?? defaultEntity);
   const [newName, setNewName] = useState("");
   const planetName = usePlanetName(selectedPlanet);
@@ -109,7 +109,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
         },
         body: JSON.stringify({
           planetName: newName,
-          worldAddress: "1",
+          worldAddress: config.worldAddress,
         }),
       });
 

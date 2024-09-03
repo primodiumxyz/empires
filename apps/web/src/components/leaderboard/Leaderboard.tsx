@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { toast } from "react-toastify";
 import { formatEther } from "viem";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
@@ -257,12 +258,12 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
 const EmpireImagePicker: React.FC<{ empireId: EEmpire }> = ({ empireId }) => {
   const { config, utils } = useCore();
 
-  const url = `${config.accountLinkUrl}/empire-logo/${empireId}?worldAddress=1`;
+  const url = `${config.accountLinkUrl}/empire-logo/${empireId}`;
 
   const handleImageSubmit = async (file: File) => {
     const formData = new FormData();
     formData.append("logo", file);
-    formData.append("worldAddress", "1");
+    formData.append("worldAddress", config.worldAddress);
 
     try {
       const response = await fetch(url, {
@@ -272,10 +273,12 @@ const EmpireImagePicker: React.FC<{ empireId: EEmpire }> = ({ empireId }) => {
 
       const data = await response.json();
       if (response.ok) {
-        console.log("Image uploaded successfully");
+        console.log("Image uploaded successfully", { data });
         utils.refreshEmpireLogo(empireId);
+        toast.success("Image uploaded successfully");
       } else {
         console.error("Failed to upload image");
+        toast.error(`Failed to upload image: ${data.error}`);
       }
     } catch (error) {
       console.error("Error uploading image:", error);
