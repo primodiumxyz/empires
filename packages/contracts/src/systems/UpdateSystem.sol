@@ -30,7 +30,7 @@ contract UpdateSystem is EmpiresSystem {
    * @dev Updates the game world state, including gold generation, ship movements, combat resolution.
    * @param routineThresholds An array of RoutineThresholds structs containing information about planet routines.
    */
-  function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver _onlyAdmin {
+  function updateWorld(RoutineThresholds[] memory routineThresholds) public _onlyNotGameOver _onlyAdminOrCanUpdate {
     IWorld world = IWorld(_world());
     world.Empires__updateEmpires(routineThresholds);
     world.Empires__updateMagnets();

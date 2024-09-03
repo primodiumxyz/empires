@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Ready } from "codegen/index.sol";
+import { Ready, Role } from "codegen/index.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
+import { ERole } from "codegen/common.sol";
 
 contract AdminSystem is EmpiresSystem {
   /**
@@ -17,5 +18,23 @@ contract AdminSystem is EmpiresSystem {
    */
   function unpause() public _onlyAdmin {
     Ready.set(true);
+  }
+
+  /**
+   * @dev Adds or updates a role for a user
+   * @param user The address of the user
+   * @param role The role to be assigned
+   */
+  function setRole(address user, ERole role) public _onlyAdmin {
+    require(role == ERole.Admin || role == ERole.CanUpdate, "[AdminSystem] Invalid role");
+    Role.set(user, role);
+  }
+
+  /**
+   * @dev Removes a role from a user
+   * @param user The address of the user
+   */
+  function removeRole(address user) public _onlyAdmin {
+    Role.deleteRecord(user);
   }
 }

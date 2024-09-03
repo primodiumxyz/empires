@@ -407,6 +407,19 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__removeRole",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__resetGame",
     "inputs": [],
     "outputs": [],
@@ -425,6 +438,24 @@ declare const abi: [
         "name": "_points",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__setRole",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "role",
+        "type": "uint8",
+        "internalType": "enum ERole"
       }
     ],
     "outputs": [],
