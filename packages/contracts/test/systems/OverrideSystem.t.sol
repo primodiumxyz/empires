@@ -9,6 +9,7 @@ import { PlayersMap } from "adts/PlayersMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
+import { OverrideShipSystem } from "systems/OverrideShipSystem.sol";
 import { EEmpire, EOverride, EDirection } from "codegen/common.sol";
 import { addressToId } from "src/utils.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
@@ -35,6 +36,29 @@ contract OverrideSystemTest is PrimodiumTest {
     P_PointConfig.setPointRake(0);
     pointUnit = P_PointConfig.getPointUnit();
     EMPIRE_COUNT = P_GameConfig.getEmpireCount();
+  }
+
+  function testOverspend() public {
+    uint256 initBalance = alice.balance;
+    vm.startPrank(alice);
+    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
+    world.Empires__createShip{ value: cost + 1 }(planetId, 1);
+    assertEq(alice.balance, initBalance - cost, "Alice should have been refunded the 1 wei");
+  }
+
+  function testUnderspend() public {
+    vm.startPrank(alice);
+    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
+    vm.expectRevert("[OverrideSystem] Incorrect payment");
+    world.Empires__createShip{ value: cost - 1 }(planetId, 1);
+  }
+
+  function testExactSpend() public {
+    uint256 initBalance = alice.balance;
+    vm.startPrank(alice);
+    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
+    world.Empires__createShip{ value: cost }(planetId, 1);
+    assertEq(alice.balance, initBalance - cost, "Alice should have been refunded the 1 wei");
   }
 
   function testCreateShipSingle() public {

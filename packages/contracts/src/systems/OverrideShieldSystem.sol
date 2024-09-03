@@ -6,6 +6,8 @@ import { Turn, ChargeShieldsOverrideLog, ChargeShieldsOverrideLogData, Planet, P
 import { EOverride, EEmpire } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
+import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
+import { IWorld } from "codegen/world/IWorld.sol";
 import { addressToId, pseudorandomEntity } from "src/utils.sol";
 
 /**
@@ -24,7 +26,7 @@ contract OverrideShieldSystem is EmpiresSystem {
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, planetData.empireId, _overrideCount);
-    require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
+    _refundOverspend(cost);
 
     LibOverride._purchaseOverride(playerId, EOverride.ChargeShield, planetData.empireId, _overrideCount, _msgValue());
 
@@ -41,5 +43,18 @@ contract OverrideShieldSystem is EmpiresSystem {
         timestamp: block.timestamp
       })
     );
+  }
+
+  /**
+   * @dev Handles overspending by the user when making a payment.
+   * @param _cost The expected cost of the transaction.
+   * @notice This function ensures that the user has sent enough ETH to cover the cost.
+   * If the user sends more than the required amount, the excess is refunded.
+   */
+  function _refundOverspend(uint256 _cost) private {
+    require(_msgValue() >= _cost, "[OverrideSystem] Incorrect payment");
+    if (_msgValue() > _cost) {
+      IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), _msgValue() - _cost);
+    }
   }
 }
