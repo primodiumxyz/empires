@@ -23,7 +23,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       empire: planet.empireId,
       citadel: planet.isCitadel,
       empireCount: tables.P_GameConfig.get()?.empireCount ?? 0,
-      updatePlanetName: async () => await core.utils.getPlanetName(entity),
+      updatePlanetName: async () => core.utils.generatePlanetName(entity),
     });
 
     planetObj
