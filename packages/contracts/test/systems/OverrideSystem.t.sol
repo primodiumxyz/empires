@@ -58,7 +58,7 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.startPrank(alice);
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
     world.Empires__createShip{ value: cost }(planetId, 1);
-    assertEq(alice.balance, initBalance - cost, "Alice should have been refunded the 1 wei");
+    assertEq(alice.balance, initBalance - cost, "Alice should have spent the exact amount");
   }
 
   function testCreateShipSingle() public {

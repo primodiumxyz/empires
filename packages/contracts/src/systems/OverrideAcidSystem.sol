@@ -51,9 +51,10 @@ contract OverrideAcidSystem is EmpiresSystem {
    * If the user sends more than the required amount, the excess is refunded.
    */
   function _refundOverspend(uint256 _cost) private {
-    require(_msgValue() >= _cost, "[OverrideSystem] Incorrect payment");
-    if (_msgValue() > _cost) {
-      IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), _msgValue() - _cost);
+    uint256 msgValue = _msgValue();
+    require(msgValue >= _cost, "[OverrideSystem] Incorrect payment");
+    if (msgValue > _cost) {
+      IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), msgValue - _cost);
     }
   }
 }
