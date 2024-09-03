@@ -8,6 +8,7 @@ import {
   createWorld,
   Type,
 } from "@primodiumxyz/reactive-tables";
+import { useGame } from "@/hooks/useGame";
 
 const settingsWorld = createWorld();
 
@@ -88,7 +89,11 @@ const ShowRoutineLogs = createLocalBoolTable(settingsWorld, { id: "ShowRoutineLo
 /*                                  SETTINGS                                  */
 /* -------------------------------------------------------------------------- */
 
+export type Settings = ReturnType<typeof useSettings>;
 export const useSettings = () => {
+  const {
+    ROOT: { tables },
+  } = useGame();
   // font
   const fontStyle = FontStyle.use();
   const setFontStyleFamily = (family: (typeof fontStyleOptions.family)[number]) => FontStyle.update({ family });
@@ -102,6 +107,25 @@ export const useSettings = () => {
   }, []);
 
   const enabled = ShowBlockchainUnits.use()?.value ?? false;
+
+  useEffect(() => {
+    const unsubscribe = ViewMode.watch({
+      onChange: ({ properties: { current } }) => {
+        if (!current) return;
+
+        if (current.value === EViewMode.Map) {
+          tables.GameState.update({ visible: true });
+        } else {
+          tables.GameState.update({ visible: false });
+        }
+      },
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [tables]);
+
   return {
     fontStyle: {
       family: fontStyle?.family ?? fontStyleOptions.family[0],
