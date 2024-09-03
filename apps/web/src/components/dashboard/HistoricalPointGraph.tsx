@@ -138,10 +138,9 @@ export const HistoricalPointGraph: React.FC<{
           const tickIndex = Math.floor(Number(item.time) / tickInterval);
 
           if (!acc[tickIndex]) {
-            const previousTick = acc[tickIndex - 1];
             acc[tickIndex] = {
               time: (tickIndex * tickInterval) as Time,
-              open: previousTick?.close ?? item.value,
+              open: item.value, // we'll handle this next
               high: item.value,
               low: item.value,
               close: item.value,
@@ -157,7 +156,17 @@ export const HistoricalPointGraph: React.FC<{
         {} as Record<number, { time: Time; open: number; high: number; low: number; close: number }>,
       );
 
-      return Object.values(data);
+      // Make sure each tick opens at the close of the previous tick (in case there are gaps in time)
+      const ticks = Object.values(data);
+      const alignedTicks = ticks.map((item, index) => {
+        if (index === 0) return item;
+        return {
+          ...item,
+          open: ticks[index - 1].close,
+        };
+      });
+
+      return alignedTicks;
     },
     [empire, tickInterval],
   );
@@ -260,7 +269,6 @@ export const HistoricalPointGraph: React.FC<{
       });
 
       const candlestickData = formatCandlestickData(initialHistoricalPriceData);
-      console.log(candlestickData);
       newSeries.setData(candlestickData);
       seriesRefs.current?.push(newSeries);
     }
