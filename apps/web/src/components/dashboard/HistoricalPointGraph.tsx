@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ColorType, createChart, ISeriesApi, LineStyle, LineType, Time } from "lightweight-charts";
+import { ForwardIcon } from "@heroicons/react/24/solid";
+import { ColorType, createChart, IChartApi, ISeriesApi, LineStyle, LineType, Time } from "lightweight-charts";
 import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
+import { CHART_TIME_SCALES } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { allEmpires as _allEmpires } from "@primodiumxyz/game";
-import { Entity, Properties } from "@primodiumxyz/reactive-tables";
+import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button, buttonVariants } from "@/components/core/Button";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { useSettings } from "@/hooks/useSettings";
@@ -43,11 +45,10 @@ type HistoricalPointCost = {
  *   - meaning that on each update, we need to recalculate the whole data to get average top/bottom values
  *   - and save the data received for the next updates
  */
-export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boolean; tickInterval: number }> = ({
-  empire,
-  candlesticks,
-  tickInterval,
-}) => {
+export const HistoricalPointGraph: React.FC<{
+  empire: EEmpire;
+  tickInterval: number;
+}> = ({ empire, tickInterval }) => {
   const {
     tables,
     utils: { weiToUsd },
@@ -163,7 +164,7 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
   // Price data for line graphs & generating candlestick data
   const initialHistoricalPriceData = useMemo(
     () => getHistoricalPriceData(tables.HistoricalPointCost.getAll()),
-    [empire, candlesticks, getHistoricalPriceData],
+    [empire, getHistoricalPriceData],
   );
 
   // Additional data received from updates
@@ -174,8 +175,19 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
 
   // Chart
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<IChartApi | null>(null);
   const seriesRefs = useRef<ISeriesApi<"Line" | "Candlestick">[] | null>(null);
 
+  // Set time scale on selection
+  const setTimeScale = (timeScale: number) => {
+    if (!chartRef.current) return;
+
+    const now = new Date().getTime() / 1000;
+    const from = timeScale === -1 ? 0 : now - timeScale;
+    chartRef.current.timeScale().setVisibleRange({ from: from as Time, to: now as Time });
+  };
+
+  // Initialize the chart
   useEffect(() => {
     if (!chartContainerRef.current) return;
     seriesRefs.current = [];
@@ -195,6 +207,7 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
       width: chartContainerRef.current.clientWidth,
       height: chartContainerRef.current.clientHeight,
     });
+    chartRef.current = chart;
     chart.timeScale().fitContent();
 
     // Apply chart formatting & layout options
@@ -233,32 +246,21 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
         seriesRefs.current?.push(newSeries);
       });
     } else {
-      const newSeries = candlesticks
-        ? chart.addCandlestickSeries({
-            // accent
-            upColor: "#22d3ee",
-            // error
-            downColor: "#A8375D",
-            borderVisible: false,
-            wickUpColor: "#22d3ee",
-            wickDownColor: "#A8375D",
-          })
-        : chart.addLineSeries({
-            color: EmpireEnumToConfig[empire].chartColor,
-            lineType: LineType.Curved,
-          });
+      const newSeries = chart.addCandlestickSeries({
+        // accent
+        upColor: "#22d3ee",
+        // error
+        downColor: "#A8375D",
+        borderVisible: false,
+        wickUpColor: "#22d3ee",
+        wickDownColor: "#A8375D",
+      });
 
-      if (candlesticks) {
-        const candlestickData = formatCandlestickData(initialHistoricalPriceData);
-        newSeries.setData(candlestickData);
-      } else {
-        newSeries.setData(initialHistoricalPriceData[empire]);
-      }
-
+      const candlestickData = formatCandlestickData(initialHistoricalPriceData);
+      newSeries.setData(candlestickData);
       seriesRefs.current?.push(newSeries);
     }
 
-    const scrollToRealTime = () => chart.timeScale().scrollToRealTime();
     const handleResize = () => {
       chart.applyOptions({
         width: chartContainerRef.current?.clientWidth ?? 0,
@@ -266,29 +268,13 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
       });
     };
 
-    // Attach real time button to the inner div, so we can control its position relative to the actual chart
-    const innerDiv = chartContainerRef.current.querySelector(".tv-lightweight-charts");
-    const button = document.createElement("button");
-    if (innerDiv) {
-      innerDiv.className = "relative";
-      button.className = cn(
-        buttonVariants({ variant: "neutral", size: "xs" }),
-        "absolute bottom-[34px] right-[88px] z-10",
-      );
-      button.innerText = ">>";
-      button.addEventListener("click", scrollToRealTime);
-      innerDiv.appendChild(button);
-    }
-
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      if (innerDiv) button.removeEventListener("click", scrollToRealTime);
       chart.remove();
-      button.remove();
     };
-  }, [empire, candlesticks, tickInterval, initialHistoricalPriceData, fontFamily, showBlockchainUnits]);
+  }, [empire, tickInterval, initialHistoricalPriceData, fontFamily, showBlockchainUnits]);
 
   // Live updates to the chart (we could go with recreating the component on ever update, but this would reset
   // zoom, pan, etc. )
@@ -306,7 +292,7 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
             // Price will be 0 if this data is filled (not the update we're interested in)
             if (updateData.value === 0) return;
             seriesRefs.current?.[entityEmpire - 1].update(updateData);
-          } else if (candlesticks) {
+          } else {
             if (entityEmpire !== empire) return;
             // We need the full data to be able to form low/high values for the candlestick
             const fullHistoricalPriceData = Object.fromEntries(
@@ -331,10 +317,6 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
                   HistoricalPointCost[]
                 >,
             );
-          } else {
-            if (entityEmpire !== empire) return;
-            const updateData = newData[empire][0];
-            seriesRefs.current?.[0].update(updateData);
           }
         },
       },
@@ -344,7 +326,6 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
     return () => unsubscribe();
   }, [
     empire,
-    candlesticks,
     tickInterval,
     initialHistoricalPriceData,
     updateHistoricalPriceData,
@@ -352,5 +333,19 @@ export const HistoricalPointGraph: React.FC<{ empire: EEmpire; candlesticks: boo
     formatCandlestickData,
   ]);
 
-  return <div ref={chartContainerRef} className="relative h-full min-h-64 w-full" />;
+  return (
+    <>
+      <div ref={chartContainerRef} className="relative h-full min-h-64 w-full" />
+      <div className="flex gap-1 self-end pr-1">
+        {CHART_TIME_SCALES.map((scale) => (
+          <Button key={scale.value} size="xs" variant="ghost" onClick={() => setTimeScale(scale.value)}>
+            {scale.label}
+          </Button>
+        ))}
+        <Button size="xs" variant="ghost" onClick={() => chartRef.current?.timeScale().scrollToRealTime()}>
+          <ForwardIcon className="size-4" />
+        </Button>
+      </div>
+    </>
+  );
 };

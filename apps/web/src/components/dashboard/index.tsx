@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { toHex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { CANDLESTICK_INTERVALS, EChartMode, EViewMode } from "@primodiumxyz/core";
+import { CHART_TICK_INTERVALS, EViewMode } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { allEmpires, EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -65,32 +65,11 @@ export const Dashboard = () => {
                 </Tabs>
                 {selectedEmpire !== EEmpire.LENGTH && (
                   <Join direction="horizontal" className="rounded-r hover:bg-transparent">
-                    <Button
-                      variant={chartConfig?.mode === EChartMode.Lines ? "primary" : "neutral"}
-                      selected={chartConfig?.mode === EChartMode.Lines}
-                      onClick={() => ChartConfig.update({ mode: EChartMode.Lines })}
-                    >
-                      Lines
-                    </Button>
-                    <Button
-                      variant={chartConfig?.mode === EChartMode.Candlestick ? "primary" : "neutral"}
-                      selected={chartConfig?.mode === EChartMode.Candlestick}
-                      onClick={() => ChartConfig.update({ mode: EChartMode.Candlestick })}
-                    >
-                      Candles
-                    </Button>
-                  </Join>
-                )}
-                {chartConfig?.mode === EChartMode.Candlestick && selectedEmpire !== EEmpire.LENGTH && (
-                  <Join
-                    direction="horizontal"
-                    className="col-span-2 -mt-2 justify-self-end rounded-r hover:bg-transparent"
-                  >
-                    {CANDLESTICK_INTERVALS.map((interval) => (
+                    {CHART_TICK_INTERVALS.map((interval) => (
                       <Button
                         key={interval.value}
                         size="xs"
-                        variant={chartConfig?.tickInterval === interval.value ? "neutral" : "ghost"}
+                        variant="neutral"
                         selected={chartConfig?.tickInterval === interval.value}
                         onClick={() => ChartConfig.update({ tickInterval: interval.value })}
                       >
@@ -100,11 +79,7 @@ export const Dashboard = () => {
                   </Join>
                 )}
               </div>
-              <HistoricalPointGraph
-                empire={selectedEmpire}
-                candlesticks={chartConfig?.mode === EChartMode.Candlestick}
-                tickInterval={chartConfig?.tickInterval ?? 60}
-              />
+              <HistoricalPointGraph empire={selectedEmpire} tickInterval={chartConfig?.tickInterval ?? 60} />
             </SecondaryCard>
           </div>
           <EmpireCards />

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { EChartMode, EViewMode } from "@primodiumxyz/core";
+import { CHART_TICK_INTERVALS, EViewMode } from "@primodiumxyz/core";
 import {
   createLocalBoolTable,
   createLocalNumberTable,
@@ -74,12 +74,12 @@ if (!ViewMode.get()?.value) {
 
 const ChartConfig = createLocalTable(
   settingsWorld,
-  { mode: Type.Number, tickInterval: Type.Number },
+  { tickInterval: Type.Number },
   { id: "ChartConfig", persist: true, version: "1" },
 );
 
-if (!ChartConfig.get()?.mode) {
-  ChartConfig.set({ mode: EChartMode.Lines, tickInterval: 60 });
+if (!ChartConfig.get()) {
+  ChartConfig.set({ tickInterval: CHART_TICK_INTERVALS[0].value });
 }
 
 // Display routine logs in the action log
