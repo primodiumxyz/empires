@@ -1,12 +1,14 @@
+import { useEffect } from "react";
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 
+import { EViewMode } from "@primodiumxyz/core";
 import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
 import { Navigator } from "@/components/core/Navigator";
 import { AudioSettings } from "@/components/settings/AudioSettings";
 import { GeneralSettings } from "@/components/settings/GeneralSettings";
-
-const params = new URLSearchParams(window.location.search);
+import { useGame } from "@/hooks/useGame";
+import { useSettings } from "@/hooks/useSettings";
 
 export const Settings = () => (
   <Modal title="Settings">
@@ -22,6 +24,24 @@ export const Settings = () => (
 
 const _Settings = () => {
   const { logout, playerAccount } = usePlayerAccount();
+
+  const { ViewMode } = useSettings();
+  const {
+    ROOT: { tables: gameTables },
+  } = useGame();
+
+  useEffect(() => {
+    const unsubscribe = ViewMode.watch({
+      onChange: ({ properties: { current } }) => {
+        // to be able to render animations only on the map (not in dashboard)
+        gameTables.GameState.update({ onMap: current?.value === EViewMode.Map });
+      },
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [gameTables]);
 
   return (
     <Navigator initialScreen="main" className="flex h-full w-full flex-col items-center gap-2 border-0 p-0 text-white">

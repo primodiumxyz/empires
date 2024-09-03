@@ -54,7 +54,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       };
     } = {},
   ) {
-    if (!globalApi.tables.GameState.get()?.visible) return;
+    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
 
     const {
       color = "#00ffff",
@@ -172,7 +172,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function flashScreen(options?: { duration?: number; color?: number }) {
-    if (!globalApi.tables.GameState.get()?.visible) return;
+    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
 
     function getRGBValues(value: number) {
       const hexValue = value.toString(16).padStart(6, "0");
@@ -207,7 +207,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       onComplete?: () => void;
     },
   ) {
-    if (!globalApi.tables.GameState.get()?.visible) return;
+    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
 
     const {
       scale = 1,
@@ -250,7 +250,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function flashSprite(sprite: Phaser.GameObjects.Sprite, duration = 400, wait = 100, repeat = 3) {
-    if (!globalApi.tables.GameState.get()?.visible) return;
+    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
 
     let at = 0;
     scene.phaserScene.add
