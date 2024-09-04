@@ -17,6 +17,8 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
+import { Role } from "codegen/index.sol";
+import { ERole } from "codegen/common.sol";
 
 contract WithdrawRakeSystemTest is PrimodiumTest {
   bytes32 planetId;
@@ -50,6 +52,15 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
       name: "WithdrawRakeSyst"
     });
     vm.deal(alice, 0);
+
+    // test that non-admin cannot call the function
+    vm.expectRevert("[EmpiresSystem] Only admin");
+    world.call(systemId, abi.encodeCall(WithdrawRakeSystem.withdrawRake, ()));
+
+    // test that admin can call the function
+    switchPrank(creator);
+    Role.set(alice, ERole.Admin);
+    switchPrank(alice);
     world.call(systemId, abi.encodeCall(WithdrawRakeSystem.withdrawRake, ()));
 
     assertEq(alice.balance, cost / 2, "alice balance");

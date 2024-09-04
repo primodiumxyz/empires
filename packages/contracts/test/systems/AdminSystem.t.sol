@@ -83,4 +83,8 @@ contract AdminSystemTest is PrimodiumTest {
     vm.expectRevert("[AdminSystem] Invalid role");
     world.Empires__setRole(user, ERole.NULL);
   }
+
+  function testInitialAdmin() public {
+    assertEq(uint8(Role.get(creator)), uint8(ERole.Admin), "Creator should be admin");
+  }
 }
