@@ -26,12 +26,11 @@ export const CHART_TIME_SCALES = [
   { value: -1, label: "All time" },
 ];
 export const CHART_TICK_INTERVALS = [
-  { value: 60, label: "1min" },
   { value: 600, label: "10min" },
   { value: 3_600, label: "1h" },
 ];
 
-export const TREASURE_PLANET_GOLD_TRESHOLD = 100n;
+export const TREASURE_PLANET_GOLD_THRESHOLD = 100n;
 
 export const PRICE_PRECISION = 4;
 

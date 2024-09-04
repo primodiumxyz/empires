@@ -5,7 +5,7 @@ import {
   entityToPlanetName,
   formatNumber,
   lerp,
-  TREASURE_PLANET_GOLD_TRESHOLD,
+  TREASURE_PLANET_GOLD_THRESHOLD,
 } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -436,7 +436,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       }),
     );
 
-    if (count >= TREASURE_PLANET_GOLD_TRESHOLD) {
+    if (count >= TREASURE_PLANET_GOLD_THRESHOLD) {
       this.treasurePlanetDecoration.setVisible(true).setActive(true);
       this.treasurePlanetDecoration.play(Animations.TreasurePlanet);
     } else {

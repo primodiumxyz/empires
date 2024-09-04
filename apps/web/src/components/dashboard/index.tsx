@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { toHex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
@@ -10,6 +11,7 @@ import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
 import { Tabs } from "@/components/core/Tabs";
+import { Tooltip } from "@/components/core/Tooltip";
 import { EmpireCards } from "@/components/dashboard/EmpireCards";
 import { HistoricalPointGraph } from "@/components/dashboard/HistoricalPointGraph";
 import { BoostEmpire } from "@/components/quick-trade/BoostEmpire";
@@ -64,19 +66,24 @@ export const Dashboard = () => {
                   </Join>
                 </Tabs>
                 {selectedEmpire !== EEmpire.LENGTH && (
-                  <Join direction="horizontal" className="rounded-r hover:bg-transparent">
-                    {CHART_TICK_INTERVALS.map((interval) => (
-                      <Button
-                        key={interval.value}
-                        size="xs"
-                        variant="neutral"
-                        selected={chartConfig?.tickInterval === interval.value}
-                        onClick={() => ChartConfig.update({ tickInterval: interval.value })}
-                      >
-                        {interval.label}
-                      </Button>
-                    ))}
-                  </Join>
+                  <div className="flex items-center gap-1">
+                    <Join direction="horizontal" className="rounded-r hover:bg-transparent">
+                      {CHART_TICK_INTERVALS.map((interval) => (
+                        <Button
+                          key={interval.value}
+                          size="xs"
+                          variant="neutral"
+                          selected={chartConfig?.tickInterval === interval.value}
+                          onClick={() => ChartConfig.update({ tickInterval: interval.value })}
+                        >
+                          {interval.label}
+                        </Button>
+                      ))}
+                    </Join>
+                    <Tooltip tooltipContent="Candles" direction="right" className="text-xs">
+                      <InformationCircleIcon className="size-4" />
+                    </Tooltip>
+                  </div>
                 )}
               </div>
               <HistoricalPointGraph empire={selectedEmpire} tickInterval={chartConfig?.tickInterval ?? 60} />

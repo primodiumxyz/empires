@@ -16,35 +16,6 @@ const settingsWorld = createWorld();
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- Font ---------------------------------- */
-const FontStyle = createLocalTable(
-  settingsWorld,
-  {
-    family: Type.String,
-    familyRaw: Type.String,
-    size: Type.String,
-  },
-  {
-    id: "FontStyle",
-    persist: true,
-  },
-);
-
-export const fontStyleOptions = {
-  family: ["pixel", "mono"],
-  familyRaw: ["Silkscreen", "Space Mono"],
-  size: ["sm", "md"],
-} as const;
-
-FontStyle.set({
-  family: fontStyleOptions.family[0],
-  familyRaw: fontStyleOptions.familyRaw[0],
-  size: fontStyleOptions.size[0],
-});
-
-const ShowBlockchainUnits = createLocalBoolTable(settingsWorld, {
-  id: "ShowBlockchainUnits",
-  persist: true,
-});
 
 const Dripped = createLocalBoolTable(settingsWorld, {
   id: "Dripped",
@@ -55,8 +26,6 @@ const MusicPlaying = createLocalBoolTable(settingsWorld, {
   id: "MusicPlaying",
   persist: true,
 });
-
-ShowBlockchainUnits.set({ value: false });
 
 const SelectedTab = createLocalNumberTable(settingsWorld, {
   id: "SelectedTab",
@@ -97,8 +66,6 @@ export const useSettings = () => {
   }, []);
 
   return {
-    FontStyle,
-    ShowBlockchainUnits,
     Dripped,
     MusicPlaying,
     SelectedTab,

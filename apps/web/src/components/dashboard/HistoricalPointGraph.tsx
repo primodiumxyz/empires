@@ -1,17 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ForwardIcon } from "@heroicons/react/24/solid";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { ColorType, createChart, IChartApi, ISeriesApi, LineStyle, LineType, Time } from "lightweight-charts";
-import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { CHART_TIME_SCALES } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { allEmpires as _allEmpires } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
-import { Button, buttonVariants } from "@/components/core/Button";
+import { Button } from "@/components/core/Button";
+import { Tooltip } from "@/components/core/Tooltip";
 import { useEthPrice } from "@/hooks/useEthPrice";
-import { useSettings } from "@/hooks/useSettings";
-import { cn } from "@/util/client";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const accentColor = "rgba(0,255, 0, .75)";
@@ -53,9 +51,6 @@ export const HistoricalPointGraph: React.FC<{
     tables,
     utils: { weiToUsd },
   } = useCore();
-  const { ShowBlockchainUnits, FontStyle } = useSettings();
-  const showBlockchainUnits = ShowBlockchainUnits.use()?.value ?? false;
-  const fontFamily = FontStyle.use()?.familyRaw ?? "Silkscreen";
   const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
   const ethPrice = useEthPrice().price;
   const empireCount = tables.P_GameConfig.use()?.empireCount ?? 0;
@@ -206,7 +201,7 @@ export const HistoricalPointGraph: React.FC<{
     const chart = createChart(chartContainerRef.current, {
       layout: {
         textColor: "white",
-        fontFamily,
+        fontFamily: "Silkscreen",
         fontSize: 11,
         background: { type: ColorType.Solid, color: "transparent" },
       },
@@ -218,17 +213,21 @@ export const HistoricalPointGraph: React.FC<{
       height: chartContainerRef.current.clientHeight,
     });
     chartRef.current = chart;
-    chart.timeScale().fitContent();
+    // chart.timeScale().fitContent();
 
     // Apply chart formatting & layout options
     chart.applyOptions({
       localization: {
-        priceFormatter: (price: number) =>
-          showBlockchainUnits
-            ? formatEther(BigInt(price.toFixed(0)))
-            : weiToUsd(BigInt(price.toFixed(0)), ethPrice ?? 0, { precision: 3, forcePrecision: true }),
-        timeFormatter: (time: number) => new Date(time * 1000).toLocaleString(),
+        priceFormatter: (price: number) => weiToUsd(BigInt(price.toFixed(0)), ethPrice ?? 0, { precision: 3 }),
+        timeFormatter: (time: number) => {
+          // Return the day if it's a new one (midnight)
+          const date = new Date(time * 1000);
+          if (date.getHours() === 0 && date.getMinutes() === 0) return date.toLocaleDateString();
+          return date.toLocaleTimeString();
+        },
       },
+      // TODO: candles too wide
+      // TODO: price scale reduce digits
       timeScale: {
         timeVisible: true,
         tickMarkFormatter: (time: number) => new Date(time * 1000).toLocaleTimeString(),
@@ -286,7 +285,7 @@ export const HistoricalPointGraph: React.FC<{
       window.removeEventListener("resize", handleResize);
       chart.remove();
     };
-  }, [empire, tickInterval, initialHistoricalPriceData, fontFamily, showBlockchainUnits]);
+  }, [empire, tickInterval, initialHistoricalPriceData]);
 
   // Live updates to the chart (we could go with recreating the component on ever update, but this would reset
   // zoom, pan, etc. )
@@ -348,15 +347,15 @@ export const HistoricalPointGraph: React.FC<{
   return (
     <>
       <div ref={chartContainerRef} className="relative h-full min-h-64 w-full" />
-      <div className="flex gap-1 self-end pr-1">
+      <div className="flex items-center gap-1 self-end pr-1">
         {CHART_TIME_SCALES.map((scale) => (
           <Button key={scale.value} size="xs" variant="ghost" onClick={() => setTimeScale(scale.value)}>
             {scale.label}
           </Button>
         ))}
-        <Button size="xs" variant="ghost" onClick={() => chartRef.current?.timeScale().scrollToRealTime()}>
-          <ForwardIcon className="size-4" />
-        </Button>
+        <Tooltip tooltipContent="Time scale" direction="right" className="ml-1 w-28 text-xs">
+          <InformationCircleIcon className="size-4" />
+        </Tooltip>
       </div>
     </>
   );

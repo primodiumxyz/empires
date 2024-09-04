@@ -39,12 +39,11 @@ export const ActionLog = ({ className }: { className: string }) => {
     scrollToBottom({ behavior: "auto" });
   }, [selectedTab]);
 
-  // return null;
   return (
     <SecondaryCard
       className={cn(
         "pointer--events-auto relative hidden h-[290px] w-80 flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
-        open ? "pr-0 hover:bg-black/75" : "translate-y-2/3",
+        open ? "bg-black/75 pr-0" : "translate-y-2/3",
         className,
       )}
     >
@@ -127,8 +126,8 @@ const OpenActionLog = () => {
         {actions.map((action, i) => (
           <div
             className={cn(
-              "pl-2",
-              i % 2 === 0 ? "bg-secondary/20" : "bg-black/20",
+              "px-2",
+              i % 2 === 0 ? "bg-secondary/30" : "bg-black/30",
               action.highlight && "border border-accent/75",
             )}
             key={`${Number(action.timestamp)}-${i}`}
