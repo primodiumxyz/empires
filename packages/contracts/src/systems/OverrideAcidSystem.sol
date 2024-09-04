@@ -8,6 +8,8 @@ import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { LibAcid } from "libraries/LibAcid.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
+import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
+import { IWorld } from "codegen/world/IWorld.sol";
 import { addressToId, pseudorandomEntity } from "src/utils.sol";
 
 /**
@@ -21,8 +23,8 @@ contract OverrideAcidSystem is EmpiresSystem {
     require(empire != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
     require(AcidPlanetsSet.has(empire, _planetId) == false, "[OverrideSystem] Planet already has acid");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceAcid, empire, 1);
-    require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
-    
+    _refundOverspend(cost);
+
     // instantly apply first cycle of acid
     LibAcid.applyAcidDamage(_planetId);
 
@@ -40,5 +42,19 @@ contract OverrideAcidSystem is EmpiresSystem {
         timestamp: block.timestamp
       })
     );
+  }
+
+  /**
+   * @dev Handles overspending by the user when making a payment.
+   * @param _cost The expected cost of the transaction.
+   * @notice This function ensures that the user has sent enough ETH to cover the cost.
+   * If the user sends more than the required amount, the excess is refunded.
+   */
+  function _refundOverspend(uint256 _cost) private {
+    uint256 msgValue = _msgValue();
+    require(msgValue >= _cost, "[OverrideSystem] Incorrect payment");
+    if (msgValue > _cost) {
+      IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), msgValue - _cost);
+    }
   }
 }
