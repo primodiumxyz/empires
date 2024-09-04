@@ -81,7 +81,7 @@ export const Dashboard = () => {
                       ))}
                     </Join>
                     <Tooltip tooltipContent="Candles" direction="right" className="text-xs">
-                      <InformationCircleIcon className="size-4" />
+                      <InformationCircleIcon className="size-4 opacity-75" />
                     </Tooltip>
                   </div>
                 )}

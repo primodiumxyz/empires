@@ -12,9 +12,6 @@ import { Tooltip } from "@/components/core/Tooltip";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
-export const accentColor = "rgba(0,255, 0, .75)";
-export const accentColorDark = "rgba(0,255, 0, .25)";
-
 export type SmallHistoricalPointPriceProps = {
   width: number;
   height: number;
@@ -213,21 +210,29 @@ export const HistoricalPointGraph: React.FC<{
       height: chartContainerRef.current.clientHeight,
     });
     chartRef.current = chart;
-    // chart.timeScale().fitContent();
+    chart.timeScale().fitContent();
 
     // Apply chart formatting & layout options
     chart.applyOptions({
       localization: {
         priceFormatter: (price: number) => weiToUsd(BigInt(price.toFixed(0)), ethPrice ?? 0, { precision: 3 }),
-        timeFormatter: (time: number) => {
-          // Return the day if it's a new one (midnight)
-          const date = new Date(time * 1000);
-          if (date.getHours() === 0 && date.getMinutes() === 0) return date.toLocaleDateString();
-          return date.toLocaleTimeString();
+        timeFormatter: (time: number, locale: string) => {
+          // Show date as well if the game spans multiple days
+          const firstDay = new Date(Number(gameStartTimestamp) * 1000).toLocaleDateString();
+          const lastDay = new Date(
+            (initialHistoricalPriceData[1][initialHistoricalPriceData[1].length - 1].time as number) * 1000,
+          ).toLocaleDateString();
+          if (firstDay === lastDay) return new Date(time * 1000).toLocaleTimeString();
+
+          return new Date(time * 1000).toLocaleString(locale, {
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
         },
       },
-      // TODO: candles too wide
-      // TODO: price scale reduce digits
       timeScale: {
         timeVisible: true,
         tickMarkFormatter: (time: number) => new Date(time * 1000).toLocaleTimeString(),
@@ -354,7 +359,7 @@ export const HistoricalPointGraph: React.FC<{
           </Button>
         ))}
         <Tooltip tooltipContent="Time scale" direction="right" className="ml-1 w-28 text-xs">
-          <InformationCircleIcon className="size-4" />
+          <InformationCircleIcon className="size-4 opacity-75" />
         </Tooltip>
       </div>
     </>
