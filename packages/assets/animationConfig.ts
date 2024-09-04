@@ -399,7 +399,7 @@ export const AnimationConfig: Animation[] = [
     assetKey: "vfx-atlas",
     frameRate: 10,
     startFrame: 0,
-    endFrame: 12,
+    endFrame: 16,
     prefix: "vfx/combat/Combat_",
     suffix: ".png",
   },
