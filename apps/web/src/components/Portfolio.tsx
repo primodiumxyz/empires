@@ -51,8 +51,8 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
   }
 
   return (
-    <div className={cn("flex h-9 w-full items-center justify-between gap-5 border-none py-1 lg:h-14")}>
-      <EmpireLogo empireId={empire} size="lg" />
+    <div className={cn("flex h-10 w-full items-center justify-between gap-5 border-none py-1 lg:h-14")}>
+      <EmpireLogo empireId={empire} size="lg" className = "h-10 lg:h-12" />
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>
         <div className="hidden lg:block">
