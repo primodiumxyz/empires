@@ -1,16 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ServerIcon } from "@heroicons/react/24/solid";
 
-import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { AutoSizer } from "@/components/core/AutoSizer";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
 import { Modal } from "@/components/core/Modal";
 import { TextInput } from "@/components/core/TextInput";
-import { setupCheatcodes } from "@/config/setupCheatcodes";
-import { useContractCalls } from "@/hooks/useContractCalls";
-import { useDripAccount } from "@/hooks/useDripAccount";
-import { useGame } from "@/hooks/useGame";
+import { useCheatcodes } from "@/hooks/useCheatcodes";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 import { withTransactionStatus } from "@/util/notify";
@@ -27,11 +23,7 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const core = useCore();
-  const game = useGame();
-  const { playerAccount } = usePlayerAccount();
-  const contractCalls = useContractCalls();
-  const requestDrip = useDripAccount();
+  const cheatcodes = useCheatcodes();
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
@@ -45,9 +37,7 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
     return () => document.removeEventListener("click", closeCheatcodes);
   }, [open]);
 
-  if (!playerAccount) return null;
-  const cheatcodes = setupCheatcodes({ core, game, playerAccount, contractCalls, requestDrip });
-
+  if (!cheatcodes) return null;
   return (
     <div className={className}>
       <Modal title="Cheatcodes">
