@@ -279,48 +279,46 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.planetName.setAlpha(nameAlpha);
   }
 
+  // - if originEmpire === this.empireId, do nothing (just moving ships)
+  // - if originEmpire !== this.empireId, trigger the battle
+  // - if destinationEmpire !== this.empireId, also update the faction
+  triggerBattle(originEmpire: EEmpire, destinationEmpire: EEmpire, playAnims = true) {
+    if (originEmpire === this.empireId) return;
+    const capture = destinationEmpire !== this.empireId && destinationEmpire !== EEmpire.NULL;
+
+    this._scene.audio.play("Blaster", "sfx");
+    this._scene.fx.flashSprite(this.hexSprite, 400, 100, capture ? 4 : 3);
+    this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 60 }, "Combat", {
+      depth: DepthLayers.Marker,
+      blendMode: Phaser.BlendModes.ADD,
+      onFrameChange: (frame) => {
+        if (frame !== 11) return;
+        if (capture) this.updateFaction(destinationEmpire);
+      },
+    });
+
+    // If playAnims is false, previous vfx was skipped so just update the faction sprites
+    if (capture && !playAnims) this.updateFaction(destinationEmpire);
+  }
+
   updateFaction(empire: EEmpire) {
     if (empire === this.empireId) return;
 
-    // TODO: we want to emit combat even when the faction is not updated
-    // but we need to adapt all the timings; the light arc, hex flashing, etc
-    // or just delay the conquer animation and increase flash duration
-    const conquer = () => {
-      this._scene.fx.emitVfx(
-        { x: this.coord.x, y: this.coord.y - 29 },
-        EmpireToConquerAnimationKeys[empire] ?? "ConquerBlue",
-        {
-          depth: DepthLayers.Marker,
-          blendMode: Phaser.BlendModes.ADD,
-          onFrameChange: (frameNumber) => {
-            if (frameNumber === 6) {
-              this.planetSprite.setTexture(
-                Assets.SpriteAtlas,
-                Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"],
-              );
-            }
-          },
+    this._scene.fx.emitVfx(
+      { x: this.coord.x, y: this.coord.y - 29 },
+      EmpireToConquerAnimationKeys[empire] ?? "ConquerBlue",
+      {
+        depth: DepthLayers.Marker,
+        blendMode: Phaser.BlendModes.ADD,
+        onFrameChange: (frameNumber) => {
+          if (frameNumber === 6) {
+            this.planetSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]);
+          }
         },
-      );
+      },
+    );
 
-      this._scene.fx.flashSprite(this.hexSprite);
-      this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
-    };
-
-    this._scene.audio.play("Blaster", "sfx");
-    conquer();
-    // if (!this.empireId) {
-    //   conquer();
-    // } else {
-    //   this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 29 }, "Combat", {
-    //     depth: DepthLayers.Marker,
-    //     blendMode: Phaser.BlendModes.ADD,
-    //     onComplete: () => {
-    //       conquer();
-    //     },
-    //   });
-    // }
-
+    this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
     this.empireId = empire;
   }
 

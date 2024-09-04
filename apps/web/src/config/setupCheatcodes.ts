@@ -588,25 +588,7 @@ export const setupCheatcodes = (options: {
     caption: "Reset the game",
     inputs: {},
     execute: async () => {
-      const success = await _resetGame();
-      const planets = tables.Planet.getAll();
-
-      if (success) {
-        for (const planet of planets) {
-          const planetObject = game.MAIN.objects.planet.get(planet);
-          const planetEmpire = tables.Planet.get(planet)?.empireId ?? 0;
-
-          planetObject?.updateFaction(planetEmpire);
-        }
-        for (const planet of planets) {
-          const planetObject = game.MAIN.objects.planet.get(planet);
-          const planetEmpire = tables.Planet.get(planet)?.empireId ?? 0;
-
-          planetObject?.updateFaction(planetEmpire);
-        }
-      }
-
-      return success;
+      return await _resetGame();
     },
     loading: () => "[CHEATCODE] Resetting game...",
     success: () => `Game reset`,

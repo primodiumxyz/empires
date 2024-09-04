@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EViewMode } from "@primodiumxyz/core";
 import { usePlayerAccount } from "@primodiumxyz/core/react";
@@ -20,17 +22,28 @@ import { Pot } from "@/components/Pot";
 import { QuickTradeMapMode, QuickTradeModal } from "@/components/quick-trade";
 import { Settings } from "@/components/settings";
 import { TimeLeft } from "@/components/TimeLeft";
+import { useGame } from "@/hooks/useGame";
 import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 const DEV = import.meta.env.PRI_DEV === "true";
 export const GameHUD = () => {
   const { ViewMode } = useSettings();
+  const {
+    ROOT: { tables: gameTables },
+  } = useGame();
+
   const viewMode = ViewMode.use()?.value ?? EViewMode.Map;
   const params = new URLSearchParams(window.location.search);
   const showCheatcodes = DEV && !!params.get("showCheatcodes");
   const showMap = viewMode === EViewMode.Map;
   const { playerAccount } = usePlayerAccount();
+
+  useEffect(() => {
+    // to be able to render animations only on the map (not in dashboard)
+    gameTables.GameState.update({ onMap: viewMode === EViewMode.Map });
+  }, [viewMode, gameTables]);
+
   return (
     <>
       <div

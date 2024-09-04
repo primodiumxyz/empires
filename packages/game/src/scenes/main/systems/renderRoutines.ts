@@ -1,3 +1,4 @@
+import { EEmpire } from "@primodiumxyz/contracts";
 import { Core, formatNumber, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { DepthLayers } from "@game/lib/constants/common";
@@ -118,10 +119,15 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
 
           await sleep(375);
 
-          //update factions if it changed
-          const faction = tables.Planet.get(current.destinationPlanetId as Entity)?.empireId;
-
-          if (faction && destinationPlanet) destinationPlanet.updateFaction(faction);
+          // trigger battle and update factions if it changed
+          const originEmpire = tables.Planet.get(current.originPlanetId as Entity)?.empireId ?? EEmpire.NULL;
+          const destinationEmpire = tables.Planet.get(current.destinationPlanetId as Entity)?.empireId ?? EEmpire.NULL;
+          if (destinationPlanet)
+            destinationPlanet.triggerBattle(
+              originEmpire,
+              destinationEmpire,
+              Object.values(scene.tables.GameState.get() ?? {}).every(Boolean),
+            );
         }, 250);
       },
     },
