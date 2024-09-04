@@ -85,6 +85,8 @@ contract AdminSystemTest is PrimodiumTest {
   }
 
   function testInitialAdmin() public {
-    assertEq(uint8(Role.get(creator)), uint8(ERole.Admin), "Creator should be admin");
+    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    address adminAddress = vm.addr(deployerPrivateKey);
+    assertEq(uint8(Role.get(adminAddress)), uint8(ERole.Admin), "Deployer should be admin");
   }
 }
