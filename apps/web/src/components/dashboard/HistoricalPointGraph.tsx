@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { SVGProps, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { ColorType, createChart, IChartApi, ISeriesApi, LineStyle, LineType, Time } from "lightweight-charts";
 
@@ -201,6 +201,7 @@ export const HistoricalPointGraph: React.FC<{
         fontFamily: "Silkscreen",
         fontSize: 11,
         background: { type: ColorType.Solid, color: "transparent" },
+        attributionLogo: false,
       },
       grid: {
         vertLines: { color: "transparent" },
@@ -353,6 +354,10 @@ export const HistoricalPointGraph: React.FC<{
     <>
       <div ref={chartContainerRef} className="relative h-full min-h-64 w-full" />
       <div className="flex items-center gap-1 self-end pr-1">
+        <TradingViewLogo
+          color="#2962ff"
+          className="size-6 fill-white opacity-75 transition-opacity hover:opacity-100"
+        />
         {CHART_TIME_SCALES.map((scale) => (
           <Button key={scale.value} size="xs" variant="ghost" onClick={() => setTimeScale(scale.value)}>
             {scale.label}
@@ -365,3 +370,19 @@ export const HistoricalPointGraph: React.FC<{
     </>
   );
 };
+
+const TradingViewLogo = (props: SVGProps<SVGSVGElement>, color: string) => (
+  <a
+    href="https://www.tradingview.com/"
+    title="Charting by TradingView"
+    target="_blank"
+    rel="noreferrer"
+    className="mr-2 cursor-pointer"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" {...props}>
+      <path d="m74.268 158.688 142.479.023.759 179.45-72.04-.504-.021-107.674-71.245-.112.068-71.183Z" />
+      <circle cx={270.59} cy={192.178} r={35.956} />
+      <path d="m343.41 158.808 83.007.088-75.185 177.96-82.128-.177 73.733-177.728z" />
+    </svg>
+  </a>
+);
