@@ -50,7 +50,7 @@ export const EmpireCard = ({
         <EmpireLogo empireId={empire} size="xl" className="row-span-3 mx-auto" />
         <p className="inline text-accent lg:text-base">
           {formatEther(playerPoints)}
-          <span className="text-xs">pts </span>
+          <span className="text-xs"> pts </span>
           <span className="hidden text-[0.6rem] opacity-50 lg:inline">YOU OWN</span>
         </p>
         <Price wei={pointPrice} className="text-right text-sm lg:text-lg" />

@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import React from "react";
 
 import { EOverride } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
-import { Button } from "@/components/core/Button";
 import { Card } from "@/components/core/Card";
 import { Tabs } from "@/components/core/Tabs";
-import { TextInput } from "@/components/core/TextInput";
 import { AcidRainContent } from "@/components/override-popup/content/AcidRainContent";
 import { ShieldContent } from "@/components/override-popup/content/ShieldContent";
 import { ShieldEaterContent } from "@/components/override-popup/content/ShieldEaterContent";
@@ -91,38 +88,9 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
   entity: selectedPlanet,
   className,
 }) => {
-  const { tables, utils, config } = useCore();
+  const { tables } = useCore();
   const planet = tables.Planet.use(selectedPlanet ?? defaultEntity);
-  const [newName, setNewName] = useState("");
   const planetName = usePlanetName(selectedPlanet);
-
-  useEffect(() => {
-    setNewName(planetName);
-  }, [planetName]);
-
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch(`http://localhost:3002/planet/${selectedPlanet}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          planetName: newName,
-          worldAddress: config.worldAddress,
-        }),
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(`Error: ${result.error}`);
-      }
-    } catch (error) {
-      toast.error((error as Error).message);
-    } finally {
-      utils.refreshPlanetName(selectedPlanet);
-    }
-  };
 
   if (!selectedPlanet || !planet) return null;
 
@@ -133,17 +101,6 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
       defaultIndex={1}
     >
       <Buttons selectedPlanet={selectedPlanet} empire={planet.empireId} />
-      <div className="pointer-events-auto z-50 flex w-full items-center gap-2">
-        <TextInput
-          maxLength={9}
-          placeholder="update planet name"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-        />
-        <Button onClick={handleSubmit} size="sm" disabled={newName === planetName} className="h-full">
-          Update
-        </Button>
-      </div>
       <Card noDecor className="relative w-96 flex-row items-center justify-center bg-slate-900">
         <Tabs.Pane index={0} className="w-full items-center gap-4">
           <Header title={"Ships"} description={"Attack other planets"} planetName={planetName} />
