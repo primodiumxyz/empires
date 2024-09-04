@@ -212,6 +212,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this._scene.objects.planet.add(id, this, false);
   }
 
+  getEmpire() {
+    return this.empireId;
+  }
+
   spawn() {
     this.spawned = true;
     this.scene.add.existing(this);
@@ -284,7 +288,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   // - if destinationEmpire !== this.empireId, also update the faction
   triggerBattle(originEmpire: EEmpire, destinationEmpire: EEmpire, playAnims = true) {
     if (originEmpire === this.empireId) return;
-    const capture = destinationEmpire !== this.empireId && destinationEmpire !== EEmpire.NULL;
+    const capture = destinationEmpire && destinationEmpire !== this.empireId;
 
     this._scene.audio.play("Blaster", "sfx");
     this._scene.fx.flashSprite(this.hexSprite, 400, 100, capture ? 4 : 3);

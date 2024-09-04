@@ -2,6 +2,7 @@ import { EEmpire } from "@primodiumxyz/contracts";
 import { Core, formatNumber, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { DepthLayers } from "@game/lib/constants/common";
+import { EmpireToPlanetSpriteKeys } from "@game/lib/mappings";
 import { StaggerQueue } from "@game/lib/utils/createStaggerQueue";
 import { PrimodiumScene } from "@game/types";
 
@@ -122,12 +123,27 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
           // trigger battle and update factions if it changed
           const originEmpire = tables.Planet.get(current.originPlanetId as Entity)?.empireId ?? EEmpire.NULL;
           const destinationEmpire = tables.Planet.get(current.destinationPlanetId as Entity)?.empireId ?? EEmpire.NULL;
-          if (destinationPlanet)
+          if (destinationPlanet) {
             destinationPlanet.triggerBattle(
               originEmpire,
               destinationEmpire,
               Object.values(scene.tables.GameState.get() ?? {}).every(Boolean),
             );
+
+            if (destinationEmpire && destinationEmpire !== destinationPlanet.getEmpire()) {
+              scene.fx.emitFloatingText(destinationPlanet.coord, "planet captured", {
+                icon: EmpireToPlanetSpriteKeys[destinationEmpire as EEmpire],
+                iconSize: 20,
+                fontSize: 16,
+                delay: 1375,
+                borderStyle: {
+                  color: 0x800080,
+                  alpha: 0.75,
+                  width: 1,
+                },
+              });
+            }
+          }
         }, 250);
       },
     },
