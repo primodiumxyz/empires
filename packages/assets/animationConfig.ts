@@ -143,11 +143,11 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/idle",
     assetKey: "sprite-atlas",
-    frameRate: 10,
+    frameRate: 8,
     startFrame: 0,
-    endFrame: 19,
+    endFrame: 14,
     repeat: -1,
-    prefix: "sprites/shield-eater/idle/ShieldEater_Test_Idle_",
+    prefix: "sprites/shield-eater/idle/ShieldEater_Idle_",
     suffix: ".png",
   },
   {
@@ -392,6 +392,15 @@ export const AnimationConfig: Animation[] = [
     startFrame: 1,
     endFrame: 14,
     prefix: "vfx/movement/purple/Movement_Purple",
+    suffix: ".png",
+  },
+  {
+    key: "combat",
+    assetKey: "vfx-atlas",
+    frameRate: 10,
+    startFrame: 0,
+    endFrame: 12,
+    prefix: "vfx/combat/Combat_",
     suffix: ".png",
   },
   {

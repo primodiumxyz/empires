@@ -5,7 +5,7 @@ import {
   entityToPlanetName,
   formatNumber,
   lerp,
-  TREASURE_PLANET_GOLD_TRESHOLD,
+  TREASURE_PLANET_GOLD_THRESHOLD,
 } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -282,24 +282,44 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   updateFaction(empire: EEmpire) {
     if (empire === this.empireId) return;
 
-    this._scene.audio.play("Blaster", "sfx");
-    this._scene.fx.emitVfx(
-      { x: this.coord.x, y: this.coord.y - 29 },
-      EmpireToConquerAnimationKeys[empire] ?? "ConquerBlue",
-      {
-        depth: DepthLayers.Marker,
-        blendMode: Phaser.BlendModes.ADD,
-        onFrameChange: (frameNumber) => {
-          if (frameNumber === 6) {
-            this.planetSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]);
-          }
+    // TODO: we want to emit combat even when the faction is not updated
+    // but we need to adapt all the timings; the light arc, hex flashing, etc
+    // or just delay the conquer animation and increase flash duration
+    const conquer = () => {
+      this._scene.fx.emitVfx(
+        { x: this.coord.x, y: this.coord.y - 29 },
+        EmpireToConquerAnimationKeys[empire] ?? "ConquerBlue",
+        {
+          depth: DepthLayers.Marker,
+          blendMode: Phaser.BlendModes.ADD,
+          onFrameChange: (frameNumber) => {
+            if (frameNumber === 6) {
+              this.planetSprite.setTexture(
+                Assets.SpriteAtlas,
+                Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"],
+              );
+            }
+          },
         },
-      },
-    );
+      );
 
-    this._scene.fx.flashSprite(this.hexSprite);
+      this._scene.fx.flashSprite(this.hexSprite);
+      this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
+    };
 
-    this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
+    this._scene.audio.play("Blaster", "sfx");
+    conquer();
+    // if (!this.empireId) {
+    //   conquer();
+    // } else {
+    //   this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 29 }, "Combat", {
+    //     depth: DepthLayers.Marker,
+    //     blendMode: Phaser.BlendModes.ADD,
+    //     onComplete: () => {
+    //       conquer();
+    //     },
+    //   });
+    // }
 
     this.empireId = empire;
   }
@@ -416,7 +436,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       }),
     );
 
-    if (count >= TREASURE_PLANET_GOLD_TRESHOLD) {
+    if (count >= TREASURE_PLANET_GOLD_THRESHOLD) {
       this.treasurePlanetDecoration.setVisible(true).setActive(true);
       this.treasurePlanetDecoration.play(Animations.TreasurePlanet);
     } else {

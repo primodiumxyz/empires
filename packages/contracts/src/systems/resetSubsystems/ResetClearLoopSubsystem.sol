@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
@@ -25,7 +24,7 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
       EEmpire empire = EEmpire(i);
       for (uint256 j = 0; j < planets.length; j++) {
         PendingMove.deleteRecord(planets[j]);
-        Magnet.deleteRecord(empire, planets[i]);
+        Magnet.deleteRecord(empire, planets[j]);
       }
 
       EmpirePlanetsSet.clear(empire);
@@ -40,5 +39,4 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
 
     WinningEmpire.set(EEmpire.NULL);
   }
-
 }

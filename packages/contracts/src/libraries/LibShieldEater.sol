@@ -110,7 +110,8 @@ library LibShieldEater {
           ShieldEaterDamageOverrideLogData({
             planetId: planetId,
             shieldsDestroyed: shieldDamage,
-            damageType: EShieldEaterDamageType.Eat
+            damageType: EShieldEaterDamageType.Eat,
+            timestamp: block.timestamp
           })
         );
       } else if (shieldCount > 0) {
@@ -121,7 +122,8 @@ library LibShieldEater {
           ShieldEaterDamageOverrideLogData({
             planetId: planetId,
             shieldsDestroyed: shieldCount,
-            damageType: EShieldEaterDamageType.Eat
+            damageType: EShieldEaterDamageType.Eat,
+            timestamp: block.timestamp
           })
         );
       }
@@ -163,7 +165,8 @@ library LibShieldEater {
       ShieldEaterDamageOverrideLogData({
         planetId: planetId,
         shieldsDestroyed: shieldsDestroyed,
-        damageType: EShieldEaterDamageType.Detonate
+        damageType: EShieldEaterDamageType.Detonate,
+        timestamp: block.timestamp
       })
     );
 
@@ -183,7 +186,8 @@ library LibShieldEater {
           ShieldEaterDamageOverrideLogData({
             planetId: neighborId,
             shieldsDestroyed: shieldsDestroyed,
-            damageType: EShieldEaterDamageType.Collateral
+            damageType: EShieldEaterDamageType.Collateral,
+            timestamp: block.timestamp
           })
         );
       }
