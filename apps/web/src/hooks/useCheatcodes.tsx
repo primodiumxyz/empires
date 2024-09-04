@@ -1,21 +1,14 @@
 import { useMemo } from "react";
-import { Address, Hex, padHex } from "viem";
+import { Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import {
-  addressToEntity,
-  Core,
-  entityToPlanetName,
-  ExternalAccount,
-  LocalAccount,
-  TxReceipt,
-} from "@primodiumxyz/core";
+import { addressToEntity, entityToPlanetName, TxReceipt } from "@primodiumxyz/core";
 import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
-import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
+import { resourceToHex } from "@primodiumxyz/reactive-tables/utils";
+import { Price } from "@/components/shared/Price";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
-import { ContractCalls } from "@/contractCalls/createContractCalls";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useDripAccount } from "@/hooks/useDripAccount";
 import { useGame } from "@/hooks/useGame";
@@ -50,6 +43,10 @@ export const useCheatcodes = () => {
   const gameConfig = tables.P_GameConfig.use();
   const pointConfig = tables.P_PointConfig.use();
   const overrideConfig = tables.P_OverrideConfig.use();
+
+  // rake
+  const adminHex = resourceToHex({ type: "namespace", namespace: "Admin", name: "" });
+  const rake = tables.Balances.useWithKeys({ namespaceId: adminHex })?.balance ?? 0n;
 
   /* ------------------------------- SHIPS ------------------------------- */
   // Set the amount of ships on a planet
@@ -865,8 +862,14 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Withdraw rake",
         bg: CheatcodeToBg["utils"],
-        caption:
-          "The rake is an essential part of the game. It is used to fund the game and is collected from the pot. This cheatcode allows you to withdraw the rake from the pot. That is why it is called withdraw rake.",
+        caption: (
+          <div className="flex gap-2">
+            <Price wei={rake} />
+            <span>
+              (<Price wei={rake} forceBlockchainUnits />)
+            </span>
+          </div>
+        ),
         inputs: {},
         execute: async () => {
           return await _withdrawRake();
@@ -875,7 +878,7 @@ export const useCheatcodes = () => {
         success: () => `Rake withdrawn`,
         error: () => `Failed to withdraw rake`,
       }),
-    [],
+    [rake],
   );
 
   /* ------------------------------ SHIELD EATER ------------------------------ */
@@ -1147,6 +1150,7 @@ export const useCheatcodes = () => {
     endGame,
     resetGame,
     dripEth,
+    withdrawRake,
     setShips,
     sendShips,
     setShields,
@@ -1160,7 +1164,6 @@ export const useCheatcodes = () => {
     moveShieldEater,
     setShieldEaterDestination,
     feedShieldEater,
-    withdrawRake,
     ...Object.values(updateGameConfig),
   ];
 };

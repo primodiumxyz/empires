@@ -137,7 +137,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         <h2 className="text-sm font-semibold text-gray-300">
           {index + 1}. {title}
         </h2>
-        <p className="whitespace-nowrap text-xs text-gray-400">{caption}</p>
+        <div className="whitespace-nowrap text-xs text-gray-400">{caption}</div>
       </div>
       <div
         className={cn("hidden gap-2 bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4", activeTab === index && "grid")}
