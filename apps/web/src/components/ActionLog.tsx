@@ -122,7 +122,7 @@ const OpenActionLog = () => {
           );
         })}
       </Join>
-      <ScrollToBottom className="mt-1 h-[212px] w-full">
+      <ScrollToBottom className="mt-1 pr-2 h-[212px] w-full">
         {actions.map((action, i) => (
           <div
             className={cn(
