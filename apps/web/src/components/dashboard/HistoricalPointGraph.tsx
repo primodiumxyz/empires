@@ -44,6 +44,7 @@ export const HistoricalPointGraph: React.FC<{
   empire: EEmpire;
   tickInterval: number;
 }> = ({ empire, tickInterval }) => {
+  tickInterval = 1;
   const {
     tables,
     utils: { weiToUsd },
@@ -194,6 +195,11 @@ export const HistoricalPointGraph: React.FC<{
     if (!chartContainerRef.current) return;
     seriesRefs.current = [];
 
+    const firstDataTime = new Date(Number(gameStartTimestamp) * 1000);
+    const lastDataTime = new Date(
+      (initialHistoricalPriceData[1][initialHistoricalPriceData[1].length - 1].time as number) * 1000,
+    );
+
     // Create the base chart
     const chart = createChart(chartContainerRef.current, {
       layout: {
@@ -211,7 +217,6 @@ export const HistoricalPointGraph: React.FC<{
       height: chartContainerRef.current.clientHeight,
     });
     chartRef.current = chart;
-    chart.timeScale().fitContent();
 
     // Apply chart formatting & layout options
     chart.applyOptions({
@@ -219,10 +224,8 @@ export const HistoricalPointGraph: React.FC<{
         priceFormatter: (price: number) => weiToUsd(BigInt(price.toFixed(0)), ethPrice ?? 0, { precision: 3 }),
         timeFormatter: (time: number, locale: string) => {
           // Show date as well if the game spans multiple days
-          const firstDay = new Date(Number(gameStartTimestamp) * 1000).toLocaleDateString();
-          const lastDay = new Date(
-            (initialHistoricalPriceData[1][initialHistoricalPriceData[1].length - 1].time as number) * 1000,
-          ).toLocaleDateString();
+          const firstDay = firstDataTime.toLocaleDateString();
+          const lastDay = lastDataTime.toLocaleDateString();
           if (firstDay === lastDay) return new Date(time * 1000).toLocaleTimeString();
 
           return new Date(time * 1000).toLocaleString(locale, {
@@ -276,6 +279,19 @@ export const HistoricalPointGraph: React.FC<{
       const candlestickData = formatCandlestickData(initialHistoricalPriceData);
       newSeries.setData(candlestickData);
       seriesRefs.current?.push(newSeries);
+
+      // If there is few data, unzoom the chart a bit so candles are not huge
+      const minTicks = 30;
+      if (candlestickData.length < minTicks) {
+        chart.timeScale().setVisibleLogicalRange({
+          from: (lastDataTime.getTime() - 40_000) / 1000,
+          to: lastDataTime.getTime() / 1000,
+        });
+        // scroll so latest data is on the right
+        chart.timeScale().scrollToPosition(0, false);
+      } else {
+        chart.timeScale().fitContent();
+      }
     }
 
     const handleResize = () => {
