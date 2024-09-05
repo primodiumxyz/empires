@@ -1,5 +1,5 @@
 import { AnimationKeys, Animations, Assets, SpriteKeys, Sprites } from "@primodiumxyz/assets";
-import { getRandomRange, sleep } from "@primodiumxyz/core";
+import { getRandomRange } from "@primodiumxyz/core";
 import { Coord, Scene } from "@primodiumxyz/engine";
 import { GlobalApi } from "@game/api/global";
 import { DepthLayers } from "@game/lib/constants/common";
@@ -24,13 +24,6 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
     gameObject.postFX.clear();
   }
 
-  // We need to use this instead of delaying the animation, to delay the sprite creation as well
-  // otherwise it gets created too early and when emitted can go behind another sprite that was created inbetween
-  const applyDelay = (callback: () => void, delay: number) => {
-    if (delay === 0) return callback();
-    return sleep(delay).then(callback);
-  };
-
   function emitFloatingText(
     coord: Coord,
     text: string,
@@ -54,7 +47,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       };
     } = {},
   ) {
-    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
 
     const {
       color = "#00ffff",
@@ -75,104 +68,101 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
         alpha: 0.75,
       },
     } = options;
+    let icon: Phaser.GameObjects.Image | undefined;
+    const container = scene.phaserScene.add.container(coord.x, coord.y).setScale(0).setDepth(DepthLayers.Marker);
 
-    applyDelay(() => {
-      let icon: Phaser.GameObjects.Image | undefined;
-      const container = scene.phaserScene.add.container(coord.x, coord.y).setScale(0).setDepth(DepthLayers.Marker);
+    if (iconSpriteKey) {
+      icon = scene.phaserScene.add.image(0, 0, Assets.SpriteAtlas, Sprites[iconSpriteKey]);
 
-      if (iconSpriteKey) {
-        icon = scene.phaserScene.add.image(0, 0, Assets.SpriteAtlas, Sprites[iconSpriteKey]);
+      icon.displayWidth = iconSize;
+      icon.scaleY = icon.scaleX;
+    }
 
-        icon.displayWidth = iconSize;
-        icon.scaleY = icon.scaleX;
-      }
-
-      const floatingText = scene.phaserScene.add
-        .text((icon?.displayWidth ?? 0) / 2, -2, text, {
-          fontFamily: "Silkscreen",
+    const floatingText = scene.phaserScene.add
+      .text((icon?.displayWidth ?? 0) / 2, -2, text, {
+        fontFamily: "Silkscreen",
+        fontSize,
+        color,
+        align: "center",
+        metrics: {
+          ascent: 10,
+          descent: 10,
           fontSize,
-          color,
-          align: "center",
-          metrics: {
-            ascent: 10,
-            descent: 10,
-            fontSize,
+        },
+      })
+      .setStroke("#000000", 5)
+      .setOrigin(0.5, 0.5);
+
+    if (icon) icon.setX(-(floatingText.displayWidth / 2));
+
+    const graphics = scene.phaserScene.add.graphics();
+
+    graphics
+      .fillStyle(fillStyle.color, fillStyle.alpha)
+      .lineStyle(borderStyle.width, borderStyle.color, borderStyle.alpha);
+
+    graphics.fillRoundedRect(
+      -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) / 2,
+      (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) - marginY * 2) / 2,
+      (icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2,
+      Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) + marginY * 2,
+      6,
+    );
+
+    graphics.strokeRoundedRect(
+      -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) / 2,
+      (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) - marginY * 2) / 2,
+      (icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2,
+      Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) + marginY * 2,
+      6,
+    );
+
+    container.add([graphics, floatingText, icon].filter(Boolean) as Phaser.GameObjects.GameObject[]);
+
+    scene.phaserScene.add
+      .timeline([
+        {
+          at: 0 + delay,
+          run: () => {
+            scene.phaserScene.tweens.add({
+              targets: container,
+              y: "-=40",
+              x: `+=${getRandomRange(-20, 20)}`,
+              ease: Phaser.Math.Easing.Expo.Out,
+              duration,
+            });
+
+            scene.phaserScene.tweens.add({
+              targets: container,
+              scale: [0.5, 1.5, 1],
+              ease: Phaser.Math.Easing.Quintic.InOut,
+              duration: 300,
+            });
           },
-        })
-        .setStroke("#000000", 5)
-        .setOrigin(0.5, 0.5);
+        },
 
-      if (icon) icon.setX(-(floatingText.displayWidth / 2));
-
-      const graphics = scene.phaserScene.add.graphics();
-
-      graphics
-        .fillStyle(fillStyle.color, fillStyle.alpha)
-        .lineStyle(borderStyle.width, borderStyle.color, borderStyle.alpha);
-
-      graphics.fillRoundedRect(
-        -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) / 2,
-        (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) - marginY * 2) / 2,
-        (icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2,
-        Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) + marginY * 2,
-        6,
-      );
-
-      graphics.strokeRoundedRect(
-        -((icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2) / 2,
-        (-Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) - marginY * 2) / 2,
-        (icon?.displayWidth ?? 0) + floatingText.displayWidth + marginX * 2,
-        Math.max(icon?.displayHeight ?? 0, floatingText.displayHeight) + marginY * 2,
-        6,
-      );
-
-      container.add([graphics, floatingText, icon].filter(Boolean) as Phaser.GameObjects.GameObject[]);
-
-      scene.phaserScene.add
-        .timeline([
-          {
-            at: 0,
-            run: () => {
-              scene.phaserScene.tweens.add({
-                targets: container,
-                y: "-=40",
-                x: `+=${getRandomRange(-20, 20)}`,
-                ease: Phaser.Math.Easing.Expo.Out,
-                duration,
-              });
-
-              scene.phaserScene.tweens.add({
-                targets: container,
-                scale: [0.5, 1.5, 1],
-                ease: Phaser.Math.Easing.Quintic.InOut,
-                duration: 300,
-              });
-            },
+        {
+          at: duration / 4 + delay,
+          run: () => {
+            scene.phaserScene.tweens.add({
+              targets: container,
+              alpha: 0,
+              scale: 0,
+              ease: Phaser.Math.Easing.Quintic.In,
+              duration: duration / 4,
+            });
           },
-
-          {
-            at: duration / 4,
-            run: () => {
-              scene.phaserScene.tweens.add({
-                targets: container,
-                alpha: 0,
-                scale: 0,
-                ease: Phaser.Math.Easing.Quintic.In,
-                duration: duration / 4,
-              });
-            },
-          },
-          {
-            at: duration,
-            run: () => container.destroy(),
-          },
-        ])
-        .play();
-    }, delay);
+        },
+        {
+          at: duration + delay,
+          run: () => container.destroy(),
+        },
+      ])
+      .play();
   }
 
   function flashScreen(options?: { duration?: number; color?: number }) {
-    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
 
     function getRGBValues(value: number) {
       const hexValue = value.toString(16).padStart(6, "0");
@@ -207,7 +197,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       onComplete?: () => void;
     },
   ) {
-    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
 
     const {
       scale = 1,
@@ -250,7 +240,7 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
   }
 
   function flashSprite(sprite: Phaser.GameObjects.Sprite, duration = 400, wait = 100, repeat = 3) {
-    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
 
     let at = 0;
     scene.phaserScene.add

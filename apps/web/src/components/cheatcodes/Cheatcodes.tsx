@@ -1,12 +1,16 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ServerIcon } from "@heroicons/react/24/solid";
 
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { AutoSizer } from "@/components/core/AutoSizer";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
 import { Modal } from "@/components/core/Modal";
 import { TextInput } from "@/components/core/TextInput";
-import { useCheatcodes } from "@/hooks/useCheatcodes";
+import { setupCheatcodes } from "@/config/setupCheatcodes";
+import { useContractCalls } from "@/hooks/useContractCalls";
+import { useDripAccount } from "@/hooks/useDripAccount";
+import { useGame } from "@/hooks/useGame";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 import { withTransactionStatus } from "@/util/notify";
@@ -23,7 +27,11 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const cheatcodes = useCheatcodes();
+  const core = useCore();
+  const game = useGame();
+  const { playerAccount } = usePlayerAccount();
+  const contractCalls = useContractCalls();
+  const requestDrip = useDripAccount();
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
@@ -37,7 +45,9 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
     return () => document.removeEventListener("click", closeCheatcodes);
   }, [open]);
 
-  if (!cheatcodes) return null;
+  if (!playerAccount) return null;
+  const cheatcodes = setupCheatcodes({ core, game, playerAccount, contractCalls, requestDrip });
+
   return (
     <div className={className}>
       <Modal title="Cheatcodes">
@@ -137,7 +147,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         <h2 className="text-sm font-semibold text-gray-300">
           {index + 1}. {title}
         </h2>
-        <div className="whitespace-nowrap text-xs text-gray-400">{caption}</div>
+        <p className="whitespace-nowrap text-xs text-gray-400">{caption}</p>
       </div>
       <div
         className={cn("hidden gap-2 bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4", activeTab === index && "grid")}

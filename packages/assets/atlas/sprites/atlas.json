@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1724918874740",
+            "image": "atlas.png?timestamp=1724832200370",
             "format": "RGBA8888",
             "size": {
-                "w": 2383,
-                "h": 2432
+                "w": 2345,
+                "h": 2307
             },
             "scale": 1,
             "frames": [
@@ -112,8 +112,8 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 768,
-                        "y": 0,
+                        "x": 708,
+                        "y": 619,
                         "w": 226,
                         "h": 231
                     }
@@ -134,7 +134,7 @@
                     },
                     "frame": {
                         "x": 768,
-                        "y": 231,
+                        "y": 0,
                         "w": 226,
                         "h": 231
                     }
@@ -155,7 +155,7 @@
                     },
                     "frame": {
                         "x": 768,
-                        "y": 462,
+                        "y": 231,
                         "w": 226,
                         "h": 231
                     }
@@ -175,8 +175,8 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 875,
+                        "x": 256,
+                        "y": 850,
                         "w": 226,
                         "h": 231
                     }
@@ -196,7 +196,7 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 226,
+                        "x": 0,
                         "y": 875,
                         "w": 226,
                         "h": 231
@@ -217,7 +217,7 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 452,
+                        "x": 482,
                         "y": 850,
                         "w": 226,
                         "h": 231
@@ -238,7 +238,7 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 678,
+                        "x": 708,
                         "y": 850,
                         "w": 226,
                         "h": 231
@@ -259,8 +259,8 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 994,
-                        "y": 0,
+                        "x": 934,
+                        "y": 462,
                         "w": 226,
                         "h": 231
                     }
@@ -281,7 +281,7 @@
                     },
                     "frame": {
                         "x": 994,
-                        "y": 231,
+                        "y": 0,
                         "w": 226,
                         "h": 231
                     }
@@ -302,7 +302,7 @@
                     },
                     "frame": {
                         "x": 994,
-                        "y": 462,
+                        "y": 231,
                         "w": 226,
                         "h": 231
                     }
@@ -322,7 +322,7 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 904,
+                        "x": 934,
                         "y": 693,
                         "w": 226,
                         "h": 231
@@ -343,8 +343,8 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1106,
+                        "x": 934,
+                        "y": 924,
                         "w": 226,
                         "h": 231
                     }
@@ -365,7 +365,7 @@
                     },
                     "frame": {
                         "x": 226,
-                        "y": 1106,
+                        "y": 1081,
                         "w": 226,
                         "h": 231
                     }
@@ -385,8 +385,8 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 452,
-                        "y": 1081,
+                        "x": 0,
+                        "y": 1106,
                         "w": 226,
                         "h": 231
                     }
@@ -406,7 +406,7 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 678,
+                        "x": 452,
                         "y": 1081,
                         "w": 226,
                         "h": 231
@@ -427,8 +427,8 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 904,
-                        "y": 924,
+                        "x": 678,
+                        "y": 1081,
                         "w": 226,
                         "h": 231
                     }
@@ -448,8 +448,8 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 1220,
-                        "y": 0,
+                        "x": 1160,
+                        "y": 462,
                         "w": 226,
                         "h": 231
                     }
@@ -470,7 +470,7 @@
                     },
                     "frame": {
                         "x": 1220,
-                        "y": 231,
+                        "y": 0,
                         "w": 226,
                         "h": 231
                     }
@@ -491,7 +491,7 @@
                     },
                     "frame": {
                         "x": 1220,
-                        "y": 462,
+                        "y": 231,
                         "w": 226,
                         "h": 231
                     }
@@ -511,7 +511,7 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 1130,
+                        "x": 1160,
                         "y": 693,
                         "w": 226,
                         "h": 231
@@ -532,7 +532,7 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 1130,
+                        "x": 1160,
                         "y": 924,
                         "w": 226,
                         "h": 231
@@ -553,90 +553,6 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1337,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 226,
-                        "y": 1337,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 452,
-                        "y": 1312,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 678,
-                        "y": 1312,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
                         "x": 904,
                         "y": 1155,
                         "w": 226,
@@ -644,7 +560,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_9.png",
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -665,112 +581,91 @@
                     }
                 },
                 {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 226,
+                        "y": 1312,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1337,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 452,
+                        "y": 1312,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 678,
+                        "y": 1312,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
                     "filename": "sprites/shield-eater/exit/ShieldEater_Leave_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1446,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1446,
-                        "y": 231,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1446,
-                        "y": 462,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1356,
-                        "y": 693,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1356,
-                        "y": 924,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_14.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -791,6 +686,111 @@
                     }
                 },
                 {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1386,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 231,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1386,
+                        "y": 693,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1386,
+                        "y": 924,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
                     "filename": "sprites/shield-eater/exit/ShieldEater_Leave_15.png",
                     "rotated": false,
                     "trimmed": false,
@@ -805,8 +805,8 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1568,
+                        "x": 904,
+                        "y": 1386,
                         "w": 226,
                         "h": 231
                     }
@@ -827,13 +827,34 @@
                     },
                     "frame": {
                         "x": 226,
-                        "y": 1568,
+                        "y": 1543,
                         "w": 226,
                         "h": 231
                     }
                 },
                 {
                     "filename": "sprites/shield-eater/exit/ShieldEater_Leave_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1568,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -854,7 +875,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_4.png",
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -870,27 +891,6 @@
                     "frame": {
                         "x": 678,
                         "y": 1543,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 904,
-                        "y": 1386,
                         "w": 226,
                         "h": 231
                     }
@@ -952,111 +952,6 @@
                         "h": 231
                     },
                     "frame": {
-                        "x": 1672,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1672,
-                        "y": 231,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1672,
-                        "y": 462,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1582,
-                        "y": 693,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 1582,
-                        "y": 924,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
                         "x": 1582,
                         "y": 1155,
                         "w": 226,
@@ -1064,7 +959,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_5.png",
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1085,91 +980,112 @@
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 1799,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 226,
-                        "y": 1799,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 452,
-                        "y": 1774,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 226,
-                        "h": 231
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 226,
-                        "h": 231
-                    },
-                    "frame": {
-                        "x": 678,
-                        "y": 1774,
-                        "w": 226,
-                        "h": 231
-                    }
-                },
-                {
                     "filename": "sprites/overheat-border/Overheat_Border_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1612,
+                        "y": 462,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1672,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1672,
+                        "y": 210,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1612,
+                        "y": 672,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1612,
+                        "y": 882,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1190,7 +1106,91 @@
                     }
                 },
                 {
-                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_1.png",
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 226,
+                        "y": 1774,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1799,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 420,
+                        "y": 1774,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 614,
+                        "y": 1774,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1211,7 +1211,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_2.png",
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1232,7 +1232,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_3.png",
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1253,7 +1253,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_4.png",
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1274,195 +1274,6 @@
                     }
                 },
                 {
-                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1898,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
-                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1898,
-                        "y": 210,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
-                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1898,
-                        "y": 420,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
-                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1898,
-                        "y": 630,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
-                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1874,
-                        "y": 840,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
-                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1874,
-                        "y": 1050,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
-                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1874,
-                        "y": 1260,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
-                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1874,
-                        "y": 1470,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
-                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 194,
-                        "h": 210
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 194,
-                        "h": 210
-                    },
-                    "frame": {
-                        "x": 1874,
-                        "y": 1680,
-                        "w": 194,
-                        "h": 210
-                    }
-                },
-                {
                     "filename": "sprites/overheat-border/red/Overheat_Border_Red_2.png",
                     "rotated": false,
                     "trimmed": false,
@@ -1477,8 +1288,8 @@
                         "h": 210
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 2030,
+                        "x": 1806,
+                        "y": 420,
                         "w": 194,
                         "h": 210
                     }
@@ -1498,8 +1309,8 @@
                         "h": 210
                     },
                     "frame": {
-                        "x": 194,
-                        "y": 2030,
+                        "x": 1866,
+                        "y": 0,
                         "w": 194,
                         "h": 210
                     }
@@ -1519,8 +1330,8 @@
                         "h": 210
                     },
                     "frame": {
-                        "x": 388,
-                        "y": 2030,
+                        "x": 1866,
+                        "y": 210,
                         "w": 194,
                         "h": 210
                     }
@@ -1540,8 +1351,8 @@
                         "h": 210
                     },
                     "frame": {
-                        "x": 582,
-                        "y": 2005,
+                        "x": 1806,
+                        "y": 630,
                         "w": 194,
                         "h": 210
                     }
@@ -1561,8 +1372,8 @@
                         "h": 210
                     },
                     "frame": {
-                        "x": 776,
-                        "y": 2005,
+                        "x": 1806,
+                        "y": 840,
                         "w": 194,
                         "h": 210
                     }
@@ -1582,8 +1393,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 970,
-                        "y": 1890,
+                        "x": 1808,
+                        "y": 1050,
                         "w": 172,
                         "h": 188
                     }
@@ -1603,8 +1414,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 1142,
-                        "y": 1890,
+                        "x": 1808,
+                        "y": 1238,
                         "w": 172,
                         "h": 188
                     }
@@ -1624,8 +1435,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 1314,
-                        "y": 1890,
+                        "x": 1808,
+                        "y": 1426,
                         "w": 172,
                         "h": 188
                     }
@@ -1645,8 +1456,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 1486,
-                        "y": 1890,
+                        "x": 1874,
+                        "y": 1614,
                         "w": 172,
                         "h": 188
                     }
@@ -1666,8 +1477,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 1658,
-                        "y": 1827,
+                        "x": 1874,
+                        "y": 1802,
                         "w": 172,
                         "h": 188
                     }
@@ -1687,8 +1498,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 1658,
-                        "y": 2015,
+                        "x": 194,
+                        "y": 1984,
                         "w": 172,
                         "h": 188
                     }
@@ -1708,8 +1519,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 1830,
-                        "y": 1890,
+                        "x": 0,
+                        "y": 2009,
                         "w": 172,
                         "h": 188
                     }
@@ -1729,8 +1540,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 2092,
-                        "y": 0,
+                        "x": 366,
+                        "y": 1984,
                         "w": 172,
                         "h": 188
                     }
@@ -1750,8 +1561,8 @@
                         "h": 188
                     },
                     "frame": {
-                        "x": 2092,
-                        "y": 188,
+                        "x": 538,
+                        "y": 1984,
                         "w": 172,
                         "h": 188
                     }
@@ -1771,8 +1582,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 708,
-                        "y": 693,
+                        "x": 710,
+                        "y": 1984,
                         "w": 179,
                         "h": 115
                     }
@@ -1792,8 +1603,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 840,
+                        "x": 808,
+                        "y": 1827,
                         "w": 179,
                         "h": 115
                     }
@@ -1813,8 +1624,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 955,
+                        "x": 889,
+                        "y": 1990,
                         "w": 179,
                         "h": 115
                     }
@@ -1834,8 +1645,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 1070,
+                        "x": 987,
+                        "y": 1827,
                         "w": 179,
                         "h": 115
                     }
@@ -1855,8 +1666,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 1185,
+                        "x": 1068,
+                        "y": 1942,
                         "w": 179,
                         "h": 115
                     }
@@ -1876,8 +1687,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 1300,
+                        "x": 1166,
+                        "y": 1827,
                         "w": 179,
                         "h": 115
                     }
@@ -1897,8 +1708,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 1415,
+                        "x": 1068,
+                        "y": 2057,
                         "w": 179,
                         "h": 115
                     }
@@ -1918,8 +1729,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 1530,
+                        "x": 1247,
+                        "y": 1942,
                         "w": 179,
                         "h": 115
                     }
@@ -1939,8 +1750,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 1645,
+                        "x": 1345,
+                        "y": 1827,
                         "w": 179,
                         "h": 115
                     }
@@ -1960,8 +1771,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 1760,
+                        "x": 1426,
+                        "y": 1942,
                         "w": 179,
                         "h": 115
                     }
@@ -1981,10 +1792,283 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 2068,
-                        "y": 1875,
+                        "x": 1524,
+                        "y": 1827,
                         "w": 179,
                         "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/icons/shield_eater.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 462,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1703,
+                        "y": 1827,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1605,
+                        "y": 1951,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1247,
+                        "y": 2057,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1390,
+                        "y": 2057,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1748,
+                        "y": 1990,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1891,
+                        "y": 1990,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_16.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 2034,
+                        "y": 1990,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_17.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1980,
+                        "y": 1050,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_18.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1980,
+                        "y": 1174,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1980,
+                        "y": 1298,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1980,
+                        "y": 1422,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 2046,
+                        "y": 1546,
+                        "w": 143,
+                        "h": 124
                     }
                 },
                 {
@@ -2002,8 +2086,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 2092,
-                        "y": 376,
+                        "x": 1533,
+                        "y": 2075,
                         "w": 160,
                         "h": 110
                     }
@@ -2023,8 +2107,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 2092,
-                        "y": 486,
+                        "x": 2046,
+                        "y": 1670,
                         "w": 160,
                         "h": 110
                     }
@@ -2044,8 +2128,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 2092,
-                        "y": 596,
+                        "x": 2046,
+                        "y": 1780,
                         "w": 160,
                         "h": 110
                     }
@@ -2065,8 +2149,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 2092,
-                        "y": 706,
+                        "x": 2000,
+                        "y": 420,
                         "w": 160,
                         "h": 110
                     }
@@ -2086,8 +2170,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 970,
-                        "y": 2078,
+                        "x": 2060,
+                        "y": 0,
                         "w": 160,
                         "h": 110
                     }
@@ -2107,8 +2191,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1830,
-                        "y": 2078,
+                        "x": 2060,
+                        "y": 110,
                         "w": 160,
                         "h": 110
                     }
@@ -2128,8 +2212,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1130,
-                        "y": 2078,
+                        "x": 2060,
+                        "y": 220,
                         "w": 160,
                         "h": 110
                     }
@@ -2149,8 +2233,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1990,
-                        "y": 2078,
+                        "x": 2000,
+                        "y": 530,
                         "w": 160,
                         "h": 110
                     }
@@ -2170,8 +2254,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1290,
-                        "y": 2078,
+                        "x": 2000,
+                        "y": 640,
                         "w": 160,
                         "h": 110
                     }
@@ -2191,8 +2275,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1450,
-                        "y": 2078,
+                        "x": 2000,
+                        "y": 750,
                         "w": 160,
                         "h": 110
                     }
@@ -2212,8 +2296,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 2240,
+                        "x": 2000,
+                        "y": 860,
                         "w": 160,
                         "h": 110
                     }
@@ -2233,8 +2317,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 160,
-                        "y": 2240,
+                        "x": 710,
+                        "y": 2099,
                         "w": 160,
                         "h": 110
                     }
@@ -2254,8 +2338,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 320,
-                        "y": 2240,
+                        "x": 870,
+                        "y": 2105,
                         "w": 160,
                         "h": 110
                     }
@@ -2275,8 +2359,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 480,
-                        "y": 2240,
+                        "x": 1030,
+                        "y": 2172,
                         "w": 160,
                         "h": 110
                     }
@@ -2296,8 +2380,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 640,
-                        "y": 2215,
+                        "x": 1190,
+                        "y": 2181,
                         "w": 160,
                         "h": 110
                     }
@@ -2317,8 +2401,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 800,
-                        "y": 2215,
+                        "x": 1350,
+                        "y": 2181,
                         "w": 160,
                         "h": 110
                     }
@@ -2338,8 +2422,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 960,
-                        "y": 2215,
+                        "x": 172,
+                        "y": 2172,
                         "w": 160,
                         "h": 110
                     }
@@ -2359,8 +2443,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1120,
-                        "y": 2203,
+                        "x": 0,
+                        "y": 2197,
                         "w": 160,
                         "h": 110
                     }
@@ -2380,8 +2464,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1280,
-                        "y": 2203,
+                        "x": 332,
+                        "y": 2172,
                         "w": 160,
                         "h": 110
                     }
@@ -2401,8 +2485,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1440,
-                        "y": 2203,
+                        "x": 492,
+                        "y": 2172,
                         "w": 160,
                         "h": 110
                     }
@@ -2422,8 +2506,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1600,
-                        "y": 2203,
+                        "x": 1510,
+                        "y": 2185,
                         "w": 160,
                         "h": 110
                     }
@@ -2443,115 +2527,10 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 1760,
-                        "y": 2203,
+                        "x": 1670,
+                        "y": 2185,
                         "w": 160,
                         "h": 110
-                    }
-                },
-                {
-                    "filename": "sprites/icons/shield_eater.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 143,
-                        "h": 124
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 143,
-                        "h": 124
-                    },
-                    "frame": {
-                        "x": 1920,
-                        "y": 2188,
-                        "w": 143,
-                        "h": 124
-                    }
-                },
-                {
-                    "filename": "sprites/planet/treasure/Treasure_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 119,
-                        "h": 61
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 119,
-                        "h": 61
-                    },
-                    "frame": {
-                        "x": 904,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
-                    }
-                },
-                {
-                    "filename": "sprites/planet/treasure/Treasure_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 119,
-                        "h": 61
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 119,
-                        "h": 61
-                    },
-                    "frame": {
-                        "x": 1023,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
-                    }
-                },
-                {
-                    "filename": "sprites/planet/treasure/Treasure_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 119,
-                        "h": 61
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 119,
-                        "h": 61
-                    },
-                    "frame": {
-                        "x": 1142,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
-                    }
-                },
-                {
-                    "filename": "sprites/planet/treasure/Treasure_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 119,
-                        "h": 61
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 119,
-                        "h": 61
-                    },
-                    "frame": {
-                        "x": 1261,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
                     }
                 },
                 {
@@ -2569,8 +2548,8 @@
                         "h": 93
                     },
                     "frame": {
-                        "x": 2063,
-                        "y": 2188,
+                        "x": 2046,
+                        "y": 1890,
                         "w": 119,
                         "h": 93
                     }
@@ -2590,8 +2569,8 @@
                         "h": 93
                     },
                     "frame": {
-                        "x": 2264,
-                        "y": 0,
+                        "x": 652,
+                        "y": 2209,
                         "w": 119,
                         "h": 93
                     }
@@ -2611,10 +2590,52 @@
                         "h": 93
                     },
                     "frame": {
-                        "x": 2264,
-                        "y": 93,
+                        "x": 1830,
+                        "y": 2114,
                         "w": 119,
                         "h": 93
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_underglow.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 96
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 96
+                    },
+                    "frame": {
+                        "x": 771,
+                        "y": 2209,
+                        "w": 96,
+                        "h": 96
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/Citadel_Asteroid_Belt.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 113,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 113,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 867,
+                        "y": 2215,
+                        "w": 113,
+                        "h": 79
                     }
                 },
                 {
@@ -2632,8 +2653,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 693,
+                        "x": 1949,
+                        "y": 2114,
                         "w": 76,
                         "h": 114
                     }
@@ -2653,8 +2674,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 2264,
-                        "y": 186,
+                        "x": 2025,
+                        "y": 2114,
                         "w": 76,
                         "h": 114
                     }
@@ -2674,8 +2695,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 2264,
-                        "y": 300,
+                        "x": 2101,
+                        "y": 2114,
                         "w": 76,
                         "h": 114
                     }
@@ -2695,808 +2716,94 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 414,
+                        "x": 2123,
+                        "y": 970,
                         "w": 76,
                         "h": 114
                     }
                 },
                 {
-                    "filename": "sprites/citadel/Citadel_Asteroid_Belt.png",
+                    "filename": "sprites/planet/treasure/Treasure_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 113,
-                        "h": 79
+                        "w": 119,
+                        "h": 61
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 113,
-                        "h": 79
+                        "w": 119,
+                        "h": 61
                     },
                     "frame": {
-                        "x": 2002,
-                        "y": 1990,
-                        "w": 113,
-                        "h": 79
+                        "x": 1693,
+                        "y": 2114,
+                        "w": 119,
+                        "h": 61
                     }
                 },
                 {
-                    "filename": "sprites/pending-arrows/blue/Pending_Blue_0.png",
+                    "filename": "sprites/planet/treasure/Treasure_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 111,
-                        "h": 56
+                        "w": 119,
+                        "h": 61
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 111,
-                        "h": 56
+                        "w": 119,
+                        "h": 61
                     },
                     "frame": {
-                        "x": 1380,
-                        "y": 1827,
-                        "w": 111,
-                        "h": 56
+                        "x": 2000,
+                        "y": 970,
+                        "w": 119,
+                        "h": 61
                     }
                 },
                 {
-                    "filename": "sprites/pending-arrows/blue/Pending_Blue_2.png",
+                    "filename": "sprites/planet/treasure/Treasure_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 111,
-                        "h": 56
+                        "w": 119,
+                        "h": 61
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 111,
-                        "h": 56
+                        "w": 119,
+                        "h": 61
                     },
                     "frame": {
-                        "x": 1491,
-                        "y": 1827,
-                        "w": 111,
-                        "h": 56
+                        "x": 1830,
+                        "y": 2207,
+                        "w": 119,
+                        "h": 61
                     }
                 },
                 {
-                    "filename": "sprites/pending-arrows/blue/Pending_Blue_3.png",
+                    "filename": "sprites/planet/treasure/Treasure_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 111,
-                        "h": 56
+                        "w": 119,
+                        "h": 61
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 111,
-                        "h": 56
+                        "w": 119,
+                        "h": 61
                     },
                     "frame": {
-                        "x": 2063,
-                        "y": 2281,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/blue/Pending_Blue_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2174,
-                        "y": 2281,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/blue/Pending_Blue_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2252,
-                        "y": 528,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/blue/Pending_Blue_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2252,
-                        "y": 584,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/green/Pending_Green_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2252,
-                        "y": 640,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/green/Pending_Green_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2252,
-                        "y": 696,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/green/Pending_Green_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2252,
-                        "y": 752,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/green/Pending_Green_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2252,
-                        "y": 808,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/green/Pending_Green_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 864,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/green/Pending_Green_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 920,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/pink/Pending_Pink_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 976,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/pink/Pending_Pink_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1032,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/pink/Pending_Pink_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1088,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/pink/Pending_Pink_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1144,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/pink/Pending_Pink_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1200,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/pink/Pending_Pink_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1256,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/purple/Pending_Purple_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1312,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/purple/Pending_Purple_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1368,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/purple/Pending_Purple_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1424,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/purple/Pending_Purple_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1480,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/purple/Pending_Purple_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1536,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/purple/Pending_Purple_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1592,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/red/Pending_Red_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1648,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/red/Pending_Red_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1704,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/red/Pending_Red_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1760,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/red/Pending_Red_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1816,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/red/Pending_Red_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1872,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/red/Pending_Red_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1928,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2247,
-                        "y": 1984,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2115,
-                        "y": 1990,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2226,
-                        "y": 2040,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2150,
-                        "y": 2096,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2261,
-                        "y": 2096,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 111,
-                        "h": 56
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 111,
-                        "h": 56
-                    },
-                    "frame": {
-                        "x": 2182,
-                        "y": 2152,
-                        "w": 111,
-                        "h": 56
-                    }
-                },
-                {
-                    "filename": "sprites/planet/planet_underglow.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 96,
-                        "h": 96
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 96,
-                        "h": 96
-                    },
-                    "frame": {
-                        "x": 2285,
-                        "y": 2208,
-                        "w": 96,
-                        "h": 96
+                        "x": 1612,
+                        "y": 1092,
+                        "w": 119,
+                        "h": 61
                     }
                 },
                 {
@@ -3514,8 +2821,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 2350,
+                        "x": 2060,
+                        "y": 330,
                         "w": 83,
                         "h": 82
                     }
@@ -3535,8 +2842,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 83,
-                        "y": 2350,
+                        "x": 2143,
+                        "y": 330,
                         "w": 83,
                         "h": 82
                     }
@@ -3556,8 +2863,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 166,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1084,
                         "w": 83,
                         "h": 82
                     }
@@ -3577,8 +2884,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 249,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1166,
                         "w": 83,
                         "h": 82
                     }
@@ -3598,8 +2905,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 332,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1248,
                         "w": 83,
                         "h": 82
                     }
@@ -3619,10 +2926,766 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 415,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1330,
                         "w": 83,
                         "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2123,
+                        "y": 1412,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2123,
+                        "y": 1468,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 1949,
+                        "y": 2228,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2060,
+                        "y": 2228,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2171,
+                        "y": 2228,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2165,
+                        "y": 1890,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2189,
+                        "y": 1524,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2189,
+                        "y": 1580,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2206,
+                        "y": 1636,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2206,
+                        "y": 1692,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2206,
+                        "y": 1748,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2206,
+                        "y": 1804,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2220,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2220,
+                        "y": 56,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2220,
+                        "y": 112,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2220,
+                        "y": 168,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2220,
+                        "y": 224,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2177,
+                        "y": 1946,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2177,
+                        "y": 2002,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2177,
+                        "y": 2058,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2177,
+                        "y": 2114,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2177,
+                        "y": 2170,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2199,
+                        "y": 412,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2226,
+                        "y": 280,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2226,
+                        "y": 336,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2199,
+                        "y": 468,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2199,
+                        "y": 524,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2160,
+                        "y": 580,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2160,
+                        "y": 636,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2160,
+                        "y": 692,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2160,
+                        "y": 748,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2160,
+                        "y": 804,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2160,
+                        "y": 860,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2199,
+                        "y": 916,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2199,
+                        "y": 972,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2199,
+                        "y": 1028,
+                        "w": 111,
+                        "h": 56
                     }
                 },
                 {
@@ -3640,8 +3703,8 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 498,
-                        "y": 2350,
+                        "x": 2271,
+                        "y": 580,
                         "w": 74,
                         "h": 74
                     }
@@ -3661,8 +3724,8 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 572,
-                        "y": 2350,
+                        "x": 2271,
+                        "y": 654,
                         "w": 74,
                         "h": 74
                     }
@@ -3682,8 +3745,8 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 646,
-                        "y": 2337,
+                        "x": 2271,
+                        "y": 728,
                         "w": 74,
                         "h": 74
                     }
@@ -3703,8 +3766,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -3724,8 +3787,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 448,
+                        "x": 652,
+                        "y": 2172,
                         "w": 53,
                         "h": 34
                     }
@@ -3745,8 +3808,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 482,
+                        "x": 1980,
+                        "y": 1546,
                         "w": 53,
                         "h": 34
                     }
@@ -3766,8 +3829,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 1602,
-                        "y": 1827,
+                        "x": 1980,
+                        "y": 1580,
                         "w": 53,
                         "h": 34
                     }
@@ -3787,8 +3850,8 @@
                         "h": 29
                     },
                     "frame": {
-                        "x": 1610,
-                        "y": 2078,
+                        "x": 2206,
+                        "y": 1860,
                         "w": 48,
                         "h": 29
                     }
@@ -3808,8 +3871,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 708,
-                        "y": 808,
+                        "x": 2160,
+                        "y": 916,
                         "w": 27,
                         "h": 41
                     }
@@ -3829,8 +3892,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 735,
-                        "y": 808,
+                        "x": 904,
+                        "y": 1081,
                         "w": 27,
                         "h": 41
                     }
@@ -3850,8 +3913,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 762,
-                        "y": 808,
+                        "x": 1030,
+                        "y": 2105,
                         "w": 27,
                         "h": 41
                     }
@@ -3871,8 +3934,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 789,
-                        "y": 808,
+                        "x": 1846,
+                        "y": 1827,
                         "w": 27,
                         "h": 41
                     }
@@ -3892,8 +3955,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 816,
-                        "y": 808,
+                        "x": 1846,
+                        "y": 1868,
                         "w": 27,
                         "h": 41
                     }
@@ -3913,8 +3976,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 843,
-                        "y": 808,
+                        "x": 1846,
+                        "y": 1909,
                         "w": 27,
                         "h": 41
                     }
@@ -3934,8 +3997,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 870,
-                        "y": 808,
+                        "x": 980,
+                        "y": 2215,
                         "w": 27,
                         "h": 41
                     }
@@ -3955,8 +4018,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2150,
-                        "y": 2046,
+                        "x": 980,
+                        "y": 2256,
                         "w": 27,
                         "h": 41
                     }
@@ -3976,8 +4039,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2177,
-                        "y": 2046,
+                        "x": 1731,
+                        "y": 1092,
                         "w": 27,
                         "h": 41
                     }
@@ -3997,8 +4060,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2337,
-                        "y": 2040,
+                        "x": 1758,
+                        "y": 1092,
                         "w": 27,
                         "h": 41
                     }
@@ -4018,8 +4081,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2293,
-                        "y": 2152,
+                        "x": 808,
+                        "y": 1774,
                         "w": 27,
                         "h": 41
                     }
@@ -4039,8 +4102,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2320,
-                        "y": 2152,
+                        "x": 835,
+                        "y": 1774,
                         "w": 27,
                         "h": 41
                     }
@@ -4060,8 +4123,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2347,
-                        "y": 2152,
+                        "x": 862,
+                        "y": 1774,
                         "w": 27,
                         "h": 41
                     }
@@ -4081,8 +4144,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2340,
-                        "y": 186,
+                        "x": 2282,
+                        "y": 2226,
                         "w": 27,
                         "h": 41
                     }
@@ -4102,8 +4165,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2340,
-                        "y": 227,
+                        "x": 1672,
+                        "y": 420,
                         "w": 27,
                         "h": 41
                     }
@@ -4123,8 +4186,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2340,
-                        "y": 268,
+                        "x": 1699,
+                        "y": 420,
                         "w": 27,
                         "h": 41
                     }
@@ -4144,8 +4207,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2340,
-                        "y": 309,
+                        "x": 1726,
+                        "y": 420,
                         "w": 27,
                         "h": 41
                     }
@@ -4165,8 +4228,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2340,
-                        "y": 350,
+                        "x": 1753,
+                        "y": 420,
                         "w": 27,
                         "h": 41
                     }
@@ -4186,8 +4249,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1830,
-                        "y": 1827,
+                        "x": 194,
+                        "y": 1799,
                         "w": 27,
                         "h": 41
                     }
@@ -4207,8 +4270,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1610,
-                        "y": 2107,
+                        "x": 194,
+                        "y": 1840,
                         "w": 27,
                         "h": 41
                     }
@@ -4228,8 +4291,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1610,
-                        "y": 2148,
+                        "x": 194,
+                        "y": 1881,
                         "w": 27,
                         "h": 41
                     }
@@ -4249,8 +4312,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2182,
-                        "y": 2208,
+                        "x": 194,
+                        "y": 1922,
                         "w": 27,
                         "h": 41
                     }
@@ -4270,8 +4333,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2209,
-                        "y": 2208,
+                        "x": 2276,
+                        "y": 1860,
                         "w": 27,
                         "h": 41
                     }
@@ -4291,8 +4354,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2236,
-                        "y": 2208,
+                        "x": 2276,
+                        "y": 1901,
                         "w": 27,
                         "h": 41
                     }
@@ -4312,8 +4375,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 708,
-                        "y": 619,
+                        "x": 226,
+                        "y": 875,
                         "w": 27,
                         "h": 41
                     }
@@ -4333,8 +4396,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 735,
-                        "y": 619,
+                        "x": 226,
+                        "y": 916,
                         "w": 27,
                         "h": 41
                     }
@@ -4354,8 +4417,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 904,
-                        "y": 1888,
+                        "x": 226,
+                        "y": 957,
                         "w": 27,
                         "h": 41
                     }
@@ -4375,8 +4438,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 931,
-                        "y": 1888,
+                        "x": 226,
+                        "y": 998,
                         "w": 27,
                         "h": 41
                     }
@@ -4396,8 +4459,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 904,
-                        "y": 1929,
+                        "x": 226,
+                        "y": 1039,
                         "w": 27,
                         "h": 41
                     }
@@ -4417,8 +4480,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 931,
-                        "y": 1929,
+                        "x": 2160,
+                        "y": 412,
                         "w": 27,
                         "h": 41
                     }
@@ -4438,8 +4501,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 807,
+                        "x": 2160,
+                        "y": 453,
                         "w": 27,
                         "h": 41
                     }
@@ -4459,8 +4522,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 807,
+                        "x": 2160,
+                        "y": 494,
                         "w": 27,
                         "h": 41
                     }
@@ -4480,8 +4543,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2002,
-                        "y": 1890,
+                        "x": 2160,
+                        "y": 535,
                         "w": 27,
                         "h": 41
                     }
@@ -4501,8 +4564,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2029,
-                        "y": 1890,
+                        "x": 2310,
+                        "y": 392,
                         "w": 27,
                         "h": 41
                     }
@@ -4522,8 +4585,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2002,
-                        "y": 1931,
+                        "x": 2310,
+                        "y": 433,
                         "w": 27,
                         "h": 41
                     }
@@ -4543,8 +4606,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2029,
-                        "y": 1931,
+                        "x": 2310,
+                        "y": 474,
                         "w": 27,
                         "h": 41
                     }
@@ -4564,8 +4627,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 848,
+                        "x": 2310,
+                        "y": 515,
                         "w": 27,
                         "h": 41
                     }
@@ -4585,8 +4648,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 848,
+                        "x": 2271,
+                        "y": 802,
                         "w": 27,
                         "h": 41
                     }
@@ -4606,8 +4669,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 889,
+                        "x": 2298,
+                        "y": 802,
                         "w": 27,
                         "h": 41
                     }
@@ -4627,8 +4690,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 889,
+                        "x": 2271,
+                        "y": 843,
                         "w": 27,
                         "h": 41
                     }
@@ -4648,8 +4711,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 930,
+                        "x": 2298,
+                        "y": 843,
                         "w": 27,
                         "h": 41
                     }
@@ -4669,8 +4732,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 930,
+                        "x": 889,
+                        "y": 1942,
                         "w": 27,
                         "h": 41
                     }
@@ -4690,8 +4753,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 971,
+                        "x": 808,
+                        "y": 1942,
                         "w": 27,
                         "h": 41
                     }
@@ -4711,8 +4774,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 971,
+                        "x": 835,
+                        "y": 1942,
                         "w": 27,
                         "h": 41
                     }
@@ -4732,8 +4795,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 1012,
+                        "x": 862,
+                        "y": 1942,
                         "w": 27,
                         "h": 41
                     }
@@ -4753,8 +4816,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 1012,
+                        "x": 916,
+                        "y": 1942,
                         "w": 27,
                         "h": 41
                     }
@@ -4774,8 +4837,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 1053,
+                        "x": 943,
+                        "y": 1942,
                         "w": 27,
                         "h": 41
                     }
@@ -4795,8 +4858,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 1053,
+                        "x": 970,
+                        "y": 1942,
                         "w": 27,
                         "h": 41
                     }
@@ -4816,8 +4879,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2150,
-                        "y": 2152,
+                        "x": 2271,
+                        "y": 884,
                         "w": 32,
                         "h": 32
                     }
@@ -4837,8 +4900,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2115,
-                        "y": 2046,
+                        "x": 2303,
+                        "y": 884,
                         "w": 32,
                         "h": 32
                     }
@@ -4858,8 +4921,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2182,
-                        "y": 2249,
+                        "x": 2282,
+                        "y": 2267,
                         "w": 32,
                         "h": 32
                     }
@@ -4879,8 +4942,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2214,
-                        "y": 2249,
+                        "x": 997,
+                        "y": 1942,
                         "w": 32,
                         "h": 32
                     }
@@ -4900,8 +4963,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2246,
-                        "y": 2249,
+                        "x": 1029,
+                        "y": 1942,
                         "w": 32,
                         "h": 32
                     }
@@ -4921,8 +4984,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 320,
-                        "y": 2240,
+                        "x": 870,
+                        "y": 2105,
                         "w": 160,
                         "h": 110
                     }
@@ -4942,8 +5005,8 @@
                         "h": 110
                     },
                     "frame": {
-                        "x": 800,
-                        "y": 2215,
+                        "x": 1350,
+                        "y": 2181,
                         "w": 160,
                         "h": 110
                     }
@@ -4963,8 +5026,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -4984,8 +5047,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5005,8 +5068,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5026,8 +5089,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5047,8 +5110,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5068,8 +5131,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5089,8 +5152,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5110,8 +5173,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5131,8 +5194,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5152,8 +5215,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5173,8 +5236,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 1693,
+                        "y": 2075,
                         "w": 53,
                         "h": 34
                     }
@@ -5194,8 +5257,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 708,
-                        "y": 693,
+                        "x": 710,
+                        "y": 1984,
                         "w": 179,
                         "h": 115
                     }
@@ -5215,8 +5278,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 708,
-                        "y": 693,
+                        "x": 710,
+                        "y": 1984,
                         "w": 179,
                         "h": 115
                     }
@@ -5236,8 +5299,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 708,
-                        "y": 693,
+                        "x": 710,
+                        "y": 1984,
                         "w": 179,
                         "h": 115
                     }
@@ -5257,10 +5320,31 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 708,
-                        "y": 693,
+                        "x": 710,
+                        "y": 1984,
                         "w": 179,
                         "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 462,
+                        "w": 143,
+                        "h": 124
                     }
                 },
                 {
@@ -5278,8 +5362,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 1380,
-                        "y": 1827,
+                        "x": 2123,
+                        "y": 1412,
                         "w": 111,
                         "h": 56
                     }
@@ -5299,8 +5383,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 640,
+                        "x": 2189,
+                        "y": 1524,
                         "w": 111,
                         "h": 56
                     }
@@ -5320,8 +5404,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 976,
+                        "x": 2220,
+                        "y": 0,
                         "w": 111,
                         "h": 56
                     }
@@ -5341,8 +5425,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1312,
+                        "x": 2177,
+                        "y": 2002,
                         "w": 111,
                         "h": 56
                     }
@@ -5362,8 +5446,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1648,
+                        "x": 2226,
+                        "y": 336,
                         "w": 111,
                         "h": 56
                     }
@@ -5383,8 +5467,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1984,
+                        "x": 2160,
+                        "y": 748,
                         "w": 111,
                         "h": 56
                     }
@@ -5404,8 +5488,8 @@
                         "h": 61
                     },
                     "frame": {
-                        "x": 904,
-                        "y": 1827,
+                        "x": 1693,
+                        "y": 2114,
                         "w": 119,
                         "h": 61
                     }
@@ -5425,8 +5509,8 @@
                         "h": 61
                     },
                     "frame": {
-                        "x": 1023,
-                        "y": 1827,
+                        "x": 2000,
+                        "y": 970,
                         "w": 119,
                         "h": 61
                     }
@@ -5446,8 +5530,8 @@
                         "h": 61
                     },
                     "frame": {
-                        "x": 1142,
-                        "y": 1827,
+                        "x": 1830,
+                        "y": 2207,
                         "w": 119,
                         "h": 61
                     }
@@ -5467,8 +5551,8 @@
                         "h": 93
                     },
                     "frame": {
-                        "x": 2264,
-                        "y": 93,
+                        "x": 1830,
+                        "y": 2114,
                         "w": 119,
                         "h": 93
                     }
@@ -5489,135 +5573,156 @@
                     },
                     "frame": {
                         "x": 1220,
-                        "y": 462,
+                        "y": 231,
                         "w": 226,
                         "h": 231
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_1.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "frame": {
-                        "x": 1672,
-                        "y": 462,
-                        "w": 226,
-                        "h": 231
+                        "x": 1703,
+                        "y": 1827,
+                        "w": 143,
+                        "h": 124
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_2.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_19.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "frame": {
-                        "x": 1672,
-                        "y": 462,
-                        "w": 226,
-                        "h": 231
+                        "x": 1703,
+                        "y": 1827,
+                        "w": 143,
+                        "h": 124
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_12.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "frame": {
-                        "x": 1582,
-                        "y": 924,
-                        "w": 226,
-                        "h": 231
+                        "x": 1703,
+                        "y": 1827,
+                        "w": 143,
+                        "h": 124
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_13.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "frame": {
-                        "x": 1582,
-                        "y": 924,
-                        "w": 226,
-                        "h": 231
+                        "x": 1703,
+                        "y": 1827,
+                        "w": 143,
+                        "h": 124
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_14.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "frame": {
-                        "x": 1582,
-                        "y": 924,
-                        "w": 226,
-                        "h": 231
+                        "x": 1703,
+                        "y": 1827,
+                        "w": 143,
+                        "h": 124
                     }
                 },
                 {
-                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_4.png",
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 226,
-                        "h": 231
+                        "w": 143,
+                        "h": 124
                     },
                     "frame": {
-                        "x": 1582,
-                        "y": 1155,
-                        "w": 226,
-                        "h": 231
+                        "x": 1703,
+                        "y": 1827,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Test_Idle_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1703,
+                        "y": 1827,
+                        "w": 143,
+                        "h": 124
                     }
                 },
                 {
@@ -5635,8 +5740,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 2350,
+                        "x": 2060,
+                        "y": 330,
                         "w": 83,
                         "h": 82
                     }
@@ -5656,8 +5761,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 83,
-                        "y": 2350,
+                        "x": 2143,
+                        "y": 330,
                         "w": 83,
                         "h": 82
                     }
@@ -5677,8 +5782,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 166,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1084,
                         "w": 83,
                         "h": 82
                     }
@@ -5698,8 +5803,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 249,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1166,
                         "w": 83,
                         "h": 82
                     }
@@ -5719,8 +5824,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 332,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1248,
                         "w": 83,
                         "h": 82
                     }
@@ -5740,8 +5845,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 415,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1330,
                         "w": 83,
                         "h": 82
                     }
@@ -5761,8 +5866,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 415,
-                        "y": 2350,
+                        "x": 2123,
+                        "y": 1330,
                         "w": 83,
                         "h": 82
                     }

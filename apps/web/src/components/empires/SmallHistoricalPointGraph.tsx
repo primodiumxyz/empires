@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { curveMonotoneX } from "@visx/curve";
 import { LinearGradient } from "@visx/gradient";
+import appleStock from "@visx/mock-data/lib/mocks/appleStock";
 import { scaleLinear, scaleTime } from "@visx/scale";
 import { AreaClosed } from "@visx/shape";
 import { extent, max } from "@visx/vendor/d3-array";
@@ -10,6 +11,7 @@ import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { cn } from "@/util/client";
 
+const stock = appleStock.slice(800);
 export const accentColor = "rgba(0,255, 0, .75)";
 export const accentColorDark = "rgba(0,255, 0, .25)";
 // accessors

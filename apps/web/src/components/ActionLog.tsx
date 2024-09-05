@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  ArrowDownIcon,
-  ArrowsPointingInIcon,
-  ArrowsPointingOutIcon,
-  EyeIcon,
-  EyeSlashIcon,
-} from "@heroicons/react/24/solid";
+import { ArrowDownIcon, ArrowsPointingInIcon, ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
 import ScrollToBottom, { useScrollToBottom, useSticky } from "react-scroll-to-bottom";
 import { toHex } from "viem";
 
@@ -39,11 +33,12 @@ export const ActionLog = ({ className }: { className: string }) => {
     scrollToBottom({ behavior: "auto" });
   }, [selectedTab]);
 
+  // return null;
   return (
     <SecondaryCard
       className={cn(
-        "pointer--events-auto relative hidden h-[290px] w-80 flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
-        open ? "bg-black/75 pr-0" : "translate-y-2/3",
+        "pointer--events-auto relative hidden h-[300px] flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block",
+        open ? "" : "translate-y-2/3",
         className,
       )}
     >
@@ -63,29 +58,21 @@ const ClosedActionLog = () => {
   const override = useMostRecentOverride();
   const action = override ? override.element : <p className="text-xs opacity-70">No player actions</p>;
 
-  const [currentAction, setCurrentAction] = useState("");
+  const [currentAction, setCurrentAction] = useState(0n);
   const [flashing, setFlashing] = useState(false);
 
   useEffect(() => {
     if (!override) return;
-    setCurrentAction(override.id);
-    if (currentAction === "") return;
-    if (currentAction === override.id) return;
+    setCurrentAction(override.timestamp);
+    if (currentAction === 0n) return;
+    if (currentAction === override.timestamp) return;
     setFlashing(true);
     setTimeout(() => setFlashing(false), 500);
   }, [override, currentAction]);
 
   const colorClass = override ? EmpireEnumToConfig[override.empireId as EEmpire].bgColor : "bg-gray-600";
   return (
-    <SecondaryCard
-      className={cn(
-        flashing
-          ? `scale-105 ${colorClass} transition-transform duration-500`
-          : override?.highlight
-            ? "border border-accent/75 hover:border-accent/100"
-            : "",
-      )}
-    >
+    <SecondaryCard className={cn(flashing ? `scale-105 ${colorClass} transition-transform duration-500` : "")}>
       {action}
     </SecondaryCard>
   );
@@ -93,21 +80,19 @@ const ClosedActionLog = () => {
 
 const OpenActionLog = () => {
   const empires = useEmpires();
-  const { SelectedTab, ShowRoutineLogs } = useSettings();
-  const showRoutineLogs = ShowRoutineLogs.use()?.value ?? false;
+  const { SelectedTab } = useSettings();
   const persistKey = toHex("action-log") as Entity;
   const selectedTab = SelectedTab.use(persistKey)?.value ?? 0;
   const selectedEmpire = selectedTab === 0 ? undefined : (selectedTab as EEmpire);
-  const actions = useActions(selectedEmpire, { max: 300, filterRoutines: !showRoutineLogs });
+  const actions = useActions(selectedEmpire, { max: 300 });
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
   const {
     ROOT: { sprite },
   } = useGame();
-
   return (
-    <Tabs className="grid grid-cols-[auto_1fr] gap-y-1" persistIndexKey={"action-log"} defaultIndex={0}>
-      <Join direction="vertical" className="h-full rounded-r !pr-0 hover:bg-transparent">
+    <Tabs className="flex gap-1" persistIndexKey={"action-log"} defaultIndex={0}>
+      <Join direction="vertical" className="rounded-r">
         <Tabs.Button key={"all"} index={0} className="h-8 w-11">
           <div>
             <h1>ALL</h1>
@@ -122,17 +107,11 @@ const OpenActionLog = () => {
           );
         })}
       </Join>
-      <ScrollToBottom className="mt-1 h-[212px] w-full">
+      <ScrollToBottom className="h-[230px] w-full">
         {actions.map((action, i) => (
-          <div
-            className={cn(
-              "px-2",
-              i % 2 === 0 ? "bg-secondary/30" : "bg-black/30",
-              action.highlight && "border border-accent/75",
-            )}
-            key={`${Number(action.timestamp)}-${i}`}
-          >
+          <div className="flex flex-col" key={`${Number(action.timestamp)}-${i}`}>
             {action.element}
+            <hr className="w-full border-secondary/50" />
           </div>
         ))}
       </ScrollToBottom>
@@ -147,25 +126,6 @@ const OpenActionLog = () => {
           <ArrowDownIcon className="h-4 w-4" />
         </Button>
       )}
-      <div className="col-span-2">
-        <Button
-          className="flex items-center gap-2 text-xs text-gray-400"
-          variant="ghost"
-          onClick={() => ShowRoutineLogs.set({ value: !showRoutineLogs })}
-        >
-          {showRoutineLogs ? (
-            <>
-              <EyeSlashIcon className="size-4" />
-              <span className="text-xs">Hide routines</span>
-            </>
-          ) : (
-            <>
-              <EyeIcon className="size-4 opacity-70" />
-              <span className="text-xs opacity-70">Show routines</span>
-            </>
-          )}
-        </Button>
-      </div>
     </Tabs>
   );
 };

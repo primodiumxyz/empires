@@ -1,4 +1,4 @@
-import { formatEther, parseEther } from "viem";
+import { formatEther } from "viem";
 import { EEmpire, EOverride } from "@primodiumxyz/contracts/config/enums";
 
 import { PRICE_PRECISION, Tables } from "@core/lib";
@@ -183,7 +183,7 @@ export function createPriceUtils(tables: Tables) {
   }
 
   function usdToWei(USD: number, weiToUsd: number): bigint {
-    return parseEther((USD / (weiToUsd || 1)).toString());
+    return BigInt(USD / weiToUsd);
   }
   const getPointPrice = (empire: EEmpire, points: number): { price: bigint; message: string } => {
     const currentPointCost = tables.Empire.getWithKeys({ id: empire })?.pointCost ?? 0n;

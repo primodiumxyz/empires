@@ -4,7 +4,7 @@ import { GlobalApi } from "@game/api/global";
 
 export const createAudioApi = (scene: Scene, globalApi: GlobalApi) => {
   function play(key: AudioKeys, channel: Channel, config?: Phaser.Types.Sound.SoundConfig) {
-    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
+    if (!globalApi.tables.GameState.get()?.visible) return;
     scene.audio[channel].playAudioSprite(Assets.AudioAtlas, Audio[key], {
       ...config,
     });

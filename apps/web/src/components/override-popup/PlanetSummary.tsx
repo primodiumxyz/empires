@@ -116,6 +116,7 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
   const { probabilities: p } = utils.getRoutineProbabilities(entity);
   const { OpenRoutineProbabilities } = useSettings();
   const isOpen = OpenRoutineProbabilities.use()?.value ?? false;
+  console.log({ isOpen });
 
   const probabilities = useMemo(() => {
     return {

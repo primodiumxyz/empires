@@ -25,13 +25,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
     });
 
     planetObj
-      .onClick((pointer: Phaser.Input.Pointer) => {
-        // TODO: vv this is madness, fix this cleanly (click on trading view chart propagating to below)
-        if (
-          (pointer.event.srcElement as HTMLElement)?.parentElement?.parentElement?.parentElement?.parentElement
-            ?.parentElement?.className === "tv-lightweight-charts"
-        )
-          return;
+      .onClick(() => {
         if (tables.SelectedPlanet.get()?.value === entity) {
           tables.SelectedPlanet.remove();
           return;

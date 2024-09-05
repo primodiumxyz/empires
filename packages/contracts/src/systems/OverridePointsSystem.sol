@@ -8,9 +8,8 @@ import { LibPoint } from "libraries/LibPoint.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
-import { addressToId, pseudorandomEntity } from "src/utils.sol";
+import { addressToId } from "src/utils.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
-import { SellPointsOverrideLog, SellPointsOverrideLogData, Turn } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 
 /**
@@ -45,17 +44,5 @@ contract OverridePointsSystem is EmpiresSystem {
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
-
-    SellPointsOverrideLog.set(
-      pseudorandomEntity(),
-      SellPointsOverrideLogData({
-        playerId: addressToId(_msgSender()),
-        turn: Turn.getValue(),
-        empireId: _empire,
-        ethReceived: pointSaleValue,
-        overrideCount: _points,
-        timestamp: block.timestamp
-      })
-    );
   }
 }

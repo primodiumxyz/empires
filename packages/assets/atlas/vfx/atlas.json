@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1725018324057",
+            "image": "atlas.png?timestamp=1724687311365",
             "format": "RGBA8888",
             "size": {
-                "w": 1982,
-                "h": 2000
+                "w": 1836,
+                "h": 1895
             },
             "scale": 1,
             "frames": [
@@ -602,279 +602,6 @@
                     }
                 },
                 {
-                    "filename": "vfx/combat/Combat_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 585,
-                        "y": 935,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 778,
-                        "y": 935,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 971,
-                        "y": 935,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 975,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 975,
-                        "y": 182,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 975,
-                        "y": 364,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 975,
-                        "y": 546,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 975,
-                        "y": 728,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 585,
-                        "y": 1117,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 778,
-                        "y": 1117,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 971,
-                        "y": 1117,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 1122,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
-                    "filename": "vfx/combat/Combat_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 193,
-                        "h": 182
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 193,
-                        "h": 182
-                    },
-                    "frame": {
-                        "x": 193,
-                        "y": 1122,
-                        "w": 193,
-                        "h": 182
-                    }
-                },
-                {
                     "filename": "vfx/gold-add/Gold_Add_0.png",
                     "rotated": false,
                     "trimmed": false,
@@ -889,8 +616,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 386,
-                        "y": 1122,
+                        "x": 585,
+                        "y": 935,
                         "w": 170,
                         "h": 142
                     }
@@ -910,8 +637,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 1164,
-                        "y": 910,
+                        "x": 755,
+                        "y": 935,
                         "w": 170,
                         "h": 142
                     }
@@ -931,8 +658,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 1164,
-                        "y": 1052,
+                        "x": 975,
+                        "y": 0,
                         "w": 170,
                         "h": 142
                     }
@@ -952,8 +679,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 1168,
-                        "y": 0,
+                        "x": 975,
+                        "y": 142,
                         "w": 170,
                         "h": 142
                     }
@@ -973,8 +700,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 1168,
-                        "y": 142,
+                        "x": 975,
+                        "y": 284,
                         "w": 170,
                         "h": 142
                     }
@@ -994,8 +721,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 1168,
-                        "y": 284,
+                        "x": 975,
+                        "y": 426,
                         "w": 170,
                         "h": 142
                     }
@@ -1015,8 +742,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 1168,
-                        "y": 426,
+                        "x": 975,
+                        "y": 568,
                         "w": 170,
                         "h": 142
                     }
@@ -1036,8 +763,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 1168,
-                        "y": 568,
+                        "x": 975,
+                        "y": 710,
                         "w": 170,
                         "h": 142
                     }
@@ -1057,8 +784,8 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 1168,
-                        "y": 710,
+                        "x": 975,
+                        "y": 852,
                         "w": 170,
                         "h": 142
                     }
@@ -1078,1900 +805,10 @@
                         "h": 142
                     },
                     "frame": {
-                        "x": 386,
-                        "y": 1264,
+                        "x": 0,
+                        "y": 1122,
                         "w": 170,
                         "h": 142
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1164,
-                        "y": 1194,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 1304,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 121,
-                        "y": 1304,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 242,
-                        "y": 1304,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 556,
-                        "y": 1299,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 677,
-                        "y": 1299,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 798,
-                        "y": 1299,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 919,
-                        "y": 1299,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1040,
-                        "y": 1299,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1161,
-                        "y": 1309,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1282,
-                        "y": 1309,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1285,
-                        "y": 1194,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1334,
-                        "y": 852,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1334,
-                        "y": 967,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/blue/Conquer_Blue_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1338,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1338,
-                        "y": 115,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1338,
-                        "y": 230,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1338,
-                        "y": 345,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1338,
-                        "y": 460,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1338,
-                        "y": 575,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1338,
-                        "y": 690,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 363,
-                        "y": 1406,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 1419,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 121,
-                        "y": 1419,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 242,
-                        "y": 1419,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 484,
-                        "y": 1414,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 605,
-                        "y": 1414,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 726,
-                        "y": 1414,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 847,
-                        "y": 1414,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 968,
-                        "y": 1414,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1089,
-                        "y": 1424,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1210,
-                        "y": 1424,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1331,
-                        "y": 1424,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1403,
-                        "y": 1309,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1452,
-                        "y": 1424,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1406,
-                        "y": 1082,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_15.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1455,
-                        "y": 805,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1455,
-                        "y": 920,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1459,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1459,
-                        "y": 115,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1459,
-                        "y": 230,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1459,
-                        "y": 345,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1459,
-                        "y": 460,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1459,
-                        "y": 575,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1459,
-                        "y": 690,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 363,
-                        "y": 1521,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 1534,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 121,
-                        "y": 1534,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 242,
-                        "y": 1534,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 484,
-                        "y": 1529,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 605,
-                        "y": 1529,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 726,
-                        "y": 1529,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 847,
-                        "y": 1529,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 968,
-                        "y": 1529,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1089,
-                        "y": 1539,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1210,
-                        "y": 1539,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1331,
-                        "y": 1539,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1452,
-                        "y": 1539,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1524,
-                        "y": 1197,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1527,
-                        "y": 1035,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1576,
-                        "y": 805,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1576,
-                        "y": 920,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1573,
-                        "y": 1312,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1573,
-                        "y": 1427,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1573,
-                        "y": 1542,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1580,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1580,
-                        "y": 115,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1580,
-                        "y": 230,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1580,
-                        "y": 345,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1580,
-                        "y": 460,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1580,
-                        "y": 575,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1580,
-                        "y": 690,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 363,
-                        "y": 1636,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 1649,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 121,
-                        "y": 1649,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 242,
-                        "y": 1649,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 484,
-                        "y": 1644,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 605,
-                        "y": 1644,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 726,
-                        "y": 1644,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 847,
-                        "y": 1644,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 968,
-                        "y": 1644,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1089,
-                        "y": 1654,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1210,
-                        "y": 1654,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1331,
-                        "y": 1654,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1452,
-                        "y": 1654,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1573,
-                        "y": 1657,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1645,
-                        "y": 1150,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1648,
-                        "y": 1035,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1697,
-                        "y": 805,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1697,
-                        "y": 920,
-                        "w": 121,
-                        "h": 115
                     }
                 },
                 {
@@ -2989,8 +826,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1168,
-                        "y": 852,
+                        "x": 925,
+                        "y": 994,
                         "w": 164,
                         "h": 57
                     }
@@ -3010,8 +847,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 363,
-                        "y": 1759,
+                        "x": 925,
+                        "y": 1051,
                         "w": 164,
                         "h": 57
                     }
@@ -3031,8 +868,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1764,
+                        "x": 170,
+                        "y": 1122,
                         "w": 164,
                         "h": 57
                     }
@@ -3052,8 +889,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 164,
-                        "y": 1764,
+                        "x": 170,
+                        "y": 1179,
                         "w": 164,
                         "h": 57
                     }
@@ -3073,8 +910,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 527,
-                        "y": 1759,
+                        "x": 334,
+                        "y": 1122,
                         "w": 164,
                         "h": 57
                     }
@@ -3094,8 +931,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 691,
-                        "y": 1759,
+                        "x": 334,
+                        "y": 1179,
                         "w": 164,
                         "h": 57
                     }
@@ -3115,8 +952,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 855,
-                        "y": 1759,
+                        "x": 498,
+                        "y": 1122,
                         "w": 164,
                         "h": 57
                     }
@@ -3136,8 +973,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1019,
-                        "y": 1769,
+                        "x": 498,
+                        "y": 1179,
                         "w": 164,
                         "h": 57
                     }
@@ -3157,8 +994,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1183,
-                        "y": 1769,
+                        "x": 662,
+                        "y": 1108,
                         "w": 164,
                         "h": 57
                     }
@@ -3178,8 +1015,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1347,
-                        "y": 1769,
+                        "x": 662,
+                        "y": 1165,
                         "w": 164,
                         "h": 57
                     }
@@ -3199,8 +1036,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1511,
-                        "y": 1772,
+                        "x": 826,
+                        "y": 1108,
                         "w": 164,
                         "h": 57
                     }
@@ -3220,8 +1057,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1675,
-                        "y": 1772,
+                        "x": 826,
+                        "y": 1165,
                         "w": 164,
                         "h": 57
                     }
@@ -3241,8 +1078,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1766,
-                        "y": 1150,
+                        "x": 1145,
+                        "y": 0,
                         "w": 164,
                         "h": 57
                     }
@@ -3262,8 +1099,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1769,
-                        "y": 1035,
+                        "x": 1145,
+                        "y": 57,
                         "w": 164,
                         "h": 57
                     }
@@ -3283,8 +1120,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1769,
-                        "y": 1092,
+                        "x": 1145,
+                        "y": 114,
                         "w": 164,
                         "h": 57
                     }
@@ -3304,8 +1141,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1766,
-                        "y": 1207,
+                        "x": 1145,
+                        "y": 171,
                         "w": 164,
                         "h": 57
                     }
@@ -3325,8 +1162,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1766,
-                        "y": 1264,
+                        "x": 1145,
+                        "y": 228,
                         "w": 164,
                         "h": 57
                     }
@@ -3346,8 +1183,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1694,
-                        "y": 1321,
+                        "x": 1145,
+                        "y": 285,
                         "w": 164,
                         "h": 57
                     }
@@ -3367,8 +1204,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1694,
-                        "y": 1378,
+                        "x": 1145,
+                        "y": 342,
                         "w": 164,
                         "h": 57
                     }
@@ -3388,8 +1225,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1694,
-                        "y": 1435,
+                        "x": 1145,
+                        "y": 399,
                         "w": 164,
                         "h": 57
                     }
@@ -3409,8 +1246,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1694,
-                        "y": 1492,
+                        "x": 1145,
+                        "y": 456,
                         "w": 164,
                         "h": 57
                     }
@@ -3430,8 +1267,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1694,
-                        "y": 1549,
+                        "x": 1145,
+                        "y": 513,
                         "w": 164,
                         "h": 57
                     }
@@ -3451,8 +1288,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1694,
-                        "y": 1606,
+                        "x": 1145,
+                        "y": 570,
                         "w": 164,
                         "h": 57
                     }
@@ -3472,8 +1309,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1694,
-                        "y": 1663,
+                        "x": 1145,
+                        "y": 627,
                         "w": 164,
                         "h": 57
                     }
@@ -3493,8 +1330,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 0,
+                        "x": 1145,
+                        "y": 684,
                         "w": 164,
                         "h": 57
                     }
@@ -3514,8 +1351,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 57,
+                        "x": 1145,
+                        "y": 741,
                         "w": 164,
                         "h": 57
                     }
@@ -3535,8 +1372,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 114,
+                        "x": 1145,
+                        "y": 798,
                         "w": 164,
                         "h": 57
                     }
@@ -3556,8 +1393,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 171,
+                        "x": 1145,
+                        "y": 855,
                         "w": 164,
                         "h": 57
                     }
@@ -3577,8 +1414,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 228,
+                        "x": 1145,
+                        "y": 912,
                         "w": 164,
                         "h": 57
                     }
@@ -3598,8 +1435,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 285,
+                        "x": 1145,
+                        "y": 969,
                         "w": 164,
                         "h": 57
                     }
@@ -3619,8 +1456,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 342,
+                        "x": 1089,
+                        "y": 1026,
                         "w": 164,
                         "h": 57
                     }
@@ -3640,8 +1477,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 399,
+                        "x": 1089,
+                        "y": 1083,
                         "w": 164,
                         "h": 57
                     }
@@ -3661,8 +1498,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 456,
+                        "x": 990,
+                        "y": 1140,
                         "w": 164,
                         "h": 57
                     }
@@ -3682,8 +1519,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1701,
-                        "y": 513,
+                        "x": 990,
+                        "y": 1197,
                         "w": 164,
                         "h": 57
                     }
@@ -3703,8 +1540,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1701,
-                        "y": 570,
+                        "x": 0,
+                        "y": 1264,
                         "w": 164,
                         "h": 57
                     }
@@ -3724,8 +1561,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1701,
-                        "y": 627,
+                        "x": 164,
+                        "y": 1264,
                         "w": 164,
                         "h": 57
                     }
@@ -3745,8 +1582,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1701,
-                        "y": 684,
+                        "x": 328,
+                        "y": 1254,
                         "w": 164,
                         "h": 57
                     }
@@ -3766,8 +1603,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1701,
-                        "y": 741,
+                        "x": 492,
+                        "y": 1254,
                         "w": 164,
                         "h": 57
                     }
@@ -3787,8 +1624,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 798,
+                        "x": 656,
+                        "y": 1254,
                         "w": 164,
                         "h": 57
                     }
@@ -3808,8 +1645,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 855,
+                        "x": 820,
+                        "y": 1222,
                         "w": 164,
                         "h": 57
                     }
@@ -3829,8 +1666,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 912,
+                        "x": 984,
+                        "y": 1254,
                         "w": 164,
                         "h": 57
                     }
@@ -3850,8 +1687,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 969,
+                        "x": 1309,
+                        "y": 0,
                         "w": 164,
                         "h": 57
                     }
@@ -3871,8 +1708,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 328,
-                        "y": 1816,
+                        "x": 1309,
+                        "y": 57,
                         "w": 164,
                         "h": 57
                     }
@@ -3892,8 +1729,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1821,
+                        "x": 1309,
+                        "y": 114,
                         "w": 164,
                         "h": 57
                     }
@@ -3913,8 +1750,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 164,
-                        "y": 1821,
+                        "x": 1309,
+                        "y": 171,
                         "w": 164,
                         "h": 57
                     }
@@ -3934,8 +1771,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 492,
-                        "y": 1816,
+                        "x": 1309,
+                        "y": 228,
                         "w": 164,
                         "h": 57
                     }
@@ -3955,8 +1792,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 656,
-                        "y": 1816,
+                        "x": 1309,
+                        "y": 285,
                         "w": 164,
                         "h": 57
                     }
@@ -3976,8 +1813,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 820,
-                        "y": 1816,
+                        "x": 1309,
+                        "y": 342,
                         "w": 164,
                         "h": 57
                     }
@@ -3997,8 +1834,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 984,
-                        "y": 1826,
+                        "x": 1309,
+                        "y": 399,
                         "w": 164,
                         "h": 57
                     }
@@ -4018,8 +1855,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1148,
-                        "y": 1826,
+                        "x": 1309,
+                        "y": 456,
                         "w": 164,
                         "h": 57
                     }
@@ -4039,8 +1876,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1312,
-                        "y": 1826,
+                        "x": 1309,
+                        "y": 513,
                         "w": 164,
                         "h": 57
                     }
@@ -4060,8 +1897,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1476,
-                        "y": 1829,
+                        "x": 1309,
+                        "y": 570,
                         "w": 164,
                         "h": 57
                     }
@@ -4081,8 +1918,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1640,
-                        "y": 1829,
+                        "x": 1309,
+                        "y": 627,
                         "w": 164,
                         "h": 57
                     }
@@ -4102,8 +1939,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1804,
-                        "y": 1829,
+                        "x": 1309,
+                        "y": 684,
                         "w": 164,
                         "h": 57
                     }
@@ -4123,8 +1960,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 328,
-                        "y": 1873,
+                        "x": 1309,
+                        "y": 741,
                         "w": 164,
                         "h": 57
                     }
@@ -4144,8 +1981,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1878,
+                        "x": 1309,
+                        "y": 798,
                         "w": 164,
                         "h": 57
                     }
@@ -4165,8 +2002,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 164,
-                        "y": 1878,
+                        "x": 1309,
+                        "y": 855,
                         "w": 164,
                         "h": 57
                     }
@@ -4186,8 +2023,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 492,
-                        "y": 1873,
+                        "x": 1309,
+                        "y": 912,
                         "w": 164,
                         "h": 57
                     }
@@ -4207,8 +2044,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 656,
-                        "y": 1873,
+                        "x": 1309,
+                        "y": 969,
                         "w": 164,
                         "h": 57
                     }
@@ -4228,8 +2065,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 820,
-                        "y": 1873,
+                        "x": 1148,
+                        "y": 1254,
                         "w": 164,
                         "h": 57
                     }
@@ -4249,8 +2086,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 984,
-                        "y": 1883,
+                        "x": 1253,
+                        "y": 1026,
                         "w": 164,
                         "h": 57
                     }
@@ -4270,8 +2107,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1148,
-                        "y": 1883,
+                        "x": 1253,
+                        "y": 1083,
                         "w": 164,
                         "h": 57
                     }
@@ -4291,8 +2128,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1312,
-                        "y": 1883,
+                        "x": 1154,
+                        "y": 1140,
                         "w": 164,
                         "h": 57
                     }
@@ -4312,8 +2149,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1476,
-                        "y": 1886,
+                        "x": 1154,
+                        "y": 1197,
                         "w": 164,
                         "h": 57
                     }
@@ -4333,8 +2170,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1640,
-                        "y": 1886,
+                        "x": 820,
+                        "y": 1279,
                         "w": 164,
                         "h": 57
                     }
@@ -4354,8 +2191,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1804,
-                        "y": 1886,
+                        "x": 0,
+                        "y": 1321,
                         "w": 164,
                         "h": 57
                     }
@@ -4375,8 +2212,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 328,
-                        "y": 1930,
+                        "x": 164,
+                        "y": 1321,
                         "w": 164,
                         "h": 57
                     }
@@ -4396,8 +2233,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1935,
+                        "x": 328,
+                        "y": 1311,
                         "w": 164,
                         "h": 57
                     }
@@ -4417,8 +2254,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 164,
-                        "y": 1935,
+                        "x": 984,
+                        "y": 1311,
                         "w": 164,
                         "h": 57
                     }
@@ -4439,7 +2276,7 @@
                     },
                     "frame": {
                         "x": 492,
-                        "y": 1930,
+                        "y": 1311,
                         "w": 164,
                         "h": 57
                     }
@@ -4460,7 +2297,7 @@
                     },
                     "frame": {
                         "x": 656,
-                        "y": 1930,
+                        "y": 1311,
                         "w": 164,
                         "h": 57
                     }
@@ -4480,8 +2317,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 820,
-                        "y": 1930,
+                        "x": 1148,
+                        "y": 1311,
                         "w": 164,
                         "h": 57
                     }
@@ -4501,8 +2338,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 984,
-                        "y": 1940,
+                        "x": 820,
+                        "y": 1336,
                         "w": 164,
                         "h": 57
                     }
@@ -4522,8 +2359,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1148,
-                        "y": 1940,
+                        "x": 0,
+                        "y": 1378,
                         "w": 164,
                         "h": 57
                     }
@@ -4543,8 +2380,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1312,
-                        "y": 1940,
+                        "x": 164,
+                        "y": 1378,
                         "w": 164,
                         "h": 57
                     }
@@ -4564,8 +2401,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1476,
-                        "y": 1943,
+                        "x": 328,
+                        "y": 1368,
                         "w": 164,
                         "h": 57
                     }
@@ -4585,8 +2422,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1640,
-                        "y": 1943,
+                        "x": 984,
+                        "y": 1368,
                         "w": 164,
                         "h": 57
                     }
@@ -4606,10 +2443,1900 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1804,
-                        "y": 1943,
+                        "x": 492,
+                        "y": 1368,
                         "w": 164,
                         "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1318,
+                        "y": 1140,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1312,
+                        "y": 1255,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1435,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 121,
+                        "y": 1435,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 242,
+                        "y": 1435,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 363,
+                        "y": 1425,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 1425,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 605,
+                        "y": 1425,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 726,
+                        "y": 1425,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 847,
+                        "y": 1425,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 968,
+                        "y": 1425,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1089,
+                        "y": 1425,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1210,
+                        "y": 1370,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1331,
+                        "y": 1370,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/blue/Conquer_Blue_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1433,
+                        "y": 1255,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 115,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 230,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 345,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 460,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 575,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 690,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 805,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1473,
+                        "y": 920,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1452,
+                        "y": 1370,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1439,
+                        "y": 1035,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1550,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 121,
+                        "y": 1550,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 242,
+                        "y": 1550,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/green/Conquer_Green_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 363,
+                        "y": 1540,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 1540,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 605,
+                        "y": 1540,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 726,
+                        "y": 1540,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 847,
+                        "y": 1540,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 968,
+                        "y": 1540,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1089,
+                        "y": 1540,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1210,
+                        "y": 1485,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1331,
+                        "y": 1485,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1452,
+                        "y": 1485,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 115,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 230,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 345,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 460,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/pink/Conquer_Pink_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 575,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 690,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 805,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1594,
+                        "y": 920,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1573,
+                        "y": 1035,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1573,
+                        "y": 1150,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1573,
+                        "y": 1265,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1573,
+                        "y": 1380,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1573,
+                        "y": 1495,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1665,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 121,
+                        "y": 1665,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 242,
+                        "y": 1665,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 363,
+                        "y": 1655,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 1655,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 605,
+                        "y": 1655,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/purple/Conquer_Purple_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 726,
+                        "y": 1655,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 847,
+                        "y": 1655,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 968,
+                        "y": 1655,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1089,
+                        "y": 1655,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1210,
+                        "y": 1610,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1331,
+                        "y": 1610,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1452,
+                        "y": 1600,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1573,
+                        "y": 1610,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 115,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 230,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 345,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 460,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 575,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 690,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 805,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1715,
+                        "y": 920,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1694,
+                        "y": 1035,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1694,
+                        "y": 1150,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1694,
+                        "y": 1265,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1694,
+                        "y": 1380,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1694,
+                        "y": 1495,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1694,
+                        "y": 1610,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1452,
+                        "y": 1715,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1780,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 121,
+                        "y": 1780,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 242,
+                        "y": 1780,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 363,
+                        "y": 1770,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 1770,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 605,
+                        "y": 1770,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 726,
+                        "y": 1770,
+                        "w": 121,
+                        "h": 115
                     }
                 },
                 {
@@ -4627,8 +4354,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1406,
-                        "y": 1197,
+                        "x": 1439,
+                        "y": 1150,
                         "w": 82,
                         "h": 82
                     }
@@ -4648,8 +4375,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1839,
-                        "y": 1720,
+                        "x": 847,
+                        "y": 1770,
                         "w": 82,
                         "h": 82
                     }
@@ -4669,8 +4396,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1865,
-                        "y": 513,
+                        "x": 929,
+                        "y": 1770,
                         "w": 82,
                         "h": 82
                     }
@@ -4690,8 +4417,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1865,
-                        "y": 595,
+                        "x": 1011,
+                        "y": 1770,
                         "w": 82,
                         "h": 82
                     }
@@ -4711,8 +4438,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1865,
-                        "y": 677,
+                        "x": 1093,
+                        "y": 1770,
                         "w": 82,
                         "h": 82
                     }
@@ -4732,8 +4459,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1858,
-                        "y": 1321,
+                        "x": 1175,
+                        "y": 1770,
                         "w": 82,
                         "h": 82
                     }
@@ -4753,8 +4480,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1858,
-                        "y": 1403,
+                        "x": 1573,
+                        "y": 1725,
                         "w": 82,
                         "h": 82
                     }
@@ -4774,8 +4501,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1858,
-                        "y": 1485,
+                        "x": 1573,
+                        "y": 1807,
                         "w": 82,
                         "h": 82
                     }
@@ -4795,8 +4522,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1858,
-                        "y": 1567,
+                        "x": 1257,
+                        "y": 1725,
                         "w": 82,
                         "h": 82
                     }
@@ -4816,8 +4543,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1406,
-                        "y": 1197,
+                        "x": 1439,
+                        "y": 1150,
                         "w": 82,
                         "h": 82
                     }
@@ -4837,8 +4564,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1089,
-                        "y": 1424,
+                        "x": 484,
+                        "y": 1540,
                         "w": 121,
                         "h": 115
                     }
@@ -4858,8 +4585,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1168,
-                        "y": 852,
+                        "x": 925,
+                        "y": 994,
                         "w": 164,
                         "h": 57
                     }
@@ -4879,8 +4606,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1769,
-                        "y": 1035,
+                        "x": 1145,
+                        "y": 57,
                         "w": 164,
                         "h": 57
                     }
@@ -4900,8 +4627,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 114,
+                        "x": 1145,
+                        "y": 798,
                         "w": 164,
                         "h": 57
                     }
@@ -4921,8 +4648,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1818,
-                        "y": 855,
+                        "x": 820,
+                        "y": 1222,
                         "w": 164,
                         "h": 57
                     }
@@ -4942,8 +4669,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1640,
-                        "y": 1829,
+                        "x": 1309,
+                        "y": 627,
                         "w": 164,
                         "h": 57
                     }
@@ -4963,8 +4690,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1804,
-                        "y": 1886,
+                        "x": 0,
+                        "y": 1321,
                         "w": 164,
                         "h": 57
                     }

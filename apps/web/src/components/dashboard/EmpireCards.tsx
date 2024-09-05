@@ -14,7 +14,7 @@ import { EmpireConfig } from "@/util/lookups";
 export const EmpireCards = () => {
   const empires = useEmpires();
   return (
-    <div className={cn("pointer-events-auto flex h-full flex-col gap-2 overflow-y-auto pr-1 lg:!grid lg:grid-cols-2")}>
+    <div className={cn("pointer-events-auto flex h-full flex-col gap-2 overflow-y-auto pr-2 lg:!grid lg:grid-cols-2")}>
       {[...empires.entries()]
         .sort((a, b) => Number(b[1].playerPoints) - Number(a[1].playerPoints))
         .map(([key, data]) => (

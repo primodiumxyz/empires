@@ -22,7 +22,7 @@ library LibAcid {
     uint256 shipsDestroyed = initShips - shipsRemaining;
     AcidDamageOverrideLog.set(
       pseudorandomEntity(),
-      AcidDamageOverrideLogData({ planetId: _planetId, shipsDestroyed: shipsDestroyed, timestamp: block.timestamp })
+      AcidDamageOverrideLogData({ planetId: _planetId, shipsDestroyed: shipsDestroyed })
     );
   }
 }
