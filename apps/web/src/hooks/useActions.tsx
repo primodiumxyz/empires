@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { Address, Hex } from "viem";
+import { Hex } from "viem";
 
 import { EEmpire, EShieldEaterDamageType } from "@primodiumxyz/contracts";
 import { entityToAddress, formatNumber, WORLD_EVENTS_THRESHOLDS } from "@primodiumxyz/core";
