@@ -45,11 +45,18 @@ export async function execute<functionName extends ContractFunctionName<WorldAbi
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       args: args as any,
     });
-    const tx = async () => await playerAccount.worldContract.write.call(params, callOptions);
-    // const simulateTx = async () => {
-    //   await playerAccount.worldContract.simulate.call(params, { ...callOptions, account: playerAccount.address });
-    // };
-    return await _execute(core, tx, () => {});
+    const tx = async () => {
+      const ret = await playerAccount.worldContract.write.call(params, callOptions);
+      return ret;
+    };
+    const simulateTx = async (options?: { blockNumber?: bigint }) => {
+      await playerAccount.worldContract.simulate.call(params, {
+        ...callOptions,
+        account: playerAccount.address,
+        ...options,
+      });
+    };
+    return await _execute(core, tx, simulateTx);
   };
 
   let receipt: TxReceipt | undefined = undefined;

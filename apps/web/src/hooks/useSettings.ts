@@ -63,10 +63,16 @@ const SelectedTab = createLocalNumberTable(settingsWorld, {
 
 const ViewMode = createLocalNumberTable(settingsWorld, { id: "ViewMode", persist: true, version: "1" });
 
+const OpenRoutineProbabilities = createLocalBoolTable(settingsWorld, { id: "OpenRoutineProbabilities", persist: true });
+
 if (!ViewMode.get()?.value) {
   ViewMode.set({ value: EViewMode.Dashboard });
 }
 
+const ShowBanner = createLocalBoolTable(settingsWorld, { id: "ShowBanner", persist: true });
+if (!ShowBanner.get()?.value) {
+  ShowBanner.set({ value: true });
+}
 /* -------------------------------------------------------------------------- */
 /*                                  SETTINGS                                  */
 /* -------------------------------------------------------------------------- */
@@ -84,6 +90,7 @@ export const useSettings = () => {
   }, []);
 
   const enabled = ShowBlockchainUnits.use()?.value ?? false;
+  const showBanner = ShowBanner.use()?.value ?? false;
   return {
     fontStyle: {
       family: fontStyle?.family ?? fontStyleOptions.family[0],
@@ -95,9 +102,14 @@ export const useSettings = () => {
       enabled,
       setEnabled: (enabled: boolean) => ShowBlockchainUnits.update({ value: enabled }),
     },
+    showBanner: {
+      enabled: showBanner,
+      setEnabled: (enabled: boolean) => ShowBanner.update({ value: enabled }),
+    },
     Dripped,
     MusicPlaying,
     SelectedTab,
     ViewMode,
+    OpenRoutineProbabilities,
   };
 };

@@ -49,9 +49,10 @@ export const NumberInput: React.FC<{
         </Button>
         <input
           type="number"
-          className={`w-24 border border-secondary bg-neutral px-2 text-center focus:outline-none ${
-            Number(count) > max ? "text-error" : ""
-          }`}
+          className={cn(
+            "w-24 border border-secondary bg-neutral px-2 text-center focus:outline-none",
+            Number(count) > max ? "text-error" : "",
+          )}
           value={count}
           placeholder={min.toString()}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

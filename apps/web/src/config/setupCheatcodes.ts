@@ -1,15 +1,8 @@
-import { Address, Hex } from "viem";
+import { Address, Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import {
-  addressToEntity,
-  Core,
-  entityToPlanetName,
-  ExternalAccount,
-  LocalAccount,
-  TxReceipt,
-} from "@primodiumxyz/core";
+import { addressToEntity, Core, ExternalAccount, LocalAccount, TxReceipt } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
@@ -35,7 +28,7 @@ export const setupCheatcodes = (options: {
   requestDrip?: (address: Address, force?: boolean) => Promise<TxReceipt | undefined>;
 }) => {
   const { core, game, playerAccount, contractCalls, requestDrip } = options;
-  const { tables } = core;
+  const { tables, utils } = core;
   const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake, updateWorld } = contractCalls;
 
   // game
@@ -57,8 +50,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       amount: {
         label: "Amount",
@@ -76,8 +69,8 @@ export const setupCheatcodes = (options: {
       });
     },
     loading: () => "[CHEATCODE] Setting ships...",
-    success: (args) => `Ships set to ${args.amount.value} on ${entityToPlanetName(args.planet.id as Entity)}`,
-    error: (args) => `Failed to set ships on ${entityToPlanetName(args.planet.id as Entity)}`,
+    success: (args) => `Ships set to ${args.amount.value} on ${utils.generatePlanetName(args.planet.id as Entity)}`,
+    error: (args) => `Failed to set ships on ${utils.generatePlanetName(args.planet.id as Entity)}`,
   });
 
   const addPlanetToEmpire = async (empireId: EEmpire, planetId: Hex) => {
@@ -150,13 +143,13 @@ export const setupCheatcodes = (options: {
       from: {
         label: "From",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       to: {
         label: "To",
         inputType: "string",
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
     },
     execute: async ({ from, to }) => {
@@ -166,13 +159,13 @@ export const setupCheatcodes = (options: {
       const toPlanetData = tables.Planet.get(toEntity);
       if (!fromPlanetData || !toPlanetData) {
         console.log("[CHEATCODE] Send ships: invalid planets");
-        return false;
+        return { success: false, error: "Invalid planets" };
       }
 
       const shipsToMove = fromPlanetData.shipCount ?? BigInt(0);
       if (shipsToMove === BigInt(0)) {
         console.log("[CHEATCODE] Send ships: no ships to send");
-        return false;
+        return { success: false, error: "No ships to send" };
       }
 
       let devOps: TableOperation[] = [
@@ -199,7 +192,7 @@ export const setupCheatcodes = (options: {
 
         if (conquer) {
           const successA = await devCalls.batch(devOps);
-          if (!successA) return false;
+          if (!successA) return { success: false, error: "Failed to send ships" };
 
           const successB = (
             await Promise.all([
@@ -213,16 +206,14 @@ export const setupCheatcodes = (options: {
             ])
           ).every(Boolean);
 
-          return successB;
+          return { success: successB, error: "Failed to send ships" };
         }
 
-        const success = await devCalls.setProperties({
+        return await devCalls.setProperties({
           table: tables.Planet,
           keys: { id: toEntity },
           properties: { shipCount: remainingShips },
         });
-
-        return success;
       }
     },
     loading: () => "[CHEATCODE] Sending ships...",
@@ -233,12 +224,12 @@ export const setupCheatcodes = (options: {
         fromPlanetData?.empireId !== toPlanetData?.empireId &&
         (fromPlanetData?.shipCount ?? 0n) < (toPlanetData?.shipCount ?? 0n);
       if (conquer)
-        return `Conquered ${entityToPlanetName(to.id as Entity)} from ${entityToPlanetName(from.id as Entity)}`;
+        return `Conquered ${utils.generatePlanetName(to.id as Entity)} from ${utils.generatePlanetName(from.id as Entity)}`;
 
-      return `Sent ${fromPlanetData?.shipCount} ships from ${entityToPlanetName(from.id as Entity)} to ${entityToPlanetName(to.id as Entity)}`;
+      return `Sent ${fromPlanetData?.shipCount} ships from ${utils.generatePlanetName(from.id as Entity)} to ${utils.generatePlanetName(to.id as Entity)}`;
     },
     error: ({ from, to }) =>
-      `Failed to send ships from ${entityToPlanetName(from.id as Entity)} to ${entityToPlanetName(to.id as Entity)}`,
+      `Failed to send ships from ${utils.generatePlanetName(from.id as Entity)} to ${utils.generatePlanetName(to.id as Entity)}`,
   });
 
   /* --------------------------------- SHIELDS -------------------------------- */
@@ -251,8 +242,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       amount: {
         label: "Amount",
@@ -268,8 +259,9 @@ export const setupCheatcodes = (options: {
       });
     },
     loading: () => "[CHEATCODE] Setting shields...",
-    success: ({ planet, amount }) => `Shields set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`,
-    error: ({ planet }) => `Failed to set shields on ${entityToPlanetName(planet.id as Entity)}`,
+    success: ({ planet, amount }) =>
+      `Shields set to ${amount.value} on ${utils.generatePlanetName(planet.id as Entity)}`,
+    error: ({ planet }) => `Failed to set shields on ${utils.generatePlanetName(planet.id as Entity)}`,
   });
 
   /* ------------------------------- MECHANISMS ------------------------------- */
@@ -282,8 +274,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       amount: {
         label: "Amount",
@@ -299,8 +291,8 @@ export const setupCheatcodes = (options: {
       });
     },
     loading: () => "[CHEATCODE] Setting gold count...",
-    success: ({ planet, amount }) => `Gold set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`,
-    error: ({ planet }) => `Failed to set gold on ${entityToPlanetName(planet.id as Entity)}`,
+    success: ({ planet, amount }) => `Gold set to ${amount.value} on ${utils.generatePlanetName(planet.id as Entity)}`,
+    error: ({ planet }) => `Failed to set gold on ${utils.generatePlanetName(planet.id as Entity)}`,
   });
 
   // generate gold on all planets
@@ -340,8 +332,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       empire: {
         label: "Empire",
@@ -386,7 +378,11 @@ export const setupCheatcodes = (options: {
     error: ({ planet, empire }) => `Failed to set empire to ${empire.value} for ${planet.value}`,
   });
 
-  const setEmpirePlayerPoints = async (playerId: Entity, empireId: EEmpire, value: bigint): Promise<boolean> => {
+  const setEmpirePlayerPoints = async (
+    playerId: Entity,
+    empireId: EEmpire,
+    value: bigint,
+  ): Promise<TxReceipt | { success: boolean; error?: string }> => {
     try {
       let devOps: TableOperation[] = [];
 
@@ -447,7 +443,7 @@ export const setupCheatcodes = (options: {
       return await devCalls.batch(devOps);
     } catch (e) {
       console.log(e);
-      return false;
+      return { success: false, error: "Failed to set points" };
     }
   };
 
@@ -499,7 +495,7 @@ export const setupCheatcodes = (options: {
         }),
       ]);
 
-      return success.every(Boolean);
+      return { success: success.every(Boolean), error: "Failed to give points" };
     },
     loading: () => "[CHEATCODE] Giving points...",
     success: ({ amount, recipient, empire }) =>
@@ -508,7 +504,7 @@ export const setupCheatcodes = (options: {
   });
 
   /* ---------------------------------- TIME ---------------------------------- */
-  const _advanceTurns = async (amount: number) => {
+  const _advanceTurns = async (amount: number): Promise<TxReceipt> => {
     const turn = tables.Turn.get()?.empire ?? EEmpire.Red;
     const empirePlanets = core.utils.getEmpirePlanets(turn);
     const routineThresholds = empirePlanets.map((planet) => core.utils.getRoutineThresholds(planet));
@@ -524,7 +520,7 @@ export const setupCheatcodes = (options: {
     };
 
     const currentBlock = tables.BlockNumber.get()?.value ?? 0n;
-    let success = true;
+    let receipt: TxReceipt | undefined;
 
     for (let i = 0; i < amount; i++) {
       const setTurnCallsParams = devCalls.createSetPropertiesParams({
@@ -533,14 +529,11 @@ export const setupCheatcodes = (options: {
         properties: { nextTurnBlock: currentBlock },
       });
 
-      const txSuccess = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
-      if (!txSuccess) {
-        success = false;
-        break;
-      }
+      receipt = await executeBatch({ systemCalls: [...setTurnCallsParams, updateWorldCallParams] });
+      if (!receipt.success) break;
     }
 
-    return success;
+    return receipt ?? { success: false, error: "Failed to advance turns" };
   };
 
   // advance turns
@@ -556,9 +549,7 @@ export const setupCheatcodes = (options: {
       },
     },
     execute: async ({ amount }) => {
-      const success = await _advanceTurns(amount.value);
-
-      return success;
+      return await _advanceTurns(amount.value);
     },
     loading: () => "[CHEATCODE] Advancing turns...",
     success: ({ amount }) => `Advanced ${amount.value} turns`,
@@ -624,7 +615,7 @@ export const setupCheatcodes = (options: {
     caption: "Drip eth to the player account",
     inputs: {},
     execute: async () => {
-      const receipt = await requestDrip?.(accountClient.playerAccount.address, true);
+      const receipt = await requestDrip?.(playerAccount.address, true);
       return receipt ?? { success: false, error: "Failed to drip eth" };
     },
     success: () => `Dripped eth to player account`,
@@ -693,9 +684,9 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
+        defaultValue: utils.generatePlanetName(planets[0]),
         options: planets
-          .map((entity) => ({ id: entity, value: entityToPlanetName(entity) }))
+          .map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) }))
           .filter(({ id }) => !!tables.Planet.get(id)?.empireId),
       },
       turns: {
@@ -765,9 +756,9 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
+        defaultValue: utils.generatePlanetName(planets[0]),
         options: planets
-          .map((entity) => ({ id: entity, value: entityToPlanetName(entity) }))
+          .map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) }))
           .filter(({ id }) => !!tables.Planet.get(id)?.empireId),
       },
     },
@@ -832,8 +823,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
     },
     execute: async ({ planet }) => {
@@ -857,8 +848,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
     },
     execute: async ({ planet }) => {
@@ -877,7 +868,7 @@ export const setupCheatcodes = (options: {
   const feedShieldEater = createCheatcode({
     title: "Feed shield eater",
     bg: CheatcodeToBg["shieldEater"],
-    caption: "Shield eater",
+    caption: "set ready to detonate",
     inputs: {},
     execute: async () => {
       const threshold = tables.P_ShieldEaterConfig.get()?.detonationThreshold ?? BigInt(0);

@@ -20,7 +20,7 @@ export type Cheatcode<T extends CheatcodeInputsBase = CheatcodeInputsBase> = {
   title: string;
   caption: string;
   inputs: T;
-  execute: (args: CheatcodeInputs<T>) => Promise<TxReceipt>;
+  execute: (args: CheatcodeInputs<T>) => Promise<TxReceipt | { success: boolean; error?: string }>;
   loading?: (args: CheatcodeInputs<T>) => string;
   success?: (args: CheatcodeInputs<T>) => string;
   error?: (args: CheatcodeInputs<T>) => string;

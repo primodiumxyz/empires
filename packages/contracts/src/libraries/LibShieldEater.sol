@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
-import { ShieldEater, P_ShieldEaterConfig, Planet, PlanetData } from "codegen/index.sol";
+import { ShieldEater, P_ShieldEaterConfig, Planet, PlanetData, ShieldEaterDamageOverrideLog, ShieldEaterDamageOverrideLogData } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
-import { EDirection } from "codegen/common.sol";
+import { EDirection, EShieldEaterDamageType } from "codegen/common.sol";
 
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 import { CoordData } from "src/Types.sol";
@@ -105,9 +105,25 @@ library LibShieldEater {
       if (shieldCount > shieldDamage) {
         Planet.setShieldCount(planetId, shieldCount - shieldDamage);
         addCharge += shieldDamage;
+        ShieldEaterDamageOverrideLog.set(
+          pseudorandomEntity(),
+          ShieldEaterDamageOverrideLogData({
+            planetId: planetId,
+            shieldsDestroyed: shieldDamage,
+            damageType: EShieldEaterDamageType.Eat
+          })
+        );
       } else if (shieldCount > 0) {
         Planet.setShieldCount(planetId, 0);
         addCharge += shieldCount;
+        ShieldEaterDamageOverrideLog.set(
+          pseudorandomEntity(),
+          ShieldEaterDamageOverrideLogData({
+            planetId: planetId,
+            shieldsDestroyed: shieldCount,
+            damageType: EShieldEaterDamageType.Eat
+          })
+        );
       }
 
       ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + addCharge);
@@ -140,7 +156,16 @@ library LibShieldEater {
     // Center
     bytes32 planetId = ShieldEater.getCurrentPlanet();
     uint256 shieldCount = Planet.getShieldCount(planetId);
-    Planet.setShieldCount(planetId, (shieldCount - ((shieldCount * centerDamage) / 10000)));
+    uint256 shieldsDestroyed = (shieldCount * centerDamage) / 10000;
+    Planet.setShieldCount(planetId, (shieldCount - shieldsDestroyed));
+    ShieldEaterDamageOverrideLog.set(
+      pseudorandomEntity(),
+      ShieldEaterDamageOverrideLogData({
+        planetId: planetId,
+        shieldsDestroyed: shieldsDestroyed,
+        damageType: EShieldEaterDamageType.Detonate
+      })
+    );
 
     // for each direction
     bytes32 neighborId;
@@ -151,7 +176,16 @@ library LibShieldEater {
       // if neighbor is a planet
       if (Planet.getIsPlanet(neighborId)) {
         shieldCount = Planet.getShieldCount(neighborId);
-        Planet.setShieldCount(neighborId, (shieldCount - ((shieldCount * adjacentDamage) / 10000)));
+        shieldsDestroyed = (shieldCount * adjacentDamage) / 10000;
+        Planet.setShieldCount(neighborId, (shieldCount - shieldsDestroyed));
+        ShieldEaterDamageOverrideLog.set(
+          pseudorandomEntity(),
+          ShieldEaterDamageOverrideLogData({
+            planetId: neighborId,
+            shieldsDestroyed: shieldsDestroyed,
+            damageType: EShieldEaterDamageType.Collateral
+          })
+        );
       }
     }
 

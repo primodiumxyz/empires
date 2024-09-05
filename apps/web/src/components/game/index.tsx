@@ -7,10 +7,10 @@ import { GameProvider } from "@/hooks/providers/GameProvider";
 import { useContractCalls } from "@/hooks/useContractCalls";
 
 const Game = () => {
-  const { loading } = useSyncStatus();
+  const { loading, message } = useSyncStatus();
   if (loading) {
     // Do nothing while the PrivyProvider initializes with updated user state
-    return <div className="animate-pulse">Syncing... </div>;
+    return <div className="animate-pulse">{message}</div>;
   }
   return <_Game />;
 };

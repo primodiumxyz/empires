@@ -4,6 +4,7 @@ import CategoryMilitary from "../icons/category/military.png?url";
 import CategoryProduction from "../icons/category/production.png?url";
 import CategoryStorage from "../icons/category/storage.png?url";
 import Discord from "../icons/discord.svg?url";
+import AcidRain from "../icons/UI_AcidRain.png?url";
 import Add from "../icons/UI_Add.png?url";
 import Alliance from "../icons/UI_Alliance.png?url";
 import Asteroid from "../icons/UI_Asteroid.png?url";
@@ -17,6 +18,7 @@ import Chat from "../icons/UI_Chat.png?url";
 import Command from "../icons/UI_Command.png?url";
 import Cooldown from "../icons/UI_Cooldown.gif?url";
 import Crosshairs from "../icons/UI_Crosshairs.png?url";
+import Crown from "../icons/UI_Crown.png?url";
 import Dashboard from "../icons/UI_Dashboard.png?url";
 import Debug from "../icons/UI_Debug.png?url";
 import Defense from "../icons/UI_Defense.png?url";
@@ -34,6 +36,7 @@ import Navigator from "../icons/UI_Navigator.png?url";
 import NotAllowed from "../icons/UI_NotAllowed.png?url";
 import Objective from "../icons/UI_Objective.png?url";
 import PinkMagnet from "../icons/UI_PinkMagnet.png?url";
+import Planet from "../icons/UI_Planet.png?url";
 import PurpleMagnet from "../icons/UI_PurpleMagnet.png?url";
 import RedMagnet from "../icons/UI_RedMagnet.png?url";
 import Reinforcements from "../icons/UI_Reinforcements.png?url";
@@ -56,6 +59,7 @@ import YellowMagnet from "../icons/UI_YellowMagnet.png?url";
 import Twitter from "../icons/x-twitter.svg?url";
 
 export const InterfaceIcons = {
+  AcidRain,
   Add,
   Alliance,
   Asteroid,
@@ -69,10 +73,12 @@ export const InterfaceIcons = {
   CategoryProduction,
   CategoryStorage,
   Chat,
+  Crown,
   Command,
   Defense,
   Cooldown,
   Crosshairs,
+  Dashboard,
   Debug,
   Discord,
   EnemyFleet,
@@ -110,5 +116,5 @@ export const InterfaceIcons = {
   PurpleMagnet,
   YellowMagnet,
   PinkMagnet,
-  Dashboard,
+  Planet,
 };

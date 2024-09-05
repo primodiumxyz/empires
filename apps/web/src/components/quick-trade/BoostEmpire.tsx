@@ -7,8 +7,8 @@ import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Dropdown } from "@/components/core/Dropdown";
-import { IconLabel } from "@/components/core/IconLabel";
 import { NumberInput } from "@/components/core/NumberInput";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
@@ -55,16 +55,17 @@ export const BoostEmpire = () => {
           </p>
         </div>
 
-        <SecondaryCard className="flex-row justify-center gap-4 bg-black/10">
+        <SecondaryCard className="flex-row justify-center gap-4 bg-black/10 py-4">
           <Dropdown
             value={selectedEmpire}
             onChange={(value) => setSelectedEmpire(value)}
             variant="bottomRight"
+            justify="start"
             className="w-32 gap-1"
           >
             {Array.from(empires.entries()).map(([key, empire]) => (
               <Dropdown.Item key={key} value={key}>
-                <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} className="text-xs" />
+                <EmpireLogo empireId={key} size="sm" />
               </Dropdown.Item>
             ))}
           </Dropdown>

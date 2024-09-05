@@ -7,6 +7,8 @@ import { EOverride, EEmpire } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
+import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
+import { IWorld } from "codegen/world/IWorld.sol";
 import { addressToId, pseudorandomEntity } from "src/utils.sol";
 
 /**
@@ -23,7 +25,7 @@ contract OverrideMagnetsSystem is EmpiresSystem {
 
     require(Magnet.get(_empire, _planetId).isMagnet == false, "[OverrideSystem] Planet already has a magnet");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, _empire, turnDuration);
-    require(_msgValue() == cost, "[OverrideSystem] Incorrect payment");
+    _refundOverspend(cost);
 
     LibMagnet.addMagnet(_empire, _planetId, playerId, turnDuration);
     LibOverride._purchaseOverride(addressToId(_msgSender()), EOverride.PlaceMagnet, _empire, turnDuration, _msgValue());
@@ -40,5 +42,19 @@ contract OverrideMagnetsSystem is EmpiresSystem {
         timestamp: block.timestamp
       })
     );
+  }
+
+  /**
+   * @dev Handles overspending by the user when making a payment.
+   * @param _cost The expected cost of the transaction.
+   * @notice This function ensures that the user has sent enough ETH to cover the cost.
+   * If the user sends more than the required amount, the excess is refunded.
+   */
+  function _refundOverspend(uint256 _cost) private {
+    uint256 msgValue = _msgValue();
+    require(msgValue >= _cost, "[OverrideSystem] Incorrect payment");
+    if (msgValue > _cost) {
+      IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), msgValue - _cost);
+    }
   }
 }

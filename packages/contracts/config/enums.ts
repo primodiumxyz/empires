@@ -54,6 +54,19 @@ export enum ERoutine {
   LENGTH,
 }
 
+export enum EShieldEaterDamageType {
+  Eat = 1,
+  Detonate,
+  Collateral,
+  LENGTH,
+}
+
+export enum ERole {
+  CanUpdate = 1,
+  Admin,
+  LENGTH,
+}
+
 export const MUDEnums = {
   EEmpire: enumToArray(EEmpire, { skipNull: true }),
   EOrigin: enumToArray(EOrigin),
@@ -61,6 +74,8 @@ export const MUDEnums = {
   EMovement: enumToArray(EMovement),
   ERoutine: enumToArray(ERoutine),
   EOverride: enumToArray(EOverride),
+  EShieldEaterDamageType: enumToArray(EShieldEaterDamageType),
+  ERole: enumToArray(ERole),
 };
 function enumToArray(enumObj: object, options?: { skipNull?: boolean }): [string] {
   if (options?.skipNull) {

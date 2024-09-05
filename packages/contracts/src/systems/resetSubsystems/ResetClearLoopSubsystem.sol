@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
@@ -6,6 +5,7 @@ import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
+import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { PendingMove, WinningEmpire, HistoricalPointCost, Magnet, P_GameConfig } from "codegen/index.sol";
@@ -24,10 +24,11 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
       EEmpire empire = EEmpire(i);
       for (uint256 j = 0; j < planets.length; j++) {
         PendingMove.deleteRecord(planets[j]);
-        Magnet.deleteRecord(empire, planets[i]);
+        Magnet.deleteRecord(empire, planets[j]);
       }
 
       EmpirePlanetsSet.clear(empire);
+      AcidPlanetsSet.clear(empire);
       PointsMap.clear(empire);
       PlayersMap.clear();
       PlanetsSet.clear();
@@ -38,5 +39,4 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
 
     WinningEmpire.set(EEmpire.NULL);
   }
-
 }

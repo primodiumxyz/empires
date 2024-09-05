@@ -407,6 +407,19 @@
   },
   {
     "type": "function",
+    "name": "Empires__removeRole",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__resetGame",
     "inputs": [],
     "outputs": [],
@@ -432,6 +445,24 @@
   },
   {
     "type": "function",
+    "name": "Empires__setRole",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "role",
+        "type": "uint8",
+        "internalType": "enum ERole"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__unpause",
     "inputs": [],
     "outputs": [],
@@ -440,13 +471,6 @@
   {
     "type": "function",
     "name": "Empires__updateAcid",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "Empires__updateCombat",
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
@@ -481,22 +505,12 @@
             "internalType": "uint256"
           },
           {
-            "name": "supportAlly",
+            "name": "moveShips",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "attackEnemy",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "supportTargetId",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "attackTargetId",
+            "name": "moveTargetId",
             "type": "bytes32",
             "internalType": "bytes32"
           }
@@ -557,22 +571,12 @@
             "internalType": "uint256"
           },
           {
-            "name": "supportAlly",
+            "name": "moveShips",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "attackEnemy",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "supportTargetId",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "attackTargetId",
+            "name": "moveTargetId",
             "type": "bytes32",
             "internalType": "bytes32"
           }

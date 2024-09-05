@@ -4,15 +4,14 @@ import ScrollToBottom, { useScrollToBottom, useSticky } from "react-scroll-to-bo
 import { toHex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Join } from "@/components/core/Join";
 import { Tabs } from "@/components/core/Tabs";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { useActions, useMostRecentOverride } from "@/hooks/useActions";
 import { useEmpires } from "@/hooks/useEmpires";
-import { useGame } from "@/hooks/useGame";
 import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 import { EmpireEnumToConfig } from "@/util/lookups";
@@ -56,7 +55,7 @@ export const ActionLog = ({ className }: { className: string }) => {
 
 const ClosedActionLog = () => {
   const override = useMostRecentOverride();
-  const action = override ? override.element : <p className="text-xs opacity-70">No actions</p>;
+  const action = override ? override.element : <p className="text-xs opacity-70">No player actions</p>;
 
   const [currentAction, setCurrentAction] = useState(0n);
   const [flashing, setFlashing] = useState(false);
@@ -87,25 +86,18 @@ const OpenActionLog = () => {
   const actions = useActions(selectedEmpire, { max: 300 });
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
-  const {
-    ROOT: { sprite },
-  } = useGame();
+
   return (
     <Tabs className="flex gap-1" persistIndexKey={"action-log"} defaultIndex={0}>
       <Join direction="vertical" className="rounded-r">
-        <Tabs.Button key={"all"} index={0} className="h-8 w-11">
-          <div>
-            <h1>ALL</h1>
-          </div>
+        <Tabs.Button key={"all"} index={0} className="h-8 w-full">
+          <h1>ALL</h1>
         </Tabs.Button>
-        {Array.from(empires.entries()).map(([id, emp], i) => {
-          const spriteUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[id] ?? "PlanetGrey");
-          return (
-            <Tabs.Button key={emp.name} index={i + 1} className="h-8">
-              <img src={spriteUrl} className="w-4" />
-            </Tabs.Button>
-          );
-        })}
+        {Array.from(empires.entries()).map(([id, emp], i) => (
+          <Tabs.Button key={id} index={i + 1} className="-mb-[1px] h-9">
+            <EmpireLogo empireId={id} size="md" />
+          </Tabs.Button>
+        ))}
       </Join>
       <ScrollToBottom className="h-[230px] w-full">
         {actions.map((action, i) => (

@@ -37,6 +37,42 @@ export default function setupCoreTables(network: CreateNetworkResult) {
 
   const SelectedPlanet = createLocalEntityTable(world, { id: "SelectedPlanet" });
   const HoveredPlanet = createLocalEntityTable(world, { id: "HoveredPlanet" });
+
+  const Username = createLocalTable(
+    world,
+    {
+      username: Type.String,
+      lastFetched: Type.Number,
+      hasTwitter: Type.Boolean,
+    },
+    {
+      id: "Username",
+      persist: true,
+    },
+  );
+
+  const PlanetName = createLocalTable(
+    world,
+    {
+      name: Type.String,
+      lastFetched: Type.Number,
+    },
+    {
+      id: "PlanetName",
+    },
+  );
+
+  const EmpireLogo = createLocalTable(
+    world,
+    {
+      uri: Type.String,
+      lastFetched: Type.Number,
+    },
+    {
+      id: "EmpireName",
+    },
+  );
+
   return {
     DoubleCounter,
     BlockNumber,
@@ -46,5 +82,8 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     TransactionQueue,
     SelectedPlanet,
     HoveredPlanet,
+    Username,
+    PlanetName,
+    EmpireLogo,
   };
 }

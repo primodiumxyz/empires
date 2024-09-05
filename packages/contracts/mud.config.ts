@@ -12,7 +12,6 @@ import { ConfigWithPrototypes } from "./ts/prototypes/types";
 export const worldInput = {
   namespace: "Empires",
   systems: {
-    UpdateCombatSubsystem: { openAccess: false },
     UpdateEmpiresSubsystem: { openAccess: false },
     UpdateAcidSubsystem: { openAccess: false },
     UpdateMagnetsSubsystem: { openAccess: false },
@@ -103,6 +102,13 @@ export const worldInput = {
     WinningEmpire: {
       key: [],
       schema: { empire: "EEmpire" },
+    },
+
+    /* ----------------------------- Access Control ----------------------------- */
+
+    Role: {
+      key: ["id"],
+      schema: { id: "address", value: "ERole" },
     },
 
     /* ------------------------------- Players Map ------------------------------ */
@@ -239,15 +245,6 @@ export const worldInput = {
       },
     },
 
-    Arrivals: {
-      key: ["planetId", "empireId"],
-      schema: {
-        planetId: "bytes32",
-        empireId: "EEmpire",
-        shipCount: "uint256",
-      },
-    },
-
     /* ----------------------------- Magnet ---------------------------- */
 
     Magnet: {
@@ -306,20 +303,6 @@ export const worldInput = {
         originPlanetId: "bytes32",
         destinationPlanetId: "bytes32",
         shipCount: "uint256",
-        timestamp: "uint256",
-      },
-      type: "offchainTable",
-    },
-
-    ShipBattleRoutineLog: {
-      key: ["id"],
-      schema: {
-        id: "bytes32",
-        turn: "uint256",
-        planetId: "bytes32",
-        redShipCount: "uint256",
-        greenShipCount: "uint256",
-        blueShipCount: "uint256",
         timestamp: "uint256",
       },
       type: "offchainTable",
@@ -462,6 +445,26 @@ export const worldInput = {
         timestamp: "uint256",
       },
       type: "offchainTable",
+    },
+
+    // Override impact logs
+    AcidDamageOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        shipsDestroyed: "uint256",
+      },
+    },
+
+    ShieldEaterDamageOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        planetId: "bytes32",
+        shieldsDestroyed: "uint256",
+        damageType: "EShieldEaterDamageType",
+      },
     },
 
     /* ----------------------------- Historical data ---------------------------- */

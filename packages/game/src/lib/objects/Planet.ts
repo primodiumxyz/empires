@@ -1,6 +1,6 @@
 import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
-import { EEmpire } from "@primodiumxyz/contracts";
-import { calculateAngleBetweenPoints, entityToPlanetName, formatNumber, lerp } from "@primodiumxyz/core";
+import { EDirection, EEmpire } from "@primodiumxyz/contracts";
+import { calculateAngleBetweenPoints, formatNumber, lerp, TREASURE_PLANET_GOLD_TRESHOLD } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { allEmpires, DepthLayers } from "@game/lib/constants/common";
@@ -11,6 +11,7 @@ import {
   EmpireToPendingAnimationKeys,
   EmpireToPlanetSpriteKeys,
 } from "@game/lib/mappings";
+import { AcidRain } from "@game/lib/objects/AcidRain";
 import { IconLabel } from "@game/lib/objects/IconLabel";
 import { Magnet } from "@game/lib/objects/Magnet";
 import { ShieldEater } from "@game/lib/objects/ShieldEater";
@@ -38,11 +39,15 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private activeMagnets: Map<EEmpire, number> = new Map();
   private magnetWaves: Phaser.GameObjects.Sprite;
   private shieldEater: ShieldEater;
+  private acidRain: AcidRain;
+  private treasurePlanetDecoration: Phaser.GameObjects.Sprite;
   private citadelCrown: Phaser.GameObjects.Sprite | null = null;
   private citadelAsteroidBelt: Phaser.GameObjects.Sprite | null = null;
   private citadelShineInterval: NodeJS.Timeout | null = null;
   private empireId: EEmpire;
   private spawned = false;
+  private updatePlanetName: () => Promise<string>;
+  private updatePlanetNameInterval: NodeJS.Timeout | null = null;
 
   constructor(args: {
     id: Entity;
@@ -50,6 +55,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     coord: PixelCoord;
     empire: EEmpire;
     citadel?: boolean;
+    updatePlanetName: () => Promise<string>;
+    updateInterval?: number;
     empireCount: number;
   }) {
     const { id, scene, coord, empire, citadel, empireCount } = args;
@@ -82,7 +89,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"],
     ).setDepth(DepthLayers.Base + coord.y);
 
-    this.planetName = new Phaser.GameObjects.Text(scene.phaserScene, coord.x, coord.y + 40, entityToPlanetName(id), {
+    this.planetName = new Phaser.GameObjects.Text(scene.phaserScene, coord.x, coord.y + 40, "", {
       fontSize: 25,
       color: "rgba(255,255,255,0.5)",
       fontFamily: "Silkscreen",
@@ -92,6 +99,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setOrigin(0.5, 0.5)
       .setAlpha(0.5)
       .setDepth(DepthLayers.Planet - 1);
+
+    this.updatePlanetName = args.updatePlanetName;
+    this.startUpdatePlanetNameInterval(args.updateInterval ?? 1000);
 
     this.shields = new IconLabel(
       scene,
@@ -157,10 +167,21 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setActive(false)
       .setVisible(false);
 
+    this.treasurePlanetDecoration = new Phaser.GameObjects.Sprite(
+      scene.phaserScene,
+      coord.x,
+      coord.y - 35,
+      Assets.SpriteAtlas,
+    )
+      .setBlendMode(Phaser.BlendModes.NORMAL)
+      .setDepth(DepthLayers.Planet + 1)
+      .setActive(false)
+      .setVisible(false);
+
     if (citadel) {
       this.citadelCrown = new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x, coord.y - 75, Assets.SpriteAtlas)
         .setOrigin(0.5, 0.5)
-        .setDepth(DepthLayers.Planet + 1)
+        .setDepth(DepthLayers.Citadel)
         .play(Animations.CitadelCrown);
 
       this.citadelAsteroidBelt = new Phaser.GameObjects.Sprite(
@@ -169,15 +190,19 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         coord.y - 30,
         Assets.SpriteAtlas,
         Sprites.CitadelAsteroidBelt,
-      ).setDepth(DepthLayers.Planet + 1);
+      ).setDepth(DepthLayers.Citadel);
 
       this.citadelShineInterval = setInterval(() => {
         this.citadelShine();
       }, 10_000);
     }
 
-    this.shieldEater = new ShieldEater(scene, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
+    this.shieldEater = new ShieldEater(scene, id, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
       DepthLayers.ShieldEater,
+    );
+
+    this.acidRain = new AcidRain(scene, id, { x: this.planetSprite.x, y: this.planetSprite.y }).setDepth(
+      DepthLayers.AcidRain,
     );
 
     this._scene = scene;
@@ -186,6 +211,19 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.empireId = empire;
 
     this._scene.objects.planet.add(id, this, false);
+  }
+  private async startUpdatePlanetNameInterval(interval: number) {
+    // Clear any existing interval
+    if (this.updatePlanetNameInterval) {
+      clearInterval(this.updatePlanetNameInterval);
+    }
+
+    const update = async () => {
+      const newName = await this.updatePlanetName();
+      this.planetName.setText(newName);
+    };
+    update();
+    this.updatePlanetNameInterval = setInterval(update, interval);
   }
 
   spawn() {
@@ -200,11 +238,12 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
     this.scene.add.existing(this.gold);
-    this.scene.add.existing(this.shieldEater);
     if (this.citadelCrown) this.scene.add.existing(this.citadelCrown);
     if (this.citadelAsteroidBelt) this.scene.add.existing(this.citadelAsteroidBelt);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
     this.scene.add.existing(this.magnetWaves);
+    this.scene.add.existing(this.acidRain);
+    this.scene.add.existing(this.treasurePlanetDecoration);
     return this;
   }
 
@@ -226,6 +265,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.magnets.forEach((magnet) => magnet.setScale(scale));
     this.magnetWaves.setScale(scale);
     this.shieldEater.setScale(scale);
+    this.acidRain.setScale(scale);
+    this.treasurePlanetDecoration.setScale(scale);
     return this;
   }
 
@@ -388,6 +429,13 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         fractionDigits: 2,
       }),
     );
+
+    if (count >= TREASURE_PLANET_GOLD_TRESHOLD) {
+      this.treasurePlanetDecoration.setVisible(true).setActive(true);
+      this.treasurePlanetDecoration.play(Animations.TreasurePlanet);
+    } else {
+      this.treasurePlanetDecoration.setVisible(false).setActive(false);
+    }
   }
 
   setMagnet(empire: EEmpire, turns: number) {
@@ -428,27 +476,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   }
 
   setShieldEaterLocation(present: boolean): ShieldEater["location"] {
-    const location = this.shieldEater.setShieldEaterLocation(present, this.playAnims);
-    if (!this.playAnims) return location;
-
-    if (present) {
-      this.shieldEater.setDepth(DepthLayers.Planet - 1);
-
-      location.on(
-        "animationupdate",
-        (animation: Phaser.Animations.Animation, frame: Phaser.Animations.AnimationFrame) => {
-          if (frame.index === 9) {
-            this.shieldEater.setDepth(DepthLayers.ShieldEater);
-            location.off("animationupdate");
-          }
-        },
-      );
-    }
-
-    return location;
+    return this.shieldEater.setShieldEaterLocation(present, this.playAnims);
   }
 
-  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater["destination"] {
+  setShieldEaterPath(turns: number, turnsToDestination?: number): ShieldEater["path"] {
     return this.shieldEater.setShieldEaterPath(turns, turnsToDestination);
   }
 
@@ -456,8 +487,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     return this.shieldEater.shieldEaterDetonate();
   }
 
-  shieldEaterCrack(): ShieldEater {
-    return this.shieldEater.shieldEaterCrack();
+  shieldEaterCrack(direction: EDirection): ShieldEater {
+    return this.shieldEater.shieldEaterCrack(direction);
   }
 
   citadelShine(): void {
@@ -466,6 +497,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       depth: DepthLayers.Planet + 1,
       blendMode: Phaser.BlendModes.ADD,
     });
+  }
+
+  setAcid(cycles: number, expiring: boolean) {
+    this.acidRain.setAcid(cycles, expiring, this.playAnims);
   }
 
   setPlayAnims(playAnims: boolean) {
@@ -496,6 +531,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this._scene.objects.planet.remove(this.id);
     this.magnets.forEach((magnet) => magnet.destroy());
     this.magnetWaves.destroy();
+    if (this.updatePlanetNameInterval) {
+      clearInterval(this.updatePlanetNameInterval);
+      this.updatePlanetNameInterval = null;
+    }
+
     super.destroy();
   }
 }

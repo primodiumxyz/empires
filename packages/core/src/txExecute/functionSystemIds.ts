@@ -17,6 +17,7 @@ export const functionSystemIds: {
   Empires__sellPoints: getSystemId("OverridePointsSystem"),
   Empires__airdropGold: getSystemId("OverrideAirdropSystem"),
   Empires__detonateShieldEater: getSystemId("OverrideShieldEaterSystem"),
+  Empires__placeAcid: getSystemId("OverrideAcidSystem"),
 
   Empires__updateWorld: getSystemId("UpdateSystem"),
 
@@ -26,9 +27,13 @@ export const functionSystemIds: {
 
   Empires__placeMagnet: getSystemId("OverrideMagnetsSystem"),
 
-  Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
-
   /* ----------------------------------- Dev ---------------------------------- */
   Empires__devSetField: getSystemId("DevSystem"),
   Empires__devDeleteRecord: getSystemId("DevSystem"),
+
+  Empires__pause: getSystemId("AdminSystem"),
+  Empires__unpause: getSystemId("AdminSystem"),
+  Empires__setRole: getSystemId("AdminSystem"),
+  Empires__removeRole: getSystemId("AdminSystem"),
+  Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
 };
