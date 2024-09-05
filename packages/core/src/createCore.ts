@@ -33,6 +33,9 @@ export function createCore(config: CoreConfig): Core {
         console.log("Running core systems");
         runCoreSystems(core);
       }
+
+      console.log("Syncing action logs");
+      sync.syncActionLogs();
     });
   }
 
