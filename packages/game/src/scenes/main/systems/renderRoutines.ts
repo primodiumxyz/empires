@@ -163,7 +163,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         enqueue(async () => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
 
-          scene.fx.emitVfx({ x: planet.coord.x + 5, y: planet.coord.y - 45 }, "GoldAdd", {
+          scene.fx.emitVfx({ x: planet.coord.x + 5, y: planet.coord.y - 45 }, "AddIridium", {
             depth: DepthLayers.Marker,
             blendMode: Phaser.BlendModes.NORMAL,
           });

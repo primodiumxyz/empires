@@ -434,12 +434,12 @@ export const AnimationConfig: Animation[] = [
     suffix: ".png",
   },
   {
-    key: "gold/add",
+    key: "iridium/add",
     assetKey: "vfx-atlas",
-    frameRate: 5,
+    frameRate: 8,
     startFrame: 0,
-    endFrame: 9,
-    prefix: "vfx/gold-add/Gold_Add_",
+    endFrame: 11,
+    prefix: "vfx/add-iridium/Add_Iridium_",
     suffix: ".png",
   },
 ];

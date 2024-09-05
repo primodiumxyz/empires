@@ -5,11 +5,11 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1725522889136",
+            "image": "atlas.png?timestamp=1725527706924",
             "format": "RGBA8888",
             "size": {
                 "w": 2052,
-                "h": 2020
+                "h": 2044
             },
             "scale": 1,
             "frames": [
@@ -959,7 +959,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_0.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -980,7 +980,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_1.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1001,7 +1001,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_2.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1022,7 +1022,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_3.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_11.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1043,7 +1043,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_4.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1064,7 +1064,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_5.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1085,7 +1085,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_6.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1106,7 +1106,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_7.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1127,7 +1127,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_8.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1148,7 +1148,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/gold-add/Gold_Add_9.png",
+                    "filename": "vfx/add-iridium/Add_Iridium_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1169,6 +1169,48 @@
                     }
                 },
                 {
+                    "filename": "vfx/add-iridium/Add_Iridium_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 170,
+                        "h": 142
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 170,
+                        "h": 142
+                    },
+                    "frame": {
+                        "x": 850,
+                        "y": 1299,
+                        "w": 170,
+                        "h": 142
+                    }
+                },
+                {
+                    "filename": "vfx/add-iridium/Add_Iridium_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 170,
+                        "h": 142
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 170,
+                        "h": 142
+                    },
+                    "frame": {
+                        "x": 1164,
+                        "y": 1256,
+                        "w": 170,
+                        "h": 142
+                    }
+                },
+                {
                     "filename": "vfx/movement/blue/Movement_Blue1.png",
                     "rotated": false,
                     "trimmed": false,
@@ -1183,8 +1225,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1164,
-                        "y": 1256,
+                        "x": 1361,
+                        "y": 0,
                         "w": 164,
                         "h": 57
                     }
@@ -1204,8 +1246,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 965,
-                        "y": 1274,
+                        "x": 1361,
+                        "y": 57,
                         "w": 164,
                         "h": 57
                     }
@@ -1225,8 +1267,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 850,
-                        "y": 1331,
+                        "x": 1361,
+                        "y": 114,
                         "w": 164,
                         "h": 57
                     }
@@ -1246,8 +1288,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 850,
-                        "y": 1388,
+                        "x": 1361,
+                        "y": 171,
                         "w": 164,
                         "h": 57
                     }
@@ -1267,8 +1309,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1014,
-                        "y": 1331,
+                        "x": 1361,
+                        "y": 228,
                         "w": 164,
                         "h": 57
                     }
@@ -1288,8 +1330,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1014,
-                        "y": 1388,
+                        "x": 1361,
+                        "y": 285,
                         "w": 164,
                         "h": 57
                     }
@@ -1309,8 +1351,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1178,
-                        "y": 1313,
+                        "x": 1361,
+                        "y": 342,
                         "w": 164,
                         "h": 57
                     }
@@ -1330,8 +1372,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1178,
-                        "y": 1370,
+                        "x": 1361,
+                        "y": 399,
                         "w": 164,
                         "h": 57
                     }
@@ -1351,8 +1393,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1328,
-                        "y": 1256,
+                        "x": 1361,
+                        "y": 456,
                         "w": 164,
                         "h": 57
                     }
@@ -1373,244 +1415,13 @@
                     },
                     "frame": {
                         "x": 1361,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/blue/Movement_Blue7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
-                        "y": 57,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/blue/Movement_Blue8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
-                        "y": 114,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/blue/Movement_Blue9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
-                        "y": 171,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/green/Movement_Green1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
-                        "y": 228,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/green/Movement_Green10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
-                        "y": 285,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/green/Movement_Green11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
-                        "y": 342,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/green/Movement_Green12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
-                        "y": 399,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/green/Movement_Green13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
-                        "y": 456,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/green/Movement_Green2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1361,
                         "y": 513,
                         "w": 164,
                         "h": 57
                     }
                 },
                 {
-                    "filename": "vfx/movement/green/Movement_Green3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1342,
-                        "y": 1313,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/green/Movement_Green4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1342,
-                        "y": 1370,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/green/Movement_Green5.png",
+                    "filename": "vfx/movement/blue/Movement_Blue7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1631,7 +1442,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/green/Movement_Green6.png",
+                    "filename": "vfx/movement/blue/Movement_Blue8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1652,7 +1463,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/green/Movement_Green7.png",
+                    "filename": "vfx/movement/blue/Movement_Blue9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1673,7 +1484,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/green/Movement_Green8.png",
+                    "filename": "vfx/movement/green/Movement_Green1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1694,7 +1505,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/green/Movement_Green9.png",
+                    "filename": "vfx/movement/green/Movement_Green10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1715,7 +1526,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/pink/Movement_Pink1.png",
+                    "filename": "vfx/movement/green/Movement_Green11.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1736,7 +1547,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/pink/Movement_Pink10.png",
+                    "filename": "vfx/movement/green/Movement_Green12.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1757,7 +1568,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/pink/Movement_Pink11.png",
+                    "filename": "vfx/movement/green/Movement_Green13.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1778,7 +1589,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/pink/Movement_Pink12.png",
+                    "filename": "vfx/movement/green/Movement_Green2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1799,7 +1610,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/pink/Movement_Pink13.png",
+                    "filename": "vfx/movement/green/Movement_Green3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1820,7 +1631,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/pink/Movement_Pink2.png",
+                    "filename": "vfx/movement/green/Movement_Green4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1841,7 +1652,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/pink/Movement_Pink3.png",
+                    "filename": "vfx/movement/green/Movement_Green5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1862,7 +1673,70 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/pink/Movement_Pink4.png",
+                    "filename": "vfx/movement/green/Movement_Green6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1334,
+                        "y": 1254,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/green/Movement_Green7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1334,
+                        "y": 1311,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/green/Movement_Green8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1334,
+                        "y": 1368,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/green/Movement_Green9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -1878,6 +1752,174 @@
                     "frame": {
                         "x": 0,
                         "y": 1446,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/pink/Movement_Pink1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 164,
+                        "y": 1446,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/pink/Movement_Pink10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 328,
+                        "y": 1446,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/pink/Movement_Pink11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 492,
+                        "y": 1446,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/pink/Movement_Pink12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 656,
+                        "y": 1446,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/pink/Movement_Pink13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 820,
+                        "y": 1446,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/pink/Movement_Pink2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 984,
+                        "y": 1441,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/pink/Movement_Pink3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1148,
+                        "y": 1425,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/pink/Movement_Pink4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1312,
+                        "y": 1425,
                         "w": 164,
                         "h": 57
                     }
@@ -1897,8 +1939,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 164,
-                        "y": 1446,
+                        "x": 0,
+                        "y": 1503,
                         "w": 164,
                         "h": 57
                     }
@@ -1918,8 +1960,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 328,
-                        "y": 1446,
+                        "x": 164,
+                        "y": 1503,
                         "w": 164,
                         "h": 57
                     }
@@ -1939,8 +1981,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 492,
-                        "y": 1446,
+                        "x": 328,
+                        "y": 1503,
                         "w": 164,
                         "h": 57
                     }
@@ -1960,8 +2002,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 656,
-                        "y": 1446,
+                        "x": 492,
+                        "y": 1503,
                         "w": 164,
                         "h": 57
                     }
@@ -1981,8 +2023,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 820,
-                        "y": 1446,
+                        "x": 656,
+                        "y": 1503,
                         "w": 164,
                         "h": 57
                     }
@@ -2002,8 +2044,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 984,
-                        "y": 1445,
+                        "x": 820,
+                        "y": 1503,
                         "w": 164,
                         "h": 57
                     }
@@ -2023,8 +2065,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1148,
-                        "y": 1445,
+                        "x": 984,
+                        "y": 1498,
                         "w": 164,
                         "h": 57
                     }
@@ -2044,8 +2086,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1312,
-                        "y": 1427,
+                        "x": 1148,
+                        "y": 1482,
                         "w": 164,
                         "h": 57
                     }
@@ -2065,8 +2107,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1503,
+                        "x": 1312,
+                        "y": 1482,
                         "w": 164,
                         "h": 57
                     }
@@ -2086,8 +2128,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 164,
-                        "y": 1503,
+                        "x": 1525,
+                        "y": 0,
                         "w": 164,
                         "h": 57
                     }
@@ -2107,8 +2149,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 328,
-                        "y": 1503,
+                        "x": 1525,
+                        "y": 57,
                         "w": 164,
                         "h": 57
                     }
@@ -2128,8 +2170,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 492,
-                        "y": 1503,
+                        "x": 1525,
+                        "y": 114,
                         "w": 164,
                         "h": 57
                     }
@@ -2149,8 +2191,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 656,
-                        "y": 1503,
+                        "x": 1525,
+                        "y": 171,
                         "w": 164,
                         "h": 57
                     }
@@ -2170,8 +2212,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 820,
-                        "y": 1503,
+                        "x": 1525,
+                        "y": 228,
                         "w": 164,
                         "h": 57
                     }
@@ -2191,8 +2233,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 984,
-                        "y": 1502,
+                        "x": 1525,
+                        "y": 285,
                         "w": 164,
                         "h": 57
                     }
@@ -2212,8 +2254,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1148,
-                        "y": 1502,
+                        "x": 1525,
+                        "y": 342,
                         "w": 164,
                         "h": 57
                     }
@@ -2233,8 +2275,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1312,
-                        "y": 1484,
+                        "x": 1525,
+                        "y": 399,
                         "w": 164,
                         "h": 57
                     }
@@ -2255,7 +2297,7 @@
                     },
                     "frame": {
                         "x": 1525,
-                        "y": 0,
+                        "y": 456,
                         "w": 164,
                         "h": 57
                     }
@@ -2276,286 +2318,13 @@
                     },
                     "frame": {
                         "x": 1525,
-                        "y": 57,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1525,
-                        "y": 114,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1525,
-                        "y": 171,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1525,
-                        "y": 228,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1525,
-                        "y": 285,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1525,
-                        "y": 342,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1525,
-                        "y": 399,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1525,
-                        "y": 456,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1525,
                         "y": 513,
                         "w": 164,
                         "h": 57
                     }
                 },
                 {
-                    "filename": "vfx/movement/red/Movement_Red6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1492,
-                        "y": 1254,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1506,
-                        "y": 1311,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1506,
-                        "y": 1368,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/red/Movement_Red9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1506,
-                        "y": 1425,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/yellow/Movement_Yellow1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 164,
-                        "h": 57
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 164,
-                        "h": 57
-                    },
-                    "frame": {
-                        "x": 1476,
-                        "y": 1482,
-                        "w": 164,
-                        "h": 57
-                    }
-                },
-                {
-                    "filename": "vfx/movement/yellow/Movement_Yellow10.png",
+                    "filename": "vfx/movement/red/Movement_Red10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2576,7 +2345,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow11.png",
+                    "filename": "vfx/movement/red/Movement_Red11.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2597,7 +2366,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow12.png",
+                    "filename": "vfx/movement/red/Movement_Red12.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2618,7 +2387,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow13.png",
+                    "filename": "vfx/movement/red/Movement_Red13.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2639,7 +2408,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow2.png",
+                    "filename": "vfx/movement/red/Movement_Red2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2660,7 +2429,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow3.png",
+                    "filename": "vfx/movement/red/Movement_Red3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2681,7 +2450,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow4.png",
+                    "filename": "vfx/movement/red/Movement_Red4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2702,7 +2471,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow5.png",
+                    "filename": "vfx/movement/red/Movement_Red5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2723,7 +2492,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow6.png",
+                    "filename": "vfx/movement/red/Movement_Red6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2744,7 +2513,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow7.png",
+                    "filename": "vfx/movement/red/Movement_Red7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2765,7 +2534,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow8.png",
+                    "filename": "vfx/movement/red/Movement_Red8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2786,7 +2555,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/movement/yellow/Movement_Yellow9.png",
+                    "filename": "vfx/movement/red/Movement_Red9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2807,6 +2576,279 @@
                     }
                 },
                 {
+                    "filename": "vfx/movement/yellow/Movement_Yellow1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1498,
+                        "y": 1254,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1498,
+                        "y": 1311,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1498,
+                        "y": 1368,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1476,
+                        "y": 1425,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1476,
+                        "y": 1482,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1560,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 164,
+                        "y": 1560,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 328,
+                        "y": 1560,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 492,
+                        "y": 1560,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 656,
+                        "y": 1560,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 820,
+                        "y": 1560,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 984,
+                        "y": 1555,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
+                    "filename": "vfx/movement/yellow/Movement_Yellow9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 164,
+                        "h": 57
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 164,
+                        "h": 57
+                    },
+                    "frame": {
+                        "x": 1148,
+                        "y": 1539,
+                        "w": 164,
+                        "h": 57
+                    }
+                },
+                {
                     "filename": "vfx/conquer/blue/Conquer_Blue_0.png",
                     "rotated": false,
                     "trimmed": false,
@@ -2821,8 +2863,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1560,
+                        "x": 1020,
+                        "y": 1274,
                         "w": 121,
                         "h": 115
                     }
@@ -2842,8 +2884,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 121,
-                        "y": 1560,
+                        "x": 0,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -2863,8 +2905,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 242,
-                        "y": 1560,
+                        "x": 121,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -2884,8 +2926,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 363,
-                        "y": 1560,
+                        "x": 242,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -2905,8 +2947,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 484,
-                        "y": 1560,
+                        "x": 363,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -2926,8 +2968,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 605,
-                        "y": 1560,
+                        "x": 484,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -2947,8 +2989,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 726,
-                        "y": 1560,
+                        "x": 605,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -2968,8 +3010,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 847,
-                        "y": 1560,
+                        "x": 726,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -2989,8 +3031,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 968,
-                        "y": 1560,
+                        "x": 847,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -3010,8 +3052,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1089,
-                        "y": 1559,
+                        "x": 968,
+                        "y": 1617,
                         "w": 121,
                         "h": 115
                     }
@@ -3031,8 +3073,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1210,
-                        "y": 1559,
+                        "x": 1089,
+                        "y": 1612,
                         "w": 121,
                         "h": 115
                     }
@@ -3052,8 +3094,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1331,
-                        "y": 1541,
+                        "x": 1210,
+                        "y": 1596,
                         "w": 121,
                         "h": 115
                     }
@@ -3073,8 +3115,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1452,
-                        "y": 1541,
+                        "x": 1331,
+                        "y": 1539,
                         "w": 121,
                         "h": 115
                     }
@@ -3094,266 +3136,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 1675,
+                        "x": 1452,
+                        "y": 1539,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
                     "filename": "vfx/conquer/blue/Conquer_Blue_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 121,
-                        "y": 1675,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 242,
-                        "y": 1675,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 363,
-                        "y": 1675,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 484,
-                        "y": 1675,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 605,
-                        "y": 1675,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 726,
-                        "y": 1675,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 847,
-                        "y": 1675,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 968,
-                        "y": 1675,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1089,
-                        "y": 1674,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1210,
-                        "y": 1674,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1331,
-                        "y": 1656,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1452,
-                        "y": 1656,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/green/Conquer_Green_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3374,7 +3164,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/green/Conquer_Green_7.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3395,7 +3185,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/green/Conquer_Green_8.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3416,7 +3206,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/green/Conquer_Green_9.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3437,7 +3227,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_0.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_11.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3458,7 +3248,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_10.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_12.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3472,14 +3262,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1670,
+                        "x": 1666,
                         "y": 575,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_11.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_13.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3493,14 +3283,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1670,
+                        "x": 1666,
                         "y": 690,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_12.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_14.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3514,14 +3304,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1670,
+                        "x": 1666,
                         "y": 805,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_13.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3535,14 +3325,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1670,
+                        "x": 1666,
                         "y": 920,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_14.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3556,14 +3346,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1670,
+                        "x": 1666,
                         "y": 1035,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_15.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3577,14 +3367,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1670,
+                        "x": 1662,
                         "y": 1150,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_2.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3598,14 +3388,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1670,
+                        "x": 1662,
                         "y": 1265,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_3.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3619,14 +3409,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1670,
+                        "x": 1662,
                         "y": 1380,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_4.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3647,7 +3437,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_5.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3668,7 +3458,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_6.png",
+                    "filename": "vfx/conquer/green/Conquer_Green_9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3683,13 +3473,13 @@
                     },
                     "frame": {
                         "x": 0,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_7.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3704,13 +3494,13 @@
                     },
                     "frame": {
                         "x": 121,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_8.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3725,13 +3515,13 @@
                     },
                     "frame": {
                         "x": 242,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/pink/Conquer_Pink_9.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_11.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3746,13 +3536,13 @@
                     },
                     "frame": {
                         "x": 363,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_0.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_12.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3767,13 +3557,13 @@
                     },
                     "frame": {
                         "x": 484,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_1.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_13.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3788,13 +3578,13 @@
                     },
                     "frame": {
                         "x": 605,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_10.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_14.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3809,13 +3599,13 @@
                     },
                     "frame": {
                         "x": 726,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_11.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_15.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3830,13 +3620,13 @@
                     },
                     "frame": {
                         "x": 847,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_12.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3851,13 +3641,13 @@
                     },
                     "frame": {
                         "x": 968,
-                        "y": 1790,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_13.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3872,13 +3662,13 @@
                     },
                     "frame": {
                         "x": 1089,
-                        "y": 1789,
+                        "y": 1727,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_14.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3893,13 +3683,13 @@
                     },
                     "frame": {
                         "x": 1210,
-                        "y": 1789,
+                        "y": 1725,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_2.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3914,13 +3704,13 @@
                     },
                     "frame": {
                         "x": 1331,
-                        "y": 1771,
+                        "y": 1725,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_3.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3935,13 +3725,13 @@
                     },
                     "frame": {
                         "x": 1452,
-                        "y": 1771,
+                        "y": 1654,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_4.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3962,7 +3752,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_5.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -3983,7 +3773,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_6.png",
+                    "filename": "vfx/conquer/pink/Conquer_Pink_9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4004,7 +3794,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_7.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4025,7 +3815,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_8.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4046,7 +3836,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/purple/Conquer_Purple_9.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4067,7 +3857,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_0.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_11.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4081,14 +3871,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1791,
+                        "x": 1787,
                         "y": 575,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_1.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_12.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4102,14 +3892,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1791,
+                        "x": 1787,
                         "y": 690,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_10.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_13.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4123,14 +3913,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1791,
+                        "x": 1787,
                         "y": 805,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_11.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_14.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4144,14 +3934,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1791,
+                        "x": 1787,
                         "y": 920,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_12.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4165,14 +3955,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1791,
+                        "x": 1787,
                         "y": 1035,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_13.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4186,14 +3976,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1791,
+                        "x": 1783,
                         "y": 1150,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_14.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4207,14 +3997,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1791,
+                        "x": 1783,
                         "y": 1265,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_2.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4228,14 +4018,14 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1791,
+                        "x": 1783,
                         "y": 1380,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_3.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4256,7 +4046,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_4.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4277,7 +4067,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_5.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4298,259 +4088,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/red/Conquer_Red_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 0,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 121,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_8.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 242,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/red/Conquer_Red_9.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 363,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_0.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 484,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 605,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_10.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 726,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_11.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 847,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_12.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 968,
-                        "y": 1905,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_13.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1089,
-                        "y": 1904,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_14.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1210,
-                        "y": 1904,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 121,
-                        "h": 115
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 121,
-                        "h": 115
-                    },
-                    "frame": {
-                        "x": 1331,
-                        "y": 1886,
-                        "w": 121,
-                        "h": 115
-                    }
-                },
-                {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_3.png",
+                    "filename": "vfx/conquer/purple/Conquer_Purple_9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4565,13 +4103,265 @@
                     },
                     "frame": {
                         "x": 1452,
-                        "y": 1886,
+                        "y": 1769,
                         "w": 121,
                         "h": 115
                     }
                 },
                 {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_4.png",
+                    "filename": "vfx/conquer/red/Conquer_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 121,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 242,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 363,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 484,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 605,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 726,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 847,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 968,
+                        "y": 1847,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1089,
+                        "y": 1842,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1210,
+                        "y": 1840,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1331,
+                        "y": 1840,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/red/Conquer_Red_7.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4592,7 +4382,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_5.png",
+                    "filename": "vfx/conquer/red/Conquer_Red_8.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4613,7 +4403,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_6.png",
+                    "filename": "vfx/conquer/red/Conquer_Red_9.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4634,7 +4424,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_7.png",
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4655,7 +4445,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_8.png",
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4676,7 +4466,7 @@
                     }
                 },
                 {
-                    "filename": "vfx/conquer/yellow/Conquer_Yellow_9.png",
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_10.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4697,6 +4487,258 @@
                     }
                 },
                 {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1931,
+                        "y": 460,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1908,
+                        "y": 575,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1908,
+                        "y": 690,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1908,
+                        "y": 805,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1908,
+                        "y": 920,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1908,
+                        "y": 1035,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1904,
+                        "y": 1150,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1904,
+                        "y": 1265,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1904,
+                        "y": 1380,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1882,
+                        "y": 1495,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1815,
+                        "y": 1610,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "vfx/conquer/yellow/Conquer_Yellow_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 121,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 121,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 1815,
+                        "y": 1725,
+                        "w": 121,
+                        "h": 115
+                    }
+                },
+                {
                     "filename": "vfx/citadel/Citadel_Shine_0.png",
                     "rotated": false,
                     "trimmed": false,
@@ -4711,8 +4753,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1931,
-                        "y": 460,
+                        "x": 1936,
+                        "y": 1610,
                         "w": 82,
                         "h": 82
                     }
@@ -4732,8 +4774,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1931,
-                        "y": 542,
+                        "x": 1936,
+                        "y": 1692,
                         "w": 82,
                         "h": 82
                     }
@@ -4753,8 +4795,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1912,
-                        "y": 624,
+                        "x": 1936,
+                        "y": 1774,
                         "w": 82,
                         "h": 82
                     }
@@ -4774,8 +4816,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1912,
-                        "y": 706,
+                        "x": 1815,
+                        "y": 1856,
                         "w": 82,
                         "h": 82
                     }
@@ -4795,8 +4837,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1912,
-                        "y": 788,
+                        "x": 1897,
+                        "y": 1856,
                         "w": 82,
                         "h": 82
                     }
@@ -4816,8 +4858,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1912,
-                        "y": 870,
+                        "x": 0,
+                        "y": 1962,
                         "w": 82,
                         "h": 82
                     }
@@ -4837,8 +4879,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1912,
-                        "y": 952,
+                        "x": 82,
+                        "y": 1962,
                         "w": 82,
                         "h": 82
                     }
@@ -4858,8 +4900,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1912,
-                        "y": 1034,
+                        "x": 164,
+                        "y": 1962,
                         "w": 82,
                         "h": 82
                     }
@@ -4879,8 +4921,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1912,
-                        "y": 1116,
+                        "x": 246,
+                        "y": 1962,
                         "w": 82,
                         "h": 82
                     }
@@ -4900,8 +4942,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 1931,
-                        "y": 460,
+                        "x": 1936,
+                        "y": 1610,
                         "w": 82,
                         "h": 82
                     }
@@ -4921,8 +4963,8 @@
                         "h": 115
                     },
                     "frame": {
-                        "x": 1689,
-                        "y": 460,
+                        "x": 121,
+                        "y": 1732,
                         "w": 121,
                         "h": 115
                     }
@@ -4942,8 +4984,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1164,
-                        "y": 1256,
+                        "x": 1361,
+                        "y": 0,
                         "w": 164,
                         "h": 57
                     }
@@ -4963,8 +5005,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1361,
-                        "y": 228,
+                        "x": 1338,
+                        "y": 741,
                         "w": 164,
                         "h": 57
                     }
@@ -4984,8 +5026,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1338,
-                        "y": 855,
+                        "x": 164,
+                        "y": 1446,
                         "w": 164,
                         "h": 57
                     }
@@ -5005,8 +5047,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 984,
-                        "y": 1445,
+                        "x": 820,
+                        "y": 1503,
                         "w": 164,
                         "h": 57
                     }
@@ -5027,7 +5069,7 @@
                     },
                     "frame": {
                         "x": 1525,
-                        "y": 57,
+                        "y": 513,
                         "w": 164,
                         "h": 57
                     }
@@ -5047,8 +5089,8 @@
                         "h": 57
                     },
                     "frame": {
-                        "x": 1476,
-                        "y": 1482,
+                        "x": 1498,
+                        "y": 1254,
                         "w": 164,
                         "h": 57
                     }

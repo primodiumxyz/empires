@@ -119,7 +119,7 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
 
   const probabilities = useMemo(() => {
     return {
-      accumulateGold: { label: "ACCUMULATE GOLD", value: p.accumulateGold },
+      accumulateGold: { label: "ACCUMULATE IRIDIUM", value: p.accumulateGold },
       buyShips: { label: "BUY SHIPS", value: p.buyShips },
       buyShields: { label: "BUY SHIELDS", value: p.buyShields },
       moveShips: { label: "MOVE SHIPS", value: p.moveShips },
