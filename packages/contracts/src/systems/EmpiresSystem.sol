@@ -2,10 +2,11 @@
 pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Ready, P_PointConfig, P_GameConfig, WinningEmpire } from "codegen/index.sol";
+import { NamespaceOwner } from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
+import { Ready, P_PointConfig, P_GameConfig, WinningEmpire, Role } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
-import { EEmpire } from "codegen/common.sol";
+import { EEmpire, ERole } from "codegen/common.sol";
 
 contract EmpiresSystem is System {
   modifier _onlyNotGameOver() {
@@ -28,7 +29,17 @@ contract EmpiresSystem is System {
 
   // Modifier to restrict access to admin only
   modifier _onlyAdmin() {
-    // TODO: Implement proper admin check
+    address sender = _msgSender();
+    require(
+      Role.get(sender) == ERole.Admin || NamespaceOwner.get(EMPIRES_NAMESPACE_ID) == sender,
+      "[EmpiresSystem] Only admin"
+    );
+    _;
+  }
+
+  modifier _onlyAdminOrCanUpdate() {
+    ERole role = Role.get(_msgSender());
+    require(role == ERole.Admin || role == ERole.CanUpdate, "[EmpiresSystem] Only admin or can update");
     _;
   }
 }
