@@ -5,6 +5,7 @@ import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Badge } from "@/components/core/Badge";
 import { SmallHistoricalPointGraph } from "@/components/empires/SmallHistoricalPointGraph";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { Price } from "@/components/shared/Price";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -32,7 +33,7 @@ const Empire: React.FC<{ empire: EEmpire; hideGraph?: boolean; hidePlanets?: boo
 
   return (
     <div className="flex h-9 items-center justify-center gap-3 text-white lg:h-14">
-      <img src={spriteUrl} className="w-6 lg:w-10" />
+      <EmpireLogo empireId={empire} size="md" />
 
       <div className={cn("flex flex-col-reverse justify-start text-left", hidePlanets && "!flex-row gap-3")}>
         <div className="flex items-center gap-1 text-xs opacity-75">

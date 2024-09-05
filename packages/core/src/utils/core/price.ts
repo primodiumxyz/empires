@@ -173,7 +173,7 @@ export function createPriceUtils(tables: Tables) {
     if (isNaN(balance)) return "$0.00";
     const balanceInUsd = balance * weiToUsd;
 
-    const maxPrecision = balanceInUsd < 0.01 ? precision : 2;
+    const maxPrecision = Math.abs(balanceInUsd) < 0.01 ? precision : 2;
 
     return balanceInUsd.toLocaleString("en-US", {
       style: "currency",

@@ -1,7 +1,6 @@
 import React from "react";
 
 import { EOverride } from "@primodiumxyz/contracts";
-import { entityToPlanetName } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { Card } from "@/components/core/Card";
@@ -13,6 +12,7 @@ import { ShipContent } from "@/components/override-popup/content/ShipContent";
 import { MagnetContent } from "@/components/override-popup/magnet";
 import { OverrideButton } from "@/components/override-popup/OverrideButton";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
+import { usePlanetName } from "@/hooks/usePlanetName";
 import { cn } from "@/util/client";
 
 export const Header: React.FC<{ title: string; description: string; planetName: string }> = ({
@@ -90,6 +90,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
 }) => {
   const { tables } = useCore();
   const planet = tables.Planet.use(selectedPlanet ?? defaultEntity);
+  const planetName = usePlanetName(selectedPlanet);
 
   if (!selectedPlanet || !planet) return null;
 
@@ -102,27 +103,15 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
       <Buttons selectedPlanet={selectedPlanet} empire={planet.empireId} />
       <Card noDecor className="relative w-96 flex-row items-center justify-center bg-slate-900">
         <Tabs.Pane index={0} className="w-full items-center gap-4">
-          <Header
-            title={"Ships"}
-            description={"Attack other planets"}
-            planetName={entityToPlanetName(selectedPlanet)}
-          />
+          <Header title={"Ships"} description={"Attack other planets"} planetName={planetName} />
           <ShipContent entity={selectedPlanet} />
         </Tabs.Pane>
         <Tabs.Pane index={1} className="w-full items-center gap-4">
-          <Header
-            title={"Shields"}
-            description={"Defend planet when under attack"}
-            planetName={entityToPlanetName(selectedPlanet)}
-          />
+          <Header title={"Shields"} description={"Defend planet when under attack"} planetName={planetName} />
           <ShieldContent entity={selectedPlanet} />
         </Tabs.Pane>
         <Tabs.Pane index={2} className="w-full items-center gap-4">
-          <Header
-            title={"Magnets"}
-            description={"Attracts ships owned by the same empire"}
-            planetName={entityToPlanetName(selectedPlanet)}
-          />
+          <Header title={"Magnets"} description={"Attracts ships owned by the same empire"} planetName={planetName} />
           <MagnetContent entity={selectedPlanet} />
         </Tabs.Pane>
 
@@ -130,17 +119,13 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
           <Header
             title={"Shield Eater"}
             description={"Destroy shields on this planet and surrounding planets"}
-            planetName={entityToPlanetName(selectedPlanet)}
+            planetName={planetName}
           />
           <ShieldEaterContent entity={selectedPlanet} />
         </Tabs.Pane>
 
         <Tabs.Pane index={4} className="w-full items-center gap-4">
-          <Header
-            title={"Acid Rain"}
-            description={"Acid Rain decays ships by 20% each turn"}
-            planetName={entityToPlanetName(selectedPlanet)}
-          />
+          <Header title={"Acid Rain"} description={"Acid Rain decays ships by 20% each turn"} planetName={planetName} />
           <AcidRainContent entity={selectedPlanet} />
         </Tabs.Pane>
       </Card>

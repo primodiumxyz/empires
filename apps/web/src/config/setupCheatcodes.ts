@@ -2,14 +2,7 @@ import { Address, Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import {
-  addressToEntity,
-  Core,
-  entityToPlanetName,
-  ExternalAccount,
-  LocalAccount,
-  TxReceipt,
-} from "@primodiumxyz/core";
+import { addressToEntity, Core, ExternalAccount, LocalAccount, TxReceipt } from "@primodiumxyz/core";
 import { PrimodiumGame } from "@primodiumxyz/game";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
@@ -35,7 +28,7 @@ export const setupCheatcodes = (options: {
   requestDrip?: (address: Address, force?: boolean) => Promise<TxReceipt | undefined>;
 }) => {
   const { core, game, playerAccount, contractCalls, requestDrip } = options;
-  const { tables } = core;
+  const { tables, utils } = core;
   const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake, updateWorld } = contractCalls;
 
   // game
@@ -57,8 +50,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       amount: {
         label: "Amount",
@@ -76,8 +69,8 @@ export const setupCheatcodes = (options: {
       });
     },
     loading: () => "[CHEATCODE] Setting ships...",
-    success: (args) => `Ships set to ${args.amount.value} on ${entityToPlanetName(args.planet.id as Entity)}`,
-    error: (args) => `Failed to set ships on ${entityToPlanetName(args.planet.id as Entity)}`,
+    success: (args) => `Ships set to ${args.amount.value} on ${utils.generatePlanetName(args.planet.id as Entity)}`,
+    error: (args) => `Failed to set ships on ${utils.generatePlanetName(args.planet.id as Entity)}`,
   });
 
   const addPlanetToEmpire = async (empireId: EEmpire, planetId: Hex) => {
@@ -150,13 +143,13 @@ export const setupCheatcodes = (options: {
       from: {
         label: "From",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       to: {
         label: "To",
         inputType: "string",
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
     },
     execute: async ({ from, to }) => {
@@ -231,12 +224,12 @@ export const setupCheatcodes = (options: {
         fromPlanetData?.empireId !== toPlanetData?.empireId &&
         (fromPlanetData?.shipCount ?? 0n) < (toPlanetData?.shipCount ?? 0n);
       if (conquer)
-        return `Conquered ${entityToPlanetName(to.id as Entity)} from ${entityToPlanetName(from.id as Entity)}`;
+        return `Conquered ${utils.generatePlanetName(to.id as Entity)} from ${utils.generatePlanetName(from.id as Entity)}`;
 
-      return `Sent ${fromPlanetData?.shipCount} ships from ${entityToPlanetName(from.id as Entity)} to ${entityToPlanetName(to.id as Entity)}`;
+      return `Sent ${fromPlanetData?.shipCount} ships from ${utils.generatePlanetName(from.id as Entity)} to ${utils.generatePlanetName(to.id as Entity)}`;
     },
     error: ({ from, to }) =>
-      `Failed to send ships from ${entityToPlanetName(from.id as Entity)} to ${entityToPlanetName(to.id as Entity)}`,
+      `Failed to send ships from ${utils.generatePlanetName(from.id as Entity)} to ${utils.generatePlanetName(to.id as Entity)}`,
   });
 
   /* --------------------------------- SHIELDS -------------------------------- */
@@ -249,8 +242,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       amount: {
         label: "Amount",
@@ -266,8 +259,9 @@ export const setupCheatcodes = (options: {
       });
     },
     loading: () => "[CHEATCODE] Setting shields...",
-    success: ({ planet, amount }) => `Shields set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`,
-    error: ({ planet }) => `Failed to set shields on ${entityToPlanetName(planet.id as Entity)}`,
+    success: ({ planet, amount }) =>
+      `Shields set to ${amount.value} on ${utils.generatePlanetName(planet.id as Entity)}`,
+    error: ({ planet }) => `Failed to set shields on ${utils.generatePlanetName(planet.id as Entity)}`,
   });
 
   /* ------------------------------- MECHANISMS ------------------------------- */
@@ -280,8 +274,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       amount: {
         label: "Amount",
@@ -297,8 +291,8 @@ export const setupCheatcodes = (options: {
       });
     },
     loading: () => "[CHEATCODE] Setting gold count...",
-    success: ({ planet, amount }) => `Gold set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`,
-    error: ({ planet }) => `Failed to set gold on ${entityToPlanetName(planet.id as Entity)}`,
+    success: ({ planet, amount }) => `Gold set to ${amount.value} on ${utils.generatePlanetName(planet.id as Entity)}`,
+    error: ({ planet }) => `Failed to set gold on ${utils.generatePlanetName(planet.id as Entity)}`,
   });
 
   // generate gold on all planets
@@ -338,8 +332,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
       empire: {
         label: "Empire",
@@ -690,9 +684,9 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
+        defaultValue: utils.generatePlanetName(planets[0]),
         options: planets
-          .map((entity) => ({ id: entity, value: entityToPlanetName(entity) }))
+          .map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) }))
           .filter(({ id }) => !!tables.Planet.get(id)?.empireId),
       },
       turns: {
@@ -762,9 +756,9 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
+        defaultValue: utils.generatePlanetName(planets[0]),
         options: planets
-          .map((entity) => ({ id: entity, value: entityToPlanetName(entity) }))
+          .map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) }))
           .filter(({ id }) => !!tables.Planet.get(id)?.empireId),
       },
     },
@@ -829,8 +823,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
     },
     execute: async ({ planet }) => {
@@ -854,8 +848,8 @@ export const setupCheatcodes = (options: {
       planet: {
         label: "Planet",
         inputType: "string",
-        defaultValue: entityToPlanetName(planets[0]),
-        options: planets.map((entity) => ({ id: entity, value: entityToPlanetName(entity) })),
+        defaultValue: utils.generatePlanetName(planets[0]),
+        options: planets.map((entity) => ({ id: entity, value: utils.generatePlanetName(entity) })),
       },
     },
     execute: async ({ planet }) => {

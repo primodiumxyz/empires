@@ -8,6 +8,7 @@ export type EmpireConfig = {
   textColor: string;
   bgColor: string;
   chartColor: string;
+  borderColor: string;
   icons: { magnet: string };
   sprites: { planet: SpriteKeys };
 };
@@ -18,6 +19,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-gray-400",
     bgColor: "bg-gray-600",
     chartColor: "rgba(128, 128, 128, .75)",
+    borderColor: "border-gray-400",
     icons: { magnet: "" },
     sprites: { planet: "Gold" },
   },
@@ -26,6 +28,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-gray-400",
     bgColor: "bg-gray-600",
     chartColor: "rgba(128, 128, 128, .75)",
+    borderColor: "border-gray-400",
     icons: { magnet: "" },
     sprites: { planet: "Gold" },
   },
@@ -34,6 +37,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-red-400",
     bgColor: "bg-red-600",
     chartColor: "rgba(255, 0, 0, .75)",
+    borderColor: "border-red-400",
     icons: { magnet: InterfaceIcons.RedMagnet },
     sprites: { planet: "PlanetRed" },
   },
@@ -42,6 +46,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-blue-300",
     bgColor: "bg-blue-600",
     chartColor: "rgba(100, 149, 237, .75)",
+    borderColor: "border-blue-400",
     icons: { magnet: InterfaceIcons.BlueMagnet },
     sprites: { planet: "PlanetBlue" },
   },
@@ -50,6 +55,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-green-400",
     bgColor: "bg-green-600",
     chartColor: "rgba(0, 255, 0, .75)",
+    borderColor: "border-green-400",
     icons: { magnet: InterfaceIcons.GreenMagnet },
     sprites: { planet: "PlanetGreen" },
   },
@@ -58,6 +64,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-yellow-400",
     bgColor: "bg-yellow-600",
     chartColor: "rgba(255, 255, 0, .75)",
+    borderColor: "border-yellow-400",
     icons: { magnet: InterfaceIcons.YellowMagnet },
     sprites: { planet: "PlanetYellow" },
   },
@@ -66,6 +73,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-purple-400",
     bgColor: "bg-purple-600",
     chartColor: "rgba(160, 32, 240, .75)",
+    borderColor: "border-purple-400",
     icons: { magnet: InterfaceIcons.PurpleMagnet },
     sprites: { planet: "PlanetPurple" },
   },
@@ -75,6 +83,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-pink-400",
     bgColor: "bg-pink-600",
     chartColor: "rgba(255, 192, 203, .75)",
+    borderColor: "border-pink-400",
     icons: { magnet: InterfaceIcons.PinkMagnet },
     sprites: { planet: "PlanetPink" },
   },
@@ -83,6 +92,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-orange-400",
     bgColor: "bg-orange-600",
     chartColor: "rgba(255, 165, 0, .75)",
+    borderColor: "border-orange-400",
     icons: { magnet: InterfaceIcons.YellowMagnet },
     sprites: { planet: "PlanetPink" },
   },
@@ -91,6 +101,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-black-400",
     bgColor: "bg-black-600",
     chartColor: "rgba(0, 0, 0, .75)",
+    borderColor: "border-black-400",
     icons: { magnet: InterfaceIcons.GreenMagnet },
     sprites: { planet: "PlanetPink" },
   },
@@ -99,6 +110,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     textColor: "text-white-400",
     bgColor: "bg-white-600",
     chartColor: "rgba(255, 255, 255, .75)",
+    borderColor: "border-white-400",
     icons: { magnet: InterfaceIcons.GreenMagnet },
     sprites: { planet: "PlanetPink" },
   },
