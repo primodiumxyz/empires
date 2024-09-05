@@ -34,6 +34,7 @@ export const getInitialQuery = ({
       { tableId: tables.ShieldEater.tableId },
       { tableId: tables.Magnet.tableId },
       { tableId: tables.MagnetTurnPlanets.tableId },
+      { tableId: tables.Value_AcidPlanetsSet.tableId },
       // Points
       { tableId: tables.Value_PlayersMap.tableId },
       { tableId: tables.HistoricalPointCost.tableId },
