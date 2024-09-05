@@ -78,7 +78,8 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <div className="text-xs">
-            {getPlanetSpan(action.planetId as Entity)} added {formatNumber(action.goldAdded, { showZero: true })} gold
+            {getPlanetSpan(action.planetId as Entity)} added {formatNumber(action.goldAdded, { showZero: true })}{" "}
+            iridium
           </div>
         ),
       };
@@ -268,8 +269,8 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <div className="text-xs">
-            {getPlayerSpan(action.playerId)} airdropped {formatNumber(action.goldDistributed, { showZero: true })} gold
-            to {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
+            {getPlayerSpan(action.playerId)} airdropped {formatNumber(action.goldDistributed, { showZero: true })}{" "}
+            iridium to {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
           </div>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
@@ -508,7 +509,7 @@ export const useMostRecentOverride = () => {
           element: (
             <div className="text-xs">
               {getPlayerSpan(current.playerId)} airdropped {formatNumber(current.goldDistributed, { showZero: true })}{" "}
-              gold to {EmpireEnumToConfig[current.empireId as EEmpire].name} empire
+              iridium to {EmpireEnumToConfig[current.empireId as EEmpire].name} empire
             </div>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
