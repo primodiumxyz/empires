@@ -3,18 +3,16 @@ import { formatEther } from "viem";
 
 import { EEmpire, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
-import { defaultEntity } from "@primodiumxyz/reactive-tables";
 import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Dropdown } from "@/components/core/Dropdown";
-import { IconLabel } from "@/components/core/IconLabel";
 import { NumberInput } from "@/components/core/NumberInput";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { Price } from "@/components/shared/Price";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
-import { useGame } from "@/hooks/useGame";
 import { usePointPrice } from "@/hooks/usePointPrice";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
@@ -25,9 +23,7 @@ export const SellPoints = () => {
   const empires = useEmpires();
   const { playerAccount, login } = usePlayerAccount();
   const calls = useContractCalls();
-  const {
-    MAIN: { sprite },
-  } = useGame();
+
   const playerPoints = playerAccount
     ? tables.Value_PointsMap.getWithKeys({ empireId: selectedEmpire, playerId: playerAccount.entity })?.value ?? 0n
     : 0n;
@@ -62,7 +58,7 @@ export const SellPoints = () => {
           >
             {Array.from(empires.entries()).map(([key, empire]) => (
               <Dropdown.Item key={key} value={key}>
-                <IconLabel imageUri={sprite.getSprite(empire.sprites.planet)} text={empire.name} className="text-xs" />
+                <EmpireLogo empireId={key} size="sm" />
               </Dropdown.Item>
             ))}
           </Dropdown>
