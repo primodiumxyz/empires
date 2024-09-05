@@ -55,18 +55,17 @@ export const _SlippageSettings = () => {
       <input
         type="number"
         className={cn(
-          "w-16 text-xs rounded-md border border-secondary bg-neutral px-2 py-1 focus:outline-none disabled:opacity-50",
-          Number(slippage) > 100 ? "text-error" : "",
+          "w-16 text-xs rounded-md border border-secondary bg-neutral px-2 py-1 focus:outline-none disabled:opacity-50"
         )}
         disabled={isAuto}
         value={`${slippage}`}
             placeholder={`${slippage}`}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
-            let value = adjustDecimals(e.target.value, 2);
+            let value = adjustDecimals(e.target.value, 1);
             if (Number(value) >= 1 && value.startsWith('0')) {
                 value = value.replace(/^0+/, '');
             }
-            if (Number(value) > 100) return;
+            if (Number(value) > 999) return;
             if (Number(value) === 0) return tables.Slippage.update({ customValue: 0 });
             tables.Slippage.update({ customValue: Number(value) });
         }}
