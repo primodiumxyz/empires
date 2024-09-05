@@ -2,12 +2,12 @@
 pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { Planet, Turn, AirdropGoldOverrideLog, AirdropGoldOverrideLogData, P_GameConfig } from "codegen/index.sol";
+import { Planet, Turn, AirdropGoldOverrideLog, AirdropGoldOverrideLogData, P_GameConfig, P_PointConfig } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
-import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { addressToId, pseudorandomEntity, pseudorandom } from "src/utils.sol";
 
@@ -21,10 +21,11 @@ contract OverrideAirdropSystem is EmpiresSystem {
    * @param _empireId The ID of the empire.
    * @param _overrideCount The number of overrides to purchase.
    */
-  function airdropGold(EEmpire _empireId, uint256 _overrideCount) public payable _onlyNotGameOver _takeRake {
+  function airdropGold(EEmpire _empireId, uint256 _overrideCount) public payable _onlyNotGameOver {
     require(_empireId != EEmpire.NULL, "[OverrideSystem] Empire is not owned");
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, _empireId, _overrideCount);
     _refundOverspend(cost);
+    _takeRake(cost);
 
     // get all planets owned by empire
     uint256 planetCount = EmpirePlanetsSet.size(_empireId);
@@ -112,5 +113,14 @@ contract OverrideAirdropSystem is EmpiresSystem {
     if (msgValue > _cost) {
       IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), msgValue - _cost);
     }
+  }
+
+  /**
+   * @dev Calculates and transfers the rake (fee) from the transaction cost.
+   * @param _cost The total cost of the transaction.
+   */
+  function _takeRake(uint256 _cost) private {
+    uint256 rake = (_cost * P_PointConfig.getPointRake()) / 10_000;
+    IWorld(_world()).transferBalanceToNamespace(EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, rake);
   }
 }
