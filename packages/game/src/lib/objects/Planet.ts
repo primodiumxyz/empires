@@ -5,7 +5,7 @@ import {
   entityToPlanetName,
   formatNumber,
   lerp,
-  TREASURE_PLANET_GOLD_THRESHOLD,
+  TREASURE_PLANET_IRIDIUM_THRESHOLDS,
 } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
@@ -438,9 +438,12 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       }),
     );
 
-    if (count >= TREASURE_PLANET_GOLD_THRESHOLD) {
+    if (count >= TREASURE_PLANET_IRIDIUM_THRESHOLDS.large) {
       this.treasurePlanetDecoration.setVisible(true).setActive(true);
-      this.treasurePlanetDecoration.play(Animations.TreasurePlanet);
+      this.treasurePlanetDecoration.play(Animations.TreasurePlanetLarge);
+    } else if (count >= TREASURE_PLANET_IRIDIUM_THRESHOLDS.medium) {
+      this.treasurePlanetDecoration.setVisible(true).setActive(true);
+      this.treasurePlanetDecoration.play(Animations.TreasurePlanetMedium);
     } else {
       this.treasurePlanetDecoration.setVisible(false).setActive(false);
     }

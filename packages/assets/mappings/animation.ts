@@ -20,7 +20,8 @@ export const Animations = {
   // Citadel
   CitadelCrown: "citadel/crown",
   // Treasure
-  TreasurePlanet: "planet/treasure",
+  TreasurePlanetLarge: "planet/treasure/large",
+  TreasurePlanetMedium: "planet/treasure/medium",
 
   //VFX --------------------------
 
