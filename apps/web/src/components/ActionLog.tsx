@@ -26,7 +26,7 @@ import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const ActionLog = ({ className }: { className: string }) => {
   const { SelectedTab } = useSettings();
-  const { loading, progress } = useSyncStatus(Keys.ACTION_LOG);
+  const { loading } = useSyncStatus(Keys.ACTION_LOG);
 
   const [open, setOpen] = useState(false);
   const persistKey = toHex("action-log") as Entity;
