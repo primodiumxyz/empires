@@ -25,11 +25,11 @@ export function createCore(config: CoreConfig): Core {
     sync,
   };
 
-  if (config?.runSystems && !config.runSync) throw new Error("Cannot run systems without running sync");
-  if (config?.runSync) {
+  if (config.runSystems && !config.runSync) throw new Error("Cannot run systems without running sync");
+  if (config.runSync) {
     console.log("Running initial sync");
     runInitialSync(core).then(() => {
-      if (config?.runSystems) {
+      if (config.runSystems) {
         console.log("Running core systems");
         runCoreSystems(core);
       }
