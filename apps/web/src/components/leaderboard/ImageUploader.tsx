@@ -57,7 +57,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onSubmit, title, classNam
           />
         </div>
 
-        <Button type="submit" disabled={!selectedFile} size="md" variant="primary" className="w-full">
+        <Button type="submit" disabled={!selectedFile} size="md" variant="primary" className="w-full mt-2">
           {!loading && "Update Image"}
           {loading && <ArrowPathIcon className="size-4 animate-spin" />}
         </Button>
