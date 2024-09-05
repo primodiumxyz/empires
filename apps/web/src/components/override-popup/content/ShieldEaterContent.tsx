@@ -11,6 +11,7 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { useShieldEater } from "@/hooks/useShieldEater";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 
 export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
@@ -36,7 +37,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
     <div className="flex flex-col items-center">
       {!!caption && <p className="mb-1 rounded-box bg-error/25 p-1 text-center text-xs opacity-75">{caption}</p>}
       {!!playerAccount && (
-        <TransactionQueueMask id="detonate-shield-eater">
+        <TransactionQueueMask id="detonate-shield-eater" className="relative">
           <Button
             onClick={async () => {
               await detonateShieldEater(entity, detonatePriceWei);
@@ -48,6 +49,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
           >
             Activate
           </Button>
+          <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={detonateDisabled} />
         </TransactionQueueMask>
       )}
       {!playerAccount && (

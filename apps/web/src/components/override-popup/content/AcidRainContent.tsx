@@ -9,6 +9,7 @@ import { useAcidRain } from "@/hooks/useAcidRain";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 
 export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
@@ -35,7 +36,7 @@ export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
     <div className="flex flex-col items-center">
       {!!caption && <p className="mb-1 rounded-box bg-error/25 p-1 text-center text-xs opacity-75">{caption}</p>}
       {!!playerAccount && (
-        <TransactionQueueMask id={`${entity}-place-acid`}>
+        <TransactionQueueMask id={`${entity}-place-acid`} className="relative flex items-center">
           <Button
             onClick={async () => {
               await placeAcidRain(entity, placeAcidPriceWei);
@@ -47,6 +48,7 @@ export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           >
             Place Acid
           </Button>
+          <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={placeAcidDisabled} />
         </TransactionQueueMask>
       )}
       {!playerAccount && (

@@ -14,6 +14,7 @@ import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 
 export const ExecuteButton = ({
   planetId,
@@ -76,10 +77,11 @@ export const ExecuteButton = ({
           </p>
         )}
         {!!playerAccount && (
-          <TransactionQueueMask id={`${planetId}-place-magnet`} className="">
+          <TransactionQueueMask id={`${planetId}-place-magnet`} className="relative">
             <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
               PLACE MAGNET
             </Button>
+            <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={disabled} />
           </TransactionQueueMask>
         )}
         {!playerAccount && (

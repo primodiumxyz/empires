@@ -17,6 +17,7 @@ import { useGame } from "@/hooks/useGame";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 
 export const BoostEmpire = () => {
   const [selectedEmpire, setSelectedEmpire] = useState<EEmpire>(DEFAULT_EMPIRE);
@@ -81,10 +82,11 @@ export const BoostEmpire = () => {
         </div>
         <div className="mt-2 flex flex-col items-center">
           {!!playerAccount && (
-            <TransactionQueueMask id="sell-points">
+            <TransactionQueueMask id="sell-points" className="relative">
               <Button size="md" className="text-base" disabled={amount == "0" || !boostPriceWei} onClick={handleSubmit}>
                 Buy
               </Button>
+              <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={amount == "0" || !boostPriceWei} />
             </TransactionQueueMask>
           )}
           {!playerAccount && (

@@ -12,6 +12,7 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 
 export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
@@ -35,7 +36,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
       <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
       <div className="flex flex-col items-center">
         {!!playerAccount && (
-          <TransactionQueueMask id={`${entity}-add-shield`}>
+          <TransactionQueueMask id={`${entity}-add-shield`} className="relative">
             <Button
               onClick={async () => {
                 await chargeShield(entity, BigInt(inputValue), chargeShieldPriceWei);
@@ -48,6 +49,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             >
               ADD SHIELDS
             </Button>
+            <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={supportDisabled} />
           </TransactionQueueMask>
         )}
         {!playerAccount && (

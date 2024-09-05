@@ -10,8 +10,8 @@ const params = new URLSearchParams(window.location.search);
 
 export const Settings = () => (
   <Modal title="Settings">
-    <Modal.Button variant="ghost" size="xs" shape="square">
-      <Cog6ToothIcon className="size-6" />
+    <Modal.Button variant="ghost" size="xs" shape="square" >
+      <Cog6ToothIcon className="size-6 hover:rotate-45 transition-all duration-300" />
     </Modal.Button>
 
     <Modal.Content className="h-120 !w-[300px]">
