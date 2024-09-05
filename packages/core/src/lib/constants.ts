@@ -31,8 +31,8 @@ export const CHART_TICK_INTERVALS = [
 ];
 
 export const TREASURE_PLANET_IRIDIUM_THRESHOLDS = {
-  medium: 100n,
-  large: 200n,
+  medium: 50,
+  large: 100,
 };
 
 export const PRICE_PRECISION = 4;
