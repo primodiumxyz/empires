@@ -291,7 +291,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     const capture = destinationEmpire && destinationEmpire !== this.empireId;
 
     this._scene.audio.play("Blaster", "sfx");
-    this._scene.fx.flashSprite(this.hexSprite, 400, 100, capture ? 4 : 3);
+    this._scene.fx.flashTint(this.planetSprite, { repeat: capture ? 2 : 3 });
     this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 60 }, "Combat", {
       depth: DepthLayers.Marker,
       blendMode: Phaser.BlendModes.ADD,
