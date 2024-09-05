@@ -10,6 +10,7 @@ import ScrollToBottom, { useScrollToBottom, useSticky } from "react-scroll-to-bo
 import { toHex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
+import { useCore } from "@primodiumxyz/core/react";
 import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
@@ -60,8 +61,15 @@ export const ActionLog = ({ className }: { className: string }) => {
 };
 
 const ClosedActionLog = () => {
+  const { tables } = useCore();
   const override = useMostRecentOverride();
-  const action = override ? override.element : <p className="text-xs opacity-70">No player actions</p>;
+  const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
+  const action =
+    override && (override.timestamp ?? gameStartTimestamp) >= gameStartTimestamp ? (
+      override.element
+    ) : (
+      <p className="text-xs opacity-70">No player actions</p>
+    );
 
   const [currentAction, setCurrentAction] = useState("");
   const [flashing, setFlashing] = useState(false);
@@ -122,7 +130,7 @@ const OpenActionLog = () => {
           );
         })}
       </Join>
-      <ScrollToBottom className="mt-1 pr-2 h-[212px] w-full">
+      <ScrollToBottom className="mt-1 h-[212px] w-full pr-2">
         {actions.map((action, i) => (
           <div
             className={cn(
