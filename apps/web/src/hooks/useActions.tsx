@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import { Address, Hex } from "viem";
 
 import { EEmpire, EShieldEaterDamageType } from "@primodiumxyz/contracts";
-import { entityToAddress, entityToPlanetName, formatNumber, WORLD_EVENTS_THRESHOLDS } from "@primodiumxyz/core";
+import { entityToAddress, formatNumber, WORLD_EVENTS_THRESHOLDS } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
@@ -16,6 +16,30 @@ type Action = {
   empireId: EEmpire | undefined;
   highlight?: boolean;
 };
+
+export const EmpireSpan = ({ empireId }: { empireId: EEmpire }) => (
+  <span className={EmpireEnumToConfig[empireId].textColor}>{EmpireEnumToConfig[empireId].name} empire</span>
+);
+
+export const PlanetSpan = ({ planetId }: { planetId: Entity }) => {
+  const { tables, utils } = useCore();
+  const planetName = tables.PlanetName.use(planetId)?.name;
+
+  useEffect(() => {
+    utils.getPlanetName(planetId);
+  }, []);
+
+  const empireId = tables.Planet.get(planetId)?.empireId;
+  if (!empireId) return <span className="text-gray-400">{planetName}</span>;
+  const colorClass = EmpireEnumToConfig[empireId as EEmpire].textColor;
+  return <span className={colorClass}>{planetName}</span>;
+};
+
+export const PlayerSpan = ({ playerId }: { playerId: Entity | Hex }) => (
+  <span className="text-yellow-400">
+    <Username address={entityToAddress(playerId)} />
+  </span>
+);
 
 export const useActions = (
   empireId?: EEmpire,
@@ -51,18 +75,6 @@ export const useActions = (
   const [debouncedIn, setDebouncedIn] = useState(Date.now());
   const [actions, setActions] = useState<Action[]>([]);
 
-  const getPlanetSpan = (planetId: Entity) => {
-    const empireId = tables.Planet.get(planetId)?.empireId;
-    if (!empireId) return <span className="text-gray-400">{entityToPlanetName(planetId)}</span>;
-    return <span className={EmpireEnumToConfig[empireId as EEmpire].textColor}>{entityToPlanetName(planetId)}</span>;
-  };
-
-  const getPlayerSpan = (playerId: Entity | Hex) => (
-    <span className="text-yellow-400">
-      <Username address={entityToAddress(playerId)} />
-    </span>
-  );
-
   useEffect(() => {
     setDebouncedIn(0);
   }, [empireId]);
@@ -77,9 +89,10 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlanetSpan(action.planetId as Entity)} added {formatNumber(action.goldAdded, { showZero: true })} gold
-          </div>
+          <p className="text-xs">
+            <PlanetSpan planetId={action.planetId as Entity} /> added{" "}
+            {formatNumber(action.goldAdded, { showZero: true })} gold
+          </p>
         ),
       };
     });
@@ -91,11 +104,11 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlanetSpan(action.originPlanetId as Entity)} moved {formatNumber(action.shipCount, { showZero: true })}{" "}
-            ship
-            {action.shipCount === 1n ? "" : "s"} to {getPlanetSpan(action.destinationPlanetId as Entity)}
-          </div>
+          <p className="text-xs">
+            <PlanetSpan planetId={action.originPlanetId as Entity} /> moved{" "}
+            {formatNumber(action.shipCount, { showZero: true })} ship
+            {action.shipCount === 1n ? "" : "s"} to <PlanetSpan planetId={action.destinationPlanetId as Entity} />
+          </p>
         ),
       };
     });
@@ -107,13 +120,13 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            A battle on {getPlanetSpan(action.planetId as Entity)} attacked{" "}
+          <p className="text-xs">
+            A battle on <PlanetSpan planetId={action.planetId as Entity} /> attacked{" "}
             {formatNumber(action.attackingShipCount, { showZero: true })} ship
             {action.attackingShipCount === 1n ? "" : "s"} and defended{" "}
             {formatNumber(action.defendingShipCount, { showZero: true })} ship
             {action.defendingShipCount === 1n ? "" : "s"}
-          </div>
+          </p>
         ),
       };
     });
@@ -125,10 +138,11 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlanetSpan(action.planetId as Entity)} bought {formatNumber(action.shipBought, { showZero: true })} ship
+          <p className="text-xs">
+            <PlanetSpan planetId={action.planetId as Entity} /> bought{" "}
+            {formatNumber(action.shipBought, { showZero: true })} ship
             {action.shipBought === 1n ? "" : "s"}
-          </div>
+          </p>
         ),
       };
     });
@@ -140,11 +154,11 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlanetSpan(action.planetId as Entity)} added {formatNumber(action.shieldBought, { showZero: true })}{" "}
-            shield
+          <p className="text-xs">
+            <PlanetSpan planetId={action.planetId as Entity} /> added{" "}
+            {formatNumber(action.shieldBought, { showZero: true })} shield
             {action.shieldBought === 1n ? "" : "s"}
-          </div>
+          </p>
         ),
       };
     });
@@ -156,10 +170,11 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount, { showZero: true })} ship
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </div>
+          <p className="text-xs">
+            <PlayerSpan playerId={action.playerId} /> created {formatNumber(action.overrideCount, { showZero: true })}{" "}
+            ship
+            {action.overrideCount === 1n ? "" : "s"} on <PlanetSpan planetId={action.planetId as Entity} />
+          </p>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
       };
@@ -172,10 +187,11 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount, { showZero: true })} shield
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </div>
+          <p className="text-xs">
+            <PlayerSpan playerId={action.playerId} /> charged {formatNumber(action.overrideCount, { showZero: true })}{" "}
+            shield
+            {action.overrideCount === 1n ? "" : "s"} on <PlanetSpan planetId={action.planetId as Entity} />
+          </p>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
       };
@@ -188,9 +204,10 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} placed a magnet on {getPlanetSpan(action.planetId as Entity)}
-          </div>
+          <p className="text-xs">
+            <PlayerSpan playerId={action.playerId} /> placed a magnet on{" "}
+            <PlanetSpan planetId={action.planetId as Entity} />
+          </p>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
       };
@@ -203,9 +220,10 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} detonated shield eater on {getPlanetSpan(action.planetId as Entity)}
-          </div>
+          <p className="text-xs">
+            <PlayerSpan playerId={action.playerId} /> detonated shield eater on{" "}
+            <PlanetSpan planetId={action.planetId as Entity} />
+          </p>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
       };
@@ -220,10 +238,10 @@ export const useActions = (
           empireId: empire,
           timestamp: action.timestamp,
           element: (
-            <div className="text-xs">
+            <p className="text-xs">
               Shield eater destroyed {formatNumber(action.shieldsDestroyed, { showZero: true })} shield
-              {action.shieldsDestroyed === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-            </div>
+              {action.shieldsDestroyed === 1n ? "" : "s"} on <PlanetSpan planetId={action.planetId as Entity} />
+            </p>
           ),
           highlight: action.shieldsDestroyed >= WORLD_EVENTS_THRESHOLDS.shieldsDestroyed,
         };
@@ -237,9 +255,10 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} placed acid rain on {getPlanetSpan(action.planetId as Entity)}
-          </div>
+          <p className="text-xs">
+            <PlayerSpan playerId={action.playerId} /> placed acid rain on{" "}
+            <PlanetSpan planetId={action.planetId as Entity} />
+          </p>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
       };
@@ -252,10 +271,10 @@ export const useActions = (
         empireId: empire,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
+          <p className="text-xs">
             Acid rain destroyed {formatNumber(action.shipsDestroyed, { showZero: true })} ship
-            {action.shipsDestroyed === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
-          </div>
+            {action.shipsDestroyed === 1n ? "" : "s"} on <PlanetSpan planetId={action.planetId as Entity} />
+          </p>
         ),
         highlight: action.shipsDestroyed >= WORLD_EVENTS_THRESHOLDS.shipsDestroyed,
       };
@@ -267,10 +286,11 @@ export const useActions = (
         empireId: action.empireId,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} airdropped {formatNumber(action.goldDistributed, { showZero: true })} gold
-            to {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
-          </div>
+          <p className="text-xs">
+            <PlayerSpan playerId={action.playerId} /> airdropped{" "}
+            {formatNumber(action.goldDistributed, { showZero: true })} gold to{" "}
+            {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
+          </p>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
       };
@@ -282,9 +302,10 @@ export const useActions = (
         empireId: action.empireId,
         timestamp: action.timestamp,
         element: (
-          <div className="text-xs">
-            {getPlayerSpan(action.playerId)} sold {formatNumber(action.overrideCount, { showZero: true })} points
-          </div>
+          <p className="text-xs">
+            <PlayerSpan playerId={action.playerId} /> sold {formatNumber(action.overrideCount, { showZero: true })}{" "}
+            points
+          </p>
         ),
         highlight: action.ethReceived >= generationalWealthThreshold,
       };
@@ -357,22 +378,6 @@ export const useMostRecentOverride = () => {
 
   const [override, setOverride] = useState<(Omit<Action, "timestamp"> & { id: string }) | null>(null);
 
-  const getEmpireSpan = (empireId: EEmpire) => (
-    <span className={EmpireEnumToConfig[empireId].textColor}>{EmpireEnumToConfig[empireId].name} empire</span>
-  );
-
-  const getPlanetSpan = (planetId: Entity) => {
-    const empireId = tables.Planet.get(planetId)?.empireId;
-    if (!empireId) return <span className="text-gray-400">{entityToPlanetName(planetId)}</span>;
-    return <span className={EmpireEnumToConfig[empireId as EEmpire].textColor}>{entityToPlanetName(planetId)}</span>;
-  };
-
-  const getPlayerSpan = (playerId: Address) => (
-    <span className="text-yellow-400">
-      <Username address={entityToAddress(playerId)} />
-    </span>
-  );
-
   // subscribe to updates
   useEffect(() => {
     const createShipsUnsub = tables.CreateShipOverrideLog.watch({
@@ -383,10 +388,11 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: empire as EEmpire,
           element: (
-            <div className="text-xs">
-              {getPlayerSpan(current.playerId)} created {formatNumber(current.overrideCount, { showZero: true })} ship
-              {current.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(current.planetId as Entity)}
-            </div>
+            <p className="text-xs">
+              <PlayerSpan playerId={current.playerId} /> created{" "}
+              {formatNumber(current.overrideCount, { showZero: true })} ship
+              {current.overrideCount === 1n ? "" : "s"} on <PlanetSpan planetId={current.planetId as Entity} />
+            </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
         });
@@ -401,10 +407,11 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: empire as EEmpire,
           element: (
-            <div className="text-xs">
-              {getPlayerSpan(current.playerId)} charged {formatNumber(current.overrideCount, { showZero: true })} shield
-              {current.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(current.planetId as Entity)}
-            </div>
+            <p className="text-xs">
+              <PlayerSpan playerId={current.playerId} /> charged{" "}
+              {formatNumber(current.overrideCount, { showZero: true })} shield
+              {current.overrideCount === 1n ? "" : "s"} on <PlanetSpan planetId={current.planetId as Entity} />
+            </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
         });
@@ -419,9 +426,10 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: empire as EEmpire,
           element: (
-            <div className="text-xs">
-              {getPlayerSpan(current.playerId)} placed a magnet on {getPlanetSpan(current.planetId as Entity)}
-            </div>
+            <p className="text-xs">
+              <PlayerSpan playerId={current.playerId} /> placed a magnet on{" "}
+              <PlanetSpan planetId={current.planetId as Entity} />
+            </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
         });
@@ -436,9 +444,10 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: empire as EEmpire,
           element: (
-            <div className="text-xs">
-              {getPlayerSpan(current.playerId)} detonated shield eater on {getPlanetSpan(current.planetId as Entity)}
-            </div>
+            <p className="text-xs">
+              <PlayerSpan playerId={current.playerId} /> detonated shield eater on{" "}
+              <PlanetSpan planetId={current.planetId as Entity} />
+            </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
         });
@@ -454,10 +463,10 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: empire as EEmpire,
           element: (
-            <div className="text-xs">
+            <p className="text-xs">
               Shield eater destroyed {formatNumber(current.shieldsDestroyed, { showZero: true })} shield
-              {current.shieldsDestroyed === 1n ? "" : "s"} on {getPlanetSpan(current.planetId as Entity)}
-            </div>
+              {current.shieldsDestroyed === 1n ? "" : "s"} on <PlanetSpan planetId={current.planetId as Entity} />
+            </p>
           ),
           highlight: current.shieldsDestroyed >= WORLD_EVENTS_THRESHOLDS.shieldsDestroyed,
         });
@@ -472,9 +481,10 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: empire as EEmpire,
           element: (
-            <div className="text-xs">
-              {getPlayerSpan(current.playerId)} placed acid rain on {getPlanetSpan(current.planetId as Entity)}
-            </div>
+            <p className="text-xs">
+              <PlayerSpan playerId={current.playerId} /> placed acid rain on{" "}
+              <PlanetSpan planetId={current.planetId as Entity} />
+            </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
         });
@@ -489,10 +499,10 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: empire as EEmpire,
           element: (
-            <div className="text-xs">
+            <p className="text-xs">
               Acid rain destroyed {formatNumber(current.shipsDestroyed, { showZero: true })} ship
-              {current.shipsDestroyed === 1n ? "" : "s"} on {getPlanetSpan(current.planetId as Entity)}
-            </div>
+              {current.shipsDestroyed === 1n ? "" : "s"} on <PlanetSpan planetId={current.planetId as Entity} />
+            </p>
           ),
           highlight: current.shipsDestroyed >= WORLD_EVENTS_THRESHOLDS.shipsDestroyed,
         });
@@ -506,10 +516,11 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: current.empireId as EEmpire,
           element: (
-            <div className="text-xs">
-              {getPlayerSpan(current.playerId)} airdropped {formatNumber(current.goldDistributed, { showZero: true })}{" "}
-              gold to {EmpireEnumToConfig[current.empireId as EEmpire].name} empire
-            </div>
+            <p className="text-xs">
+              <PlayerSpan playerId={current.playerId} /> airdropped{" "}
+              {formatNumber(current.goldDistributed, { showZero: true })} gold to{" "}
+              {EmpireEnumToConfig[current.empireId as EEmpire].name} empire
+            </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
         });
@@ -523,10 +534,11 @@ export const useMostRecentOverride = () => {
           id: entity,
           empireId: current.empireId as EEmpire,
           element: (
-            <div className="text-xs">
-              {getPlayerSpan(current.playerId)} sold {formatNumber(current.overrideCount, { showZero: true })} point
+            <p className="text-xs">
+              <PlayerSpan playerId={current.playerId} /> sold {formatNumber(current.overrideCount, { showZero: true })}{" "}
+              point
               {current.overrideCount === 1n ? "" : "s"}
-            </div>
+            </p>
           ),
           highlight: current.ethReceived >= generationalWealthThreshold,
         });
@@ -545,15 +557,15 @@ export const useMostRecentOverride = () => {
             id: `${entity}-citadel`,
             empireId: current.empireId as EEmpire,
             element: prevEmpire ? (
-              <div>
-                {getEmpireSpan(current.empireId as EEmpire)} captured a citadel ({getPlanetSpan(planetId as Entity)})
-                from {getEmpireSpan(prev.empireId as EEmpire)}
-              </div>
+              <p>
+                <EmpireSpan empireId={current.empireId as EEmpire} /> captured a citadel (
+                <PlanetSpan planetId={planetId as Entity} />) from <EmpireSpan empireId={prev.empireId as EEmpire} />
+              </p>
             ) : (
-              <div>
-                {getEmpireSpan(current.empireId as EEmpire)} was first to capture the{" "}
-                {getPlanetSpan(planetId as Entity)} citadel
-              </div>
+              <p>
+                <EmpireSpan empireId={current.empireId as EEmpire} /> was first to capture the{" "}
+                <PlanetSpan planetId={planetId as Entity} /> citadel
+              </p>
             ),
           });
         }
@@ -591,14 +603,14 @@ export const useMostRecentOverride = () => {
             empireId: leadingEmpireId as EEmpire,
             element:
               thirdEmpire && secondEmpire[1] !== thirdEmpire[1] ? (
-                <div>
-                  {getEmpireSpan(leadingEmpireId)} took the lead with {leadingEmpire[1]} planets, closely followed by{" "}
-                  {getEmpireSpan(Number(secondEmpire[0]) as EEmpire)}!
-                </div>
+                <p>
+                  <EmpireSpan empireId={leadingEmpireId} /> took the lead with {leadingEmpire[1]} planets, closely
+                  followed by <EmpireSpan empireId={Number(secondEmpire[0]) as EEmpire} />!
+                </p>
               ) : (
-                <div>
-                  {getEmpireSpan(leadingEmpireId)} took the lead with {leadingEmpire[1]} planets!
-                </div>
+                <p>
+                  <EmpireSpan empireId={leadingEmpireId} /> took the lead with {leadingEmpire[1]} planets!
+                </p>
               ),
           });
         }
@@ -615,7 +627,11 @@ export const useMostRecentOverride = () => {
           setOverride({
             id: entity,
             empireId: empireId as EEmpire,
-            element: <div>The price to support {getEmpireSpan(empireId as EEmpire)} could not be lower!</div>,
+            element: (
+              <p>
+                The price to support <EmpireSpan empireId={empireId as EEmpire} /> could not be lower!
+              </p>
+            ),
           });
         }
       },

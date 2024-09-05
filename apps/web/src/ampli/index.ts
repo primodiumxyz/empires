@@ -17,13 +17,13 @@
  * [Full Setup Instructions](https://data.amplitude.com/primodium/primodium-testnet2/implementation/empires)
  */
 
-import * as amplitude from '@amplitude/analytics-browser';
+import * as amplitude from "@amplitude/analytics-browser";
 
-export type Environment = 'prod' | 'dev';
+export type Environment = "prod" | "dev";
 
 export const ApiKey: Record<Environment, string> = {
-  prod: '',
-  dev: ''
+  prod: "",
+  dev: "",
 };
 
 /**
@@ -31,24 +31,29 @@ export const ApiKey: Record<Environment, string> = {
  */
 export const DefaultConfiguration: BrowserOptions = {
   plan: {
-    version: '1',
-    branch: 'main',
-    source: 'empires',
-    versionId: '8f0c2168-550a-4531-bc6b-f48fc69bf49e'
+    version: "1",
+    branch: "main",
+    source: "empires",
+    versionId: "8f0c2168-550a-4531-bc6b-f48fc69bf49e",
   },
   ...{
     ingestionMetadata: {
-      sourceName: 'browser-typescript-ampli',
-      sourceVersion: '2.0.0'
-    }
-  }
+      sourceName: "browser-typescript-ampli",
+      sourceVersion: "2.0.0",
+    },
+  },
 };
 
-export interface LoadOptionsBase { disabled?: boolean }
+export interface LoadOptionsBase {
+  disabled?: boolean;
+}
 
-export type LoadOptionsWithEnvironment = LoadOptionsBase & { environment: Environment; client?: { configuration?: BrowserOptions; }; };
-export type LoadOptionsWithApiKey = LoadOptionsBase & { client: { apiKey: string; configuration?: BrowserOptions; } };
-export type LoadOptionsWithClientInstance = LoadOptionsBase & { client: { instance: BrowserClient; } };
+export type LoadOptionsWithEnvironment = LoadOptionsBase & {
+  environment: Environment;
+  client?: { configuration?: BrowserOptions };
+};
+export type LoadOptionsWithApiKey = LoadOptionsBase & { client: { apiKey: string; configuration?: BrowserOptions } };
+export type LoadOptionsWithClientInstance = LoadOptionsBase & { client: { instance: BrowserClient } };
 
 export type LoadOptions = LoadOptionsWithEnvironment | LoadOptionsWithApiKey | LoadOptionsWithClientInstance;
 
@@ -115,7 +120,7 @@ export interface EmpiresBoostChargeProperties {
      */
     chargeCount?: number;
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
   };
@@ -167,7 +172,7 @@ export interface EmpiresChargeShieldProperties {
      */
     overrideCount?: number;
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
   };
@@ -219,7 +224,7 @@ export interface EmpiresCreateShipProperties {
      */
     overrideCount?: number;
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
   };
@@ -267,7 +272,7 @@ export interface EmpiresCreateShipProperties {
 export interface EmpiresDetonateShieldEaterProperties {
   empires?: {
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
   };
@@ -319,7 +324,7 @@ export interface EmpiresDrainShieldProperties {
      */
     overrideCount?: number;
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
   };
@@ -371,7 +376,7 @@ export interface EmpiresKillShipProperties {
      */
     overrideCount?: number;
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
   };
@@ -423,7 +428,7 @@ export interface EmpiresPlaceMagnetProperties {
      */
     empireName?: string;
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
     /**
@@ -531,7 +536,7 @@ export interface EmpiresStunChargeProperties {
      */
     chargeCount?: number;
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
   };
@@ -579,7 +584,7 @@ export interface EmpiresStunChargeProperties {
 export interface EmpiresTacticalStrikeProperties {
   empires?: {
     /**
-     * Planet name derived from `planetId`, an `EntityId`, with the `entityToPlanetName` function.
+     * Planet name derived from `planetId`, an `EntityId`, with the `getPlanetName` function.
      */
     planetName?: string;
   };
@@ -625,111 +630,89 @@ export interface EmpiresTacticalStrikeProperties {
 }
 
 export class EmpiresAirdropGold implements BaseEvent {
-  event_type = 'empires.airdropGold';
+  event_type = "empires.airdropGold";
 
-  constructor(
-    public event_properties: EmpiresAirdropGoldProperties,
-  ) {
+  constructor(public event_properties: EmpiresAirdropGoldProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresBoostCharge implements BaseEvent {
-  event_type = 'empires.boostCharge';
+  event_type = "empires.boostCharge";
 
-  constructor(
-    public event_properties: EmpiresBoostChargeProperties,
-  ) {
+  constructor(public event_properties: EmpiresBoostChargeProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresChargeShield implements BaseEvent {
-  event_type = 'empires.chargeShield';
+  event_type = "empires.chargeShield";
 
-  constructor(
-    public event_properties: EmpiresChargeShieldProperties,
-  ) {
+  constructor(public event_properties: EmpiresChargeShieldProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresCreateShip implements BaseEvent {
-  event_type = 'empires.createShip';
+  event_type = "empires.createShip";
 
-  constructor(
-    public event_properties: EmpiresCreateShipProperties,
-  ) {
+  constructor(public event_properties: EmpiresCreateShipProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresDetonateShieldEater implements BaseEvent {
-  event_type = 'empires.detonateShieldEater';
+  event_type = "empires.detonateShieldEater";
 
-  constructor(
-    public event_properties: EmpiresDetonateShieldEaterProperties,
-  ) {
+  constructor(public event_properties: EmpiresDetonateShieldEaterProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresDrainShield implements BaseEvent {
-  event_type = 'empires.drainShield';
+  event_type = "empires.drainShield";
 
-  constructor(
-    public event_properties: EmpiresDrainShieldProperties,
-  ) {
+  constructor(public event_properties: EmpiresDrainShieldProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresKillShip implements BaseEvent {
-  event_type = 'empires.killShip';
+  event_type = "empires.killShip";
 
-  constructor(
-    public event_properties: EmpiresKillShipProperties,
-  ) {
+  constructor(public event_properties: EmpiresKillShipProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresPlaceMagnet implements BaseEvent {
-  event_type = 'empires.placeMagnet';
+  event_type = "empires.placeMagnet";
 
-  constructor(
-    public event_properties: EmpiresPlaceMagnetProperties,
-  ) {
+  constructor(public event_properties: EmpiresPlaceMagnetProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresSellPoints implements BaseEvent {
-  event_type = 'empires.sellPoints';
+  event_type = "empires.sellPoints";
 
-  constructor(
-    public event_properties: EmpiresSellPointsProperties,
-  ) {
+  constructor(public event_properties: EmpiresSellPointsProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresStunCharge implements BaseEvent {
-  event_type = 'empires.stunCharge';
+  event_type = "empires.stunCharge";
 
-  constructor(
-    public event_properties: EmpiresStunChargeProperties,
-  ) {
+  constructor(public event_properties: EmpiresStunChargeProperties) {
     this.event_properties = event_properties;
   }
 }
 
 export class EmpiresTacticalStrike implements BaseEvent {
-  event_type = 'empires.tacticalStrike';
+  event_type = "empires.tacticalStrike";
 
-  constructor(
-    public event_properties: EmpiresTacticalStrikeProperties,
-  ) {
+  constructor(public event_properties: EmpiresTacticalStrikeProperties) {
     this.event_properties = event_properties;
   }
 }

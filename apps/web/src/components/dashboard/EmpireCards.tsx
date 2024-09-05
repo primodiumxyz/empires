@@ -2,8 +2,10 @@ import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
+import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Badge } from "@/components/core/Badge";
 import { SecondaryCard } from "@/components/core/Card";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { Price } from "@/components/shared/Price";
 import { EmpireData, useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -43,23 +45,20 @@ export const EmpireCard = ({
   const citadelCount = tables.Planet.getAllWith({ isCitadel: true }).length ?? 0;
 
   return (
-    <SecondaryCard>
-      <div className="grid grid-cols-[3rem_1fr_auto] grid-rows-[1rem_1rem_1rem] items-center gap-x-2 lg:grid-cols-[4rem_1fr_auto] lg:grid-rows-[1fr_auto_auto]">
-        <div className="row-span-3 mx-auto">
-          <img src={sprite.getSprite(sprites.planet)} className="w-6 lg:w-8" />
-        </div>
-        <p className="text-sm font-bold text-accent lg:text-lg">{name}</p>
+    <SecondaryCard className="justify-center">
+      <div className="grid grid-cols-[3rem_1fr_auto] grid-rows-[1rem_1rem] items-center gap-x-2 lg:grid-cols-[4rem_1fr_auto] lg:grid-rows-[1fr_auto_auto]">
+        <EmpireLogo empireId={empire} size="xl" className="row-span-3 mx-auto" />
+        <p className="inline text-accent lg:text-base">
+          {formatEther(playerPoints)}
+          <span className="text-xs"> pts </span>
+          <span className="hidden text-[0.6rem] opacity-50 lg:inline">YOU OWN</span>
+        </p>
         <Price wei={pointPrice} className="text-right text-sm lg:text-lg" />
         <p className="inline w-full text-xs uppercase opacity-75 lg:!text-sm">
           win <span className="hidden lg:inline">chance</span>: {winRate}%
         </p>
-        <div className="items-center gap-0 text-right text-accent lg:text-base">
-          <p className="hidden text-[0.6rem] opacity-50 lg:block">YOU OWN</p>
-          <p className="text-sm">
-            {formatEther(playerPoints)}
-            <span className="text-xs">pts</span>
-          </p>
-        </div>
+        <div />
+
         <div className="flex items-center gap-4 lg:gap-6">
           <Badge className="gap-1 p-2" variant="neutral">
             <img src={sprite.getSprite("Crown")} className="w-3 lg:w-4" />
@@ -68,7 +67,7 @@ export const EmpireCard = ({
             </span>
           </Badge>
           <Badge className="gap-1 p-2" variant="neutral">
-            <img src={sprite.getSprite("PlanetGrey")} className="w-3 lg:w-4" />
+            <img src={sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey")} className="w-3 lg:w-4" />
             <span className="text-xs">{ownedPlanetCount}</span>
           </Badge>
         </div>
