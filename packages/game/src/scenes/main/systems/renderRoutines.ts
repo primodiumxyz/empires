@@ -26,7 +26,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `-${current.goldSpent}`, {
-            icon: "Gold",
+            icon: "Iridium",
             color: "#ff0000",
           });
 
@@ -63,7 +63,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `-${current.goldSpent}`, {
-            icon: "Gold",
+            icon: "Iridium",
             color: "#ff0000",
           });
 
@@ -169,7 +169,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
           });
 
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
-            icon: "Gold",
+            icon: "Iridium",
             fontSize: 16,
             iconSize: 20,
             delay: 1000,
@@ -209,7 +209,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
               { x: planet.coord.x, y: planet.coord.y - 25 },
               `+${formatNumber(goldGenRate * 3n)}`,
               {
-                icon: "Gold",
+                icon: "Iridium",
                 fontSize: 12,
                 iconSize: 16,
               },

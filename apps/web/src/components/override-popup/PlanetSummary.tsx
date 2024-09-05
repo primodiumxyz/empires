@@ -106,7 +106,7 @@ const PlanetAssets = ({
     <div className="mt-1 flex gap-2">
       <IconLabel imageUri={sprite.getSprite("Ship")} text={formatNumber(shipCount, { showZero: true })} />
       <IconLabel imageUri={sprite.getSprite("Shield")} text={formatNumber(shieldCount, { showZero: true })} />
-      <IconLabel imageUri={sprite.getSprite("Gold")} text={formatNumber(goldCount, { showZero: true })} />
+      <IconLabel imageUri={sprite.getSprite("Iridium")} text={formatNumber(goldCount, { showZero: true })} />
     </div>
   );
 };

@@ -40,7 +40,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private pendingMove: Entity | null = null;
   private shields: IconLabel;
   private ships: IconLabel;
-  private gold: IconLabel;
+  private iridium: IconLabel;
   private magnets: Magnet[];
   private activeMagnets: Map<EEmpire, number> = new Map();
   private magnetWaves: Phaser.GameObjects.Sprite;
@@ -123,14 +123,14 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       "Ship",
     ).setDepth(DepthLayers.Planet - 1);
 
-    this.gold = new IconLabel(
+    this.iridium = new IconLabel(
       scene,
       {
         x: coord.x,
         y: coord.y + 60,
       },
       "0",
-      "Gold",
+      "Iridium",
     ).setDepth(DepthLayers.Planet - 1);
 
     this.hexHoloSprite = new Phaser.GameObjects.Sprite(
@@ -227,7 +227,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.pendingArrow);
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
-    this.scene.add.existing(this.gold);
+    this.scene.add.existing(this.iridium);
     if (this.citadelCrown) this.scene.add.existing(this.citadelCrown);
     if (this.citadelAsteroidBelt) this.scene.add.existing(this.citadelAsteroidBelt);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
@@ -249,7 +249,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.planetName.setScale(scale);
     this.shields.setScale(scale);
     this.ships.setScale(scale);
-    this.gold.setScale(scale);
+    this.iridium.setScale(scale);
     if (this.citadelCrown) this.citadelCrown.setScale(scale);
     if (this.citadelAsteroidBelt) this.citadelAsteroidBelt.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
@@ -278,7 +278,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.shields.setAlpha(alpha);
     this.ships.setAlpha(alpha);
-    this.gold.setAlpha(alpha);
+    this.iridium.setAlpha(alpha);
     this.magnets.forEach((magnet) => magnet.setAlpha(alpha));
     this.planetName.setAlpha(nameAlpha);
   }
@@ -429,8 +429,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     );
   }
 
-  setGoldCount(count: bigint) {
-    this.gold.setText(
+  setIridiumCount(count: bigint) {
+    this.iridium.setText(
       formatNumber(count, {
         short: true,
         showZero: true,

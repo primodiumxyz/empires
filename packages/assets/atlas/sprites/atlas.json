@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1725527094755",
+            "image": "atlas.png?timestamp=1725527300789",
             "format": "RGBA8888",
             "size": {
                 "w": 2386,
@@ -4928,7 +4928,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/shard.png",
+                    "filename": "sprites/icons/iridium.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4949,7 +4949,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/shield.png",
+                    "filename": "sprites/icons/shard.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4970,7 +4970,7 @@
                     }
                 },
                 {
-                    "filename": "sprites/icons/ship.png",
+                    "filename": "sprites/icons/shield.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4985,6 +4985,27 @@
                     },
                     "frame": {
                         "x": 1535,
+                        "y": 2313,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/ship.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1567,
                         "y": 2313,
                         "w": 32,
                         "h": 32

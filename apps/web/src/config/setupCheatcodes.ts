@@ -271,11 +271,11 @@ export const setupCheatcodes = (options: {
   });
 
   /* ------------------------------- MECHANISMS ------------------------------- */
-  // set gold count for a planet
-  const setGoldCount = createCheatcode({
-    title: "Set gold",
+  // set iridium count for a planet
+  const setIridiumCount = createCheatcode({
+    title: "Set iridium",
     bg: CheatcodeToBg["mechanisms"],
-    caption: "Set the gold count for a planet",
+    caption: "Set the iridium count for a planet",
     inputs: {
       planet: {
         label: "Planet",
@@ -296,16 +296,16 @@ export const setupCheatcodes = (options: {
         properties: { goldCount: BigInt(amount.value) },
       });
     },
-    loading: () => "[CHEATCODE] Setting gold count...",
-    success: ({ planet, amount }) => `Gold set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`,
-    error: ({ planet }) => `Failed to set gold on ${entityToPlanetName(planet.id as Entity)}`,
+    loading: () => "[CHEATCODE] Setting iridium count...",
+    success: ({ planet, amount }) => `Iridium set to ${amount.value} on ${entityToPlanetName(planet.id as Entity)}`,
+    error: ({ planet }) => `Failed to set iridium on ${entityToPlanetName(planet.id as Entity)}`,
   });
 
-  // generate gold on all planets
+  // generate iridium on all planets
   const generateGold = createCheatcode({
-    title: "Generate gold",
+    title: "Generate iridium",
     bg: CheatcodeToBg["mechanisms"],
-    caption: "Give a specified amount of gold to all planets",
+    caption: "Give a specified amount of iridium to all planets",
     inputs: {
       amount: {
         label: "Amount",
@@ -324,9 +324,9 @@ export const setupCheatcodes = (options: {
         ),
       );
     },
-    loading: () => "[CHEATCODE] Generating gold...",
-    success: ({ amount }) => `Generated ${amount.value} gold on all planets`,
-    error: () => `Failed to generate gold on all planets`,
+    loading: () => "[CHEATCODE] Generating iridium...",
+    success: ({ amount }) => `Generated ${amount.value} iridium on all planets`,
+    error: () => `Failed to generate iridium on all planets`,
   });
 
   // set empire on planet
@@ -879,7 +879,7 @@ export const setupCheatcodes = (options: {
           defaultValue: gameConfig?.turnLengthBlocks ?? BigInt(1),
         },
         goldGenRate: {
-          label: "Gold generation rate",
+          label: "Iridium generation rate",
           inputType: "number",
           defaultValue: gameConfig?.goldGenRate ?? BigInt(1),
         },
@@ -1020,7 +1020,7 @@ export const setupCheatcodes = (options: {
       caption: "P_RoutineCosts",
       inputs: {
         buyShips: {
-          label: "Buy ships (in gold)",
+          label: "Buy ships (in iridium)",
           inputType: "number",
           defaultValue: tables.P_RoutineCosts.getWithKeys({ routine: ERoutine["BuyShips"] })?.goldCost ?? BigInt(2),
         },
@@ -1046,7 +1046,7 @@ export const setupCheatcodes = (options: {
     setShips,
     sendShips,
     setShields,
-    setGoldCount,
+    setIridiumCount,
     generateGold,
     setEmpire,
     givePoints,
