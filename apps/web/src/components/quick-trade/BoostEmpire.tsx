@@ -29,7 +29,7 @@ export const BoostEmpire = () => {
   } = useGame();
   const { playerAccount, login } = usePlayerAccount();
 
-  const boostPriceWei = useOverrideCost(EOverride.AirdropGold, selectedEmpire, BigInt(amount));
+  const {expected: boostPriceWei, max: boostPriceWeiMax} = useOverrideCost(EOverride.AirdropGold, selectedEmpire, BigInt(amount));
   const boostPointsReceived = useOverridePointsReceived(EOverride.AirdropGold, selectedEmpire, BigInt(amount));
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const BoostEmpire = () => {
   };
 
   const handleSubmit = () => {
-    calls.airdropGold(selectedEmpire, BigInt(amount), boostPriceWei, boostPointsReceived.value);
+    calls.airdropGold(selectedEmpire, BigInt(amount), boostPriceWeiMax, boostPointsReceived.value);
     setAmount("0");
   };
   return (
@@ -94,9 +94,10 @@ export const BoostEmpire = () => {
               Login to Buy
             </Button>
           )}
-          <Badge size="sm" variant="primary" className="rounded-t-none p-3">
-            <Price wei={boostPriceWei} className="text-sm text-white" />
-          </Badge>
+          <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
+            <Price wei={boostPriceWei} />
+            <p className="opacity-70 text-[0.6rem]" >Max <Price wei={boostPriceWeiMax}  /></p>
+          </div>
         </div>
       </div>
     </SecondaryCard>

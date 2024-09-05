@@ -20,7 +20,7 @@ export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const planetEmpire = planet?.empireId ?? (0 as EEmpire);
   const { cycles } = useAcidRain(entity, planetEmpire);
 
-  const placeAcidPriceWei = useOverrideCost(EOverride.PlaceAcid, planetEmpire, 1n);
+  const { expected: placeAcidPriceWei, max: placeAcidPriceWeiMax } = useOverrideCost(EOverride.PlaceAcid, planetEmpire, 1n);
   const placeAcidDisabled = !planetEmpire || cycles > 0n;
   const placeAcidPointsReceived = useOverridePointsReceived(EOverride.PlaceAcid, planetEmpire, 1n);
 
@@ -33,13 +33,15 @@ export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
       : "";
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-1">
       {!!caption && <p className="mb-1 rounded-box bg-error/25 p-1 text-center text-xs opacity-75">{caption}</p>}
+
+      <PointsReceived points={placeAcidPointsReceived} inline explicit />
       {!!playerAccount && (
         <TransactionQueueMask id={`${entity}-place-acid`} className="relative flex items-center">
           <Button
             onClick={async () => {
-              await placeAcidRain(entity, placeAcidPriceWei);
+              await placeAcidRain(entity, placeAcidPriceWeiMax);
               tables.SelectedPlanet.remove();
             }}
             disabled={placeAcidDisabled}
@@ -56,10 +58,11 @@ export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           LOGIN TO ACTIVATE
         </Button>
       )}
-      <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
+      <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
         <Price wei={placeAcidPriceWei} />
-      </p>
-      <PointsReceived points={placeAcidPointsReceived} inline explicit />
+        <p className="opacity-70 text-[0.6rem]" >Max <Price wei={placeAcidPriceWeiMax}  /></p>
+      </div>
+
     </div>
   );
 };

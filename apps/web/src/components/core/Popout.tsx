@@ -78,9 +78,7 @@ export const Popout = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      console.log('clicked', popoutRef.current, event.target)
       const contains = popoutRef.current?.contains(event.target as Node);
-      console.log('contains', contains)
 
       if (popoutRef.current && !popoutRef.current.contains(event.target as Node)) {
         setVisible(false);

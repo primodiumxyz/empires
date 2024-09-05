@@ -22,7 +22,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? (0 as EEmpire);
 
-  const detonatePriceWei = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
+  const {expected: detonatePriceWei, max: detonatePriceWeiMax} = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
   const detonateDisabled = currentPlanet !== entity || !!cooldownShields;
   const detonatePointsReceived = useOverridePointsReceived(EOverride.DetonateShieldEater, planetEmpire, 1n);
 
@@ -40,7 +40,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
         <TransactionQueueMask id="detonate-shield-eater" className="relative">
           <Button
             onClick={async () => {
-              await detonateShieldEater(entity, detonatePriceWei);
+              await detonateShieldEater(entity, detonatePriceWeiMax);
               tables.SelectedPlanet.remove();
             }}
             disabled={detonateDisabled}
@@ -57,9 +57,10 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
           LOGIN TO ACTIVATE
         </Button>
       )}
-      <p className="rounded-box rounded-t-none bg-error/25 p-1 text-center text-xs opacity-75">
+      <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
         <Price wei={detonatePriceWei} />
-      </p>
+        <p className="opacity-70 text-[0.6rem]" >Max <Price wei={detonatePriceWeiMax}  /></p>
+      </div>
       {currentPlanet === entity && <PointsReceived points={detonatePointsReceived} inline explicit allowNullEmpire />}
     </div>
   );

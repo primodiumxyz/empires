@@ -21,7 +21,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? EEmpire.NULL;
   const [inputValue, setInputValue] = useState("1");
-  const createShipPriceWei = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const {expected: createShipPriceWei, max: createShipPriceWeiMax} = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
   const createShipPointsReceived = useOverridePointsReceived(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
   const { playerAccount, login } = usePlayerAccount();
 
@@ -29,13 +29,14 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
 
   return (
     <div className="flex w-full flex-col items-center gap-2">
+      <PointsReceived points={createShipPointsReceived} inline />
       <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
       <div className="flex flex-col items-center">
         {!!playerAccount && (
           <TransactionQueueMask id={`${entity}-create-ship`} className = "relative flex flex-row items-center ">
             <Button
               onClick={async () => {
-                await createShip(entity, BigInt(inputValue), createShipPriceWei);
+                await createShip(entity, BigInt(inputValue), createShipPriceWeiMax);
                 setInputValue("1");
                 tables.SelectedPlanet.remove();
               }}
@@ -55,11 +56,11 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             LOGIN TO ADD SHIPS
           </Button>
         )}
-        <p className="-mt-1 w-fit rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
+        <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
           <Price wei={createShipPriceWei} />
-        </p>
+          <p className="opacity-70 text-[0.6rem]" >Max <Price wei={createShipPriceWeiMax}  /></p>
+        </div>
       </div>
-      <PointsReceived points={createShipPointsReceived} inline />
     </div>
   );
 };

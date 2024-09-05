@@ -66,7 +66,6 @@ export const _SlippageSettings = () => {
             if (Number(value) >= 1 && value.startsWith('0')) {
                 value = value.replace(/^0+/, '');
             }
-            console.log(value);
             if (Number(value) > 100) return;
             if (Number(value) === 0) return tables.Slippage.update({ customValue: 0 });
             tables.Slippage.update({ customValue: Number(value) });
