@@ -55,7 +55,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
   );
 
   const ViewMode = createLocalNumberTable(world, { id: "ViewMode", persist: true, version: "1" });
-  if (!ViewMode.get()?.value) ViewMode.set({ value: EViewMode.Dashboard });
 
   return {
     DoubleCounter,
