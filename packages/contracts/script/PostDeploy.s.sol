@@ -9,7 +9,8 @@ import { createPrototypes } from "codegen/Prototypes.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { Ready, Turn, P_GameConfig } from "codegen/index.sol";
+import { Ready, Turn, P_GameConfig, Role } from "codegen/index.sol";
+import { ERole } from "codegen/common.sol";
 
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
 import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
@@ -52,6 +53,13 @@ contract PostDeploy is Script {
     world.registerSystem(withdrawSystemId, withdrawSystem, true);
     world.registerFunctionSelector(withdrawSystemId, "withdrawRake()");
 
+    address adminAddress = vm.addr(deployerPrivateKey);
+    Role.set(adminAddress, ERole.Admin);
+
+    address keeperAddress = vm.envAddress("KEEPER_ADDRESS");
+    if (adminAddress != keeperAddress) {
+      Role.set(keeperAddress, ERole.CanUpdate);
+    }
     // must be set after post deploy to avoid race condition
     Ready.set(true);
     vm.stopBroadcast();

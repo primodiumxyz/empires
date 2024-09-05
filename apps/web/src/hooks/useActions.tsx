@@ -6,7 +6,6 @@ import { entityToAddress, entityToPlanetName, formatNumber, WORLD_EVENTS_THRESHO
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
-import { Price } from "@/components/shared/Price";
 import { Username } from "@/components/shared/Username";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { EmpireEnumToConfig } from "@/util/lookups";
@@ -159,8 +158,7 @@ export const useActions = (
         element: (
           <div className="text-xs">
             {getPlayerSpan(action.playerId)} created {formatNumber(action.overrideCount, { showZero: true })} ship
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)} for{" "}
-            <Price wei={action.ethSpent} className="font-bold" />
+            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
           </div>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
@@ -176,8 +174,7 @@ export const useActions = (
         element: (
           <div className="text-xs">
             {getPlayerSpan(action.playerId)} charged {formatNumber(action.overrideCount, { showZero: true })} shield
-            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)} for{" "}
-            <Price wei={action.ethSpent} className="font-bold" />
+            {action.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(action.planetId as Entity)}
           </div>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
@@ -272,8 +269,7 @@ export const useActions = (
         element: (
           <div className="text-xs">
             {getPlayerSpan(action.playerId)} airdropped {formatNumber(action.goldDistributed, { showZero: true })} gold
-            to {EmpireEnumToConfig[action.empireId as EEmpire].name} empire for{" "}
-            <Price wei={action.ethSpent} className="font-bold" />
+            to {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
           </div>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
@@ -287,8 +283,7 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <div className="text-xs">
-            {getPlayerSpan(action.playerId)} sold {formatNumber(action.overrideCount, { showZero: true })} points for{" "}
-            <Price wei={action.ethReceived} className="font-bold" />
+            {getPlayerSpan(action.playerId)} sold {formatNumber(action.overrideCount, { showZero: true })} points
           </div>
         ),
         highlight: action.ethReceived >= generationalWealthThreshold,
@@ -390,8 +385,7 @@ export const useMostRecentOverride = () => {
           element: (
             <div className="text-xs">
               {getPlayerSpan(current.playerId)} created {formatNumber(current.overrideCount, { showZero: true })} ship
-              {current.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(current.planetId as Entity)} for{" "}
-              <Price wei={current.ethSpent} className="font-bold" />
+              {current.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(current.planetId as Entity)}
             </div>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
@@ -409,8 +403,7 @@ export const useMostRecentOverride = () => {
           element: (
             <div className="text-xs">
               {getPlayerSpan(current.playerId)} charged {formatNumber(current.overrideCount, { showZero: true })} shield
-              {current.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(current.planetId as Entity)} for{" "}
-              <Price wei={current.ethSpent} className="font-bold" />
+              {current.overrideCount === 1n ? "" : "s"} on {getPlanetSpan(current.planetId as Entity)}
             </div>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
@@ -515,8 +508,7 @@ export const useMostRecentOverride = () => {
           element: (
             <div className="text-xs">
               {getPlayerSpan(current.playerId)} airdropped {formatNumber(current.goldDistributed, { showZero: true })}{" "}
-              gold to {EmpireEnumToConfig[current.empireId as EEmpire].name} empire for{" "}
-              <Price wei={current.ethSpent} className="font-bold" />
+              gold to {EmpireEnumToConfig[current.empireId as EEmpire].name} empire
             </div>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
@@ -532,8 +524,8 @@ export const useMostRecentOverride = () => {
           empireId: current.empireId as EEmpire,
           element: (
             <div className="text-xs">
-              {getPlayerSpan(current.playerId)} sold {formatNumber(current.overrideCount, { showZero: true })} points
-              for <Price wei={current.ethReceived} className="font-bold" />
+              {getPlayerSpan(current.playerId)} sold {formatNumber(current.overrideCount, { showZero: true })} point
+              {current.overrideCount === 1n ? "" : "s"}
             </div>
           ),
           highlight: current.ethReceived >= generationalWealthThreshold,

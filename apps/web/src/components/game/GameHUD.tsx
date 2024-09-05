@@ -5,6 +5,7 @@ import { EViewMode } from "@primodiumxyz/core";
 import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
+import { AdminModal } from "@/components/Admin";
 import { Cheatcodes } from "@/components/cheatcodes/Cheatcodes";
 import { Button } from "@/components/core/Button";
 import { HUD } from "@/components/core/HUD";
@@ -36,7 +37,9 @@ export const GameHUD = () => {
   const viewMode = ViewMode.use()?.value ?? EViewMode.Map;
   const params = new URLSearchParams(window.location.search);
   const showCheatcodes = DEV && !!params.get("showCheatcodes");
+  const showAdmin = !!params.get("admin");
   const showMap = viewMode === EViewMode.Map;
+
   const { playerAccount } = usePlayerAccount();
 
   useEffect(() => {
@@ -81,6 +84,7 @@ export const GameHUD = () => {
 
           {showMap && <QuickTradeMapMode className="hidden lg:flex" />}
           {showCheatcodes && <Cheatcodes />}
+          {showAdmin && <AdminModal />}
         </HUD.TopMiddle>
 
         <HUD.TopRight className="z-[1000] flex flex-col gap-1">

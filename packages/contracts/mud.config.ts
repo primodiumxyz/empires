@@ -104,6 +104,13 @@ export const worldInput = {
       schema: { empire: "EEmpire" },
     },
 
+    /* ----------------------------- Access Control ----------------------------- */
+
+    Role: {
+      key: ["id"],
+      schema: { id: "address", value: "ERole" },
+    },
+
     /* ------------------------------- Players Map ------------------------------ */
     // Used in the mbuilding utilities Map data structure
     Value_PlayersMap: {

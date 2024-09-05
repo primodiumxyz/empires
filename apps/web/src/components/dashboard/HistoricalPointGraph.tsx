@@ -379,7 +379,7 @@ export const HistoricalPointGraph: React.FC<{
             {scale.label}
           </Button>
         ))}
-        <Tooltip tooltipContent="Time scale" direction="right" className="ml-1 w-28 text-xs">
+        <Tooltip tooltipContent="Resize visible chart to time range" direction="right" className="ml-1 w-44 text-xs">
           <InformationCircleIcon className="size-4 opacity-75" />
         </Tooltip>
       </div>
