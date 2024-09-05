@@ -19,12 +19,26 @@ export const getInitialQuery = ({
   return {
     address: worldAddress,
     queries: [
+      // Config
       ...configTableQueries,
-      { tableId: tables.Planet.tableId },
-      { tableId: tables.Turn.tableId },
-      { tableId: tables.Value_PlayersMap.tableId },
       { tableId: tables.FunctionSelectors.tableId },
       { tableId: tables.FunctionSignatures.tableId },
+      { tableId: tables.Role.tableId },
+      // Base
+      { tableId: tables.Planet.tableId },
+      { tableId: tables.Empire.tableId },
+      { tableId: tables.Turn.tableId },
+      { tableId: tables.WinningEmpire.tableId },
+      // Overrides
+      { tableId: tables.OverrideCost.tableId },
+      { tableId: tables.ShieldEater.tableId },
+      { tableId: tables.Magnet.tableId },
+      { tableId: tables.MagnetTurnPlanets.tableId },
+      // Points
+      { tableId: tables.Value_PlayersMap.tableId },
+      { tableId: tables.HistoricalPointCost.tableId },
+      // Routines
+      { tableId: tables.PendingMove.tableId },
     ],
   };
 };
