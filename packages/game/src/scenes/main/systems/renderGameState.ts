@@ -1,4 +1,4 @@
-import { Core } from "@primodiumxyz/core";
+import { Core, EViewMode } from "@primodiumxyz/core";
 import { GlobalApi } from "@game/api/global";
 import { PrimodiumScene } from "@game/types";
 
@@ -13,6 +13,13 @@ export const renderGameState = (scene: PrimodiumScene, core: Core, game: GlobalA
 
         planet.setPlayAnims(current.visible);
       });
+    },
+  });
+
+  core.tables.ViewMode.watch({
+    onChange: ({ properties: { current } }) => {
+      if (!current) return;
+      game.tables.GameState.update({ onMap: current.value === EViewMode.Map });
     },
   });
 };

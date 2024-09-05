@@ -21,14 +21,13 @@ import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 export const Dashboard = () => {
-  const { ChartConfig, ViewMode, SelectedTab } = useSettings();
-  const viewMode = ViewMode.use()?.value ?? EViewMode.Map;
-  const showMap = viewMode === EViewMode.Map;
-
   const {
     MAIN: { sprite },
   } = useGame();
   const { tables } = useCore();
+  const { ChartConfig, SelectedTab } = useSettings();
+  const viewMode = tables.ViewMode.use()?.value ?? EViewMode.Map;
+  const showMap = viewMode === EViewMode.Map;
   const persistKey = toHex("trading-chart") as Entity;
   const selectedTab = SelectedTab.use(persistKey)?.value ?? 0;
   const selectedEmpire = selectedTab === 0 ? EEmpire.LENGTH : (selectedTab as EEmpire);

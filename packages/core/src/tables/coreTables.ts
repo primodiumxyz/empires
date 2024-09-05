@@ -2,9 +2,11 @@ import {
   createLocalBigIntTable,
   createLocalBoolTable,
   createLocalEntityTable,
+  createLocalNumberTable,
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
+import { EViewMode } from "@core/lib";
 import { CreateNetworkResult } from "@core/lib/types";
 
 import { createTransactionQueueTable } from "./customTables/TransactionQueueTable";
@@ -48,8 +50,12 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     {
       id: "Username",
       persist: true,
+      version: "1",
     },
   );
+
+  const ViewMode = createLocalNumberTable(world, { id: "ViewMode", persist: true, version: "1" });
+  if (!ViewMode.get()?.value) ViewMode.set({ value: EViewMode.Dashboard });
 
   return {
     DoubleCounter,
@@ -61,5 +67,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     SelectedPlanet,
     HoveredPlanet,
     Username,
+    ViewMode,
   };
 }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { CHART_TICK_INTERVALS, EViewMode } from "@primodiumxyz/core";
+import { CHART_TICK_INTERVALS } from "@primodiumxyz/core";
 import {
   createLocalBoolTable,
   createLocalNumberTable,
@@ -33,13 +33,7 @@ const SelectedTab = createLocalNumberTable(settingsWorld, {
   version: "1",
 });
 
-const ViewMode = createLocalNumberTable(settingsWorld, { id: "ViewMode", persist: true, version: "1" });
-
 const OpenRoutineProbabilities = createLocalBoolTable(settingsWorld, { id: "OpenRoutineProbabilities", persist: true });
-
-if (!ViewMode.get()?.value) {
-  ViewMode.set({ value: EViewMode.Dashboard });
-}
 
 const ChartConfig = createLocalTable(
   settingsWorld,
@@ -69,7 +63,6 @@ export const useSettings = () => {
     Dripped,
     MusicPlaying,
     SelectedTab,
-    ViewMode,
     ChartConfig,
     OpenRoutineProbabilities,
     ShowRoutineLogs,
