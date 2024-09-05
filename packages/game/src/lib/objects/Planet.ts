@@ -2,7 +2,6 @@ import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
 import {
   calculateAngleBetweenPoints,
-  entityToPlanetName,
   formatNumber,
   lerp,
   TREASURE_PLANET_IRIDIUM_THRESHOLDS,
@@ -52,6 +51,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private citadelShineInterval: NodeJS.Timeout | null = null;
   private empireId: EEmpire;
   private spawned = false;
+  private updatePlanetName: () => Promise<string>;
+  private updatePlanetNameInterval: NodeJS.Timeout | null = null;
 
   constructor(args: {
     id: Entity;
@@ -59,6 +60,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     coord: PixelCoord;
     empire: EEmpire;
     citadel?: boolean;
+    updatePlanetName: () => Promise<string>;
+    updateInterval?: number;
     empireCount: number;
   }) {
     const { id, scene, coord, empire, citadel, empireCount } = args;
@@ -91,7 +94,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"],
     ).setDepth(DepthLayers.Base + coord.y);
 
-    this.planetName = new Phaser.GameObjects.Text(scene.phaserScene, coord.x, coord.y + 40, entityToPlanetName(id), {
+    this.planetName = new Phaser.GameObjects.Text(scene.phaserScene, coord.x, coord.y + 40, "", {
       fontSize: 25,
       color: "rgba(255,255,255,0.5)",
       fontFamily: "Silkscreen",
@@ -101,6 +104,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       .setOrigin(0.5, 0.5)
       .setAlpha(0.5)
       .setDepth(DepthLayers.Planet - 1);
+
+    this.updatePlanetName = args.updatePlanetName;
+    this.startUpdatePlanetNameInterval(args.updateInterval ?? 1000);
 
     this.shields = new IconLabel(
       scene,
@@ -210,6 +216,19 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.empireId = empire;
 
     this._scene.objects.planet.add(id, this, false);
+  }
+  private async startUpdatePlanetNameInterval(interval: number) {
+    // Clear any existing interval
+    if (this.updatePlanetNameInterval) {
+      clearInterval(this.updatePlanetNameInterval);
+    }
+
+    const update = async () => {
+      const newName = await this.updatePlanetName();
+      this.planetName.setText(newName);
+    };
+    update();
+    this.updatePlanetNameInterval = setInterval(update, interval);
   }
 
   getEmpire() {
@@ -542,6 +561,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this._scene.objects.planet.remove(this.id);
     this.magnets.forEach((magnet) => magnet.destroy());
     this.magnetWaves.destroy();
+    if (this.updatePlanetNameInterval) {
+      clearInterval(this.updatePlanetNameInterval);
+      this.updatePlanetNameInterval = null;
+    }
+
     super.destroy();
   }
 }

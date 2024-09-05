@@ -6,7 +6,6 @@ import {
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
-import { EViewMode } from "@core/lib";
 import { CreateNetworkResult } from "@core/lib/types";
 
 import { createTransactionQueueTable } from "./customTables/TransactionQueueTable";
@@ -55,6 +54,27 @@ export default function setupCoreTables(network: CreateNetworkResult) {
   );
 
   const ViewMode = createLocalNumberTable(world, { id: "ViewMode", persist: true, version: "1" });
+  const PlanetName = createLocalTable(
+    world,
+    {
+      name: Type.String,
+      lastFetched: Type.Number,
+    },
+    {
+      id: "PlanetName",
+    },
+  );
+
+  const EmpireLogo = createLocalTable(
+    world,
+    {
+      uri: Type.String,
+      lastFetched: Type.Number,
+    },
+    {
+      id: "EmpireName",
+    },
+  );
 
   return {
     DoubleCounter,
@@ -67,5 +87,7 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     HoveredPlanet,
     Username,
     ViewMode,
+    PlanetName,
+    EmpireLogo,
   };
 }

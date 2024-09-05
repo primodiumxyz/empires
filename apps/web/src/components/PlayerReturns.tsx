@@ -4,9 +4,9 @@ import { formatEther } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { useCore } from "@primodiumxyz/core/react";
-import { EmpireToPlanetSpriteKeys } from "@primodiumxyz/game";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tooltip } from "@/components/core/Tooltip";
+import { EmpireLogo } from "@/components/shared/EmpireLogo";
 import { Price } from "@/components/shared/Price";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
@@ -65,7 +65,6 @@ const EarnUpTo = ({
   const percentageChange = totalSpent > 0n ? ((earnings - totalSpent) * 10000n) / totalSpent : 0n;
   const isProfit = percentageChange >= 0n;
 
-  const imgUrl = sprite.getSprite(EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey");
   const empires = useEmpires();
   const empireName = empires.get(empire)?.name;
 
@@ -83,8 +82,8 @@ const EarnUpTo = ({
           </Tooltip>
         </div>
       </h2>
-      <div className={cn("flex h-full w-full flex-row items-center justify-around border-none text-sm")}>
-        <img src={imgUrl} className="w-4 lg:w-8" />
+      <div className={cn("flex h-full w-full flex-row items-center justify-around border-none pt-1 text-sm")}>
+        <EmpireLogo empireId={empire} size="sm" />
         <div className="flex flex-col">
           <Price wei={earnings} />
           {!!totalSpent && (

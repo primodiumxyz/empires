@@ -1,7 +1,7 @@
 import { formatEther, Hex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
-import { bigintToNumber, Core, entityToPlanetName, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
+import { bigintToNumber, Core, ExecuteFunctions, TxQueueOptions } from "@primodiumxyz/core";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { ampli } from "@/ampli";
 import { parseReceipt } from "@/contractCalls/parseReceipt";
@@ -15,6 +15,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
+    const planetName = await core.utils.getPlanetName(planetId);
     return await withTransactionStatus(
       () =>
         execute({
@@ -28,7 +29,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           onComplete: (receipt) => {
             ampli.empiresCreateShip({
               empires: {
-                planetName: entityToPlanetName(planetId),
+                planetName: planetName,
                 overrideCount: bigintToNumber(overrideCount),
               },
               ...parseReceipt(receipt),
@@ -36,8 +37,8 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           },
         }),
       {
-        loading: `Supporting ${entityToPlanetName(planetId)}`,
-        success: `Supported ${entityToPlanetName(planetId)} with ${overrideCount} ship${overrideCount > 1 ? "s" : ""}`,
+        loading: `Supporting ${planetName}`,
+        success: `Supported ${planetName} with ${overrideCount} ship${overrideCount > 1 ? "s" : ""}`,
         error: "Failed to provide support",
       },
     );
@@ -49,6 +50,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
+    const planetName = await core.utils.getPlanetName(planetId);
     return await withTransactionStatus(
       () =>
         execute({
@@ -62,7 +64,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           onComplete: (receipt) => {
             ampli.empiresChargeShield({
               empires: {
-                planetName: entityToPlanetName(planetId),
+                planetName: planetName,
                 overrideCount: bigintToNumber(overrideCount),
               },
               ...parseReceipt(receipt),
@@ -70,8 +72,8 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           },
         }),
       {
-        loading: `Supporting ${entityToPlanetName(planetId)}`,
-        success: `Supported ${entityToPlanetName(planetId)} with ${overrideCount} shield${overrideCount > 1 ? "s" : ""}`,
+        loading: `Supporting ${planetName}`,
+        success: `Supported ${planetName} with ${overrideCount} shield${overrideCount > 1 ? "s" : ""}`,
         error: "Failed to provide support",
       },
     );
@@ -149,6 +151,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     payment: bigint,
     options?: Partial<TxQueueOptions>,
   ) => {
+    const planetName = await core.utils.getPlanetName(planetId);
     return await withTransactionStatus(
       () =>
         execute({
@@ -163,7 +166,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
             ampli.empiresPlaceMagnet({
               empires: {
                 empireName: EmpireEnumToConfig[empire].name,
-                planetName: entityToPlanetName(planetId),
+                planetName: planetName,
                 turnCount: bigintToNumber(turnCount),
               },
               ...parseReceipt(receipt),
@@ -171,14 +174,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           },
         }),
       {
-        loading: `Placing ${EmpireEnumToConfig[empire as EEmpire].name} magnet on ${entityToPlanetName(planetId)}`,
-        success: `Placed ${EmpireEnumToConfig[empire as EEmpire].name} magnet on ${entityToPlanetName(planetId)} for ${turnCount} turn${turnCount > 1 ? "s" : ""}`,
+        loading: `Placing ${EmpireEnumToConfig[empire as EEmpire].name} magnet on ${planetName}`,
+        success: `Placed ${EmpireEnumToConfig[empire as EEmpire].name} magnet on ${planetName} for ${turnCount} turn${turnCount > 1 ? "s" : ""}`,
         error: "Failed to place magnet",
       },
     );
   };
 
   const detonateShieldEater = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    const planetName = await core.utils.getPlanetName(planetId);
     return await withTransactionStatus(
       () =>
         execute({
@@ -192,21 +196,22 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           onComplete: (receipt) => {
             ampli.empiresDetonateShieldEater({
               empires: {
-                planetName: entityToPlanetName(planetId),
+                planetName: planetName,
               },
               ...parseReceipt(receipt),
             });
           },
         }),
       {
-        loading: `Detonating shield eater on ${entityToPlanetName(planetId)}`,
-        success: `Detonated shield eater on ${entityToPlanetName(planetId)}`,
+        loading: `Detonating shield eater on ${planetName}`,
+        success: `Detonated shield eater on ${planetName}`,
         error: "Failed to detonate shield eater",
       },
     );
   };
 
   const placeAcidRain = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+    const planetName = await core.utils.getPlanetName(planetId);
     return await withTransactionStatus(
       () =>
         execute({
@@ -221,15 +226,15 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
             // TODO: add acid rain ampli event
             // ampli.empiresPlaceAcid({
             //   empires: {
-            //     planetName: entityToPlanetName(planetId),
+            //     planetName: getPlanetName(planetId),
             //   },
             //   ...parseReceipt(receipt),
             // });
           },
         }),
       {
-        loading: `Placing acid rain on ${entityToPlanetName(planetId)}`,
-        success: `Placed acid rain on ${entityToPlanetName(planetId)}`,
+        loading: `Placing acid rain on ${planetName}`,
+        success: `Placed acid rain on ${planetName}`,
         error: "Failed to place acid rain",
       },
     );
