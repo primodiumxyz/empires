@@ -23,7 +23,7 @@ export const TransactionQueueMask: React.FC<{
         )}
         {queuePosition === 0 && (
           <div className="absolute right-1/2 top-1/2 -translate-y-1/2 translate-x-1/2">
-            <Loader className="h-full w-full" size={size == "sm" ? "loading-sm" : "loading-xs"} />
+            <Loader className="h-full w-full" size={size} />
           </div>
         )}
       </div>
