@@ -43,12 +43,13 @@ export const PlayerSpan = ({ playerId }: { playerId: Entity | Hex }) => (
 
 export const useActions = (
   empireId?: EEmpire,
-  options?: { filterRoutines?: boolean; laterThan?: number; max?: number },
+  options?: { filterRoutines?: boolean; laterThan?: bigint; max?: number },
 ): Action[] => {
   const {
     tables,
     utils: { usdToWei },
   } = useCore();
+  const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
   const { price } = useEthPrice();
   const ethSpentThreshold = useMemo(() => usdToWei(WORLD_EVENTS_THRESHOLDS.dollarSpent, price ?? 0), [price]);
   const generationalWealthThreshold = useMemo(
@@ -337,7 +338,7 @@ export const useActions = (
       allActions = allActions.filter((action) => action.empireId === empireId);
     }
 
-    const laterThan = options?.laterThan;
+    const laterThan = options?.laterThan ?? gameStartTimestamp;
 
     allActions.sort((a, b) => -Number(b.timestamp - (a.timestamp ?? 0n)));
     if (laterThan !== undefined) {
@@ -376,7 +377,9 @@ export const useMostRecentOverride = () => {
     [price],
   );
 
-  const [override, setOverride] = useState<(Omit<Action, "timestamp"> & { id: string }) | null>(null);
+  const [override, setOverride] = useState<(Omit<Action, "timestamp"> & { id: string; timestamp?: bigint }) | null>(
+    null,
+  );
 
   // subscribe to updates
   useEffect(() => {
@@ -395,6 +398,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
+          timestamp: current.timestamp,
         });
       },
     });
@@ -414,6 +418,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
+          timestamp: current.timestamp,
         });
       },
     });
@@ -432,6 +437,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
+          timestamp: current.timestamp,
         });
       },
     });
@@ -450,6 +456,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
+          timestamp: current.timestamp,
         });
       },
     });
@@ -469,6 +476,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.shieldsDestroyed >= WORLD_EVENTS_THRESHOLDS.shieldsDestroyed,
+          timestamp: current.timestamp,
         });
       },
     });
@@ -487,6 +495,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
+          timestamp: current.timestamp,
         });
       },
     });
@@ -505,6 +514,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.shipsDestroyed >= WORLD_EVENTS_THRESHOLDS.shipsDestroyed,
+          timestamp: current.timestamp,
         });
       },
     });
@@ -523,6 +533,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
+          timestamp: current.timestamp,
         });
       },
     });
@@ -541,6 +552,7 @@ export const useMostRecentOverride = () => {
             </p>
           ),
           highlight: current.ethReceived >= generationalWealthThreshold,
+          timestamp: current.timestamp,
         });
       },
     });

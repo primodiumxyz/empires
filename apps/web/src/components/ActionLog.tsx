@@ -10,6 +10,8 @@ import ScrollToBottom, { useScrollToBottom, useSticky } from "react-scroll-to-bo
 import { toHex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
+import { Keys } from "@primodiumxyz/core";
+import { useCore, useSyncStatus } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -23,8 +25,10 @@ import { cn } from "@/util/client";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const ActionLog = ({ className }: { className: string }) => {
-  const [open, setOpen] = useState(false);
   const { SelectedTab } = useSettings();
+  const { loading } = useSyncStatus(Keys.ACTION_LOG);
+
+  const [open, setOpen] = useState(false);
   const persistKey = toHex("action-log") as Entity;
   const selectedTab = SelectedTab.use(persistKey)?.value ?? 0;
   const scrollToBottom = useScrollToBottom();
@@ -41,8 +45,9 @@ export const ActionLog = ({ className }: { className: string }) => {
   return (
     <SecondaryCard
       className={cn(
-        "pointer--events-auto relative hidden h-[300px] w-80 flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
+        "relative hidden h-[290px] w-80 flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
         open ? "bg-black/75 pr-0" : "translate-y-2/3",
+        loading && "translate-y-[150%]",
         className,
       )}
     >
@@ -59,8 +64,15 @@ export const ActionLog = ({ className }: { className: string }) => {
 };
 
 const ClosedActionLog = () => {
+  const { tables } = useCore();
   const override = useMostRecentOverride();
-  const action = override ? override.element : <p className="text-xs opacity-70">No player actions</p>;
+  const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
+  const action =
+    override && (override.timestamp ?? gameStartTimestamp) >= gameStartTimestamp ? (
+      override.element
+    ) : (
+      <p className="text-xs opacity-70">No player actions</p>
+    );
 
   const [currentAction, setCurrentAction] = useState("");
   const [flashing, setFlashing] = useState(false);

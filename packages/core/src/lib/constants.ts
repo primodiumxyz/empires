@@ -5,7 +5,7 @@ import { toHex32 } from "@core/utils";
 
 /** Encoded keys. Used in prototype tables to prevent collisions  */
 export const Keys = {
-  SECONDARY: toHex32("secondary") as Entity,
+  ACTION_LOG: toHex32("action-log") as Entity,
 };
 
 export const STORAGE_PREFIX = "primodiumSessionKey:";

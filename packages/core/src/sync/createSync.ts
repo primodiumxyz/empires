@@ -5,9 +5,8 @@ import { StorageAdapterLog } from "@primodiumxyz/reactive-tables/utils";
 import { Read, Sync } from "@primodiumxyz/sync-stack";
 import { Keys } from "@core/lib";
 import { CoreConfig, CreateNetworkResult, SyncSourceType, SyncStep, Tables } from "@core/lib/types";
-import { getSecondaryQuery } from "@core/sync/queries/secondaryQueries";
-
-import { getInitialQuery } from "./queries/initialQueries";
+import { getActionLogQuery } from "@core/sync/queries/actionLogQueries";
+import { getInitialQuery } from "@core/sync/queries/initialQueries";
 
 /**
  * Creates sync object. Includes methods to sync data from RPC and Indexer
@@ -20,7 +19,6 @@ import { getInitialQuery } from "./queries/initialQueries";
 export function createSync(config: CoreConfig, network: CreateNetworkResult, tables: Tables) {
   const { tableDefs, world, publicClient, storageAdapter } = network;
   const indexerUrl = config.chain.indexerUrl;
-  let fromBlock = config.initialBlockNumber ?? 0n;
 
   const syncFromRPC = (
     fromBlock: bigint,
@@ -185,24 +183,23 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
 
       if (progress === 1) {
         onComplete(blockNumber);
-        fromBlock = blockNumber;
       }
     }, onError);
 
     world.registerDisposer(sync.unsubscribe);
   };
 
-  const syncSecondaryGameState = (onComplete: () => void, onError: (err: unknown) => void) => {
+  const syncActionLogs = () => {
     // if we're already syncing from RPC, don't sync from indexer
     if (tables.SyncSource.get()?.value === SyncSourceType.RPC) return;
 
     if (!indexerUrl) return;
 
-    const syncId = Keys.SECONDARY;
+    const syncId = Keys.ACTION_LOG;
     const sync = Sync.withCustom({
       reader: Read.fromDecodedIndexer.query({
         indexerUrl,
-        query: getSecondaryQuery({
+        query: getActionLogQuery({
           tables: tableDefs,
           worldAddress: config.worldAddress as Hex,
         }),
@@ -210,35 +207,13 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
       writer: storageAdapter,
     });
 
-    sync.start(async (_, blockNumber, progress) => {
-      tables.SyncStatus.set(
-        {
-          step: SyncStep.Syncing,
-          progress,
-          message: `Syncing...`,
-          lastBlockNumberProcessed: blockNumber,
-        },
-        syncId,
-      );
-
-      // sync remaining blocks from RPC
-      if (progress === 1) {
-        const latestBlockNumber = await publicClient.getBlockNumber();
-        const processPendingLogs = subscribeToRPC();
-        syncFromRPC(
-          fromBlock,
-          latestBlockNumber,
-          () => {
-            processPendingLogs();
-            onComplete();
-          },
-          () => {
-            console.warn("Failed to sync remaining blocks. Client may be out of sync!");
-          },
-          syncId,
-        );
-      }
-    }, onError);
+    sync.start(
+      ...createSyncHandlers(syncId, {
+        progress: "Syncing action logs...",
+        complete: "Action logs synced",
+        error: "Error syncing action logs",
+      }),
+    );
 
     world.registerDisposer(sync.unsubscribe);
   };
@@ -248,6 +223,6 @@ export function createSync(config: CoreConfig, network: CreateNetworkResult, tab
     subscribeToRPC,
 
     syncInitialGameState,
-    syncSecondaryGameState,
+    syncActionLogs,
   };
 }
