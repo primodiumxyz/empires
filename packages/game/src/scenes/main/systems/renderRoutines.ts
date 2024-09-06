@@ -94,7 +94,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         const planet = scene.objects.planet.get(current.originPlanetId as Entity);
         const destinationPlanet = scene.objects.planet.get(current.destinationPlanetId as Entity);
 
-        if (!planet) return;
+        if (!planet || !destinationPlanet) return;
 
         planet.setPendingMove(current.destinationPlanetId as Entity);
         enqueue(async () => {
@@ -103,7 +103,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
           planet.moveDestroyers(current.destinationPlanetId as Entity);
 
           scene.fx.emitFloatingText(
-            (destinationPlanet ?? planet).coord,
+            { x: destinationPlanet.coord.x, y: destinationPlanet.coord.y - 40 },
             `${current.shipCount.toLocaleString()} Arrived`,
             {
               icon: "Ship",
@@ -131,17 +131,21 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
             );
 
             if (destinationEmpire && destinationEmpire !== destinationPlanet.getEmpire()) {
-              scene.fx.emitFloatingText(destinationPlanet.coord, "planet captured", {
-                icon: EmpireToPlanetSpriteKeys[destinationEmpire as EEmpire],
-                iconSize: 20,
-                fontSize: 16,
-                delay: 1375,
-                borderStyle: {
-                  color: 0x800080,
-                  alpha: 0.75,
-                  width: 1,
+              scene.fx.emitFloatingText(
+                { x: destinationPlanet.coord.x, y: destinationPlanet.coord.y - 50 },
+                "planet captured",
+                {
+                  icon: EmpireToPlanetSpriteKeys[destinationEmpire as EEmpire],
+                  iconSize: 20,
+                  fontSize: 16,
+                  delay: 1375,
+                  borderStyle: {
+                    color: 0x800080,
+                    alpha: 0.75,
+                    width: 1,
+                  },
                 },
-              });
+              );
             }
           }
         }, 250);
