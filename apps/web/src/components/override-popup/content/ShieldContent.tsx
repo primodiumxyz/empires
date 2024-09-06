@@ -51,7 +51,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             >
               ADD SHIELDS
             </Button>
-            <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={supportDisabled} />
+            <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-[105%]" disabled={supportDisabled} />
           </TransactionQueueMask>
         )}
         {!playerAccount && (

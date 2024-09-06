@@ -86,7 +86,7 @@ export const BoostEmpire = () => {
               <Button size="md" className="text-base" disabled={amount == "0" || !boostPriceWei} onClick={handleSubmit}>
                 Buy
               </Button>
-              <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={amount == "0" || !boostPriceWei} />
+              <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-[105%]" disabled={amount == "0" || !boostPriceWei} />
             </TransactionQueueMask>
           )}
           {!playerAccount && (
