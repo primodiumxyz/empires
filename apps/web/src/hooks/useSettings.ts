@@ -41,10 +41,6 @@ const ChartConfig = createLocalTable(
   { id: "ChartConfig", persist: true, version: "1" },
 );
 
-if (!ChartConfig.get()) {
-  ChartConfig.set({ tickInterval: CHART_TICK_INTERVALS[0].value });
-}
-
 // Display routine logs in the action log
 const ShowRoutineLogs = createLocalBoolTable(settingsWorld, { id: "ShowRoutineLogs", persist: true });
 /* -------------------------------------------------------------------------- */

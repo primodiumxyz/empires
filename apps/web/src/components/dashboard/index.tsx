@@ -73,7 +73,7 @@ export const Dashboard = () => {
                           size="xs"
                           variant="neutral"
                           selected={chartConfig?.tickInterval === interval.value}
-                          onClick={() => ChartConfig.update({ tickInterval: interval.value })}
+                          onClick={() => ChartConfig.set({ tickInterval: interval.value })}
                         >
                           {interval.label}
                         </Button>
