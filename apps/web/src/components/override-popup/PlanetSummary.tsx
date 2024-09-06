@@ -110,7 +110,7 @@ const PlanetAssets = ({
     <div className="mt-1 flex gap-2">
       <IconLabel imageUri={sprite.getSprite("Ship")} text={formatNumber(shipCount, { showZero: true })} />
       <IconLabel imageUri={sprite.getSprite("Shield")} text={formatNumber(shieldCount, { showZero: true })} />
-      <IconLabel imageUri={sprite.getSprite("Gold")} text={formatNumber(goldCount, { showZero: true })} />
+      <IconLabel imageUri={sprite.getSprite("Iridium")} text={formatNumber(goldCount, { showZero: true })} />
     </div>
   );
 };
@@ -123,7 +123,7 @@ const RoutineProbabilities = ({ entity }: { entity: Entity }) => {
 
   const probabilities = useMemo(() => {
     return {
-      accumulateGold: { label: "ACCUMULATE GOLD", value: p.accumulateGold },
+      accumulateGold: { label: "ACCUMULATE IRIDIUM", value: p.accumulateGold },
       buyShips: { label: "BUY SHIPS", value: p.buyShips },
       buyShields: { label: "BUY SHIELDS", value: p.buyShields },
       moveShips: { label: "MOVE SHIPS", value: p.moveShips },

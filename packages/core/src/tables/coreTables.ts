@@ -2,6 +2,7 @@ import {
   createLocalBigIntTable,
   createLocalBoolTable,
   createLocalEntityTable,
+  createLocalNumberTable,
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
@@ -48,9 +49,11 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     {
       id: "Username",
       persist: true,
+      version: "1",
     },
   );
 
+  const ViewMode = createLocalNumberTable(world, { id: "ViewMode", persist: true, version: "1" });
   const PlanetName = createLocalTable(
     world,
     {
@@ -83,6 +86,7 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     SelectedPlanet,
     HoveredPlanet,
     Username,
+    ViewMode,
     PlanetName,
     EmpireLogo,
   };

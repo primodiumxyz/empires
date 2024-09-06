@@ -1,6 +1,6 @@
 import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
-import { calculateAngleBetweenPoints, formatNumber, lerp, TREASURE_PLANET_GOLD_THRESHOLD } from "@primodiumxyz/core";
+import { calculateAngleBetweenPoints, formatNumber, lerp, TREASURE_PLANET_IRIDIUM_THRESHOLD } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { allEmpires, DepthLayers } from "@game/lib/constants/common";
@@ -34,7 +34,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private pendingMove: Entity | null = null;
   private shields: IconLabel;
   private ships: IconLabel;
-  private gold: IconLabel;
+  private iridium: IconLabel;
   private magnets: Magnet[];
   private activeMagnets: Map<EEmpire, number> = new Map();
   private magnetWaves: Phaser.GameObjects.Sprite;
@@ -124,14 +124,14 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       "Ship",
     ).setDepth(DepthLayers.Planet - 1);
 
-    this.gold = new IconLabel(
+    this.iridium = new IconLabel(
       scene,
       {
         x: coord.x,
         y: coord.y + 60,
       },
       "0",
-      "Gold",
+      "Iridium",
     ).setDepth(DepthLayers.Planet - 1);
 
     this.hexHoloSprite = new Phaser.GameObjects.Sprite(
@@ -226,6 +226,10 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.updatePlanetNameInterval = setInterval(update, interval);
   }
 
+  getEmpire() {
+    return this.empireId;
+  }
+
   spawn() {
     this.spawned = true;
     this.scene.add.existing(this);
@@ -237,7 +241,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.pendingArrow);
     this.scene.add.existing(this.shields);
     this.scene.add.existing(this.ships);
-    this.scene.add.existing(this.gold);
+    this.scene.add.existing(this.iridium);
     if (this.citadelCrown) this.scene.add.existing(this.citadelCrown);
     if (this.citadelAsteroidBelt) this.scene.add.existing(this.citadelAsteroidBelt);
     this.magnets.forEach((magnet) => this.scene.add.existing(magnet));
@@ -259,7 +263,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.planetName.setScale(scale);
     this.shields.setScale(scale);
     this.ships.setScale(scale);
-    this.gold.setScale(scale);
+    this.iridium.setScale(scale);
     if (this.citadelCrown) this.citadelCrown.setScale(scale);
     if (this.citadelAsteroidBelt) this.citadelAsteroidBelt.setScale(scale);
     this.magnets.forEach((magnet) => magnet.setScale(scale));
@@ -288,53 +292,51 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this.shields.setAlpha(alpha);
     this.ships.setAlpha(alpha);
-    this.gold.setAlpha(alpha);
+    this.iridium.setAlpha(alpha);
     this.magnets.forEach((magnet) => magnet.setAlpha(alpha));
     this.planetName.setAlpha(nameAlpha);
+  }
+
+  // - if originEmpire === this.empireId, do nothing (just moving ships)
+  // - if originEmpire !== this.empireId, trigger the battle
+  // - if destinationEmpire !== this.empireId, also update the faction
+  triggerBattle(originEmpire: EEmpire, destinationEmpire: EEmpire, playAnims = true) {
+    if (originEmpire === this.empireId) return;
+    const capture = destinationEmpire && destinationEmpire !== this.empireId;
+
+    this._scene.audio.play("Blaster", "sfx");
+    this._scene.fx.flashTint(this.planetSprite, { repeat: capture ? 2 : 3 });
+    this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 60 }, "Combat", {
+      depth: DepthLayers.Marker,
+      blendMode: Phaser.BlendModes.ADD,
+      onFrameChange: (frame) => {
+        if (frame !== 11) return;
+        if (capture) this.updateFaction(destinationEmpire);
+      },
+    });
+
+    // If playAnims is false, previous vfx was skipped so just update the faction sprites
+    if (capture && !playAnims) this.updateFaction(destinationEmpire);
   }
 
   updateFaction(empire: EEmpire) {
     if (empire === this.empireId) return;
 
-    // TODO: we want to emit combat even when the faction is not updated
-    // but we need to adapt all the timings; the light arc, hex flashing, etc
-    // or just delay the conquer animation and increase flash duration
-    const conquer = () => {
-      this._scene.fx.emitVfx(
-        { x: this.coord.x, y: this.coord.y - 29 },
-        EmpireToConquerAnimationKeys[empire] ?? "ConquerBlue",
-        {
-          depth: DepthLayers.Marker,
-          blendMode: Phaser.BlendModes.ADD,
-          onFrameChange: (frameNumber) => {
-            if (frameNumber === 6) {
-              this.planetSprite.setTexture(
-                Assets.SpriteAtlas,
-                Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"],
-              );
-            }
-          },
+    this._scene.fx.emitVfx(
+      { x: this.coord.x, y: this.coord.y - 29 },
+      EmpireToConquerAnimationKeys[empire] ?? "ConquerBlue",
+      {
+        depth: DepthLayers.Marker,
+        blendMode: Phaser.BlendModes.ADD,
+        onFrameChange: (frameNumber) => {
+          if (frameNumber === 6) {
+            this.planetSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]);
+          }
         },
-      );
+      },
+    );
 
-      this._scene.fx.flashSprite(this.hexSprite);
-      this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
-    };
-
-    this._scene.audio.play("Blaster", "sfx");
-    conquer();
-    // if (!this.empireId) {
-    //   conquer();
-    // } else {
-    //   this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 29 }, "Combat", {
-    //     depth: DepthLayers.Marker,
-    //     blendMode: Phaser.BlendModes.ADD,
-    //     onComplete: () => {
-    //       conquer();
-    //     },
-    //   });
-    // }
-
+    this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
     this.empireId = empire;
   }
 
@@ -441,8 +443,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     );
   }
 
-  setGoldCount(count: bigint) {
-    this.gold.setText(
+  setIridiumCount(count: bigint) {
+    this.iridium.setText(
       formatNumber(count, {
         short: true,
         showZero: true,
@@ -450,7 +452,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       }),
     );
 
-    if (count >= TREASURE_PLANET_GOLD_THRESHOLD) {
+    if (count >= TREASURE_PLANET_IRIDIUM_THRESHOLD) {
       this.treasurePlanetDecoration.setVisible(true).setActive(true);
       this.treasurePlanetDecoration.play(Animations.TreasurePlanet);
     } else {

@@ -249,8 +249,12 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
     sprite.play(Animations[animationKey]);
   }
 
-  function flashSprite(sprite: Phaser.GameObjects.Sprite, duration = 400, wait = 100, repeat = 3) {
+  function flashSprite(
+    sprite: Phaser.GameObjects.Sprite,
+    options?: { duration?: number; wait?: number; repeat?: number },
+  ) {
     if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
+    const { duration = 400, wait = 100, repeat = 3 } = options ?? {};
 
     let at = 0;
     scene.phaserScene.add
@@ -269,11 +273,50 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       .play();
   }
 
+  function flashTint(
+    sprite: Phaser.GameObjects.Sprite,
+    options?: { color?: number; duration?: number; wait?: number; repeat?: number },
+  ) {
+    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
+    const { color = 0xff0000, duration = 350, wait = 0, repeat = 3 } = options ?? {};
+
+    const tintSprite = scene.phaserScene.add.sprite(sprite.x, sprite.y, sprite.texture.key, sprite.frame.name);
+    tintSprite.setScale(sprite.scaleX, sprite.scaleY);
+    tintSprite.setOrigin(sprite.originX, sprite.originY);
+    tintSprite.setTint(color);
+    tintSprite.setBlendMode(Phaser.BlendModes.NORMAL);
+    tintSprite.setDepth(sprite.depth + 1);
+    tintSprite.setAlpha(0);
+
+    const flashTween = scene.phaserScene.tweens.add({
+      targets: tintSprite,
+      alpha: 0.6,
+      duration: duration,
+      ease: "Sine.easeInOut",
+      yoyo: true,
+      repeat: repeat - 1,
+      repeatDelay: wait,
+    });
+
+    flashTween.on("complete", () => {
+      scene.phaserScene.tweens.add({
+        targets: tintSprite,
+        alpha: 0,
+        duration: duration / 2,
+        ease: "Sine.easeOut",
+        onComplete: () => {
+          tintSprite.destroy();
+        },
+      });
+    });
+  }
+
   return {
     outline,
     removeOutline,
     emitFloatingText,
     flashSprite,
+    flashTint,
     flashScreen,
     emitVfx,
   };

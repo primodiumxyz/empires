@@ -5,7 +5,7 @@
     },
     "textures": [
         {
-            "image": "atlas.png?timestamp=1724918874740",
+            "image": "atlas.png?timestamp=1725607984704",
             "format": "RGBA8888",
             "size": {
                 "w": 2383,
@@ -2471,87 +2471,87 @@
                     }
                 },
                 {
-                    "filename": "sprites/planet/treasure/Treasure_0.png",
+                    "filename": "sprites/planet/treasure/Planets_Iridium_0.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "frame": {
-                        "x": 904,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
+                        "x": 2002,
+                        "y": 1990,
+                        "w": 122,
+                        "h": 80
                     }
                 },
                 {
-                    "filename": "sprites/planet/treasure/Treasure_1.png",
+                    "filename": "sprites/planet/treasure/Planets_Iridium_1.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "frame": {
-                        "x": 1023,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
+                        "x": 2124,
+                        "y": 1990,
+                        "w": 122,
+                        "h": 80
                     }
                 },
                 {
-                    "filename": "sprites/planet/treasure/Treasure_2.png",
+                    "filename": "sprites/planet/treasure/Planets_Iridium_2.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "frame": {
-                        "x": 1142,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
+                        "x": 2063,
+                        "y": 2188,
+                        "w": 122,
+                        "h": 80
                     }
                 },
                 {
-                    "filename": "sprites/planet/treasure/Treasure_3.png",
+                    "filename": "sprites/planet/treasure/Planets_Iridium_3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "frame": {
-                        "x": 1261,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
+                        "x": 2063,
+                        "y": 2268,
+                        "w": 122,
+                        "h": 80
                     }
                 },
                 {
@@ -2569,8 +2569,8 @@
                         "h": 93
                     },
                     "frame": {
-                        "x": 2063,
-                        "y": 2188,
+                        "x": 2264,
+                        "y": 0,
                         "w": 119,
                         "h": 93
                     }
@@ -2591,7 +2591,7 @@
                     },
                     "frame": {
                         "x": 2264,
-                        "y": 0,
+                        "y": 93,
                         "w": 119,
                         "h": 93
                     }
@@ -2612,13 +2612,34 @@
                     },
                     "frame": {
                         "x": 2264,
-                        "y": 93,
+                        "y": 186,
                         "w": 119,
                         "h": 93
                     }
                 },
                 {
                     "filename": "sprites/planet/planet_blue.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 2150,
+                        "y": 2070,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_green.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -2639,27 +2660,6 @@
                     }
                 },
                 {
-                    "filename": "sprites/planet/planet_green.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 76,
-                        "h": 114
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 76,
-                        "h": 114
-                    },
-                    "frame": {
-                        "x": 2264,
-                        "y": 186,
-                        "w": 76,
-                        "h": 114
-                    }
-                },
-                {
                     "filename": "sprites/planet/planet_grey.png",
                     "rotated": false,
                     "trimmed": false,
@@ -2675,7 +2675,7 @@
                     },
                     "frame": {
                         "x": 2264,
-                        "y": 300,
+                        "y": 279,
                         "w": 76,
                         "h": 114
                     }
@@ -2695,8 +2695,8 @@
                         "h": 114
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 414,
+                        "x": 2185,
+                        "y": 2184,
                         "w": 76,
                         "h": 114
                     }
@@ -2716,8 +2716,8 @@
                         "h": 79
                     },
                     "frame": {
-                        "x": 2002,
-                        "y": 1990,
+                        "x": 2261,
+                        "y": 393,
                         "w": 113,
                         "h": 79
                     }
@@ -2737,7 +2737,7 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 1380,
+                        "x": 904,
                         "y": 1827,
                         "w": 111,
                         "h": 56
@@ -2758,7 +2758,7 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 1491,
+                        "x": 1015,
                         "y": 1827,
                         "w": 111,
                         "h": 56
@@ -2779,8 +2779,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2063,
-                        "y": 2281,
+                        "x": 1126,
+                        "y": 1827,
                         "w": 111,
                         "h": 56
                     }
@@ -2800,8 +2800,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2174,
-                        "y": 2281,
+                        "x": 1237,
+                        "y": 1827,
                         "w": 111,
                         "h": 56
                     }
@@ -2821,8 +2821,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 528,
+                        "x": 1348,
+                        "y": 1827,
                         "w": 111,
                         "h": 56
                     }
@@ -2842,8 +2842,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 584,
+                        "x": 1459,
+                        "y": 1827,
                         "w": 111,
                         "h": 56
                     }
@@ -2863,8 +2863,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 640,
+                        "x": 2261,
+                        "y": 472,
                         "w": 111,
                         "h": 56
                     }
@@ -2884,8 +2884,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 696,
+                        "x": 2261,
+                        "y": 528,
                         "w": 111,
                         "h": 56
                     }
@@ -2905,8 +2905,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 752,
+                        "x": 2261,
+                        "y": 584,
                         "w": 111,
                         "h": 56
                     }
@@ -2926,8 +2926,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 808,
+                        "x": 2261,
+                        "y": 640,
                         "w": 111,
                         "h": 56
                     }
@@ -2947,8 +2947,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 864,
+                        "x": 2261,
+                        "y": 696,
                         "w": 111,
                         "h": 56
                     }
@@ -2968,8 +2968,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 920,
+                        "x": 2261,
+                        "y": 752,
                         "w": 111,
                         "h": 56
                     }
@@ -2989,8 +2989,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 976,
+                        "x": 2261,
+                        "y": 808,
                         "w": 111,
                         "h": 56
                     }
@@ -3010,8 +3010,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1032,
+                        "x": 2261,
+                        "y": 864,
                         "w": 111,
                         "h": 56
                     }
@@ -3031,8 +3031,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1088,
+                        "x": 2261,
+                        "y": 920,
                         "w": 111,
                         "h": 56
                     }
@@ -3052,8 +3052,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1144,
+                        "x": 2261,
+                        "y": 976,
                         "w": 111,
                         "h": 56
                     }
@@ -3073,8 +3073,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1200,
+                        "x": 2261,
+                        "y": 1032,
                         "w": 111,
                         "h": 56
                     }
@@ -3094,8 +3094,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1256,
+                        "x": 2261,
+                        "y": 1088,
                         "w": 111,
                         "h": 56
                     }
@@ -3115,8 +3115,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1312,
+                        "x": 2261,
+                        "y": 1144,
                         "w": 111,
                         "h": 56
                     }
@@ -3136,8 +3136,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1368,
+                        "x": 2261,
+                        "y": 1200,
                         "w": 111,
                         "h": 56
                     }
@@ -3157,8 +3157,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1424,
+                        "x": 2261,
+                        "y": 1256,
                         "w": 111,
                         "h": 56
                     }
@@ -3178,8 +3178,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1480,
+                        "x": 2261,
+                        "y": 1312,
                         "w": 111,
                         "h": 56
                     }
@@ -3199,8 +3199,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1536,
+                        "x": 2261,
+                        "y": 1368,
                         "w": 111,
                         "h": 56
                     }
@@ -3220,8 +3220,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1592,
+                        "x": 2261,
+                        "y": 1424,
                         "w": 111,
                         "h": 56
                     }
@@ -3241,8 +3241,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1648,
+                        "x": 2261,
+                        "y": 1480,
                         "w": 111,
                         "h": 56
                     }
@@ -3262,8 +3262,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1704,
+                        "x": 2261,
+                        "y": 1536,
                         "w": 111,
                         "h": 56
                     }
@@ -3283,8 +3283,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1760,
+                        "x": 2261,
+                        "y": 1592,
                         "w": 111,
                         "h": 56
                     }
@@ -3304,8 +3304,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1816,
+                        "x": 2261,
+                        "y": 1648,
                         "w": 111,
                         "h": 56
                     }
@@ -3325,8 +3325,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1872,
+                        "x": 2261,
+                        "y": 1704,
                         "w": 111,
                         "h": 56
                     }
@@ -3346,8 +3346,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1928,
+                        "x": 2261,
+                        "y": 1760,
                         "w": 111,
                         "h": 56
                     }
@@ -3367,8 +3367,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1984,
+                        "x": 2261,
+                        "y": 1816,
                         "w": 111,
                         "h": 56
                     }
@@ -3388,8 +3388,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2115,
-                        "y": 1990,
+                        "x": 2261,
+                        "y": 1872,
                         "w": 111,
                         "h": 56
                     }
@@ -3409,8 +3409,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2226,
-                        "y": 2040,
+                        "x": 2261,
+                        "y": 1928,
                         "w": 111,
                         "h": 56
                     }
@@ -3430,8 +3430,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2150,
-                        "y": 2096,
+                        "x": 2261,
+                        "y": 1984,
                         "w": 111,
                         "h": 56
                     }
@@ -3452,7 +3452,7 @@
                     },
                     "frame": {
                         "x": 2261,
-                        "y": 2096,
+                        "y": 2040,
                         "w": 111,
                         "h": 56
                     }
@@ -3472,8 +3472,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2182,
-                        "y": 2152,
+                        "x": 2261,
+                        "y": 2096,
                         "w": 111,
                         "h": 56
                     }
@@ -3493,8 +3493,8 @@
                         "h": 96
                     },
                     "frame": {
-                        "x": 2285,
-                        "y": 2208,
+                        "x": 2261,
+                        "y": 2152,
                         "w": 96,
                         "h": 96
                     }
@@ -3514,8 +3514,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 2350,
+                        "x": 2261,
+                        "y": 2248,
                         "w": 83,
                         "h": 82
                     }
@@ -3535,7 +3535,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 83,
+                        "x": 0,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -3556,7 +3556,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 166,
+                        "x": 83,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -3577,7 +3577,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 249,
+                        "x": 166,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -3598,7 +3598,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 332,
+                        "x": 249,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -3619,7 +3619,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 415,
+                        "x": 332,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -3640,8 +3640,8 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 498,
-                        "y": 2350,
+                        "x": 2185,
+                        "y": 2298,
                         "w": 74,
                         "h": 74
                     }
@@ -3661,7 +3661,7 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 572,
+                        "x": 415,
                         "y": 2350,
                         "w": 74,
                         "h": 74
@@ -3682,8 +3682,8 @@
                         "h": 74
                     },
                     "frame": {
-                        "x": 646,
-                        "y": 2337,
+                        "x": 489,
+                        "y": 2350,
                         "w": 74,
                         "h": 74
                     }
@@ -3703,8 +3703,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -3724,8 +3724,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 448,
+                        "x": 708,
+                        "y": 653,
                         "w": 53,
                         "h": 34
                     }
@@ -3745,8 +3745,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 482,
+                        "x": 708,
+                        "y": 808,
                         "w": 53,
                         "h": 34
                     }
@@ -3766,8 +3766,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 1602,
-                        "y": 1827,
+                        "x": 761,
+                        "y": 808,
                         "w": 53,
                         "h": 34
                     }
@@ -3808,7 +3808,7 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 708,
+                        "x": 814,
                         "y": 808,
                         "w": 27,
                         "h": 41
@@ -3829,7 +3829,7 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 735,
+                        "x": 841,
                         "y": 808,
                         "w": 27,
                         "h": 41
@@ -3850,7 +3850,7 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 762,
+                        "x": 868,
                         "y": 808,
                         "w": 27,
                         "h": 41
@@ -3871,8 +3871,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 789,
-                        "y": 808,
+                        "x": 2226,
+                        "y": 2070,
                         "w": 27,
                         "h": 41
                     }
@@ -3892,8 +3892,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 816,
-                        "y": 808,
+                        "x": 2226,
+                        "y": 2111,
                         "w": 27,
                         "h": 41
                     }
@@ -3913,8 +3913,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 843,
-                        "y": 808,
+                        "x": 2344,
+                        "y": 2248,
                         "w": 27,
                         "h": 41
                     }
@@ -3934,8 +3934,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 870,
-                        "y": 808,
+                        "x": 2344,
+                        "y": 2289,
                         "w": 27,
                         "h": 41
                     }
@@ -3955,8 +3955,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2150,
-                        "y": 2046,
+                        "x": 2340,
+                        "y": 279,
                         "w": 27,
                         "h": 41
                     }
@@ -3976,203 +3976,14 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2177,
-                        "y": 2046,
+                        "x": 2340,
+                        "y": 320,
                         "w": 27,
                         "h": 41
                     }
                 },
                 {
                     "filename": "sprites/magnet/green/Magnet_Green_1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2337,
-                        "y": 2040,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2293,
-                        "y": 2152,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_3.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2320,
-                        "y": 2152,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_4.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2347,
-                        "y": 2152,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_5.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2340,
-                        "y": 186,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_6.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2340,
-                        "y": 227,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/green/Magnet_Green_7.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2340,
-                        "y": 268,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink1.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2340,
-                        "y": 309,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink2.png",
-                    "rotated": false,
-                    "trimmed": false,
-                    "sourceSize": {
-                        "w": 27,
-                        "h": 41
-                    },
-                    "spriteSourceSize": {
-                        "x": 0,
-                        "y": 0,
-                        "w": 27,
-                        "h": 41
-                    },
-                    "frame": {
-                        "x": 2340,
-                        "y": 350,
-                        "w": 27,
-                        "h": 41
-                    }
-                },
-                {
-                    "filename": "sprites/magnet/pink/Magnet_Pink3.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
@@ -4193,6 +4004,195 @@
                     }
                 },
                 {
+                    "filename": "sprites/magnet/green/Magnet_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 563,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 590,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 617,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 640,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 644,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 667,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 671,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 694,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 698,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
                     "filename": "sprites/magnet/pink/Magnet_Pink4.png",
                     "rotated": false,
                     "trimmed": false,
@@ -4207,8 +4207,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1610,
-                        "y": 2107,
+                        "x": 721,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4228,8 +4228,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1610,
-                        "y": 2148,
+                        "x": 725,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4249,8 +4249,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2182,
-                        "y": 2208,
+                        "x": 748,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4270,8 +4270,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2209,
-                        "y": 2208,
+                        "x": 752,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4291,8 +4291,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2236,
-                        "y": 2208,
+                        "x": 775,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4312,8 +4312,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 708,
-                        "y": 619,
+                        "x": 779,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4333,8 +4333,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 735,
-                        "y": 619,
+                        "x": 802,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4354,8 +4354,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 904,
-                        "y": 1888,
+                        "x": 806,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4375,8 +4375,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 931,
-                        "y": 1888,
+                        "x": 829,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4396,8 +4396,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 904,
-                        "y": 1929,
+                        "x": 833,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4417,8 +4417,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 931,
-                        "y": 1929,
+                        "x": 856,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4438,8 +4438,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 807,
+                        "x": 860,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4459,8 +4459,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 807,
+                        "x": 883,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4480,8 +4480,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2002,
-                        "y": 1890,
+                        "x": 887,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4501,8 +4501,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2029,
-                        "y": 1890,
+                        "x": 910,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4522,8 +4522,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2002,
-                        "y": 1931,
+                        "x": 914,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4543,8 +4543,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 2029,
-                        "y": 1931,
+                        "x": 937,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4564,8 +4564,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 848,
+                        "x": 941,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4585,8 +4585,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 848,
+                        "x": 964,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4606,8 +4606,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 889,
+                        "x": 968,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4627,8 +4627,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 889,
+                        "x": 991,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4648,8 +4648,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 930,
+                        "x": 995,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4669,8 +4669,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 930,
+                        "x": 1018,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4690,8 +4690,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 971,
+                        "x": 1022,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4711,8 +4711,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 971,
+                        "x": 1045,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4732,8 +4732,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 1012,
+                        "x": 1049,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4753,8 +4753,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 1012,
+                        "x": 1072,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4774,8 +4774,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1808,
-                        "y": 1053,
+                        "x": 1076,
+                        "y": 2372,
                         "w": 27,
                         "h": 41
                     }
@@ -4795,8 +4795,8 @@
                         "h": 41
                     },
                     "frame": {
-                        "x": 1835,
-                        "y": 1053,
+                        "x": 1099,
+                        "y": 2325,
                         "w": 27,
                         "h": 41
                     }
@@ -4816,7 +4816,7 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2150,
+                        "x": 2226,
                         "y": 2152,
                         "w": 32,
                         "h": 32
@@ -4837,8 +4837,29 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2115,
-                        "y": 2046,
+                        "x": 2340,
+                        "y": 361,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/iridium.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1808,
+                        "y": 807,
                         "w": 32,
                         "h": 32
                     }
@@ -4858,8 +4879,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2182,
-                        "y": 2249,
+                        "x": 1840,
+                        "y": 807,
                         "w": 32,
                         "h": 32
                     }
@@ -4879,8 +4900,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2214,
-                        "y": 2249,
+                        "x": 1610,
+                        "y": 2107,
                         "w": 32,
                         "h": 32
                     }
@@ -4900,8 +4921,8 @@
                         "h": 32
                     },
                     "frame": {
-                        "x": 2246,
-                        "y": 2249,
+                        "x": 1610,
+                        "y": 2139,
                         "w": 32,
                         "h": 32
                     }
@@ -4963,8 +4984,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -4984,8 +5005,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5005,8 +5026,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5026,8 +5047,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5047,8 +5068,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5068,8 +5089,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5089,8 +5110,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5110,8 +5131,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5131,8 +5152,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5152,8 +5173,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5173,8 +5194,8 @@
                         "h": 34
                     },
                     "frame": {
-                        "x": 2328,
-                        "y": 414,
+                        "x": 708,
+                        "y": 619,
                         "w": 53,
                         "h": 34
                     }
@@ -5278,7 +5299,7 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 1380,
+                        "x": 904,
                         "y": 1827,
                         "w": 111,
                         "h": 56
@@ -5299,8 +5320,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2252,
-                        "y": 640,
+                        "x": 2261,
+                        "y": 472,
                         "w": 111,
                         "h": 56
                     }
@@ -5320,8 +5341,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 976,
+                        "x": 2261,
+                        "y": 808,
                         "w": 111,
                         "h": 56
                     }
@@ -5341,8 +5362,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1312,
+                        "x": 2261,
+                        "y": 1144,
                         "w": 111,
                         "h": 56
                     }
@@ -5362,8 +5383,8 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1648,
+                        "x": 2261,
+                        "y": 1480,
                         "w": 111,
                         "h": 56
                     }
@@ -5383,73 +5404,73 @@
                         "h": 56
                     },
                     "frame": {
-                        "x": 2247,
-                        "y": 1984,
+                        "x": 2261,
+                        "y": 1816,
                         "w": 111,
                         "h": 56
                     }
                 },
                 {
-                    "filename": "sprites/planet/treasure/Treasure_6.png",
+                    "filename": "sprites/planet/treasure/Planets_Iridium_6.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "frame": {
-                        "x": 904,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
+                        "x": 2002,
+                        "y": 1990,
+                        "w": 122,
+                        "h": 80
                     }
                 },
                 {
-                    "filename": "sprites/planet/treasure/Treasure_5.png",
+                    "filename": "sprites/planet/treasure/Planets_Iridium_5.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "frame": {
-                        "x": 1023,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
+                        "x": 2124,
+                        "y": 1990,
+                        "w": 122,
+                        "h": 80
                     }
                 },
                 {
-                    "filename": "sprites/planet/treasure/Treasure_4.png",
+                    "filename": "sprites/planet/treasure/Planets_Iridium_4.png",
                     "rotated": false,
                     "trimmed": false,
                     "sourceSize": {
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "spriteSourceSize": {
                         "x": 0,
                         "y": 0,
-                        "w": 119,
-                        "h": 61
+                        "w": 122,
+                        "h": 80
                     },
                     "frame": {
-                        "x": 1142,
-                        "y": 1827,
-                        "w": 119,
-                        "h": 61
+                        "x": 2063,
+                        "y": 2188,
+                        "w": 122,
+                        "h": 80
                     }
                 },
                 {
@@ -5468,7 +5489,7 @@
                     },
                     "frame": {
                         "x": 2264,
-                        "y": 93,
+                        "y": 186,
                         "w": 119,
                         "h": 93
                     }
@@ -5635,8 +5656,8 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 0,
-                        "y": 2350,
+                        "x": 2261,
+                        "y": 2248,
                         "w": 83,
                         "h": 82
                     }
@@ -5656,7 +5677,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 83,
+                        "x": 0,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -5677,7 +5698,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 166,
+                        "x": 83,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -5698,7 +5719,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 249,
+                        "x": 166,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -5719,7 +5740,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 332,
+                        "x": 249,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -5740,7 +5761,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 415,
+                        "x": 332,
                         "y": 2350,
                         "w": 83,
                         "h": 82
@@ -5761,7 +5782,7 @@
                         "h": 82
                     },
                     "frame": {
-                        "x": 415,
+                        "x": 332,
                         "y": 2350,
                         "w": 83,
                         "h": 82
