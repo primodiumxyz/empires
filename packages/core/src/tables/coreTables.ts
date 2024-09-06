@@ -76,6 +76,14 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     },
   );
 
+  const Slippage = createLocalTable(world, 
+    {
+      customValue: Type.Number,
+      isAuto: Type.Boolean,
+      autoValue: Type.Number,
+    },
+    { id: "Slippage", persist: true}, { isAuto: true, autoValue: 5, customValue: 0 } );
+
   return {
     DoubleCounter,
     BlockNumber,
@@ -89,5 +97,6 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     ViewMode,
     PlanetName,
     EmpireLogo,
+    Slippage,
   };
 }
