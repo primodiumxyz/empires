@@ -116,12 +116,12 @@ const OpenActionLog = () => {
   return (
     <Tabs className="grid grid-cols-[auto_1fr] gap-y-1" persistIndexKey={"action-log"} defaultIndex={0}>
       <Join direction="vertical" className="h-full rounded-r !pr-0 hover:bg-transparent">
-        <Tabs.Button key={"all"} index={0} className="h-8 w-11">
+        <Tabs.Button key={"all"} index={0} className="h-8 w-11 -mb-[1px]">
           <h1>ALL</h1>
         </Tabs.Button>
         {Array.from(empires.entries()).map(([id, emp], i) => (
-          <Tabs.Button key={id} index={i + 1} className="-mb-[1px] h-9">
-            <EmpireLogo empireId={id} size="md" />
+          <Tabs.Button key={id} index={i + 1} className="-mb-[2px] h-9">
+            <EmpireLogo empireId={id} size="xs" />
           </Tabs.Button>
         ))}
       </Join>

@@ -115,7 +115,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       if (planet) {
         planet.setShieldCount(current?.shieldCount ?? 0n);
         planet.setShipCount(current?.shipCount ?? 0n);
-        planet.setGoldCount(current?.goldCount ?? 0n);
+        planet.setIridiumCount(current?.goldCount ?? 0n);
       }
     },
   });

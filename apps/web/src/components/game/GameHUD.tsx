@@ -1,6 +1,6 @@
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EViewMode } from "@primodiumxyz/core";
-import { usePlayerAccount } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
 import { AdminModal } from "@/components/Admin";
@@ -21,19 +21,20 @@ import { Pot } from "@/components/Pot";
 import { QuickTradeMapMode, QuickTradeModal } from "@/components/quick-trade";
 import { Settings } from "@/components/settings";
 import { TimeLeft } from "@/components/TimeLeft";
-import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 const DEV = import.meta.env.PRI_DEV === "true";
 export const GameHUD = () => {
-  const { ViewMode } = useSettings();
-  const viewMode = ViewMode.use()?.value ?? EViewMode.Map;
+  const { tables } = useCore();
+
+  const viewMode = tables.ViewMode.use()?.value ?? EViewMode.Map;
   const params = new URLSearchParams(window.location.search);
   const showCheatcodes = DEV && !!params.get("showCheatcodes");
   const showAdmin = !!params.get("admin");
   const showMap = viewMode === EViewMode.Map;
 
   const { playerAccount } = usePlayerAccount();
+
   return (
     <>
       <div
@@ -58,7 +59,7 @@ export const GameHUD = () => {
               size="md"
               variant="neutral"
               className="z-50 -mr-1 w-56"
-              onClick={() => ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
+              onClick={() => tables.ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
             >
               {showMap ? (
                 <IconLabel imageUri={InterfaceIcons.Dashboard} text="DASHBOARD" />

@@ -92,7 +92,7 @@ export const useActions = (
         element: (
           <p className="text-xs">
             <PlanetSpan planetId={action.planetId as Entity} /> added{" "}
-            {formatNumber(action.goldAdded, { showZero: true })} gold
+            {formatNumber(action.goldAdded, { showZero: true })} iridium
           </p>
         ),
       };
@@ -289,7 +289,7 @@ export const useActions = (
         element: (
           <p className="text-xs">
             <PlayerSpan playerId={action.playerId} /> airdropped{" "}
-            {formatNumber(action.goldDistributed, { showZero: true })} gold to{" "}
+            {formatNumber(action.goldDistributed, { showZero: true })} iridium to{" "}
             {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
           </p>
         ),
@@ -528,7 +528,7 @@ export const useMostRecentOverride = () => {
           element: (
             <p className="text-xs">
               <PlayerSpan playerId={current.playerId} /> airdropped{" "}
-              {formatNumber(current.goldDistributed, { showZero: true })} gold to{" "}
+              {formatNumber(current.goldDistributed, { showZero: true })} iridium to{" "}
               {EmpireEnumToConfig[current.empireId as EEmpire].name} empire
             </p>
           ),

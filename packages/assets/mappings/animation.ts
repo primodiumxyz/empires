@@ -65,7 +65,7 @@ export const Animations = {
   CitadelShine: "citadel/shine",
 
   // Gold
-  GoldAdd: "gold/add",
+  AddIridium: "iridium/add",
 };
 
 export type AnimationKeys = keyof typeof Animations;

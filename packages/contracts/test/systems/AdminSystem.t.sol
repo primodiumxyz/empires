@@ -83,4 +83,10 @@ contract AdminSystemTest is PrimodiumTest {
     vm.expectRevert("[AdminSystem] Invalid role");
     world.Empires__setRole(user, ERole.NULL);
   }
+
+  function testInitialAdmin() public {
+    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    address adminAddress = vm.addr(deployerPrivateKey);
+    assertTrue(Role.get(adminAddress) == ERole.Admin, "Deployer should be admin");
+  }
 }
