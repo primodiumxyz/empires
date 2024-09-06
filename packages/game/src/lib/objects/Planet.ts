@@ -1,11 +1,6 @@
 import { Animations, Assets, Sprites } from "@primodiumxyz/assets";
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
-import {
-  calculateAngleBetweenPoints,
-  formatNumber,
-  lerp,
-  TREASURE_PLANET_IRIDIUM_THRESHOLDS,
-} from "@primodiumxyz/core";
+import { calculateAngleBetweenPoints, formatNumber, lerp, TREASURE_PLANET_IRIDIUM_THRESHOLD } from "@primodiumxyz/core";
 import { PixelCoord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { allEmpires, DepthLayers } from "@game/lib/constants/common";
@@ -457,12 +452,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       }),
     );
 
-    if (count >= TREASURE_PLANET_IRIDIUM_THRESHOLDS.large) {
+    if (count >= TREASURE_PLANET_IRIDIUM_THRESHOLD) {
       this.treasurePlanetDecoration.setVisible(true).setActive(true);
-      this.treasurePlanetDecoration.play(Animations.TreasurePlanetLarge);
-    } else if (count >= TREASURE_PLANET_IRIDIUM_THRESHOLDS.medium) {
-      this.treasurePlanetDecoration.setVisible(true).setActive(true);
-      this.treasurePlanetDecoration.play(Animations.TreasurePlanetMedium);
+      this.treasurePlanetDecoration.play(Animations.TreasurePlanet);
     } else {
       this.treasurePlanetDecoration.setVisible(false).setActive(false);
     }

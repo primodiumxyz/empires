@@ -30,10 +30,7 @@ export const CHART_TICK_INTERVALS = [
   { value: 3_600, label: "1h" },
 ];
 
-export const TREASURE_PLANET_IRIDIUM_THRESHOLDS = {
-  medium: 50n,
-  large: 100n,
-};
+export const TREASURE_PLANET_IRIDIUM_THRESHOLD = 50n;
 
 export const PRICE_PRECISION = 4;
 
