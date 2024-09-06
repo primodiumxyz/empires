@@ -191,7 +191,6 @@ export const HistoricalPointGraph: React.FC<{
 
   // Initialize the chart
   useEffect(() => {
-    console.log("tick interval", tickInterval);
     if (!chartContainerRef.current) return;
     seriesRefs.current = [];
 
