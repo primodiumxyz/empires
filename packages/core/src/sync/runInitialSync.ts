@@ -87,6 +87,8 @@ export const runInitialSync = async (core: Core) => {
   };
 
   tables.SyncSource.set({ value: SyncSourceType.Indexer });
+  const processPendingLogs = subscribeToRPC();
+
   // sync initial game state from indexer
   syncInitialGameState(
     // on complete
@@ -97,6 +99,8 @@ export const runInitialSync = async (core: Core) => {
         message: `DONE`,
         lastBlockNumberProcessed: blockNumber,
       });
+
+      onSyncComplete(blockNumber, processPendingLogs);
     },
     onError,
   );

@@ -119,12 +119,15 @@ export function formatTime(rawSeconds: number | bigint, short?: boolean): string
   if (short) return formatTimeShort(rawSeconds);
   const seconds = Number(rawSeconds);
   if (seconds < 0) return "00:00:00";
-  const hours = Math.floor(seconds / 3600);
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const secs = Math.floor(seconds % 60);
-  return `${hours.toString().padStart(2, "0")}:${minutes
+
+  const time = `${hours.toString().padStart(2, "0")}:${minutes
     .toString()
     .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  return days ? `${days}d ${time}` : time;
 }
 
 /**

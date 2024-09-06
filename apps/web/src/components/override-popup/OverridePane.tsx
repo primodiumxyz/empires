@@ -45,6 +45,20 @@ export const Buttons: React.FC<{ selectedPlanet: Entity; empire: number }> = ({ 
       </p>
       <div className="relative z-10 translate-y-5">
         <OverrideButton
+          index={3}
+          icon="ShieldEater"
+          axialCoord={{ q: -1, r: -1 }}
+          tooltip="Shield Eater"
+          price={createShieldEaterPriceWei}
+        />
+        <OverrideButton
+          index={4}
+          icon="AcidRain"
+          axialCoord={{ q: 2, r: -1 }}
+          tooltip="Acid Rain"
+          price={createAcidRainPriceWei}
+        />
+        <OverrideButton
           index={0}
           icon="Fleet"
           axialCoord={{ q: -1, r: 0 }}
@@ -64,20 +78,6 @@ export const Buttons: React.FC<{ selectedPlanet: Entity; empire: number }> = ({ 
           axialCoord={{ q: 1, r: 0 }}
           tooltip="Magnets"
           price={createMagnetPriceWei}
-        />
-        <OverrideButton
-          index={3}
-          icon="ShieldEater"
-          axialCoord={{ q: -1, r: -1 }}
-          tooltip="Shield Eater"
-          price={createShieldEaterPriceWei}
-        />
-        <OverrideButton
-          index={4}
-          icon="AcidRain"
-          axialCoord={{ q: 2, r: -1 }}
-          tooltip="Acid Rain"
-          price={createAcidRainPriceWei}
         />
       </div>
     </div>

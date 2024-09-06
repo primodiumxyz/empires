@@ -4,9 +4,6 @@ import { usePlayerAccount } from "@primodiumxyz/core/react";
 import { Modal } from "@/components/core/Modal";
 import { Navigator } from "@/components/core/Navigator";
 import { AudioSettings } from "@/components/settings/AudioSettings";
-import { GeneralSettings } from "@/components/settings/GeneralSettings";
-
-const params = new URLSearchParams(window.location.search);
 
 export const Settings = () => (
   <Modal title="Settings">
@@ -27,9 +24,6 @@ const _Settings = () => {
     <Navigator initialScreen="main" className="flex h-full w-full flex-col items-center gap-2 border-0 p-0 text-white">
       <Navigator.Screen title="main">
         <div className="my-3 flex flex-col items-center space-y-3">
-          <Navigator.NavButton to="general" variant="secondary" size="sm" className="w-28">
-            General
-          </Navigator.NavButton>
           <Navigator.NavButton to="audio" variant="secondary" size="sm" className="w-28">
             Audio
           </Navigator.NavButton>
@@ -42,7 +36,6 @@ const _Settings = () => {
       </Navigator.Screen>
 
       <AudioSettings />
-      <GeneralSettings />
     </Navigator>
   );
 };

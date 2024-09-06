@@ -1,6 +1,8 @@
+import { EEmpire } from "@primodiumxyz/contracts";
 import { Core, formatNumber, sleep } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { DepthLayers } from "@game/lib/constants/common";
+import { EmpireToPlanetSpriteKeys } from "@game/lib/mappings";
 import { StaggerQueue } from "@game/lib/utils/createStaggerQueue";
 import { PrimodiumScene } from "@game/types";
 
@@ -24,7 +26,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `-${current.goldSpent}`, {
-            icon: "Gold",
+            icon: "Iridium",
             color: "#ff0000",
           });
 
@@ -61,7 +63,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         enqueue(() => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `-${current.goldSpent}`, {
-            icon: "Gold",
+            icon: "Iridium",
             color: "#ff0000",
           });
 
@@ -92,7 +94,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         const planet = scene.objects.planet.get(current.originPlanetId as Entity);
         const destinationPlanet = scene.objects.planet.get(current.destinationPlanetId as Entity);
 
-        if (!planet) return;
+        if (!planet || !destinationPlanet) return;
 
         planet.setPendingMove(current.destinationPlanetId as Entity);
         enqueue(async () => {
@@ -101,7 +103,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
           planet.moveDestroyers(current.destinationPlanetId as Entity);
 
           scene.fx.emitFloatingText(
-            (destinationPlanet ?? planet).coord,
+            { x: destinationPlanet.coord.x, y: destinationPlanet.coord.y - 40 },
             `${current.shipCount.toLocaleString()} Arrived`,
             {
               icon: "Ship",
@@ -118,10 +120,34 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
 
           await sleep(375);
 
-          //update factions if it changed
-          const faction = tables.Planet.get(current.destinationPlanetId as Entity)?.empireId;
+          // trigger battle and update factions if it changed
+          const originEmpire = tables.Planet.get(current.originPlanetId as Entity)?.empireId ?? EEmpire.NULL;
+          const destinationEmpire = tables.Planet.get(current.destinationPlanetId as Entity)?.empireId ?? EEmpire.NULL;
+          if (destinationPlanet) {
+            destinationPlanet.triggerBattle(
+              originEmpire,
+              destinationEmpire,
+              Object.values(scene.tables.GameState.get() ?? {}).every(Boolean),
+            );
 
-          if (faction && destinationPlanet) destinationPlanet.updateFaction(faction);
+            if (destinationEmpire && destinationEmpire !== destinationPlanet.getEmpire()) {
+              scene.fx.emitFloatingText(
+                { x: destinationPlanet.coord.x, y: destinationPlanet.coord.y - 50 },
+                "planet captured",
+                {
+                  icon: EmpireToPlanetSpriteKeys[destinationEmpire as EEmpire],
+                  iconSize: 20,
+                  fontSize: 16,
+                  delay: 1375,
+                  borderStyle: {
+                    color: 0x800080,
+                    alpha: 0.75,
+                    width: 1,
+                  },
+                },
+              );
+            }
+          }
         }, 250);
       },
     },
@@ -141,13 +167,13 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         enqueue(async () => {
           scene.audio.play("Complete2", "sfx", { volume: 0.15 });
 
-          scene.fx.emitVfx({ x: planet.coord.x + 5, y: planet.coord.y - 45 }, "GoldAdd", {
+          scene.fx.emitVfx({ x: planet.coord.x + 5, y: planet.coord.y - 45 }, "AddIridium", {
             depth: DepthLayers.Marker,
             blendMode: Phaser.BlendModes.NORMAL,
           });
 
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
-            icon: "Gold",
+            icon: "Iridium",
             fontSize: 16,
             iconSize: 20,
             delay: 1000,
@@ -187,7 +213,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
               { x: planet.coord.x, y: planet.coord.y - 25 },
               `+${formatNumber(goldGenRate * 3n)}`,
               {
-                icon: "Gold",
+                icon: "Iridium",
                 fontSize: 12,
                 iconSize: 16,
               },

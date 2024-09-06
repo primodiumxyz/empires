@@ -39,6 +39,8 @@ export const Animations = {
   MovementPink: "movement/pink",
   MovementPurple: "movement/purple",
 
+  Combat: "combat",
+
   // Waves
   MagnetWaves: "waves",
 
@@ -63,7 +65,7 @@ export const Animations = {
   CitadelShine: "citadel/shine",
 
   // Gold
-  GoldAdd: "gold/add",
+  AddIridium: "iridium/add",
 };
 
 export type AnimationKeys = keyof typeof Animations;

@@ -49,9 +49,11 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     {
       id: "Username",
       persist: true,
+      version: "1",
     },
   );
 
+  const ViewMode = createLocalNumberTable(world, { id: "ViewMode", persist: true, version: "1" });
   const PlanetName = createLocalTable(
     world,
     {
@@ -93,6 +95,7 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     SelectedPlanet,
     HoveredPlanet,
     Username,
+    ViewMode,
     PlanetName,
     EmpireLogo,
     Slippage,

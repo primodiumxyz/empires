@@ -21,7 +21,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     chartColor: "rgba(128, 128, 128, .75)",
     borderColor: "border-gray-400",
     icons: { magnet: "" },
-    sprites: { planet: "Gold" },
+    sprites: { planet: "Iridium" },
   },
   [EEmpire.LENGTH]: {
     name: "None",
@@ -30,7 +30,7 @@ export const EmpireEnumToConfig: Record<EEmpire, EmpireConfig> = {
     chartColor: "rgba(128, 128, 128, .75)",
     borderColor: "border-gray-400",
     icons: { magnet: "" },
-    sprites: { planet: "Gold" },
+    sprites: { planet: "Iridium" },
   },
   [EEmpire.Red]: {
     name: "Red",
