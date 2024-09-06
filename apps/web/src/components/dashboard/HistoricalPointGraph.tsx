@@ -44,7 +44,6 @@ export const HistoricalPointGraph: React.FC<{
   empire: EEmpire;
   tickInterval: number;
 }> = ({ empire, tickInterval }) => {
-  tickInterval = 1;
   const {
     tables,
     utils: { weiToUsd },
@@ -192,6 +191,7 @@ export const HistoricalPointGraph: React.FC<{
 
   // Initialize the chart
   useEffect(() => {
+    console.log("tick interval", tickInterval);
     if (!chartContainerRef.current) return;
     seriesRefs.current = [];
 
@@ -369,7 +369,7 @@ export const HistoricalPointGraph: React.FC<{
   return (
     <>
       <div ref={chartContainerRef} className="relative h-full min-h-64 w-full" />
-      <div className="flex items-center gap-1 self-end pr-1 mb-2">
+      <div className="mb-2 flex items-center gap-1 self-end pr-1">
         <TradingViewLogo
           color="#2962ff"
           className="size-6 fill-white opacity-75 transition-opacity hover:opacity-100"
