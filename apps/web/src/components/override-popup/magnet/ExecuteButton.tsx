@@ -82,7 +82,7 @@ export const ExecuteButton = ({
             <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
               PLACE MAGNET
             </Button>
-            <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={disabled} />
+            <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-[105%]" disabled={disabled} />
           </TransactionQueueMask>
         )}
         {!playerAccount && (

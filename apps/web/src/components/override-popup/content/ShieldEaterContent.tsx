@@ -49,7 +49,7 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
           >
             Activate
           </Button>
-          <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={detonateDisabled} />
+          <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-[105%]" disabled={detonateDisabled} />
         </TransactionQueueMask>
       )}
       {!playerAccount && (

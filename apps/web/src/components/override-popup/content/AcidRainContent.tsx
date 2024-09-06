@@ -50,7 +50,7 @@ export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           >
             Place Acid
           </Button>
-          <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-full" disabled={placeAcidDisabled} />
+          <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-[105%]" disabled={placeAcidDisabled} />
         </TransactionQueueMask>
       )}
       {!playerAccount && (
