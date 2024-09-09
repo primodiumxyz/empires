@@ -1,14 +1,22 @@
 {
+  "extends": "../../.tsconfigs/bundler/no-dom/library.json",
   "compilerOptions": {
-    "target": "es2021",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "rootDir": ".",
+    "outDir": "./dist",
     "declaration": true,
-    "sourceMap": true,
-    "outDir": "dist",
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true
+    "noEmit": false,
+    "moduleResolution": "Bundler",
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@bin/*": ["./bin/*"]
+    }
+  },
+  "exclude": ["node_modules", "./dist"],
+  "include": ["src/**/*.ts", "bin/**/*.ts"],
+  "references": [{ "path": "../../packages/core" }],
+  "tsc-alias": {
+    "resolveFullPaths": true
   }
 }

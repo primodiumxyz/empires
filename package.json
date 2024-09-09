@@ -7,7 +7,7 @@
     "build": "turbo build",
     "clean:indexer": "pnpm clean-local-docker-indexer",
     "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
-    "dev:keeper": "turbo --filter @primodiumxyz/keeper start",
+    "dev:keeper": "cd apps/keeper && pnpm build && pnpm keeper-server",
     "build:contracts": "turbo --filter @primodiumxyz/contracts build",
     "build:webapp": "turbo --filter @primodiumxyz/webapp build"
   },

@@ -20,11 +20,9 @@
     "keeper-server": "./dist/bin/keeper-server.js"
   },
   "scripts": {
-    "build": "pnpm run build:js",
-    "build:js": "tsup",
-    "clean": "pnpm run clean:js",
-    "clean:js": "rimraf dist",
-    "dev": "tsup --watch",
+    "build": "tsc --build tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "clean": "rimraf dist",
+    "dev": "tsc --watch",
     "lint": "eslint .",
     "start": "tsx bin/keeper-server",
     "test": "tsc --noEmit --skipLibCheck",
@@ -46,7 +44,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
     "@types/debug": "^4.1.7",
     "prettier": "^3.3.2",
-    "tsup": "^6.7.0",
+    "tsc-alias": "^1.8.10",
     "tsx": "^3.12.6",
     "vitest": "0.31.4"
   },

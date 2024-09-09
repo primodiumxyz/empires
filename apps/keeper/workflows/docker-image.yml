@@ -3,7 +3,8 @@ name: Docker Image Deployment to EC2
 on:
   push:
     branches:
-      - main
+      - sprint/*
+      - release/*
   workflow_dispatch:
 
 jobs:
@@ -16,8 +17,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Generate dedicated lockfile
+        run: pnpx @pnpm/make-dedicated-lockfile
+
       - name: Build Docker image
-        run: docker build -t keeper:latest .
+        run: docker build -t keeper:latest ./apps/keeper
 
       - name: Save Docker image
         run: docker save keeper:latest > image.tar
@@ -60,3 +64,4 @@ jobs:
         run: |
           rm -f private_key
           rm -f image.tar
+          rm -f pnpm-lock.yaml
