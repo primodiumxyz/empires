@@ -5,7 +5,8 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@bin/*": ["./bin/*"]
+      "@bin/*": ["./bin/*"],
+      "@core/*": ["../../packages/core/src/*"]
     }
   },
   "include": ["**/*.ts"],

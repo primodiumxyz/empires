@@ -6,6 +6,10 @@
       "cache": false,
       "persistent": true
     },
+    "//#dev:keeper": {
+      "cache": false,
+      "persistent": true
+    },
     "build": {
       "outputs": ["dist/**", "out/**", "src/codegen/**"],
       "dependsOn": ["^build"],
@@ -17,6 +21,10 @@
     "dev": {
       "persistent": true,
       "cache": false
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
     }
   },
   "ui": "tui"

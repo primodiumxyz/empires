@@ -3,10 +3,11 @@
   "version": "0.1.9",
   "description": "",
   "scripts": {
-    "dev": "turbo dev dev:indexer --continue",
+    "dev": "turbo dev dev:indexer dev:keeper --continue",
     "build": "turbo build",
     "clean:indexer": "pnpm clean-local-docker-indexer",
     "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
+    "dev:keeper": "turbo --filter @primodiumxyz/keeper start",
     "build:contracts": "turbo --filter @primodiumxyz/contracts build",
     "build:webapp": "turbo --filter @primodiumxyz/webapp build"
   },
@@ -15,6 +16,7 @@
   "license": "ISC",
   "devDependencies": {
     "@primodiumxyz/pg-indexer-reader": "^0.6.9",
+    "@primodiumxyz/keeper": "workspace:*",
     "turbo": "^2.0.4",
     "typescript": "^5.5.3"
   },
