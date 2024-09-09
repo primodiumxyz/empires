@@ -75,7 +75,7 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Red, 1);
     vm.expectRevert("[OverrideSystem] Empire is not owned");
     world.Empires__airdropGold{ value: cost }(EEmpire.NULL, 1);
-    vm.expectRevert("[OverrideSystem] Incorrect payment");
+    vm.expectRevert("[EmpiresSystem] Incorrect payment");
     world.Empires__airdropGold{ value: cost - 1 }(EEmpire.Red, 1);
   }
 
