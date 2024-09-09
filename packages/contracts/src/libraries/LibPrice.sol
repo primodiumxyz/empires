@@ -222,32 +222,4 @@ library LibPrice {
       revert("[LibPrice] Selling points beyond minimum price");
     }
   }
-
-  /**
-   * @dev Calculates the total maximum value that can be obtained from selling points for all empires.
-   * @return totalMaxSellValue The sum of maximum sell values across all empires.
-   */
-  function getTotalMaxSellValue() internal view returns (uint256 totalMaxSellValue) {
-    P_PointConfigData memory config = P_PointConfig.get();
-    uint256 pointUnit = config.pointUnit;
-    uint256 pointCostDecrease = config.pointCostIncrease;
-    uint8 empireCount = P_GameConfig.getEmpireCount();
-
-    totalMaxSellValue = 0;
-
-    for (uint8 i = 1; i <= empireCount; i++) {
-      EEmpire empire = EEmpire(i);
-      uint256 currentPointCost = Empire.getPointCost(empire);
-
-      // Calculate the maximum number of whole points that can be sold
-      uint256 maxWholePoints = (currentPointCost - config.minPointCost) / pointCostDecrease;
-
-      if (maxWholePoints > 0) {
-        uint256 empireSellValue = getPointSaleValue(empire, maxWholePoints * pointUnit);
-        totalMaxSellValue += empireSellValue;
-      }
-    }
-
-    return totalMaxSellValue;
-  }
 }
