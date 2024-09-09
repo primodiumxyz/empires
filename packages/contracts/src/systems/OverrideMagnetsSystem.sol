@@ -44,27 +44,4 @@ contract OverrideMagnetsSystem is EmpiresSystem {
       })
     );
   }
-
-  /**
-   * @dev Handles overspending by the user when making a payment.
-   * @param _cost The expected cost of the transaction.
-   * @notice This function ensures that the user has sent enough ETH to cover the cost.
-   * If the user sends more than the required amount, the excess is refunded.
-   */
-  function _refundOverspend(uint256 _cost) private {
-    uint256 msgValue = _msgValue();
-    require(msgValue >= _cost, "[OverrideSystem] Incorrect payment");
-    if (msgValue > _cost) {
-      IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), msgValue - _cost);
-    }
-  }
-
-  /**
-   * @dev Calculates and transfers the rake (fee) from the transaction cost.
-   * @param _cost The total cost of the transaction.
-   */
-  function _takeRake(uint256 _cost) private {
-    uint256 rake = (_cost * P_PointConfig.getPointRake()) / 10_000;
-    IWorld(_world()).transferBalanceToNamespace(EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID, rake);
-  }
 }
