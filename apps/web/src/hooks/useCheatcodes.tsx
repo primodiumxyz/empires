@@ -12,6 +12,7 @@ import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useDripAccount } from "@/hooks/useDripAccount";
 import { useGame } from "@/hooks/useGame";
+import { useKeeperClient } from "@/hooks/useKeeperClient";
 import { createCheatcode } from "@/util/cheatcodes";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
@@ -34,6 +35,7 @@ export const useCheatcodes = () => {
   const { playerAccount } = usePlayerAccount();
   const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake } = useContractCalls();
   const requestDrip = useDripAccount();
+  const { start: _startKeeper, stop: _stopKeeper, running: isKeeperRunning } = useKeeperClient();
 
   // game
   const empires = tables.Empire.useAll();
@@ -1145,6 +1147,43 @@ export const useCheatcodes = () => {
     [gameConfig, pointConfig, overrideConfig],
   );
 
+  /* --------------------------------- Keeper --------------------------------- */
+  const startKeeper = useMemo(
+    () =>
+      createCheatcode({
+        title: "Start keeper",
+        bg: CheatcodeToBg["keeper"],
+        caption: "Start keeper",
+        inputs: {},
+        execute: async () => {
+          return await _startKeeper();
+        },
+        loading: () => "[CHEATCODE] Starting keeper...",
+        success: () => `Keeper started`,
+        error: () => `Failed to start keeper`,
+        disabled: isKeeperRunning,
+      }),
+    [isKeeperRunning],
+  );
+
+  const stopKeeper = useMemo(
+    () =>
+      createCheatcode({
+        title: "Stop keeper",
+        bg: CheatcodeToBg["keeper"],
+        caption: "Stop keeper",
+        inputs: {},
+        execute: async () => {
+          return await _stopKeeper();
+        },
+        loading: () => "[CHEATCODE] Stopping keeper...",
+        success: () => `Keeper stopped`,
+        error: () => `Failed to stop keeper`,
+        disabled: !isKeeperRunning,
+      }),
+    [isKeeperRunning],
+  );
+
   return [
     advanceTurns,
     endGame,
@@ -1165,5 +1204,7 @@ export const useCheatcodes = () => {
     setShieldEaterDestination,
     feedShieldEater,
     ...Object.values(updateGameConfig),
+    startKeeper,
+    stopKeeper,
   ];
 };

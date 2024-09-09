@@ -98,6 +98,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
     loading: getLoadingMsg,
     success: getSuccessMsg,
     error: getErrorMsg,
+    disabled = false,
     bg = "bg-gray-500/10",
   } = cheatcode;
   const [inputValues, setInputValues] = useState<CheatcodeInputs<T>>({} as CheatcodeInputs<T>);
@@ -131,8 +132,10 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         className={cn(
           "h-14 cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
           activeTab === undefined && bg,
+          disabled && "cursor-not-allowed opacity-50",
         )}
-        onClick={() => setActiveTab(activeTab === index ? undefined : index)}
+        onClick={() => !disabled && setActiveTab(activeTab === index ? undefined : index)}
+        aria-disabled={disabled}
       >
         <h2 className="text-sm font-semibold text-gray-300">
           {index + 1}. {title}

@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { transportObserver } from "@latticexyz/common";
-import { createWalletClient, fallback, formatEther, Hex, http } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
 
 import { worldsJson } from "@primodiumxyz/contracts";
-import { minEth, TxReceipt } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { createClient as createKeeperClient } from "@primodiumxyz/keeper";
-import { Entity } from "@primodiumxyz/reactive-tables";
 
-export const CHAIN = import.meta.env.PRI_CHAIN_ID;
 const worlds = worldsJson as Partial<Record<keyof typeof worldsJson, { address: string; blockNumber?: number }>>;
 
 export const useKeeperClient = (): {
@@ -27,12 +21,12 @@ export const useKeeperClient = (): {
   }, [config.chain]);
 
   const { worldAddress, initialBlockNumber } = useMemo(() => {
-    const chainId = CHAIN as keyof typeof worlds;
-    return { worldAddress: worlds[chainId]?.address, initialBlockNumber: worlds[chainId]?.blockNumber };
+    const chainId = config.chain.id.toString() as keyof typeof worlds;
+    return { worldAddress: worlds[chainId]?.address, initialBlockNumber: worlds[chainId]?.blockNumber ?? 0 };
   }, [config.chain]);
 
   const startKeeper = useCallback(async () => {
-    if (!keeper || !worldAddress || !initialBlockNumber) return { success: false };
+    if (!keeper || !worldAddress) return { success: false };
     return await keeper.start.mutate({ worldAddress, initialBlockNumber: initialBlockNumber.toString() });
   }, [keeper, worldAddress, initialBlockNumber]);
 
@@ -43,10 +37,11 @@ export const useKeeperClient = (): {
 
   const getKeeperStatus = useCallback(async () => {
     if (!keeper) return { running: false };
-    return await keeper.getStatus.query();
+    return keeper.getStatus.query();
   }, [keeper]);
 
   useEffect(() => {
+    if (!keeper) return;
     const unsubscribe = tables.Time.watch({
       onChange: async () => {
         const { running: isRunning } = await getKeeperStatus();
@@ -55,7 +50,7 @@ export const useKeeperClient = (): {
     });
 
     return () => unsubscribe();
-  }, [tables.Time, getKeeperStatus]);
+  }, [keeper, tables.Time, getKeeperStatus]);
 
   return { start: startKeeper, stop: stopKeeper, getStatus: getKeeperStatus, running };
 };

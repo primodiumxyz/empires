@@ -22,14 +22,14 @@ export function createAppRouter() {
       )
       .mutation(async ({ input, ctx }) => {
         const { worldAddress, initialBlockNumber } = input as { worldAddress: string; initialBlockNumber: string };
-        if (!isAddress(worldAddress) || !BigInt(initialBlockNumber)) {
+        if (!isAddress(worldAddress)) {
           throw new TRPCError({
             code: "BAD_REQUEST",
             message: "Invalid world address or initial block number",
           });
         }
 
-        const success = await ctx.keeperService.start(worldAddress, BigInt(initialBlockNumber));
+        const success = await ctx.keeperService.start(worldAddress, BigInt(initialBlockNumber) ?? 0n);
         if (!success) {
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",

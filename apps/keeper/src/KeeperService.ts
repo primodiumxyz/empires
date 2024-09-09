@@ -24,7 +24,7 @@ export class KeeperService {
   }
 
   async start(worldAddress: Hex, initialBlockNumber: bigint): Promise<boolean> {
-    if (this.running) await this.stop();
+    if (this.running) return await this.stop();
 
     try {
       this.running = true;
@@ -57,7 +57,7 @@ export class KeeperService {
     const { core, deployerAccount } = await this.setupCore(worldAddress, initialBlockNumber);
 
     let updating = false;
-    core.tables.BlockNumber.watch({
+    this.unsubscribe = core.tables.BlockNumber.watch({
       onChange: async ({ properties: { current } }) => {
         const ready = core.tables.Ready.get()?.value ?? false;
         const endBlock = core.tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
