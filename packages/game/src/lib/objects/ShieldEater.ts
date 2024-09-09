@@ -5,9 +5,6 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { DepthLayers } from "@game/lib/constants/common";
 import { PrimodiumScene } from "@game/types";
 
-const OFFSET_X = -26;
-const OFFSET_Y = -14;
-
 export class ShieldEater extends Phaser.GameObjects.Zone {
   private location: Phaser.GameObjects.Sprite;
   private path: Phaser.GameObjects.Sprite;
@@ -21,12 +18,7 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
     this._scene = scene;
     this.coord = coord;
 
-    this.location = new Phaser.GameObjects.Sprite(
-      scene.phaserScene,
-      coord.x + OFFSET_X,
-      coord.y + OFFSET_Y,
-      "spriteAtlas",
-    )
+    this.location = new Phaser.GameObjects.Sprite(scene.phaserScene, coord.x - 26, coord.y - 14, "spriteAtlas")
       .setDepth(DepthLayers.ShieldEater)
       .setOrigin(0.5)
       .setActive(false)
@@ -88,12 +80,10 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
           },
         );
         this.location.once("animationcomplete", () => {
-          this.offsetLocationIdle("offset");
           this.location.play(Animations["ShieldEaterIdle"]);
         });
       }, 3000);
     } else {
-      this.offsetLocationIdle("restore");
       this.location.play(Animations["ShieldEaterExit"]);
       this.location.once("animationcomplete", () => {
         this.location.setActive(false).setVisible(false);
@@ -117,7 +107,6 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
   }
 
   shieldEaterDetonate() {
-    this.offsetLocationIdle("restore");
     this.location.play(Animations["ShieldEaterDetonate"]);
     this.location.once("animationcomplete", () => {
       this.location.play(Animations["ShieldEaterExit"]);
@@ -201,16 +190,6 @@ export class ShieldEater extends Phaser.GameObjects.Zone {
           y: this.coord.y + 66,
           rotation: Math.PI / 3,
         };
-    }
-  }
-
-  private offsetLocationIdle(type: "offset" | "restore") {
-    if (type === "offset") {
-      this.location.setX(this.coord.x + 4);
-      this.location.setY(this.coord.y);
-    } else {
-      this.location.setX(this.coord.x + OFFSET_X);
-      this.location.setY(this.coord.y + OFFSET_Y);
     }
   }
 }

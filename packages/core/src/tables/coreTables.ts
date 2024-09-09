@@ -2,6 +2,7 @@ import {
   createLocalBigIntTable,
   createLocalBoolTable,
   createLocalEntityTable,
+  createLocalNumberTable,
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
@@ -48,9 +49,11 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     {
       id: "Username",
       persist: true,
+      version: "1",
     },
   );
 
+  const ViewMode = createLocalNumberTable(world, { id: "ViewMode", persist: true, version: "1" });
   const PlanetName = createLocalTable(
     world,
     {
@@ -73,6 +76,15 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     },
   );
 
+  const Slippage = createLocalTable(world, 
+    {
+      customValue: Type.Number,
+      isAuto: Type.Boolean,
+      autoValue: Type.Number,
+    },
+    { id: "Slippage", persist: true});
+
+  if (!Slippage.get()) Slippage.set({ isAuto: true, autoValue: 5, customValue: 0 })
   return {
     DoubleCounter,
     BlockNumber,
@@ -83,7 +95,9 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     SelectedPlanet,
     HoveredPlanet,
     Username,
+    ViewMode,
     PlanetName,
     EmpireLogo,
+    Slippage,
   };
 }

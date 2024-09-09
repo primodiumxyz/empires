@@ -44,6 +44,7 @@ const calderaSepolia: ChainConfig = {
     },
   },
   faucetUrl: "https://caldera-sepolia-faucet.primodium.ai/trpc",
+  indexerUrl: "https://empires-indexer.primodium.ai",
   blockExplorers: {
     default: {
       name: "Blockscout",

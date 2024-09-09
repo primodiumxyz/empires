@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { ToastContainer } from "react-toastify";
 import { defineChain } from "viem";
@@ -12,7 +12,6 @@ import { BackgroundNebula } from "@/components/BackgroundNebula";
 import Game from "@/components/game";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
-import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 import { ampli } from "./ampli/index";
@@ -20,22 +19,6 @@ import { ampli } from "./ampli/index";
 const DEV = import.meta.env.PRI_DEV === "true";
 
 const App = () => {
-  const settings = useSettings();
-  const fontStyle = useMemo(() => {
-    const { family, size } = settings.fontStyle;
-    const fontFamily = {
-      pixel: "font-pixel",
-      mono: "font-mono",
-    }[family];
-
-    const fontSize = {
-      sm: "text-sm",
-      md: "text-md",
-    }[size];
-
-    return cn(fontFamily, fontSize);
-  }, [settings.fontStyle]);
-
   // Amplitude Analytics
   useEffect(() => {
     if (DEV) {
@@ -85,8 +68,7 @@ const App = () => {
           <CoreProvider {...core}>
             <div
               className={cn(
-                "star-background flex h-screen w-screen cursor-default items-center justify-center",
-                fontStyle,
+                "star-background flex h-screen w-screen cursor-default items-center justify-center font-pixel text-sm",
               )}
             >
               <BackgroundNebula />
@@ -94,7 +76,7 @@ const App = () => {
               <PlayerAccountProvider allowBurner={!!DEV} defaultLogin={usingFoundry ? "burner" : "privy"}>
                 <Game />
                 <ToastContainer
-                  toastClassName={cn(fontStyle, "text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
+                  toastClassName={cn("font-pixel text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
                   progressClassName="bg-primary"
                   position="bottom-right"
                   autoClose={3000}
@@ -111,7 +93,7 @@ const App = () => {
           </CoreProvider>
         </EthPriceProvider>
       </PrivyProvider>
-      <div id="modal-root" className={cn("pointer-events-auto fixed top-0 z-50 cursor-default", fontStyle)} />
+      <div id="modal-root" className={cn("pointer-events-auto fixed top-0 z-50 cursor-default font-pixel text-sm")} />
     </>
   );
 };

@@ -7,12 +7,13 @@ export function createGameStateTable(core: Core) {
   } = core;
   const table = createLocalTable(
     world,
-    { visible: Type.Boolean },
+    { visible: Type.Boolean, onMap: Type.Boolean },
     {
       id: "GameState",
     },
-    { visible: true },
   );
+
+  table.set({ visible: true, onMap: false });
 
   return table;
 }

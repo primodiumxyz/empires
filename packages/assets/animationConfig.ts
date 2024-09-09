@@ -143,11 +143,11 @@ export const AnimationConfig: Animation[] = [
   {
     key: "shield-eater/idle",
     assetKey: "sprite-atlas",
-    frameRate: 10,
+    frameRate: 8,
     startFrame: 0,
-    endFrame: 19,
+    endFrame: 14,
     repeat: -1,
-    prefix: "sprites/shield-eater/idle/ShieldEater_Test_Idle_",
+    prefix: "sprites/shield-eater/idle/ShieldEater_Idle_",
     suffix: ".png",
   },
   {
@@ -214,7 +214,7 @@ export const AnimationConfig: Animation[] = [
     startFrame: 0,
     endFrame: 6,
     repeat: -1,
-    prefix: "sprites/planet/treasure/Treasure_",
+    prefix: "sprites/planet/treasure/Planets_Iridium_",
     suffix: ".png",
   },
   {
@@ -395,6 +395,15 @@ export const AnimationConfig: Animation[] = [
     suffix: ".png",
   },
   {
+    key: "combat",
+    assetKey: "vfx-atlas",
+    frameRate: 8,
+    startFrame: 0,
+    endFrame: 16,
+    prefix: "vfx/combat/Combat_",
+    suffix: ".png",
+  },
+  {
     key: "waves",
     assetKey: "vfx-atlas",
     frameRate: 10,
@@ -415,12 +424,12 @@ export const AnimationConfig: Animation[] = [
     suffix: ".png",
   },
   {
-    key: "gold/add",
+    key: "iridium/add",
     assetKey: "vfx-atlas",
-    frameRate: 5,
+    frameRate: 8,
     startFrame: 0,
-    endFrame: 9,
-    prefix: "vfx/gold-add/Gold_Add_",
+    endFrame: 11,
+    prefix: "vfx/add-iridium/Add_Iridium_",
     suffix: ".png",
   },
 ];

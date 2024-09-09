@@ -27,7 +27,13 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
     });
 
     planetObj
-      .onClick(() => {
+      .onClick((pointer: Phaser.Input.Pointer) => {
+        // TODO: vv this is madness, fix this cleanly (click on trading view chart propagating to below)
+        if (
+          (pointer.event.srcElement as HTMLElement)?.parentElement?.parentElement?.parentElement?.parentElement
+            ?.parentElement?.className === "tv-lightweight-charts"
+        )
+          return;
         if (tables.SelectedPlanet.get()?.value === entity) {
           tables.SelectedPlanet.remove();
           return;
@@ -109,7 +115,7 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       if (planet) {
         planet.setShieldCount(current?.shieldCount ?? 0n);
         planet.setShipCount(current?.shipCount ?? 0n);
-        planet.setGoldCount(current?.goldCount ?? 0n);
+        planet.setIridiumCount(current?.goldCount ?? 0n);
       }
     },
   });
