@@ -16,17 +16,11 @@
   "files": [
     "src"
   ],
-  "bin": {
-    "keeper-server": "./dist/bin/keeper-server.js"
-  },
   "scripts": {
-    "build": "tsc --build tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "clean": "rimraf dist",
-    "dev": "tsc --watch",
     "lint": "eslint .",
     "start": "tsx bin/keeper-server",
-    "test": "tsc --noEmit --skipLibCheck",
-    "test:ci": "pnpm run test"
+    "types:dev": "tsc --watch",
+    "types:test": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "@fastify/compress": "^6.5.0",
@@ -44,7 +38,6 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
     "@types/debug": "^4.1.7",
     "prettier": "^3.3.2",
-    "tsc-alias": "^1.8.10",
     "tsx": "^3.12.6",
     "vitest": "0.31.4"
   },

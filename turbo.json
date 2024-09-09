@@ -21,10 +21,6 @@
     "dev": {
       "persistent": true,
       "cache": false
-    },
-    "start": {
-      "cache": false,
-      "persistent": true
     }
   },
   "ui": "tui"
