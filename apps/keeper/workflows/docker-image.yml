@@ -50,7 +50,6 @@ jobs:
               -e KEEPER_HOST="0.0.0.0" \
               -e KEEPER_PORT="3002" \
               -e KEEPER_PRIVATE_KEY="'$KEEPER_PRIVATE_KEY'" \
-              -e KEEPER_CHAIN_ID="'$KEEPER_CHAIN_ID'" \
               keeper:latest
           '
         env:
@@ -58,7 +57,6 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
           KEEPER_PRIVATE_KEY: ${{ secrets.KEEPER_PRIVATE_KEY }}
-          KEEPER_CHAIN_ID: ${{ secrets.KEEPER_CHAIN_ID }}
 
       - name: Clean up Artifacts
         run: |

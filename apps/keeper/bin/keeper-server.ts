@@ -2,20 +2,14 @@
 
 import "dotenv/config";
 
-import { parseEnv } from "@bin/parseEnv";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import fastify from "fastify";
 
-import { chainConfigs } from "@primodiumxyz/core";
+import { parseEnv } from "@bin/parseEnv";
 import { AppRouter, createAppRouter } from "@/createAppRouter";
 import { KeeperService } from "@/KeeperService";
 
 const env = parseEnv();
-const chainId = env.KEEPER_CHAIN_ID;
-if (!(chainId in chainConfigs)) throw new Error(`Invalid chain ID: ${chainId}`);
-
-const chainConfig = chainConfigs[chainId as keyof typeof chainConfigs];
-const keeperService = new KeeperService(chainConfig, env.KEEPER_PRIVATE_KEY);
 
 // @see https://fastify.dev/docs/latest/
 const server = fastify({
@@ -29,6 +23,8 @@ await server.register(import("@fastify/cors"));
 // k8s healthchecks
 server.get("/healthz", (req, res) => res.code(200).send());
 server.get("/readyz", (req, res) => res.code(200).send());
+
+const keeperService = new KeeperService(env.KEEPER_PRIVATE_KEY);
 
 // @see https://trpc.io/docs/server/adapters/fastify
 server.register(fastifyTRPCPlugin<AppRouter>, {

@@ -20,15 +20,15 @@ export const useKeeperClient = (): {
     return keeperUrl ? createKeeperClient({ url: keeperUrl }) : undefined;
   }, [config.chain]);
 
-  const { worldAddress, initialBlockNumber } = useMemo(() => {
+  const { chainId, worldAddress, initialBlockNumber } = useMemo(() => {
     const chainId = config.chain.id.toString() as keyof typeof worlds;
-    return { worldAddress: worlds[chainId]?.address, initialBlockNumber: worlds[chainId]?.blockNumber ?? 0 };
+    return { chainId, worldAddress: worlds[chainId]?.address, initialBlockNumber: worlds[chainId]?.blockNumber ?? 0 };
   }, [config.chain]);
 
   const startKeeper = useCallback(async () => {
-    if (!keeper || !worldAddress) return { success: false };
-    return await keeper.start.mutate({ worldAddress, initialBlockNumber: initialBlockNumber.toString() });
-  }, [keeper, worldAddress, initialBlockNumber]);
+    if (!keeper || !chainId || !worldAddress) return { success: false };
+    return await keeper.start.mutate({ chainId, worldAddress, initialBlockNumber: initialBlockNumber.toString() });
+  }, [keeper, chainId, worldAddress, initialBlockNumber]);
 
   const stopKeeper = useCallback(async () => {
     if (!keeper) return { success: false };

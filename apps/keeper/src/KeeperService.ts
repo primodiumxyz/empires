@@ -13,22 +13,20 @@ import {
 } from "@primodiumxyz/core";
 
 export class KeeperService {
-  private chainConfig: ChainConfig;
   private keeperPrivateKey: Hex;
   private running: boolean = false;
   private unsubscribe: (() => void) | null = null;
 
-  constructor(chainConfig: ChainConfig, keeperPrivateKey: Hex) {
-    this.chainConfig = chainConfig;
+  constructor(keeperPrivateKey: Hex) {
     this.keeperPrivateKey = keeperPrivateKey;
   }
 
-  async start(worldAddress: Hex, initialBlockNumber: bigint): Promise<boolean> {
+  async start(chain: ChainConfig, worldAddress: Hex, initialBlockNumber: bigint): Promise<boolean> {
     if (this.running) return await this.stop();
 
     try {
       this.running = true;
-      this.run(worldAddress, initialBlockNumber);
+      this.run(chain, worldAddress, initialBlockNumber);
       return true;
     } catch (error) {
       console.error("Failed to start keeper:", error);
@@ -53,8 +51,8 @@ export class KeeperService {
     return { running: this.running };
   }
 
-  private async run(worldAddress: Hex, initialBlockNumber: bigint): Promise<void> {
-    const { core, deployerAccount } = await this.setupCore(worldAddress, initialBlockNumber);
+  private async run(chain: ChainConfig, worldAddress: Hex, initialBlockNumber: bigint): Promise<void> {
+    const { core, deployerAccount } = await this.setupCore(chain, worldAddress, initialBlockNumber);
 
     let updating = false;
     this.unsubscribe = core.tables.BlockNumber.watch({
@@ -90,11 +88,12 @@ export class KeeperService {
   }
 
   private async setupCore(
+    chain: ChainConfig,
     worldAddress: Hex,
     initialBlockNumber: bigint,
   ): Promise<{ core: Core; deployerAccount: LocalAccount }> {
     const core = createCore({
-      chain: this.chainConfig,
+      chain,
       worldAddress: worldAddress,
       initialBlockNumber: initialBlockNumber,
       runSync: true,

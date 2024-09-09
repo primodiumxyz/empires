@@ -4,7 +4,6 @@ import { z, ZodError, ZodIntersection, ZodTypeAny } from "zod";
 const commonSchema = z.object({
   KEEPER_HOST: z.string().default("0.0.0.0"),
   KEEPER_PORT: z.coerce.number().positive().default(3002),
-  KEEPER_CHAIN_ID: z.string().default("dev"),
   KEEPER_PRIVATE_KEY: z
     .string()
     .refine(isHex)

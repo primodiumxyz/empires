@@ -1,3 +1,4 @@
+import { chainConfigs } from "@core/index";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { isAddress } from "viem";
 import { z } from "zod";
@@ -16,20 +17,27 @@ export function createAppRouter() {
     start: t.procedure
       .input(
         z.object({
+          chainId: z.string(),
           worldAddress: z.string(),
           initialBlockNumber: z.string(),
         }),
       )
       .mutation(async ({ input, ctx }) => {
-        const { worldAddress, initialBlockNumber } = input as { worldAddress: string; initialBlockNumber: string };
-        if (!isAddress(worldAddress)) {
+        const { chainId, worldAddress, initialBlockNumber } = input as {
+          chainId: string;
+          worldAddress: string;
+          initialBlockNumber: string;
+        };
+
+        const chain = Object.values(chainConfigs).find((chain) => chain.id === Number(chainId));
+        if (!chain) throw new TRPCError({ code: "BAD_REQUEST", message: `Invalid chain ID: ${chainId}` });
+        if (!isAddress(worldAddress))
           throw new TRPCError({
             code: "BAD_REQUEST",
-            message: "Invalid world address or initial block number",
+            message: "Invalid world address",
           });
-        }
 
-        const success = await ctx.keeperService.start(worldAddress, BigInt(initialBlockNumber) ?? 0n);
+        const success = await ctx.keeperService.start(chain, worldAddress, BigInt(initialBlockNumber) ?? 0n);
         if (!success) {
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
