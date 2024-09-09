@@ -27,12 +27,13 @@ contract OverrideShieldEaterSystem is EmpiresSystem {
     );
 
     uint256 cost = LibPrice.getTotalCost(EOverride.DetonateShieldEater, planetData.empireId, 1);
-    _refundOverspend(cost);
-    _takeRake(cost);
 
     LibOverride._purchaseOverride(playerId, EOverride.DetonateShieldEater, planetData.empireId, 1, _msgValue());
 
     LibShieldEater.detonate();
+
+    _refundOverspend(cost);
+    _takeRake(cost);
 
     ShieldEaterDetonateOverrideLog.set(
       pseudorandomEntity(),

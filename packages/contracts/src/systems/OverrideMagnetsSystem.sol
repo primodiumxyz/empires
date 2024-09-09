@@ -25,11 +25,12 @@ contract OverrideMagnetsSystem is EmpiresSystem {
 
     require(Magnet.get(_empire, _planetId).isMagnet == false, "[OverrideSystem] Planet already has a magnet");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, _empire, turnDuration);
-    _refundOverspend(cost);
-    _takeRake(cost);
 
     LibMagnet.addMagnet(_empire, _planetId, playerId, turnDuration);
     LibOverride._purchaseOverride(addressToId(_msgSender()), EOverride.PlaceMagnet, _empire, turnDuration, _msgValue());
+
+    _refundOverspend(cost);
+    _takeRake(cost);
 
     PlaceMagnetOverrideLog.set(
       pseudorandomEntity(),

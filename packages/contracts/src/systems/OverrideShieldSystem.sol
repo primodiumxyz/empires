@@ -26,12 +26,13 @@ contract OverrideShieldSystem is EmpiresSystem {
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, planetData.empireId, _overrideCount);
-    _refundOverspend(cost);
-    _takeRake(cost);
 
     LibOverride._purchaseOverride(playerId, EOverride.ChargeShield, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShieldCount(_planetId, planetData.shieldCount + _overrideCount);
+
+    _refundOverspend(cost);
+    _takeRake(cost);
 
     ChargeShieldsOverrideLog.set(
       pseudorandomEntity(),

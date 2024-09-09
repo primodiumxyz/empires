@@ -33,12 +33,12 @@ contract OverrideShipSystem is EmpiresSystem {
     require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, planetData.empireId, _overrideCount);
 
-    _refundOverspend(cost);
-    _takeRake(cost);
-
     LibOverride._purchaseOverride(playerId, EOverride.CreateShip, planetData.empireId, _overrideCount, _msgValue());
 
     Planet.setShipCount(_planetId, planetData.shipCount + _overrideCount);
+
+    _refundOverspend(cost);
+    _takeRake(cost);
 
     CreateShipOverrideLog.set(
       pseudorandomEntity(),
