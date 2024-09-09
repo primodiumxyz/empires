@@ -2,8 +2,6 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { isAddress } from "viem";
 import { z } from "zod";
 
-import { StartKeeperRequest } from "@/types";
-
 import { KeeperService } from "./KeeperService";
 
 export type AppContext = {
@@ -23,7 +21,7 @@ export function createAppRouter() {
         }),
       )
       .mutation(async ({ input, ctx }) => {
-        const { worldAddress, initialBlockNumber } = input as StartKeeperRequest;
+        const { worldAddress, initialBlockNumber } = input as { worldAddress: string; initialBlockNumber: string };
         if (!isAddress(worldAddress) || !BigInt(initialBlockNumber)) {
           throw new TRPCError({
             code: "BAD_REQUEST",

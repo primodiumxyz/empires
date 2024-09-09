@@ -15,7 +15,7 @@ const chainId = env.KEEPER_CHAIN_ID;
 if (!(chainId in chainConfigs)) throw new Error(`Invalid chain ID: ${chainId}`);
 
 const chainConfig = chainConfigs[chainId as keyof typeof chainConfigs];
-const keeperService = new KeeperService(chainConfig);
+const keeperService = new KeeperService(chainConfig, env.KEEPER_PRIVATE_KEY);
 
 // @see https://fastify.dev/docs/latest/
 const server = fastify({
