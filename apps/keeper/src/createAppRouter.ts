@@ -13,7 +13,7 @@ export function createAppRouter() {
   const t = initTRPC.context<AppContext>().create();
 
   return t.router({
-    startKeeper: t.procedure
+    start: t.procedure
       .input(
         z.object({
           worldAddress: z.string(),
@@ -40,7 +40,7 @@ export function createAppRouter() {
         return { success: true };
       }),
 
-    stopKeeper: t.procedure.mutation(async ({ ctx }) => {
+    stop: t.procedure.mutation(async ({ ctx }) => {
       const success = await ctx.keeperService.stop();
       if (!success) {
         throw new TRPCError({
@@ -52,7 +52,7 @@ export function createAppRouter() {
       return { success: true };
     }),
 
-    getKeeperStatus: t.procedure.query(({ ctx }) => {
+    getStatus: t.procedure.query(({ ctx }) => {
       return ctx.keeperService.getStatus();
     }),
   });
