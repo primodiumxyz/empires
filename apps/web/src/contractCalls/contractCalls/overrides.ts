@@ -137,9 +137,9 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           },
         }),
       {
-        loading: `Airdropping gold to ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
-        success: `Airdropped gold to ${EmpireEnumToConfig[empire as EEmpire].name} empire for ${formatEther(pointsReceived)} points`,
-        error: "Failed to airdrop gold",
+        loading: `Airdropping iridium to ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
+        success: `Airdropped iridium to ${EmpireEnumToConfig[empire as EEmpire].name} empire for ${formatEther(pointsReceived)} points`,
+        error: "Failed to airdrop iridium",
       },
     );
   };

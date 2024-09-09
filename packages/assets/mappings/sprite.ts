@@ -21,7 +21,7 @@ export const Sprites = {
   //ICONS
   Ship: "sprites/icons/ship.png",
   Shield: "sprites/icons/shield.png",
-  Gold: "sprites/icons/gold.png",
+  Iridium: "sprites/icons/iridium.png",
   Attack: "sprites/icons/attack.png",
   Crown: "sprites/icons/crown.png",
   ShieldEater: "sprites/icons/shield_eater.png",

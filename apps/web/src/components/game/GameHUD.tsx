@@ -1,10 +1,9 @@
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { EViewMode } from "@primodiumxyz/core";
-import { usePlayerAccount } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Account } from "@/components/Account";
 import { ActionLog } from "@/components/ActionLog";
 import { AdminModal } from "@/components/Admin";
-import { Banner } from "@/components/Banner";
 import { Cheatcodes } from "@/components/cheatcodes/Cheatcodes";
 import { Button } from "@/components/core/Button";
 import { HUD } from "@/components/core/HUD";
@@ -22,19 +21,20 @@ import { Pot } from "@/components/Pot";
 import { QuickTradeMapMode, QuickTradeModal } from "@/components/quick-trade";
 import { Settings } from "@/components/settings";
 import { TimeLeft } from "@/components/TimeLeft";
-import { useSettings } from "@/hooks/useSettings";
 import { cn } from "@/util/client";
 
 const DEV = import.meta.env.PRI_DEV === "true";
 export const GameHUD = () => {
-  const { ViewMode } = useSettings();
-  const viewMode = ViewMode.use()?.value ?? EViewMode.Map;
+  const { tables } = useCore();
+
+  const viewMode = tables.ViewMode.use()?.value ?? EViewMode.Map;
   const params = new URLSearchParams(window.location.search);
   const showCheatcodes = DEV && !!params.get("showCheatcodes");
   const showAdmin = !!params.get("admin");
   const showMap = viewMode === EViewMode.Map;
 
   const { playerAccount } = usePlayerAccount();
+
   return (
     <>
       <div
@@ -54,12 +54,12 @@ export const GameHUD = () => {
         </HUD.TopLeft>
 
         <HUD.TopMiddle className="flex flex-col items-center">
-          <Join className="z-50">
+          <Join className="z-50 hover:bg-transparent">
             <Button
               size="md"
               variant="neutral"
               className="z-50 -mr-1 w-56"
-              onClick={() => ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
+              onClick={() => tables.ViewMode.set({ value: showMap ? EViewMode.Dashboard : EViewMode.Map })}
             >
               {showMap ? (
                 <IconLabel imageUri={InterfaceIcons.Dashboard} text="DASHBOARD" />
@@ -101,14 +101,13 @@ export const GameHUD = () => {
 
         <HUD.BottomLeft className="flex w-[300px] flex-col gap-2">
           {showMap && <ActionLog className="hidden lg:flex" />}
-          <div className="pointer-events-auto flex w-full items-center gap-2">
+          <div className="pointer-events-auto flex w-full items-center gap-2 lg:ml-2">
             <MusicPlayer />
             <Settings />
           </div>
         </HUD.BottomLeft>
 
         <HUD.BottomMiddle className="flex flex-col items-center gap-2">
-          <Banner />
           <TimeLeft className="gap-0" />
         </HUD.BottomMiddle>
 

@@ -74,17 +74,33 @@ export const MusicPlayer = ({ className }: { className?: string }) => {
     }
   };
 
+  const [hovering, hover] = useState(false);
+
   return (
     <div className={cn("group pointer-events-auto relative text-sm", className)}>
-      <div className={cn("flex items-center gap-2 transition-all", !isPlaying && "opacity-70")}>
+      <div
+        className={cn("relative flex items-center gap-2 transition-all", !isPlaying && "opacity-70")}
+        onMouseEnter={() => hover(true)}
+        onMouseLeave={() => hover(false)}
+      >
         {!isPlaying ? (
           <Button variant="ghost" shape="square" size="xs" onClick={handlePlay}>
             <PauseIcon />
           </Button>
         ) : (
-          <Button variant="ghost" shape="square" size="xs" onClick={handlePause}>
-            <MusicalNoteIcon />
-          </Button>
+          <>
+            <div
+              className={cn(
+                "pointer-events-none absolute left-8 top-1/2 z-10 whitespace-nowrap rounded-sm bg-black px-1 py-0.5 text-xs opacity-0 transition-all",
+                hovering ? "-translate-y-1/2 opacity-100" : "translate-y-[100%]",
+              )}
+            >
+              {song.artist} - {song.title}
+            </div>
+            <Button variant="ghost" shape="square" size="xs" onClick={handlePause}>
+              <MusicalNoteIcon />
+            </Button>
+          </>
         )}
       </div>
 

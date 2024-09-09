@@ -1,27 +1,16 @@
-import React, { useCallback, useMemo } from "react";
-import { AxisBottom, AxisLeft } from "@visx/axis";
-import { curveMonotoneX } from "@visx/curve";
-import { localPoint } from "@visx/event";
-import { GridColumns, GridRows } from "@visx/grid";
-import { scaleLinear, scaleTime } from "@visx/scale";
-import { Bar, Line, LinePath } from "@visx/shape";
-import { withTooltip } from "@visx/tooltip";
-import { bisector, extent, max } from "@visx/vendor/d3-array";
-import { timeFormat } from "@visx/vendor/d3-time-format";
+import React, { SVGProps, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
+import { ColorType, createChart, IChartApi, ISeriesApi, LineStyle, LineType, Time } from "lightweight-charts";
 
 import { EEmpire } from "@primodiumxyz/contracts";
+import { CHART_TIME_SCALES } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
-import { SecondaryCard } from "@/components/core/Card";
-import { useEmpires } from "@/hooks/useEmpires";
+import { allEmpires as _allEmpires } from "@primodiumxyz/game";
+import { Entity } from "@primodiumxyz/reactive-tables";
+import { Button } from "@/components/core/Button";
+import { Tooltip } from "@/components/core/Tooltip";
 import { useEthPrice } from "@/hooks/useEthPrice";
-import { EmpireConfig } from "@/util/lookups";
-
-export const accentColor = "rgba(0,255, 0, .75)";
-export const accentColorDark = "rgba(0,255, 0, .25)";
-// accessors
-const getDate = (d: HistoricalPointCost) => new Date(d.timestamp * 1000);
-const getPointValue = (d: HistoricalPointCost) => d.cost;
-const bisectDate = bisector<HistoricalPointCost, Date>((d) => new Date(d.timestamp * 1000)).left;
+import { EmpireEnumToConfig } from "@/util/lookups";
 
 export type SmallHistoricalPointPriceProps = {
   width: number;
@@ -32,44 +21,42 @@ export type SmallHistoricalPointPriceProps = {
 };
 
 type HistoricalPointCost = {
-  timestamp: number;
-  cost: number;
+  time: Time;
+  value: number;
   empire: EEmpire;
 };
 
-const tickLabelProps = {
-  fill: "rgba(255, 255, 255, 1)",
-  fontSize: 12,
-  fontFamily: "Silkscreen",
-  textAnchor: "middle",
-} as const;
+/**
+ * `getHistoricalPriceData` - get historical price data from a set of price data entities (all empires)
+ * `formatCandlestickData` - get formatted data for candlesticks (the selected empire)
+ * `initialHistoricalPriceData` - base historical data on mount
+ * `initialCandlestickData` - base candlestick data on mount
+ * `chartContainerRef` - reference to the chart container
+ * `seriesRefs` - references to the series
+ *
+ * 1. Get base historical data on mount (& candlestick data if an empire is selected)
+ * 2. Setup live updates to the chart (on new entities)
+ *   - we're doing that to prevent rerendering the chart on every update (which would reset zoom, pan, etc.)
+ *   - meaning that on each update, we need to recalculate the whole data to get average top/bottom values
+ *   - and save the data received for the next updates
+ */
+export const HistoricalPointGraph: React.FC<{
+  empire: EEmpire;
+  tickInterval: number;
+}> = ({ empire, tickInterval }) => {
+  const {
+    tables,
+    utils: { weiToUsd },
+  } = useCore();
+  const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
+  const ethPrice = useEthPrice().price;
+  const empireCount = tables.P_GameConfig.use()?.empireCount ?? 0;
 
-export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = withTooltip<
-  SmallHistoricalPointPriceProps,
-  HistoricalPointCost[]
->(
-  ({
-    width,
-    height,
-    margin = { top: 40, right: 40, bottom: 40, left: 60 },
-    empire,
-    tooltipData,
-    showTooltip,
-    hideTooltip,
-    tooltipTop = 0,
-    tooltipLeft = 0,
-  }) => {
-    const {
-      tables,
-      utils: { weiToUsd },
-    } = useCore();
-    const historicalPriceEntities = tables.HistoricalPointCost.useAll();
-    const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
-    const ethPrice = useEthPrice().price;
-    const empires = useEmpires();
-    const historicalPriceData = useMemo(() => {
-      // get data
-      let data = historicalPriceEntities
+  // Get historical price data from entities, used on mount and to get updates
+  const getHistoricalPriceData = useCallback(
+    (entities: Entity[]) => {
+      const allEmpires = _allEmpires.slice(0, empireCount);
+      const data = entities
         .map((entity) => ({
           ...tables.HistoricalPointCost.getEntityKeys(entity), // empire, timestamp
           cost: tables.HistoricalPointCost.get(entity)?.cost ?? BigInt(0),
@@ -88,7 +75,6 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
       );
 
       // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
-      const allEmpires = Array.from(new Array(empires.size)).map((_, i) => i + 1);
       const timestampMap = new Map<number, { [key: number]: bigint }>();
 
       // grab costs for each timestamp
@@ -112,183 +98,306 @@ export const HistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = wi
         });
       });
 
-      // create the flattened data
-      const filledData: HistoricalPointCost[] = [];
+      // create the data
+      const empireData = Object.fromEntries(allEmpires.map((empire) => [empire, []])) as unknown as Record<
+        EEmpire,
+        HistoricalPointCost[]
+      >;
       timestampMap.forEach((costs, timestamp) => {
         allEmpires.forEach((empire) => {
-          filledData.push({
-            timestamp,
+          empireData[empire as EEmpire].push({
+            time: timestamp as Time,
             empire,
-            cost: Number(costs[empire]),
+            value: Number(costs[empire]),
           });
         });
       });
 
-      return filledData;
-    }, [historicalPriceEntities, gameStartTimestamp, ethPrice]);
+      return empireData;
+    },
+    [gameStartTimestamp, ethPrice, empireCount],
+  );
 
-    const { innerWidth, innerHeight } = useMemo(() => {
-      return {
-        innerWidth: width - margin.left - margin.right,
-        innerHeight: height - margin.top - margin.bottom,
-      };
-    }, [width, height, margin]);
-
-    // scales
-    const dateScale = useMemo(
-      () =>
-        scaleTime({
-          range: [margin.left, innerWidth + margin.left],
-          domain: extent(historicalPriceData, getDate) as [Date, Date],
-        }),
-      [innerWidth, margin.left, historicalPriceData],
-    );
-    const stockValueScale = useMemo(
-      () =>
-        scaleLinear({
-          range: [innerHeight + margin.top, margin.top],
-          domain: [0, (max(historicalPriceData, getPointValue) || 0) + innerHeight / 3],
-          nice: true,
-        }),
-      [margin.top, innerHeight, historicalPriceData],
-    );
-
-    // tooltip handler
-    const handleTooltip = useCallback(
-      (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
-        const { x } = localPoint(event) || { x: 0 };
-        const x0 = dateScale.invert(x);
-        const index = bisectDate(historicalPriceData, x0, 1);
-        const d0 = historicalPriceData[index - 1];
-        const d1 = historicalPriceData[index];
-
-        // Find the closest timestamp
-        const closestTimestamp =
-          x0.valueOf() - getDate(d0).valueOf() > getDate(d1).valueOf() - x0.valueOf() ? d1.timestamp : d0.timestamp;
-
-        // Get all data points with the same timestamp
-        const dataPoints = historicalPriceData.filter((d) => d.timestamp === closestTimestamp);
-
-        showTooltip({
-          tooltipData: dataPoints,
-          tooltipLeft: x,
-          tooltipTop: Math.min(...dataPoints.map((d) => stockValueScale(getPointValue(d)))),
-        });
-      },
-      [showTooltip, stockValueScale, dateScale, historicalPriceData],
-    );
-
-    const filteredEmpires: [EEmpire, EmpireConfig][] = useMemo(() => {
-      if (empire === EEmpire.LENGTH) {
-        return Array.from(empires.entries());
+  // Get formatted data for candlesticks
+  const formatCandlestickData = useCallback(
+    (historicalPriceData: Record<EEmpire, HistoricalPointCost[]>) => {
+      if (!historicalPriceData[empire] || historicalPriceData[empire].length === 0) {
+        return [];
       }
-      return [[empire, empires.get(empire)!]];
-    }, [empires, empire]);
 
-    if (width < 10) return null;
+      const data = historicalPriceData[empire].reduce(
+        (acc, item) => {
+          const tickIndex = Math.floor(Number(item.time) / tickInterval);
 
-    return (
-      <div className="pointer-event-auto flex items-center justify-center gap-2 rounded-box bg-black/10">
-        <svg width={width} height={height}>
-          {filteredEmpires.map(([empire, data]) => (
-            <LinePath
-              key={empire}
-              data={historicalPriceData.filter((d) => d.empire === empire)}
-              x={(d) => dateScale(getDate(d)) ?? 0}
-              y={(d) => stockValueScale(getPointValue(d)) ?? 0}
-              strokeWidth={1}
-              stroke={data.chartColor}
-              curve={curveMonotoneX}
-            />
-          ))}
+          if (!acc[tickIndex]) {
+            acc[tickIndex] = {
+              time: (tickIndex * tickInterval) as Time,
+              open: item.value, // we'll handle this next
+              high: item.value,
+              low: item.value,
+              close: item.value,
+            };
+          } else {
+            acc[tickIndex].high = Math.max(acc[tickIndex].high, item.value);
+            acc[tickIndex].low = Math.min(acc[tickIndex].low, item.value);
+            acc[tickIndex].close = item.value;
+          }
 
-          <GridRows
-            left={margin.left}
-            scale={stockValueScale}
-            width={innerWidth}
-            strokeDasharray="1,3"
-            stroke={accentColor}
-            strokeOpacity={0}
-            pointerEvents="none"
-          />
-          <GridColumns
-            top={margin.top}
-            scale={dateScale}
-            height={innerHeight}
-            strokeDasharray="1,3"
-            stroke={accentColor}
-            strokeOpacity={0.2}
-            pointerEvents="none"
-          />
-          <AxisBottom
-            top={height - margin.bottom}
-            scale={dateScale}
-            tickFormat={(v: Date, i: number) => (width > 400 || i % 2 === 0 ? timeFormat("%I:%M")(v) : "")}
-            stroke={"rgba(0, 255, 255, .5)"}
-            tickStroke={"rgba(0, 255, 255, .5)"}
-            tickLabelProps={tickLabelProps}
-            numTicks={width > 750 ? 8 : 5}
-            label={"time"}
-            labelProps={{
-              x: width + 30,
-              y: -10,
-              fontSize: 18,
-              strokeWidth: 0,
-              stroke: "rgba(0, 255, 255, .5)",
-              paintOrder: "stroke",
-              fontFamily: "Silkscreen",
-              textAnchor: "start",
-            }}
-          />
-          <AxisLeft
-            left={margin.left}
-            scale={stockValueScale}
-            numTicks={5}
-            tickFormat={(v: bigint) => `${weiToUsd(v, ethPrice ?? 0)}`}
-            stroke={"rgba(0, 255, 255, .5)"}
-            tickStroke={"rgba(0, 255, 255, .5)"}
-            tickLabelProps={{
-              ...tickLabelProps,
-              textAnchor: "end",
-            }}
-          />
-          <Bar
-            x={margin.left}
-            y={margin.top}
-            width={innerWidth}
-            height={innerHeight}
-            fill="transparent"
-            rx={14}
-            onTouchStart={handleTooltip}
-            onTouchMove={handleTooltip}
-            onMouseMove={handleTooltip}
-            onMouseLeave={() => hideTooltip()}
-          />
-          {tooltipData && (
-            <g>
-              <Line
-                from={{ x: tooltipLeft, y: margin.top }}
-                to={{ x: tooltipLeft, y: innerHeight + margin.top }}
-                stroke={"rgba(0, 255, 255, .25)"}
-                strokeWidth={2}
-                pointerEvents="none"
-                strokeDasharray="5,2"
-              />
-            </g>
-          )}
-        </svg>
-        {tooltipData && (
-          <div className="absolute right-2 top-2 flex w-fit flex-row gap-1 text-xs">
-            {tooltipData.map((d, index) => (
-              <SecondaryCard key={index} className="flex flex-col items-end">
-                <p className="opacity-50">{EEmpire[d.empire]}</p>
-                <p className="text-center">{weiToUsd(BigInt(d.cost), ethPrice ?? 0)} USD</p>
-                <p className="opacity-50">{timeFormat("%I:%M %p")(getDate(d))}</p>
-              </SecondaryCard>
-            ))}
-          </div>
-        )}
-      </div>
+          return acc;
+        },
+        {} as Record<number, { time: Time; open: number; high: number; low: number; close: number }>,
+      );
+
+      // Make sure each tick opens at the close of the previous tick (in case there are gaps in time)
+      const ticks = Object.values(data);
+      const alignedTicks = ticks.map((item, index) => {
+        if (index === 0) return item;
+        return {
+          ...item,
+          open: ticks[index - 1].close,
+        };
+      });
+
+      return alignedTicks;
+    },
+    [empire, tickInterval],
+  );
+
+  // Price data for line graphs & generating candlestick data
+  const initialHistoricalPriceData = useMemo(
+    () => getHistoricalPriceData(tables.HistoricalPointCost.getAll()),
+    [empire, getHistoricalPriceData],
+  );
+
+  // Additional data received from updates
+  const [updateHistoricalPriceData, setUpdateHistoricalPriceData] = useState<Record<
+    EEmpire,
+    HistoricalPointCost[]
+  > | null>(null);
+
+  // Chart
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<IChartApi | null>(null);
+  const seriesRefs = useRef<ISeriesApi<"Line" | "Candlestick">[] | null>(null);
+
+  // Set time scale on selection
+  const setTimeScale = (timeScale: number) => {
+    if (!chartRef.current) return;
+
+    const now = new Date().getTime() / 1000;
+    const from = timeScale === -1 ? 0 : now - timeScale;
+    chartRef.current.timeScale().setVisibleRange({ from: from as Time, to: now as Time });
+  };
+
+  // Initialize the chart
+  useEffect(() => {
+    if (!chartContainerRef.current) return;
+    seriesRefs.current = [];
+
+    const firstDataTime = new Date(Number(gameStartTimestamp) * 1000);
+    const lastDataTime = new Date(
+      (initialHistoricalPriceData[1][initialHistoricalPriceData[1].length - 1].time as number) * 1000,
     );
-  },
+
+    // Create the base chart
+    const chart = createChart(chartContainerRef.current, {
+      layout: {
+        textColor: "white",
+        fontFamily: "Silkscreen",
+        fontSize: 11,
+        background: { type: ColorType.Solid, color: "transparent" },
+        attributionLogo: false,
+      },
+      grid: {
+        vertLines: { color: "transparent" },
+        horzLines: { color: "transparent" },
+      },
+      width: chartContainerRef.current.clientWidth,
+      height: chartContainerRef.current.clientHeight,
+    });
+    chartRef.current = chart;
+
+    // Apply chart formatting & layout options
+    chart.applyOptions({
+      localization: {
+        priceFormatter: (price: number) => weiToUsd(BigInt(price.toFixed(0)), ethPrice ?? 0, { precision: 3 }),
+        timeFormatter: (time: number, locale: string) => {
+          // Show date as well if the game spans multiple days
+          const firstDay = firstDataTime.toLocaleDateString();
+          const lastDay = lastDataTime.toLocaleDateString();
+          if (firstDay === lastDay) return new Date(time * 1000).toLocaleTimeString();
+
+          return new Date(time * 1000).toLocaleString(locale, {
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+        },
+      },
+      timeScale: {
+        timeVisible: true,
+        tickMarkFormatter: (time: number) => new Date(time * 1000).toLocaleTimeString(),
+      },
+      crosshair: {
+        vertLine: {
+          color: "#22d3ee",
+          style: LineStyle.Solid,
+          labelBackgroundColor: "#22d3ee",
+        },
+        horzLine: {
+          color: "#22d3ee",
+          labelBackgroundColor: "#22d3ee",
+        },
+      },
+    });
+
+    // Add series & populate with base data (on mount)
+    if (empire === EEmpire.LENGTH) {
+      Object.entries(initialHistoricalPriceData).forEach(([_empire, data]) => {
+        const empire = Number(_empire) as EEmpire;
+        const newSeries = chart.addLineSeries({
+          color: EmpireEnumToConfig[empire].chartColor,
+          lineType: LineType.Curved,
+        });
+        newSeries.setData(data);
+        seriesRefs.current?.push(newSeries);
+      });
+    } else {
+      const newSeries = chart.addCandlestickSeries({
+        // accent
+        upColor: "#22d3ee",
+        // error
+        downColor: "#A8375D",
+        borderVisible: false,
+        wickUpColor: "#22d3ee",
+        wickDownColor: "#A8375D",
+      });
+
+      const candlestickData = formatCandlestickData(initialHistoricalPriceData);
+      newSeries.setData(candlestickData);
+      seriesRefs.current?.push(newSeries);
+
+      // If there is few data, unzoom the chart a bit so candles are not huge
+      const minTicks = 30;
+      if (candlestickData.length < minTicks) {
+        chart.timeScale().setVisibleLogicalRange({
+          from: (lastDataTime.getTime() - 40_000) / 1000,
+          to: lastDataTime.getTime() / 1000,
+        });
+        // scroll so latest data is on the right
+        chart.timeScale().scrollToPosition(0, false);
+      } else {
+        chart.timeScale().fitContent();
+      }
+    }
+
+    const handleResize = () => {
+      chart.applyOptions({
+        width: chartContainerRef.current?.clientWidth ?? 0,
+        height: chartContainerRef.current?.clientHeight ?? 0,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      chart.remove();
+    };
+  }, [empire, tickInterval, initialHistoricalPriceData]);
+
+  // Live updates to the chart (we could go with recreating the component on ever update, but this would reset
+  // zoom, pan, etc. )
+  // This is a listener on individual entities, meaning associated with a specific empire
+  // so we only want to update this empire (since the rest will be 0 and reset the accurate data possibly updated previously)
+  useEffect(() => {
+    const unsubscribe = tables.HistoricalPointCost.watch(
+      {
+        onEnter: ({ entity }) => {
+          const { empire: entityEmpire } = tables.HistoricalPointCost.getEntityKeys(entity) as { empire: EEmpire };
+          const newData = getHistoricalPriceData([entity]);
+
+          if (empire === EEmpire.LENGTH) {
+            const updateData = newData[entityEmpire][0];
+            // Price will be 0 if this data is filled (not the update we're interested in)
+            if (updateData.value === 0) return;
+            seriesRefs.current?.[entityEmpire - 1].update(updateData);
+          } else {
+            if (entityEmpire !== empire) return;
+            // We need the full data to be able to form low/high values for the candlestick
+            const fullHistoricalPriceData = Object.fromEntries(
+              Object.entries(initialHistoricalPriceData).map(([key, value]) => [
+                key,
+                [
+                  ...value,
+                  ...Object.values(updateHistoricalPriceData?.[Number(key) as EEmpire] ?? []),
+                  ...newData[Number(key) as EEmpire],
+                ],
+              ]),
+            ) as Record<EEmpire, HistoricalPointCost[]>;
+
+            const candlestickData = formatCandlestickData(fullHistoricalPriceData);
+            const updateData = candlestickData?.[candlestickData.length - 1];
+            if (updateData) seriesRefs.current?.[0].update(updateData);
+
+            setUpdateHistoricalPriceData(
+              (prev) =>
+                ({ ...prev, [entityEmpire]: { ...prev?.[entityEmpire], ...newData[entityEmpire] } }) as Record<
+                  EEmpire,
+                  HistoricalPointCost[]
+                >,
+            );
+          }
+        },
+      },
+      { runOnInit: false },
+    );
+
+    return () => unsubscribe();
+  }, [
+    empire,
+    tickInterval,
+    initialHistoricalPriceData,
+    updateHistoricalPriceData,
+    getHistoricalPriceData,
+    formatCandlestickData,
+  ]);
+
+  return (
+    <>
+      <div ref={chartContainerRef} className="relative h-full min-h-64 w-full" />
+      <div className="mb-2 flex items-center gap-1 self-end pr-1">
+        <TradingViewLogo
+          color="#2962ff"
+          className="size-6 fill-white opacity-75 transition-opacity hover:opacity-100"
+        />
+        {CHART_TIME_SCALES.map((scale) => (
+          <Button key={scale.value} size="xs" variant="ghost" onClick={() => setTimeScale(scale.value)}>
+            {scale.label}
+          </Button>
+        ))}
+        <Tooltip tooltipContent="Resize visible chart to time range" direction="right" className="ml-1 w-44 text-xs">
+          <InformationCircleIcon className="size-4 opacity-75" />
+        </Tooltip>
+      </div>
+    </>
+  );
+};
+
+const TradingViewLogo = (props: SVGProps<SVGSVGElement>, color: string) => (
+  <a
+    href="https://www.tradingview.com/"
+    title="Charting by TradingView"
+    target="_blank"
+    rel="noreferrer"
+    className="mr-2 cursor-pointer"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" {...props}>
+      <path d="m74.268 158.688 142.479.023.759 179.45-72.04-.504-.021-107.674-71.245-.112.068-71.183Z" />
+      <circle cx={270.59} cy={192.178} r={35.956} />
+      <path d="m343.41 158.808 83.007.088-75.185 177.96-82.128-.177 73.733-177.728z" />
+    </svg>
+  </a>
 );
