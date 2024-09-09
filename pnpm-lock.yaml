@@ -139,6 +139,9 @@ importers:
       '@primodiumxyz/game':
         specifier: workspace:*
         version: link:../../packages/game
+      '@primodiumxyz/keeper':
+        specifier: workspace:*
+        version: link:../keeper
       '@primodiumxyz/reactive-tables':
         specifier: ^3.5.5
         version: 3.5.5(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)

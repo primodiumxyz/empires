@@ -4,6 +4,7 @@ const dev: ChainConfig = {
   ...mudFoundry,
   //COMMENT OUT INDEXER URL TO USE ONLY RPC
   indexerUrl: "http://localhost:3001",
+  keeperUrl: "http://localhost:3002",
 };
 
 const caldera: ChainConfig = {
@@ -51,7 +52,7 @@ const calderaSepolia: ChainConfig = {
   },
 };
 
-export type ChainConfig = MUDChain & { indexerUrl?: string };
+export type ChainConfig = MUDChain & { indexerUrl?: string; keeperUrl?: string };
 
 export const chainConfigs = {
   caldera,
