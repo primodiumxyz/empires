@@ -20,7 +20,7 @@ jobs:
 
       - name: Install pnpm and dependencies
         run: |
-          npm install -g pnpm
+          npm install -g pnpm@8.15.8
           pnpm install
 
       - name: Generate dedicated lockfile
