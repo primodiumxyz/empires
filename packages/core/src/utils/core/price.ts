@@ -223,12 +223,13 @@ export function createPriceUtils(tables: Tables) {
     for (let i = 1; i <= empireCount; i++) {
       const empire = i as EEmpire;
       const currentPointCost = tables.Empire.getWithKeys({ id: empire })?.pointCost ?? 0n;
+      const pointsIssued = tables.Empire.getWithKeys({ id: empire })?.pointsIssued ?? 0n;
 
       // Calculate the maximum number of whole points that can be sold
       const maxWholePoints = (currentPointCost - config.minPointCost) / pointCostDecrease;
-
-      if (maxWholePoints > 0n) {
-        const empireSellValue = getPointPrice(empire, Number(maxWholePoints)).price;
+      const pointsToSell = pointsIssued > maxWholePoints ? maxWholePoints : pointsIssued;
+      if (pointsToSell > 0n) {
+        const empireSellValue = getPointPrice(empire, Number(pointsToSell)).price;
         totalMaxSellValue += empireSellValue;
       }
     }
