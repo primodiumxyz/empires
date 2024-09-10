@@ -27,7 +27,7 @@ jobs:
       #   run: cd apps/keeper && pnpm dlx @pnpm/make-dedicated-lockfile@0.5.13
 
       - name: Build Docker image
-        run: docker build -t keeper:latest -f ./apps/keeper/Dockerfile ./apps/keeper
+        run: docker build -t keeper:latest -f ./apps/keeper/Dockerfile .
 
       - name: Save Docker image
         run: docker save keeper:latest > image.tar
