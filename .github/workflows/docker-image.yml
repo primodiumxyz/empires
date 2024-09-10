@@ -20,11 +20,11 @@ jobs:
 
       - name: Install pnpm and dependencies
         run: |
-          npm install -g pnpm@8.15.8
-          pnpm install
+          npm install -g pnpm@8
+          pnpm install --frozen-lockfile
 
       - name: Generate dedicated lockfile
-        run: npx @pnpm/make-dedicated-lockfile
+        run: pnpm dlx @pnpm/make-dedicated-lockfile
 
       - name: Build Docker image
         run: docker build -t keeper:latest ./apps/keeper

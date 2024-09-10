@@ -7,14 +7,7 @@ A minimal Typescript keeper to call a function on a contract whenever a conditio
 Install and run with:
 
 ```sh
-pnpm add @primodiumxyz/keeper
 pnpm keeper-server
-```
-
-or execute the package bin directly:
-
-```sh
-pnpx @primodiumxyz/keeper
 ```
 
 ## Configuration
