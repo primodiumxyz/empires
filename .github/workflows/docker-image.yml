@@ -36,15 +36,15 @@ jobs:
       - name: Load and run Docker image on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${EC2_USER}@${EC2_HOST} '
-            # RUN THE FOLLOWING IF THE MACHINE IS Amazon Linux
+            # RUN THE FOLLOWING IF THE MACHINE IS Amazon Linux (won't have docker installed)
             # Update package list and install Docker
-            sudo dnf update -y
-            sudo dnf install docker -y
+            # sudo dnf update -y
+            # sudo dnf install docker -y
             # Start Docker service
-            sudo systemctl start docker
-            sudo systemctl enable docker
+            # sudo systemctl start docker
+            # sudo systemctl enable docker
             # Add ec2-user to docker group
-            sudo usermod -a -G docker ec2-user
+            # sudo usermod -a -G docker ec2-user
 
             sudo docker load < image.tar
 
