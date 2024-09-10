@@ -59,4 +59,3 @@ jobs:
         run: |
           rm -f private_key
           rm -f image.tar
-          rm -f pnpm-lock.yaml
