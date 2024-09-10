@@ -24,7 +24,7 @@ jobs:
           pnpm install --frozen-lockfile
 
       - name: Generate dedicated lockfile
-        run: pnpm dlx @pnpm/make-dedicated-lockfile@0.5.13
+        run: cd apps/keeper && pnpm dlx @pnpm/make-dedicated-lockfile@0.5.13
 
       - name: Build Docker image
         run: docker build -t keeper:latest ./apps/keeper
