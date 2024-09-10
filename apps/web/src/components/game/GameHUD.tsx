@@ -12,6 +12,7 @@ import { Join } from "@/components/core/Join";
 import { Dashboard } from "@/components/dashboard";
 import { Empires } from "@/components/empires/Empires";
 import { GameOver } from "@/components/GameOver";
+import { Intro } from "@/components/Introduction";
 import { Leaderboard } from "@/components/leaderboard/Leaderboard";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { OverridePopup } from "@/components/override-popup";
@@ -43,6 +44,7 @@ export const GameHUD = () => {
           showMap ? "pointer-events-none opacity-0" : "pointer-events-auto opacity-100",
         )}
       />
+      <Intro />
       <HUD pad>
         {/* TOP */}
         <HUD.TopLeft className="gap-2">
