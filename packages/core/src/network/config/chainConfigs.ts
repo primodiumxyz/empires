@@ -23,6 +23,7 @@ const caldera: ChainConfig = {
   },
   faucetUrl: "https://caldera-faucet.primodium.ai/trpc",
   indexerUrl: "https://caldera-mud2-indexer.primodium.ai/trpc",
+  keeperUrl: "https://keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
       name: "Blockscout",
@@ -45,6 +46,7 @@ const calderaSepolia: ChainConfig = {
   },
   faucetUrl: "https://caldera-sepolia-faucet.primodium.ai/trpc",
   indexerUrl: "https://empires-indexer.primodium.ai",
+  keeperUrl: "https://keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
       name: "Blockscout",
