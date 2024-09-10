@@ -36,14 +36,15 @@ jobs:
       - name: Load and run Docker image on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${EC2_USER}@${EC2_HOST} '
-            sudo `which docker` load < image.tar
+            sudo apt-get install docker
+            sudo docker load < image.tar
 
             # Stop and remove any existing container
-            sudo `which docker` stop keeper-container || true
-            sudo `which docker` rm keeper-container || true
+            sudo docker stop keeper-container || true
+            sudo docker rm keeper-container || true
 
             # Run the new container
-            sudo `which docker` run -d -p 3002:3002 \
+            sudo docker run -d -p 3002:3002 \
               --name keeper-container \
               -e KEEPER_HOST="0.0.0.0" \
               -e KEEPER_PORT="3002" \
