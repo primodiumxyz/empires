@@ -4,6 +4,7 @@ const dev: ChainConfig = {
   ...mudFoundry,
   //COMMENT OUT INDEXER URL TO USE ONLY RPC
   indexerUrl: "http://localhost:3001",
+  keeperUrl: "http://localhost:3002/trpc",
 };
 
 const caldera: ChainConfig = {
@@ -22,6 +23,7 @@ const caldera: ChainConfig = {
   },
   faucetUrl: "https://caldera-faucet.primodium.ai/trpc",
   indexerUrl: "https://caldera-mud2-indexer.primodium.ai/trpc",
+  keeperUrl: "https://keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
       name: "Blockscout",
@@ -44,6 +46,7 @@ const calderaSepolia: ChainConfig = {
   },
   faucetUrl: "https://caldera-sepolia-faucet.primodium.ai/trpc",
   indexerUrl: "https://empires-indexer.primodium.ai",
+  keeperUrl: "https://keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
       name: "Blockscout",
@@ -52,7 +55,7 @@ const calderaSepolia: ChainConfig = {
   },
 };
 
-export type ChainConfig = MUDChain & { indexerUrl?: string };
+export type ChainConfig = MUDChain & { indexerUrl?: string; keeperUrl?: string };
 
 export const chainConfigs = {
   caldera,
