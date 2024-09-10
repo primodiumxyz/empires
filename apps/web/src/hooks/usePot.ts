@@ -16,12 +16,8 @@ export const usePot = () => {
     name: "",
   });
   const gameEndPot = tables.Balances.useWithKeys({ namespaceId: gameHex })?.balance ?? 0n; // to be used only when the game is over
-  let pot = 0n;
-  if (useWinningEmpire().gameOver) {
-    pot = gameEndPot;
-  } else {
-    pot = gameEndPot - utils.getTotalMaxSellValue();
-  }
+  const { gameOver } = useWinningEmpire();
+  const pot = gameOver ? gameEndPot : gameEndPot - utils.getTotalMaxSellValue();
   const rake = tables.Balances.useWithKeys({ namespaceId: adminHex })?.balance ?? 0n;
   return { pot, rake };
 };
