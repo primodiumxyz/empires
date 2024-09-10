@@ -5,7 +5,7 @@ RUN corepack enable
 WORKDIR /app
 
 # Copy root package.json, pnpm-workspace.yaml, and pnpm-lock.yaml
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .tsconfigs/bundler/dom/library-monorepo.json ./
 
 # Copy the keeper app
 COPY apps/keeper ./apps/keeper
