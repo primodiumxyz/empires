@@ -18,6 +18,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Install pnpm and dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
+
       - name: Generate dedicated lockfile
         run: npx @pnpm/make-dedicated-lockfile
 
