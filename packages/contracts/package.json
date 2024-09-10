@@ -12,6 +12,7 @@
     "build:mud": "pnpm run build:prototype && pnpm run build:map && pnpm mud build",
     "build:prototype": "tsx ./ts/prototypes/commands/prototypegen.ts",
     "build:map": "tsx ./ts/map/commands/mapgen.ts",
+    "deploy:base-sepolia": "pnpm mud deploy --profile=base-sepolia",
     "deploy:caldera": "pnpm mud deploy --profile=caldera",
     "deploy:caldera-sepolia": "pnpm mud deploy --profile=caldera-sepolia",
     "deploy:local": "pnpm mud deploy --skipBuild",
