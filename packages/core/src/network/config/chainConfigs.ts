@@ -55,11 +55,35 @@ const calderaSepolia: ChainConfig = {
   },
 };
 
+const baseSepolia: ChainConfig = {
+  name: "Base Sepolia",
+  id: 84532,
+  nativeCurrency: { decimals: 18, name: "Ether", symbol: "ETH" },
+  rpcUrls: {
+    default: {
+      http: ["https://base-sepolia.g.alchemy.com/v2/r7XIy5ha8oVNDTsTaYoZ7VVZ-hcbNRam"],
+    },
+    public: {
+      http: ["https://base-sepolia.g.alchemy.com/v2/r7XIy5ha8oVNDTsTaYoZ7VVZ-hcbNRam"],
+    },
+  },
+  faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",
+  indexerUrl: "https://empires-indexer.primodium.ai",
+  keeperUrl: "https://keeper.primodium.ai/trpc",
+  blockExplorers: {
+    default: {
+      name: "BaseScan",
+      url: "https://sepolia.basescan.org/",
+    },
+  },
+};
+
 export type ChainConfig = MUDChain & { indexerUrl?: string; keeperUrl?: string };
 
 export const chainConfigs = {
   caldera,
   calderaSepolia,
+  baseSepolia,
   dev,
   garnet: garnet as ChainConfig,
   redstone: redstone as ChainConfig,
