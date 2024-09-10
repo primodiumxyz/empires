@@ -5,6 +5,7 @@ on:
     branches:
       - sprint/*
       - release/*
+      - 0xpolarzero/pri-1067-base-sepolia-deployment
   workflow_dispatch:
 
 jobs:

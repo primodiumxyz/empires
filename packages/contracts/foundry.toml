@@ -28,7 +28,8 @@ eth_rpc_url = "https://primodium-sepolia.rpc.caldera.xyz/http"
 chain_id = 10017
 
 [profile.base-sepolia]
-eth_rpc_url = "https://base-sepolia.g.alchemy.com/v2/r7XIy5ha8oVNDTsTaYoZ7VVZ-hcbNRam"
+# eth_rpc_url = "https://base-sepolia.g.alchemy.com/v2/r7XIy5ha8oVNDTsTaYoZ7VVZ-hcbNRam"
+eth_rpc_url = "https://sepolia.base.org"
 chain_id = 84532
 
 [profile.redstone-holesky]

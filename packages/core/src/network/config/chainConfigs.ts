@@ -61,10 +61,10 @@ const baseSepolia: ChainConfig = {
   nativeCurrency: { decimals: 18, name: "Ether", symbol: "ETH" },
   rpcUrls: {
     default: {
-      http: ["https://base-sepolia.g.alchemy.com/v2/r7XIy5ha8oVNDTsTaYoZ7VVZ-hcbNRam"],
+      http: ["https://sepolia.base.org"],
     },
     public: {
-      http: ["https://base-sepolia.g.alchemy.com/v2/r7XIy5ha8oVNDTsTaYoZ7VVZ-hcbNRam"],
+      http: ["https://sepolia.base.org"],
     },
   },
   faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",
