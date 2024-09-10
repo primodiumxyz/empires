@@ -23,7 +23,7 @@ contract OverridePointsSystem is EmpiresSystem {
    * @param _empire The empire to sell points from.
    * @param _points The number of points to sell.
    */
-  function sellPoints(EEmpire _empire, uint256 _points) public {
+  function sellPoints(EEmpire _empire, uint256 _points) public _onlyNotGameOver {
     bytes32 playerId = addressToId(_msgSender());
     require(
       _points <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
