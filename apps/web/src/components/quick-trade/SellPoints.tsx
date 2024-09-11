@@ -24,7 +24,7 @@ export const SellPoints = () => {
   const empires = useEmpires();
   const { playerAccount, login } = usePlayerAccount();
   const calls = useContractCalls();
-  const { pot } = usePot();
+  const { gameEndPot } = usePot();
 
   const playerPoints = playerAccount
     ? tables.Value_PointsMap.getWithKeys({ empireId: selectedEmpire, playerId: playerAccount.entity })?.value ?? 0n
@@ -40,7 +40,7 @@ export const SellPoints = () => {
 
   const { price: pointsToWei, message } = usePointPrice(selectedEmpire, Number(amount));
   const handleSubmit = () => {
-    calls.sellPoints(selectedEmpire, BigInt(Number(amount) * POINTS_UNIT), pot);
+    calls.sellPoints(selectedEmpire, BigInt(Number(amount) * POINTS_UNIT), gameEndPot);
 
     setAmount("0");
   };

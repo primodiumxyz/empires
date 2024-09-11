@@ -15,9 +15,11 @@ export const usePot = () => {
     namespace: "Admin",
     name: "",
   });
-  const gameEndPot = tables.Balances.useWithKeys({ namespaceId: gameHex })?.balance ?? 0n; // to be used only when the game is over
+
   const { gameOver } = useWinningEmpire();
+  const gameEndPot = tables.Balances.useWithKeys({ namespaceId: gameHex })?.balance ?? 0n; // to be used only when the game is over
   const pot = gameOver ? gameEndPot : gameEndPot - utils.getTotalMaxSellValue();
   const rake = tables.Balances.useWithKeys({ namespaceId: adminHex })?.balance ?? 0n;
-  return { pot, rake };
+
+  return { pot, gameEndPot, rake };
 };
