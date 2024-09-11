@@ -994,7 +994,7 @@ export const useCheatcodes = () => {
             defaultValue: 1000,
           },
           gameStartTimestamp: {
-            label: "Game start block",
+            label: "Game start timestamp",
             inputType: "number",
             defaultValue: gameConfig?.gameStartTimestamp ?? BigInt(0),
           },
