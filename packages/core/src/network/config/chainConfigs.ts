@@ -55,7 +55,11 @@ const calderaSepolia: ChainConfig = {
   },
 };
 
-const baseSepoliaRpcUrl = process.env.PRI_BASE_SEPOLIA_RPC_URL || "https://sepolia.base.org";
+const baseSepoliaRpcUrl =
+  // @ts-expect-error env doesn't exist on import.meta
+  (typeof process !== "undefined" ? process.env.PRI_BASE_SEPOLIA_RPC_URL : import.meta.env.PRI_BASE_SEPOLIA_RPC_URL) ||
+  "https://sepolia.base.org";
+
 const baseSepolia: ChainConfig = {
   name: "Base Sepolia",
   id: 84532,
