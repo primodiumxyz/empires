@@ -15,6 +15,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_GameConfig: {
         turnLengthBlocks: 8n,
+        nextGameLengthTurns: 225n, // total blocks is turnLengthBlocks * nextGameLengthTurns
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
