@@ -18,20 +18,6 @@ export const runInitialSync = async (core: Core) => {
   const { publicClient } = network;
   const fromBlock = config.initialBlockNumber ?? 0n;
 
-  // Once historical sync (indexer > rpc) is complete
-  const onSyncComplete = (blockNumber: bigint, processPendingLogs?: () => void) => {
-    // process logs that came in the meantime
-    processPendingLogs?.();
-
-    // set sync status to live so it processed incoming blocks immediately
-    tables.SyncStatus.set({
-      step: SyncStep.Live,
-      progress: 1,
-      message: "Subscribed to live updates",
-      lastBlockNumberProcessed: blockNumber,
-    });
-  };
-
   if (!config.chain.indexerUrl) {
     console.warn("No indexer url found, hydrating from RPC");
     tables.SyncSource.set({ value: SyncSourceType.RPC });
@@ -39,13 +25,13 @@ export const runInitialSync = async (core: Core) => {
     const toBlock = await publicClient.getBlockNumber();
 
     // Start live sync right away (it will store logs until `SyncStatus` is `SyncStep.Live`)
-    const processPendingLogs = subscribeToRPC();
+    const processLatestLogs = await subscribeToRPC(fromBlock);
 
     syncFromRPC(
       fromBlock,
       toBlock,
       //on complete
-      (blockNumber: bigint) => onSyncComplete(blockNumber, processPendingLogs),
+      (blockNumber: bigint) => processLatestLogs(blockNumber),
       //on error
       (err: unknown) => {
         tables.SyncStatus.set({
@@ -66,13 +52,13 @@ export const runInitialSync = async (core: Core) => {
   const onError = async (err: unknown) => {
     console.warn("Failed to fetch from indexer, hydrating from RPC", err);
     const toBlock = await publicClient.getBlockNumber();
-    const processPendingLogs = subscribeToRPC();
+    const processLatestLogs = await subscribeToRPC(fromBlock);
 
     syncFromRPC(
       fromBlock,
       toBlock,
       //on complete
-      (blockNumber: bigint) => onSyncComplete(blockNumber, processPendingLogs),
+      (blockNumber: bigint) => processLatestLogs(blockNumber),
       //on error
       (err: unknown) => {
         tables.SyncStatus.set({
@@ -87,7 +73,7 @@ export const runInitialSync = async (core: Core) => {
   };
 
   tables.SyncSource.set({ value: SyncSourceType.Indexer });
-  const processPendingLogs = subscribeToRPC();
+  const processLatestLogs = await subscribeToRPC(fromBlock);
 
   // sync initial game state from indexer
   syncInitialGameState(
@@ -100,7 +86,7 @@ export const runInitialSync = async (core: Core) => {
         lastBlockNumberProcessed: blockNumber,
       });
 
-      onSyncComplete(blockNumber, processPendingLogs);
+      processLatestLogs(blockNumber);
     },
     onError,
   );
