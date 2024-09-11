@@ -79,13 +79,16 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
+  const sellPoints = async (empire: number, amount: bigint, endPot: bigint, options?: Partial<TxQueueOptions>) => {
+    const { price: expectedValue } = core.utils.getPointPrice(empire, amount);
+    if (expectedValue > endPot) throw new Error("Pot is not enough to cover sale");
+
     return await withTransactionStatus(
       () =>
         execute({
           functionName: "Empires__sellPoints",
           args: [empire, amount],
-          options: { gas: 151271n * 2n },
+          options: { gas: 200000n * 2n },
           txQueueOptions: {
             id: "sell-points",
             ...options,
