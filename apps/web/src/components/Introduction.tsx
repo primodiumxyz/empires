@@ -36,7 +36,7 @@ export const Intro = () => {
 
   return (
     <Modal title="Introduction" startOpen={showIntro} onClose={() => ShowIntro.set({ value: false })}>
-      <Modal.Content className="h-[43rem] max-h-screen w-[50rem] p-6">
+      <Modal.Content className="h-[46rem] max-h-screen w-[50rem] p-6">
         <div className="hide-scrollbar z-50 flex h-full flex-col items-center overflow-scroll p-8">
           <h1 className="mb-6 text-center text-xl text-warning lg:!text-2xl">WELCOME TO PRIMODIUM: EMPIRES</h1>
           <p className="mb-6 text-center text-xs lg:!text-sm">
@@ -83,7 +83,7 @@ export const Intro = () => {
                 <h3 className="absolute m-2 rounded-box bg-gradient-to-t from-black to-transparent px-2 text-sm text-accent lg:!text-lg">
                   {item.title}
                 </h3>
-                <img src={item.gif} alt={item.title} className="h-[250px] w-[250px] object-cover leading-none" />
+                <img src={item.gif} alt={item.title} className="aspect-square h-[300px] object-cover leading-none" />
                 <p className="absolute bottom-0 bg-gradient-to-t from-black to-black/50 p-2 text-center text-xs">
                   {item.description}
                 </p>
