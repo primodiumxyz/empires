@@ -172,7 +172,7 @@ contract OverrideSystemTest is PrimodiumTest {
     );
     assertEq(
       LibPrice.getPointSaleValue(empire, 1 * pointUnit),
-      pointSaleValue - P_PointConfig.getPointCostIncrease(),
+      pointSaleValue - (P_PointConfig.getPointCostIncrease() * (10000 - P_PointConfig.getPointSellTax()) / 10000),
       "Point Sale Value should have decreased"
     );
     assertEq(overrideCost, OverrideCost.get(empire, EOverride.CreateShip), "Override Cost should not have changed");
