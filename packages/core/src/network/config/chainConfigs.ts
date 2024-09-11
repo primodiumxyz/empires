@@ -55,16 +55,17 @@ const calderaSepolia: ChainConfig = {
   },
 };
 
+const baseSepoliaRpcUrl = process.env.PRI_BASE_SEPOLIA_RPC_URL || "https://sepolia.base.org";
 const baseSepolia: ChainConfig = {
   name: "Base Sepolia",
   id: 84532,
   nativeCurrency: { decimals: 18, name: "Ether", symbol: "ETH" },
   rpcUrls: {
     default: {
-      http: ["https://sepolia.base.org"],
+      http: [baseSepoliaRpcUrl],
     },
     public: {
-      http: ["https://sepolia.base.org"],
+      http: [baseSepoliaRpcUrl],
     },
   },
   faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",
