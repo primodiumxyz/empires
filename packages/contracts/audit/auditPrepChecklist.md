@@ -11,9 +11,9 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [ ] packages/contracts/src/adts/CitadelPlanetsSet.sol
 - [ ] packages/contracts/src/adts/EmpirePlanetsSet.sol
 - [ ] packages/contracts/src/adts/PlanetsSet.sol
-- [ ] packages/contracts/src/adts/PlayersMap.sol
-- [ ] packages/contracts/src/adts/PointsMap.sol
-- [ ] packages/contracts/src/libraries/InitPrice.sol
+- [x] packages/contracts/src/adts/PlayersMap.sol
+- [x] packages/contracts/src/adts/PointsMap.sol
+- [x] packages/contracts/src/libraries/InitPrice.sol
 - [ ] packages/contracts/src/libraries/LibAcid.sol
 - [ ] packages/contracts/src/libraries/LibMagnet.sol
 - [ ] packages/contracts/src/libraries/LibMoveShips.sol
