@@ -206,6 +206,37 @@ export function createPriceUtils(tables: Tables) {
     return { price: totalSaleValue, message: "" };
   };
 
+  /**
+   * @dev Calculates the sum of maximum value to collect from selling points across all empires.
+   * @returns The total maximum sell value.
+   * @notice This is useful for calculating the guaranteed pot value with currentPot - totalMaxSellValue
+   */
+  function getTotalMaxSellValue(): bigint {
+    const config = tables.P_PointConfig.get();
+    if (!config) return 0n;
+
+    const pointCostDecrease = config.pointCostIncrease;
+    const empireCount = tables.P_GameConfig.get()?.empireCount ?? 0;
+
+    let totalMaxSellValue = 0n;
+
+    for (let i = 1; i <= empireCount; i++) {
+      const empire = i as EEmpire;
+      const currentPointCost = tables.Empire.getWithKeys({ id: empire })?.pointCost ?? 0n;
+      const pointsIssued = tables.Empire.getWithKeys({ id: empire })?.pointsIssued ?? 0n;
+
+      // Calculate the maximum number of whole points that can be sold
+      const maxWholePoints = (currentPointCost - config.minPointCost) / pointCostDecrease;
+      const pointsToSell = pointsIssued > maxWholePoints ? maxWholePoints : pointsIssued;
+      if (pointsToSell > 0n) {
+        const empireSellValue = getPointPrice(empire, Number(pointsToSell)).price;
+        totalMaxSellValue += empireSellValue;
+      }
+    }
+
+    return totalMaxSellValue;
+  }
+
   return {
     getTotalCost,
     getProgressPointCost,
@@ -216,5 +247,6 @@ export function createPriceUtils(tables: Tables) {
     weiToUsd,
     usdToWei,
     getPointPrice,
+    getTotalMaxSellValue,
   };
 }

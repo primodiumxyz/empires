@@ -1,9 +1,10 @@
 import { resourceToHex } from "@latticexyz/common";
 
 import { useCore } from "@primodiumxyz/core/react";
+import useWinningEmpire from "@/hooks/useWinningEmpire";
 
 export const usePot = () => {
-  const { tables } = useCore();
+  const { tables, utils } = useCore();
   const gameHex = resourceToHex({
     type: "namespace",
     namespace: tables.P_GameConfig.metadata.globalName.split("__")[0],
@@ -14,7 +15,9 @@ export const usePot = () => {
     namespace: "Admin",
     name: "",
   });
-  const pot = tables.Balances.useWithKeys({ namespaceId: gameHex })?.balance ?? 0n;
+  const gameEndPot = tables.Balances.useWithKeys({ namespaceId: gameHex })?.balance ?? 0n; // to be used only when the game is over
+  const { gameOver } = useWinningEmpire();
+  const pot = gameOver ? gameEndPot : gameEndPot - utils.getTotalMaxSellValue();
   const rake = tables.Balances.useWithKeys({ namespaceId: adminHex })?.balance ?? 0n;
   return { pot, rake };
 };
