@@ -193,7 +193,7 @@ library LibPrice {
     );
 
     uint256 triangleSum = (wholePoints * (wholePoints + 1)) / 2;
-    uint256 totalSaleValue = (currentPointCost - config.pointSellTax) * wholePoints - pointCostDecrease * triangleSum;
+    uint256 totalSaleValue = (currentPointCost * wholePoints - pointCostDecrease * triangleSum) * (10000 - config.pointSellTax) / 10000;
 
     return totalSaleValue;
   }

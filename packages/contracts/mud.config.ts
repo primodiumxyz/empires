@@ -51,7 +51,7 @@ export const worldInput = {
       schema: {
         pointUnit: "uint256",
         pointRake: "uint256", // times 10_000
-        pointSellTax: "uint256",
+        pointSellTax: "uint256", // times 10_000
         minPointCost: "uint256",
         startPointCost: "uint256",
         pointGenRate: "uint256",

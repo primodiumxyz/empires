@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { Hex } from "viem";
+import { formatEther, Hex, parseEther } from "viem";
 
 import { EEmpire, EShieldEaterDamageType } from "@primodiumxyz/contracts";
 import { entityToAddress, formatNumber, WORLD_EVENTS_THRESHOLDS } from "@primodiumxyz/core";
@@ -304,8 +304,9 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            <PlayerSpan playerId={action.playerId} /> sold {formatNumber(action.overrideCount, { showZero: true })}{" "}
-            points
+            <PlayerSpan playerId={action.playerId} /> sold{" "}
+            {formatNumber(BigInt(formatEther(action.overrideCount)), { showZero: true })} point
+            {action.overrideCount === parseEther("1") ? "" : "s"}
           </p>
         ),
         highlight: action.ethReceived >= generationalWealthThreshold,
@@ -546,9 +547,9 @@ export const useMostRecentOverride = () => {
           empireId: current.empireId as EEmpire,
           element: (
             <p className="text-xs">
-              <PlayerSpan playerId={current.playerId} /> sold {formatNumber(current.overrideCount, { showZero: true })}{" "}
-              point
-              {current.overrideCount === 1n ? "" : "s"}
+              <PlayerSpan playerId={current.playerId} /> sold{" "}
+              {formatNumber(BigInt(formatEther(current.overrideCount)), { showZero: true })} point
+              {current.overrideCount === parseEther("1") ? "" : "s"}
             </p>
           ),
           highlight: current.ethReceived >= generationalWealthThreshold,
