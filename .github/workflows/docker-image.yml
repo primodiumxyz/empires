@@ -5,6 +5,7 @@ on:
     branches:
       - sprint/*
       - release/*
+      - 0xpolarzero/pri-1065-infra-keeper
   workflow_dispatch:
 
 jobs:
@@ -47,6 +48,7 @@ jobs:
               -e KEEPER_HOST="0.0.0.0" \
               -e KEEPER_PORT="3002" \
               -e KEEPER_PRIVATE_KEY="'$KEEPER_PRIVATE_KEY'" \
+              -e PRI_KEEPER_BEARER_TOKEN="'$PRI_KEEPER_BEARER_TOKEN'" \
               keeper:latest
           '
         env:
