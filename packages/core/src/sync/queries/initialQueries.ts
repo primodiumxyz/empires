@@ -24,6 +24,7 @@ export const getInitialQuery = ({
       { tableId: tables.FunctionSelectors.tableId },
       { tableId: tables.FunctionSignatures.tableId },
       { tableId: tables.Role.tableId },
+      { tableId: tables.Ready.tableId },
       // Base
       { tableId: tables.Planet.tableId },
       { tableId: tables.Empire.tableId },
