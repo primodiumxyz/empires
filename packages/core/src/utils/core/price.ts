@@ -185,14 +185,14 @@ export function createPriceUtils(tables: Tables) {
   function usdToWei(USD: number, weiToUsd: number): bigint {
     return parseEther((USD / (weiToUsd || 1)).toString());
   }
-  const getPointPrice = (empire: EEmpire, points: number): { price: bigint; message: string } => {
+  const getPointPrice = (empire: EEmpire, points: number | bigint): { price: bigint; message: string } => {
     const currentPointCost = tables.Empire.getWithKeys({ id: empire })?.pointCost ?? 0n;
     const config = tables.P_PointConfig.get();
-    if (!config || currentPointCost == 0n || points == 0) {
+    const pointsBigInt = BigInt(points);
+    if (!config || currentPointCost == 0n || pointsBigInt == 0n) {
       return { price: 0n, message: "" };
     }
 
-    const pointsBigInt = BigInt(points);
     const pointCostDecrease = config?.pointCostIncrease ?? 0n;
 
     if (currentPointCost < (config?.minPointCost ?? 0n) + pointCostDecrease * pointsBigInt) {
@@ -201,7 +201,8 @@ export function createPriceUtils(tables: Tables) {
 
     const triangleSum = (pointsBigInt * (pointsBigInt + 1n)) / 2n;
     const totalSaleValue =
-    (currentPointCost * pointsBigInt - pointCostDecrease * triangleSum) * (10000n - (config?.pointSellTax ?? 0n)) / 10000n;
+      ((currentPointCost * pointsBigInt - pointCostDecrease * triangleSum) * (10000n - (config?.pointSellTax ?? 0n))) /
+      10000n;
 
     return { price: totalSaleValue, message: "" };
   };
