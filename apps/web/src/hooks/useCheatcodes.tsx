@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import config from "postcss.config";
 import { Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
@@ -45,6 +46,7 @@ export const useCheatcodes = () => {
   const gameConfig = tables.P_GameConfig.use();
   const pointConfig = tables.P_PointConfig.use();
   const overrideConfig = tables.P_OverrideConfig.use();
+  const currentBlock = tables.BlockNumber.use()?.value ?? 0n;
 
   // rake
   const adminHex = resourceToHex({ type: "namespace", namespace: "Admin", name: "" });
@@ -988,10 +990,11 @@ export const useCheatcodes = () => {
             inputType: "number",
             defaultValue: gameConfig?.goldGenRate ?? BigInt(1),
           },
-          roundTimeLeftInSeconds: {
-            label: "Round time left",
+          roundBlocksLeft: {
+            label: "Round blocks left",
             inputType: "number",
-            defaultValue: 1000,
+            defaultValue:
+              currentBlock >= (gameConfig?.gameOverBlock ?? 0n) ? 0n : (gameConfig?.gameOverBlock ?? 0n) - currentBlock,
           },
           gameStartTimestamp: {
             label: "Game start timestamp",
@@ -1000,14 +1003,11 @@ export const useCheatcodes = () => {
           },
         },
         execute: async (properties) => {
-          const currBlock = tables.BlockNumber.get() ?? { value: 0n, avgBlockTime: 0 };
-          const finalBlockFromTimeLeft =
-            BigInt(properties.roundTimeLeftInSeconds.value * currBlock.avgBlockTime) + currBlock.value;
           const newProperties = {
             empireCount: Number(properties.empireCount.value),
             turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
             goldGenRate: BigInt(properties.goldGenRate.value),
-            gameOverBlock: finalBlockFromTimeLeft,
+            gameOverBlock: currentBlock + BigInt(properties.roundBlocksLeft.value),
             gameStartTimestamp: BigInt(properties.gameStartTimestamp.value),
           };
 
@@ -1144,7 +1144,7 @@ export const useCheatcodes = () => {
         error: () => `Failed to update routine costs`,
       }),
     }),
-    [gameConfig, pointConfig, overrideConfig],
+    [gameConfig, pointConfig, overrideConfig, currentBlock],
   );
 
   /* --------------------------------- Keeper --------------------------------- */
