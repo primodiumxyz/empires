@@ -17,7 +17,8 @@ export const useKeeperClient = (): {
 
   const keeper = useMemo(() => {
     const keeperUrl = config.chain.keeperUrl;
-    return keeperUrl ? createKeeperClient({ url: keeperUrl }) : undefined;
+    const bearerToken = import.meta.env.KEEPER_BEARER_TOKEN;
+    return keeperUrl ? createKeeperClient({ url: keeperUrl, token: bearerToken }) : undefined;
   }, [config.chain]);
 
   const { chainId, worldAddress, initialBlockNumber } = useMemo(() => {

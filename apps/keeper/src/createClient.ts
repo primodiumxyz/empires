@@ -1,15 +1,13 @@
-import {
-  createTRPCProxyClient,
-  httpBatchLink,
-  CreateTRPCProxyClient,
-} from '@trpc/client';
-import type { AppRouter } from './createAppRouter';
+import { createTRPCProxyClient, CreateTRPCProxyClient, httpBatchLink } from "@trpc/client";
+
+import type { AppRouter } from "./createAppRouter";
 
 type CreateClientOptions = {
   /**
    * tRPC endpoint URL like `https://keeper.dev.linfra.xyz/trpc`.
    */
   url: string;
+  token: string;
 };
 
 /**
@@ -18,10 +16,15 @@ type CreateClientOptions = {
  * @param {CreateClientOptions} options See `CreateClientOptions`.
  * @returns {CreateTRPCProxyClient<AppRouter>} A typed tRPC client.
  */
-export function createClient({
-  url,
-}: CreateClientOptions): CreateTRPCProxyClient<AppRouter> {
+export function createClient({ url, token }: CreateClientOptions): CreateTRPCProxyClient<AppRouter> {
   return createTRPCProxyClient<AppRouter>({
-    links: [httpBatchLink({ url })],
+    links: [
+      httpBatchLink({
+        url,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    ],
   });
 }
