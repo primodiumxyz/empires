@@ -33,7 +33,7 @@ const SelectedTab = createLocalNumberTable(settingsWorld, {
   version: "1",
 });
 
-const ShowIntro = createLocalBoolTable(settingsWorld, { id: "showIntro", persist: true });
+const ShowIntro = createLocalBoolTable(settingsWorld, { id: "ShowIntro", persist: true });
 
 const OpenRoutineProbabilities = createLocalBoolTable(settingsWorld, { id: "OpenRoutineProbabilities", persist: true });
 

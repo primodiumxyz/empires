@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { Button } from "@/components/core/Button";
@@ -34,8 +35,8 @@ export const Intro = () => {
 
   return (
     <Modal title="Introduction" startOpen={showIntro} onClose={() => ShowIntro.set({ value: false })}>
-      <Modal.Content className="w-[50rem] p-6">
-        <div className="z-50 flex flex-col items-center p-8">
+      <Modal.Content className="h-[45rem] max-h-screen w-[50rem] p-6">
+        <div className="hide-scrollbar z-50 flex h-full flex-col items-center overflow-scroll p-8">
           <h1 className="mb-6 text-center text-xl text-warning">WELCOME TO PRIMODIUM: EMPIRES</h1>
           <p className="mb-6 text-center text-sm">
             IN THIS THRILLING INTERSTELLAR ADVENTURE, YOU WILL COMPETE AMONG SIX EMPIRES TO CONTROL THE MOST CITADELS
@@ -43,33 +44,47 @@ export const Intro = () => {
             OUTCOME. STRATEGIZE WISELY AND LEAD YOUR EMPIRE TO VICTORY!
           </p>
 
-          <h2 className="mb-4 text-lg text-accent">HOW TO PLAY</h2>
+          <h2 className="mb-4 flex items-center gap-2 text-lg text-accent">- HOW TO PLAY -</h2>
 
-          <div className="flex justify-between gap-4">
+          <div className="grid grid-cols-3 gap-2">
             {[
               {
                 title: "STRATEGIZE",
-                icon: InterfaceIcons.Starmap,
+                gif: "img/intro/strategize.gif",
                 description: "ANALYZE THE GALAXY AND PLAN YOUR MOVES",
               },
               {
                 title: "SUPPORT",
-                icon: InterfaceIcons.Alliance,
-                description: "BOOST YOUR EMPIRE BY TAKING ACTIONS ON PLANETS AND EARNING VALUABLE POINTS.",
+                gif: "img/intro/support.gif",
+                description: (
+                  <>
+                    BOOST YOUR EMPIRE BY TAKING ACTIONS ON PLANETS AND EARNING VALUABLE{" "}
+                    <span className="text-accent">POINTS</span>.
+                  </>
+                ),
               },
               {
                 title: "WIN",
-                icon: InterfaceIcons.Leaderboard,
-                description: "SELL POINTS FOR IMMEDIATE REWARDS OR HOLD FOR A BIG WIN IF YOUR EMPIRE TRIUMPHS.",
+                gif: "img/intro/win.gif",
+                description: (
+                  <>
+                    SELL <span className="text-accent">POINTS</span> FOR IMMEDIATE REWARDS OR HOLD FOR A BIG WIN IF YOUR
+                    EMPIRE TRIUMPHS.
+                  </>
+                ),
               },
             ].map((item, index) => (
               <SecondaryCard
                 key={item.title}
-                className={`flex w-1/3 flex-col items-center p-4 transition-opacity duration-500 ${cardVisibility[index] ? "opacity-100" : "opacity-0"}`}
+                className={`flex w-full flex-col items-center overflow-hidden p-0 transition-opacity duration-500 ${cardVisibility[index] ? "opacity-100" : "opacity-0"}`}
               >
-                <h3 className="mb-2 text-lg">{item.title}</h3>
-                <img src={item.icon} alt={item.title} className="mb-2 h-32 w-32" />
-                <p className="text-center text-xs">{item.description}</p>
+                <h3 className="absolute m-2 rounded-box bg-gradient-to-t from-black to-transparent px-2 text-lg text-accent">
+                  {item.title}
+                </h3>
+                <img src={item.gif} alt={item.title} className="h-[250px] w-[250px] object-cover leading-none" />
+                <p className="absolute bottom-0 bg-gradient-to-t from-black to-black/50 p-2 text-center text-xs">
+                  {item.description}
+                </p>
               </SecondaryCard>
             ))}
           </div>

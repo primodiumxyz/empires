@@ -19,7 +19,7 @@ export const EmpireLogo = ({
     <img
       src={empireLogo}
       className={cn(
-        "aspect-square w-10 rounded-sm border p-[4px]",
+        "aspect-square w-10 rounded-sm border object-contain p-[4px]",
         size === "xs" && "w-6",
         size === "sm" && "w-8",
         size === "lg" && "w-12",
