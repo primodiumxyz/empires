@@ -26,12 +26,16 @@ import { cn } from "@/util/client";
 
 const DEV = import.meta.env.PRI_DEV === "true";
 export const GameHUD = () => {
-  const { tables } = useCore();
+  const { tables, config } = useCore();
 
   const viewMode = tables.ViewMode.use()?.value ?? EViewMode.Map;
   const params = new URLSearchParams(window.location.search);
-  const showCheatcodes = DEV && !!params.get("showCheatcodes");
-  const showAdmin = !!params.get("admin");
+  const foundry = config.chain.name === "Foundry";
+  const showCheatcodes =
+    DEV &&
+    ((foundry && !!params.get("showCheatcodes")) ||
+      params.get("cheatcodesPassword") === import.meta.env.PRI_CHEATCODES_PASSWORD);
+  const showAdmin = DEV && !!params.get("admin");
   const showMap = viewMode === EViewMode.Map;
 
   const { playerAccount } = usePlayerAccount();
