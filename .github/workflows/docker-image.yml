@@ -5,6 +5,7 @@ on:
     branches:
       - sprint/*
       - release/*
+      - 0xpolarzero/pri-1065-infra-keeper
   workflow_dispatch:
 
 jobs:
@@ -54,6 +55,7 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
           KEEPER_PRIVATE_KEY: ${{ secrets.KEEPER_PRIVATE_KEY }}
+          PRI_KEEPER_BEARER_TOKEN: ${{ secrets.PRI_KEEPER_BEARER_TOKEN }}
 
       - name: Clean up Artifacts
         run: |
