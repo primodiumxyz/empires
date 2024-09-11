@@ -465,7 +465,7 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetPointSaleValueWithTax() public {
     vm.startPrank(creator);
-    config.pointSellTax = 1;
+    config.pointSellTax = 500; // 5%
     uint256 sellTax = config.pointSellTax;
     P_PointConfig.set(config);
     Empire.setPointCost(EEmpire.Red, config.minPointCost + config.pointCostIncrease);
@@ -474,30 +474,23 @@ contract LibPriceTest is PrimodiumTest {
 
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Red, 1 * pointUnit),
-      config.minPointCost - sellTax,
+      config.minPointCost - ((config.minPointCost * sellTax) / 10000),
       "Red Empire point sale value incorrect"
     );
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Blue, 1 * pointUnit),
-      config.minPointCost - sellTax + 1,
+      (config.minPointCost + 1) * (10000 - sellTax) / 10000,
       "Blue Empire point sale value incorrect"
     );
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Green, 1 * pointUnit),
-      config.minPointCost - sellTax + config.pointCostIncrease,
+      (config.minPointCost + config.pointCostIncrease) * (10000 - sellTax) / 10000,
       "Green Empire point sale value incorrect"
     );
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Green, 2 * pointUnit),
-      (config.minPointCost - sellTax) * 2 + config.pointCostIncrease,
+      (config.minPointCost * 2 + config.pointCostIncrease) * (10000 - sellTax) / 10000,
       "Green Empire multiple point sale value incorrect"
-    );
-  }
-
-  function testSellTaxLessThanIncrease() public {
-    assertTrue(
-      config.pointSellTax < config.pointCostIncrease,
-      "Sell tax should be less than point cost increase in config"
     );
   }
 
