@@ -42,14 +42,12 @@ export const useKeeperClient = (): {
 
   useEffect(() => {
     if (!keeper) return;
-    const unsubscribe = tables.Time.watch({
-      onChange: async () => {
-        const { running: isRunning } = await getKeeperStatus();
-        setRunning(isRunning);
-      },
-    });
+    const interval = setInterval(async () => {
+      const { running: isRunning } = await getKeeperStatus();
+      setRunning(isRunning);
+    }, 3000);
 
-    return () => unsubscribe();
+    return () => clearInterval(interval);
   }, [keeper, tables.Time, getKeeperStatus]);
 
   return { start: startKeeper, stop: stopKeeper, getStatus: getKeeperStatus, running };
