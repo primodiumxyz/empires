@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
-import { InterfaceIcons } from "@primodiumxyz/assets";
+import { useCore } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
 import { Modal } from "@/components/core/Modal";
@@ -13,6 +12,8 @@ export const Intro = () => {
   const ShowIntro = useSettings().ShowIntro;
   const showIntro = ShowIntro.use()?.value ?? true;
   const [cardVisibility, setCardVisibility] = useState([false, false, false]);
+  const { tables } = useCore();
+  const empireCount = tables.P_GameConfig.use()?.empireCount ?? 1;
 
   useEffect(() => {
     if (showIntro) {
@@ -35,16 +36,17 @@ export const Intro = () => {
 
   return (
     <Modal title="Introduction" startOpen={showIntro} onClose={() => ShowIntro.set({ value: false })}>
-      <Modal.Content className="h-[45rem] max-h-screen w-[50rem] p-6">
+      <Modal.Content className="h-[43rem] max-h-screen w-[50rem] p-6">
         <div className="hide-scrollbar z-50 flex h-full flex-col items-center overflow-scroll p-8">
-          <h1 className="mb-6 text-center text-xl text-warning">WELCOME TO PRIMODIUM: EMPIRES</h1>
-          <p className="mb-6 text-center text-sm">
-            IN THIS THRILLING INTERSTELLAR ADVENTURE, YOU WILL COMPETE AMONG SIX EMPIRES TO CONTROL THE MOST CITADELS
-            WHEN THE TIMER ENDS. YOU CAN BUY AND SELL SHIPS AND SHIELDS, AND PERFORM SPECIAL ACTIONS TO INFLUENCE THE
-            OUTCOME. STRATEGIZE WISELY AND LEAD YOUR EMPIRE TO VICTORY!
+          <h1 className="mb-6 text-center text-xl text-warning lg:!text-2xl">WELCOME TO PRIMODIUM: EMPIRES</h1>
+          <p className="mb-6 text-center text-xs lg:!text-sm">
+            IN THIS THRILLING INTERSTELLAR ADVENTURE, YOU WILL COMPETE AMONG{" "}
+            <span className="text-accent">{empireCount}</span> EMPIRES TO CONTROL THE MOST CITADELS WHEN THE TIMER ENDS.
+            YOU CAN BUY AND SELL SHIPS AND SHIELDS, AND PERFORM SPECIAL ACTIONS TO INFLUENCE THE OUTCOME. STRATEGIZE
+            WISELY AND LEAD YOUR EMPIRE TO VICTORY!
           </p>
 
-          <h2 className="mb-4 flex items-center gap-2 text-lg text-accent">- HOW TO PLAY -</h2>
+          <h2 className="mb-4 flex items-center gap-2 text-sm text-accent lg:!text-lg">- HOW TO PLAY -</h2>
 
           <div className="grid grid-cols-3 gap-2">
             {[
@@ -78,7 +80,7 @@ export const Intro = () => {
                 key={item.title}
                 className={`flex w-full flex-col items-center overflow-hidden p-0 transition-opacity duration-500 ${cardVisibility[index] ? "opacity-100" : "opacity-0"}`}
               >
-                <h3 className="absolute m-2 rounded-box bg-gradient-to-t from-black to-transparent px-2 text-lg text-accent">
+                <h3 className="absolute m-2 rounded-box bg-gradient-to-t from-black to-transparent px-2 text-sm text-accent lg:!text-lg">
                   {item.title}
                 </h3>
                 <img src={item.gif} alt={item.title} className="h-[250px] w-[250px] object-cover leading-none" />
@@ -89,9 +91,14 @@ export const Intro = () => {
             ))}
           </div>
 
-          <Button variant="primary" size="lg" className="mt-6" onClick={() => ShowIntro.set({ value: false })}>
+          <Modal.CloseButton
+            variant="primary"
+            size="md"
+            className="mt-6"
+            onClick={() => ShowIntro.set({ value: false })}
+          >
             BEGIN
-          </Button>
+          </Modal.CloseButton>
         </div>
       </Modal.Content>
     </Modal>
