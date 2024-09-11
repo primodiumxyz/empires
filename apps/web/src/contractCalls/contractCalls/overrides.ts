@@ -85,7 +85,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
         execute({
           functionName: "Empires__sellPoints",
           args: [empire, amount],
-          options: { gas: 151271n * 2n },
+          options: { gas: 200000n * 2n },
           txQueueOptions: {
             id: "sell-points",
             ...options,
