@@ -3,7 +3,7 @@
 ## Review for CEI/FREI
 https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 
-- [ ] packages/contracts/src/constants.sol
+- [x] packages/contracts/src/constants.sol
 - [ ] packages/contracts/src/Keys.sol
 - [ ] packages/contracts/src/Types.sol
 - [ ] packages/contracts/src/utils.sol
