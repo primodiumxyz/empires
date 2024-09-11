@@ -4,9 +4,9 @@
 https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 
 - [x] packages/contracts/src/constants.sol
-- [ ] packages/contracts/src/Keys.sol
-- [ ] packages/contracts/src/Types.sol
-- [ ] packages/contracts/src/utils.sol
+- [x] packages/contracts/src/Keys.sol (removed)
+- [x] packages/contracts/src/Types.sol
+- [x] packages/contracts/src/utils.sol
 - [ ] packages/contracts/src/adts/AcidPlanetsSet.sol
 - [ ] packages/contracts/src/adts/CitadelPlanetsSet.sol
 - [ ] packages/contracts/src/adts/EmpirePlanetsSet.sol
@@ -48,7 +48,7 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 https://docs.soliditylang.org/en/develop/natspec-format.html
 
 - [ ] packages/contracts/src/constants.sol
-- [ ] packages/contracts/src/Keys.sol
+- [x] packages/contracts/src/Keys.sol (removed)
 - [ ] packages/contracts/src/Types.sol
 - [ ] packages/contracts/src/utils.sol
 - [ ] packages/contracts/src/adts/AcidPlanetsSet.sol
@@ -93,7 +93,7 @@ https://docs.soliditylang.org/en/develop/natspec-format.html
 Happy Path, failure modes, fuzzing and invariants
 
 - [ ] packages/contracts/src/constants.sol
-- [ ] packages/contracts/src/Keys.sol
+- [x] packages/contracts/src/Keys.sol (removed)
 - [ ] packages/contracts/src/Types.sol
 - [ ] packages/contracts/src/utils.sol
 - [ ] packages/contracts/src/adts/AcidPlanetsSet.sol
