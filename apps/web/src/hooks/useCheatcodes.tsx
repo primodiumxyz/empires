@@ -981,6 +981,11 @@ export const useCheatcodes = () => {
             inputType: "number",
             defaultValue: gameConfig?.turnLengthBlocks ?? BigInt(1),
           },
+          nextGameLengthTurns: {
+            label: "Next game length in turns",
+            inputType: "number",
+            defaultValue: gameConfig?.nextGameLengthTurns ?? BigInt(1),
+          },
           goldGenRate: {
             label: "Gold generation rate",
             inputType: "number",
@@ -1004,6 +1009,7 @@ export const useCheatcodes = () => {
           const newProperties = {
             empireCount: Number(properties.empireCount.value),
             turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
+            nextGameLengthTurns: BigInt(properties.nextGameLengthTurns.value),
             goldGenRate: BigInt(properties.goldGenRate.value),
             gameOverBlock: finalBlockFromTimeLeft,
             gameStartTimestamp: BigInt(properties.gameStartTimestamp.value),
