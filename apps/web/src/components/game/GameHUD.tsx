@@ -31,7 +31,7 @@ export const GameHUD = () => {
   const viewMode = tables.ViewMode.use()?.value ?? EViewMode.Map;
   const params = new URLSearchParams(window.location.search);
   const showCheatcodes = DEV && !!params.get("showCheatcodes");
-  const showAdmin = !!params.get("admin");
+  const showAdmin = DEV && !!params.get("admin");
   const showMap = viewMode === EViewMode.Map;
 
   const { playerAccount } = usePlayerAccount();

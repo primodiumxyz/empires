@@ -45,7 +45,7 @@ export const ActionLog = ({ className }: { className: string }) => {
   return (
     <SecondaryCard
       className={cn(
-        "relative hidden h-[290px] w-80 flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
+        "relative hidden h-[310px] w-80 flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
         open ? "bg-black/75 pr-0" : "translate-y-2/3",
         loading && "translate-y-[150%]",
         className,
@@ -116,7 +116,7 @@ const OpenActionLog = () => {
   return (
     <Tabs className="grid grid-cols-[auto_1fr] gap-y-1" persistIndexKey={"action-log"} defaultIndex={0}>
       <Join direction="vertical" className="h-full rounded-r !pr-0 hover:bg-transparent">
-        <Tabs.Button key={"all"} index={0} className="h-8 w-11 -mb-[1px]">
+        <Tabs.Button key={"all"} index={0} className="-mb-[1px] h-8 w-11">
           <h1>ALL</h1>
         </Tabs.Button>
         {Array.from(empires.entries()).map(([id, emp], i) => (
