@@ -7,10 +7,10 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [x] packages/contracts/src/Keys.sol (removed)
 - [x] packages/contracts/src/Types.sol
 - [x] packages/contracts/src/utils.sol
-- [ ] packages/contracts/src/adts/AcidPlanetsSet.sol
-- [ ] packages/contracts/src/adts/CitadelPlanetsSet.sol
-- [ ] packages/contracts/src/adts/EmpirePlanetsSet.sol
-- [ ] packages/contracts/src/adts/PlanetsSet.sol
+- [x] packages/contracts/src/adts/AcidPlanetsSet.sol
+- [x] packages/contracts/src/adts/CitadelPlanetsSet.sol
+- [x] packages/contracts/src/adts/EmpirePlanetsSet.sol
+- [x] packages/contracts/src/adts/PlanetsSet.sol
 - [x] packages/contracts/src/adts/PlayersMap.sol
 - [x] packages/contracts/src/adts/PointsMap.sol
 - [x] packages/contracts/src/libraries/InitPrice.sol
