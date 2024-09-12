@@ -1,27 +1,47 @@
 {
-  "name": "keeper",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
-  "type": "module",
-  "scripts": {
-    "dev": "dotenv -e ../../.env -- tsx src/index.ts --watch",
-    "test": "vitest"
+  "name": "@primodiumxyz/keeper",
+  "version": "0.0.1",
+  "description": "Keeper API for Primodium games",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/primodiumxyz/keeper.git",
+    "directory": "."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "src/index.ts",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "start": "tsx bin/keeper-server",
+    "types:dev": "tsc --watch",
+    "types:test": "tsc --noEmit --skipLibCheck"
+  },
   "dependencies": {
-    "@primodiumxyz/contracts": "workspace:*",
+    "@fastify/compress": "^6.5.0",
+    "@fastify/cors": "^8.3.0",
     "@primodiumxyz/core": "workspace:*",
-    "tsconfig-paths": "^4.2.0",
-    "tsx": "^3.12.8"
+    "@trpc/client": "10.34.0",
+    "@trpc/server": "10.34.0",
+    "debug": "^4.3.4",
+    "dotenv": "^16.0.3",
+    "fastify": "^4.21.0",
+    "viem": "2.9.20",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@types/node": "^22.1.0",
-    "dotenv-cli": "^7.4.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.4",
-    "vitest": "^0.32.4"
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/debug": "^4.1.7",
+    "prettier": "^3.3.2",
+    "tsx": "^3.12.6",
+    "vitest": "0.31.4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

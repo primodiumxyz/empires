@@ -13,6 +13,8 @@ import { withTransactionStatus } from "@/util/notify";
 
 import "@/index.css";
 
+import { usePlayerAccount } from "@/hooks/usePlayerAccount";
+
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
 /* -------------------------------------------------------------------------- */
@@ -24,6 +26,7 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const cheatcodes = useCheatcodes();
+  const { playerAccount } = usePlayerAccount();
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
@@ -37,14 +40,14 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
     return () => document.removeEventListener("click", closeCheatcodes);
   }, [open]);
 
-  if (!cheatcodes) return null;
+  if (!cheatcodes || !playerAccount) return null;
   return (
     <div className={className}>
       <Modal title="Cheatcodes">
         <Modal.Button variant="warning">
           <ServerIcon className="size-6" /> CHEATCODES
         </Modal.Button>
-        <Modal.Content className={cn("w-1/2", activeTab == undefined && "h-screen")}>
+        <Modal.Content className={cn("w-1/2 min-w-[500px]", activeTab == undefined && "h-screen")}>
           {activeTab !== undefined && (
             <Button
               variant="primary"
@@ -98,6 +101,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
     loading: getLoadingMsg,
     success: getSuccessMsg,
     error: getErrorMsg,
+    disabled = false,
     bg = "bg-gray-500/10",
   } = cheatcode;
   const [inputValues, setInputValues] = useState<CheatcodeInputs<T>>({} as CheatcodeInputs<T>);
@@ -131,8 +135,10 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         className={cn(
           "h-14 cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
           activeTab === undefined && bg,
+          disabled && "cursor-not-allowed opacity-50",
         )}
-        onClick={() => setActiveTab(activeTab === index ? undefined : index)}
+        onClick={() => !disabled && setActiveTab(activeTab === index ? undefined : index)}
+        aria-disabled={disabled}
       >
         <h2 className="text-sm font-semibold text-gray-300">
           {index + 1}. {title}
@@ -159,7 +165,9 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
 
           return (
             <div key={inputKey} className="flex flex-col gap-1 text-sm">
-              <label className="text-gray-300">{label}</label>
+              <span id={inputKey} className="text-gray-300">
+                {label}
+              </span>
               {options ? (
                 <>
                   <TextInput
