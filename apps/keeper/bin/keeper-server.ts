@@ -27,7 +27,6 @@ server.get("/readyz", (req, res) => res.code(200).send());
 const keeperService = new KeeperService(env.KEEPER_PRIVATE_KEY);
 
 server.addHook("preHandler", (req, reply, done) => {
-  console.log("received request", req.headers.authorization);
   if (req.headers.authorization !== `Bearer ${env.KEEPER_BEARER_TOKEN}`) {
     reply.code(401).send({ error: "Unauthorized" });
   } else {
