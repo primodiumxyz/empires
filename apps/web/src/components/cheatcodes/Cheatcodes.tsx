@@ -165,7 +165,9 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
 
           return (
             <div key={inputKey} className="flex flex-col gap-1 text-sm">
-              <label className="text-gray-300">{label}</label>
+              <span id={inputKey} className="text-gray-300">
+                {label}
+              </span>
               {options ? (
                 <>
                   <TextInput

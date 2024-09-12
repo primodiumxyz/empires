@@ -25,6 +25,7 @@ export const CheatcodeToBg: Record<string, string> = {
   magnet: "bg-purple-900/10",
   shieldEater: "bg-purple-400/10",
   config: "bg-gray-500/10",
+  keeper: "bg-pink-500/10",
 };
 
 export const useCheatcodes = () => {
@@ -36,7 +37,8 @@ export const useCheatcodes = () => {
   const { playerAccount } = usePlayerAccount();
   const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake } = useContractCalls();
   const requestDrip = useDripAccount();
-  const { start: _startKeeper, stop: _stopKeeper, running: isKeeperRunning } = useKeeperClient();
+  const keeper = useKeeperClient();
+  console.log("keeper", keeper);
 
   // game
   const empires = tables.Empire.useAll();
@@ -1155,15 +1157,13 @@ export const useCheatcodes = () => {
         bg: CheatcodeToBg["keeper"],
         caption: "Start keeper",
         inputs: {},
-        execute: async () => {
-          return await _startKeeper();
-        },
+        execute: async () => await keeper.start(),
         loading: () => "[CHEATCODE] Starting keeper...",
         success: () => `Keeper started`,
         error: () => `Failed to start keeper`,
-        disabled: isKeeperRunning,
+        disabled: !keeper.instance || keeper.running,
       }),
-    [isKeeperRunning],
+    [keeper.instance, keeper.running],
   );
 
   const stopKeeper = useMemo(
@@ -1173,15 +1173,38 @@ export const useCheatcodes = () => {
         bg: CheatcodeToBg["keeper"],
         caption: "Stop keeper",
         inputs: {},
-        execute: async () => {
-          return await _stopKeeper();
-        },
+        execute: async () => await keeper.stop(),
         loading: () => "[CHEATCODE] Stopping keeper...",
         success: () => `Keeper stopped`,
         error: () => `Failed to stop keeper`,
-        disabled: !isKeeperRunning,
+        disabled: !keeper.instance || !keeper.running,
       }),
-    [isKeeperRunning],
+    [keeper.instance, keeper.running],
+  );
+
+  const setKeeperBearerToken = useMemo(
+    () =>
+      createCheatcode({
+        title: "Set keeper bearer token",
+        bg: CheatcodeToBg["keeper"],
+        caption: "Set keeper bearer token",
+        inputs: {
+          token: {
+            label: "Bearer token",
+            inputType: "string",
+            defaultValue: "",
+          },
+        },
+        execute: async ({ token }) => {
+          keeper.setBearerToken(token.value);
+          keeper.create();
+          return { success: true };
+        },
+        loading: () => "[CHEATCODE] Setting keeper bearer token...",
+        success: () => `Keeper bearer token set`,
+        error: () => `Failed to set keeper bearer token`,
+      }),
+    [],
   );
 
   return [
@@ -1204,6 +1227,7 @@ export const useCheatcodes = () => {
     setShieldEaterDestination,
     feedShieldEater,
     ...Object.values(updateGameConfig),
+    setKeeperBearerToken,
     startKeeper,
     stopKeeper,
   ];
