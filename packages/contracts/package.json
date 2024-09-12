@@ -21,7 +21,8 @@
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write './**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
-    "test": "forge build && mud test --skipBuild"
+    "test": "forge build && mud test --skipBuild --forgeOptions='--nmt invariant_'",
+    "test:invariants": "forge build && mud test --skipBuild --forgeOptions='--mt invariant_'"
   },
   "dependencies": {
     "@latticexyz/cli": "2.0.9",
