@@ -8,14 +8,9 @@ import { createUpdateCalls } from "@/contractCalls/contractCalls/update";
 
 export type ContractCalls = ReturnType<typeof createContractCalls>;
 
-export const createContractCalls = (
-  core: Core,
-  playerAccount: ExternalAccount | LocalAccount | null,
-  devAccount: LocalAccount | null,
-) => {
+export const createContractCalls = (core: Core, playerAccount: ExternalAccount | LocalAccount | null) => {
   const execute = createExecute(core, playerAccount);
-  const devExecute = devAccount ? createExecute(core, devAccount) : null;
-  const devCalls = createDevCalls(devExecute ?? execute);
+  const devCalls = createDevCalls(execute);
 
   const overrideCalls = createOverrideCalls(core, execute);
   const updateCalls = createUpdateCalls(core, execute);
