@@ -660,17 +660,17 @@ export const useCheatcodes = () => {
   /* ---------------------------------- UTILS --------------------------------- */
   // drip eth
   const dripEth = useMemo(() => {
+    if (!playerAccount) return;
     return createCheatcode({
       title: "Drip",
       bg: CheatcodeToBg["utils"],
       caption: "Drip eth to the player account",
       inputs: {},
       execute: async () => {
-        const receipt = await requestDrip?.(playerAccount?.address ?? "0x", true);
+        const receipt = await requestDrip?.(playerAccount.address, true);
         return receipt ?? { success: false, error: "Failed to drip eth" };
       },
       success: () => `Dripped eth to player account`,
-      disabled: !playerAccount,
     });
   }, [playerAccount]);
 
