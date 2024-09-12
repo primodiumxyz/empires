@@ -15,7 +15,7 @@ library LibMoveShips {
    */
   function createPendingMove(bytes32 planetId, bytes32 targetId) internal returns (bool) {
     PlanetData memory planetData = Planet.get(planetId);
-    if (!Planet.getIsPlanet(targetId)) revert("[LibMoveShips] Target is not a planet");
+    require(planetData.isPlanet, "[LibMoveShips] Target is not a planet");
     // Return false if the planet has no empire or no ships
     if (planetData.empireId == EEmpire.NULL || planetData.shipCount == 0) return false;
 
@@ -26,32 +26,32 @@ library LibMoveShips {
   }
 
   /**
-   * @dev Executes pending moves for ships from a given planet.
-   * @param planetId The ID of the planet from which ships will move.
-   *
-   * This function performs the following steps:
+   * @notice Executes pending moves for ships from a given planet.
+   * @dev This function performs the following steps:
    * 1. Retrieves the current planet data and the destination planet ID.
    * 2. If there's no valid destination, the function returns early.
    * 3. Calculates the number of ships to move and the total ships arriving at the destination.
-   * 4. Updates the ship count on the origin planet 
+   * 4. Updates the ship count on the origin planet.
    * 5. Executes combat on the destination planet.
    * 6. Clears the pending move record.
    * 7. Logs the move for off-chain tracking.
+   * @param planetId The ID of the planet from which ships will move.
    */
   function executePendingMoves(bytes32 planetId) internal {
     PlanetData memory planetData = Planet.get(planetId);
-    bytes32 destinationPlanetId = PendingMove.getDestinationPlanetId(planetId);
-    // Clear the pending move
-    PendingMove.deleteRecord(planetId);
-
-    if (destinationPlanetId == bytes32(0)) return;
-
-    // todo: make it variable
     uint256 shipsToMove = planetData.shipCount;
+    bytes32 destinationPlanetId = PendingMove.getDestinationPlanetId(planetId);
+
+    if (destinationPlanetId == bytes32(0)) {
+      PendingMove.deleteRecord(planetId);
+      return;
+    }
 
     // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
     LibResolveCombat.resolveCombat(planetData.empireId, shipsToMove, destinationPlanetId);
+
+    PendingMove.deleteRecord(planetId);
 
     // Log the move
     MoveRoutineLog.set(
