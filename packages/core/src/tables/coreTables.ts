@@ -6,6 +6,7 @@ import {
   createLocalTable,
   Type,
 } from "@primodiumxyz/reactive-tables";
+import { EViewMode } from "@core/lib";
 import { CreateNetworkResult } from "@core/lib/types";
 
 import { createTransactionQueueTable } from "./customTables/TransactionQueueTable";
@@ -54,6 +55,9 @@ export default function setupCoreTables(network: CreateNetworkResult) {
   );
 
   const ViewMode = createLocalNumberTable(world, { id: "ViewMode", persist: true, version: "1" });
+  // set default value
+  if (!ViewMode.get()?.value) ViewMode.set({ value: EViewMode.Map });
+
   const PlanetName = createLocalTable(
     world,
     {
@@ -76,15 +80,17 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     },
   );
 
-  const Slippage = createLocalTable(world, 
+  const Slippage = createLocalTable(
+    world,
     {
       customValue: Type.Number,
       isAuto: Type.Boolean,
       autoValue: Type.Number,
     },
-    { id: "Slippage", persist: true});
+    { id: "Slippage", persist: true },
+  );
 
-  if (!Slippage.get()) Slippage.set({ isAuto: true, autoValue: 5, customValue: 0 })
+  if (!Slippage.get()) Slippage.set({ isAuto: true, autoValue: 5, customValue: 0 });
   return {
     DoubleCounter,
     BlockNumber,

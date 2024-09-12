@@ -9,7 +9,7 @@ import { createPrototypes } from "codegen/Prototypes.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { Ready, Turn, P_GameConfig, Role } from "codegen/index.sol";
+import { Ready, Turn, P_GameConfig, P_GameConfigData, Role } from "codegen/index.sol";
 import { ERole } from "codegen/common.sol";
 
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
@@ -32,14 +32,15 @@ contract PostDeploy is Script {
 
     createPrototypes(world);
     console.log("Prototypes created");
+    P_GameConfigData memory config = P_GameConfig.get();
 
-    P_GameConfig.setGameOverBlock(block.number + 1_900);
+    P_GameConfig.setGameOverBlock(block.number + config.nextGameLengthTurns * config.turnLengthBlocks);
     P_GameConfig.setGameStartTimestamp(block.timestamp);
 
     createPlanets();
     LibShieldEater.initialize();
     initPrice();
-    Turn.setNextTurnBlock(block.number + P_GameConfig.getTurnLengthBlocks());
+    Turn.setNextTurnBlock(block.number + config.turnLengthBlocks);
 
     // register the admin namespace that stores raked eth
     world.registerNamespace(ADMIN_NAMESPACE_ID);

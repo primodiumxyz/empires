@@ -28,6 +28,7 @@ export const worldInput = {
       key: [],
       schema: {
         turnLengthBlocks: "uint256",
+        nextGameLengthTurns: "uint256",
         goldGenRate: "uint256",
         gameOverBlock: "uint256",
         gameStartTimestamp: "uint256",
