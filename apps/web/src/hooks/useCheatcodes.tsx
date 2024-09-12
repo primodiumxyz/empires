@@ -38,7 +38,6 @@ export const useCheatcodes = () => {
   const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake } = useContractCalls();
   const requestDrip = useDripAccount();
   const keeper = useKeeperClient();
-  console.log("keeper", keeper);
 
   // game
   const empires = tables.Empire.useAll();
