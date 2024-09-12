@@ -1,10 +1,9 @@
 import { useMemo } from "react";
-import config from "postcss.config";
 import { Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
-import { addressToEntity, TxReceipt } from "@primodiumxyz/core";
+import { addressToEntity, createLocalAccount, TxReceipt } from "@primodiumxyz/core";
 import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
 import { resourceToHex } from "@primodiumxyz/reactive-tables/utils";
@@ -28,8 +27,11 @@ export const CheatcodeToBg: Record<string, string> = {
   keeper: "bg-pink-500/10",
 };
 
+const devKey = import.meta.env.PRI_DEV_PKEY;
+
 export const useCheatcodes = () => {
   const {
+    config,
     tables,
     utils: { generatePlanetName, getEmpirePlanets, getRoutineThresholds },
   } = useCore();
@@ -38,6 +40,8 @@ export const useCheatcodes = () => {
   const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake } = useContractCalls();
   const requestDrip = useDripAccount();
   const keeper = useKeeperClient();
+  const devAccount = devKey ? createLocalAccount(config, devKey) : null;
+  const account = devAccount ?? playerAccount;
 
   // game
   const empires = tables.Empire.useAll();
@@ -483,7 +487,6 @@ export const useCheatcodes = () => {
       }
     };
 
-    if (!playerAccount) return;
     return createCheatcode({
       title: "Give points",
       bg: CheatcodeToBg["mechanisms"],
@@ -506,10 +509,11 @@ export const useCheatcodes = () => {
         recipient: {
           label: "Recipient",
           inputType: "string",
-          defaultValue: playerAccount.address,
+          defaultValue: playerAccount?.address,
         },
       },
       execute: async ({ empire, amount, recipient }) => {
+        if (!recipient.value) return { success: false, error: "No recipient" };
         const playerId = addressToEntity(recipient.value);
         const empireId = empire.id as EEmpire;
         const currentPoints = tables.Value_PointsMap.getWithKeys({ empireId, playerId })?.value ?? BigInt(0);
@@ -597,14 +601,14 @@ export const useCheatcodes = () => {
 
   // end game
   const endGame = useMemo(() => {
-    if (!playerAccount) return;
+    if (!account) return;
     return createCheatcode({
       title: "End game",
       bg: CheatcodeToBg["time"],
       caption: "End the game",
       inputs: {},
       execute: async () => {
-        const nextBlock = await playerAccount.publicClient.getBlockNumber();
+        const nextBlock = await account.publicClient.getBlockNumber();
         return await devCalls.setProperties({
           table: tables.P_GameConfig,
           keys: {},
@@ -615,7 +619,7 @@ export const useCheatcodes = () => {
       success: () => `Game ended`,
       error: () => `Failed to end game`,
     });
-  }, [playerAccount]);
+  }, [account]);
 
   // reset game
   const resetGame = useMemo(

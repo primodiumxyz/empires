@@ -13,8 +13,6 @@ import { withTransactionStatus } from "@/util/notify";
 
 import "@/index.css";
 
-import { usePlayerAccount } from "@/hooks/usePlayerAccount";
-
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
 /* -------------------------------------------------------------------------- */
@@ -26,7 +24,6 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const cheatcodes = useCheatcodes();
-  const { playerAccount } = usePlayerAccount();
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
@@ -40,7 +37,7 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
     return () => document.removeEventListener("click", closeCheatcodes);
   }, [open]);
 
-  if (!cheatcodes || !playerAccount) return null;
+  if (!cheatcodes) return null;
   return (
     <div className={className}>
       <Modal title="Cheatcodes">
