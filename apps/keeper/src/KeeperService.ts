@@ -53,8 +53,6 @@ export class KeeperService {
 
   private async run(chain: ChainConfig, worldAddress: Hex, initialBlockNumber: bigint): Promise<void> {
     const { core, deployerAccount } = await this.setupCore(chain, worldAddress, initialBlockNumber);
-    console.log("chain rpc", chain.rpcUrls.default.http);
-    console.log("chain rpc", chain.rpcUrls.public.http);
 
     let updating = false;
     this.unsubscribe = core.tables.BlockNumber.watch({
