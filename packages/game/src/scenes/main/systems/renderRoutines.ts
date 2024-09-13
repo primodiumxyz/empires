@@ -195,14 +195,16 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
       onUpdate: async ({ properties: { prev } }) => {
         if (!prev) return;
 
-        const goldGenRate = tables.P_GameConfig.get()?.goldGenRate;
+        const config = tables.P_GameConfig.get();
+        const goldGenRate = config?.goldGenRate;
+        const empireCount = config?.empireCount;
 
         const planets = tables.Planet.getAllWith({ empireId: prev.empire });
 
         for (let i = 0; i < planets.length; i++) {
           const planet = scene.objects.planet.get(planets[i] as Entity);
 
-          if (!planet || !goldGenRate) continue;
+          if (!planet || !goldGenRate || !empireCount) continue;
 
           enqueue(() => {
             scene.audio.play("Complete", "sfx", {
@@ -211,7 +213,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
             });
             scene.fx.emitFloatingText(
               { x: planet.coord.x, y: planet.coord.y - 25 },
-              `+${formatNumber(goldGenRate * 3n)}`,
+              `+${formatNumber(goldGenRate * BigInt(empireCount))}`,
               {
                 icon: "Iridium",
                 fontSize: 12,
