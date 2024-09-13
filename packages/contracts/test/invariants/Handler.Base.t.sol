@@ -12,8 +12,6 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { RoutineThresholds } from "src/Types.sol";
 
 /// @dev Base handler to be implemented by specific handlers
-/// @dev This base is used to:
-/// - create/select random players
 abstract contract HandlerBase is Test, TestPlus {
   /* -------------------------------------------------------------------------- */
   /*                                   STORAGE                                  */
@@ -36,6 +34,7 @@ abstract contract HandlerBase is Test, TestPlus {
     creator = _creator;
 
     vm.startPrank(creator);
+    emit log_named_address("creator", creator);
     P_GameConfig.setGameOverBlock(block.number + 100_000);
     P_GameConfig.setTurnLengthBlocks(10);
     vm.stopPrank();

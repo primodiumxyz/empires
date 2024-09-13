@@ -9,8 +9,8 @@ contract InvariantsPot is InvariantsBase {
 
   function setUp() public override {
     super.setUp();
-    // handler = new HandlerPot(address(world), creator);
-    // init(address(handler));
+    handler = new HandlerPot(address(world), creator);
+    init(address(handler));
   }
 
   function invariant_pot_balanceOfEmpiresContractShouldEqualExpectedPot() public {
