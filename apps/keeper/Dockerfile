@@ -16,7 +16,7 @@ COPY apps/keeper ./apps/keeper
 COPY packages ./packages
 
 # Install dependencies
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Set working directory to the keeper app
 WORKDIR /app/apps/keeper
