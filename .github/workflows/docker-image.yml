@@ -5,6 +5,7 @@ on:
     branches:
       - sprint/*
       - release/*
+      - 0xpolarzero/pri-1085-playtest-deployment
   workflow_dispatch:
 
 jobs:

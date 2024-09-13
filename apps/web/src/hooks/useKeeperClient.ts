@@ -28,7 +28,6 @@ export const useKeeperClient = (): {
   const createKeeper = useCallback(() => {
     const keeperUrl = config.chain.keeperUrl;
     const bearerToken = storage.getItem("keeperBearerToken");
-    console.log("CREATING KEEPER", keeperUrl, bearerToken);
     if (keeperUrl && bearerToken) keeper.current = createKeeperClient({ url: keeperUrl, token: bearerToken });
   }, [config.chain]);
 
@@ -62,15 +61,15 @@ export const useKeeperClient = (): {
     createKeeper();
   }, [config.chain]);
 
-  useEffect(() => {
-    if (!keeper) return;
-    const interval = setInterval(async () => {
-      const { running: isRunning } = await getKeeperStatus();
-      setRunning(isRunning);
-    }, 3000);
+  // useEffect(() => {
+  //   if (!keeper) return;
+  //   const interval = setInterval(async () => {
+  //     const { running: isRunning } = await getKeeperStatus();
+  //     setRunning(isRunning);
+  //   }, 3000);
 
-    return () => clearInterval(interval);
-  }, [keeper, tables.Time, getKeeperStatus]);
+  //   return () => clearInterval(interval);
+  // }, [keeper, tables.Time, getKeeperStatus]);
 
   return {
     instance: keeper.current,

@@ -55,25 +55,21 @@ const calderaSepolia: ChainConfig = {
   },
 };
 
-const baseSepoliaRpcUrl =
-  // @ts-expect-error env doesn't exist on import.meta
-  (typeof process !== "undefined" ? process.env.PRI_BASE_SEPOLIA_RPC_URL : import.meta.env.PRI_BASE_SEPOLIA_RPC_URL) ||
-  "https://sepolia.base.org";
-
 const baseSepolia: ChainConfig = {
   name: "Base Sepolia",
   id: 84532,
   nativeCurrency: { decimals: 18, name: "Ether", symbol: "ETH" },
   rpcUrls: {
     default: {
-      http: [baseSepoliaRpcUrl],
+      // this gets exposed in the client anyway, so it's easier to put it here directly for the keeper as well
+      http: ["https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"],
     },
     public: {
       http: ["https://sepolia.base.org"],
     },
   },
   faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",
-  indexerUrl: "https://empires-base-sepolia-indexer.primodium.ai",
+  // indexerUrl: "https://empires-base-sepolia-indexer.primodium.ai",
   keeperUrl: "https://keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
