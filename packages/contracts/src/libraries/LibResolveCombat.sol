@@ -38,7 +38,7 @@ library LibResolveCombat {
       uint256 defendingShields = Planet.getShieldCount(defendingPlanetId);
       uint256 totalDefenses = defendingShips + defendingShields;
 
-      // attackers bounce off shields
+      // attackers die from shields
       if (attackingShips <= defendingShields) {
         Planet.setShieldCount(defendingPlanetId, defendingShields - attackingShips);
       }
