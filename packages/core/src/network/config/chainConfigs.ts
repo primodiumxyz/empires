@@ -69,7 +69,7 @@ const baseSepolia: ChainConfig = {
     },
   },
   faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",
-  // indexerUrl: "https://empires-base-sepolia-indexer.primodium.ai",
+  indexerUrl: "https://empires-base-sepolia-indexer.primodium.ai",
   keeperUrl: "https://keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
