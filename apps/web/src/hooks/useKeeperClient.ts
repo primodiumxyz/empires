@@ -61,15 +61,15 @@ export const useKeeperClient = (): {
     createKeeper();
   }, [config.chain]);
 
-  // useEffect(() => {
-  //   if (!keeper) return;
-  //   const interval = setInterval(async () => {
-  //     const { running: isRunning } = await getKeeperStatus();
-  //     setRunning(isRunning);
-  //   }, 3000);
+  useEffect(() => {
+    if (!keeper) return;
+    const interval = setInterval(async () => {
+      const { running: isRunning } = await getKeeperStatus();
+      setRunning(isRunning);
+    }, 3000);
 
-  //   return () => clearInterval(interval);
-  // }, [keeper, tables.Time, getKeeperStatus]);
+    return () => clearInterval(interval);
+  }, [keeper, tables.Time, getKeeperStatus]);
 
   return {
     instance: keeper.current,
