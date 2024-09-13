@@ -65,7 +65,7 @@ const baseSepolia: ChainConfig = {
       http: ["https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"],
     },
     public: {
-      http: ["https://sepolia.base.org"],
+      http: ["https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"],
     },
   },
   faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",
