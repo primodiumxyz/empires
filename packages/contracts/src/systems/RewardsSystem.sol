@@ -130,8 +130,8 @@ contract RewardsSystem is EmpiresSystem {
     uint256 playerPot = (pot * playerEmpirePoints) / empirePoints;
 
     PlayersMap.setGain(playerId, PlayersMap.get(playerId).gain + playerPot);
-    IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), playerPot);
-
     PointsMap.remove(winningEmpire, playerId);
+
+    IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), playerPot);
   }
 }

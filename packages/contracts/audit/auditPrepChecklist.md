@@ -33,8 +33,8 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [ ] packages/contracts/src/systems/OverrideShieldEaterSystem.sol
 - [x] packages/contracts/src/systems/OverrideShieldSystem.sol
 - [x] packages/contracts/src/systems/OverrideShipSystem.sol
-- [ ] packages/contracts/src/systems/resetSubsystems/ResetClearLoopSubsystem.sol
-- [ ] packages/contracts/src/systems/ResetSystem.sol
+- [x] packages/contracts/src/systems/resetSubsystems/ResetClearLoopSubsystem.sol
+- [x] packages/contracts/src/systems/ResetSystem.sol
 - [ ] packages/contracts/src/systems/RewardsSystem.sol
 - [ ] packages/contracts/src/systems/updateSubsystems/UpdateAcidSubsystem.sol
 - [ ] packages/contracts/src/systems/updateSubsystems/UpdateEmpiresSubsystem.sol
