@@ -28,8 +28,8 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [x] packages/contracts/src/systems/EmpiresSystem.sol
 - [x] packages/contracts/src/systems/OverrideAcidSystem.sol
 - [x] packages/contracts/src/systems/OverrideAirdropSystem.sol
-- [ ] packages/contracts/src/systems/OverrideMagnetsSystem.sol
-- [ ] packages/contracts/src/systems/OverridePointsSystem.sol
+- [x] packages/contracts/src/systems/OverrideMagnetsSystem.sol
+- [x] packages/contracts/src/systems/OverridePointsSystem.sol
 - [ ] packages/contracts/src/systems/OverrideShieldEaterSystem.sol
 - [ ] packages/contracts/src/systems/OverrideShieldSystem.sol
 - [ ] packages/contracts/src/systems/OverrideShipSystem.sol
