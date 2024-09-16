@@ -48,6 +48,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   private spawned = false;
   private updatePlanetName: () => Promise<string>;
   private updatePlanetNameInterval: NodeJS.Timeout | null = null;
+  private highlightSprite: Phaser.GameObjects.Sprite;
 
   constructor(args: {
     id: Entity;
@@ -205,6 +206,19 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       DepthLayers.AcidRain,
     );
 
+    this.highlightSprite = this.scene.add
+      .sprite(
+        this.hexSprite.x,
+        this.hexSprite.y,
+        Assets.SpriteAtlas,
+        Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"],
+      )
+      .setAlpha(1)
+      .setScale(1.02)
+      .setDepth(this.hexSprite.depth - 1)
+      .setActive(false)
+      .setVisible(false);
+
     this._scene = scene;
     this.id = id;
     this.coord = coord;
@@ -212,6 +226,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
 
     this._scene.objects.planet.add(id, this, false);
   }
+
   private async startUpdatePlanetNameInterval(interval: number) {
     // Clear any existing interval
     if (this.updatePlanetNameInterval) {
@@ -248,6 +263,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.scene.add.existing(this.magnetWaves);
     this.scene.add.existing(this.acidRain);
     this.scene.add.existing(this.treasurePlanetDecoration);
+    this.scene.add.existing(this.highlightSprite);
     return this;
   }
 
@@ -271,6 +287,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.shieldEater.setScale(scale);
     this.acidRain.setScale(scale);
     this.treasurePlanetDecoration.setScale(scale);
+    this.highlightSprite.setScale(scale * 1.02);
     return this;
   }
 
@@ -295,6 +312,25 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.iridium.setAlpha(alpha);
     this.magnets.forEach((magnet) => magnet.setAlpha(alpha));
     this.planetName.setAlpha(nameAlpha);
+  }
+
+  highlightHex(highlight: boolean) {
+    if (highlight) {
+      this.highlightSprite.setActive(true).setVisible(true);
+      this.scene.tweens.add({
+        targets: this.highlightSprite,
+        alpha: { from: 0, to: 1 },
+        repeat: -1,
+        yoyo: true,
+        duration: 1000,
+        ease: "Sine.easeInOut",
+      });
+    } else {
+      if (this.highlightSprite) {
+        this.scene.tweens.killTweensOf(this.highlightSprite);
+        this.highlightSprite.setActive(false).setVisible(false);
+      }
+    }
   }
 
   // - if originEmpire === this.empireId, do nothing (just moving ships)
@@ -557,6 +593,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       clearInterval(this.updatePlanetNameInterval);
       this.updatePlanetNameInterval = null;
     }
+    this.highlightSprite.destroy();
 
     super.destroy();
   }
