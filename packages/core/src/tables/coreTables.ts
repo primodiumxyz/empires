@@ -89,8 +89,8 @@ export default function setupCoreTables(network: CreateNetworkResult) {
     },
     { id: "Slippage", persist: true },
   );
+  if (!Slippage.get()?.autoValue) Slippage.set({ isAuto: true, autoValue: 5, customValue: 0 });
 
-  if (!Slippage.get()) Slippage.set({ isAuto: true, autoValue: 5, customValue: 0 });
   return {
     DoubleCounter,
     BlockNumber,
