@@ -20,8 +20,8 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [x] packages/contracts/src/libraries/LibOverride.sol
 - [x] packages/contracts/src/libraries/LibPoint.sol
 - [ ] packages/contracts/src/libraries/LibPrice.sol
-- [ ] packages/contracts/src/libraries/LibResolveCombat.sol
-- [ ] packages/contracts/src/libraries/LibRoutine.sol
+- [x] packages/contracts/src/libraries/LibResolveCombat.sol
+- [x] packages/contracts/src/libraries/LibRoutine.sol
 - [ ] packages/contracts/src/libraries/LibShieldEater.sol
 - [ ] packages/contracts/src/systems/AdminSystem.sol
 - [ ] packages/contracts/src/systems/DevSystem.sol
