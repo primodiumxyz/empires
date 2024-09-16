@@ -51,7 +51,8 @@ const Empire: React.FC<{ empire: EEmpire; hideGraph?: boolean; hidePlanets?: boo
         </div>
         <Price wei={sellPrice} />
       </div>
-      {!hideGraph && <SmallHistoricalPointGraph width={40} height={25} empire={empire} windowSize={WINDOW_SIZE} />}
+      {/* TODO: Tanking perf. */}
+      {/* {!hideGraph && <SmallHistoricalPointGraph width={40} height={25} empire={empire} windowSize={WINDOW_SIZE} />} */}
     </div>
   );
 };
