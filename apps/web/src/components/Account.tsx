@@ -3,7 +3,7 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import { Address } from "viem";
 
 import { minEth } from "@primodiumxyz/core";
-import { usePlayerAccount } from "@primodiumxyz/core/react";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { Button } from "@/components/core/Button";
 import { Price } from "@/components/shared/Price";
 import { Username } from "@/components/shared/Username";
@@ -14,13 +14,21 @@ import { cn } from "@/util/client";
 const DEV = import.meta.env.PRI_DEV === "true";
 
 export const Account = ({ className }: { className?: string }) => {
-  const { playerAccount, login } = usePlayerAccount();
+  const { config } = useCore();
+  const { playerAccount, login, currentChainId } = usePlayerAccount();
   const address = playerAccount?.address;
 
   if (!address)
     return (
       <Button size="md" variant="accent" onClick={() => login()}>
         Login
+      </Button>
+    );
+
+  if (config.chain.name !== "Foundry" && currentChainId !== config.chain.id)
+    return (
+      <Button size="sm" variant="error" onClick={() => playerAccount.walletClient.switchChain(config.chain)}>
+        Switch to {config.chain.name}
       </Button>
     );
 

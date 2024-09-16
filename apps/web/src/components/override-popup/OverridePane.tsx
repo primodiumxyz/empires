@@ -49,35 +49,35 @@ export const Buttons: React.FC<{ selectedPlanet: Entity; empire: number }> = ({ 
           icon="ShieldEater"
           axialCoord={{ q: -1, r: -1 }}
           tooltip="Shield Eater"
-          price={createShieldEaterPriceWei}
+          price={createShieldEaterPriceWei.expected}
         />
         <OverrideButton
           index={4}
           icon="AcidRain"
           axialCoord={{ q: 2, r: -1 }}
           tooltip="Acid Rain"
-          price={createAcidRainPriceWei}
+          price={createAcidRainPriceWei.expected}
         />
         <OverrideButton
           index={0}
           icon="Fleet"
           axialCoord={{ q: -1, r: 0 }}
           tooltip="Ships"
-          price={createShipPriceWei}
+          price={createShipPriceWei.expected}
         />
         <OverrideButton
           index={1}
           icon="Defense"
           axialCoord={{ q: 0, r: 0 }}
           tooltip="Shields"
-          price={createShieldPriceWei}
+          price={createShieldPriceWei.expected}
         />
         <OverrideButton
           index={2}
           icon="Magnet"
           axialCoord={{ q: 1, r: 0 }}
           tooltip="Magnets"
-          price={createMagnetPriceWei}
+          price={createMagnetPriceWei.expected}
         />
       </div>
     </div>

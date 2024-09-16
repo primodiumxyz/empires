@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import { Keys } from "@primodiumxyz/core";
 import { useCore, useSyncStatus } from "@primodiumxyz/core/react";
 import { initGame, PrimodiumGame } from "@primodiumxyz/game";
 import { GameHUD } from "@/components/game/GameHUD";
@@ -8,9 +9,11 @@ import { useContractCalls } from "@/hooks/useContractCalls";
 
 const Game = () => {
   const { loading, message } = useSyncStatus();
-  if (loading) {
+  const { loading: actionLogLoading, message: actionLogMessage } = useSyncStatus(Keys.ACTION_LOG);
+  if (loading || actionLogLoading) {
     // Do nothing while the PrivyProvider initializes with updated user state
-    return <div className="animate-pulse">{message}</div>;
+    // Same for action log, otherwise it might flash with routine updates after rendering the game
+    return <div className="animate-pulse">{message || actionLogMessage}</div>;
   }
   return <_Game />;
 };
