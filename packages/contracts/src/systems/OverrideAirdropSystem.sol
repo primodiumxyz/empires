@@ -30,6 +30,9 @@ contract OverrideAirdropSystem is EmpiresSystem {
     require(planetCount > 0, "[OverrideSystem] Empire has no planets");
     bytes32[] memory planetIds = EmpirePlanetsSet.getEmpirePlanetIds(_empireId);
 
+    // get average planets owned per empire, excluding current empire
+    uint256 goldToDistribute = _overrideCount * getAveragePlanetsPerOpposingEmpire(_empireId);
+
     LibOverride._purchaseOverride(
       addressToId(_msgSender()),
       EOverride.AirdropGold,
@@ -37,9 +40,6 @@ contract OverrideAirdropSystem is EmpiresSystem {
       _overrideCount,
       _msgValue()
     );
-
-    // get average planets owned per empire, excluding current empire
-    uint256 goldToDistribute = _overrideCount * getAveragePlanetsPerOpposingEmpire(_empireId);
 
     // evenly distribute gold to all planets owned by empire.
     uint256 goldToDistributePerPlanet = goldToDistribute / planetCount;

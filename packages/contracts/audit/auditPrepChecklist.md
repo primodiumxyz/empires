@@ -19,15 +19,15 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [x] packages/contracts/src/libraries/LibMoveShips.sol
 - [x] packages/contracts/src/libraries/LibOverride.sol
 - [x] packages/contracts/src/libraries/LibPoint.sol
-- [ ] packages/contracts/src/libraries/LibPrice.sol
+- [x] packages/contracts/src/libraries/LibPrice.sol
 - [x] packages/contracts/src/libraries/LibResolveCombat.sol
 - [x] packages/contracts/src/libraries/LibRoutine.sol
 - [ ] packages/contracts/src/libraries/LibShieldEater.sol
-- [ ] packages/contracts/src/systems/AdminSystem.sol
-- [ ] packages/contracts/src/systems/DevSystem.sol
-- [ ] packages/contracts/src/systems/EmpiresSystem.sol
-- [ ] packages/contracts/src/systems/OverrideAcidSystem.sol
-- [ ] packages/contracts/src/systems/OverrideAirdropSystem.sol
+- [x] packages/contracts/src/systems/AdminSystem.sol
+- [x] packages/contracts/src/systems/DevSystem.sol
+- [x] packages/contracts/src/systems/EmpiresSystem.sol
+- [x] packages/contracts/src/systems/OverrideAcidSystem.sol
+- [x] packages/contracts/src/systems/OverrideAirdropSystem.sol
 - [ ] packages/contracts/src/systems/OverrideMagnetsSystem.sol
 - [ ] packages/contracts/src/systems/OverridePointsSystem.sol
 - [ ] packages/contracts/src/systems/OverrideShieldEaterSystem.sol
