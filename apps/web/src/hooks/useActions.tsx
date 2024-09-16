@@ -306,7 +306,7 @@ export const useActions = (
           <p className="text-xs">
             <PlayerSpan playerId={action.playerId} /> sold{" "}
             {formatNumber(BigInt(formatEther(action.overrideCount)), { showZero: true })} point
-            {action.overrideCount === parseEther("1") ? "" : "s"}
+            {action.overrideCount === parseEther("1") ? "" : "s"} from <EmpireSpan empireId={action.empireId} />
           </p>
         ),
         highlight: action.ethReceived >= generationalWealthThreshold,
@@ -549,7 +549,7 @@ export const useMostRecentOverride = () => {
             <p className="text-xs">
               <PlayerSpan playerId={current.playerId} /> sold{" "}
               {formatNumber(BigInt(formatEther(current.overrideCount)), { showZero: true })} point
-              {current.overrideCount === parseEther("1") ? "" : "s"}
+              {current.overrideCount === parseEther("1") ? "" : "s"} from <EmpireSpan empireId={current.empireId} />
             </p>
           ),
           highlight: current.ethReceived >= generationalWealthThreshold,
