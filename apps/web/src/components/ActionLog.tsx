@@ -11,7 +11,7 @@ import { toHex } from "viem";
 
 import { EEmpire } from "@primodiumxyz/contracts";
 import { Keys } from "@primodiumxyz/core";
-import { useCore, useSyncStatus } from "@primodiumxyz/core/react";
+import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { SecondaryCard } from "@/components/core/Card";
@@ -26,7 +26,6 @@ import { EmpireEnumToConfig } from "@/util/lookups";
 
 export const ActionLog = ({ className }: { className: string }) => {
   const { SelectedTab } = useSettings();
-  const { loading } = useSyncStatus(Keys.ACTION_LOG);
 
   const [open, setOpen] = useState(false);
   const persistKey = toHex("action-log") as Entity;
@@ -47,7 +46,6 @@ export const ActionLog = ({ className }: { className: string }) => {
       className={cn(
         "relative hidden h-[310px] w-80 flex-grow gap-2 overflow-y-auto rounded-box transition-all lg:block 2xl:w-96",
         open ? "bg-black/75 pr-0" : "translate-y-2/3",
-        loading && "translate-y-[150%]",
         className,
       )}
     >

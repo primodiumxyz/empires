@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import { ConnectedWallet, usePrivy, useWallets } from "@privy-io/react-auth";
 import { toast } from "react-toastify";
-import { Address, EIP1193Provider, Hex } from "viem";
+import { Address, EIP1193Provider, Hex, ProviderConnectInfo } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 
 import { createExternalAccount, createLocalAccount, ExternalAccount, LocalAccount, storage } from "@primodiumxyz/core";
@@ -18,6 +18,7 @@ export type PlayerAccount = {
   playerAccount: ExternalAccount | LocalAccount | null;
   login: (type?: ProviderType) => void;
   logout: () => void;
+  currentChainId: number | undefined;
 };
 
 type PlayerAccountProviderProps = PlayerAccountOptions & { children: ReactNode };
@@ -56,6 +57,7 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
 
   const [playerAccount, setPlayerAccount] = useState<ExternalAccount | LocalAccount | null>(null);
   const [providerType, setProviderType] = useState<ProviderType | null>(null);
+  const [currentChainId, setCurrentChainId] = useState<number | undefined>(undefined);
 
   const getTransport = useCallback(
     async (wallet: ConnectedWallet) => {
@@ -78,6 +80,12 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
       setPlayerAccount(account);
       setProviderType("privy");
       tables.Account.set({ value: account.entity });
+
+      const chainId = await provider.request({ method: "eth_chainId" });
+      setCurrentChainId(Number(chainId));
+      provider.on("chainChanged", ({ chainId }: ProviderConnectInfo) => {
+        setCurrentChainId(Number(chainId));
+      });
     },
     [config, getTransport, tables],
   );
@@ -172,10 +180,13 @@ export function PlayerAccountProvider({ children, ...options }: PlayerAccountPro
   const logout = () => {
     if (providerType === "burner") cancelBurner();
     else cancelPrivy();
+    setCurrentChainId(undefined);
     toast.success("Logged out");
   };
 
   return (
-    <PlayerAccountContext.Provider value={{ playerAccount, login, logout }}>{children}</PlayerAccountContext.Provider>
+    <PlayerAccountContext.Provider value={{ playerAccount, login, logout, currentChainId }}>
+      {children}
+    </PlayerAccountContext.Provider>
   );
 }

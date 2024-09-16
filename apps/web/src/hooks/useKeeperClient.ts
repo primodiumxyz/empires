@@ -28,7 +28,6 @@ export const useKeeperClient = (): {
   const createKeeper = useCallback(() => {
     const keeperUrl = config.chain.keeperUrl;
     const bearerToken = storage.getItem("keeperBearerToken");
-    console.log("CREATING KEEPER", keeperUrl, bearerToken);
     if (keeperUrl && bearerToken) keeper.current = createKeeperClient({ url: keeperUrl, token: bearerToken });
   }, [config.chain]);
 

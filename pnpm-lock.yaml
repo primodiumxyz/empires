@@ -106,8 +106,8 @@ importers:
         specifier: workspace:*
         version: link:../keeper
       '@primodiumxyz/reactive-tables':
-        specifier: ^3.5.5
-        version: 3.5.5(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        specifier: ^3.6.1
+        version: 3.6.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@privy-io/react-auth':
         specifier: ^1.72.0
         version: 1.73.0(@babel/core@7.25.2)(@types/react@18.3.3)(react-dom@18.3.1)(react-is@18.3.1)(react@18.3.1)(typescript@5.5.2)
@@ -318,19 +318,19 @@ importers:
         version: 2.0.9(google-protobuf@3.21.4)
       '@latticexyz/common':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.4)(zod@3.23.8)
+        version: 2.0.9(typescript@5.6.2)(zod@3.23.8)
       '@latticexyz/schema-type':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.4)(zod@3.23.8)
+        version: 2.0.9(typescript@5.6.2)(zod@3.23.8)
       '@latticexyz/store':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.4)
+        version: 2.0.9(typescript@5.6.2)
       '@latticexyz/world':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.4)
+        version: 2.0.9(typescript@5.6.2)
       '@latticexyz/world-modules':
         specifier: 2.0.9
-        version: 2.0.9(typescript@5.5.4)
+        version: 2.0.9(typescript@5.6.2)
       dotenv:
         specifier: ^16.3.1
         version: 16.4.5
@@ -339,11 +339,11 @@ importers:
         version: 3.14.0
       viem:
         specifier: 2.9.20
-        version: 2.9.20(typescript@5.5.4)(zod@3.23.8)
+        version: 2.9.20(typescript@5.6.2)(zod@3.23.8)
     devDependencies:
       '@typechain/ethers-v5':
         specifier: ^10.2.0
-        version: 10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.5.4)
+        version: 10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.6.2)
       '@types/node':
         specifier: ^18.15.11
         version: 18.19.39
@@ -367,7 +367,7 @@ importers:
         version: 1.3.1(prettier@2.8.8)
       solhint:
         specifier: ^3.3.7
-        version: 3.6.2(typescript@5.5.4)
+        version: 3.6.2(typescript@5.6.2)
       solhint-config-mud:
         specifier: 2.0.9
         version: 2.0.9
@@ -379,7 +379,7 @@ importers:
         version: github.com/mds1/solidity-trigonometry/58af3a912ab3e2203cf21189012caefe24471e29
       typechain:
         specifier: ^8.1.1
-        version: 8.3.2(typescript@5.5.4)
+        version: 8.3.2(typescript@5.6.2)
 
   packages/core:
     dependencies:
@@ -405,8 +405,8 @@ importers:
         specifier: workspace:*
         version: link:../engine
       '@primodiumxyz/reactive-tables':
-        specifier: ^3.5.5
-        version: 3.5.5(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        specifier: ^3.6.1
+        version: 3.6.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@primodiumxyz/sync-stack':
         specifier: ^0.6.9
         version: 0.6.9(typescript@5.5.2)
@@ -482,14 +482,14 @@ importers:
         version: 7.8.1
       zustand:
         specifier: ^4.4.7
-        version: 4.5.4(@types/react@18.3.3)(react@18.3.1)
+        version: 4.5.4(@types/react@18.3.5)(react@18.3.1)
     devDependencies:
       '@types/node':
         specifier: ^18.19.3
         version: 18.19.39
       simple-zustand-devtools:
         specifier: ^1.1.0
-        version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)(zustand@4.5.4)
+        version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)(zustand@4.5.4)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@18.19.39)(typescript@4.9.5)
@@ -512,8 +512,8 @@ importers:
         specifier: workspace:*
         version: link:../engine
       '@primodiumxyz/reactive-tables':
-        specifier: ^3.5.5
-        version: 3.5.5(prettier@3.3.2)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8)
+        specifier: ^3.6.1
+        version: 3.6.1(prettier@3.3.2)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1274,6 +1274,14 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.1
+    dev: false
+
+  /@babel/runtime@7.25.6:
+    resolution: {integrity: sha512-VBj9MYyDb9tuLq7yzqjgzt6Q+IBQLrGZfdjOekyEirZPHxXWoTSGUTMrpsfi58Up73d13NfYLv8HT9vmznjzhQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.1
+    dev: true
 
   /@babel/template@7.24.7:
     resolution: {integrity: sha512-jYqfPrU9JTF0PmPy1tLYHW4Mp4KlgxJD9l2nP9fD6yT/ICi554DmrWBAEYpIelzjHf1msDP3PxJIRt/nFNfBig==}
@@ -2789,7 +2797,7 @@ packages:
       - utf-8-validate
       - zod
 
-  /@latticexyz/common@2.0.9(typescript@5.5.4)(zod@3.23.8):
+  /@latticexyz/common@2.0.9(typescript@5.6.2)(zod@3.23.8):
     resolution: {integrity: sha512-hI3gYt/4UhgsDXomTQXatDxe/WeINPQ3veZ4cZC1zWwpt5RviMJ33OTqY1p7rU4btqvsfY9NiZoMHmC8KaC34g==}
     peerDependencies:
       '@aws-sdk/client-kms': 3.x
@@ -2800,7 +2808,7 @@ packages:
       asn1.js:
         optional: true
     dependencies:
-      '@latticexyz/schema-type': 2.0.9(typescript@5.5.4)(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.6.2)(zod@3.23.8)
       '@solidity-parser/parser': 0.16.2
       debug: 4.3.6(supports-color@5.5.0)
       execa: 7.2.0
@@ -2808,7 +2816,7 @@ packages:
       p-retry: 5.1.2
       prettier: 3.2.5
       prettier-plugin-solidity: 1.3.1(prettier@3.2.5)
-      viem: 2.9.20(typescript@5.5.4)(zod@3.23.8)
+      viem: 2.9.20(typescript@5.6.2)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -2873,14 +2881,14 @@ packages:
       - typescript
       - utf-8-validate
 
-  /@latticexyz/config@2.0.9(typescript@5.5.4):
+  /@latticexyz/config@2.0.9(typescript@5.6.2):
     resolution: {integrity: sha512-iKvGHmI5Fk8J/C6tffJx1vMWhfIy03+7dk1kr1aGBsTC4BDajDoWNjmlXFxPgYtq8BxreuHVaR0W089+4nrKlQ==}
     dependencies:
-      '@latticexyz/common': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/schema-type': 2.0.9(typescript@5.5.4)(zod@3.23.8)
+      '@latticexyz/common': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.6.2)(zod@3.23.8)
       esbuild: 0.17.19
       find-up: 6.3.0
-      viem: 2.9.20(typescript@5.5.4)(zod@3.23.8)
+      viem: 2.9.20(typescript@5.6.2)(zod@3.23.8)
       zod: 3.23.8
       zod-validation-error: 1.5.0(zod@3.23.8)
     transitivePeerDependencies:
@@ -2981,14 +2989,14 @@ packages:
       - utf-8-validate
       - zod
 
-  /@latticexyz/protocol-parser@2.0.9(typescript@5.5.4)(zod@3.23.8):
+  /@latticexyz/protocol-parser@2.0.9(typescript@5.6.2)(zod@3.23.8):
     resolution: {integrity: sha512-fIQJw8061DT/xKvaQxxGLXKPCZyyvKofg3g1E4/nfTPBKVMfbkTIzSjbjTbznVZ5Sefp3ng4RYA6t3s9v0/RPQ==}
     dependencies:
-      '@latticexyz/common': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/config': 2.0.9(typescript@5.5.4)
-      '@latticexyz/schema-type': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      abitype: 1.0.0(typescript@5.5.4)(zod@3.23.8)
-      viem: 2.9.20(typescript@5.5.4)(zod@3.23.8)
+      '@latticexyz/common': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/config': 2.0.9(typescript@5.6.2)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      abitype: 1.0.0(typescript@5.6.2)(zod@3.23.8)
+      viem: 2.9.20(typescript@5.6.2)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
       - asn1.js
@@ -3079,11 +3087,11 @@ packages:
       - utf-8-validate
       - zod
 
-  /@latticexyz/schema-type@2.0.9(typescript@5.5.4)(zod@3.23.8):
+  /@latticexyz/schema-type@2.0.9(typescript@5.6.2)(zod@3.23.8):
     resolution: {integrity: sha512-iynRKq5qgKJO9hCyIJn57sklLSmkjtxPKhcdx0uvGeaWh/SK9d+Yz383+NyLq85vaIRNcbkp3oE8YQjK0Exx3g==}
     dependencies:
-      abitype: 1.0.0(typescript@5.5.4)(zod@3.23.8)
-      viem: 2.9.20(typescript@5.5.4)(zod@3.23.8)
+      abitype: 1.0.0(typescript@5.6.2)(zod@3.23.8)
+      viem: 2.9.20(typescript@5.6.2)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -3127,7 +3135,7 @@ packages:
       superjson: 1.13.3
       viem: 2.9.20(typescript@5.5.3)(zod@3.23.8)
       zod: 3.23.8
-      zustand: 4.5.4(@types/react@18.3.3)(react@18.3.1)
+      zustand: 4.5.4(@types/react@18.3.5)(react@18.3.1)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
       - '@aws-sdk/client-rds-data'
@@ -3218,17 +3226,17 @@ packages:
       - typescript
       - utf-8-validate
 
-  /@latticexyz/store@2.0.9(typescript@5.5.4):
+  /@latticexyz/store@2.0.9(typescript@5.6.2):
     resolution: {integrity: sha512-VNwBtNICdYBrLwMI4655fhUQLzxdXwjxt6orGYd1wjWMsP6o95MqmittWf21TVdpvK1p+bJayYJByBtxOwc1ow==}
     dependencies:
       '@arktype/util': 0.0.29
-      '@latticexyz/common': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/config': 2.0.9(typescript@5.5.4)
-      '@latticexyz/protocol-parser': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/schema-type': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      abitype: 1.0.0(typescript@5.5.4)(zod@3.23.8)
+      '@latticexyz/common': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/config': 2.0.9(typescript@5.6.2)
+      '@latticexyz/protocol-parser': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      abitype: 1.0.0(typescript@5.6.2)(zod@3.23.8)
       arktype: 1.0.29-alpha
-      viem: 2.9.20(typescript@5.5.4)(zod@3.23.8)
+      viem: 2.9.20(typescript@5.6.2)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -3282,14 +3290,14 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@latticexyz/world-modules@2.0.9(typescript@5.5.4):
+  /@latticexyz/world-modules@2.0.9(typescript@5.6.2):
     resolution: {integrity: sha512-0u3jrjrzIsvu7OKjrFMaL4PGArrg3Wxth2q3gKo6OqAC6BGdDeecAZPUP+HnTe4i4mY0TX0BIx4Si/mew5Eozw==}
     dependencies:
-      '@latticexyz/common': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/config': 2.0.9(typescript@5.5.4)
-      '@latticexyz/schema-type': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/store': 2.0.9(typescript@5.5.4)
-      '@latticexyz/world': 2.0.9(typescript@5.5.4)
+      '@latticexyz/common': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/config': 2.0.9(typescript@5.6.2)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/store': 2.0.9(typescript@5.6.2)
+      '@latticexyz/world': 2.0.9(typescript@5.6.2)
       zod: 3.23.8
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -3366,18 +3374,18 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@latticexyz/world@2.0.9(typescript@5.5.4):
+  /@latticexyz/world@2.0.9(typescript@5.6.2):
     resolution: {integrity: sha512-KLNiwa+2CJRyBG44Z65jI9593ynDEBEYa2QB7qtCQpseMTQipXugA/fDnszJZkwXZkNJz0HwYvB2R7jg+WQJxg==}
     dependencies:
       '@arktype/util': 0.0.29
-      '@latticexyz/common': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/config': 2.0.9(typescript@5.5.4)
-      '@latticexyz/protocol-parser': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/schema-type': 2.0.9(typescript@5.5.4)(zod@3.23.8)
-      '@latticexyz/store': 2.0.9(typescript@5.5.4)
-      abitype: 1.0.0(typescript@5.5.4)(zod@3.23.8)
+      '@latticexyz/common': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/config': 2.0.9(typescript@5.6.2)
+      '@latticexyz/protocol-parser': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/schema-type': 2.0.9(typescript@5.6.2)(zod@3.23.8)
+      '@latticexyz/store': 2.0.9(typescript@5.6.2)
+      abitype: 1.0.0(typescript@5.6.2)(zod@3.23.8)
       arktype: 1.0.29-alpha
-      viem: 2.9.20(typescript@5.5.4)(zod@3.23.8)
+      viem: 2.9.20(typescript@5.6.2)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -3761,17 +3769,17 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@primodiumxyz/reactive-tables@3.5.5(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
-    resolution: {integrity: sha512-89Ipz7qZ7cIBDgejCo+x9mk869XXst36zkhoHtLdUcOCbsrkIo9KVUy5Qpns7Igg/KxIgppWCUNbLlsazJlXlg==}
+  /@primodiumxyz/reactive-tables@3.6.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
+    resolution: {integrity: sha512-3m/915uNA8shvUUnwFQXg2gokoOL3c/fVHOnwVjQZoP0j96roZD6S0PYI3qZEJXzUpE0vegykQUVXWUv2CQA6A==}
     engines: {node: 20.x, pnpm: 8.x}
     dependencies:
       '@latticexyz/protocol-parser': 2.0.9(typescript@5.5.2)(zod@3.23.8)
       '@latticexyz/schema-type': 2.0.9(typescript@5.5.2)(zod@3.23.8)
       '@latticexyz/store': 2.0.9(typescript@5.5.2)
       '@primodiumxyz/sync-stack': 0.6.9(typescript@5.5.2)
-      debug: 4.3.6(supports-color@5.5.0)
+      debug: 4.3.5
       fast-deep-equal: 3.1.3
-      mobx: 6.13.1
+      mobx: 6.13.2
       rxjs: 7.5.5
       tinybase: 4.8.17(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)
       viem: 2.9.20(typescript@5.5.2)(zod@3.23.8)
@@ -3799,17 +3807,17 @@ packages:
       - zod
     dev: false
 
-  /@primodiumxyz/reactive-tables@3.5.5(prettier@3.3.2)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8):
-    resolution: {integrity: sha512-89Ipz7qZ7cIBDgejCo+x9mk869XXst36zkhoHtLdUcOCbsrkIo9KVUy5Qpns7Igg/KxIgppWCUNbLlsazJlXlg==}
+  /@primodiumxyz/reactive-tables@3.6.1(prettier@3.3.2)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8):
+    resolution: {integrity: sha512-3m/915uNA8shvUUnwFQXg2gokoOL3c/fVHOnwVjQZoP0j96roZD6S0PYI3qZEJXzUpE0vegykQUVXWUv2CQA6A==}
     engines: {node: 20.x, pnpm: 8.x}
     dependencies:
       '@latticexyz/protocol-parser': 2.0.9(typescript@5.5.3)(zod@3.23.8)
       '@latticexyz/schema-type': 2.0.9(typescript@5.5.3)(zod@3.23.8)
       '@latticexyz/store': 2.0.9(typescript@5.5.3)
       '@primodiumxyz/sync-stack': 0.6.9(typescript@5.5.3)
-      debug: 4.3.6(supports-color@5.5.0)
+      debug: 4.3.7
       fast-deep-equal: 3.1.3
-      mobx: 6.13.1
+      mobx: 6.13.2
       rxjs: 7.5.5
       tinybase: 4.8.17(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)
       viem: 2.9.20(typescript@5.5.3)(zod@3.23.8)
@@ -3846,7 +3854,7 @@ packages:
       '@latticexyz/recs': 2.0.9(typescript@5.5.2)(zod@3.23.8)
       '@latticexyz/schema-type': 2.0.9(typescript@5.5.2)(zod@3.23.8)
       '@latticexyz/store': 2.0.9(typescript@5.5.2)
-      debug: 4.3.6(supports-color@5.5.0)
+      debug: 4.3.7
       eventemitter3: 5.0.1
       viem: 2.9.20(typescript@5.5.2)(zod@3.23.8)
       zod: 3.23.8
@@ -3868,7 +3876,7 @@ packages:
       '@latticexyz/recs': 2.0.9(typescript@5.5.3)(zod@3.23.8)
       '@latticexyz/schema-type': 2.0.9(typescript@5.5.3)(zod@3.23.8)
       '@latticexyz/store': 2.0.9(typescript@5.5.3)
-      debug: 4.3.6(supports-color@5.5.0)
+      debug: 4.3.7
       eventemitter3: 5.0.1
       viem: 2.9.20(typescript@5.5.3)(zod@3.23.8)
       zod: 3.23.8
@@ -4866,7 +4874,7 @@ packages:
     engines: {node: '>=18'}
     dependencies:
       '@babel/code-frame': 7.24.7
-      '@babel/runtime': 7.25.0
+      '@babel/runtime': 7.25.6
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       chalk: 4.1.2
@@ -4978,7 +4986,7 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.5.4):
+  /@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.6.2):
     resolution: {integrity: sha512-n3tQmCZjRE6IU4h6lqUGiQ1j866n5MTCBJreNEHHVWXa2u9GJTaeYyU1/k+1qLutkyw+sS6VAN+AbeiTqsxd/A==}
     peerDependencies:
       '@ethersproject/abi': ^5.0.0
@@ -4991,9 +4999,9 @@ packages:
       '@ethersproject/providers': 5.7.2
       ethers: 5.7.2
       lodash: 4.17.21
-      ts-essentials: 7.0.3(typescript@5.5.4)
-      typechain: 8.3.2(typescript@5.5.4)
-      typescript: 5.5.4
+      ts-essentials: 7.0.3(typescript@5.6.2)
+      typechain: 8.3.2(typescript@5.6.2)
+      typescript: 5.6.2
     dev: true
 
   /@types/aria-query@5.0.4:
@@ -5319,6 +5327,12 @@ packages:
 
   /@types/react@18.3.3:
     resolution: {integrity: sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==}
+    dependencies:
+      '@types/prop-types': 15.7.12
+      csstype: 3.1.3
+
+  /@types/react@18.3.5:
+    resolution: {integrity: sha512-WeqMfGJLGuLCqHGYRGHxnKrXcTitc6L/nBUWfWPcTarG3t9PsquqUMuVeXZeca+mglY4Vo5GZjCi0A3Or2lnxA==}
     dependencies:
       '@types/prop-types': 15.7.12
       csstype: 3.1.3
@@ -6066,7 +6080,7 @@ packages:
       typescript: 5.5.3
       zod: 3.23.8
 
-  /abitype@1.0.0(typescript@5.5.4)(zod@3.23.8):
+  /abitype@1.0.0(typescript@5.6.2)(zod@3.23.8):
     resolution: {integrity: sha512-NMeMah//6bJ56H5XRj8QCV4AwuW6hB6zqz2LnhhLdcWVQOsXki6/Pn3APeqxCma62nXIcmZWdu1DlHWS74umVQ==}
     peerDependencies:
       typescript: '>=5.0.4'
@@ -6077,7 +6091,7 @@ packages:
       zod:
         optional: true
     dependencies:
-      typescript: 5.5.4
+      typescript: 5.6.2
       zod: 3.23.8
     dev: false
 
@@ -6954,7 +6968,7 @@ packages:
       yaml: 1.10.2
     dev: false
 
-  /cosmiconfig@8.3.6(typescript@5.5.4):
+  /cosmiconfig@8.3.6(typescript@5.6.2):
     resolution: {integrity: sha512-kcZ6+W5QzcJ3P1Mt+83OUv/oHFqZHIx8DuxG6eZ5RGMERoLqp4BuGjhHLYGK+Kf5XVkQvqBSmAy/nGWN3qDgEA==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -6967,7 +6981,7 @@ packages:
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
-      typescript: 5.5.4
+      typescript: 5.6.2
     dev: true
 
   /crc-32@1.2.2:
@@ -7421,7 +7435,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /debug@4.3.6(supports-color@5.5.0):
     resolution: {integrity: sha512-O/09Bd4Z1fBrU4VzkhFqVgpPzaGbw6Sm9FEkBT1A/YBXQFGuuSxa1dN2nxgxS34JmKXqYx8CZAwEVoJFImUXIg==}
@@ -7434,6 +7447,18 @@ packages:
     dependencies:
       ms: 2.1.2
       supports-color: 5.5.0
+
+  /debug@4.3.7:
+    resolution: {integrity: sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.3
+    dev: false
 
   /decamelize@1.2.0:
     resolution: {integrity: sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==}
@@ -10002,8 +10027,8 @@ packages:
   /mobx@6.12.5:
     resolution: {integrity: sha512-xRq2tyY6unAec0ItlsrgoCuxrWXLoIkM5cGPuerm/0nX/CI9FxAO6ttfRYfFa+B5Yz51d59IfKy0mJwxOEwqzQ==}
 
-  /mobx@6.13.1:
-    resolution: {integrity: sha512-ekLRxgjWJr8hVxj9ZKuClPwM/iHckx3euIJ3Np7zLVNtqJvfbbq7l370W/98C8EabdQ1pB5Jd3BbDWxJPNnaOg==}
+  /mobx@6.13.2:
+    resolution: {integrity: sha512-GIubI2qf+P6lG6rSEG0T2pg3jV9/0+O0ncF09+0umRe75+Cbnh1KNLM1GvbTY9RSc7QuU+LcPNZfxDY8B+3XRg==}
     dev: false
 
   /motion@10.16.2:
@@ -10028,6 +10053,10 @@ packages:
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
+
+  /ms@2.1.3:
+    resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+    dev: false
 
   /multiformats@9.9.0:
     resolution: {integrity: sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==}
@@ -11501,7 +11530,7 @@ packages:
     resolution: {integrity: sha512-FrW41lLiOs82jKxwq39UrE1HDAHOvirKWk4Nv8tqnFFFknVbTxcHZzDS4vt02qqdU/5+KNsQHWzhKHznDBmrww==}
     dev: false
 
-  /simple-zustand-devtools@1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)(zustand@4.5.4):
+  /simple-zustand-devtools@1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)(zustand@4.5.4):
     resolution: {integrity: sha512-Axfcfr9L3YL3kto7aschCQLY2VUlXXMnIVtaTe9Y0qWbNmPsX/y7KsNprmxBZoB0pww5ZGs1u/ohcrvQ3tE6jA==}
     peerDependencies:
       '@types/react': '>=18.0.0'
@@ -11510,11 +11539,11 @@ packages:
       react-dom: '>=18.0.0'
       zustand: '>=1.0.2'
     dependencies:
-      '@types/react': 18.3.3
+      '@types/react': 18.3.5
       '@types/react-dom': 18.3.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      zustand: 4.5.4(@types/react@18.3.3)(react@18.3.1)
+      zustand: 4.5.4(@types/react@18.3.5)(react@18.3.1)
     dev: true
 
   /slash@3.0.0:
@@ -11540,7 +11569,7 @@ packages:
       '@solidity-parser/parser': 0.16.2
     dev: true
 
-  /solhint@3.6.2(typescript@5.5.4):
+  /solhint@3.6.2(typescript@5.6.2):
     resolution: {integrity: sha512-85EeLbmkcPwD+3JR7aEMKsVC9YrRSxd4qkXuMzrlf7+z2Eqdfm1wHWq1ffTuo5aDhoZxp2I9yF3QkxZOxOL7aQ==}
     hasBin: true
     dependencies:
@@ -11550,7 +11579,7 @@ packages:
       ast-parents: 0.0.1
       chalk: 4.1.2
       commander: 10.0.1
-      cosmiconfig: 8.3.6(typescript@5.5.4)
+      cosmiconfig: 8.3.6(typescript@5.6.2)
       fast-diff: 1.3.0
       glob: 8.1.0
       ignore: 5.3.1
@@ -12178,12 +12207,12 @@ packages:
     resolution: {integrity: sha512-tLJxacIQUM82IR7JO1UUkKlYuUTmoY9HBJAmNWFzheSlDS5SPMcNIepejHJa4BpPQLAcbRhRf3GDJzyj6rbKvA==}
     dev: false
 
-  /ts-essentials@7.0.3(typescript@5.5.4):
+  /ts-essentials@7.0.3(typescript@5.6.2):
     resolution: {integrity: sha512-8+gr5+lqO3G84KdiTSMRLtuyJ+nTBVRKuCrK4lidMPdVeEp0uqC875uE5NMcaA7YYMN7XsNiFQuMvasF8HT/xQ==}
     peerDependencies:
       typescript: '>=3.7.0'
     dependencies:
-      typescript: 5.5.4
+      typescript: 5.6.2
     dev: true
 
   /ts-interface-checker@0.1.13:
@@ -12433,7 +12462,7 @@ packages:
     resolution: {integrity: sha512-8j+1QmAbPvLZow5Qpi6NCaN8FB60p/6x8/vfNqOk/hC+HuvFZhL4+WfekuhQLiqFZXOgQdrs3B+XxEmCc6b3FQ==}
     dev: false
 
-  /typechain@8.3.2(typescript@5.5.4):
+  /typechain@8.3.2(typescript@5.6.2):
     resolution: {integrity: sha512-x/sQYr5w9K7yv3es7jo4KTX05CLxOf7TRWwoHlrjRh8H82G64g+k7VuWPJlgMo6qrjfCulOdfBjiaDtmhFYD/Q==}
     hasBin: true
     peerDependencies:
@@ -12448,8 +12477,8 @@ packages:
       mkdirp: 1.0.4
       prettier: 2.8.8
       ts-command-line-args: 2.5.1
-      ts-essentials: 7.0.3(typescript@5.5.4)
-      typescript: 5.5.4
+      ts-essentials: 7.0.3(typescript@5.6.2)
+      typescript: 5.6.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -12482,8 +12511,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.4:
-    resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
+  /typescript@5.6.2:
+    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -12810,7 +12839,7 @@ packages:
       - utf-8-validate
       - zod
 
-  /viem@2.9.20(typescript@5.5.4)(zod@3.23.8):
+  /viem@2.9.20(typescript@5.6.2)(zod@3.23.8):
     resolution: {integrity: sha512-PHb1MrBHMrSZ8Ayuk3Y/6wUTcMbzlACQaM6AJBSv9kRKX3xYSZ/kehi+gvS0swQJeAlTQ4eZM7jsHQJNAOarmg==}
     peerDependencies:
       typescript: '>=5.0.4'
@@ -12823,9 +12852,9 @@ packages:
       '@noble/hashes': 1.3.2
       '@scure/bip32': 1.3.2
       '@scure/bip39': 1.2.1
-      abitype: 1.0.0(typescript@5.5.4)(zod@3.23.8)
+      abitype: 1.0.0(typescript@5.6.2)(zod@3.23.8)
       isows: 1.0.3(ws@8.13.0)
-      typescript: 5.5.4
+      typescript: 5.6.2
       ws: 8.13.0
     transitivePeerDependencies:
       - bufferutil
@@ -13621,7 +13650,7 @@ packages:
   /zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
-  /zustand@4.5.4(@types/react@18.3.3)(react@18.3.1):
+  /zustand@4.5.4(@types/react@18.3.5)(react@18.3.1):
     resolution: {integrity: sha512-/BPMyLKJPtFEvVL0E9E9BTUM63MNyhPGlvxk1XjrfWTUlV+BR8jufjsovHzrtR6YNcBEcL7cMHovL1n9xHawEg==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -13636,7 +13665,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@types/react': 18.3.3
+      '@types/react': 18.3.5
       react: 18.3.1
       use-sync-external-store: 1.2.0(react@18.3.1)
 
