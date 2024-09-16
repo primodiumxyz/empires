@@ -36,13 +36,13 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [x] packages/contracts/src/systems/resetSubsystems/ResetClearLoopSubsystem.sol
 - [x] packages/contracts/src/systems/ResetSystem.sol
 - [ ] packages/contracts/src/systems/RewardsSystem.sol
-- [ ] packages/contracts/src/systems/updateSubsystems/UpdateAcidSubsystem.sol
-- [ ] packages/contracts/src/systems/updateSubsystems/UpdateEmpiresSubsystem.sol
-- [ ] packages/contracts/src/systems/updateSubsystems/UpdateMagnetsSubsystem.sol
-- [ ] packages/contracts/src/systems/updateSubsystems/UpdatePriceSubsystem.sol
+- [x] packages/contracts/src/systems/updateSubsystems/UpdateAcidSubsystem.sol
+- [x] packages/contracts/src/systems/updateSubsystems/UpdateEmpiresSubsystem.sol
+- [x] packages/contracts/src/systems/updateSubsystems/UpdateMagnetsSubsystem.sol
+- [x] packages/contracts/src/systems/updateSubsystems/UpdatePriceSubsystem.sol
 - [ ] packages/contracts/src/systems/updateSubsystems/UpdateShieldEaterSubsystem.sol
-- [ ] packages/contracts/src/systems/UpdateSystem.sol
-- [ ] packages/contracts/src/systems/WithdrawRakeSystem.sol
+- [x] packages/contracts/src/systems/UpdateSystem.sol
+- [x] packages/contracts/src/systems/WithdrawRakeSystem.sol
 
 ## Review for NatSpec, external clarity
 https://docs.soliditylang.org/en/develop/natspec-format.html
