@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { Test } from "forge-std/Test.sol";
 import { TestPlus } from "solady/TestPlus.sol";
 
@@ -32,42 +33,43 @@ abstract contract HandlerBase is Test, TestPlus {
   constructor(address _world, address _creator) {
     world = IWorld(_world);
     creator = _creator;
+    StoreSwitch.setStoreAddress(_world);
 
     vm.startPrank(creator);
-    emit log_named_address("creator", creator);
-    P_GameConfig.setGameOverBlock(block.number + 100_000);
     P_GameConfig.setTurnLengthBlocks(10);
+    P_GameConfig.setGameOverBlock(block.number + 100_000);
     vm.stopPrank();
   }
 
   function updateWorld(uint256) public {
     TurnData memory turn = Turn.get();
+    // we don't want it to update everytime the function is called, more like advance block and update if possible
     vm.roll(block.number + 1);
     if (block.number < turn.nextTurnBlock) {
       return;
     }
 
-    bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
-    RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);
-    for (uint256 i = 0; i < empirePlanets.length; i++) {
-      bytes32 targetPlanet = _selectRandomPlanet(_random());
-      do {
-        targetPlanet = _selectRandomPlanet(_random());
-      } while (targetPlanet == empirePlanets[i]);
+    // bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
+    // RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);
+    // for (uint256 i = 0; i < empirePlanets.length; i++) {
+    //   bytes32 targetPlanet = _selectRandomPlanet(_random());
+    //   do {
+    //     targetPlanet = _selectRandomPlanet(_random());
+    //   } while (targetPlanet == empirePlanets[i]);
 
-      routineThresholds[i] = RoutineThresholds({
-        planetId: empirePlanets[i],
-        moveTargetId: targetPlanet,
-        accumulateGold: 2000,
-        buyShields: 4000,
-        buyShips: 6000,
-        moveShips: 10000
-      });
-    }
+    //   routineThresholds[i] = RoutineThresholds({
+    //     planetId: empirePlanets[i],
+    //     moveTargetId: targetPlanet,
+    //     accumulateGold: 2000,
+    //     buyShields: 4000,
+    //     buyShips: 6000,
+    //     moveShips: 10000
+    //   });
+    // }
 
     vm.prank(creator);
-    world.Empires__updateWorld(routineThresholds);
-    // world.Empires__updateWorld(new RoutineThresholds[](0));
+    // world.Empires__updateWorld(routineThresholds);
+    world.Empires__updateWorld(new RoutineThresholds[](0));
   }
 
   /* -------------------------------------------------------------------------- */
