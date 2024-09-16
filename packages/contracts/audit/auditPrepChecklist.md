@@ -15,7 +15,7 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [x] packages/contracts/src/adts/PointsMap.sol
 - [x] packages/contracts/src/libraries/InitPrice.sol
 - [x] packages/contracts/src/libraries/LibAcid.sol
-- [ ] packages/contracts/src/libraries/LibMagnet.sol
+- [x] packages/contracts/src/libraries/LibMagnet.sol
 - [x] packages/contracts/src/libraries/LibMoveShips.sol
 - [x] packages/contracts/src/libraries/LibOverride.sol
 - [x] packages/contracts/src/libraries/LibPoint.sol
