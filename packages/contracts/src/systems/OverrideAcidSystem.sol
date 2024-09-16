@@ -24,7 +24,6 @@ contract OverrideAcidSystem is EmpiresSystem {
     require(AcidPlanetsSet.has(empire, _planetId) == false, "[OverrideSystem] Planet already has acid");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceAcid, empire, 1);
 
-
     // instantly apply first cycle of acid
     LibAcid.applyAcidDamage(_planetId);
 
