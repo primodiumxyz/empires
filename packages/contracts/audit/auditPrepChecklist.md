@@ -31,8 +31,8 @@ https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
 - [x] packages/contracts/src/systems/OverrideMagnetsSystem.sol
 - [x] packages/contracts/src/systems/OverridePointsSystem.sol
 - [ ] packages/contracts/src/systems/OverrideShieldEaterSystem.sol
-- [ ] packages/contracts/src/systems/OverrideShieldSystem.sol
-- [ ] packages/contracts/src/systems/OverrideShipSystem.sol
+- [x] packages/contracts/src/systems/OverrideShieldSystem.sol
+- [x] packages/contracts/src/systems/OverrideShipSystem.sol
 - [ ] packages/contracts/src/systems/resetSubsystems/ResetClearLoopSubsystem.sol
 - [ ] packages/contracts/src/systems/ResetSystem.sol
 - [ ] packages/contracts/src/systems/RewardsSystem.sol

@@ -30,10 +30,12 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
       EmpirePlanetsSet.clear(empire);
       AcidPlanetsSet.clear(empire);
       PointsMap.clear(empire);
-      PlayersMap.clear();
-      PlanetsSet.clear();
-      CitadelPlanetsSet.clear();
+
     }
+
+    PlayersMap.clear();
+    PlanetsSet.clear();
+    CitadelPlanetsSet.clear();
     // Does not reset Player table, that's fine. it only contains id and spent
     // by not clearing Player.spent, we can keep track of how much each player has spent over multiple matches
 
