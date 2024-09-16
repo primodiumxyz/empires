@@ -49,7 +49,7 @@ contract OverrideSystemTest is PrimodiumTest {
   function testUnderspend() public {
     vm.startPrank(alice);
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
-    vm.expectRevert("[EmpiresSystem] Incorrect payment");
+    vm.expectRevert("[OverrideSystem] Insufficient payment");
     world.Empires__createShip{ value: cost - 1 }(planetId, 1);
   }
 
@@ -338,7 +338,7 @@ contract OverrideSystemTest is PrimodiumTest {
     uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
 
     vm.prank(alice);
-    vm.expectRevert("[EmpiresSystem] Incorrect payment");
+    vm.expectRevert("[OverrideSystem] Insufficient payment");
     world.Empires__placeMagnet{ value: totalCost - 1 }(empire, planetId, 1);
   }
 
