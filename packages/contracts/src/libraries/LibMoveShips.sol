@@ -14,8 +14,9 @@ library LibMoveShips {
    * @return bool Returns true if a pending move was successfully created, false otherwise.
    */
   function createPendingMove(bytes32 planetId, bytes32 targetId) internal returns (bool) {
+    require(Planet.getIsPlanet(targetId), "[LibMoveShips] Target is not a planet");
+    
     PlanetData memory planetData = Planet.get(planetId);
-    require(planetData.isPlanet, "[LibMoveShips] Target is not a planet");
     // Return false if the planet has no empire or no ships
     if (planetData.empireId == EEmpire.NULL || planetData.shipCount == 0) return false;
 
