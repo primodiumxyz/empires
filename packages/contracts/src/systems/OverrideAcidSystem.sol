@@ -18,17 +18,18 @@ import { addressToId, pseudorandomEntity } from "src/utils.sol";
  */
 contract OverrideAcidSystem is EmpiresSystem {
   function placeAcid(bytes32 _planetId) public payable _onlyNotGameOver {
-    bytes32 playerId = addressToId(_msgSender());
     EEmpire empire = Planet.getEmpireId(_planetId);
     require(empire != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
     require(AcidPlanetsSet.has(empire, _planetId) == false, "[OverrideSystem] Planet already has acid");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceAcid, empire, 1);
+    require(_msgValue() >= cost, "[OverrideSystem] Insufficient payment");
+    bytes32 playerId = addressToId(_msgSender());
 
     // instantly apply first cycle of acid
     LibAcid.applyAcidDamage(_planetId);
 
     AcidPlanetsSet.add(empire, _planetId, P_AcidConfig.getAcidDuration() - 1);
-    LibOverride._purchaseOverride(addressToId(_msgSender()), EOverride.PlaceAcid, empire, 1, _msgValue());
+    LibOverride._purchaseOverride(playerId, EOverride.PlaceAcid, empire, 1, _msgValue());
 
     _refundOverspend(cost);
     _takeRake(cost);

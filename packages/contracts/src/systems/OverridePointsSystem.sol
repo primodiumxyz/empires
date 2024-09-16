@@ -49,7 +49,7 @@ contract OverridePointsSystem is EmpiresSystem {
     SellPointsOverrideLog.set(
       pseudorandomEntity(),
       SellPointsOverrideLogData({
-        playerId: addressToId(_msgSender()),
+        playerId: playerId,
         turn: Turn.getValue(),
         empireId: _empire,
         ethReceived: pointSaleValue,
