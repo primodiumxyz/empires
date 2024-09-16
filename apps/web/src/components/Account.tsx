@@ -25,7 +25,7 @@ export const Account = ({ className }: { className?: string }) => {
       </Button>
     );
 
-  if (currentChainId !== config.chain.id)
+  if (config.chain.name !== "Foundry" && currentChainId !== config.chain.id)
     return (
       <Button size="sm" variant="error" onClick={() => playerAccount.walletClient.switchChain(config.chain)}>
         Switch to {config.chain.name}
