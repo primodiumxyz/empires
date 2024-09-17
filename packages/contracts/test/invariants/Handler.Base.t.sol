@@ -18,13 +18,13 @@ abstract contract HandlerBase is Test, TestPlus {
   /*                                   STORAGE                                  */
   /* -------------------------------------------------------------------------- */
   /// @dev World contract
-  IWorld public world;
+  IWorld internal world;
 
   /// @dev Creator and admin of the contract
-  address public creator;
+  address internal creator;
 
   /// @dev players that interacted with the contract
-  address[] internal _players;
+  address[] private _players;
 
   /* -------------------------------------------------------------------------- */
   /*                                  FUNCTIONS                                 */
@@ -32,12 +32,13 @@ abstract contract HandlerBase is Test, TestPlus {
 
   constructor(address _world, address _creator) {
     world = IWorld(_world);
-    creator = _creator;
     StoreSwitch.setStoreAddress(_world);
+    creator = _creator;
 
     vm.startPrank(creator);
     P_GameConfig.setTurnLengthBlocks(10);
     P_GameConfig.setGameOverBlock(block.number + 100_000);
+    Turn.setNextTurnBlock(block.number + 10);
     vm.stopPrank();
   }
 
@@ -49,27 +50,26 @@ abstract contract HandlerBase is Test, TestPlus {
       return;
     }
 
-    // bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
-    // RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);
-    // for (uint256 i = 0; i < empirePlanets.length; i++) {
-    //   bytes32 targetPlanet = _selectRandomPlanet(_random());
-    //   do {
-    //     targetPlanet = _selectRandomPlanet(_random());
-    //   } while (targetPlanet == empirePlanets[i]);
+    bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
+    RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);
+    for (uint256 i = 0; i < empirePlanets.length; i++) {
+      bytes32 targetPlanet = _selectRandomPlanet(_random());
+      do {
+        targetPlanet = _selectRandomPlanet(_randomUnique());
+      } while (targetPlanet == empirePlanets[i]);
 
-    //   routineThresholds[i] = RoutineThresholds({
-    //     planetId: empirePlanets[i],
-    //     moveTargetId: targetPlanet,
-    //     accumulateGold: 2000,
-    //     buyShields: 4000,
-    //     buyShips: 6000,
-    //     moveShips: 10000
-    //   });
-    // }
+      routineThresholds[i] = RoutineThresholds({
+        planetId: empirePlanets[i],
+        moveTargetId: targetPlanet,
+        accumulateGold: 2000,
+        buyShields: 4000,
+        buyShips: 6000,
+        moveShips: 10000
+      });
+    }
 
     vm.prank(creator);
-    // world.Empires__updateWorld(routineThresholds);
-    world.Empires__updateWorld(new RoutineThresholds[](0));
+    world.Empires__updateWorld(routineThresholds);
   }
 
   /* -------------------------------------------------------------------------- */

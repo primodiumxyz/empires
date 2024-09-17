@@ -20,21 +20,21 @@ contract HandlerPot is HandlerBase {
 
   constructor(address _world, address _creator) HandlerBase(_world, _creator) {}
 
-  // function airdropGold(uint256 playerSeed, uint256 planetSeed, uint256 overrideCountSeed) public {
-  //   address player = _selectRandomOrCreatePlayer(playerSeed);
-  //   (bytes32 planet, EEmpire empire) = _selectRandomOwnedPlanet(planetSeed);
-  //   (uint256 overrideCount, uint256 overrideCost) = _getSensibleOverrideCount(
-  //     overrideCountSeed,
-  //     EOverride.CreateShip,
-  //     empire,
-  //     player
-  //   );
+  function airdropGold(uint256 playerSeed, uint256 planetSeed, uint256 overrideCountSeed) public payable {
+    address player = _selectRandomOrCreatePlayer(playerSeed);
+    (bytes32 planet, EEmpire empire) = _selectRandomOwnedPlanet(planetSeed);
+    (uint256 overrideCount, uint256 overrideCost) = _getSensibleOverrideCount(
+      overrideCountSeed,
+      EOverride.CreateShip,
+      empire,
+      player
+    );
 
-  //   vm.prank(player);
-  //   world.Empires__airdropGold(empire, overrideCount);
+    vm.prank(player);
+    world.Empires__airdropGold(empire, overrideCount);
 
-  //   _mirrorPot += overrideCost;
-  // }
+    _mirrorPot += overrideCost;
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                                   GETTERS                                  */
