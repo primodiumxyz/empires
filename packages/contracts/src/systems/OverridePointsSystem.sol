@@ -25,11 +25,6 @@ contract OverridePointsSystem is EmpiresSystem {
    */
   function sellPoints(EEmpire _empire, uint256 _points) public _onlyNotGameOver {
     bytes32 playerId = addressToId(_msgSender());
-    require(
-      _points <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
-      "[OverrideSystem] Player does not have enough points to remove"
-    );
-
     uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _points);
 
     // require that the pot has enough ETH to send
