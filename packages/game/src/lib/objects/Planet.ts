@@ -347,7 +347,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
       blendMode: Phaser.BlendModes.ADD,
       onFrameChange: (frame) => {
         if (frame !== 11) return;
-        if (capture) this.updateFaction(destinationEmpire);
+        if (capture) this.updateFaction(originEmpire);
       },
     });
 
