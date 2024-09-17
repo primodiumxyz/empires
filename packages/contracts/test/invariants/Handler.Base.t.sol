@@ -20,8 +20,9 @@ abstract contract HandlerBase is Test, TestPlus {
 
   /// @dev Allow calls that are supposed to fail (e.g. sell points when the player doesn't have enough)
   /// When set to true, it will still allow the call, even if it's supposed to not succeed, which helps
-  // for testing unexpected cases
+  /// for testing unexpected cases
   /// When set to false, it will return before the call is made if the requirements for a successful case are not met
+  /// Note: disable if you want to set `fail_on_revert = false` in `foundry.toml`
   bool constant ALLOW_UNEXPECTED_INPUTS = true;
 
   /* -------------------------------------------------------------------------- */
