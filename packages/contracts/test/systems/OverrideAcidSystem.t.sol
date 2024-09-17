@@ -43,7 +43,7 @@ contract OverrideAcidSystemTest is PrimodiumTest {
   function testPlaceAcidFailIncorrectPayment() public {
     assignPlanetToEmpire(planetIds[0], EEmpire.Red);
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceAcid, EEmpire.Red, 1);
-    vm.expectRevert("[EmpiresSystem] Incorrect payment");
+    vm.expectRevert("[OverrideSystem] Insufficient payment");
     world.Empires__placeAcid{ value: cost - 1 }(planetIds[0]);
   }
 

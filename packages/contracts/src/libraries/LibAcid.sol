@@ -17,9 +17,9 @@ library LibAcid {
     uint256 initShips = Planet.getShipCount(_planetId);
     // Round down
     uint256 shipsRemaining = (initShips * (10000 - P_AcidConfig.getAcidDamagePercent())) / 10000;
+    uint256 shipsDestroyed = initShips - shipsRemaining;
     Planet.setShipCount(_planetId, shipsRemaining);
 
-    uint256 shipsDestroyed = initShips - shipsRemaining;
     AcidDamageOverrideLog.set(
       pseudorandomEntity(),
       AcidDamageOverrideLogData({ planetId: _planetId, shipsDestroyed: shipsDestroyed, timestamp: block.timestamp })

@@ -26,12 +26,12 @@ contract OverrideShipSystem is EmpiresSystem {
    * @param _overrideCount The number of overrides to purchase.
    */
   function createShip(bytes32 _planetId, uint256 _overrideCount) public payable _onlyNotGameOver {
-    bytes32 playerId = addressToId(_msgSender());
-    // increase ships
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, planetData.empireId, _overrideCount);
+    require(_msgValue() >= cost, "[OverrideSystem] Insufficient payment");
+    bytes32 playerId = addressToId(_msgSender());
 
     LibOverride._purchaseOverride(playerId, EOverride.CreateShip, planetData.empireId, _overrideCount, _msgValue());
 
