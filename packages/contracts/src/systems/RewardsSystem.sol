@@ -91,7 +91,7 @@ contract RewardsSystem is EmpiresSystem {
       uint8 index = i - 1;
       EEmpire empire = EEmpire(i);
       uint256 currentPlanets = citadelPlanetsPerEmpire[index];
-      uint256 pseudorandomCurrent = pseudorandom(uint256(empire));
+      uint256 pseudorandomCurrent = pseudorandom(uint256(empire), 1e18) + 1;
       if (currentPlanets > maxCitadelPlanets) { // most citadel planets
         maxCitadelPlanets = currentPlanets;
         winningEmpire = EEmpire(empire);
