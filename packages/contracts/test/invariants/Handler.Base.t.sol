@@ -15,6 +15,16 @@ import { RoutineThresholds } from "src/Types.sol";
 /// @dev Base handler to be implemented by specific handlers
 abstract contract HandlerBase is Test, TestPlus {
   /* -------------------------------------------------------------------------- */
+  /*                                   CONFIG                                   */
+  /* -------------------------------------------------------------------------- */
+
+  /// @dev Allow calls that are supposed to fail (e.g. sell points when the player doesn't have enough)
+  /// When set to true, it will still allow the call, even if it's supposed to not succeed, which helps
+  // for testing unexpected cases
+  /// When set to false, it will return before the call is made if the requirements for a successful case are not met
+  bool constant ALLOW_UNEXPECTED_INPUTS = true;
+
+  /* -------------------------------------------------------------------------- */
   /*                                   STORAGE                                  */
   /* -------------------------------------------------------------------------- */
   /// @dev World contract
@@ -64,9 +74,7 @@ abstract contract HandlerBase is Test, TestPlus {
     TurnData memory turn = Turn.get();
     // we don't want it to update everytime the function is called, more like advance block and update if possible
     vm.roll(block.number + 1);
-    if (block.number < turn.nextTurnBlock) {
-      return;
-    }
+    if (block.number < turn.nextTurnBlock) return;
 
     bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
     RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);
@@ -138,9 +146,15 @@ abstract contract HandlerBase is Test, TestPlus {
 
   /* --------------------------------- EMPIRES -------------------------------- */
   /// @dev Select a random empire
+  /// Note: this can return `EEmpire.NULL`
   function _selectRandomEmpire(uint256) internal returns (EEmpire empire) {
+    empire = EEmpire(_randomUnique() % EMPIRE_COUNT);
+  }
+
+  /// @dev Select a random empire that exists
+  function _selectRandomOwnedEmpire(uint256 seed) internal returns (EEmpire empire) {
     do {
-      empire = EEmpire(_randomUnique() % EMPIRE_COUNT);
+      empire = _selectRandomEmpire(seed);
     } while (empire == EEmpire.NULL);
   }
 
