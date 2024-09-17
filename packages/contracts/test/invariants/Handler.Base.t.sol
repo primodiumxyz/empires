@@ -5,7 +5,7 @@ import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { Test } from "forge-std/Test.sol";
 import { TestPlus } from "solady/TestPlus.sol";
 
-import { P_GameConfig, Planet, Turn, TurnData } from "codegen/index.sol";
+import { P_GameConfig, Planet, Ready, Turn, TurnData, WinningEmpire } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
@@ -20,11 +20,28 @@ abstract contract HandlerBase is Test, TestPlus {
   /// @dev World contract
   IWorld internal world;
 
-  /// @dev Creator and admin of the contract
-  address internal creator;
+  /// @dev Deployer and admin of the contract
+  address internal immutable CREATOR;
 
-  /// @dev players that interacted with the contract
+  /// @dev Amount of empires set during initialization
+  uint256 internal immutable EMPIRE_COUNT;
+
+  /// @dev Accounts that interacted with the contract (funded and participated at least once)
   address[] private _players;
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  MODIFIERS                                 */
+  /* -------------------------------------------------------------------------- */
+
+  /// @dev Skip function if game is over
+  modifier _assumeNotGameOver() {
+    uint256 endBlock = P_GameConfig.getGameOverBlock();
+
+    vm.assume(Ready.get());
+    vm.assume(WinningEmpire.get() == EEmpire.NULL);
+    vm.assume(endBlock == 0 || block.number < endBlock);
+    _;
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                                  FUNCTIONS                                 */
@@ -33,9 +50,10 @@ abstract contract HandlerBase is Test, TestPlus {
   constructor(address _world, address _creator) {
     world = IWorld(_world);
     StoreSwitch.setStoreAddress(_world);
-    creator = _creator;
+    CREATOR = _creator;
+    EMPIRE_COUNT = P_GameConfig.getEmpireCount();
 
-    vm.startPrank(creator);
+    vm.startPrank(_creator);
     P_GameConfig.setTurnLengthBlocks(10);
     P_GameConfig.setGameOverBlock(block.number + 100_000);
     Turn.setNextTurnBlock(block.number + 10);
@@ -68,7 +86,7 @@ abstract contract HandlerBase is Test, TestPlus {
       });
     }
 
-    vm.prank(creator);
+    vm.prank(CREATOR);
     world.Empires__updateWorld(routineThresholds);
   }
 
@@ -92,20 +110,16 @@ abstract contract HandlerBase is Test, TestPlus {
 
   /* --------------------------------- PLAYERS -------------------------------- */
   /// @dev A. Return an existing player; meaning that they have already interacted with the contract (30%)
-  /// @dev B. Create a new player, deal some ETH and add them to the array
+  /// @dev B. Create a new player and add them to the array
   /// (70%)
-  function _selectRandomOrCreatePlayer(uint256 seed) internal virtual returns (address player) {
+  function _selectRandomOrCreatePlayer(uint256 seed) internal returns (address player) {
     bool shouldSelectExistingPlayer = _randomChance(3); // 1/3
 
     if (shouldSelectExistingPlayer && _players.length > 0) {
       player = _players[seed % _players.length];
     } else {
       player = _randomUniqueAddress();
-
-      // Add the player to the list and fund them
       _players.push(player);
-      uint256 amount = _hem(seed, 1, uint256(type(uint96).max));
-      vm.deal(player, amount);
     }
   }
 
@@ -116,25 +130,31 @@ abstract contract HandlerBase is Test, TestPlus {
     EOverride overrideType,
     EEmpire empireId,
     address player
-  ) internal view returns (uint256 overrideCount, uint256 overrideCost) {
-    overrideCost = type(uint256).max;
+  ) internal returns (uint256 overrideCount, uint256 overrideCost) {
+    overrideCount = _hem(overrideCountSeed, 1, 100);
+    overrideCost = LibPrice.getTotalCost(overrideType, empireId, overrideCount);
+    vm.deal(player, overrideCost);
+  }
+
+  /* --------------------------------- EMPIRES -------------------------------- */
+  /// @dev Select a random empire
+  function _selectRandomEmpire(uint256) internal returns (EEmpire empire) {
     do {
-      overrideCount = _hem(overrideCountSeed, 1, 100);
-      overrideCost = LibPrice.getTotalCost(overrideType, empireId, overrideCount);
-    } while (overrideCost > player.balance);
+      empire = EEmpire(_randomUnique() % EMPIRE_COUNT);
+    } while (empire == EEmpire.NULL);
   }
 
   /* --------------------------------- PLANETS -------------------------------- */
   /// @dev Select a random planet
-  function _selectRandomPlanet(uint256 seed) internal returns (bytes32 planet) {
+  function _selectRandomPlanet(uint256 seed) internal view returns (bytes32 planet) {
     bytes32[] memory planets = PlanetsSet.getPlanetIds();
     planet = planets[seed % planets.length];
   }
 
   /// @dev Select a random planet owned by an empire
-  function _selectRandomOwnedPlanet(uint256 seed) internal returns (bytes32 planet, EEmpire empire) {
+  function _selectRandomOwnedPlanet(uint256) internal returns (bytes32 planet, EEmpire empire) {
     do {
-      planet = _selectRandomPlanet(seed);
+      planet = _selectRandomPlanet(_randomUnique());
       empire = Planet.getEmpireId(planet);
     } while (empire == EEmpire.NULL);
   }

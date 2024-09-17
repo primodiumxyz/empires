@@ -13,7 +13,11 @@ contract InvariantsPot is InvariantsBase {
     init(address(handler));
   }
 
-  function invariant_pot_balanceOfEmpiresContractShouldEqualExpectedPot() public {
-    assert(handler.getPot() == handler.getMirrorPot());
+  function invariant_pot_balanceOfEmpiresContractShouldEqualExpectedPot() public view {
+    assert(handler.getPot() == handler.getExpectedPot());
+  }
+
+  function invariant_pot_rakeShouldEqualExpectedRake() public view {
+    assert(handler.getRake() == handler.getExpectedRake());
   }
 }
