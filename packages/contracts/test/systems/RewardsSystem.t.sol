@@ -77,7 +77,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertTrue(0 < winningEmpire && winningEmpire <= P_GameConfig.getEmpireCount(), "WinningEmpire is not in range");
   }
 
-  function testWithdrawEarningsTimeVictoryPointsIssuedCondition() public {
+  function testWithdrawEarningsTimeVictoryMostPointsIssuedCondition() public {
     setTimeGameover();
     Empire.setPointsIssued(EEmpire.Red, 1);
     Empire.setPointsIssued(EEmpire.Blue, 4);
@@ -86,7 +86,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(WinningEmpire.get(), EEmpire.Blue);
   }
 
-  function testWithdrawEarningsTimeVictoryTiedCitadelCondition() public {
+  function testWithdrawEarningsTimeVictoryMostPlanetsCondition() public {
     bytes32 extraCitadelPlanet = findUnownedNonCitadelPlanet();
     Planet.setEmpireId(extraCitadelPlanet, EEmpire.Green);
     EmpirePlanetsSet.add(EEmpire.Green, extraCitadelPlanet);
@@ -96,7 +96,7 @@ contract RewardsSystemTest is PrimodiumTest {
     assertEq(WinningEmpire.get(), EEmpire.Green);
   }
 
-  function testWithdrawEarningsTimeVictory() public {
+  function testWithdrawEarningsTimeVictoryMostCitadelPlanetsCondition() public {
     bytes32 extraCitadelPlanet = findCitadelPlanet(EEmpire.NULL);
     Planet.setEmpireId(extraCitadelPlanet, EEmpire.Blue);
     EmpirePlanetsSet.add(EEmpire.Blue, extraCitadelPlanet);
