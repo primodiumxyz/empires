@@ -352,7 +352,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     });
 
     // If playAnims is false, previous vfx was skipped so just update the faction sprites
-    if (capture && !playAnims) this.updateFaction(destinationEmpire);
+    if (capture && !playAnims) this.updateFaction(originEmpire);
   }
 
   updateFaction(empire: EEmpire) {
