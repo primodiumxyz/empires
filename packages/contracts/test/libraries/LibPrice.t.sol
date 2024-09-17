@@ -97,6 +97,14 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
+  function testGetPointCostDefeatedEmpire() public {
+    vm.startPrank(creator);
+    Empire.setDefeated(EEmpire.Red, true);
+    assertEq(LibPrice.getPointCost(EEmpire.Red, 1 * pointUnit), 0, "Red Empire point cost for 1 point should be 0");
+    assertEq(LibPrice.getPointCost(EEmpire.Red, 1000 * pointUnit), 0, "Red Empire point cost for 1000 points should be 0");
+    assertEq(LibPrice.getPointCost(EEmpire.Blue, 1 * pointUnit), config.startPointCost, "Blue Empire point cost for 1 point should not be 0");
+  }
+
   function testGetRegressPointCostSingle() public {
     uint256 initPointCost = config.startPointCost;
     vm.startPrank(creator);
@@ -113,6 +121,18 @@ contract LibPriceTest is PrimodiumTest {
       LibPrice.getPointCost(EEmpire.Red, 2 * pointUnit * P_OverrideConfig.getPointMultiplier(EOverride.DetonateShieldEater)) * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 bulk overrides incorrect"
     );
+  }
+
+  function testGetRegressPointCostDefeatedEmpire() public {
+    vm.startPrank(creator);
+    Empire.setDefeated(EEmpire.Red, true);
+    uint256 initPointCost = config.startPointCost;
+    P_OverrideConfig.setPointMultiplier(EOverride.DetonateShieldEater, 2);
+    uint256 pointCost = (initPointCost + (initPointCost + config.pointCostIncrease)) * (EMPIRE_COUNT - 2); // Empire count minus 2 because Red is defeated and the impacted empire should not be included
+    uint256 deadRegressPointCost = (initPointCost + (initPointCost + config.pointCostIncrease)) * (EMPIRE_COUNT - 1); // this shouldn't happen in production but we'll test it just in case
+    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Red, 1), deadRegressPointCost, "Red Empire point cost for 2 points incorrect"); // this shouldn't happen in production but we'll test it just in case
+    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Blue, 1), pointCost, "Blue Empire point cost for 2 points incorrect");
+    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Green, 1), pointCost, "Green Empire point cost for 2 points incorrect");
   }
 
   function testGetProgressPointCostSingle() public {

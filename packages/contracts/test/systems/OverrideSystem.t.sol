@@ -356,6 +356,17 @@ contract OverrideSystemTest is PrimodiumTest {
     world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
   }
 
+  function testPlaceMagnetFailDefeatedEmpire() public {
+    EEmpire empire = EEmpire.Blue;
+    vm.prank(creator);
+    Empire.setDefeated(empire, true);
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);
+
+    vm.prank(alice);
+    vm.expectRevert("[EmpiresSystem] Empire defeated");
+    world.Empires__placeMagnet{ value: totalCost }(empire, planetId, 1);
+  }
+
   function testPlaceMagnetCostDeduction() public {
     EEmpire empire = Planet.getEmpireId(planetId);
     uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, 1);

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { P_GameConfig, Turn, PendingMove, Planet, PlanetData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
+import { P_GameConfig, Turn, PendingMove, Planet, PlanetData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData, Empire } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { pseudorandomEntity } from "src/utils.sol";
@@ -59,6 +59,9 @@ library LibResolveCombat {
         AcidPlanetsSet.changeEmpire(defendingEmpire, attackingEmpire, defendingPlanetId);
         Planet.setEmpireId(defendingPlanetId, attackingEmpire);
         PendingMove.deleteRecord(defendingPlanetId);
+        if (EmpirePlanetsSet.size(defendingEmpire) == 0) {
+          Empire.setDefeated(defendingEmpire, true);
+        }
       } else {
         revert("[LibResolveCombat] Invalid combat resolution");
       }
