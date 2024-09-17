@@ -33,7 +33,7 @@ contract RewardsSystemTest is PrimodiumTest {
     world.Empires__withdrawEarnings();
   }
 
-  function setGameover() internal {
+  function setTimeGameover() internal {
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     vm.roll(endBlock + 1);
   }
@@ -70,28 +70,38 @@ contract RewardsSystemTest is PrimodiumTest {
     revert("[RewardsSystemTest] No non-citadel planet found");
   }
 
-  function testWithdrawEarningsTimeVictoryTiedTwice() public {
-    setGameover();
-    world.Empires__withdrawEarnings(); // note: this currently hits all tie conditions and then defaults to Red
-    assertEq(WinningEmpire.get(), EEmpire.Red);
+  function testWithdrawEarningsTimeVictoryPseudorandomCondition() public {
+    setTimeGameover();
+    world.Empires__withdrawEarnings();
+    uint256 winningEmpire = uint256(WinningEmpire.get());
+    assertTrue(0 < winningEmpire && winningEmpire <= P_GameConfig.getEmpireCount(), "WinningEmpire is not in range");
   }
 
-  function testWithdrawEarningsTimeVictoryTiedOnce() public {
+  function testWithdrawEarningsTimeVictoryMostPointsIssuedCondition() public {
+    setTimeGameover();
+    Empire.setPointsIssued(EEmpire.Red, 1);
+    Empire.setPointsIssued(EEmpire.Blue, 4);
+    Empire.setPointsIssued(EEmpire.Green, 3);
+    world.Empires__withdrawEarnings();
+    assertEq(WinningEmpire.get(), EEmpire.Blue);
+  }
+
+  function testWithdrawEarningsTimeVictoryMostPlanetsCondition() public {
     bytes32 extraCitadelPlanet = findUnownedNonCitadelPlanet();
     Planet.setEmpireId(extraCitadelPlanet, EEmpire.Green);
     EmpirePlanetsSet.add(EEmpire.Green, extraCitadelPlanet);
     EmpirePlanetsSet.remove(EEmpire.NULL, extraCitadelPlanet);
-    setGameover();
+    setTimeGameover();
     world.Empires__withdrawEarnings();
     assertEq(WinningEmpire.get(), EEmpire.Green);
   }
 
-  function testWithdrawEarningsTimeVictory() public {
+  function testWithdrawEarningsTimeVictoryMostCitadelPlanetsCondition() public {
     bytes32 extraCitadelPlanet = findCitadelPlanet(EEmpire.NULL);
     Planet.setEmpireId(extraCitadelPlanet, EEmpire.Blue);
     EmpirePlanetsSet.add(EEmpire.Blue, extraCitadelPlanet);
     EmpirePlanetsSet.remove(EEmpire.NULL, extraCitadelPlanet);
-    setGameover();
+    setTimeGameover();
     world.Empires__withdrawEarnings();
     assertEq(WinningEmpire.get(), EEmpire.Blue);
   }
@@ -104,7 +114,7 @@ contract RewardsSystemTest is PrimodiumTest {
       EmpirePlanetsSet.add(EEmpire.Blue, citadelPlanets[i]);
       EmpirePlanetsSet.remove(prevEmpire, citadelPlanets[i]);
     }
-    // Do NOT add setGameOver() here, because we want to test the case where the time is not up yet
+    // Do NOT add setTimeGameover() here, because we want to test the case where the time is not up yet
     world.Empires__withdrawEarnings();
     assertEq(WinningEmpire.get(), EEmpire.Blue);
   }
@@ -118,7 +128,7 @@ contract RewardsSystemTest is PrimodiumTest {
       EmpirePlanetsSet.add(EEmpire.Green, citadelPlanets[i]);
       EmpirePlanetsSet.remove(prevEmpire, citadelPlanets[i]);
     }
-    setGameover();
+    setTimeGameover();
     world.Empires__withdrawEarnings();
     assertEq(WinningEmpire.get(), EEmpire.Blue, "Victory should be locked from domination");
   }
@@ -134,7 +144,7 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.assume(alicePoints <= totalPoints);
     vm.assume(totalPoints < 100 ether);
     testSendEther();
-    setGameover();
+    setTimeGameover();
     vm.startPrank(creator);
     WinningEmpire.set(EEmpire.Red);
     P_PointConfig.setPointRake(0); // out of 10_000
@@ -168,7 +178,7 @@ contract RewardsSystemTest is PrimodiumTest {
     vm.assume(totalPoints < 100 ether);
 
     sendEther(alice, 1 ether);
-    setGameover();
+    setTimeGameover();
 
     vm.deal(alice, 1 ether);
     vm.deal(bob, 1 ether);
