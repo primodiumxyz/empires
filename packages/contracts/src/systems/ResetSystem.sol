@@ -22,7 +22,7 @@ contract ResetSystem is System {
     _;
   }
 
-  function resetGame() public {
+  function resetGame() public _onlyAdmin {
     IWorld world = IWorld(_world());
     world.Empires__clearLoop();
     P_GameConfigData memory config = P_GameConfig.get();
