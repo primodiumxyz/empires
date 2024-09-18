@@ -53,10 +53,10 @@ export const worldInput = {
         pointUnit: "uint256",
         pointRake: "uint256", // times 10_000
         pointSellTax: "uint256", // times 10_000
-        minPointCost: "uint256",
-        startPointCost: "uint256",
+        minPointPrice: "uint256",
+        startPointPrice: "uint256",
         pointGenRate: "uint256",
-        pointCostIncrease: "uint256",
+        pointPriceIncrease: "uint256",
       },
     },
 
@@ -167,7 +167,7 @@ export const worldInput = {
         id: "EEmpire",
         origin: "EOrigin",
         pointsIssued: "uint256",
-        pointCost: "uint256", // todo: change to pointPrice
+        pointPrice: "uint256", // todo: change to pointPrice
         isDefeated: "bool",
       },
     },
@@ -487,12 +487,12 @@ export const worldInput = {
 
     /* ----------------------------- Historical data ---------------------------- */
 
-    HistoricalPointCost: {
+    HistoricalPointPrice: {
       key: ["empire", "timestamp"],
       schema: {
         empire: "EEmpire",
         timestamp: "uint256",
-        cost: "uint256", // the cost of each point for this empire in wei
+        price: "uint256", // the price of each point for this empire in wei
       },
       type: "offchainTable",
     },

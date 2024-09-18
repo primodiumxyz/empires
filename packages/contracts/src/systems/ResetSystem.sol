@@ -19,7 +19,7 @@ contract ResetSystem is System {
     P_GameConfig.setGameStartTimestamp(block.timestamp);
     createPlanets(); // Planet and Empire tables are reset to default values
     LibShieldEater.initialize(); // ShieldEater relocated, charge reset, and destination set
-    initPrice(); // Empire.setPointCost and OverrideCost tables are reset to default values
+    initPrice(); // Empire.setPointPrice and OverrideCost tables are reset to default values
     Turn.set(block.number + config.turnLengthBlocks, EEmpire.Red, 1);
   }
 }

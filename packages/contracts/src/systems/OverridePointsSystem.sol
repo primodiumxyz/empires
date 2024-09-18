@@ -38,8 +38,8 @@ contract OverridePointsSystem is EmpiresSystem {
     // remove points from player and empire's issued points count
     LibPoint.removePoints(_empire, playerId, _points);
 
-    // set the new empire point cost
-    LibPrice.sellEmpirePointCostDown(_empire, _points);
+    // set the new empire point price
+    LibPrice.sellEmpirePointPriceDown(_empire, _points);
 
     PlayersMap.setGain(playerId, PlayersMap.get(playerId).gain + pointSaleValue);
 
