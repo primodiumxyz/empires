@@ -127,6 +127,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
             destinationPlanet.triggerBattle(
               originEmpire,
               destinationEmpire,
+              current.conquered,
               Object.values(scene.tables.GameState.get() ?? {}).every(Boolean),
             );
 

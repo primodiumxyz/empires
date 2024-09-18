@@ -336,23 +336,22 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   // - if originEmpire === this.empireId, do nothing (just moving ships)
   // - if originEmpire !== this.empireId, trigger the battle
   // - if destinationEmpire !== this.empireId, also update the faction
-  triggerBattle(originEmpire: EEmpire, destinationEmpire: EEmpire, playAnims = true) {
+  triggerBattle(originEmpire: EEmpire, destinationEmpire: EEmpire, conquered: boolean, playAnims = true) {
     if (originEmpire === this.empireId) return;
-    const capture = destinationEmpire && destinationEmpire !== this.empireId;
 
     this._scene.audio.play("Blaster", "sfx");
-    this._scene.fx.flashTint(this.planetSprite, { repeat: capture ? 2 : 3 });
+    this._scene.fx.flashTint(this.planetSprite, { repeat: conquered ? 2 : 3 });
     this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 60 }, "Combat", {
       depth: DepthLayers.Marker,
       blendMode: Phaser.BlendModes.ADD,
       onFrameChange: (frame) => {
         if (frame !== 11) return;
-        if (capture) this.updateFaction(destinationEmpire);
+        if (conquered) this.updateFaction(originEmpire);
       },
     });
 
     // If playAnims is false, previous vfx was skipped so just update the faction sprites
-    if (capture && !playAnims) this.updateFaction(destinationEmpire);
+    if (conquered && !playAnims) this.updateFaction(originEmpire);
   }
 
   updateFaction(empire: EEmpire) {

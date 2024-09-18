@@ -23,14 +23,18 @@ library LibResolveCombat {
    *    - Updates planet ownership and forces based on combat outcome.
    * 5. Logs the battle result if combat occurred.
    */
-  function resolveCombat(EEmpire attackingEmpire, uint256 attackingShips, bytes32 defendingPlanetId) internal {
+  function resolveCombat(
+    EEmpire attackingEmpire,
+    uint256 attackingShips,
+    bytes32 defendingPlanetId
+  ) internal returns (bool) {
     PlanetData memory planetData = Planet.get(defendingPlanetId);
     EEmpire defendingEmpire = planetData.empireId;
 
     uint256 defendingShips = planetData.shipCount;
 
     if (attackingEmpire == EEmpire.NULL) {
-      return;
+      return false;
     } else if (defendingEmpire == attackingEmpire) {
       Planet.setShipCount(defendingPlanetId, defendingShips + attackingShips);
     } else {
@@ -80,6 +84,10 @@ library LibResolveCombat {
           timestamp: block.timestamp
         })
       );
+
+      return conquer;
     }
+
+    return false;
   }
 }
