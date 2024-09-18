@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { HandlerBase } from "test/invariants/Handler.Base.t.sol";
 
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
-import { Empire, Magnet, Planet, PlanetData, P_MagnetConfig, P_PointConfig, P_ShieldEaterConfig, ShieldEater } from "codegen/index.sol";
+import { Empire, Magnet, Planet, PlanetData, P_MagnetConfig, P_PointConfig, P_ShieldEaterConfig, ShieldEater, Turn, WinningEmpire } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
@@ -26,6 +26,10 @@ contract HandlerPot is HandlerBase {
   uint256 private _mirrorPot;
   /// @dev The rake taken from each override
   uint256 private _mirrorRake;
+
+  /// @dev Tracking variables for logs
+  uint256 private _log_sellPointsCount;
+  uint256 private _log_withdrawEarningsCount;
 
   /* -------------------------------------------------------------------------- */
   /*                                  FUNCTIONS                                 */
@@ -187,8 +191,7 @@ contract HandlerPot is HandlerBase {
     uint256 playerBalanceBefore = player.balance;
 
     // we don't want to restrict inputs too much, but instead allow unexpected inputs (try with up to twice the available points)
-    uint256 multiplier = _hem(pointsSeed, 0, ((playerPoints - playerLockedPoints) / POINTS_UNIT) * 2);
-    uint256 pointsToSell = POINTS_UNIT * multiplier;
+    uint256 pointsToSell = POINTS_UNIT * _hem(pointsSeed, 0, ((playerPoints - playerLockedPoints) / POINTS_UNIT) * 2);
     // TODO: substract sell tax
     uint256 expectedPointSaleValue = pointsToSell > 0 ? LibPrice.getPointSaleValue(empire, pointsToSell) : 0;
 
@@ -205,7 +208,7 @@ contract HandlerPot is HandlerBase {
     // don't proceed if we don't allow unexpected inputs and the requirements are not met
     if (shouldSkip(!requirementsFulfilled)) return;
     vm.prank(player);
-    // bool success = _sellPoints(empire, pointsToSell);
+    bool success = _sellPoints(empire, pointsToSell);
 
     // expected outcomes:
     // - the pot was decreased by the expected amount of native tokens
@@ -217,10 +220,15 @@ contract HandlerPot is HandlerBase {
       // - the points map was updated correctly
       PointsMap.getValue(empire, playerId) == playerPoints - pointsToSell;
 
-    // a successful call implies that all requirements were met and that the outcomes should all be achieved
-    // assert_implies(success, requirementsFulfilled && outcomesAchieved);
+    // an decrease in the pot implies that all requirements were met and that the outcomes should all be achieved
+    assert_implies(
+      Balances.get(EMPIRES_NAMESPACE_ID) < potBalanceBefore,
+      success && requirementsFulfilled && outcomesAchieved
+    );
     // decrease the mirrored pot only if the sale happened under expected circumstances
-    // if (requirementsFulfilled && outcomesAchieved) _afterSaleDecrease(expectedPointSaleValue);
+    if (success && requirementsFulfilled && outcomesAchieved) _afterSaleDecrease(expectedPointSaleValue);
+
+    if (success) _log_sellPointsCount++;
   }
 
   /// @dev Call `Empires__sellPoints` and return the success status
@@ -228,6 +236,67 @@ contract HandlerPot is HandlerBase {
     (success, ) = address(world).call(
       abi.encodeWithSignature("Empires__sellPoints(uint8,uint256)", uint8(_empire), _points)
     );
+  }
+
+  /// @dev Withdraw earnings after the game ended
+  /// Note: see `RewardsSystem`
+  /// - This function should decrease the pot by the price of the points the player could withdraw
+  function withdrawEarnings(uint256 playerSeed) public payable {
+    if (shouldSkip(block.number >= GAME_OVER_BLOCK && WinningEmpire.get() != EEmpire.NULL)) return;
+    address player = _selectRandomOrCreatePlayer(playerSeed);
+    bytes32 playerId = addressToId(player);
+    EEmpire winningEmpire = WinningEmpire.get();
+    uint256 playerPoints = PointsMap.getValue(winningEmpire, playerId);
+    uint256 playerLockedPoints = PointsMap.getLockedPoints(winningEmpire, playerId);
+
+    uint256 pointsIssuedByEmpire = Empire.getPointsIssued(winningEmpire);
+    uint256 potBalanceBefore = Balances.get(EMPIRES_NAMESPACE_ID);
+    uint256 rakeBalanceBefore = Balances.get(ADMIN_NAMESPACE_ID);
+    uint256 playerBalanceBefore = player.balance;
+
+    uint256 playerPot = pointsIssuedByEmpire > 0
+      ? (potBalanceBefore * (playerPoints - playerLockedPoints)) / pointsIssuedByEmpire
+      : 0;
+
+    // requirements for the withdrawal to be (supposed to be) successful:
+    // - an empire has won the game
+    bool requirementsFulfilled = winningEmpire != EEmpire.NULL &&
+      // - the empire has issued enough points
+      pointsIssuedByEmpire > 0;
+    // - player has enough points for this empire
+    playerPoints > 0 &&
+      // - the pot has enough native tokens to send
+      playerPot <= _mirrorPot;
+
+    // don't proceed if we don't allow unexpected inputs and the requirements are not met
+    if (shouldSkip(!requirementsFulfilled)) return;
+    vm.prank(player);
+    bool success = _withdrawEarnings();
+
+    // expected outcomes:
+    // - the pot was decreased by the expected amount of native tokens
+    bool outcomesAchieved = Balances.get(EMPIRES_NAMESPACE_ID) == potBalanceBefore - playerPot &&
+      // - the rake didn't decrease
+      Balances.get(ADMIN_NAMESPACE_ID) == rakeBalanceBefore &&
+      // - the player was sent the exact amount of native tokens
+      player.balance == playerBalanceBefore + playerPot &&
+      // - the points map was updated correctly
+      PointsMap.getValue(winningEmpire, playerId) == 0;
+
+    // a decrease in the pot implies that all requirements were met and that the outcomes should all be achieved
+    assert_implies(
+      Balances.get(EMPIRES_NAMESPACE_ID) < potBalanceBefore,
+      success && requirementsFulfilled && outcomesAchieved
+    );
+    // decrease the mirrored pot only if the sale happened under expected circumstances
+    if (success && requirementsFulfilled && outcomesAchieved) _afterSaleDecrease(playerPot);
+
+    if (success) _log_withdrawEarningsCount++;
+  }
+
+  /// @dev Call `Empires__withdrawEarnings` and return the success status
+  function _withdrawEarnings() private returns (bool success) {
+    (success, ) = address(world).call(abi.encodeWithSignature("Empires__withdrawEarnings()"));
   }
 
   /* -------------------------------------------------------------------------- */
@@ -245,6 +314,16 @@ contract HandlerPot is HandlerBase {
   function _afterSaleDecrease(uint256 value) internal {
     if (value > _mirrorPot) revert HandlerPot__SaleDecreaseUnderflow();
     _mirrorPot -= value;
+  }
+
+  /// @dev Log tracking variables (called in `Invariants.pot.t.sol::afterInvariant`)
+  function logTrackers() external {
+    emit log_string("---");
+    emit log_named_uint("Last turn", Turn.getValue());
+    emit log_named_string("Reached game over", block.number >= GAME_OVER_BLOCK ? "Yes" : "No");
+    emit log_named_uint("Total sales", _log_sellPointsCount);
+    emit log_named_uint("Total withdrawals", _log_withdrawEarningsCount);
+    emit log_string("---");
   }
 
   /* -------------------------------------------------------------------------- */

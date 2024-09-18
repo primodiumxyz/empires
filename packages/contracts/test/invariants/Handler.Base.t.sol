@@ -22,14 +22,15 @@ abstract contract HandlerBase is Test, TestPlus {
   /// When set to true, it will still allow the call, even if it's supposed to not succeed, which helps
   /// for testing unexpected cases
   /// When set to false, it will return before the call is made if the requirements for a successful case are not met
-  /// Note: disable if you want to set `fail_on_revert = false` in `foundry.toml`
+  /// Note: set to false if you want to set `fail_on_revert = true` in `foundry.toml`
   bool constant ALLOW_UNEXPECTED_INPUTS = true;
 
   /// @dev The number of turns it takes for the game to end (provided that each run has enough depth to reach it)
-  /// e.g. 200 turns, with ~10 public handler functions, we need ~4000 depth to reach the end of the game and have a few calls left
-  uint256 constant ROUND_TURNS = 200;
+  /// e.g. 400 turns, 3 blocks per turn, ~10 handler public functions: we need ~12,000 depth to reach the end of the game
+  /// and be able to make a decent amount of calls to withdraw (`updateWorld` will advance 1 block per call so 400 * 3 * 10 = 12,000)
+  uint256 constant ROUND_TURNS = 400;
   /// @dev The number of blocks for each turn
-  uint256 constant TURN_LENGTH_BLOCKS = 10;
+  uint256 constant TURN_LENGTH_BLOCKS = 3;
 
   /* -------------------------------------------------------------------------- */
   /*                                   STORAGE                                  */
@@ -48,20 +49,6 @@ abstract contract HandlerBase is Test, TestPlus {
 
   /// @dev Accounts that interacted with the contract (funded and participated at least once)
   address[] private _players;
-
-  /* -------------------------------------------------------------------------- */
-  /*                                  MODIFIERS                                 */
-  /* -------------------------------------------------------------------------- */
-
-  /// @dev Skip function if game is over
-  modifier _assumeNotGameOver() {
-    uint256 endBlock = P_GameConfig.getGameOverBlock();
-
-    vm.assume(Ready.get());
-    vm.assume(WinningEmpire.get() == EEmpire.NULL);
-    vm.assume(endBlock == 0 || block.number < endBlock);
-    _;
-  }
 
   /* -------------------------------------------------------------------------- */
   /*                                  FUNCTIONS                                 */
@@ -86,15 +73,10 @@ abstract contract HandlerBase is Test, TestPlus {
     TurnData memory turn = Turn.get();
     // we don't want it to update everytime the function is called, more like advance block and update if possible
     vm.roll(block.number + 1);
-    if (block.number < turn.nextTurnBlock) {
-      emit log_string("Skipping update");
-      return;
-    }
-    if (block.number >= GAME_OVER_BLOCK) {
-      emit log_string("Game over");
-      return;
-    }
-    emit log_named_uint("Updating world, turn:", turn.value);
+    if (block.number < turn.nextTurnBlock) return;
+    if (block.number >= GAME_OVER_BLOCK) return;
+
+    emit log_named_uint("Updating world, turn", turn.value);
 
     bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
     RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);

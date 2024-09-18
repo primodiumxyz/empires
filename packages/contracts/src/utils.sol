@@ -30,5 +30,5 @@ function pseudorandom(uint256 seed, uint256 max) view returns (uint256) {
 function pseudorandomEntity() returns (bytes32) {
   uint256 nonce = Nonce.get();
   Nonce.set(nonce + 1);
-  return bytes32(keccak256(abi.encodePacked(nonce, block.timestamp, block.prevrandao, block.number)));
+  return bytes32(keccak256(abi.encode(nonce)));
 }
