@@ -108,6 +108,7 @@ library PointsMap {
    * @dev Maintains the integrity of the empire keys array by replacing the removed empire with the last in the array.
    */
   function remove(EEmpire empire, bytes32 playerId) internal {
+    if (!has(empire, playerId)) return;
     uint256 index = Meta_PointsMap.getIndex(empire, playerId);
     if (Keys_PointsMap.length(empire) == 1) {
       clear(empire);
