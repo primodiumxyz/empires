@@ -145,7 +145,7 @@ library LibPrice {
 
   /**
    * @dev Decreases the price of points for a specific empire.
-   * @param _empire The empire to decrease the point cost for.
+   * @param _empire The empire to decrease the point price for.
    */
   function turnEmpirePointPriceDown(EEmpire _empire) internal {
     P_PointConfigData memory config = P_PointConfig.get();
@@ -178,7 +178,7 @@ library LibPrice {
 
   /**
    * @dev Calculates the value of selling a specific number of points from a specific empire.
-   * @notice The value of the points sold is calculated based on the current point cost and the point sell tax. Reverts if exceeding the minimum point cost.
+   * @notice The value of the points sold is calculated based on the current point price and the point sell tax. Reverts if exceeding the minimum point price.
    * @param _empire The empire to sell points from.
    * @param _points The number of points to sell.
    * @return pointSaleValue The value of the points to be sold.
