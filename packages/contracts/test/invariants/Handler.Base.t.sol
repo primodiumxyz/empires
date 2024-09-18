@@ -25,6 +25,12 @@ abstract contract HandlerBase is Test, TestPlus {
   /// Note: disable if you want to set `fail_on_revert = false` in `foundry.toml`
   bool constant ALLOW_UNEXPECTED_INPUTS = true;
 
+  /// @dev The number of turns it takes for the game to end (provided that each run has enough depth to reach it)
+  /// e.g. 200 turns, with ~10 public handler functions, we need ~4000 depth to reach the end of the game and have a few calls left
+  uint256 constant ROUND_TURNS = 200;
+  /// @dev The number of blocks for each turn
+  uint256 constant TURN_LENGTH_BLOCKS = 10;
+
   /* -------------------------------------------------------------------------- */
   /*                                   STORAGE                                  */
   /* -------------------------------------------------------------------------- */
@@ -36,6 +42,9 @@ abstract contract HandlerBase is Test, TestPlus {
 
   /// @dev Amount of empires set during initialization
   uint256 internal immutable EMPIRE_COUNT;
+
+  /// @dev Block at which the game ends
+  uint256 internal immutable GAME_OVER_BLOCK;
 
   /// @dev Accounts that interacted with the contract (funded and participated at least once)
   address[] private _players;
@@ -63,19 +72,29 @@ abstract contract HandlerBase is Test, TestPlus {
     StoreSwitch.setStoreAddress(_world);
     CREATOR = _creator;
     EMPIRE_COUNT = P_GameConfig.getEmpireCount();
+    GAME_OVER_BLOCK = block.number + ROUND_TURNS * TURN_LENGTH_BLOCKS;
 
     vm.startPrank(_creator);
-    P_GameConfig.setTurnLengthBlocks(10);
-    P_GameConfig.setGameOverBlock(block.number + 100_000);
-    Turn.setNextTurnBlock(block.number + 10);
+    P_GameConfig.setTurnLengthBlocks(TURN_LENGTH_BLOCKS);
+    P_GameConfig.setGameOverBlock(GAME_OVER_BLOCK);
+    Turn.setNextTurnBlock(block.number + TURN_LENGTH_BLOCKS);
     vm.stopPrank();
   }
 
+  /// @dev Advance to the next turn block and update the world
   function updateWorld(uint256) public {
     TurnData memory turn = Turn.get();
     // we don't want it to update everytime the function is called, more like advance block and update if possible
     vm.roll(block.number + 1);
-    if (block.number < turn.nextTurnBlock) return;
+    if (block.number < turn.nextTurnBlock) {
+      emit log_string("Skipping update");
+      return;
+    }
+    if (block.number >= GAME_OVER_BLOCK) {
+      emit log_string("Game over");
+      return;
+    }
+    emit log_named_uint("Updating world, turn:", turn.value);
 
     bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
     RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);
@@ -111,6 +130,11 @@ abstract contract HandlerBase is Test, TestPlus {
   /// @dev Assert that `a` implies `b`
   function assert_implies(bool a, bool b) internal pure {
     assert(implies(a, b));
+  }
+
+  /// @dev Return true if this test should be skipped
+  function shouldSkip(bool skipCondition) internal pure returns (bool) {
+    return !ALLOW_UNEXPECTED_INPUTS && skipCondition;
   }
 
   /* -------------------------------------------------------------------------- */
