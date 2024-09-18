@@ -2,10 +2,11 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_AcidConfig, Planet, P_PointConfig } from "codegen/index.sol";
+import { P_AcidConfig, Planet, P_PointConfig, P_GameConfig, Empire, P_OverrideConfig } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
+import { PointsMap } from "adts/PointsMap.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { addressToId } from "src/utils.sol";
 
@@ -89,5 +90,31 @@ contract OverrideAcidSystemTest is PrimodiumTest {
     world.Empires__placeAcid{ value: cost }(planetIds[0]);
     assertTrue(AcidPlanetsSet.has(EEmpire.Red, planetIds[0]), "Planet should have acid");
     assertEq(Planet.getShipCount(planetIds[0]), 0, "Ships should be 0");
+  }
+
+  function testPlaceAcidSkipDefeatedEmpirePoints() public {
+    assignPlanetToEmpire(planetIds[0], EEmpire.Red);
+    vm.startPrank(creator);
+    uint256 empireCount = P_GameConfig.getEmpireCount();
+    uint256 initCost = LibPrice.getRegressPointCost(EOverride.PlaceAcid, EEmpire.Red, 1);
+    Empire.setIsDefeated(EEmpire.Blue, true);
+    uint256 defeatedCost = LibPrice.getRegressPointCost(EOverride.PlaceAcid, EEmpire.Red, 1);
+    assertEq(initCost / (empireCount - 1), defeatedCost / (empireCount - 2), "Defeated empire should not contribute to point cost");
+    uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceAcid, EEmpire.Red, 1);
+    vm.startPrank(alice);
+    world.Empires__placeAcid{ value: totalCost }(planetIds[0]);
+    assertTrue(AcidPlanetsSet.has(EEmpire.Red, planetIds[0]), "Planet should have acid");
+
+    uint256[] memory allPoints = new uint256[](empireCount + 1);
+    for (uint256 i = 1; i <= empireCount; i++) {
+      allPoints[i] = PointsMap.getValue(EEmpire(i), aliceId);
+    }
+    assertEq(allPoints[uint256(EEmpire.Red)], 0, "Red was impacted, so alice points should be 0");
+    assertEq(allPoints[uint256(EEmpire.Blue)], 0, "Blue was defeated, so alice points should be 0");
+    for (uint256 i = 1; i <= empireCount; i++) {
+      if (i != uint256(EEmpire.Red) && i != uint256(EEmpire.Blue)) {
+        assertEq(allPoints[i], P_OverrideConfig.getPointMultiplier(EOverride.PlaceAcid) * pointUnit, "Alice should have points for all other empires");
+      }
+    }
   }
 }

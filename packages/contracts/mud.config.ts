@@ -167,7 +167,8 @@ export const worldInput = {
         id: "EEmpire",
         origin: "EOrigin",
         pointsIssued: "uint256",
-        pointCost: "uint256",
+        pointCost: "uint256", // todo: change to pointPrice
+        isDefeated: "bool",
       },
     },
 

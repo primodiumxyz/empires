@@ -20,7 +20,7 @@ contract OverrideMagnetsSystem is EmpiresSystem {
     EEmpire _empire,
     bytes32 _planetId,
     uint256 turnDuration
-  ) public payable _onlyNotGameOver {
+  ) public payable _onlyNotGameOver _notDefeated(_empire) {
     require(Magnet.get(_empire, _planetId).isMagnet == false, "[OverrideSystem] Planet already has a magnet");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, _empire, turnDuration);
     require(_msgValue() >= cost, "[OverrideSystem] Insufficient payment");

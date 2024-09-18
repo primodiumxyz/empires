@@ -2,8 +2,9 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { PendingMove, Planet, PlanetData } from "codegen/index.sol";
+import { PendingMove, Planet, PlanetData, Empire } from "codegen/index.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
+import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { EEmpire } from "codegen/common.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
@@ -112,5 +113,25 @@ contract LibResolveCombatTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 1);
     assertEq(Planet.getShieldCount(planetId), 0);
     assertEq(Planet.getEmpireId(planetId), EEmpire.Blue);
+  }
+
+  function testDefeatedEmpire() public {
+    bytes32[] memory empirePlanets = EmpirePlanetsSet.getEmpirePlanetIds(EEmpire.Red);
+    // check how many planets are in the red empire. remove all but planetId.
+    for (uint256 i = 0; i < empirePlanets.length; i++) {
+      if (empirePlanets[i] != planetId) {
+        EmpirePlanetsSet.remove(EEmpire.Red, empirePlanets[i]);
+        Planet.setEmpireId(empirePlanets[i], EEmpire.NULL);
+      }
+    }
+    assertEq(EmpirePlanetsSet.size(EEmpire.Red), 1, "Red empire should have 1 planet remaining");
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Red, "planet should still be in the red empire");
+    Planet.setShipCount(planetId, 2);
+    Planet.setShieldCount(planetId, 2);
+    LibResolveCombat.resolveCombat(EEmpire.Blue, 5, planetId);
+    assertEq(Planet.getShipCount(planetId), 1);
+    assertEq(Planet.getShieldCount(planetId), 0);
+    assertEq(Planet.getEmpireId(planetId), EEmpire.Blue);
+    assertEq(Empire.getIsDefeated(EEmpire.Red), true, "Red empire should be defeated");
   }
 }

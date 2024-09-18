@@ -62,9 +62,10 @@ export function createPriceUtils(tables: Tables) {
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
     const pointMultiplier =
       tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
+    const empireIsDefeated = tables.Empire.getWithKeys({ id: _empireImpacted })?.isDefeated ?? false;
     let pointCost = 0n;
     for (let i = 1; i <= empires; i++) {
-      if (i == _empireImpacted) {
+      if (i == _empireImpacted || empireIsDefeated) {
         continue;
       }
       pointCost += getPointCost(i, _overrideCount * pointUnit * pointMultiplier, nextTurn);
@@ -82,6 +83,8 @@ export function createPriceUtils(tables: Tables) {
    */
   function getPointCost(_empire: EEmpire, _points: bigint, nextTurn = false): bigint {
     if (nextTurn) return getNextTurnPointCost(_empire, _points);
+    const empireIsDefeated = tables.Empire.getWithKeys({ id: _empire })?.isDefeated ?? false;
+    if (empireIsDefeated) return 0n;
 
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
 
@@ -95,6 +98,9 @@ export function createPriceUtils(tables: Tables) {
   }
 
   function getNextTurnPointCost(_empire: EEmpire, _points: bigint): bigint {
+    const empireIsDefeated = tables.Empire.getWithKeys({ id: _empire })?.isDefeated ?? false;
+    if (empireIsDefeated) return 0n;
+
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
     const config = tables.P_PointConfig.get();
     const currentPointCost = tables.Empire.getWithKeys({ id: _empire })?.pointCost ?? 0n;
