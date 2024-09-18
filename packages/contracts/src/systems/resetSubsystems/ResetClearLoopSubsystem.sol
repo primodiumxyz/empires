@@ -30,7 +30,7 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
       EmpirePlanetsSet.clear(empire);
       AcidPlanetsSet.clear(empire);
       PointsMap.clear(empire);
-      Empire.setDefeated(empire, false);
+      Empire.setIsDefeated(empire, false);
     }
 
     PlayersMap.clear();

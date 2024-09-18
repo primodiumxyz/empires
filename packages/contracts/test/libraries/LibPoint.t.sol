@@ -80,7 +80,7 @@ contract LibPointTest is PrimodiumTest {
 
   function testIssuePointsDefeatedEmpire() public {
     vm.startPrank(creator);
-    Empire.setDefeated(EEmpire.Red, true);
+    Empire.setIsDefeated(EEmpire.Red, true);
     LibPoint.issuePoints(EEmpire.Red, aliceId, 100 * pointUnit);
     assertEq(Empire.getPointsIssued(EEmpire.Red), 0, "Red Empire points issued should be 0");
     assertEq(PointsMap.getValue(EEmpire.Red, aliceId), 0, "Alice's Red Empire points should be 0");

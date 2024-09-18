@@ -81,7 +81,7 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
 
   function testAirdropGoldFailDefeatedEmpire() public {
     vm.startPrank(creator);
-    Empire.setDefeated(EEmpire.Red, true);
+    Empire.setIsDefeated(EEmpire.Red, true);
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Red, 1);
     vm.expectRevert("[EmpiresSystem] Empire defeated");
     world.Empires__airdropGold{ value: cost }(EEmpire.Red, 1);

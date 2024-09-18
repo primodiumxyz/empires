@@ -99,7 +99,7 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetPointCostDefeatedEmpire() public {
     vm.startPrank(creator);
-    Empire.setDefeated(EEmpire.Red, true);
+    Empire.setIsDefeated(EEmpire.Red, true);
     assertEq(LibPrice.getPointCost(EEmpire.Red, 1 * pointUnit), 0, "Red Empire point cost for 1 point should be 0");
     assertEq(LibPrice.getPointCost(EEmpire.Red, 1000 * pointUnit), 0, "Red Empire point cost for 1000 points should be 0");
     assertEq(LibPrice.getPointCost(EEmpire.Blue, 1 * pointUnit), config.startPointCost, "Blue Empire point cost for 1 point should not be 0");
@@ -125,7 +125,7 @@ contract LibPriceTest is PrimodiumTest {
 
   function testGetRegressPointCostDefeatedEmpire() public {
     vm.startPrank(creator);
-    Empire.setDefeated(EEmpire.Red, true);
+    Empire.setIsDefeated(EEmpire.Red, true);
     uint256 initPointCost = config.startPointCost;
     P_OverrideConfig.setPointMultiplier(EOverride.DetonateShieldEater, 2);
     uint256 pointCost = (initPointCost + (initPointCost + config.pointCostIncrease)) * (EMPIRE_COUNT - 2); // Empire count minus 2 because Red is defeated and the impacted empire should not be included

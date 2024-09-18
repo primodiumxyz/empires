@@ -60,7 +60,7 @@ library LibResolveCombat {
         Planet.setEmpireId(defendingPlanetId, attackingEmpire);
         PendingMove.deleteRecord(defendingPlanetId);
         if (EmpirePlanetsSet.size(defendingEmpire) == 0) {
-          Empire.setDefeated(defendingEmpire, true);
+          Empire.setIsDefeated(defendingEmpire, true);
         }
       } else {
         revert("[LibResolveCombat] Invalid combat resolution");

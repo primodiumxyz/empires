@@ -168,7 +168,7 @@ export const worldInput = {
         origin: "EOrigin",
         pointsIssued: "uint256",
         pointCost: "uint256", // todo: change to pointPrice
-        defeated: "bool",
+        isDefeated: "bool",
       },
     },
 

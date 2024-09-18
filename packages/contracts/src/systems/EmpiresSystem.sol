@@ -34,7 +34,7 @@ contract EmpiresSystem is System {
   }
 
   modifier _notDefeated(EEmpire _empire) {
-    require(!Empire.getDefeated(_empire), "[EmpiresSystem] Empire defeated");
+    require(!Empire.getIsDefeated(_empire), "[EmpiresSystem] Empire defeated");
     _;
   }
 

@@ -132,6 +132,6 @@ contract LibResolveCombatTest is PrimodiumTest {
     assertEq(Planet.getShipCount(planetId), 1);
     assertEq(Planet.getShieldCount(planetId), 0);
     assertEq(Planet.getEmpireId(planetId), EEmpire.Blue);
-    assertEq(Empire.getDefeated(EEmpire.Red), true, "Red empire should be defeated");
+    assertEq(Empire.getIsDefeated(EEmpire.Red), true, "Red empire should be defeated");
   }
 }

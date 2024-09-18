@@ -56,7 +56,7 @@ library LibPrice {
     uint256 pointCost;
     uint8 empireCount = P_GameConfig.getEmpireCount();
     for (uint8 i = 1; i <= empireCount; i++) {
-      if (EEmpire(i) == _empireImpacted || Empire.getDefeated(EEmpire(i))) {
+      if (EEmpire(i) == _empireImpacted || Empire.getIsDefeated(EEmpire(i))) {
         continue;
       }
       pointCost += getPointCost(EEmpire(i), _overrideCount * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType));
@@ -74,7 +74,7 @@ library LibPrice {
     uint256 pointUnit = P_PointConfig.getPointUnit();
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
-    if (Empire.getDefeated(_empire)) {
+    if (Empire.getIsDefeated(_empire)) {
       return 0; // needed for regressive override cases
     }
 
@@ -119,7 +119,7 @@ library LibPrice {
     uint256 pointUnit = P_PointConfig.getPointUnit();
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
-    if (Empire.getDefeated(_empire)) {
+    if (Empire.getIsDefeated(_empire)) {
       return; // needed for regressive override cases
     }
     uint256 wholePoints = _points / pointUnit;

@@ -19,7 +19,7 @@ library LibPoint {
   function issuePoints(EEmpire _empire, bytes32 _playerId, uint256 _points) internal {
     uint8 empireCount = P_GameConfig.getEmpireCount();
     require(_empire != EEmpire.NULL && uint8(_empire) <= empireCount, "[LibPoint] Invalid empire");
-    if (Empire.getDefeated(_empire)) {
+    if (Empire.getIsDefeated(_empire)) {
       return;
     }
     uint256 currentPoints = PointsMap.getValue(_empire, _playerId);
