@@ -339,6 +339,11 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
   triggerBattle(originEmpire: EEmpire, destinationEmpire: EEmpire, conquered: boolean, playAnims = true) {
     if (originEmpire === this.empireId) return;
 
+    if (!this.playAnims || !playAnims) {
+      if (conquered) this.updateFaction(originEmpire);
+      return;
+    }
+
     this._scene.audio.play("Blaster", "sfx");
     this._scene.fx.flashTint(this.planetSprite, { repeat: conquered ? 2 : 3 });
     this._scene.fx.emitVfx({ x: this.coord.x, y: this.coord.y - 60 }, "Combat", {
@@ -349,9 +354,6 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
         if (conquered) this.updateFaction(originEmpire);
       },
     });
-
-    // If playAnims is false, previous vfx was skipped so just update the faction sprites
-    if (conquered && !playAnims) this.updateFaction(originEmpire);
   }
 
   updateFaction(empire: EEmpire) {
@@ -372,14 +374,16 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     );
 
     this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
+    if (!this.playAnims)
+      this.planetSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]);
     this.empireId = empire;
   }
 
-  setPendingMove(destinationPlanetId: Entity) {
+  setPendingMove(destinationPlanetId: Entity, playAnims = true) {
     const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
     if (!destinationPlanet) return;
 
-    if (!this.playAnims) {
+    if (!this.playAnims || !playAnims) {
       this.pendingMove = destinationPlanetId;
       return;
     }
@@ -399,7 +403,9 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     this.pendingMove = null;
   }
 
-  moveDestroyers(destinationPlanetId: Entity) {
+  moveDestroyers(destinationPlanetId: Entity, playAnims = true) {
+    if (!this.playAnims || !playAnims) return;
+
     const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
     if (!destinationPlanet) return;
 
@@ -495,8 +501,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     }
   }
 
-  setMagnet(empire: EEmpire, turns: number) {
-    if (!this.playAnims) {
+  setMagnet(empire: EEmpire, turns: number, playAnims = true) {
+    if (!this.playAnims || !playAnims) {
       this.activeMagnets.set(empire, turns);
       return;
     }
