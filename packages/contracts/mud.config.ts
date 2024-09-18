@@ -238,6 +238,7 @@ export const worldInput = {
     },
 
     /* -------------------------------- Movement -------------------------------- */
+
     PendingMove: {
       key: ["planetId"],
       schema: {
@@ -245,6 +246,21 @@ export const worldInput = {
         empireId: "EEmpire",
         destinationPlanetId: "bytes32",
       },
+    },
+
+    /* ----------------------------- Arrived ---------------------------- */
+    
+    Value_ArrivedMap: {
+      key: ["planetId"],
+      schema: { planetId: "bytes32", value: "uint256" },
+    },
+    Meta_ArrivedMap: {
+      key: ["planetId"],
+      schema: { planetId: "bytes32", stored: "bool", index: "uint256" },
+    },
+    Keys_ArrivedMap: {
+      key: [],
+      schema: { itemKeys: "bytes32[]" },
     },
 
     /* ----------------------------- Magnet ---------------------------- */

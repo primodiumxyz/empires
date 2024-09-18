@@ -4,6 +4,7 @@ pragma solidity >=0.8.24;
 import { P_GameConfig, Turn, PendingMove, Planet, PlanetData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData, Empire } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
+import { ArrivedMap } from "adts/ArrivedMap.sol";
 import { pseudorandomEntity } from "src/utils.sol";
 import { EEmpire } from "codegen/common.sol";
 
@@ -36,6 +37,7 @@ library LibResolveCombat {
     if (attackingEmpire == EEmpire.NULL) {
       return false;
     } else if (defendingEmpire == attackingEmpire) {
+      ArrivedMap.set(defendingPlanetId, ArrivedMap.get(defendingPlanetId) + attackingShips);
       Planet.setShipCount(defendingPlanetId, defendingShips + attackingShips);
     } else {
       bool conquer = false;

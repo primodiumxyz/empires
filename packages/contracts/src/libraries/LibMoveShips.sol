@@ -5,6 +5,7 @@ import { Turn, PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveRou
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
 import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
+import { ArrivedMap } from "adts/ArrivedMap.sol";
 
 library LibMoveShips {
   /**
@@ -40,19 +41,28 @@ library LibMoveShips {
    */
   function executePendingMoves(bytes32 planetId) internal {
     PlanetData memory planetData = Planet.get(planetId);
-    uint256 shipsToMove = planetData.shipCount;
     bytes32 destinationPlanetId = PendingMove.getDestinationPlanetId(planetId);
+    uint256 allyShipsArrived = ArrivedMap.get(planetId);
 
     if (destinationPlanetId == bytes32(0)) {
       PendingMove.deleteRecord(planetId);
       return;
     }
 
+    if (planetData.shipCount <= allyShipsArrived) {
+      PendingMove.deleteRecord(planetId);
+      ArrivedMap.remove(planetId);
+      return;
+    }
+
+    uint256 shipsToMove = planetData.shipCount - allyShipsArrived; // prevents ships arriving from other allies from being moved again in the same turn
+
     // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
     bool conquered = LibResolveCombat.resolveCombat(planetData.empireId, shipsToMove, destinationPlanetId);
 
     PendingMove.deleteRecord(planetId);
+    ArrivedMap.remove(planetId);
 
     // Log the move
     MoveRoutineLog.set(
