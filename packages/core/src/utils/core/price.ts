@@ -88,12 +88,12 @@ export function createPriceUtils(tables: Tables) {
 
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
 
-    const initPointCost = tables.Empire.getWithKeys({ id: _empire })?.pointCost ?? 0n;
-    const pointCostIncrease = tables.P_PointConfig.get()?.pointCostIncrease ?? 0n;
+    const initPointPrice = tables.Empire.getWithKeys({ id: _empire })?.pointPrice ?? 0n;
+    const pointPriceIncrease = tables.P_PointConfig.get()?.pointPriceIncrease ?? 0n;
     const wholePoints = _points / pointUnit;
 
     const triangleSumOBO = ((wholePoints - 1n) * wholePoints) / 2n;
-    const pointCost = initPointCost * wholePoints + pointCostIncrease * triangleSumOBO;
+    const pointCost = initPointPrice * wholePoints + pointPriceIncrease * triangleSumOBO;
     return pointCost;
   }
 
@@ -103,22 +103,22 @@ export function createPriceUtils(tables: Tables) {
 
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
     const config = tables.P_PointConfig.get();
-    const currentPointCost = tables.Empire.getWithKeys({ id: _empire })?.pointCost ?? 0n;
-    const minPointCost = config?.minPointCost ?? 0n;
+    const currentPointPrice = tables.Empire.getWithKeys({ id: _empire })?.pointPrice ?? 0n;
+    const minPointPrice = config?.minPointPrice ?? 0n;
     const pointGenRate = config?.pointGenRate ?? 0n;
 
-    let nextTurnPointCost = currentPointCost;
-    if (nextTurnPointCost >= minPointCost + pointGenRate) {
-      nextTurnPointCost -= pointGenRate;
+    let nextTurnPointPrice = currentPointPrice;
+    if (nextTurnPointPrice >= minPointPrice + pointGenRate) {
+      nextTurnPointPrice -= pointGenRate;
     } else {
-      nextTurnPointCost = minPointCost;
+      nextTurnPointPrice = minPointPrice;
     }
 
-    const pointCostIncrease = config?.pointCostIncrease ?? 0n;
+    const pointPriceIncrease = config?.pointPriceIncrease ?? 0n;
     const wholePoints = _points / pointUnit;
 
     const triangleSumOBO = ((wholePoints - 1n) * wholePoints) / 2n;
-    const pointCost = nextTurnPointCost * wholePoints + pointCostIncrease * triangleSumOBO;
+    const pointCost = nextTurnPointPrice * wholePoints + pointPriceIncrease * triangleSumOBO;
     return pointCost;
   }
 
@@ -192,22 +192,22 @@ export function createPriceUtils(tables: Tables) {
     return parseEther((USD / (weiToUsd || 1)).toString());
   }
   const getPointPrice = (empire: EEmpire, points: number | bigint): { price: bigint; message: string } => {
-    const currentPointCost = tables.Empire.getWithKeys({ id: empire })?.pointCost ?? 0n;
+    const currentPointPrice = tables.Empire.getWithKeys({ id: empire })?.pointPrice ?? 0n;
     const config = tables.P_PointConfig.get();
     const pointsBigInt = BigInt(points);
-    if (!config || currentPointCost == 0n || pointsBigInt == 0n) {
+    if (!config || currentPointPrice == 0n || pointsBigInt == 0n) {
       return { price: 0n, message: "" };
     }
 
-    const pointCostDecrease = config?.pointCostIncrease ?? 0n;
+    const pointPriceIncrease = config?.pointPriceIncrease ?? 0n;
 
-    if (currentPointCost < (config?.minPointCost ?? 0n) + pointCostDecrease * pointsBigInt) {
+    if (currentPointPrice < (config?.minPointPrice ?? 0n) + pointPriceIncrease * pointsBigInt) {
       return { price: 0n, message: "Selling beyond min price" };
     }
 
     const triangleSum = (pointsBigInt * (pointsBigInt + 1n)) / 2n;
     const totalSaleValue =
-      ((currentPointCost * pointsBigInt - pointCostDecrease * triangleSum) * (10000n - (config?.pointSellTax ?? 0n))) /
+      ((currentPointPrice * pointsBigInt - pointPriceIncrease * triangleSum) * (10000n - (config?.pointSellTax ?? 0n))) /
       10000n;
 
     return { price: totalSaleValue, message: "" };
@@ -222,18 +222,18 @@ export function createPriceUtils(tables: Tables) {
     const config = tables.P_PointConfig.get();
     if (!config) return 0n;
 
-    const pointCostDecrease = config.pointCostIncrease;
+    const pointPriceIncrease = config.pointPriceIncrease;
     const empireCount = tables.P_GameConfig.get()?.empireCount ?? 0;
 
     let totalMaxSellValue = 0n;
 
     for (let i = 1; i <= empireCount; i++) {
       const empire = i as EEmpire;
-      const currentPointCost = tables.Empire.getWithKeys({ id: empire })?.pointCost ?? 0n;
+      const currentPointPrice = tables.Empire.getWithKeys({ id: empire })?.pointPrice ?? 0n;
       const pointsIssued = tables.Empire.getWithKeys({ id: empire })?.pointsIssued ?? 0n;
 
       // Calculate the maximum number of whole points that can be sold
-      const maxWholePoints = (currentPointCost - config.minPointCost) / pointCostDecrease;
+      const maxWholePoints = (currentPointPrice - config.minPointPrice) / pointPriceIncrease;
       const pointsToSell = pointsIssued > maxWholePoints ? maxWholePoints : pointsIssued;
       if (pointsToSell > 0n) {
         const empireSellValue = getPointPrice(empire, Number(pointsToSell)).price;
