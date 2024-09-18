@@ -374,6 +374,8 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     );
 
     this.hexSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToHexSpriteKeys[empire] ?? "HexGrey"]);
+    if (!this.playAnims)
+      this.planetSprite.setTexture(Assets.SpriteAtlas, Sprites[EmpireToPlanetSpriteKeys[empire] ?? "PlanetGrey"]);
     this.empireId = empire;
   }
 
@@ -381,7 +383,7 @@ export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObj
     const destinationPlanet = this._scene.objects.planet.get(destinationPlanetId);
     if (!destinationPlanet) return;
 
-    if (!!this.playAnims || !playAnims) {
+    if (!this.playAnims || !playAnims) {
       this.pendingMove = destinationPlanetId;
       return;
     }
