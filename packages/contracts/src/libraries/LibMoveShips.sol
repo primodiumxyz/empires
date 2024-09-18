@@ -15,7 +15,7 @@ library LibMoveShips {
    */
   function createPendingMove(bytes32 planetId, bytes32 targetId) internal returns (bool) {
     require(Planet.getIsPlanet(targetId), "[LibMoveShips] Target is not a planet");
-    
+
     PlanetData memory planetData = Planet.get(planetId);
     // Return false if the planet has no empire or no ships
     if (planetData.empireId == EEmpire.NULL || planetData.shipCount == 0) return false;
@@ -50,7 +50,7 @@ library LibMoveShips {
 
     // Execute the move
     Planet.setShipCount(planetId, planetData.shipCount - shipsToMove);
-    LibResolveCombat.resolveCombat(planetData.empireId, shipsToMove, destinationPlanetId);
+    bool conquered = LibResolveCombat.resolveCombat(planetData.empireId, shipsToMove, destinationPlanetId);
 
     PendingMove.deleteRecord(planetId);
 
@@ -62,7 +62,8 @@ library LibMoveShips {
         originPlanetId: planetId,
         destinationPlanetId: destinationPlanetId,
         shipCount: shipsToMove,
-        timestamp: block.timestamp
+        timestamp: block.timestamp,
+        conquered: conquered
       })
     );
   }

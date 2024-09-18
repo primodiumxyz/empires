@@ -305,6 +305,7 @@ export const worldInput = {
         destinationPlanetId: "bytes32",
         shipCount: "uint256",
         timestamp: "uint256",
+        conquered: "bool",
       },
       type: "offchainTable",
     },
