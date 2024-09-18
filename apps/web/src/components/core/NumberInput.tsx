@@ -11,7 +11,8 @@ export const NumberInput: React.FC<{
   onChange?: (val: string) => void;
   count: string;
   className?: string;
-}> = ({ count, min = 0, max = Infinity, onChange, toFixed = 0, className }) => {
+  disabled?: boolean;
+}> = ({ count, min = 0, max = Infinity, onChange, toFixed = 0, className, disabled }) => {
   const game = useGame();
 
   const handleUpdate = (newCount: string) => {
@@ -39,7 +40,7 @@ export const NumberInput: React.FC<{
         <Button
           size={"xs"}
           variant={"ghost"}
-          disabled={Number(count) <= min}
+          disabled={Number(count) <= min || disabled}
           onClick={(e) => {
             e?.preventDefault();
             handleUpdate(Math.max(min, count == "" ? 0 : Number(count) - 1).toString());
@@ -63,11 +64,12 @@ export const NumberInput: React.FC<{
           onBlur={game.GLOBAL.enableGlobalInput}
           min={0}
           max={max}
+          disabled={disabled}
         />
         <Button
           size={"xs"}
           variant={"ghost"}
-          disabled={Number(count) >= max}
+          disabled={Number(count) >= max || disabled}
           onClick={(e) => {
             e?.preventDefault();
             handleUpdate(Math.min(max, count == "" ? min + 1 : Number(count) + 1).toString());
@@ -81,7 +83,7 @@ export const NumberInput: React.FC<{
         <Button
           variant={"ghost"}
           size={"xs"}
-          disabled={Number(count) >= max}
+          disabled={Number(count) >= max || disabled}
           onClick={() => handleUpdate(max.toString())}
         >
           max
