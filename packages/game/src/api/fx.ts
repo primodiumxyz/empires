@@ -52,10 +52,9 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
         color: number;
         alpha: number;
       };
+      skip?: boolean;
     } = {},
   ) {
-    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
-
     const {
       color = "#00ffff",
       duration = 4000,
@@ -74,7 +73,10 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
         color: 0x000000,
         alpha: 0.75,
       },
+      skip = false,
     } = options;
+
+    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean) || skip) return;
 
     applyDelay(() => {
       let icon: Phaser.GameObjects.Image | undefined;
@@ -205,10 +207,9 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       originY?: number;
       offset?: Coord;
       onComplete?: () => void;
+      skip?: boolean;
     },
   ) {
-    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean)) return;
-
     const {
       scale = 1,
       depth = DepthLayers.Base,
@@ -220,7 +221,10 @@ export const createFxApi = (scene: Scene, globalApi: GlobalApi) => {
       originX = 0.5,
       originY = 0.5,
       offset,
+      skip = false,
     } = options || {};
+
+    if (!Object.values(globalApi.tables.GameState.get() ?? {}).every(Boolean) || skip) return;
 
     const sprite = scene.phaserScene.add.sprite(offset ? offset.x : coord.x, offset ? offset.y : coord.y, "vfx-atlas");
 

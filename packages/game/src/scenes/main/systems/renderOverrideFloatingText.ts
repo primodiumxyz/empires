@@ -21,10 +21,12 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
 
         if (!planet) return;
 
+        const visible = !!scene.tables.GameState.get()?.visible;
         enqueue(() => {
-          scene.audio.play("Build", "sfx", { volume: 0.25 });
+          scene.audio.play("Build", "sfx", { volume: visible ? 0.25 : 0 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.overrideCount}`, {
             icon: "Ship",
+            skip: !visible,
           });
         }, 50);
       },
@@ -42,10 +44,12 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
 
         if (!planet) return;
 
+        const visible = !!scene.tables.GameState.get()?.visible;
         enqueue(() => {
-          scene.audio.play("Build", "sfx", { volume: 0.25 });
+          scene.audio.play("Build", "sfx", { volume: visible ? 0.25 : 0 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `+${current.shieldBought}`, {
             icon: "Shield",
+            skip: !visible,
           });
         }, 50);
       },
@@ -57,8 +61,9 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
     const planet = scene.objects.planet.get(planetId);
     if (!planet) return;
 
+    const visible = !!scene.tables.GameState.get()?.visible;
     enqueue(() => {
-      scene.audio.play("Demolish", "sfx", { volume: 0.25, delay: delay ?? 500 });
+      scene.audio.play("Demolish", "sfx", { volume: visible ? 0.25 : 0, delay: delay ?? 500 });
       scene.fx.emitFloatingText(
         { x: planet.coord.x, y: planet.coord.y - 20 },
         `-${shieldsDestroyed.toLocaleString()}`,
@@ -71,6 +76,7 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
             alpha: 0.75,
           },
           delay: delay ?? 500,
+          skip: !visible,
         },
       );
     }, 50);
@@ -106,9 +112,10 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
         const planet = scene.objects.planet.get(current.planetId as Entity);
         if (!planet) return;
 
+        const visible = !!scene.tables.GameState.get()?.visible;
         enqueue(() => {
           const delay = 500;
-          scene.audio.play("Demolish", "sfx", { volume: 0.25, delay });
+          scene.audio.play("Demolish", "sfx", { volume: visible ? 0.25 : 0, delay });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 20 }, `-${current.shipsDestroyed}`, {
             icon: "Ship",
             color: "#ff0000",
@@ -118,6 +125,7 @@ export const renderOverrideFloatingText = (scene: PrimodiumScene, core: Core, { 
               alpha: 0.75,
             },
             delay,
+            skip: !visible,
           });
         }, 50);
       },
