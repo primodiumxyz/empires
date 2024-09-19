@@ -969,6 +969,46 @@ export const useCheatcodes = () => {
   );
 
   /* --------------------------------- CONFIG --------------------------------- */
+  const empireConfig = useMemo(
+    () =>
+      createCheatcode({
+        title: "Update empire",
+        bg: CheatcodeToBg["config"],
+        caption: "Empire config",
+        inputs: {
+          empire: {
+            label: "Empire",
+            inputType: "string",
+            defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+            options: empires.map((entity) => ({
+              id: entity,
+              value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
+            })),
+          },
+          isDefeated: {
+            label: "Is defeated",
+            inputType: "boolean",
+            defaultValue: false,
+            options: [
+              { id: 0, value: "false" },
+              { id: 1, value: "true" },
+            ],
+          },
+        },
+        execute: async ({ empire, isDefeated }) => {
+          return await devCalls.setProperties({
+            table: tables.Empire,
+            keys: { id: empire.id as EEmpire },
+            properties: { isDefeated: isDefeated.value },
+          });
+        },
+        loading: () => "[CHEATCODE] Updating empire...",
+        success: ({ empire, isDefeated }) => `Updated ${empire.value} to ${isDefeated ? "defeated" : "alive"}`,
+        error: ({ empire, isDefeated }) => `Failed to update ${empire.value} to ${isDefeated ? "defeated" : "alive"}`,
+      }),
+    [empires],
+  );
+
   const updateGameConfig = useMemo(
     () => ({
       P_GameConfig: createCheatcode({
@@ -1231,6 +1271,7 @@ export const useCheatcodes = () => {
     moveShieldEater,
     setShieldEaterDestination,
     feedShieldEater,
+    empireConfig,
     ...Object.values(updateGameConfig),
     setKeeperBearerToken,
     startKeeper,
