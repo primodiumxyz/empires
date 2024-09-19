@@ -33,7 +33,7 @@ library LibMoveShips {
    * 1. Retrieves the current planet data and the destination planet ID.
    * 2. If there's no valid destination, the function returns early.
    * 3. Calculates the number of ships to move and the total ships arriving at the destination.
-   * 4. Updates the ship count on the origin planet 
+   * 4. Updates the ship count on the origin planet
    * 5. Executes combat on the destination planet.
    * 6. Clears the pending move record.
    * 7. Logs the move for off-chain tracking.
@@ -55,7 +55,7 @@ library LibMoveShips {
 
     // Log the move
     MoveRoutineLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       MoveRoutineLogData({
         turn: Turn.getValue(),
         originPlanetId: planetId,

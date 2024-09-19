@@ -57,7 +57,7 @@ library LibRoutine {
     uint256 goldCount = Planet.getGoldCount(planetId);
     Planet.setGoldCount(planetId, goldCount + goldAdded);
     AccumulateGoldRoutineLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       AccumulateGoldRoutineLogData({
         turn: Turn.getValue(),
         goldAdded: goldAdded,
@@ -89,7 +89,7 @@ library LibRoutine {
     Planet.setGoldCount(planetId, newGoldCount);
 
     BuyShieldsRoutineLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       BuyShieldsRoutineLogData({
         turn: Turn.getValue(),
         goldSpent: shieldsToBuy * shieldPrice,
@@ -122,7 +122,7 @@ library LibRoutine {
     Planet.setGoldCount(planetId, newGoldCount);
 
     BuyShipsRoutineLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       BuyShipsRoutineLogData({
         turn: Turn.getValue(),
         goldSpent: shipsToBuy * shipPrice,

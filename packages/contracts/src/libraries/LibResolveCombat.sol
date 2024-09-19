@@ -63,7 +63,7 @@ library LibResolveCombat {
         revert("[LibResolveCombat] Invalid combat resolution");
       }
 
-      bytes32 eventEntity = pseudorandomEntity();
+      bytes32 eventEntity = nextLogEntity();
 
       PlanetBattleRoutineLog.set(
         eventEntity,

@@ -36,7 +36,7 @@ contract OverrideShieldEaterSystem is EmpiresSystem {
     _takeRake(cost);
 
     ShieldEaterDetonateOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       ShieldEaterDetonateOverrideLogData({
         turn: Turn.getValue(),
         planetId: ShieldEater.getCurrentPlanet(),

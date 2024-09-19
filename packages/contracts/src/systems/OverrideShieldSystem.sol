@@ -35,7 +35,7 @@ contract OverrideShieldSystem is EmpiresSystem {
     _takeRake(cost);
 
     ChargeShieldsOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       ChargeShieldsOverrideLogData({
         turn: Turn.getValue(),
         planetId: _planetId,

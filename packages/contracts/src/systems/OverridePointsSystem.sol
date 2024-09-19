@@ -42,7 +42,7 @@ contract OverridePointsSystem is EmpiresSystem {
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
 
     SellPointsOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       SellPointsOverrideLogData({
         playerId: addressToId(_msgSender()),
         turn: Turn.getValue(),

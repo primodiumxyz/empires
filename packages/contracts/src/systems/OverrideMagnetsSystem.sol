@@ -16,11 +16,7 @@ import { addressToId, pseudorandomEntity } from "src/utils.sol";
  * @dev A contract that handles overrides related to creating and killing ships on a planet.
  */
 contract OverrideMagnetsSystem is EmpiresSystem {
-  function placeMagnet(
-    EEmpire _empire,
-    bytes32 _planetId,
-    uint256 turnDuration
-  ) public payable _onlyNotGameOver {
+  function placeMagnet(EEmpire _empire, bytes32 _planetId, uint256 turnDuration) public payable _onlyNotGameOver {
     bytes32 playerId = addressToId(_msgSender());
 
     require(Magnet.get(_empire, _planetId).isMagnet == false, "[OverrideSystem] Planet already has a magnet");
@@ -33,7 +29,7 @@ contract OverrideMagnetsSystem is EmpiresSystem {
     _takeRake(cost);
 
     PlaceMagnetOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       PlaceMagnetOverrideLogData({
         turn: Turn.getValue(),
         planetId: _planetId,

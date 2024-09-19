@@ -41,7 +41,7 @@ contract OverrideShipSystem is EmpiresSystem {
     _takeRake(cost);
 
     CreateShipOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       CreateShipOverrideLogData({
         playerId: playerId,
         turn: Turn.getValue(),

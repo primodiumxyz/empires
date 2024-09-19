@@ -67,7 +67,7 @@ contract OverrideAirdropSystem is EmpiresSystem {
     _takeRake(cost);
 
     AirdropGoldOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       AirdropGoldOverrideLogData({
         playerId: addressToId(_msgSender()),
         turn: Turn.getValue(),
