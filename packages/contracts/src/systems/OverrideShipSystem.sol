@@ -11,7 +11,7 @@ import { LibMagnet } from "libraries/LibMagnet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
-import { addressToId, pseudorandomEntity } from "src/utils.sol";
+import { addressToId, nextLogEntity } from "src/utils.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 

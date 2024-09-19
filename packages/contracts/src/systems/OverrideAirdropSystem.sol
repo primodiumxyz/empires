@@ -9,7 +9,7 @@ import { LibPrice } from "libraries/LibPrice.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
-import { addressToId, pseudorandomEntity, pseudorandom } from "src/utils.sol";
+import { addressToId, nextLogEntity, pseudorandom } from "src/utils.sol";
 
 /**
  * @title OverrideAirdropSystem

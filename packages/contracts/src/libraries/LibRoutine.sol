@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { pseudorandom, pseudorandomEntity } from "src/utils.sol";
+import { pseudorandom, nextLogEntity } from "src/utils.sol";
 import { Turn, AccumulateGoldRoutineLog, AccumulateGoldRoutineLogData, Planet, P_RoutineCosts, BuyShipsRoutineLog, BuyShipsRoutineLogData, BuyShieldsRoutineLog, BuyShieldsRoutineLogData } from "codegen/index.sol";
 import { ERoutine } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";

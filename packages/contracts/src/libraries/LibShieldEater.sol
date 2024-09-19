@@ -4,7 +4,7 @@ import { ShieldEater, P_ShieldEaterConfig, Planet, PlanetData, ShieldEaterDamage
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EDirection, EShieldEaterDamageType } from "codegen/common.sol";
 
-import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
+import { pseudorandom, nextLogEntity, coordToId } from "src/utils.sol";
 import { CoordData } from "src/Types.sol";
 
 import { console } from "forge-std/console.sol";

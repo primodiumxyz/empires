@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import { P_GameConfig, Turn, PendingMove, Planet, PlanetData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
-import { pseudorandomEntity } from "src/utils.sol";
+import { nextLogEntity } from "src/utils.sol";
 import { EEmpire } from "codegen/common.sol";
 
 library LibResolveCombat {

@@ -10,7 +10,7 @@ import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { ShieldEater } from "codegen/index.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
-import { addressToId, pseudorandomEntity } from "src/utils.sol";
+import { addressToId, nextLogEntity } from "src/utils.sol";
 
 /**
  * @title OverrideShieldEaterSystem
