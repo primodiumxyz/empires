@@ -40,18 +40,19 @@ library LibMoveShips {
    * @param planetId The ID of the planet from which ships will move.
    */
   function executePendingMoves(bytes32 planetId) internal {
-    PlanetData memory planetData = Planet.get(planetId);
     bytes32 destinationPlanetId = PendingMove.getDestinationPlanetId(planetId);
-    uint256 allyShipsArrived = ArrivedMap.get(planetId);
 
     if (destinationPlanetId == bytes32(0)) {
       PendingMove.deleteRecord(planetId);
       return;
     }
 
+    PlanetData memory planetData = Planet.get(planetId);
+    uint256 allyShipsArrived = ArrivedMap.get(planetId);
+
     if (planetData.shipCount <= allyShipsArrived) {
       PendingMove.deleteRecord(planetId);
-      ArrivedMap.remove(planetId);
+      ArrivedMap.remove(planetId); // under assumption that executePendingMoves is only called once per turn per planet for one empire and ArrivedMap is cleared at the end of each turn, this clear may be redundant
       return;
     }
 
@@ -62,7 +63,7 @@ library LibMoveShips {
     bool conquered = LibResolveCombat.resolveCombat(planetData.empireId, shipsToMove, destinationPlanetId);
 
     PendingMove.deleteRecord(planetId);
-    ArrivedMap.remove(planetId);
+    ArrivedMap.remove(planetId); // under assumption that executePendingMoves is only called once per turn per planet for one empire and ArrivedMap is cleared at the end of each turn, this clear may be redundant
 
     // Log the move
     MoveRoutineLog.set(
