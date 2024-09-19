@@ -62,10 +62,11 @@ export function createPriceUtils(tables: Tables) {
     const pointUnit = tables.P_PointConfig.get()?.pointUnit ?? 1n;
     const pointMultiplier =
       tables.P_OverrideConfig.getWithKeys({ overrideAction: _overrideType })?.pointMultiplier ?? 1n;
-    const empireIsDefeated = tables.Empire.getWithKeys({ id: _empireImpacted })?.isDefeated ?? false;
+    const empireIsDefeated =
+      (_empireImpacted !== EEmpire.NULL && tables.Empire.getWithKeys({ id: _empireImpacted })?.isDefeated) ?? false;
     let pointCost = 0n;
     for (let i = 1; i <= empires; i++) {
-      if (i == _empireImpacted || empireIsDefeated) {
+      if (i === _empireImpacted || empireIsDefeated) {
         continue;
       }
       pointCost += getPointCost(i, _overrideCount * pointUnit * pointMultiplier, nextTurn);
@@ -207,7 +208,8 @@ export function createPriceUtils(tables: Tables) {
 
     const triangleSum = (pointsBigInt * (pointsBigInt + 1n)) / 2n;
     const totalSaleValue =
-      ((currentPointPrice * pointsBigInt - pointPriceIncrease * triangleSum) * (10000n - (config?.pointSellTax ?? 0n))) /
+      ((currentPointPrice * pointsBigInt - pointPriceIncrease * triangleSum) *
+        (10000n - (config?.pointSellTax ?? 0n))) /
       10000n;
 
     return { price: totalSaleValue, message: "" };
