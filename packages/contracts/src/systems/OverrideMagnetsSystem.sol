@@ -16,14 +16,18 @@ import { addressToId, nextLogEntity } from "src/utils.sol";
  * @dev A contract that handles overrides related to creating and killing ships on a planet.
  */
 contract OverrideMagnetsSystem is EmpiresSystem {
-  function placeMagnet(EEmpire _empire, bytes32 _planetId, uint256 turnDuration) public payable _onlyNotGameOver {
-    bytes32 playerId = addressToId(_msgSender());
-
+  function placeMagnet(
+    EEmpire _empire,
+    bytes32 _planetId,
+    uint256 turnDuration
+  ) public payable _onlyNotGameOver _notDefeated(_empire) {
     require(Magnet.get(_empire, _planetId).isMagnet == false, "[OverrideSystem] Planet already has a magnet");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceMagnet, _empire, turnDuration);
+    require(_msgValue() >= cost, "[OverrideSystem] Insufficient payment");
+    bytes32 playerId = addressToId(_msgSender());
 
     LibMagnet.addMagnet(_empire, _planetId, playerId, turnDuration);
-    LibOverride._purchaseOverride(addressToId(_msgSender()), EOverride.PlaceMagnet, _empire, turnDuration, _msgValue());
+    LibOverride._purchaseOverride(playerId, EOverride.PlaceMagnet, _empire, turnDuration, _msgValue());
 
     _refundOverspend(cost);
     _takeRake(cost);

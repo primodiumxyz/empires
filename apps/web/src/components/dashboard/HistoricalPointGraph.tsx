@@ -20,7 +20,7 @@ export type SmallHistoricalPointPriceProps = {
   windowSize?: number;
 };
 
-type HistoricalPointCost = {
+type HistoricalPointPrice = {
   time: Time;
   value: number;
   empire: EEmpire;
@@ -58,8 +58,8 @@ export const HistoricalPointGraph: React.FC<{
       const allEmpires = _allEmpires.slice(0, empireCount);
       const data = entities
         .map((entity) => ({
-          ...tables.HistoricalPointCost.getEntityKeys(entity), // empire, timestamp
-          cost: tables.HistoricalPointCost.get(entity)?.cost ?? BigInt(0),
+          ...tables.HistoricalPointPrice.getEntityKeys(entity), // empire, timestamp
+          price: tables.HistoricalPointPrice.get(entity)?.price ?? BigInt(0),
         }))
         .filter((d) => d.timestamp >= gameStartTimestamp);
 
@@ -77,23 +77,23 @@ export const HistoricalPointGraph: React.FC<{
       // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
       const timestampMap = new Map<number, { [key: number]: bigint }>();
 
-      // grab costs for each timestamp
+      // grab prices for each timestamp
       Object.entries(groupedData).forEach(([key, items]) => {
         const timestamp = Number(key);
         timestampMap.set(timestamp, {});
         items.forEach((item) => {
-          timestampMap.get(timestamp)![item.empire] = item.cost;
+          timestampMap.get(timestamp)![item.empire] = item.price;
         });
       });
 
-      // fill costs for missing timestamps
+      // fill prices for missing timestamps
       allEmpires.forEach((empire) => {
-        let previousCost = 0n;
-        timestampMap.forEach((costs) => {
-          if (costs[empire] === undefined) {
-            costs[empire] = previousCost;
+        let previousPrice = 0n;
+        timestampMap.forEach((prices) => {
+          if (prices[empire] === undefined) {
+            prices[empire] = previousPrice;
           } else {
-            previousCost = costs[empire];
+            previousPrice = prices[empire];
           }
         });
       });
@@ -101,14 +101,14 @@ export const HistoricalPointGraph: React.FC<{
       // create the data
       const empireData = Object.fromEntries(allEmpires.map((empire) => [empire, []])) as unknown as Record<
         EEmpire,
-        HistoricalPointCost[]
+        HistoricalPointPrice[]
       >;
-      timestampMap.forEach((costs, timestamp) => {
+      timestampMap.forEach((prices, timestamp) => {
         allEmpires.forEach((empire) => {
           empireData[empire as EEmpire].push({
             time: timestamp as Time,
             empire,
-            value: Number(costs[empire]),
+            value: Number(prices[empire]),
           });
         });
       });
@@ -120,7 +120,7 @@ export const HistoricalPointGraph: React.FC<{
 
   // Get formatted data for candlesticks
   const formatCandlestickData = useCallback(
-    (historicalPriceData: Record<EEmpire, HistoricalPointCost[]>) => {
+    (historicalPriceData: Record<EEmpire, HistoricalPointPrice[]>) => {
       if (!historicalPriceData[empire] || historicalPriceData[empire].length === 0) {
         return [];
       }
@@ -165,14 +165,14 @@ export const HistoricalPointGraph: React.FC<{
 
   // Price data for line graphs & generating candlestick data
   const initialHistoricalPriceData = useMemo(
-    () => getHistoricalPriceData(tables.HistoricalPointCost.getAll()),
+    () => getHistoricalPriceData(tables.HistoricalPointPrice.getAll()),
     [empire, getHistoricalPriceData],
   );
 
   // Additional data received from updates
   const [updateHistoricalPriceData, setUpdateHistoricalPriceData] = useState<Record<
     EEmpire,
-    HistoricalPointCost[]
+    HistoricalPointPrice[]
   > | null>(null);
 
   // Chart
@@ -313,10 +313,10 @@ export const HistoricalPointGraph: React.FC<{
   // This is a listener on individual entities, meaning associated with a specific empire
   // so we only want to update this empire (since the rest will be 0 and reset the accurate data possibly updated previously)
   useEffect(() => {
-    const unsubscribe = tables.HistoricalPointCost.watch(
+    const unsubscribe = tables.HistoricalPointPrice.watch(
       {
         onEnter: ({ entity }) => {
-          const { empire: entityEmpire } = tables.HistoricalPointCost.getEntityKeys(entity) as { empire: EEmpire };
+          const { empire: entityEmpire } = tables.HistoricalPointPrice.getEntityKeys(entity) as { empire: EEmpire };
           const newData = getHistoricalPriceData([entity]);
 
           if (empire === EEmpire.LENGTH) {
@@ -336,7 +336,7 @@ export const HistoricalPointGraph: React.FC<{
                   ...newData[Number(key) as EEmpire],
                 ],
               ]),
-            ) as Record<EEmpire, HistoricalPointCost[]>;
+            ) as Record<EEmpire, HistoricalPointPrice[]>;
 
             const candlestickData = formatCandlestickData(fullHistoricalPriceData);
             const updateData = candlestickData?.[candlestickData.length - 1];
@@ -346,7 +346,7 @@ export const HistoricalPointGraph: React.FC<{
               (prev) =>
                 ({ ...prev, [entityEmpire]: { ...prev?.[entityEmpire], ...newData[entityEmpire] } }) as Record<
                   EEmpire,
-                  HistoricalPointCost[]
+                  HistoricalPointPrice[]
                 >,
             );
           }

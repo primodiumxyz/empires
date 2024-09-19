@@ -8,7 +8,7 @@ import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
-import { PendingMove, WinningEmpire, HistoricalPointCost, Magnet, P_GameConfig } from "codegen/index.sol";
+import { PendingMove, WinningEmpire, HistoricalPointPrice, Magnet, P_GameConfig, Empire } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 
 contract ResetClearLoopSubsystem is EmpiresSystem {
@@ -30,10 +30,12 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
       EmpirePlanetsSet.clear(empire);
       AcidPlanetsSet.clear(empire);
       PointsMap.clear(empire);
-      PlayersMap.clear();
-      PlanetsSet.clear();
-      CitadelPlanetsSet.clear();
+      Empire.setIsDefeated(empire, false);
     }
+
+    PlayersMap.clear();
+    PlanetsSet.clear();
+    CitadelPlanetsSet.clear();
     // Does not reset Player table, that's fine. it only contains id and spent
     // by not clearing Player.spent, we can keep track of how much each player has spent over multiple matches
 

@@ -25,10 +25,10 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         pointUnit: BigInt(POINTS_UNIT),
         pointRake: scaleMultiplier(0.05), // out of 1, scales to out of 10000
         pointSellTax: scaleMultiplier(0.05), // out of 1, scales to out of 10000
-        minPointCost: BigInt(POINTS_UNIT * 0.000001),
-        startPointCost: BigInt(POINTS_UNIT * 0.000004),
+        minPointPrice: BigInt(POINTS_UNIT * 0.000001),
+        startPointPrice: BigInt(POINTS_UNIT * 0.000004),
         pointGenRate: BigInt(POINTS_UNIT * 0.0000004),
-        pointCostIncrease: BigInt(POINTS_UNIT * 0.0000005),
+        pointPriceIncrease: BigInt(POINTS_UNIT * 0.0000005),
       },
       P_MagnetConfig: {
         lockedPointsPercent: scaleMultiplier(0.1),

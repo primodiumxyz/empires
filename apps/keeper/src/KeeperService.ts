@@ -109,7 +109,7 @@ export class KeeperService {
     return new Promise((resolve) => {
       tables.SyncStatus.watch({
         onChange: ({ properties: { current } }) => {
-          if (current?.step === SyncStep.Complete) {
+          if (current?.step === SyncStep.Live) {
             resolve();
           }
         },

@@ -35,6 +35,9 @@ jobs:
       - name: Load and run Docker image on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${EC2_USER}@${EC2_HOST} '
+            # Clean up Docker resources
+            sudo docker system prune -af --volumes
+
             sudo docker load < image.tar
 
             # Stop and remove any existing container
@@ -49,6 +52,12 @@ jobs:
               -e KEEPER_PRIVATE_KEY="'$KEEPER_PRIVATE_KEY'" \
               -e KEEPER_BEARER_TOKEN="'$KEEPER_BEARER_TOKEN'" \
               keeper:latest
+
+            # Remove the transferred image file
+            rm ~/image.tar
+            
+            # Keep only the latest image
+            sudo docker image prune -af
           '
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

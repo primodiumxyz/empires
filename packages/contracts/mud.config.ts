@@ -53,10 +53,10 @@ export const worldInput = {
         pointUnit: "uint256",
         pointRake: "uint256", // times 10_000
         pointSellTax: "uint256", // times 10_000
-        minPointCost: "uint256",
-        startPointCost: "uint256",
+        minPointPrice: "uint256",
+        startPointPrice: "uint256",
         pointGenRate: "uint256",
-        pointCostIncrease: "uint256",
+        pointPriceIncrease: "uint256",
       },
     },
 
@@ -167,7 +167,8 @@ export const worldInput = {
         id: "EEmpire",
         origin: "EOrigin",
         pointsIssued: "uint256",
-        pointCost: "uint256",
+        pointPrice: "uint256", // todo: change to pointPrice
+        isDefeated: "bool",
       },
     },
 
@@ -237,6 +238,7 @@ export const worldInput = {
     },
 
     /* -------------------------------- Movement -------------------------------- */
+
     PendingMove: {
       key: ["planetId"],
       schema: {
@@ -244,6 +246,21 @@ export const worldInput = {
         empireId: "EEmpire",
         destinationPlanetId: "bytes32",
       },
+    },
+
+    /* ----------------------------- Arrived ---------------------------- */
+    
+    Value_ArrivedMap: {
+      key: ["planetId"],
+      schema: { planetId: "bytes32", value: "uint256" },
+    },
+    Meta_ArrivedMap: {
+      key: ["planetId"],
+      schema: { planetId: "bytes32", stored: "bool", index: "uint256" },
+    },
+    Keys_ArrivedMap: {
+      key: [],
+      schema: { itemKeys: "bytes32[]" },
     },
 
     /* ----------------------------- Magnet ---------------------------- */
@@ -305,6 +322,7 @@ export const worldInput = {
         destinationPlanetId: "bytes32",
         shipCount: "uint256",
         timestamp: "uint256",
+        conquered: "bool",
       },
       type: "offchainTable",
     },
@@ -486,12 +504,12 @@ export const worldInput = {
 
     /* ----------------------------- Historical data ---------------------------- */
 
-    HistoricalPointCost: {
+    HistoricalPointPrice: {
       key: ["empire", "timestamp"],
       schema: {
         empire: "EEmpire",
         timestamp: "uint256",
-        cost: "uint256", // the cost of each point for this empire in wei
+        price: "uint256", // the price of each point for this empire in wei
       },
       type: "offchainTable",
     },

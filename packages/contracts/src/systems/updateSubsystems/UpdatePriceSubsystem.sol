@@ -9,7 +9,7 @@ import { EEmpire } from "codegen/common.sol";
 contract UpdatePriceSubsystem is EmpiresSystem {
   function updatePrice() public {
     for (uint8 i = 1; i <= P_GameConfig.getEmpireCount(); i++) {
-      LibPrice.turnEmpirePointCostDown(EEmpire(i));
+      LibPrice.turnEmpirePointPriceDown(EEmpire(i));
       LibPrice.empireOverridesCostDown(EEmpire(i));
     }
   }

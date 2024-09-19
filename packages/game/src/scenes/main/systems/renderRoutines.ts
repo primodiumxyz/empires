@@ -23,14 +23,16 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
 
         if (!planet) return;
 
+        const visible = !!scene.tables.GameState.get()?.visible;
         enqueue(() => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
+          scene.audio.play("Complete2", "sfx", { volume: visible ? 0.15 : 0 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `-${current.goldSpent}`, {
             icon: "Iridium",
             color: "#ff0000",
+            skip: !visible,
           });
 
-          scene.audio.play("Build", "sfx", { volume: 0.15 });
+          scene.audio.play("Build", "sfx", { volume: visible ? 0.15 : 0 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.shieldBought}`, {
             icon: "Shield",
             fontSize: 16,
@@ -41,6 +43,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
               alpha: 0.75,
             },
             delay: 500,
+            skip: !visible,
           });
         }, 500);
       },
@@ -60,11 +63,13 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
 
         if (!planet) return;
 
+        const visible = !!scene.tables.GameState.get()?.visible;
         enqueue(() => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
+          scene.audio.play("Complete2", "sfx", { volume: visible ? 0.15 : 0 });
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `-${current.goldSpent}`, {
             icon: "Iridium",
             color: "#ff0000",
+            skip: !visible,
           });
 
           scene.audio.play("Build", "sfx", { volume: 0.15 });
@@ -78,6 +83,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
               color: 0x00ff00,
               alpha: 0.75,
             },
+            skip: !visible,
           });
         }, 500);
       },
@@ -97,10 +103,13 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
         if (!planet || !destinationPlanet) return;
 
         planet.setPendingMove(current.destinationPlanetId as Entity);
+
+        const visible = !!scene.tables.GameState.get()?.visible;
         enqueue(async () => {
           planet.removePendingMove();
+
           //move destroyers
-          planet.moveDestroyers(current.destinationPlanetId as Entity);
+          planet.moveDestroyers(current.destinationPlanetId as Entity, visible);
 
           scene.fx.emitFloatingText(
             { x: destinationPlanet.coord.x, y: destinationPlanet.coord.y - 40 },
@@ -115,6 +124,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
                 alpha: 0.75,
                 width: 1,
               },
+              skip: !visible,
             },
           );
 
@@ -124,11 +134,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
           const originEmpire = tables.Planet.get(current.originPlanetId as Entity)?.empireId ?? EEmpire.NULL;
           const destinationEmpire = tables.Planet.get(current.destinationPlanetId as Entity)?.empireId ?? EEmpire.NULL;
           if (destinationPlanet) {
-            destinationPlanet.triggerBattle(
-              originEmpire,
-              destinationEmpire,
-              Object.values(scene.tables.GameState.get() ?? {}).every(Boolean),
-            );
+            destinationPlanet.triggerBattle(originEmpire, destinationEmpire, current.conquered, visible);
 
             if (destinationEmpire && destinationEmpire !== destinationPlanet.getEmpire()) {
               scene.fx.emitFloatingText(
@@ -144,6 +150,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
                     alpha: 0.75,
                     width: 1,
                   },
+                  skip: !visible,
                 },
               );
             }
@@ -164,12 +171,14 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
 
         if (!planet) return;
 
+        const visible = !!scene.tables.GameState.get()?.visible;
         enqueue(async () => {
-          scene.audio.play("Complete2", "sfx", { volume: 0.15 });
+          scene.audio.play("Complete2", "sfx", { volume: visible ? 0.15 : 0 });
 
           scene.fx.emitVfx({ x: planet.coord.x + 5, y: planet.coord.y - 45 }, "AddIridium", {
             depth: DepthLayers.Marker,
             blendMode: Phaser.BlendModes.NORMAL,
+            skip: !visible,
           });
 
           scene.fx.emitFloatingText({ x: planet.coord.x, y: planet.coord.y - 25 }, `+${current.goldAdded}`, {
@@ -182,6 +191,7 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
               width: 2,
               color: 0xffd700,
             },
+            skip: !visible,
           });
         }, 50);
       },
@@ -195,27 +205,31 @@ export const renderRoutines = (scene: PrimodiumScene, core: Core, { enqueue }: S
       onUpdate: async ({ properties: { prev } }) => {
         if (!prev) return;
 
-        const goldGenRate = tables.P_GameConfig.get()?.goldGenRate;
+        const config = tables.P_GameConfig.get();
+        const goldGenRate = config?.goldGenRate;
+        const empireCount = config?.empireCount;
 
         const planets = tables.Planet.getAllWith({ empireId: prev.empire });
 
+        const visible = !!scene.tables.GameState.get()?.visible;
         for (let i = 0; i < planets.length; i++) {
           const planet = scene.objects.planet.get(planets[i] as Entity);
 
-          if (!planet || !goldGenRate) continue;
+          if (!planet || !goldGenRate || !empireCount) continue;
 
           enqueue(() => {
             scene.audio.play("Complete", "sfx", {
-              volume: 0.01,
+              volume: visible ? 0.01 : 0,
               detune: 20 * i,
             });
             scene.fx.emitFloatingText(
               { x: planet.coord.x, y: planet.coord.y - 25 },
-              `+${formatNumber(goldGenRate * 3n)}`,
+              `+${formatNumber(goldGenRate * BigInt(empireCount))}`,
               {
                 icon: "Iridium",
                 fontSize: 12,
                 iconSize: 16,
+                skip: !visible,
               },
             );
           }, 50);

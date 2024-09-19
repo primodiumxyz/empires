@@ -85,8 +85,8 @@ library LibRoutine {
     uint256 shieldsToBuy = goldCount / shieldPrice;
     if (shieldsToBuy == 0) return;
     uint256 newGoldCount = goldCount - (shieldsToBuy * shieldPrice);
-    Planet.setShieldCount(planetId, Planet.getShieldCount(planetId) + shieldsToBuy);
     Planet.setGoldCount(planetId, newGoldCount);
+    Planet.setShieldCount(planetId, Planet.getShieldCount(planetId) + shieldsToBuy);
 
     BuyShieldsRoutineLog.set(
       nextLogEntity(),
@@ -118,8 +118,8 @@ library LibRoutine {
     uint256 shipsToBuy = goldCount / shipPrice;
     if (shipsToBuy == 0) return;
     uint256 newGoldCount = goldCount - (shipsToBuy * shipPrice);
-    Planet.setShipCount(planetId, Planet.getShipCount(planetId) + shipsToBuy);
     Planet.setGoldCount(planetId, newGoldCount);
+    Planet.setShipCount(planetId, Planet.getShipCount(planetId) + shipsToBuy);
 
     BuyShipsRoutineLog.set(
       nextLogEntity(),

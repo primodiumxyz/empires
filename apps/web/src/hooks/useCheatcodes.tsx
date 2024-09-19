@@ -513,8 +513,8 @@ export const useCheatcodes = () => {
         const playerId = addressToEntity(recipient.value);
         const empireId = empire.id as EEmpire;
         const currentPoints = tables.Value_PointsMap.getWithKeys({ empireId, playerId })?.value ?? BigInt(0);
-        const currentCost = tables.Empire.getWithKeys({ id: empireId })?.pointCost ?? BigInt(0);
-        const increaseCost = pointConfig?.pointCostIncrease ?? BigInt(1);
+        const currentPrice = tables.Empire.getWithKeys({ id: empireId })?.pointPrice ?? BigInt(0);
+        const increasePrice = pointConfig?.pointPriceIncrease ?? BigInt(1);
 
         const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
         const pointsToIssue = BigInt(amount.value) * BigInt(empires - 1);
@@ -526,7 +526,7 @@ export const useCheatcodes = () => {
             table: tables.Empire,
             keys: { id: empireId },
             properties: {
-              pointCost: currentCost + increaseCost * BigInt(empires - 1),
+              pointPrice: currentPrice + increasePrice * BigInt(empires - 1),
             },
           }),
         ]);
@@ -969,6 +969,46 @@ export const useCheatcodes = () => {
   );
 
   /* --------------------------------- CONFIG --------------------------------- */
+  const empireConfig = useMemo(
+    () =>
+      createCheatcode({
+        title: "Update empire",
+        bg: CheatcodeToBg["config"],
+        caption: "Empire config",
+        inputs: {
+          empire: {
+            label: "Empire",
+            inputType: "string",
+            defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+            options: empires.map((entity) => ({
+              id: entity,
+              value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
+            })),
+          },
+          isDefeated: {
+            label: "Is defeated",
+            inputType: "boolean",
+            defaultValue: false,
+            options: [
+              { id: 0, value: "false" },
+              { id: 1, value: "true" },
+            ],
+          },
+        },
+        execute: async ({ empire, isDefeated }) => {
+          return await devCalls.setProperties({
+            table: tables.Empire,
+            keys: { id: empire.id as EEmpire },
+            properties: { isDefeated: isDefeated.value },
+          });
+        },
+        loading: () => "[CHEATCODE] Updating empire...",
+        success: ({ empire, isDefeated }) => `Updated ${empire.value} to ${isDefeated ? "defeated" : "alive"}`,
+        error: ({ empire, isDefeated }) => `Failed to update ${empire.value} to ${isDefeated ? "defeated" : "alive"}`,
+      }),
+    [empires],
+  );
+
   const updateGameConfig = useMemo(
     () => ({
       P_GameConfig: createCheatcode({
@@ -1039,25 +1079,25 @@ export const useCheatcodes = () => {
             inputType: "number",
             defaultValue: pointConfig?.pointUnit ?? BigInt(POINTS_UNIT),
           },
-          minPointCost: {
-            label: "Min point cost",
+          minPointPrice: {
+            label: "Min point price",
             inputType: "number",
-            defaultValue: pointConfig?.minPointCost ?? BigInt(POINTS_UNIT * 0.1),
+            defaultValue: pointConfig?.minPointPrice ?? BigInt(POINTS_UNIT * 0.1),
           },
-          startPointCost: {
-            label: "Start point cost",
+          startPointPrice: {
+            label: "Start point price",
             inputType: "number",
-            defaultValue: pointConfig?.startPointCost ?? BigInt(POINTS_UNIT * 0.2),
+            defaultValue: pointConfig?.startPointPrice ?? BigInt(POINTS_UNIT * 0.2),
           },
           pointGenRate: {
             label: "Point generation rate",
             inputType: "number",
             defaultValue: pointConfig?.pointGenRate ?? BigInt(POINTS_UNIT * 0.2),
           },
-          pointCostIncrease: {
-            label: "Point cost increase",
+          pointPriceIncrease: {
+            label: "Point price increase",
             inputType: "number",
-            defaultValue: pointConfig?.pointCostIncrease ?? BigInt(POINTS_UNIT * 0.1),
+            defaultValue: pointConfig?.pointPriceIncrease ?? BigInt(POINTS_UNIT * 0.1),
           },
           pointRake: {
             label: "Point rake",
@@ -1231,6 +1271,7 @@ export const useCheatcodes = () => {
     moveShieldEater,
     setShieldEaterDestination,
     feedShieldEater,
+    empireConfig,
     ...Object.values(updateGameConfig),
     setKeeperBearerToken,
     startKeeper,

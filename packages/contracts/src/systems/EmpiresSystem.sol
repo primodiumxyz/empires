@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { NamespaceOwner } from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
-import { Ready, P_GameConfig, P_PointConfig, WinningEmpire, Role } from "codegen/index.sol";
+import { Ready, P_GameConfig, P_PointConfig, WinningEmpire, Role, Empire } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { EEmpire, ERole } from "codegen/common.sol";
@@ -30,6 +30,11 @@ contract EmpiresSystem is System {
   modifier _onlyAdminOrCanUpdate() {
     ERole role = Role.get(_msgSender());
     require(role == ERole.Admin || role == ERole.CanUpdate, "[EmpiresSystem] Only admin or can update");
+    _;
+  }
+
+  modifier _notDefeated(EEmpire _empire) {
+    require(!Empire.getIsDefeated(_empire), "[EmpiresSystem] Empire defeated");
     _;
   }
 
