@@ -39,7 +39,7 @@ export const getInitialQuery = ({
       // Points
       { tableId: tables.Value_PlayersMap.tableId },
       { tableId: tables.Value_PointsMap.tableId },
-      { tableId: tables.HistoricalPointCost.tableId },
+      { tableId: tables.HistoricalPointPrice.tableId },
       // Routines
       { tableId: tables.PendingMove.tableId },
       // Metadata

@@ -38,7 +38,7 @@ library LibOverride {
     if (progressOverride) {
       uint256 numPoints = _overrideCount * (empireCount - 1) * pointUnit * pointMultiplier;
       LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
-      LibPrice.pointCostUp(_empireImpacted, numPoints);
+      LibPrice.pointPriceUp(_empireImpacted, numPoints);
     } else {
       uint256 numPoints = _overrideCount * pointUnit * pointMultiplier;
       // Iterate through each empire except the impacted one
@@ -47,7 +47,7 @@ library LibOverride {
           continue;
         }
         LibPoint.issuePoints(EEmpire(i), playerId, numPoints);
-        LibPrice.pointCostUp(EEmpire(i), numPoints);
+        LibPrice.pointPriceUp(EEmpire(i), numPoints);
       }
     }
 

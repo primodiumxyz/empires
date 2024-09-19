@@ -660,7 +660,7 @@ export const useMostRecentOverride = () => {
         const config = tables.P_PointConfig.get();
         if (!current || !prev || !config) return;
 
-        if (current.pointCost <= config.minPointCost && prev.pointCost > config.minPointCost) {
+        if (current.pointPrice <= config.minPointPrice && prev.pointPrice > config.minPointPrice) {
           const { id: empireId } = decodeEntity(tables.Empire.metadata.abiKeySchema, entity);
           setOverride({
             id: entity,
