@@ -10,16 +10,17 @@ import { Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 
 contract ResetSystem is System {
-  function resetGame() public {
+  function resetGame(uint256 _gameStartBlock) public {
+    require(_gameStartBlock > block.number, "[ResetSystem] Game must start in the future");
     IWorld world = IWorld(_world());
     world.Empires__clearLoop();
     P_GameConfigData memory config = P_GameConfig.get();
 
-    P_GameConfig.setGameOverBlock(block.number + config.nextGameLengthTurns * config.turnLengthBlocks);
-    P_GameConfig.setGameStartTimestamp(block.timestamp);
+    P_GameConfig.setGameStartBlock(_gameStartBlock);
+    P_GameConfig.setGameOverBlock(_gameStartBlock + config.nextGameLengthTurns * config.turnLengthBlocks);
     createPlanets(); // Planet and Empire tables are reset to default values
     LibShieldEater.initialize(); // ShieldEater relocated, charge reset, and destination set
     initPrice(); // Empire.setPointPrice and OverrideCost tables are reset to default values
-    Turn.set(block.number + config.turnLengthBlocks, EEmpire.Red, 1);
+    Turn.set(_gameStartBlock + config.turnLengthBlocks, EEmpire.Red, 1);
   }
 }

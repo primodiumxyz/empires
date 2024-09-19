@@ -17,8 +17,8 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         turnLengthBlocks: 8n,
         nextGameLengthTurns: 225n, // total blocks is turnLengthBlocks * nextGameLengthTurns
         goldGenRate: 1n,
+        gameStartBlock: 0n, // currently handled in PostDeploy
         gameOverBlock: 0n, // currently handled in PostDeploy
-        gameStartTimestamp: 0n, // currently handled in PostDeploy
         empireCount: 6,
       },
       P_PointConfig: {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Ready, Role } from "codegen/index.sol";
+import { Ready, Role, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { ERole } from "codegen/common.sol";
 
@@ -18,6 +18,10 @@ contract AdminSystem is EmpiresSystem {
    */
   function unpause() public _onlyAdmin {
     Ready.set(true);
+  }
+
+  function setGameConfig(P_GameConfigData memory gameConfig) public _onlyAdmin {
+    P_GameConfig.set(gameConfig);
   }
 
   /**
