@@ -10,6 +10,7 @@ import { ArrivedMap } from "adts/ArrivedMap.sol";
 library LibMoveShips {
   /**
    * @dev Creates a pending move for ships from a given planet.
+   * @notice Does not create pending move if the planet has no empire or no ships.
    * @param planetId The ID of the planet from which ships will move.
    * @param targetId The ID of the planet to which ships will move.
    * @return bool Returns true if a pending move was successfully created, false otherwise.
@@ -31,11 +32,11 @@ library LibMoveShips {
    * @notice Executes pending moves for ships from a given planet.
    * @dev This function performs the following steps:
    * 1. Retrieves the current planet data and the destination planet ID.
-   * 2. If there's no valid destination, the function returns early.
-   * 3. Calculates the number of ships to move and the total ships arriving at the destination.
+   * 2. If there's no valid destination, the function returns early and clears the pending move record.
+   * 3. Calculates the number of ships to move, considering ships that have already arrived from allies.
    * 4. Updates the ship count on the origin planet.
    * 5. Executes combat on the destination planet.
-   * 6. Clears the pending move record.
+   * 6. Clears the pending move record and the arrived map entry for the origin planet.
    * 7. Logs the move for off-chain tracking.
    * @param planetId The ID of the planet from which ships will move.
    */
