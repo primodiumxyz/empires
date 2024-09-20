@@ -15,6 +15,7 @@ import { P_PointConfig, P_OverrideConfig, P_GameConfig } from "codegen/index.sol
 library LibOverride {
   /**
    * @dev Internal function to purchase a number of overrides.
+   * @param playerId The ID of the player purchasing the override.
    * @param _overrideType The type of override to purchase.
    * @param _empireImpacted The empire impacted by the override.
    * @param _overrideCount The number of overrides to purchase.
@@ -27,16 +28,17 @@ library LibOverride {
     uint256 _overrideCount,
     uint256 _spend
   ) internal {
-    PlayersMap.setLoss(playerId, PlayersMap.get(playerId).loss + _spend);
     uint256 pointUnit = P_PointConfig.getPointUnit();
     uint8 empireCount = P_GameConfig.getEmpireCount();
     bool progressOverride = P_OverrideConfig.getIsProgressOverride(_overrideType);
     uint256 pointMultiplier = P_OverrideConfig.getPointMultiplier(_overrideType);
 
+    PlayersMap.setLoss(playerId, PlayersMap.get(playerId).loss + _spend);
+
     if (progressOverride) {
       uint256 numPoints = _overrideCount * (empireCount - 1) * pointUnit * pointMultiplier;
       LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
-      LibPrice.pointCostUp(_empireImpacted, numPoints);
+      LibPrice.pointPriceUp(_empireImpacted, numPoints);
     } else {
       uint256 numPoints = _overrideCount * pointUnit * pointMultiplier;
       // Iterate through each empire except the impacted one
@@ -45,9 +47,10 @@ library LibOverride {
           continue;
         }
         LibPoint.issuePoints(EEmpire(i), playerId, numPoints);
-        LibPrice.pointCostUp(EEmpire(i), numPoints);
+        LibPrice.pointPriceUp(EEmpire(i), numPoints);
       }
     }
+
     LibPrice.overrideCostUp(_empireImpacted, _overrideType, _overrideCount);
   }
 }

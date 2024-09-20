@@ -24,6 +24,7 @@ export const getInitialQuery = ({
       { tableId: tables.FunctionSelectors.tableId },
       { tableId: tables.FunctionSignatures.tableId },
       { tableId: tables.Role.tableId },
+      { tableId: tables.Ready.tableId },
       // Base
       { tableId: tables.Planet.tableId },
       { tableId: tables.Empire.tableId },
@@ -37,9 +38,17 @@ export const getInitialQuery = ({
       { tableId: tables.Value_AcidPlanetsSet.tableId },
       // Points
       { tableId: tables.Value_PlayersMap.tableId },
-      { tableId: tables.HistoricalPointCost.tableId },
+      { tableId: tables.Value_PointsMap.tableId },
+      { tableId: tables.HistoricalPointPrice.tableId },
       // Routines
       { tableId: tables.PendingMove.tableId },
+      // Metadata
+      { tableId: tables.Keys_EmpirePlanetsSet.tableId },
+      { tableId: tables.Keys_PlanetsSet.tableId },
+      { tableId: tables.Keys_PointsMap.tableId },
+      { tableId: tables.Keys_CitadelPlanetsSet.tableId },
+      { tableId: tables.Meta_EmpirePlanetsSet.tableId },
+      { tableId: tables.Meta_PointsMap.tableId },
     ],
   };
 };

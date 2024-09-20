@@ -112,14 +112,14 @@ const SellNow = ({ playerId }: { playerId: Entity }) => {
   const totalSpent = tables.Value_PlayersMap.use(playerId)?.loss ?? 0n;
   const empires = useEmpires();
 
-  const pointCosts = useMemo(
+  const pointPrices = useMemo(
     () =>
       [...empires.keys()].map(
         (empire) => getPointPrice(empire, Number(formatEther(points[empire].playerPoints))).price,
       ),
     [empires, points],
   );
-  const totalReward = pointCosts.reduce((sum, cost) => sum + cost, 0n);
+  const totalReward = pointPrices.reduce((sum, price) => sum + price, 0n);
   const percentageChange = totalSpent > 0n ? ((totalReward - totalSpent) * 10000n) / totalSpent : 0n;
   const isProfit = percentageChange >= 0n;
 

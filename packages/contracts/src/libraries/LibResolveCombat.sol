@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { P_GameConfig, Turn, PendingMove, Planet, PlanetData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData } from "codegen/index.sol";
+import { P_GameConfig, Turn, PendingMove, Planet, PlanetData, PlanetBattleRoutineLog, PlanetBattleRoutineLogData, Empire } from "codegen/index.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
+import { ArrivedMap } from "adts/ArrivedMap.sol";
 import { pseudorandomEntity } from "src/utils.sol";
 import { EEmpire } from "codegen/common.sol";
 
@@ -23,22 +24,27 @@ library LibResolveCombat {
    *    - Updates planet ownership and forces based on combat outcome.
    * 5. Logs the battle result if combat occurred.
    */
-  function resolveCombat(EEmpire attackingEmpire, uint256 attackingShips, bytes32 defendingPlanetId) internal {
+  function resolveCombat(
+    EEmpire attackingEmpire,
+    uint256 attackingShips,
+    bytes32 defendingPlanetId
+  ) internal returns (bool) {
     PlanetData memory planetData = Planet.get(defendingPlanetId);
     EEmpire defendingEmpire = planetData.empireId;
 
     uint256 defendingShips = planetData.shipCount;
 
     if (attackingEmpire == EEmpire.NULL) {
-      return;
+      return false;
     } else if (defendingEmpire == attackingEmpire) {
+      ArrivedMap.set(defendingPlanetId, ArrivedMap.get(defendingPlanetId) + attackingShips);
       Planet.setShipCount(defendingPlanetId, defendingShips + attackingShips);
     } else {
       bool conquer = false;
       uint256 defendingShields = Planet.getShieldCount(defendingPlanetId);
       uint256 totalDefenses = defendingShips + defendingShields;
 
-      // attackers bounce off shields
+      // attackers die from shields
       if (attackingShips <= defendingShields) {
         Planet.setShieldCount(defendingPlanetId, defendingShields - attackingShips);
       }
@@ -59,6 +65,9 @@ library LibResolveCombat {
         AcidPlanetsSet.changeEmpire(defendingEmpire, attackingEmpire, defendingPlanetId);
         Planet.setEmpireId(defendingPlanetId, attackingEmpire);
         PendingMove.deleteRecord(defendingPlanetId);
+        if (EmpirePlanetsSet.size(defendingEmpire) == 0) {
+          Empire.setIsDefeated(defendingEmpire, true);
+        }
       } else {
         revert("[LibResolveCombat] Invalid combat resolution");
       }
@@ -77,6 +86,10 @@ library LibResolveCombat {
           timestamp: block.timestamp
         })
       );
+
+      return conquer;
     }
+
+    return false;
   }
 }

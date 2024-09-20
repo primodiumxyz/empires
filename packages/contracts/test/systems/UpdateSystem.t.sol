@@ -107,10 +107,10 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function testGeneratePointsAndOverrides() public {
     P_PointConfigData memory pointCfg = P_PointConfig.get();
-    uint256 beginPointCost = pointCfg.minPointCost + pointCfg.pointGenRate;
-    Empire.setPointCost(EEmpire.Red, beginPointCost);
-    Empire.setPointCost(EEmpire.Blue, beginPointCost);
-    Empire.setPointCost(EEmpire.Green, beginPointCost);
+    uint256 beginPointPrice = pointCfg.minPointPrice + pointCfg.pointGenRate;
+    Empire.setPointPrice(EEmpire.Red, beginPointPrice);
+    Empire.setPointPrice(EEmpire.Blue, beginPointPrice);
+    Empire.setPointPrice(EEmpire.Green, beginPointPrice);
 
     P_OverrideConfigData memory createShipCfg = P_OverrideConfig.get(EOverride.CreateShip);
     uint256 beginCreateShipCost = createShipCfg.minOverrideCost + createShipCfg.overrideGenRate;
@@ -121,9 +121,9 @@ contract UpdateSystemTest is PrimodiumTest {
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
 
-    assertEq(Empire.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Empire.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Empire.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointPrice(EEmpire.Red), beginPointPrice - pointCfg.pointGenRate);
+    assertEq(Empire.getPointPrice(EEmpire.Blue), beginPointPrice - pointCfg.pointGenRate);
+    assertEq(Empire.getPointPrice(EEmpire.Green), beginPointPrice - pointCfg.pointGenRate);
 
     assertEq(OverrideCost.get(EEmpire.Red, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
     assertEq(OverrideCost.get(EEmpire.Blue, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);

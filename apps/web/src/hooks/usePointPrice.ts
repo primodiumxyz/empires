@@ -6,24 +6,24 @@ import { useCore } from "@primodiumxyz/core/react";
 export const usePointPrice = (empire: EEmpire, points: number): { price: bigint; message: string } => {
   const { tables } = useCore();
 
-  const currentPointCost = tables.Empire.useWithKeys({ id: empire })?.pointCost ?? 0n;
+  const currentPointPrice = tables.Empire.useWithKeys({ id: empire })?.pointPrice ?? 0n;
   const config = tables.P_PointConfig.use();
   return useMemo(() => {
-    if (!config || currentPointCost == 0n || points == 0) {
+    if (!config || currentPointPrice == 0n || points == 0) {
       return { price: 0n, message: "" };
     }
 
     const pointsBigInt = BigInt(points);
-    const pointCostDecrease = config?.pointCostIncrease ?? 0n;
+    const pointPriceIncrease = config?.pointPriceIncrease ?? 0n;
 
-    if (currentPointCost < (config?.minPointCost ?? 0n) + pointCostDecrease * pointsBigInt) {
+    if (currentPointPrice < (config?.minPointPrice ?? 0n) + pointPriceIncrease * pointsBigInt) {
       return { price: 0n, message: "Beyond min price" };
     }
 
     const triangleSum = (pointsBigInt * (pointsBigInt + 1n)) / 2n;
     const totalSaleValue =
-      (currentPointCost - (config?.pointSellTax ?? 0n)) * pointsBigInt - pointCostDecrease * triangleSum;
+      (currentPointPrice * pointsBigInt - pointPriceIncrease * triangleSum) * (10000n - (config?.pointSellTax ?? 0n)) / 10000n;
 
     return { price: totalSaleValue, message: "" };
-  }, [empire, currentPointCost, config, points]);
+  }, [empire, currentPointPrice, config, points]);
 };

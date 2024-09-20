@@ -16,7 +16,7 @@ import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 
 import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
-import { addressToId } from "src/utils.sol";
+import { addressToId, pseudorandom } from "src/utils.sol";
 import { EEmpire } from "codegen/common.sol";
 
 /**
@@ -64,8 +64,8 @@ contract RewardsSystem is EmpiresSystem {
   }
 
   /**
-   * @dev Checks if the game has been won by the match running out of time.
-   * @notice First condition is number of owned citadel planets. Second condition is number of all owned planets.
+   * @dev Checks if the game has ended by the match running out of time, and sets the winning empire.
+   * @notice First condition is number of owned citadel planets. Second condition is number of all owned planets. Third condition is number of points issued. Fourth condition is pseudorandom tiebreaker.
    * @return winningEmpire The empire index that has won the game, or 0 if the game has not been won by time.
    */
   function _checkTimeVictory() internal view returns (EEmpire) {
@@ -86,20 +86,32 @@ contract RewardsSystem is EmpiresSystem {
 
     EEmpire winningEmpire = EEmpire.NULL;
     uint256 maxCitadelPlanets = 0;
+    uint256 pseudorandomWinner = 0; // used to handle ties, and not rerolling the winner prevents the Monty Hall problem
     for (uint8 i = 1; i <= empireCount; i++) {
       uint8 index = i - 1;
       EEmpire empire = EEmpire(i);
       uint256 currentPlanets = citadelPlanetsPerEmpire[index];
-      if (currentPlanets > maxCitadelPlanets) {
+      uint256 pseudorandomCurrent = pseudorandom(uint256(empire), 1e18) + 1;
+      if (currentPlanets > maxCitadelPlanets) { // most citadel planets
         maxCitadelPlanets = currentPlanets;
         winningEmpire = EEmpire(empire);
-      } else if (currentPlanets == maxCitadelPlanets) {
-        if (EmpirePlanetsSet.size(EEmpire(empire)) > EmpirePlanetsSet.size(winningEmpire)) {
+      } else if (currentPlanets == maxCitadelPlanets) { // same number of citadel planets, most planets
+        if (EmpirePlanetsSet.size(empire) > EmpirePlanetsSet.size(winningEmpire)) {
           winningEmpire = EEmpire(empire);
-        } else if (EmpirePlanetsSet.size(empire) == EmpirePlanetsSet.size(winningEmpire)) {
-          // todo: handle a tie of both the number of citadel planets and the number of planets. Likely overtime or most points issued.
-          continue;
+        } else if (EmpirePlanetsSet.size(empire) == EmpirePlanetsSet.size(winningEmpire)) { // same number of citadel planets and planets, most points issued
+          if (Empire.getPointsIssued(empire) > Empire.getPointsIssued(winningEmpire)) {
+            winningEmpire = EEmpire(empire);
+          } else if (Empire.getPointsIssued(empire) == Empire.getPointsIssued(winningEmpire)) {
+            // pseudorandomly select winner
+            if (pseudorandomCurrent > pseudorandomWinner) {
+              winningEmpire = EEmpire(empire);
+            }
+          }
         }
+      }
+
+      if (winningEmpire == empire) {
+        pseudorandomWinner = pseudorandomCurrent; // update pseudorandom winner to handle potential ties in future loops
       }
     }
 
@@ -130,8 +142,8 @@ contract RewardsSystem is EmpiresSystem {
     uint256 playerPot = (pot * playerEmpirePoints) / empirePoints;
 
     PlayersMap.setGain(playerId, PlayersMap.get(playerId).gain + playerPot);
-    IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), playerPot);
-
     PointsMap.remove(winningEmpire, playerId);
+
+    IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), playerPot);
   }
 }

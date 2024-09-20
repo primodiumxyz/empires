@@ -1,12 +1,13 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { Hex } from "viem";
+import { formatEther, Hex, parseEther } from "viem";
 
 import { EEmpire, EShieldEaterDamageType } from "@primodiumxyz/contracts";
-import { entityToAddress, formatNumber, WORLD_EVENTS_THRESHOLDS } from "@primodiumxyz/core";
+import { entityToAddress, formatNumber, Tables, WORLD_EVENTS_THRESHOLDS } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { decodeEntity } from "@primodiumxyz/reactive-tables/utils";
 import { Username } from "@/components/shared/Username";
+import { useEmpires } from "@/hooks/useEmpires";
 import { useEthPrice } from "@/hooks/useEthPrice";
 import { EmpireEnumToConfig } from "@/util/lookups";
 
@@ -35,11 +36,33 @@ export const PlanetSpan = ({ planetId }: { planetId: Entity }) => {
   return <span className={colorClass}>{planetName}</span>;
 };
 
-export const PlayerSpan = ({ playerId }: { playerId: Entity | Hex }) => (
-  <span className="text-yellow-400">
-    <Username address={entityToAddress(playerId)} />
-  </span>
-);
+export const PlayerSpan = ({
+  empires,
+  tables,
+  playerId,
+}: {
+  empires: EEmpire[];
+  tables: Tables;
+  playerId: Entity | Hex;
+}) => {
+  const empireWithMostPoints = empires
+    .map((empireId) => tables.Value_PointsMap.getWithKeys({ empireId, playerId })?.value ?? 0n)
+    .reduce((max, points, index) => (points > max.points ? { empire: empires[index], points } : max), {
+      empire: EEmpire.NULL,
+      points: 0n,
+    });
+
+  const colorClass =
+    empireWithMostPoints.empire !== EEmpire.NULL
+      ? EmpireEnumToConfig[empireWithMostPoints.empire].textColor
+      : "text-gray-400";
+
+  return (
+    <span className={colorClass}>
+      <Username address={entityToAddress(playerId)} />
+    </span>
+  );
+};
 
 export const useActions = (
   empireId?: EEmpire,
@@ -49,6 +72,7 @@ export const useActions = (
     tables,
     utils: { usdToWei },
   } = useCore();
+  const empires = useEmpires();
   const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
   const { price } = useEthPrice();
   const ethSpentThreshold = useMemo(() => usdToWei(WORLD_EVENTS_THRESHOLDS.dollarSpent, price ?? 0), [price]);
@@ -172,8 +196,8 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            <PlayerSpan playerId={action.playerId} /> created {formatNumber(action.overrideCount, { showZero: true })}{" "}
-            ship
+            <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={action.playerId} /> created{" "}
+            {formatNumber(action.overrideCount, { showZero: true })} ship
             {action.overrideCount === 1n ? "" : "s"} on <PlanetSpan planetId={action.planetId as Entity} />
           </p>
         ),
@@ -189,8 +213,8 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            <PlayerSpan playerId={action.playerId} /> charged {formatNumber(action.overrideCount, { showZero: true })}{" "}
-            shield
+            <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={action.playerId} /> charged{" "}
+            {formatNumber(action.overrideCount, { showZero: true })} shield
             {action.overrideCount === 1n ? "" : "s"} on <PlanetSpan planetId={action.planetId as Entity} />
           </p>
         ),
@@ -206,7 +230,7 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            <PlayerSpan playerId={action.playerId} /> placed a magnet on{" "}
+            <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={action.playerId} /> placed a magnet on{" "}
             <PlanetSpan planetId={action.planetId as Entity} />
           </p>
         ),
@@ -222,8 +246,8 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            <PlayerSpan playerId={action.playerId} /> detonated shield eater on{" "}
-            <PlanetSpan planetId={action.planetId as Entity} />
+            <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={action.playerId} /> detonated shield
+            eater on <PlanetSpan planetId={action.planetId as Entity} />
           </p>
         ),
         highlight: action.ethSpent >= ethSpentThreshold,
@@ -257,7 +281,7 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            <PlayerSpan playerId={action.playerId} /> placed acid rain on{" "}
+            <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={action.playerId} /> placed acid rain on{" "}
             <PlanetSpan planetId={action.planetId as Entity} />
           </p>
         ),
@@ -288,7 +312,7 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            <PlayerSpan playerId={action.playerId} /> airdropped{" "}
+            <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={action.playerId} /> airdropped{" "}
             {formatNumber(action.goldDistributed, { showZero: true })} iridium to{" "}
             {EmpireEnumToConfig[action.empireId as EEmpire].name} empire
           </p>
@@ -304,8 +328,9 @@ export const useActions = (
         timestamp: action.timestamp,
         element: (
           <p className="text-xs">
-            <PlayerSpan playerId={action.playerId} /> sold {formatNumber(action.overrideCount, { showZero: true })}{" "}
-            points
+            <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={action.playerId} /> sold{" "}
+            {formatNumber(BigInt(formatEther(action.overrideCount)), { showZero: true })} point
+            {action.overrideCount === parseEther("1") ? "" : "s"} from <EmpireSpan empireId={action.empireId} />
           </p>
         ),
         highlight: action.ethReceived >= generationalWealthThreshold,
@@ -371,6 +396,7 @@ export const useMostRecentOverride = () => {
     utils: { usdToWei },
   } = useCore();
   const { price } = useEthPrice();
+  const empires = useEmpires();
   const ethSpentThreshold = useMemo(() => usdToWei(WORLD_EVENTS_THRESHOLDS.dollarSpent, price ?? 0), [price]);
   const generationalWealthThreshold = useMemo(
     () => usdToWei(WORLD_EVENTS_THRESHOLDS.generationalWealth, price ?? 0),
@@ -392,7 +418,7 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           element: (
             <p className="text-xs">
-              <PlayerSpan playerId={current.playerId} /> created{" "}
+              <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={current.playerId} /> created{" "}
               {formatNumber(current.overrideCount, { showZero: true })} ship
               {current.overrideCount === 1n ? "" : "s"} on <PlanetSpan planetId={current.planetId as Entity} />
             </p>
@@ -412,7 +438,7 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           element: (
             <p className="text-xs">
-              <PlayerSpan playerId={current.playerId} /> charged{" "}
+              <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={current.playerId} /> charged{" "}
               {formatNumber(current.overrideCount, { showZero: true })} shield
               {current.overrideCount === 1n ? "" : "s"} on <PlanetSpan planetId={current.planetId as Entity} />
             </p>
@@ -432,8 +458,8 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           element: (
             <p className="text-xs">
-              <PlayerSpan playerId={current.playerId} /> placed a magnet on{" "}
-              <PlanetSpan planetId={current.planetId as Entity} />
+              <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={current.playerId} /> placed a magnet
+              on <PlanetSpan planetId={current.planetId as Entity} />
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
@@ -451,8 +477,8 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           element: (
             <p className="text-xs">
-              <PlayerSpan playerId={current.playerId} /> detonated shield eater on{" "}
-              <PlanetSpan planetId={current.planetId as Entity} />
+              <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={current.playerId} /> detonated shield
+              eater on <PlanetSpan planetId={current.planetId as Entity} />
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
@@ -490,8 +516,8 @@ export const useMostRecentOverride = () => {
           empireId: empire as EEmpire,
           element: (
             <p className="text-xs">
-              <PlayerSpan playerId={current.playerId} /> placed acid rain on{" "}
-              <PlanetSpan planetId={current.planetId as Entity} />
+              <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={current.playerId} /> placed acid rain
+              on <PlanetSpan planetId={current.planetId as Entity} />
             </p>
           ),
           highlight: current.ethSpent >= ethSpentThreshold,
@@ -527,7 +553,7 @@ export const useMostRecentOverride = () => {
           empireId: current.empireId as EEmpire,
           element: (
             <p className="text-xs">
-              <PlayerSpan playerId={current.playerId} /> airdropped{" "}
+              <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={current.playerId} /> airdropped{" "}
               {formatNumber(current.goldDistributed, { showZero: true })} iridium to{" "}
               {EmpireEnumToConfig[current.empireId as EEmpire].name} empire
             </p>
@@ -546,9 +572,9 @@ export const useMostRecentOverride = () => {
           empireId: current.empireId as EEmpire,
           element: (
             <p className="text-xs">
-              <PlayerSpan playerId={current.playerId} /> sold {formatNumber(current.overrideCount, { showZero: true })}{" "}
-              point
-              {current.overrideCount === 1n ? "" : "s"}
+              <PlayerSpan empires={[...empires.keys()]} tables={tables} playerId={current.playerId} /> sold{" "}
+              {formatNumber(BigInt(formatEther(current.overrideCount)), { showZero: true })} point
+              {current.overrideCount === parseEther("1") ? "" : "s"} from <EmpireSpan empireId={current.empireId} />
             </p>
           ),
           highlight: current.ethReceived >= generationalWealthThreshold,
@@ -634,7 +660,7 @@ export const useMostRecentOverride = () => {
         const config = tables.P_PointConfig.get();
         if (!current || !prev || !config) return;
 
-        if (current.pointCost <= config.minPointCost && prev.pointCost > config.minPointCost) {
+        if (current.pointPrice <= config.minPointPrice && prev.pointPrice > config.minPointPrice) {
           const { id: empireId } = decodeEntity(tables.Empire.metadata.abiKeySchema, entity);
           setOverride({
             id: entity,

@@ -73,9 +73,9 @@ function createPlanets() {
 
   bytes32 planetId;
 
-  Empire.set(EEmpire.Red, EOrigin.North, 0, 0);
-  Empire.set(EEmpire.Blue, EOrigin.North, 0, 0);
-  Empire.set(EEmpire.Green, EOrigin.North, 0, 0);
+  Empire.set(EEmpire.Red, EOrigin.North, 0, 0, false);
+  Empire.set(EEmpire.Blue, EOrigin.North, 0, 0, false);
+  Empire.set(EEmpire.Green, EOrigin.North, 0, 0, false);
   PlanetData memory planetData = PlanetData({
     q: 0,
     r: 0,

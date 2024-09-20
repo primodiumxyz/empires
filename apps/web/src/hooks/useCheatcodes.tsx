@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import config from "postcss.config";
 import { Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
@@ -12,6 +13,7 @@ import { TableOperation } from "@/contractCalls/contractCalls/dev";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useDripAccount } from "@/hooks/useDripAccount";
 import { useGame } from "@/hooks/useGame";
+import { useKeeperClient } from "@/hooks/useKeeperClient";
 import { createCheatcode } from "@/util/cheatcodes";
 import { DEFAULT_EMPIRE, EmpireEnumToConfig } from "@/util/lookups";
 
@@ -23,6 +25,7 @@ export const CheatcodeToBg: Record<string, string> = {
   magnet: "bg-purple-900/10",
   shieldEater: "bg-purple-400/10",
   config: "bg-gray-500/10",
+  keeper: "bg-pink-500/10",
 };
 
 export const useCheatcodes = () => {
@@ -34,6 +37,7 @@ export const useCheatcodes = () => {
   const { playerAccount } = usePlayerAccount();
   const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake } = useContractCalls();
   const requestDrip = useDripAccount();
+  const keeper = useKeeperClient();
 
   // game
   const empires = tables.Empire.useAll();
@@ -43,6 +47,7 @@ export const useCheatcodes = () => {
   const gameConfig = tables.P_GameConfig.use();
   const pointConfig = tables.P_PointConfig.use();
   const overrideConfig = tables.P_OverrideConfig.use();
+  const currentBlock = tables.BlockNumber.use()?.value ?? 0n;
 
   // rake
   const adminHex = resourceToHex({ type: "namespace", namespace: "Admin", name: "" });
@@ -508,8 +513,8 @@ export const useCheatcodes = () => {
         const playerId = addressToEntity(recipient.value);
         const empireId = empire.id as EEmpire;
         const currentPoints = tables.Value_PointsMap.getWithKeys({ empireId, playerId })?.value ?? BigInt(0);
-        const currentCost = tables.Empire.getWithKeys({ id: empireId })?.pointCost ?? BigInt(0);
-        const increaseCost = pointConfig?.pointCostIncrease ?? BigInt(1);
+        const currentPrice = tables.Empire.getWithKeys({ id: empireId })?.pointPrice ?? BigInt(0);
+        const increasePrice = pointConfig?.pointPriceIncrease ?? BigInt(1);
 
         const empires = tables.P_GameConfig.get()?.empireCount ?? 0;
         const pointsToIssue = BigInt(amount.value) * BigInt(empires - 1);
@@ -521,7 +526,7 @@ export const useCheatcodes = () => {
             table: tables.Empire,
             keys: { id: empireId },
             properties: {
-              pointCost: currentCost + increaseCost * BigInt(empires - 1),
+              pointPrice: currentPrice + increasePrice * BigInt(empires - 1),
             },
           }),
         ]);
@@ -964,6 +969,46 @@ export const useCheatcodes = () => {
   );
 
   /* --------------------------------- CONFIG --------------------------------- */
+  const empireConfig = useMemo(
+    () =>
+      createCheatcode({
+        title: "Update empire",
+        bg: CheatcodeToBg["config"],
+        caption: "Empire config",
+        inputs: {
+          empire: {
+            label: "Empire",
+            inputType: "string",
+            defaultValue: EmpireEnumToConfig[Number(empires[0]) as EEmpire].name,
+            options: empires.map((entity) => ({
+              id: entity,
+              value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
+            })),
+          },
+          isDefeated: {
+            label: "Is defeated",
+            inputType: "boolean",
+            defaultValue: false,
+            options: [
+              { id: 0, value: "false" },
+              { id: 1, value: "true" },
+            ],
+          },
+        },
+        execute: async ({ empire, isDefeated }) => {
+          return await devCalls.setProperties({
+            table: tables.Empire,
+            keys: { id: empire.id as EEmpire },
+            properties: { isDefeated: isDefeated.value },
+          });
+        },
+        loading: () => "[CHEATCODE] Updating empire...",
+        success: ({ empire, isDefeated }) => `Updated ${empire.value} to ${isDefeated ? "defeated" : "alive"}`,
+        error: ({ empire, isDefeated }) => `Failed to update ${empire.value} to ${isDefeated ? "defeated" : "alive"}`,
+      }),
+    [empires],
+  );
+
   const updateGameConfig = useMemo(
     () => ({
       P_GameConfig: createCheatcode({
@@ -981,31 +1026,35 @@ export const useCheatcodes = () => {
             inputType: "number",
             defaultValue: gameConfig?.turnLengthBlocks ?? BigInt(1),
           },
+          nextGameLengthTurns: {
+            label: "Next game length in turns",
+            inputType: "number",
+            defaultValue: gameConfig?.nextGameLengthTurns ?? BigInt(1),
+          },
           goldGenRate: {
             label: "Gold generation rate",
             inputType: "number",
             defaultValue: gameConfig?.goldGenRate ?? BigInt(1),
           },
-          roundTimeLeftInSeconds: {
-            label: "Round time left",
+          roundBlocksLeft: {
+            label: "Round blocks left",
             inputType: "number",
-            defaultValue: 1000,
+            defaultValue:
+              currentBlock >= (gameConfig?.gameOverBlock ?? 0n) ? 0n : (gameConfig?.gameOverBlock ?? 0n) - currentBlock,
           },
           gameStartTimestamp: {
-            label: "Game start block",
+            label: "Game start timestamp",
             inputType: "number",
             defaultValue: gameConfig?.gameStartTimestamp ?? BigInt(0),
           },
         },
         execute: async (properties) => {
-          const currBlock = tables.BlockNumber.get() ?? { value: 0n, avgBlockTime: 0 };
-          const finalBlockFromTimeLeft =
-            BigInt(properties.roundTimeLeftInSeconds.value * currBlock.avgBlockTime) + currBlock.value;
           const newProperties = {
             empireCount: Number(properties.empireCount.value),
             turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
+            nextGameLengthTurns: BigInt(properties.nextGameLengthTurns.value),
             goldGenRate: BigInt(properties.goldGenRate.value),
-            gameOverBlock: finalBlockFromTimeLeft,
+            gameOverBlock: currentBlock + BigInt(properties.roundBlocksLeft.value),
             gameStartTimestamp: BigInt(properties.gameStartTimestamp.value),
           };
 
@@ -1030,25 +1079,25 @@ export const useCheatcodes = () => {
             inputType: "number",
             defaultValue: pointConfig?.pointUnit ?? BigInt(POINTS_UNIT),
           },
-          minPointCost: {
-            label: "Min point cost",
+          minPointPrice: {
+            label: "Min point price",
             inputType: "number",
-            defaultValue: pointConfig?.minPointCost ?? BigInt(POINTS_UNIT * 0.1),
+            defaultValue: pointConfig?.minPointPrice ?? BigInt(POINTS_UNIT * 0.1),
           },
-          startPointCost: {
-            label: "Start point cost",
+          startPointPrice: {
+            label: "Start point price",
             inputType: "number",
-            defaultValue: pointConfig?.startPointCost ?? BigInt(POINTS_UNIT * 0.2),
+            defaultValue: pointConfig?.startPointPrice ?? BigInt(POINTS_UNIT * 0.2),
           },
           pointGenRate: {
             label: "Point generation rate",
             inputType: "number",
             defaultValue: pointConfig?.pointGenRate ?? BigInt(POINTS_UNIT * 0.2),
           },
-          pointCostIncrease: {
-            label: "Point cost increase",
+          pointPriceIncrease: {
+            label: "Point price increase",
             inputType: "number",
-            defaultValue: pointConfig?.pointCostIncrease ?? BigInt(POINTS_UNIT * 0.1),
+            defaultValue: pointConfig?.pointPriceIncrease ?? BigInt(POINTS_UNIT * 0.1),
           },
           pointRake: {
             label: "Point rake",
@@ -1142,7 +1191,65 @@ export const useCheatcodes = () => {
         error: () => `Failed to update routine costs`,
       }),
     }),
-    [gameConfig, pointConfig, overrideConfig],
+    [gameConfig, pointConfig, overrideConfig, currentBlock],
+  );
+
+  /* --------------------------------- Keeper --------------------------------- */
+  const startKeeper = useMemo(
+    () =>
+      createCheatcode({
+        title: "Start keeper",
+        bg: CheatcodeToBg["keeper"],
+        caption: "Start keeper",
+        inputs: {},
+        execute: async () => await keeper.start(),
+        loading: () => "[CHEATCODE] Starting keeper...",
+        success: () => `Keeper started`,
+        error: () => `Failed to start keeper`,
+        disabled: !keeper.instance || keeper.running,
+      }),
+    [keeper.instance, keeper.running],
+  );
+
+  const stopKeeper = useMemo(
+    () =>
+      createCheatcode({
+        title: "Stop keeper",
+        bg: CheatcodeToBg["keeper"],
+        caption: "Stop keeper",
+        inputs: {},
+        execute: async () => await keeper.stop(),
+        loading: () => "[CHEATCODE] Stopping keeper...",
+        success: () => `Keeper stopped`,
+        error: () => `Failed to stop keeper`,
+        disabled: !keeper.instance || !keeper.running,
+      }),
+    [keeper.instance, keeper.running],
+  );
+
+  const setKeeperBearerToken = useMemo(
+    () =>
+      createCheatcode({
+        title: "Set keeper bearer token",
+        bg: CheatcodeToBg["keeper"],
+        caption: "Set keeper bearer token",
+        inputs: {
+          token: {
+            label: "Bearer token",
+            inputType: "string",
+            defaultValue: "",
+          },
+        },
+        execute: async ({ token }) => {
+          keeper.setBearerToken(token.value);
+          keeper.create();
+          return { success: true };
+        },
+        loading: () => "[CHEATCODE] Setting keeper bearer token...",
+        success: () => `Keeper bearer token set`,
+        error: () => `Failed to set keeper bearer token`,
+      }),
+    [],
   );
 
   return [
@@ -1164,6 +1271,10 @@ export const useCheatcodes = () => {
     moveShieldEater,
     setShieldEaterDestination,
     feedShieldEater,
+    empireConfig,
     ...Object.values(updateGameConfig),
+    setKeeperBearerToken,
+    startKeeper,
+    stopKeeper,
   ];
 };

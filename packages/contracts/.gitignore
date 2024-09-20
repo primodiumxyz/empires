@@ -15,5 +15,5 @@ src/codegen/
 .DS_Store
 
 # Ignore MUD deploy artifacts
-deploys/**/*.json
+deploys/
 .env

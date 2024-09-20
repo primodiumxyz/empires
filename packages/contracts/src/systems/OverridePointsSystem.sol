@@ -23,7 +23,7 @@ contract OverridePointsSystem is EmpiresSystem {
    * @param _empire The empire to sell points from.
    * @param _points The number of points to sell.
    */
-  function sellPoints(EEmpire _empire, uint256 _points) public {
+  function sellPoints(EEmpire _empire, uint256 _points) public _onlyNotGameOver {
     bytes32 playerId = addressToId(_msgSender());
     require(
       _points <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
@@ -35,11 +35,11 @@ contract OverridePointsSystem is EmpiresSystem {
     // require that the pot has enough ETH to send
     require(pointSaleValue <= Balances.get(EMPIRES_NAMESPACE_ID), "[OverrideSystem] Insufficient funds for point sale");
 
-    // set the new empire point cost
-    LibPrice.sellEmpirePointCostDown(_empire, _points);
-
     // remove points from player and empire's issued points count
     LibPoint.removePoints(_empire, playerId, _points);
+
+    // set the new empire point price
+    LibPrice.sellEmpirePointPriceDown(_empire, _points);
 
     PlayersMap.setGain(playerId, PlayersMap.get(playerId).gain + pointSaleValue);
 
@@ -49,7 +49,7 @@ contract OverridePointsSystem is EmpiresSystem {
     SellPointsOverrideLog.set(
       pseudorandomEntity(),
       SellPointsOverrideLogData({
-        playerId: addressToId(_msgSender()),
+        playerId: playerId,
         turn: Turn.getValue(),
         empireId: _empire,
         ethReceived: pointSaleValue,

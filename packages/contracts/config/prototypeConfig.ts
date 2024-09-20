@@ -15,6 +15,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     tables: {
       P_GameConfig: {
         turnLengthBlocks: 8n,
+        nextGameLengthTurns: 225n, // total blocks is turnLengthBlocks * nextGameLengthTurns
         goldGenRate: 1n,
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
@@ -23,11 +24,11 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),
         pointRake: scaleMultiplier(0.05), // out of 1, scales to out of 10000
-        pointSellTax: BigInt(POINTS_UNIT * 0),
-        minPointCost: BigInt(POINTS_UNIT * 0.000001),
-        startPointCost: BigInt(POINTS_UNIT * 0.000004),
+        pointSellTax: scaleMultiplier(0.05), // out of 1, scales to out of 10000
+        minPointPrice: BigInt(POINTS_UNIT * 0.000001),
+        startPointPrice: BigInt(POINTS_UNIT * 0.000004),
         pointGenRate: BigInt(POINTS_UNIT * 0.0000004),
-        pointCostIncrease: BigInt(POINTS_UNIT * 0.0000005),
+        pointPriceIncrease: BigInt(POINTS_UNIT * 0.0000005),
       },
       P_MagnetConfig: {
         lockedPointsPercent: scaleMultiplier(0.1),

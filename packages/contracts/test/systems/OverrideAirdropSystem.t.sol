@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_GameConfig, Planet, P_PointConfig } from "codegen/index.sol";
+import { P_GameConfig, Planet, P_PointConfig, Empire } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
@@ -75,10 +75,19 @@ contract OverrideAirdropSystemTest is PrimodiumTest, OverrideAirdropSystem {
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Red, 1);
     vm.expectRevert("[OverrideSystem] Empire is not owned");
     world.Empires__airdropGold{ value: cost }(EEmpire.NULL, 1);
-    vm.expectRevert("[EmpiresSystem] Incorrect payment");
+    vm.expectRevert("[OverrideSystem] Insufficient payment");
     world.Empires__airdropGold{ value: cost - 1 }(EEmpire.Red, 1);
   }
 
+  function testAirdropGoldFailDefeatedEmpire() public {
+    vm.startPrank(creator);
+    Empire.setIsDefeated(EEmpire.Red, true);
+    uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Red, 1);
+    vm.expectRevert("[EmpiresSystem] Empire defeated");
+    world.Empires__airdropGold{ value: cost }(EEmpire.Red, 1);
+  }
+
+  // this shouldn't happen in production because it should be flagged as defeated, but we'll test it just in case
   function testAirdropGoldFailDeadEmpire() public {
     // test an empire that shouldn't be playing - EEmpire.LENGTH
     uint256 cost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.LENGTH, 1);
