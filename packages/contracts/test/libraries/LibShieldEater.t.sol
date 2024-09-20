@@ -192,6 +192,11 @@ contract LibShieldEaterTest is PrimodiumTest {
     fuzz = bound(fuzz, 1000000, 1e36);
     vm.roll(fuzz);
 
+    uint256 centerDamage = P_ShieldEaterConfig.getDetonateCenterDamage();
+    if (centerDamage > 10000) {
+      centerDamage = 10000;
+    }
+
     uint256 adjacentDamage = P_ShieldEaterConfig.getDetonateAdjacentDamage();
     if (adjacentDamage > 10000) {
       adjacentDamage = 10000;
@@ -219,7 +224,14 @@ contract LibShieldEaterTest is PrimodiumTest {
 
     LibShieldEater.detonate();
 
-    assertEq(Planet.getShieldCount(centerPlanet), 0, "LibShieldEater: Center shieldCount not zero.");
+    preShieldCount = baseShieldCount;
+    postShieldCount = Planet.getShieldCount(centerPlanet);
+
+    assertTrue(
+      postShieldCount == preShieldCount - ((preShieldCount * centerDamage) / 10000),
+      "LibShieldEater: incorrect adjacent shield damage."
+    );
+
     assertEq(ShieldEater.getCurrentCharge(), 0, "LibShieldEater: CurrentCharge not zero.");
 
     for (uint256 i = 2; i < uint256(EDirection.LENGTH); i++) {
@@ -233,7 +245,7 @@ contract LibShieldEaterTest is PrimodiumTest {
 
         assertTrue(
           postShieldCount == preShieldCount - ((preShieldCount * adjacentDamage) / 10000),
-          "LibShieldEater: incorrect shield damage."
+          "LibShieldEater: incorrect adjacent shield damage."
         );
       }
     }
