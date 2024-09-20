@@ -35,7 +35,7 @@ export const useCheatcodes = () => {
   } = useCore();
   const game = useGame();
   const { playerAccount } = usePlayerAccount();
-  const { devCalls, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake } = useContractCalls();
+  const { devCalls, execute, executeBatch, resetGame: _resetGame, withdrawRake: _withdrawRake } = useContractCalls();
   const requestDrip = useDripAccount();
   const keeper = useKeeperClient();
 
@@ -59,7 +59,7 @@ export const useCheatcodes = () => {
     () =>
       createCheatcode({
         title: "Set ships",
-        caption: "Set the amount of ships on a planet",
+        caption: "Set the amount of ships on a planet (dev)",
         bg: CheatcodeToBg["overrides"],
         inputs: {
           planet: {
@@ -156,7 +156,7 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "Send ships",
       bg: CheatcodeToBg["overrides"],
-      caption: "Send ships from one planet to another",
+      caption: "Send ships from one planet to another (dev)",
       inputs: {
         from: {
           label: "From",
@@ -257,7 +257,7 @@ export const useCheatcodes = () => {
     () =>
       createCheatcode({
         title: "Set shields",
-        caption: "Set the amount of shields on a planet",
+        caption: "Set the amount of shields on a planet (dev)",
         bg: CheatcodeToBg["overrides"],
         inputs: {
           planet: {
@@ -293,7 +293,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Set gold",
         bg: CheatcodeToBg["mechanisms"],
-        caption: "Set the gold count for a planet",
+        caption: "Set the gold count for a planet (dev)",
         inputs: {
           planet: {
             label: "Planet",
@@ -327,7 +327,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Generate gold",
         bg: CheatcodeToBg["mechanisms"],
-        caption: "Give a specified amount of gold to all planets",
+        caption: "Give a specified amount of gold to all planets (dev)",
         inputs: {
           amount: {
             label: "Amount",
@@ -359,7 +359,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Set empire",
         bg: CheatcodeToBg["mechanisms"],
-        caption: "Set the empire of a planet",
+        caption: "Set the empire of a planet (dev)",
         inputs: {
           planet: {
             label: "Planet",
@@ -487,7 +487,7 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "Give points",
       bg: CheatcodeToBg["mechanisms"],
-      caption: "Give points from an empire to an address",
+      caption: "Give points from an empire to an address (dev)",
       inputs: {
         empire: {
           label: "Empire",
@@ -578,7 +578,7 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "Advance turns",
       bg: CheatcodeToBg["time"],
-      caption: "Advance a specified number of turns",
+      caption: "Advance a specified number of turns (dev)",
       inputs: {
         amount: {
           label: "Amount",
@@ -601,7 +601,7 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "End game",
       bg: CheatcodeToBg["time"],
-      caption: "End the game",
+      caption: "End the game (dev)",
       inputs: {},
       execute: async () => {
         const nextBlock = await playerAccount.publicClient.getBlockNumber();
@@ -623,10 +623,16 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Reset game",
         bg: CheatcodeToBg["time"],
-        caption: "Reset the game",
-        inputs: {},
-        execute: async () => {
-          const success = await _resetGame();
+        caption: "Reset the game (admin)",
+        inputs: {
+          nextGameStartBlock: {
+            label: "Next game start block",
+            inputType: "number",
+            defaultValue: currentBlock + 10n,
+          },
+        },
+        execute: async ({ nextGameStartBlock }) => {
+          const success = await _resetGame(nextGameStartBlock.value);
           const planets = tables.Planet.getAll();
 
           if (success) {
@@ -650,7 +656,7 @@ export const useCheatcodes = () => {
         success: () => `Game reset`,
         error: () => `Failed to reset game`,
       }),
-    [],
+    [currentBlock],
   );
 
   /* ---------------------------------- UTILS --------------------------------- */
@@ -660,7 +666,7 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "Drip",
       bg: CheatcodeToBg["utils"],
-      caption: "Drip eth to the player account",
+      caption: "Drip eth to the player account (dev)",
       inputs: {},
       execute: async () => {
         const receipt = await requestDrip?.(playerAccount.address, true);
@@ -714,7 +720,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Place magnet",
         bg: CheatcodeToBg["magnet"],
-        caption: "on a planet",
+        caption: "on a planet (dev)",
         inputs: {
           empire: {
             label: "Empire",
@@ -796,7 +802,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Remove magnet",
         bg: CheatcodeToBg["magnet"],
-        caption: "from a planet",
+        caption: "from a planet (dev)",
         inputs: {
           empire: {
             label: "Empire",
@@ -835,7 +841,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Remove all magnets",
         bg: CheatcodeToBg["magnet"],
-        caption: "for an empire",
+        caption: "for an empire (dev)",
         inputs: {
           empire: {
             label: "Empire",
@@ -871,7 +877,7 @@ export const useCheatcodes = () => {
           <div className="flex gap-2">
             <Price wei={rake} />
             <span>
-              (<Price wei={rake} forceBlockchainUnits />)
+              (<Price wei={rake} forceBlockchainUnits />) (admin)
             </span>
           </div>
         ),
@@ -893,7 +899,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Move shield eater",
         bg: CheatcodeToBg["shieldEater"],
-        caption: "to planet",
+        caption: "to planet (dev)",
         inputs: {
           planet: {
             label: "Planet",
@@ -922,7 +928,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Set shield eater destination",
         bg: CheatcodeToBg["shieldEater"],
-        caption: "to planet",
+        caption: "to planet (dev)",
         inputs: {
           planet: {
             label: "Planet",
@@ -951,7 +957,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Feed shield eater",
         bg: CheatcodeToBg["shieldEater"],
-        caption: "set ready to detonate",
+        caption: "set ready to detonate (dev)",
         inputs: {},
         execute: async () => {
           const threshold = tables.P_ShieldEaterConfig.get()?.detonationThreshold ?? BigInt(0);
@@ -968,13 +974,76 @@ export const useCheatcodes = () => {
     [],
   );
 
+  /* ---------------------------------- ADMIN --------------------------------- */
+  const updateGameConfig = useMemo(
+    () =>
+      createCheatcode({
+        title: "Update game config",
+        bg: CheatcodeToBg["config"],
+        caption: "P_GameConfig (admin)",
+        inputs: {
+          empireCount: {
+            label: "Empire count",
+            inputType: "number",
+            defaultValue: gameConfig?.empireCount ?? 1,
+          },
+          turnLengthBlocks: {
+            label: "Turn length blocks",
+            inputType: "number",
+            defaultValue: gameConfig?.turnLengthBlocks ?? BigInt(1),
+          },
+          nextGameLengthTurns: {
+            label: "Next game length in turns",
+            inputType: "number",
+            defaultValue: gameConfig?.nextGameLengthTurns ?? BigInt(1),
+          },
+          goldGenRate: {
+            label: "Gold generation rate",
+            inputType: "number",
+            defaultValue: gameConfig?.goldGenRate ?? BigInt(1),
+          },
+          roundBlocksLeft: {
+            label: "Round blocks left",
+            inputType: "number",
+            defaultValue:
+              currentBlock >= (gameConfig?.gameOverBlock ?? 0n) ? 0n : (gameConfig?.gameOverBlock ?? 0n) - currentBlock,
+          },
+          gameStartBlock: {
+            label: "Game start block",
+            inputType: "number",
+            defaultValue: gameConfig?.gameStartBlock ?? BigInt(0),
+          },
+        },
+        execute: async (properties) => {
+          const newProperties = {
+            empireCount: Number(properties.empireCount.value),
+            turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
+            nextGameLengthTurns: BigInt(properties.nextGameLengthTurns.value),
+            goldGenRate: BigInt(properties.goldGenRate.value),
+            gameOverBlock: currentBlock + BigInt(properties.roundBlocksLeft.value),
+            gameStartBlock: BigInt(properties.gameStartBlock.value),
+          };
+
+          return await execute({
+            functionName: "Empires__setGameConfig",
+            args: [newProperties],
+            txQueueOptions: { id: "set-game-config" },
+          });
+        },
+        loading: () => "[CHEATCODE] Updating game config...",
+        success: () => `Game config updated`,
+        error: () => `Failed to update game config; verify in admin panel that you have the correct role`,
+      }),
+    [gameConfig, currentBlock],
+  );
+
   /* --------------------------------- CONFIG --------------------------------- */
   const empireConfig = useMemo(
     () =>
       createCheatcode({
         title: "Update empire",
         bg: CheatcodeToBg["config"],
-        caption: "Empire config",
+        caption: "Empire config (dev)",
         inputs: {
           empire: {
             label: "Empire",
@@ -1009,70 +1078,12 @@ export const useCheatcodes = () => {
     [empires],
   );
 
-  const updateGameConfig = useMemo(
+  const updatePrototypeConfig = useMemo(
     () => ({
-      P_GameConfig: createCheatcode({
-        title: "Update game config",
-        bg: CheatcodeToBg["config"],
-        caption: "P_GameConfig",
-        inputs: {
-          empireCount: {
-            label: "Empire count",
-            inputType: "number",
-            defaultValue: gameConfig?.empireCount ?? 1,
-          },
-          turnLengthBlocks: {
-            label: "Turn length blocks",
-            inputType: "number",
-            defaultValue: gameConfig?.turnLengthBlocks ?? BigInt(1),
-          },
-          nextGameLengthTurns: {
-            label: "Next game length in turns",
-            inputType: "number",
-            defaultValue: gameConfig?.nextGameLengthTurns ?? BigInt(1),
-          },
-          goldGenRate: {
-            label: "Gold generation rate",
-            inputType: "number",
-            defaultValue: gameConfig?.goldGenRate ?? BigInt(1),
-          },
-          roundBlocksLeft: {
-            label: "Round blocks left",
-            inputType: "number",
-            defaultValue:
-              currentBlock >= (gameConfig?.gameOverBlock ?? 0n) ? 0n : (gameConfig?.gameOverBlock ?? 0n) - currentBlock,
-          },
-          gameStartTimestamp: {
-            label: "Game start timestamp",
-            inputType: "number",
-            defaultValue: gameConfig?.gameStartTimestamp ?? BigInt(0),
-          },
-        },
-        execute: async (properties) => {
-          const newProperties = {
-            empireCount: Number(properties.empireCount.value),
-            turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
-            nextGameLengthTurns: BigInt(properties.nextGameLengthTurns.value),
-            goldGenRate: BigInt(properties.goldGenRate.value),
-            gameOverBlock: currentBlock + BigInt(properties.roundBlocksLeft.value),
-            gameStartTimestamp: BigInt(properties.gameStartTimestamp.value),
-          };
-
-          return await devCalls.setProperties({
-            table: tables.P_GameConfig,
-            keys: {},
-            properties: newProperties,
-          });
-        },
-        loading: () => "[CHEATCODE] Updating game config...",
-        success: () => `Game config updated`,
-        error: () => `Failed to update game config`,
-      }),
-
       P_PointConfig: createCheatcode({
         title: "Update point config",
         bg: CheatcodeToBg["config"],
-        caption: "P_PointConfig",
+        caption: "P_PointConfig (dev)",
         inputs: {
           pointUnit: {
             label: "Point unit",
@@ -1122,7 +1133,7 @@ export const useCheatcodes = () => {
       P_OverrideConfig: createCheatcode({
         title: "Update override config",
         bg: CheatcodeToBg["config"],
-        caption: "P_OverrideConfig",
+        caption: "P_OverrideConfig (dev)",
         inputs: {
           overrideAction: {
             label: "Override action",
@@ -1171,7 +1182,7 @@ export const useCheatcodes = () => {
       P_RoutineCosts: createCheatcode({
         title: "Update routine costs",
         bg: CheatcodeToBg["config"],
-        caption: "P_RoutineCosts",
+        caption: "P_RoutineCosts (dev)",
         inputs: {
           buyShips: {
             label: "Buy ships (in gold)",
@@ -1200,7 +1211,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Start keeper",
         bg: CheatcodeToBg["keeper"],
-        caption: "Start keeper",
+        caption: "Start keeper (bearer)",
         inputs: {},
         execute: async () => await keeper.start(),
         loading: () => "[CHEATCODE] Starting keeper...",
@@ -1216,7 +1227,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Stop keeper",
         bg: CheatcodeToBg["keeper"],
-        caption: "Stop keeper",
+        caption: "Stop keeper (bearer)",
         inputs: {},
         execute: async () => await keeper.stop(),
         loading: () => "[CHEATCODE] Stopping keeper...",
@@ -1256,6 +1267,7 @@ export const useCheatcodes = () => {
     advanceTurns,
     endGame,
     resetGame,
+    updateGameConfig,
     dripEth,
     withdrawRake,
     setShips,
@@ -1272,7 +1284,7 @@ export const useCheatcodes = () => {
     setShieldEaterDestination,
     feedShieldEater,
     empireConfig,
-    ...Object.values(updateGameConfig),
+    ...Object.values(updatePrototypeConfig),
     setKeeperBearerToken,
     startKeeper,
     stopKeeper,
