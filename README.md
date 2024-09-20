@@ -75,3 +75,11 @@ Start the Keeper with the following procedure:
 
 Once the game has finished and you would like to reset it for a new match, you can do so with the `Reset Game` cheatcode.
 Make sure to set an appropriate `gameStartBlock` when calling this cheatcode.
+
+### Cheatcodes
+
+Cheatcodes have different permissions (marked as "dev"/"admin"/"bearer").
+
+- `dev`: only available through `DevSystem`, meaning in non-production environments;
+- `admin`: only available to accounts with the `ADMIN` role;
+- `bearer`: requires a the bearer token to reach endpoints.
