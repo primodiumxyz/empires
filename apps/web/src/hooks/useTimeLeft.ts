@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useCore } from "@primodiumxyz/core/react";
+import useWinningEmpire from "@/hooks/useWinningEmpire";
 
 export const useTimeLeft = (): {
   timeLeftMs: number | undefined;
   blocksLeft: bigint;
   timeUntilStartMs: number | undefined;
   started: boolean;
+  gameActive: boolean;
 } => {
   const { tables } = useCore();
+  const { gameOver } = useWinningEmpire();
   const [timeLeft, setTimeLeft] = useState<number>();
   const [timeUntilStart, setTimeUntilStart] = useState<number>();
   const gameConfig = tables.P_GameConfig.use();
@@ -53,9 +56,15 @@ export const useTimeLeft = (): {
   }, [expectedEndTime, expectedStartTime]);
 
   return useMemo(() => {
-    if (!block) return { timeLeftMs: 0, blocksLeft: 0n, timeUntilStartMs: 0, started: false };
+    if (!block) return { timeLeftMs: 0, blocksLeft: 0n, timeUntilStartMs: 0, started: false, gameActive: false };
     const blocksLeft = endBlock - block.value;
     const started = block.value >= startBlock;
-    return { timeLeftMs: timeLeft, blocksLeft, timeUntilStartMs: timeUntilStart, started };
-  }, [time, block, endBlock, timeLeft, timeUntilStart]);
+    return {
+      timeLeftMs: timeLeft,
+      blocksLeft,
+      timeUntilStartMs: timeUntilStart,
+      started,
+      gameActive: started && !gameOver,
+    };
+  }, [time, block, endBlock, timeLeft, timeUntilStart, gameOver]);
 };

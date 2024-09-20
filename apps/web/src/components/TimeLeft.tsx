@@ -29,7 +29,7 @@ export const TimeLeft = ({ className, small, invert }: { className?: string; sma
     Math.max(0, Number(turn?.nextTurnBlock ?? 0n) - Number(blockNumber)) * Number(avgBlockTime),
   );
 
-  if (!turn || (gameOver && !started && !timeUntilStartMs)) return null;
+  if (!turn || (gameOver && !timeUntilStartMs)) return null;
   if (!started && timeUntilStartMs) {
     return (
       <div className={cn("pointer-events-auto flex flex-col justify-center text-center lg:gap-1", className)}>

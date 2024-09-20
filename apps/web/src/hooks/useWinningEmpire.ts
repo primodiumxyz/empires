@@ -9,16 +9,12 @@ const useWinningEmpire = (): { gameOver: boolean; empire: EEmpire | null } => {
   // Check if there's a winning empire in the WinningEmpire table
   let winningEmpire = tables.WinningEmpire.use()?.empire || null;
   // If no winning empire is set, calculate it
-  const { gameStartBlock, gameOverBlock } = tables.P_GameConfig.use() ?? { gameStartBlock: 0n, gameOverBlock: 0n };
+  const gameOverBlock = tables.P_GameConfig.use()?.gameOverBlock ?? 0n;
   const currentBlock = tables.BlockNumber.use()?.value ?? 0n;
 
   const citadelPlanets = tables.Planet.useAllWith({ isCitadel: true }) ?? [];
 
   return useMemo(() => {
-    if (gameStartBlock > currentBlock) {
-      return { gameOver: true, empire: null };
-    }
-
     if (winningEmpire !== null && winningEmpire !== 0) {
       return { gameOver: true, empire: winningEmpire };
     }
@@ -65,7 +61,7 @@ const useWinningEmpire = (): { gameOver: boolean; empire: EEmpire | null } => {
     }
 
     return { gameOver: true, empire: winningEmpire };
-  }, [gameOverBlock, gameStartBlock, currentBlock, citadelPlanets, tables]);
+  }, [gameOverBlock, currentBlock, citadelPlanets, tables]);
 };
 
 export default useWinningEmpire;

@@ -7,25 +7,29 @@ import { Button } from "@/components/core/Button";
 import { NumberInput } from "@/components/core/NumberInput";
 import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
-import useWinningEmpire from "@/hooks/useWinningEmpire";
-import { SlippageSettings } from "@/components/shared/SlippageSettings";
+import { useTimeLeft } from "@/hooks/useTimeLeft";
 
 export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
   const { createShip } = useContractCalls();
-  const { gameOver } = useWinningEmpire();
+  const { gameActive } = useTimeLeft();
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? EEmpire.NULL;
   const [inputValue, setInputValue] = useState("1");
-  const {expected: createShipPriceWei, max: createShipPriceWeiMax} = useOverrideCost(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
+  const { expected: createShipPriceWei, max: createShipPriceWeiMax } = useOverrideCost(
+    EOverride.CreateShip,
+    planetEmpire,
+    BigInt(inputValue),
+  );
   const createShipPointsReceived = useOverridePointsReceived(EOverride.CreateShip, planetEmpire, BigInt(inputValue));
   const { playerAccount, login } = usePlayerAccount();
 
-  const supportDisabled = gameOver || Number(planetEmpire) === 0;
+  const supportDisabled = !gameActive || Number(planetEmpire) === 0;
 
   return (
     <div className="flex w-full flex-col items-center gap-2">
@@ -33,7 +37,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
       <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
       <div className="flex flex-col items-center">
         {!!playerAccount && (
-          <TransactionQueueMask id={`${entity}-create-ship`} className = "relative flex flex-row items-center ">
+          <TransactionQueueMask id={`${entity}-create-ship`} className="relative flex flex-row items-center">
             <Button
               onClick={async () => {
                 await createShip(entity, BigInt(inputValue), createShipPriceWeiMax);
@@ -46,8 +50,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             >
               ADD SHIPS
             </Button>
-            <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-[105%]" disabled={supportDisabled} />
-
+            <SlippageSettings className="absolute left-[105%] top-1/2 -translate-y-1/2" disabled={supportDisabled} />
           </TransactionQueueMask>
         )}
 
@@ -58,7 +61,9 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
         )}
         <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
           <Price wei={createShipPriceWei} />
-          <p className="opacity-70 text-[0.6rem]" >Max <Price wei={createShipPriceWeiMax}  /></p>
+          <p className="text-[0.6rem] opacity-70">
+            Max <Price wei={createShipPriceWeiMax} />
+          </p>
         </div>
       </div>
     </div>
