@@ -451,10 +451,10 @@
   },
   {
     "type": "function",
-    "name": "Empires__setGameConfig",
+    "name": "Empires__setGameConfigAndTurn",
     "inputs": [
       {
-        "name": "gameConfig",
+        "name": "_gameConfig",
         "type": "tuple",
         "internalType": "struct P_GameConfigData",
         "components": [
@@ -487,6 +487,28 @@
             "name": "empireCount",
             "type": "uint8",
             "internalType": "uint8"
+          }
+        ]
+      },
+      {
+        "name": "_turn",
+        "type": "tuple",
+        "internalType": "struct TurnData",
+        "components": [
+          {
+            "name": "nextTurnBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "empire",
+            "type": "uint8",
+            "internalType": "enum EEmpire"
+          },
+          {
+            "name": "value",
+            "type": "uint256",
+            "internalType": "uint256"
           }
         ]
       }
