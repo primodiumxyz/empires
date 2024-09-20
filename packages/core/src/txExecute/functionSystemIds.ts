@@ -35,6 +35,6 @@ export const functionSystemIds: {
   Empires__unpause: getSystemId("AdminSystem"),
   Empires__setRole: getSystemId("AdminSystem"),
   Empires__removeRole: getSystemId("AdminSystem"),
-  Empires__setGameConfig: getSystemId("AdminSystem"),
+  Empires__setGameConfigAndTurn: getSystemId("AdminSystem"),
   Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
 };

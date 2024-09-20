@@ -1,12 +1,11 @@
 import { useMemo } from "react";
-import config from "postcss.config";
 import { Hex, padHex } from "viem";
 
 import { EEmpire, ERoutine, POINTS_UNIT } from "@primodiumxyz/contracts";
 import { EOverride } from "@primodiumxyz/contracts/config/enums";
 import { addressToEntity, TxReceipt } from "@primodiumxyz/core";
 import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
-import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
+import { defaultEntity, Entity, PropertiesSansMetadata } from "@primodiumxyz/reactive-tables";
 import { resourceToHex } from "@primodiumxyz/reactive-tables/utils";
 import { Price } from "@/components/shared/Price";
 import { TableOperation } from "@/contractCalls/contractCalls/dev";
@@ -44,10 +43,18 @@ export const useCheatcodes = () => {
   const planets = tables.Planet.useAll();
 
   // config
-  const gameConfig = tables.P_GameConfig.use();
+  const gameConfig = tables.P_GameConfig.use() ?? {
+    turnLengthBlocks: BigInt(0),
+    nextGameLengthTurns: BigInt(0),
+    goldGenRate: BigInt(0),
+    gameStartBlock: BigInt(0),
+    gameOverBlock: BigInt(0),
+    empireCount: 0,
+  };
   const pointConfig = tables.P_PointConfig.use();
   const overrideConfig = tables.P_OverrideConfig.use();
   const currentBlock = tables.BlockNumber.use()?.value ?? 0n;
+  const turn = tables.Turn.use() ?? { nextTurnBlock: BigInt(0), empire: 0, value: BigInt(0) };
 
   // rake
   const adminHex = resourceToHex({ type: "namespace", namespace: "Admin", name: "" });
@@ -1021,11 +1028,10 @@ export const useCheatcodes = () => {
             inputType: "number",
             defaultValue: gameConfig?.goldGenRate ?? BigInt(1),
           },
-          roundBlocksLeft: {
-            label: "Round blocks left",
+          gameOverBlock: {
+            label: "Game over block",
             inputType: "number",
-            defaultValue:
-              currentBlock >= (gameConfig?.gameOverBlock ?? 0n) ? 0n : (gameConfig?.gameOverBlock ?? 0n) - currentBlock,
+            defaultValue: gameConfig?.gameOverBlock ?? BigInt(0),
           },
           gameStartBlock: {
             label: "Game start block",
@@ -1039,20 +1045,13 @@ export const useCheatcodes = () => {
             turnLengthBlocks: BigInt(properties.turnLengthBlocks.value),
             nextGameLengthTurns: BigInt(properties.nextGameLengthTurns.value),
             goldGenRate: BigInt(properties.goldGenRate.value),
-            gameOverBlock: currentBlock + BigInt(properties.roundBlocksLeft.value),
+            gameOverBlock: BigInt(properties.gameOverBlock.value),
             gameStartBlock: BigInt(properties.gameStartBlock.value),
           };
 
-          // only update modified properties
-          const modifiedProperties = Object.fromEntries(
-            Object.entries(newProperties).filter(
-              ([key, value]) => value !== properties[key as keyof typeof properties].defaultValue,
-            ),
-          );
-
           return await execute({
-            functionName: "Empires__setGameConfig",
-            args: [modifiedProperties],
+            functionName: "Empires__setGameConfigAndTurn",
+            args: [newProperties, turn],
             txQueueOptions: { id: "set-game-config" },
           });
         },
@@ -1060,7 +1059,55 @@ export const useCheatcodes = () => {
         success: () => `Game config updated`,
         error: () => `Failed to update game config; verify in admin panel that you have the correct role`,
       }),
-    [gameConfig, currentBlock],
+    [gameConfig, turn, currentBlock],
+  );
+
+  const updateTurn = useMemo(
+    () =>
+      createCheatcode({
+        title: "Update turn",
+        bg: CheatcodeToBg["config"],
+        caption: `Turn ${turn.value}, ${EmpireEnumToConfig[turn.empire as EEmpire].name} empire, next in ${(turn.nextTurnBlock - currentBlock).toLocaleString()} blocks`,
+        label: "admin",
+        inputs: {
+          nextTurnBlock: {
+            label: "Next turn block",
+            inputType: "number",
+            defaultValue: turn.nextTurnBlock ?? BigInt(0),
+          },
+          value: {
+            label: "Value",
+            inputType: "number",
+            defaultValue: turn.value ?? BigInt(0),
+          },
+          empire: {
+            label: "Empire",
+            inputType: "number",
+            defaultValue: turn.empire ?? EEmpire.NULL,
+            options: empires.map((entity) => ({
+              id: entity,
+              value: EmpireEnumToConfig[Number(entity) as EEmpire].name,
+            })),
+          },
+        },
+        execute: async (properties) => {
+          const newProperties = {
+            nextTurnBlock: BigInt(properties.nextTurnBlock.value),
+            empire: Number(properties.empire.value),
+            value: BigInt(properties.value.value),
+          };
+
+          return await execute({
+            functionName: "Empires__setGameConfigAndTurn",
+            args: [gameConfig, newProperties],
+            txQueueOptions: { id: "set-game-config-turn" },
+          });
+        },
+        loading: () => "[CHEATCODE] Updating turn...",
+        success: () => `Turn updated`,
+        error: () => `Failed to update turn`,
+      }),
+    [gameConfig, turn, currentBlock, empires],
   );
 
   /* --------------------------------- CONFIG --------------------------------- */
@@ -1300,6 +1347,7 @@ export const useCheatcodes = () => {
     endGame,
     resetGame,
     updateGameConfig,
+    updateTurn,
     dripEth,
     withdrawRake,
     setShips,
