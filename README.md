@@ -36,10 +36,10 @@ Before deploying, set the `FIRST_MATCH_START_BLOCK` in the `.env` file to a desi
 ### Game States
 There are a few different game states to be aware of:
 
-1. `Ready`: The game has been successfully deployed and is ready to be started.
-1. `gameStartBlock`: The block at which the game will start.
-1. `WinningEmpire`: The empire that has won the game. Whenever this is set as `EEmpire.NULL`, the winner has not been decided yet.
-1. `gameOverBlock`: The block at which the game will end due to time running out.
+1. `Ready`: The game has been successfully deployed and is ready to be started. Admins can pause the game via the client cheatcodes, which calls `Ready.set(false)`.
+1. `gameStartBlock`: The block at which the game will start. Admins can set this via the client cheatcodes, which calls `AdminSystem.setGameConfig()`.
+1. `WinningEmpire`: The empire that has won the game. Whenever this is set as `EEmpire.NULL`, the winner has not been decided yet. Resets to `EEmpire.NULL` when `resetGame()` is called.
+1. `gameOverBlock`: The block at which the game will end due to time running out. Admins can set this via the client cheatcodes, which calls `AdminSystem.setGameConfig()`.
 
 
 ### First Match Start
