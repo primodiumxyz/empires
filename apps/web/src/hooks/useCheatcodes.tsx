@@ -980,7 +980,7 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Update game config",
         bg: CheatcodeToBg["config"],
-        caption: "P_GameConfig (admin)",
+        caption: `Current block: ${currentBlock.toLocaleString()} (admin)`,
         inputs: {
           empireCount: {
             label: "Empire count",
@@ -1024,9 +1024,16 @@ export const useCheatcodes = () => {
             gameStartBlock: BigInt(properties.gameStartBlock.value),
           };
 
+          // only update modified properties
+          const modifiedProperties = Object.fromEntries(
+            Object.entries(newProperties).filter(
+              ([key, value]) => value !== properties[key as keyof typeof properties].defaultValue,
+            ),
+          );
+
           return await execute({
             functionName: "Empires__setGameConfig",
-            args: [newProperties],
+            args: [modifiedProperties],
             txQueueOptions: { id: "set-game-config" },
           });
         },
