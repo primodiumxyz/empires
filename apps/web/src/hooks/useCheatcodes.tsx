@@ -59,7 +59,8 @@ export const useCheatcodes = () => {
     () =>
       createCheatcode({
         title: "Set ships",
-        caption: "Set the amount of ships on a planet (dev)",
+        caption: "Set the amount of ships on a planet",
+        label: "dev",
         bg: CheatcodeToBg["overrides"],
         inputs: {
           planet: {
@@ -156,7 +157,8 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "Send ships",
       bg: CheatcodeToBg["overrides"],
-      caption: "Send ships from one planet to another (dev)",
+      caption: "Send ships from one planet to another",
+      label: "dev",
       inputs: {
         from: {
           label: "From",
@@ -257,7 +259,8 @@ export const useCheatcodes = () => {
     () =>
       createCheatcode({
         title: "Set shields",
-        caption: "Set the amount of shields on a planet (dev)",
+        caption: "Set the amount of shields on a planet",
+        label: "dev",
         bg: CheatcodeToBg["overrides"],
         inputs: {
           planet: {
@@ -293,7 +296,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Set gold",
         bg: CheatcodeToBg["mechanisms"],
-        caption: "Set the gold count for a planet (dev)",
+        caption: "Set the gold count for a planet",
+        label: "dev",
         inputs: {
           planet: {
             label: "Planet",
@@ -327,7 +331,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Generate gold",
         bg: CheatcodeToBg["mechanisms"],
-        caption: "Give a specified amount of gold to all planets (dev)",
+        caption: "Give a specified amount of gold to all planets",
+        label: "dev",
         inputs: {
           amount: {
             label: "Amount",
@@ -359,7 +364,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Set empire",
         bg: CheatcodeToBg["mechanisms"],
-        caption: "Set the empire of a planet (dev)",
+        caption: "Set the empire of a planet",
+        label: "dev",
         inputs: {
           planet: {
             label: "Planet",
@@ -487,7 +493,8 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "Give points",
       bg: CheatcodeToBg["mechanisms"],
-      caption: "Give points from an empire to an address (dev)",
+      caption: "Give points from an empire to an address",
+      label: "dev",
       inputs: {
         empire: {
           label: "Empire",
@@ -578,7 +585,8 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "Advance turns",
       bg: CheatcodeToBg["time"],
-      caption: "Advance a specified number of turns (dev)",
+      caption: "Advance a specified number of turns",
+      label: "dev",
       inputs: {
         amount: {
           label: "Amount",
@@ -601,7 +609,8 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "End game",
       bg: CheatcodeToBg["time"],
-      caption: "End the game (dev)",
+      caption: "End the game",
+      label: "dev",
       inputs: {},
       execute: async () => {
         const nextBlock = await playerAccount.publicClient.getBlockNumber();
@@ -623,7 +632,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Reset game",
         bg: CheatcodeToBg["time"],
-        caption: "Reset the game (admin)",
+        caption: "Reset the game",
+        label: "admin",
         inputs: {
           nextGameStartBlock: {
             label: "Next game start block",
@@ -666,7 +676,8 @@ export const useCheatcodes = () => {
     return createCheatcode({
       title: "Drip",
       bg: CheatcodeToBg["utils"],
-      caption: "Drip eth to the player account (dev)",
+      caption: "Drip eth to the player account",
+      label: "dev",
       inputs: {},
       execute: async () => {
         const receipt = await requestDrip?.(playerAccount.address, true);
@@ -720,7 +731,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Place magnet",
         bg: CheatcodeToBg["magnet"],
-        caption: "on a planet (dev)",
+        caption: "on a planet",
+        label: "dev",
         inputs: {
           empire: {
             label: "Empire",
@@ -802,7 +814,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Remove magnet",
         bg: CheatcodeToBg["magnet"],
-        caption: "from a planet (dev)",
+        caption: "from a planet",
+        label: "dev",
         inputs: {
           empire: {
             label: "Empire",
@@ -841,7 +854,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Remove all magnets",
         bg: CheatcodeToBg["magnet"],
-        caption: "for an empire (dev)",
+        caption: "for an empire",
+        label: "dev",
         inputs: {
           empire: {
             label: "Empire",
@@ -877,10 +891,11 @@ export const useCheatcodes = () => {
           <div className="flex gap-2">
             <Price wei={rake} />
             <span>
-              (<Price wei={rake} forceBlockchainUnits />) (admin)
+              (<Price wei={rake} forceBlockchainUnits />)
             </span>
           </div>
         ),
+        label: "admin",
         inputs: {},
         execute: async () => {
           return await _withdrawRake();
@@ -899,7 +914,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Move shield eater",
         bg: CheatcodeToBg["shieldEater"],
-        caption: "to planet (dev)",
+        caption: "to planet",
+        label: "dev",
         inputs: {
           planet: {
             label: "Planet",
@@ -928,7 +944,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Set shield eater destination",
         bg: CheatcodeToBg["shieldEater"],
-        caption: "to planet (dev)",
+        caption: "to planet",
+        label: "dev",
         inputs: {
           planet: {
             label: "Planet",
@@ -957,7 +974,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Feed shield eater",
         bg: CheatcodeToBg["shieldEater"],
-        caption: "set ready to detonate (dev)",
+        caption: "set ready to detonate",
+        label: "dev",
         inputs: {},
         execute: async () => {
           const threshold = tables.P_ShieldEaterConfig.get()?.detonationThreshold ?? BigInt(0);
@@ -980,7 +998,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Update game config",
         bg: CheatcodeToBg["config"],
-        caption: `Current block: ${currentBlock.toLocaleString()} (admin)`,
+        caption: `Current block: ${currentBlock.toLocaleString()}`,
+        label: "admin",
         inputs: {
           empireCount: {
             label: "Empire count",
@@ -1050,7 +1069,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Update empire",
         bg: CheatcodeToBg["config"],
-        caption: "Empire config (dev)",
+        caption: "Empire config",
+        label: "dev",
         inputs: {
           empire: {
             label: "Empire",
@@ -1090,7 +1110,8 @@ export const useCheatcodes = () => {
       P_PointConfig: createCheatcode({
         title: "Update point config",
         bg: CheatcodeToBg["config"],
-        caption: "P_PointConfig (dev)",
+        caption: "P_PointConfig",
+        label: "dev",
         inputs: {
           pointUnit: {
             label: "Point unit",
@@ -1140,7 +1161,8 @@ export const useCheatcodes = () => {
       P_OverrideConfig: createCheatcode({
         title: "Update override config",
         bg: CheatcodeToBg["config"],
-        caption: "P_OverrideConfig (dev)",
+        caption: "P_OverrideConfig",
+        label: "dev",
         inputs: {
           overrideAction: {
             label: "Override action",
@@ -1189,7 +1211,8 @@ export const useCheatcodes = () => {
       P_RoutineCosts: createCheatcode({
         title: "Update routine costs",
         bg: CheatcodeToBg["config"],
-        caption: "P_RoutineCosts (dev)",
+        caption: "P_RoutineCosts",
+        label: "dev",
         inputs: {
           buyShips: {
             label: "Buy ships (in gold)",
@@ -1218,7 +1241,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Start keeper",
         bg: CheatcodeToBg["keeper"],
-        caption: "Start keeper (bearer)",
+        caption: "Start keeper",
+        label: "bearer",
         inputs: {},
         execute: async () => await keeper.start(),
         loading: () => "[CHEATCODE] Starting keeper...",
@@ -1234,7 +1258,8 @@ export const useCheatcodes = () => {
       createCheatcode({
         title: "Stop keeper",
         bg: CheatcodeToBg["keeper"],
-        caption: "Stop keeper (bearer)",
+        caption: "Stop keeper",
+        label: "bearer",
         inputs: {},
         execute: async () => await keeper.stop(),
         loading: () => "[CHEATCODE] Stopping keeper...",
