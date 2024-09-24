@@ -25,122 +25,122 @@ contract PayoutTest is Test {
     }
 
     function testRecordFailWrongCaller() public {
-        address[] memory winners = new address[](1);
-        winners[0] = ALICE;
-        uint256[] memory winnings = new uint256[](1);
-        winnings[0] = 100;
+        address[] memory victors = new address[](1);
+        victors[0] = ALICE;
+        uint256[] memory balances = new uint256[](1);
+        balances[0] = 100;
         vm.prank(ALICE);
         vm.expectRevert("[PAYMAN] Only owner can add winners");
-        payman.record(winners, winnings, 1);
+        payman.record(victors, balances, 1);
     }
 
     function testRecordFailWinnersPayoutsLengthMismatch() public {
-        address[] memory winners = new address[](2);
-        winners[0] = ALICE;
-        winners[1] = BOB;
-        uint256[] memory winnings = new uint256[](1);
-        winnings[0] = 100;
+        address[] memory victors = new address[](2);
+        victors[0] = ALICE;
+        victors[1] = BOB;
+        uint256[] memory balances = new uint256[](1);
+        balances[0] = 100;
         vm.prank(OWNER);
-        vm.expectRevert("[PAYMAN] Winners and winnings length mismatch");
-        payman.record(winners, winnings, 1);
+        vm.expectRevert("[PAYMAN] Winners and balances length mismatch");
+        payman.record(victors, balances, 1);
     }
 
     function testRecordFailRepeatRoundNumber() public {
-        address[] memory winners = new address[](1);
-        winners[0] = ALICE;
-        uint256[] memory winnings = new uint256[](1);
-        winnings[0] = 100;
+        address[] memory victors = new address[](1);
+        victors[0] = ALICE;
+        uint256[] memory balances = new uint256[](1);
+        balances[0] = 100;
         vm.prank(OWNER);
-        payman.record{value: 100}(winners, winnings, 1);
+        payman.record{value: 100}(victors, balances, 1);
         vm.prank(OWNER);
         vm.expectRevert(
             "[PAYMAN] Round number must be greater than last round"
         );
-        payman.record{value: 100}(winners, winnings, 1);
+        payman.record{value: 100}(victors, balances, 1);
     }
 
     function testRecordFailPayoutExceedsValue() public {
-        address[] memory winners = new address[](1);
-        winners[0] = ALICE;
-        uint256[] memory winnings = new uint256[](1);
-        winnings[0] = 200;
+        address[] memory victors = new address[](1);
+        victors[0] = ALICE;
+        uint256[] memory balances = new uint256[](1);
+        balances[0] = 200;
         vm.prank(OWNER);
-        vm.expectRevert("[PAYMAN] Incorrect winnings allocation");
-        payman.record{value: 100}(winners, winnings, 1);
+        vm.expectRevert("[PAYMAN] Incorrect balances allocation");
+        payman.record{value: 100}(victors, balances, 1);
     }
 
     function testRecordSuccessSingleWinner() public {
-        address[] memory winners = new address[](1);
-        winners[0] = ALICE;
-        uint256[] memory winnings = new uint256[](1);
-        winnings[0] = 100;
+        address[] memory victors = new address[](1);
+        victors[0] = ALICE;
+        uint256[] memory balances = new uint256[](1);
+        balances[0] = 100;
         vm.prank(OWNER);
-        payman.record{value: 100}(winners, winnings, 1);
-        assertEq(payman.winnings(ALICE), 100);
+        payman.record{value: 100}(victors, balances, 1);
+        assertEq(payman.balances(ALICE), 100);
     }
 
     function testRecordSuccessMultipleWinners() public {
-        address[] memory winners = new address[](2);
-        winners[0] = ALICE;
-        winners[1] = BOB;
-        uint256[] memory winnings = new uint256[](2);
-        winnings[0] = 100;
-        winnings[1] = 200;
+        address[] memory victors = new address[](2);
+        victors[0] = ALICE;
+        victors[1] = BOB;
+        uint256[] memory balances = new uint256[](2);
+        balances[0] = 100;
+        balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(winners, winnings, 1);
-        assertEq(payman.winnings(ALICE), 100);
-        assertEq(payman.winnings(BOB), 200);
+        payman.record{value: 300}(victors, balances, 1);
+        assertEq(payman.balances(ALICE), 100);
+        assertEq(payman.balances(BOB), 200);
     }
 
     function testRecordSuccessMultipleRounds() public {
-        address[] memory winners = new address[](2);
-        winners[0] = ALICE;
-        winners[1] = BOB;
-        uint256[] memory winnings = new uint256[](2);
-        winnings[0] = 100;
-        winnings[1] = 200;
+        address[] memory victors = new address[](2);
+        victors[0] = ALICE;
+        victors[1] = BOB;
+        uint256[] memory balances = new uint256[](2);
+        balances[0] = 100;
+        balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(winners, winnings, 1);
-        assertEq(payman.winnings(ALICE), 100);
-        assertEq(payman.winnings(BOB), 200);
+        payman.record{value: 300}(victors, balances, 1);
+        assertEq(payman.balances(ALICE), 100);
+        assertEq(payman.balances(BOB), 200);
 
-        winners[0] = BOB;
-        winners[1] = ALICE;
-        winnings[0] = 300;
-        winnings[1] = 400;
+        victors[0] = BOB;
+        victors[1] = ALICE;
+        balances[0] = 300;
+        balances[1] = 400;
         vm.prank(OWNER);
-        payman.record{value: 700}(winners, winnings, 2);
-        assertEq(payman.winnings(ALICE), 500);
-        assertEq(payman.winnings(BOB), 500);
+        payman.record{value: 700}(victors, balances, 2);
+        assertEq(payman.balances(ALICE), 500);
+        assertEq(payman.balances(BOB), 500);
     }
 
     function testWithdrawFailNoPayout() public {
         vm.prank(ALICE);
-        vm.expectRevert("[PAYMAN] No winnings available for this address");
+        vm.expectRevert("[PAYMAN] No balances available for this address");
         payman.withdraw();
     }
 
     function testWithdrawSuccessSingle() public {
-        address[] memory winners = new address[](1);
-        winners[0] = ALICE;
-        uint256[] memory winnings = new uint256[](1);
-        winnings[0] = 100;
+        address[] memory victors = new address[](1);
+        victors[0] = ALICE;
+        uint256[] memory balances = new uint256[](1);
+        balances[0] = 100;
         vm.prank(OWNER);
-        payman.record{value: 100}(winners, winnings, 1);
+        payman.record{value: 100}(victors, balances, 1);
         vm.prank(ALICE);
         payman.withdraw();
         assertEq(address(ALICE).balance, STARTING_BALANCE + 100);
     }
 
     function testWithdrawSuccessMultiple() public {
-        address[] memory winners = new address[](2);
-        winners[0] = ALICE;
-        winners[1] = BOB;
-        uint256[] memory winnings = new uint256[](2);
-        winnings[0] = 100;
-        winnings[1] = 200;
+        address[] memory victors = new address[](2);
+        victors[0] = ALICE;
+        victors[1] = BOB;
+        uint256[] memory balances = new uint256[](2);
+        balances[0] = 100;
+        balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(winners, winnings, 1);
+        payman.record{value: 300}(victors, balances, 1);
         vm.prank(ALICE);
         payman.withdraw();
         assertEq(address(ALICE).balance, STARTING_BALANCE + 100);
@@ -150,21 +150,21 @@ contract PayoutTest is Test {
     }
 
     function testWithdrawSuccessSingleMultipleRounds() public {
-        address[] memory winners = new address[](2);
-        winners[0] = ALICE;
-        winners[1] = BOB;
-        uint256[] memory winnings = new uint256[](2);
-        winnings[0] = 100;
-        winnings[1] = 200;
+        address[] memory victors = new address[](2);
+        victors[0] = ALICE;
+        victors[1] = BOB;
+        uint256[] memory balances = new uint256[](2);
+        balances[0] = 100;
+        balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(winners, winnings, 1);
+        payman.record{value: 300}(victors, balances, 1);
 
-        winners[0] = BOB;
-        winners[1] = ALICE;
-        winnings[0] = 300;
-        winnings[1] = 400;
+        victors[0] = BOB;
+        victors[1] = ALICE;
+        balances[0] = 300;
+        balances[1] = 400;
         vm.prank(OWNER);
-        payman.record{value: 700}(winners, winnings, 2);
+        payman.record{value: 700}(victors, balances, 2);
         vm.prank(ALICE);
         payman.withdraw();
         assertEq(address(ALICE).balance, STARTING_BALANCE + 500);
@@ -174,21 +174,21 @@ contract PayoutTest is Test {
     }
 
     function testGetWinnersByRound() public {
-        address[] memory winners = new address[](2);
-        winners[0] = ALICE;
-        winners[1] = BOB;
-        uint256[] memory winnings = new uint256[](2);
-        winnings[0] = 100;
-        winnings[1] = 200;
+        address[] memory victors = new address[](2);
+        victors[0] = ALICE;
+        victors[1] = BOB;
+        uint256[] memory balances = new uint256[](2);
+        balances[0] = 100;
+        balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(winners, winnings, 1);
+        payman.record{value: 300}(victors, balances, 1);
 
-        winners[0] = BOB;
-        winners[1] = ALICE;
-        winnings[0] = 300;
-        winnings[1] = 400;
+        victors[0] = BOB;
+        victors[1] = ALICE;
+        balances[0] = 300;
+        balances[1] = 400;
         vm.prank(OWNER);
-        payman.record{value: 700}(winners, winnings, 2);
+        payman.record{value: 700}(victors, balances, 2);
 
         PayoutManager.Winner[] memory winnersRound1 = payman.winnersByRound(1);
         assertEq(winnersRound1.length, 2);

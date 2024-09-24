@@ -7,8 +7,8 @@ contract PayoutManager {
         uint256 payout;
     }
 
-    address private immutable owner;
-    mapping(address winner => uint256 payout) public winnings;
+    address private owner;
+    mapping(address winner => uint256 payout) public balances;
     mapping(uint256 roundNumber => Winner[]) private winners;
     uint256 public lastRound;
 
@@ -17,14 +17,14 @@ contract PayoutManager {
     }
 
     function record(
-        address[] memory _winners,
-        uint256[] memory _winnings,
+        address[] memory _victors,
+        uint256[] memory _gains,
         uint256 _roundNumber
     ) public payable {
         require(msg.sender == owner, "[PAYMAN] Only owner can add winners");
         require(
-            _winners.length == _winnings.length,
-            "[PAYMAN] Winners and winnings length mismatch"
+            _victors.length == _gains.length,
+            "[PAYMAN] Winners and balances length mismatch"
         );
         require(
             _roundNumber > lastRound,
@@ -33,23 +33,23 @@ contract PayoutManager {
 
         uint256 allocated = 0;
 
-        for (uint256 i = 0; i < _winners.length; i++) {
-            winners[_roundNumber].push(Winner(_winners[i], _winnings[i]));
-            winnings[_winners[i]] = winnings[_winners[i]] + _winnings[i];
-            allocated = allocated + _winnings[i];
+        for (uint256 i = 0; i < _victors.length; i++) {
+            winners[_roundNumber].push(Winner(_victors[i], _gains[i]));
+            balances[_victors[i]] = balances[_victors[i]] + _gains[i];
+            allocated = allocated + _gains[i];
         }
 
-        lastRound = _roundNumber;
         require(
             allocated == msg.value,
-            "[PAYMAN] Incorrect winnings allocation"
+            "[PAYMAN] Incorrect balances allocation"
         );
+        lastRound = _roundNumber;
     }
 
     function withdraw() external {
-        uint256 payout = winnings[msg.sender];
-        require(payout > 0, "[PAYMAN] No winnings available for this address");
-        winnings[msg.sender] = 0;
+        uint256 payout = balances[msg.sender];
+        require(payout > 0, "[PAYMAN] No balances available for this address");
+        balances[msg.sender] = 0;
         (bool callSuccess, ) = payable(msg.sender).call{value: payout}("");
         require(callSuccess, "[PAYMAN] Payout call failed");
     }
@@ -58,5 +58,14 @@ contract PayoutManager {
         uint256 _roundNumber
     ) external view returns (Winner[] memory) {
         return winners[_roundNumber];
+    }
+
+    function changeOwner(address _newOwner) external {
+        require(msg.sender == owner, "[PAYMAN] Only owner can change owner");
+        owner = _newOwner;
+    }
+
+    function getOwner() external view returns (address) {
+        return owner;
     }
 }
