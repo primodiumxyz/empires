@@ -1,0 +1,6 @@
+[submodule "apps/payman/lib/forge-std"]
+	path = apps/payman/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "apps/payman/lib/solady"]
+	path = apps/payman/lib/solady
+	url = https://github.com/vectorized/solady
