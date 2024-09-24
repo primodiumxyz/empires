@@ -1,4 +1,4 @@
-# Audit Prep Checklist
+# Audit Prep Checklist 
 
 ## Review for CEI/FREI
 https://www.nascent.xyz/idea/youre-writing-require-statements-wrong
