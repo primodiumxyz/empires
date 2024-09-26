@@ -25,10 +25,13 @@ abstract contract HandlerBase is Test, TestPlus {
   /// Note: set to false if you want to set `fail_on_revert = true` in `foundry.toml`
   bool constant ALLOW_UNEXPECTED_INPUTS = true;
 
+  /// @dev Log variables for debugging and tracking test coverage (turns resolved, sales, withdrawals)
+  bool constant LOG_COVERAGE = false;
+
   /// @dev The number of turns it takes for the game to end (provided that each run has enough depth to reach it)
   /// e.g. 400 turns, 3 blocks per turn, ~10 handler public functions: we need ~12,000 depth to reach the end of the game
   /// and be able to make a decent amount of calls to withdraw (`updateWorld` will advance 1 block per call so 400 * 3 * 10 = 12,000)
-  uint256 constant ROUND_TURNS = 400;
+  uint256 constant ROUND_TURNS = 500;
   /// @dev The number of blocks for each turn
   uint256 constant TURN_LENGTH_BLOCKS = 3;
 
@@ -75,8 +78,6 @@ abstract contract HandlerBase is Test, TestPlus {
     vm.roll(block.number + 1);
     if (block.number < turn.nextTurnBlock) return;
     if (block.number >= GAME_OVER_BLOCK) return;
-
-    emit log_named_uint("Updating world, turn", turn.value);
 
     bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
     RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);

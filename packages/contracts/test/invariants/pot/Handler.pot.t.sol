@@ -318,9 +318,11 @@ contract HandlerPot is HandlerBase {
 
   /// @dev Log tracking variables (called in `Invariants.pot.t.sol::afterInvariant`)
   function logTrackers() external {
+    if (!LOG_COVERAGE) return;
     emit log_string("---");
     emit log_named_uint("Last turn", Turn.getValue());
     emit log_named_string("Reached game over", block.number >= GAME_OVER_BLOCK ? "Yes" : "No");
+    emit log_named_string("An empire won", WinningEmpire.get() != EEmpire.NULL ? "Yes" : "No");
     emit log_named_uint("Total sales", _log_sellPointsCount);
     emit log_named_uint("Total withdrawals", _log_withdrawEarningsCount);
     emit log_string("---");
