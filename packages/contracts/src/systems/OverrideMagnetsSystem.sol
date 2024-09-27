@@ -9,7 +9,7 @@ import { LibMagnet } from "libraries/LibMagnet.sol";
 import { LibOverride } from "libraries/LibOverride.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
-import { addressToId, pseudorandomEntity } from "src/utils.sol";
+import { addressToId, nextLogEntity } from "src/utils.sol";
 
 /**
  * @title OverrideMagnetsSystem
@@ -33,7 +33,7 @@ contract OverrideMagnetsSystem is EmpiresSystem {
     _takeRake(cost);
 
     PlaceMagnetOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       PlaceMagnetOverrideLogData({
         turn: Turn.getValue(),
         planetId: _planetId,

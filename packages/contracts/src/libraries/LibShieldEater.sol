@@ -4,7 +4,7 @@ import { ShieldEater, P_ShieldEaterConfig, Planet, PlanetData, ShieldEaterDamage
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EDirection, EShieldEaterDamageType } from "codegen/common.sol";
 
-import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
+import { pseudorandom, nextLogEntity, coordToId } from "src/utils.sol";
 import { CoordData } from "src/Types.sol";
 
 import { console } from "forge-std/console.sol";
@@ -52,7 +52,7 @@ library LibShieldEater {
     //   // if there are no shields on the map, it tends to gravitate towards the bottom center.
     //   // this will force it to wander around a bit more even if there's nothing to eat.
     if (maxShieldCount == 0) {
-      uint256 randomIndex = pseudorandom(uint256(pseudorandomEntity()), planetIds.length);
+      uint256 randomIndex = pseudorandom(uint256(nextLogEntity()), planetIds.length);
       ShieldEater.setDestinationPlanet(planetIds[randomIndex]);
     } else {
       ShieldEater.setDestinationPlanet(newDestination);
@@ -106,7 +106,7 @@ library LibShieldEater {
         Planet.setShieldCount(planetId, shieldCount - shieldDamage);
         addCharge += shieldDamage;
         ShieldEaterDamageOverrideLog.set(
-          pseudorandomEntity(),
+          nextLogEntity(),
           ShieldEaterDamageOverrideLogData({
             planetId: planetId,
             shieldsDestroyed: shieldDamage,
@@ -118,7 +118,7 @@ library LibShieldEater {
         Planet.setShieldCount(planetId, 0);
         addCharge += shieldCount;
         ShieldEaterDamageOverrideLog.set(
-          pseudorandomEntity(),
+          nextLogEntity(),
           ShieldEaterDamageOverrideLogData({
             planetId: planetId,
             shieldsDestroyed: shieldCount,
@@ -161,7 +161,7 @@ library LibShieldEater {
     uint256 shieldsDestroyed = (shieldCount * centerDamage) / 10000;
     Planet.setShieldCount(planetId, (shieldCount - shieldsDestroyed));
     ShieldEaterDamageOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       ShieldEaterDamageOverrideLogData({
         planetId: planetId,
         shieldsDestroyed: shieldsDestroyed,
@@ -182,7 +182,7 @@ library LibShieldEater {
         shieldsDestroyed = (shieldCount * adjacentDamage) / 10000;
         Planet.setShieldCount(neighborId, (shieldCount - shieldsDestroyed));
         ShieldEaterDamageOverrideLog.set(
-          pseudorandomEntity(),
+          nextLogEntity(),
           ShieldEaterDamageOverrideLogData({
             planetId: neighborId,
             shieldsDestroyed: shieldsDestroyed,
