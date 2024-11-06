@@ -43,7 +43,7 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
     P_PointConfig.setPointRake(5000);
     switchPrank(alice);
     cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
-    world.Empires__createShip{ value: cost }(planetId, 1);
+    world.Empires__createShip{ value: cost }(planetId, Planet.getEmpireId(planetId), 1);
 
     rakeSystemId = WorldResourceIdLib.encode({
       typeId: RESOURCE_SYSTEM,

@@ -20,20 +20,18 @@ contract OverrideShieldSystem is EmpiresSystem {
    * @param _planetId The ID of the planet.
    * @param _overrideCount The number of overrides to purchase.
    */
-  function chargeShield(bytes32 _planetId, uint256 _overrideCount) public payable _onlyNotGameOver {
+  function chargeShield(bytes32 _planetId, EEmpire _empireId, uint256 _overrideCount) public payable _onlyNotGameOver {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
+    require(planetData.empireId == _empireId, "[OverrideSystem] Wrong empire owns the planet");
     uint256 cost = LibPrice.getTotalCost(EOverride.ChargeShield, planetData.empireId, _overrideCount);
     require(_msgValue() >= cost, "[OverrideSystem] Insufficient payment");
     bytes32 playerId = addressToId(_msgSender());
 
-    LibOverride._purchaseOverride(playerId, EOverride.ChargeShield, planetData.empireId, _overrideCount, _msgValue());
+    LibOverride._purchaseOverride(playerId, EOverride.ChargeShield, planetData.empireId, _overrideCount, cost);
 
     Planet.setShieldCount(_planetId, planetData.shieldCount + _overrideCount);
-
-    _refundOverspend(cost);
-    _takeRake(cost);
 
     ChargeShieldsOverrideLog.set(
       nextLogEntity(),
@@ -46,5 +44,8 @@ contract OverrideShieldSystem is EmpiresSystem {
         timestamp: block.timestamp
       })
     );
+
+    _refundOverspend(cost);
+    _takeRake(cost);
   }
 }

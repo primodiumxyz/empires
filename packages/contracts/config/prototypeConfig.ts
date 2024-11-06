@@ -20,6 +20,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         gameOverBlock: 0n, // currently handled in PostDeploy
         gameStartTimestamp: 0n, // currently handled in PostDeploy
         empireCount: 6,
+        empiresCleared: 0,
       },
       P_PointConfig: {
         pointUnit: BigInt(POINTS_UNIT),

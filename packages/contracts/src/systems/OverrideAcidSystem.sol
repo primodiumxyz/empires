@@ -17,9 +17,10 @@ import { addressToId, nextLogEntity } from "src/utils.sol";
  * @dev A contract that handles overrides related to creating and killing ships on a planet.
  */
 contract OverrideAcidSystem is EmpiresSystem {
-  function placeAcid(bytes32 _planetId) public payable _onlyNotGameOver {
+  function placeAcid(bytes32 _planetId, EEmpire _empireId) public payable _onlyNotGameOver {
     EEmpire empire = Planet.getEmpireId(_planetId);
     require(empire != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
+    require(empire == _empireId, "[OverrideSystem] Wrong empire owns the planet");
     require(AcidPlanetsSet.has(empire, _planetId) == false, "[OverrideSystem] Planet already has acid");
     uint256 cost = LibPrice.getTotalCost(EOverride.PlaceAcid, empire, 1);
     require(_msgValue() >= cost, "[OverrideSystem] Insufficient payment");
@@ -29,10 +30,7 @@ contract OverrideAcidSystem is EmpiresSystem {
     LibAcid.applyAcidDamage(_planetId);
 
     AcidPlanetsSet.add(empire, _planetId, P_AcidConfig.getAcidDuration() - 1);
-    LibOverride._purchaseOverride(playerId, EOverride.PlaceAcid, empire, 1, _msgValue());
-
-    _refundOverspend(cost);
-    _takeRake(cost);
+    LibOverride._purchaseOverride(playerId, EOverride.PlaceAcid, empire, 1, cost);
 
     PlaceAcidOverrideLog.set(
       nextLogEntity(),
@@ -40,10 +38,13 @@ contract OverrideAcidSystem is EmpiresSystem {
         playerId: playerId,
         turn: Turn.getValue(),
         planetId: _planetId,
-        ethSpent: _msgValue(),
+        ethSpent: cost,
         overrideCount: 1,
         timestamp: block.timestamp
       })
     );
+
+    _refundOverspend(cost);
+    _takeRake(cost);
   }
 }

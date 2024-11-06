@@ -31,7 +31,7 @@ contract PayoutTest is Test {
         balances[0] = 100;
         vm.prank(ALICE);
         vm.expectRevert("[PAYMAN] Only owner can add winners");
-        payman.record(victors, balances, 1);
+        payman.record(victors, balances);
     }
 
     function testRecordFailWinnersPayoutsLengthMismatch() public {
@@ -42,21 +42,7 @@ contract PayoutTest is Test {
         balances[0] = 100;
         vm.prank(OWNER);
         vm.expectRevert("[PAYMAN] Winners and balances length mismatch");
-        payman.record(victors, balances, 1);
-    }
-
-    function testRecordFailRepeatRoundNumber() public {
-        address[] memory victors = new address[](1);
-        victors[0] = ALICE;
-        uint256[] memory balances = new uint256[](1);
-        balances[0] = 100;
-        vm.prank(OWNER);
-        payman.record{value: 100}(victors, balances, 1);
-        vm.prank(OWNER);
-        vm.expectRevert(
-            "[PAYMAN] Round number must be greater than last round"
-        );
-        payman.record{value: 100}(victors, balances, 1);
+        payman.record(victors, balances);
     }
 
     function testRecordFailPayoutExceedsValue() public {
@@ -66,7 +52,7 @@ contract PayoutTest is Test {
         balances[0] = 200;
         vm.prank(OWNER);
         vm.expectRevert("[PAYMAN] Incorrect balances allocation");
-        payman.record{value: 100}(victors, balances, 1);
+        payman.record{value: 100}(victors, balances);
     }
 
     function testRecordSuccessSingleWinner() public {
@@ -75,7 +61,7 @@ contract PayoutTest is Test {
         uint256[] memory balances = new uint256[](1);
         balances[0] = 100;
         vm.prank(OWNER);
-        payman.record{value: 100}(victors, balances, 1);
+        payman.record{value: 100}(victors, balances);
         assertEq(payman.balances(ALICE), 100);
     }
 
@@ -87,7 +73,7 @@ contract PayoutTest is Test {
         balances[0] = 100;
         balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(victors, balances, 1);
+        payman.record{value: 300}(victors, balances);
         assertEq(payman.balances(ALICE), 100);
         assertEq(payman.balances(BOB), 200);
     }
@@ -100,7 +86,7 @@ contract PayoutTest is Test {
         balances[0] = 100;
         balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(victors, balances, 1);
+        payman.record{value: 300}(victors, balances);
         assertEq(payman.balances(ALICE), 100);
         assertEq(payman.balances(BOB), 200);
 
@@ -108,8 +94,10 @@ contract PayoutTest is Test {
         victors[1] = ALICE;
         balances[0] = 300;
         balances[1] = 400;
-        vm.prank(OWNER);
-        payman.record{value: 700}(victors, balances, 2);
+        vm.startPrank(OWNER);
+        payman.incrementRound();
+        payman.record{value: 700}(victors, balances);
+        vm.stopPrank();
         assertEq(payman.balances(ALICE), 500);
         assertEq(payman.balances(BOB), 500);
     }
@@ -126,7 +114,7 @@ contract PayoutTest is Test {
         uint256[] memory balances = new uint256[](1);
         balances[0] = 100;
         vm.prank(OWNER);
-        payman.record{value: 100}(victors, balances, 1);
+        payman.record{value: 100}(victors, balances);
         vm.prank(ALICE);
         payman.withdraw();
         assertEq(address(ALICE).balance, STARTING_BALANCE + 100);
@@ -140,7 +128,7 @@ contract PayoutTest is Test {
         balances[0] = 100;
         balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(victors, balances, 1);
+        payman.record{value: 300}(victors, balances);
         vm.prank(ALICE);
         payman.withdraw();
         assertEq(address(ALICE).balance, STARTING_BALANCE + 100);
@@ -157,14 +145,16 @@ contract PayoutTest is Test {
         balances[0] = 100;
         balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(victors, balances, 1);
+        payman.record{value: 300}(victors, balances);
 
         victors[0] = BOB;
         victors[1] = ALICE;
         balances[0] = 300;
         balances[1] = 400;
-        vm.prank(OWNER);
-        payman.record{value: 700}(victors, balances, 2);
+        vm.startPrank(OWNER);
+        payman.incrementRound();
+        payman.record{value: 700}(victors, balances);
+        vm.stopPrank();
         vm.prank(ALICE);
         payman.withdraw();
         assertEq(address(ALICE).balance, STARTING_BALANCE + 500);
@@ -181,14 +171,16 @@ contract PayoutTest is Test {
         balances[0] = 100;
         balances[1] = 200;
         vm.prank(OWNER);
-        payman.record{value: 300}(victors, balances, 1);
+        payman.record{value: 300}(victors, balances);
 
         victors[0] = BOB;
         victors[1] = ALICE;
         balances[0] = 300;
         balances[1] = 400;
-        vm.prank(OWNER);
-        payman.record{value: 700}(victors, balances, 2);
+        vm.startPrank(OWNER);
+        payman.incrementRound();
+        payman.record{value: 700}(victors, balances);
+        vm.stopPrank();
 
         PayoutManager.Winner[] memory winnersRound1 = payman.winnersByRound(1);
         assertEq(winnersRound1.length, 2);

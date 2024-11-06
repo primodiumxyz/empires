@@ -9,7 +9,7 @@ import { createPrototypes } from "codegen/Prototypes.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { Ready, Turn, P_GameConfig, P_GameConfigData, Role } from "codegen/index.sol";
+import { Ready, Turn, P_GameConfig, P_GameConfigData, Role, PayoutManager, RakeRecipient } from "codegen/index.sol";
 import { ERole } from "codegen/common.sol";
 
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
@@ -20,11 +20,14 @@ import { ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 contract PostDeploy is Script {
   function run(address worldAddress) external {
-    // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
+    // Load data from environment variables (in .env)
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    address payoutManagerAddress = vm.envAddress("PAYOUT_MANAGER_ADDRESS");
+    address rakeRecipientAddress = vm.envAddress("RAKE_RECIPIENT_ADDRESS");
 
     IWorld world = IWorld(worldAddress);
     console.log("world address:", worldAddress);
+
     vm.startBroadcast(deployerPrivateKey);
     StoreSwitch.setStoreAddress(worldAddress);
 
@@ -32,6 +35,13 @@ contract PostDeploy is Script {
 
     createPrototypes(world);
     console.log("Prototypes created");
+
+    require(payoutManagerAddress != address(0), "PayoutManager address not set");
+    PayoutManager.setContractAddress(payoutManagerAddress);
+
+    require(rakeRecipientAddress != address(0), "RakeRecipient address not set");
+    RakeRecipient.setRecipientAddress(rakeRecipientAddress);
+
     P_GameConfigData memory config = P_GameConfig.get();
 
     P_GameConfig.setGameOverBlock(block.number + config.nextGameLengthTurns * config.turnLengthBlocks);

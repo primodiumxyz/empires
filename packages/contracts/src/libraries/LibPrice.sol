@@ -40,9 +40,27 @@ library LibPrice {
    * @param _overrideCount The number of overrides to be purchased.
    * @return pointCost The cost of all points related to the override.
    */
-  function getProgressPointCost(EOverride _overrideType, EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+  function getProgressPointCost(
+    EOverride _overrideType,
+    EEmpire _empireImpacted,
+    uint256 _overrideCount
+  ) internal view returns (uint256) {
     uint8 empireCount = P_GameConfig.getEmpireCount();
-    return getPointCost(_empireImpacted, _overrideCount * (empireCount - 1) * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType));
+    uint8 enemiesCount;
+    for (uint8 i = 1; i <= empireCount; i++) {
+      if (EEmpire(i) != _empireImpacted && !Empire.getIsDefeated(EEmpire(i))) {
+        enemiesCount++;
+      }
+    }
+
+    return
+      getPointCost(
+        _empireImpacted,
+        _overrideCount *
+          enemiesCount *
+          P_PointConfig.getPointUnit() *
+          P_OverrideConfig.getPointMultiplier(_overrideType)
+      );
   }
 
   /**
@@ -52,14 +70,21 @@ library LibPrice {
    * @param _overrideCount The number of overrides to be purchased.
    * @return pointCost The cost of all points related to the override.
    */
-  function getRegressPointCost(EOverride _overrideType, EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+  function getRegressPointCost(
+    EOverride _overrideType,
+    EEmpire _empireImpacted,
+    uint256 _overrideCount
+  ) internal view returns (uint256) {
     uint256 pointCost;
     uint8 empireCount = P_GameConfig.getEmpireCount();
     for (uint8 i = 1; i <= empireCount; i++) {
       if (EEmpire(i) == _empireImpacted || Empire.getIsDefeated(EEmpire(i))) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), _overrideCount * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType));
+      pointCost += getPointCost(
+        EEmpire(i),
+        _overrideCount * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType)
+      );
     }
     return pointCost;
   }
@@ -199,7 +224,8 @@ library LibPrice {
     );
 
     uint256 triangleSum = (wholePoints * (wholePoints + 1)) / 2;
-    uint256 totalSaleValue = (currentPointPrice * wholePoints - pointPriceDecrease * triangleSum) * (10000 - config.pointSellTax) / 10000;
+    uint256 totalSaleValue = ((currentPointPrice * wholePoints - pointPriceDecrease * triangleSum) *
+      (10000 - config.pointSellTax)) / 10000;
 
     return totalSaleValue;
   }

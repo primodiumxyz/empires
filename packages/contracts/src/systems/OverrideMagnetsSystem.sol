@@ -27,10 +27,7 @@ contract OverrideMagnetsSystem is EmpiresSystem {
     bytes32 playerId = addressToId(_msgSender());
 
     LibMagnet.addMagnet(_empire, _planetId, playerId, turnDuration);
-    LibOverride._purchaseOverride(playerId, EOverride.PlaceMagnet, _empire, turnDuration, _msgValue());
-
-    _refundOverspend(cost);
-    _takeRake(cost);
+    LibOverride._purchaseOverride(playerId, EOverride.PlaceMagnet, _empire, turnDuration, cost);
 
     PlaceMagnetOverrideLog.set(
       nextLogEntity(),
@@ -44,5 +41,8 @@ contract OverrideMagnetsSystem is EmpiresSystem {
         timestamp: block.timestamp
       })
     );
+
+    _refundOverspend(cost);
+    _takeRake(cost);
   }
 }

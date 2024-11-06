@@ -2,36 +2,34 @@
 pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { NamespaceOwner } from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
-import { Role, Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
-import { EEmpire, ERole } from "codegen/common.sol";
+import { Ready, Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
+import { EEmpire } from "codegen/common.sol";
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 
-contract ResetSystem is System {
-  // Modifier to restrict access to admin only
-  modifier _onlyAdmin() {
-    address sender = _msgSender();
-    require(
-      Role.get(sender) == ERole.Admin || NamespaceOwner.get(EMPIRES_NAMESPACE_ID) == sender,
-      "[EmpiresSystem] Only admin"
-    );
-    _;
-  }
+contract ResetSystem is EmpiresSystem {
+  function resetGame() public _onlyAdminOrCanUpdate returns (bool) {
+    if (Ready.get() == true) {
+      Ready.set(false);
+      P_GameConfig.setEmpiresCleared(0);
+    }
 
-  function resetGame() public _onlyAdmin {
     IWorld world = IWorld(_world());
-    world.Empires__clearLoop();
-    P_GameConfigData memory config = P_GameConfig.get();
 
-    P_GameConfig.setGameOverBlock(block.number + config.nextGameLengthTurns * config.turnLengthBlocks);
-    P_GameConfig.setGameStartTimestamp(block.timestamp);
-    createPlanets(); // Planet and Empire tables are reset to default values
-    LibShieldEater.initialize(); // ShieldEater relocated, charge reset, and destination set
-    initPrice(); // Empire.setPointPrice and OverrideCost tables are reset to default values
-    Turn.set(block.number + config.turnLengthBlocks, EEmpire.Red, 1);
+    if (world.Empires__clearLoop() == true) {
+      P_GameConfigData memory config = P_GameConfig.get();
+
+      P_GameConfig.setGameOverBlock(block.number + config.nextGameLengthTurns * config.turnLengthBlocks);
+      P_GameConfig.setGameStartTimestamp(block.timestamp);
+      createPlanets(); // Planet and Empire tables are reset to default values
+      LibShieldEater.initialize(); // ShieldEater relocated, charge reset, and destination set
+      initPrice(); // Empire.setPointPrice and OverrideCost tables are reset to default values
+      Turn.set(block.number + config.turnLengthBlocks, EEmpire.Red, 1);
+    }
+
+    return Ready.get();
   }
 }
