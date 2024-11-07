@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { Planet, P_AcidConfig, AcidDamageOverrideLog, AcidDamageOverrideLogData } from "codegen/index.sol";
-import { pseudorandomEntity } from "src/utils.sol";
+import { nextLogEntity } from "src/utils.sol";
 
 /**
  * @title LibAcid
@@ -21,7 +21,7 @@ library LibAcid {
     Planet.setShipCount(_planetId, shipsRemaining);
 
     AcidDamageOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       AcidDamageOverrideLogData({ planetId: _planetId, shipsDestroyed: shipsDestroyed, timestamp: block.timestamp })
     );
   }

@@ -3,12 +3,14 @@ pragma solidity >=0.8.24;
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { System } from "@latticexyz/world/src/System.sol";
+import { NamespaceOwner } from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
-import { EEmpire } from "codegen/common.sol";
+import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
+import { Role, Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
+import { EEmpire, ERole } from "codegen/common.sol";
 
 contract ResetSystem is EmpiresSystem {
   function resetGame(uint256 _gameStartBlock) public _onlyAdmin {

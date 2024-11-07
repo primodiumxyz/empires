@@ -5,7 +5,7 @@ import { P_GameConfig, Turn, PendingMove, Planet, PlanetData, PlanetBattleRoutin
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { AcidPlanetsSet } from "adts/AcidPlanetsSet.sol";
 import { ArrivedMap } from "adts/ArrivedMap.sol";
-import { pseudorandomEntity } from "src/utils.sol";
+import { nextLogEntity } from "src/utils.sol";
 import { EEmpire } from "codegen/common.sol";
 
 library LibResolveCombat {
@@ -72,7 +72,7 @@ library LibResolveCombat {
         revert("[LibResolveCombat] Invalid combat resolution");
       }
 
-      bytes32 eventEntity = pseudorandomEntity();
+      bytes32 eventEntity = nextLogEntity();
 
       PlanetBattleRoutineLog.set(
         eventEntity,

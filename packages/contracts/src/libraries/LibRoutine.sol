@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { pseudorandom, pseudorandomEntity } from "src/utils.sol";
+import { pseudorandom, nextLogEntity } from "src/utils.sol";
 import { Turn, AccumulateGoldRoutineLog, AccumulateGoldRoutineLogData, Planet, P_RoutineCosts, BuyShipsRoutineLog, BuyShipsRoutineLogData, BuyShieldsRoutineLog, BuyShieldsRoutineLogData } from "codegen/index.sol";
 import { ERoutine } from "codegen/common.sol";
 import { RoutineThresholds } from "src/Types.sol";
@@ -57,7 +57,7 @@ library LibRoutine {
     uint256 goldCount = Planet.getGoldCount(planetId);
     Planet.setGoldCount(planetId, goldCount + goldAdded);
     AccumulateGoldRoutineLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       AccumulateGoldRoutineLogData({
         turn: Turn.getValue(),
         goldAdded: goldAdded,
@@ -89,7 +89,7 @@ library LibRoutine {
     Planet.setShieldCount(planetId, Planet.getShieldCount(planetId) + shieldsToBuy);
 
     BuyShieldsRoutineLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       BuyShieldsRoutineLogData({
         turn: Turn.getValue(),
         goldSpent: shieldsToBuy * shieldPrice,
@@ -122,7 +122,7 @@ library LibRoutine {
     Planet.setShipCount(planetId, Planet.getShipCount(planetId) + shipsToBuy);
 
     BuyShipsRoutineLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       BuyShipsRoutineLogData({
         turn: Turn.getValue(),
         goldSpent: shipsToBuy * shipPrice,
