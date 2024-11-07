@@ -21,6 +21,7 @@ export type CheatcodeInputs<T extends CheatcodeInputsBase> = {
 export type Cheatcode<T extends CheatcodeInputsBase = CheatcodeInputsBase> = {
   title: string | ReactNode;
   caption: string | ReactNode;
+  label?: "dev" | "admin" | "bearer";
   inputs: T;
   execute: (args: CheatcodeInputs<T>) => Promise<TxReceipt | { success: boolean; error?: string }>;
   loading?: (args: CheatcodeInputs<T>) => string;

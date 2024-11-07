@@ -2,18 +2,24 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ServerIcon } from "@heroicons/react/24/solid";
 
 import { AutoSizer } from "@/components/core/AutoSizer";
+import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
 import { Modal } from "@/components/core/Modal";
 import { TextInput } from "@/components/core/TextInput";
 import { useCheatcodes } from "@/hooks/useCheatcodes";
+import { usePlayerAccount } from "@/hooks/usePlayerAccount";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 import { withTransactionStatus } from "@/util/notify";
 
 import "@/index.css";
 
-import { usePlayerAccount } from "@/hooks/usePlayerAccount";
+const LabelToVariant = {
+  dev: "glass",
+  admin: "error",
+  bearer: "success",
+} as const;
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
@@ -96,6 +102,7 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   const {
     title,
     caption,
+    label,
     inputs,
     execute: _execute,
     loading: getLoadingMsg,
@@ -140,9 +147,12 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         onClick={() => !disabled && setActiveTab(activeTab === index ? undefined : index)}
         aria-disabled={disabled}
       >
-        <h2 className="text-sm font-semibold text-gray-300">
-          {index + 1}. {title}
-        </h2>
+        <div className="flex items-center justify-between gap-1">
+          <h2 className="text-sm font-semibold text-gray-300">
+            {index + 1}. {title}
+          </h2>
+          {label && <Badge variant={LabelToVariant[label]}>{label}</Badge>}
+        </div>
         <div className="whitespace-nowrap text-xs text-gray-400">{caption}</div>
       </div>
       <div
