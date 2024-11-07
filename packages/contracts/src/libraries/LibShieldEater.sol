@@ -64,63 +64,33 @@ library LibShieldEater {
   /**
    * @dev Moves the Shield Eater to the next planet en route to the destination planet.
    */
-  function update() internal {
-    // on each call, we either find a new destination or move to the next planet in the path
-    // only one of these should happen per update call.
-
-    // if retarget pending, find a new destination
-    if (ShieldEater.getRetargetPending()) {
-      // how many times have we looped?  If we're stuck, clear the path and try again.
-      if (ShieldEater.getRetargetCount() >= P_ShieldEaterConfig.getRetargetMaxThreshold()) {
-        // we're stuck.  clear the path.
-        ShieldEater.setPathIndex(0);
-        bytes32[] memory emptyPath = new bytes32[](0);
-        ShieldEater.setPath(emptyPath);
-
-        // reset the retarget count
-        ShieldEater.setRetargetCount(0);
-      }
-
-      // find new destination
-      retarget();
-
-      // if we found a valid destination, don't retarget on next update call
-      if (ShieldEater.getDestinationPlanet() != ShieldEater.getCurrentPlanet()) {
-        ShieldEater.setRetargetPending(false);
-      }
-    } else {
-      bytes32 destinationPlanet = ShieldEater.getDestinationPlanet();
-      bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
-
-      // figure out which way to go, move, and save where we've been
-      bytes32 planetId = getDirection(currentPlanet, destinationPlanet);
-      ShieldEater.setCurrentPlanet(planetId);
-      ShieldEater.pushPath(planetId);
-      ShieldEater.setPathIndex(ShieldEater.getPathIndex() + 1);
+  function update(bytes32 shieldEaterNextPlanetId) internal {
+    if (ShieldEater.getCurrentPlanet() != shieldEaterNextPlanetId) {
+      ShieldEater.setCurrentPlanet(shieldEaterNextPlanetId);
 
       // Eat a little shields if there are any
-      uint256 shieldCount = Planet.getShieldCount(planetId);
+      uint256 shieldCount = Planet.getShieldCount(shieldEaterNextPlanetId);
       uint256 shieldDamage = P_ShieldEaterConfig.getVisitShieldDamage();
       uint256 addCharge = 1;
       if (shieldCount > shieldDamage) {
-        Planet.setShieldCount(planetId, shieldCount - shieldDamage);
+        Planet.setShieldCount(shieldEaterNextPlanetId, shieldCount - shieldDamage);
         addCharge += shieldDamage;
         ShieldEaterDamageOverrideLog.set(
           nextLogEntity(),
           ShieldEaterDamageOverrideLogData({
-            planetId: planetId,
+            planetId: shieldEaterNextPlanetId,
             shieldsDestroyed: shieldDamage,
             damageType: EShieldEaterDamageType.Eat,
             timestamp: block.timestamp
           })
         );
       } else if (shieldCount > 0) {
-        Planet.setShieldCount(planetId, 0);
+        Planet.setShieldCount(shieldEaterNextPlanetId, 0);
         addCharge += shieldCount;
         ShieldEaterDamageOverrideLog.set(
           nextLogEntity(),
           ShieldEaterDamageOverrideLogData({
-            planetId: planetId,
+            planetId: shieldEaterNextPlanetId,
             shieldsDestroyed: shieldCount,
             damageType: EShieldEaterDamageType.Eat,
             timestamp: block.timestamp
@@ -129,14 +99,6 @@ library LibShieldEater {
       }
 
       ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + addCharge);
-
-      // we have arrived.  clear the destination so we'll find a new one next update.
-      if (planetId == destinationPlanet) {
-        ShieldEater.setPathIndex(0);
-        bytes32[] memory emptyPath = new bytes32[](0);
-        ShieldEater.setPath(emptyPath);
-        ShieldEater.setRetargetPending(true);
-      }
     }
   }
 

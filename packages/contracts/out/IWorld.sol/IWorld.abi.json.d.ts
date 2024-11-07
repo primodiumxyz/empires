@@ -610,7 +610,13 @@ declare const abi: [
   {
     "type": "function",
     "name": "Empires__updateShieldEater",
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "shieldEaterNextPlanetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -654,6 +660,11 @@ declare const abi: [
             "internalType": "bytes32"
           }
         ]
+      },
+      {
+        "name": "shieldEaterNextPlanetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
       }
     ],
     "outputs": [],

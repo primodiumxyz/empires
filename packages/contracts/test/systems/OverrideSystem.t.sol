@@ -23,6 +23,8 @@ contract OverrideSystemTest is PrimodiumTest {
   uint256 pointUnit;
   uint8 EMPIRE_COUNT;
 
+  bytes32 shieldEaterNextPlanetId;
+
   function setUp() public override {
     super.setUp();
     uint256 i = 0;
@@ -36,6 +38,7 @@ contract OverrideSystemTest is PrimodiumTest {
     P_PointConfig.setPointRake(0);
     pointUnit = P_PointConfig.getPointUnit();
     EMPIRE_COUNT = P_GameConfig.getEmpireCount();
+    shieldEaterNextPlanetId = PlanetsSet.getPlanetIds()[2];
   }
 
   function testOverspend() public {
@@ -297,18 +300,18 @@ contract OverrideSystemTest is PrimodiumTest {
   function testPlaceMagnetMultipleTurnsGas() public {
     vm.startPrank(creator);
     P_MagnetConfig.setLockedPointsPercent(1000);
-    
+
     uint256 turns = 3;
     EEmpire empire = EEmpire.Blue;
     uint256 initGas;
     uint256 gasUsed;
     uint256 maxGasUsed = 0;
     for (uint256 i = 0; i < 10; i++) {
-      planetId = PlanetsSet.getPlanetIds()[i];  
+      planetId = PlanetsSet.getPlanetIds()[i];
       assignPlanetToEmpire(planetId, empire);
       uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, turns);
       uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
-      
+
       vm.prank(alice);
       initGas = gasleft();
       world.Empires__placeMagnet{ value: totalCost }(empire, planetId, turns);
@@ -406,7 +409,7 @@ contract OverrideSystemTest is PrimodiumTest {
     LibShieldEater.initialize();
 
     for (uint256 i = 0; i < chargeTime; i++) {
-      LibShieldEater.update();
+      LibShieldEater.update(shieldEaterNextPlanetId);
     }
 
     planetId = ShieldEater.getCurrentPlanet();
