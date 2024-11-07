@@ -449,7 +449,13 @@ declare const abi: [
   {
     "type": "function",
     "name": "Empires__resetGame",
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "_gameStartBlock",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
     "outputs": [
       {
         "name": "",
@@ -518,6 +524,11 @@ declare const abi: [
           },
           {
             "name": "empireCount",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "empiresCleared",
             "type": "uint8",
             "internalType": "uint8"
           }

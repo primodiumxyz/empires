@@ -24,14 +24,15 @@ contract ResetSystem is EmpiresSystem {
     if (world.Empires__clearLoop() == true) {
       P_GameConfigData memory config = P_GameConfig.get();
 
-    P_GameConfig.setGameStartBlock(_gameStartBlock);
-    P_GameConfig.setGameOverBlock(_gameStartBlock + config.nextGameLengthTurns * config.turnLengthBlocks);
+      P_GameConfig.setGameStartBlock(_gameStartBlock);
+      P_GameConfig.setGameOverBlock(_gameStartBlock + config.nextGameLengthTurns * config.turnLengthBlocks);
 
-    createPlanets(); // Planet and Empire tables are reset to default values
-    LibShieldEater.initialize(); // ShieldEater relocated, charge reset, and destination set
-    initPrice(); // Empire.setPointPrice and OverrideCost tables are reset to default values
-    Turn.set(_gameStartBlock + config.turnLengthBlocks, EEmpire.Red, 1);
+      createPlanets(); // Planet and Empire tables are reset to default values
+      LibShieldEater.initialize(); // ShieldEater relocated, charge reset, and destination set
+      initPrice(); // Empire.setPointPrice and OverrideCost tables are reset to default values
+      Turn.set(_gameStartBlock + config.turnLengthBlocks, EEmpire.Red, 1);
+    }
+
+    return Ready.get();
   }
-
-      return Ready.get();
 }

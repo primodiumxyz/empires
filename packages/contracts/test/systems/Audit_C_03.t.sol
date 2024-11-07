@@ -18,10 +18,13 @@ contract AuditTest is PrimodiumTest {
   uint256 internal GAME_OVER_BLOCK;
   bytes32 internal planetId;
 
+  uint256 internal GAME_START_BLOCK;
+
   function setUp() public override {
     super.setUp();
 
     EMPIRE_COUNT = P_GameConfig.getEmpireCount();
+    GAME_START_BLOCK = block.number;
     GAME_OVER_BLOCK = block.number + ROUND_TURNS * TURN_LENGTH_BLOCKS;
     planetId = _getFirstPlanet(EEmpire(1));
 
@@ -109,9 +112,9 @@ contract AuditTest is PrimodiumTest {
 
     // Game is reset, but MagnetTurnPlanets is not cleared
     vm.startPrank(creator);
-    bool resetComplete = world.Empires__resetGame();
+    bool resetComplete = world.Empires__resetGame(GAME_OVER_BLOCK + 100);
     while (resetComplete == false) {
-      world.Empires__resetGame();
+      world.Empires__resetGame(GAME_OVER_BLOCK + 100);
     }
 
     magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), aliceMagnetDeletionTurn);
@@ -141,9 +144,10 @@ contract AuditTest is PrimodiumTest {
 
   function createPendingMove() public {
     RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](1);
+    bytes32 moveTargetId = _getNotOwnedCitadel(Turn.get().empire);
     routineThresholds[0] = RoutineThresholds({
       planetId: planetId,
-      moveTargetId: _getNotOwnedCitadel(Turn.get().empire),
+      moveTargetId: moveTargetId,
       accumulateGold: 0,
       buyShields: 0,
       buyShips: 0,
@@ -151,14 +155,15 @@ contract AuditTest is PrimodiumTest {
     });
 
     vm.prank(creator);
-    world.Empires__updateWorld(routineThresholds);
+    world.Empires__updateWorld(routineThresholds, moveTargetId);
   }
 
   function executePendingMove() public {
     RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](1);
+    bytes32 moveTargetId = bytes32(0);
     routineThresholds[0] = RoutineThresholds({
       planetId: planetId,
-      moveTargetId: bytes32(0),
+      moveTargetId: moveTargetId,
       accumulateGold: 10000,
       buyShields: 0,
       buyShips: 0,
@@ -166,7 +171,7 @@ contract AuditTest is PrimodiumTest {
     });
 
     vm.prank(creator);
-    world.Empires__updateWorld(routineThresholds);
+    world.Empires__updateWorld(routineThresholds, moveTargetId);
   }
 
   function _getNotOwnedCitadel(EEmpire empire) public view returns (bytes32 planetId_) {
