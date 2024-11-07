@@ -7,14 +7,14 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useBalance } from "@/hooks/useBalance";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { usePlanetMagnets } from "@/hooks/usePlanetMagnets";
-import useWinningEmpire from "@/hooks/useWinningEmpire";
-import { SlippageSettings } from "@/components/shared/SlippageSettings";
+import { useTimeLeft } from "@/hooks/useTimeLeft";
 
 export const ExecuteButton = ({
   planetId,
@@ -35,7 +35,11 @@ export const ExecuteButton = ({
   const { placeMagnet } = useContractCalls();
   const { playerAccount, login } = usePlayerAccount();
 
-  const { expected: placeMagnetPriceWei, max: placeMagnetPriceWeiMax } = useOverrideCost(EOverride.PlaceMagnet, empire, BigInt(inputValue));
+  const { expected: placeMagnetPriceWei, max: placeMagnetPriceWeiMax } = useOverrideCost(
+    EOverride.PlaceMagnet,
+    empire,
+    BigInt(inputValue),
+  );
 
   const onPlaceMagnet = useCallback(async () => {
     await placeMagnet(empire, planetId, BigInt(inputValue), placeMagnetPriceWeiMax);
@@ -50,7 +54,7 @@ export const ExecuteButton = ({
   const playerBalance = useBalance(address).value ?? 0n;
   const placeMagnetPointsReceived = useOverridePointsReceived(EOverride.PlaceMagnet, empire, BigInt(inputValue));
 
-  const { gameOver } = useWinningEmpire();
+  const { gameActive } = useTimeLeft();
   const magnets = usePlanetMagnets(planetId);
   const currentMagnetExists = !!magnets.find((magnet) => magnet.empire === empire)?.exists;
 
@@ -58,7 +62,7 @@ export const ExecuteButton = ({
     if (playerBalance < placeMagnetPriceWei) return { disabled: true, message: "Not enough money" };
     if (playerPoints < pointsLocked) return { disabled: true, message: `${formatEther(pointsLocked)} points needed` };
     if (currentMagnetExists) return { disabled: true, message: "Magnet already exists" };
-    if (gameOver) return { disabled: true, message: "" };
+    if (!gameActive) return { disabled: true, message: "" };
     return { disabled: false, message: "" };
   }, [placeMagnetPriceWei, pointsLocked, currentMagnetExists, playerBalance, playerPoints]);
 
@@ -82,7 +86,7 @@ export const ExecuteButton = ({
             <Button onClick={onPlaceMagnet} size="xs" variant="secondary" className="" disabled={disabled}>
               PLACE MAGNET
             </Button>
-            <SlippageSettings className="absolute top-1/2 -translate-y-1/2 left-[105%]" disabled={disabled} />
+            <SlippageSettings className="absolute left-[105%] top-1/2 -translate-y-1/2" disabled={disabled} />
           </TransactionQueueMask>
         )}
         {!playerAccount && (
@@ -93,11 +97,10 @@ export const ExecuteButton = ({
 
         <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
           <Price wei={placeMagnetPriceWei} />
-          <p className="opacity-70 text-[0.6rem]" >Max <Price wei={placeMagnetPriceWeiMax}  /></p>
+          <p className="text-[0.6rem] opacity-70">
+            Max <Price wei={placeMagnetPriceWeiMax} />
+          </p>
         </div>
-
-        
-
       </div>
     </div>
   );
