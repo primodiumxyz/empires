@@ -12,6 +12,7 @@ contract EmpiresSystem is System {
   modifier _onlyNotGameOver() {
     require(Ready.get(), "[EmpiresSystem] Game not ready");
     require(WinningEmpire.get() == EEmpire.NULL, "[EmpiresSystem] Game over");
+    require(block.number >= P_GameConfig.getGameStartBlock(), "[EmpiresSystem] Game not started");
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     require(endBlock == 0 || block.number < endBlock, "[EmpiresSystem] Game over");
     _;

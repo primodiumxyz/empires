@@ -5,7 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
-import { P_GameConfig, WinningEmpire, Empire, Planet } from "codegen/index.sol";
+import { P_GameConfig, WinningEmpire, Empire, Planet, Ready } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
@@ -28,6 +28,7 @@ contract RewardsSystem is EmpiresSystem {
    * @dev Modifier that restricts the execution of a function to when the game is over.
    */
   modifier _onlyGameOver() {
+    require(Ready.get(), "[RewardsSystem] Game is not ready");
     EEmpire winningEmpire = WinningEmpire.get();
     if (winningEmpire == EEmpire.NULL) {
       winningEmpire = _checkTimeVictory();
@@ -36,6 +37,7 @@ contract RewardsSystem is EmpiresSystem {
       }
       require(winningEmpire != EEmpire.NULL, "[RewardsSystem] Game is not over");
       WinningEmpire.set(winningEmpire);
+      P_GameConfig.setGameOverBlock(block.number);
     }
     _;
   }
