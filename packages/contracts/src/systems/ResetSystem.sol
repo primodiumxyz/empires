@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
@@ -9,7 +10,7 @@ import { initPrice } from "libraries/InitPrice.sol";
 import { Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 
-contract ResetSystem is System {
+contract ResetSystem is EmpiresSystem {
   function resetGame(uint256 _gameStartBlock) public _onlyAdmin {
     require(_gameStartBlock > block.number, "[ResetSystem] Game must start in the future");
     IWorld world = IWorld(_world());
