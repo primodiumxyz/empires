@@ -27,6 +27,11 @@
         "internalType": "bytes32"
       },
       {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
+      },
+      {
         "name": "_overrideCount",
         "type": "uint256",
         "internalType": "uint256"
@@ -39,7 +44,13 @@
     "type": "function",
     "name": "Empires__clearLoop",
     "inputs": [],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "resetComplete",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
     "stateMutability": "nonpayable"
   },
   {
@@ -50,6 +61,11 @@
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
       },
       {
         "name": "_overrideCount",
@@ -364,6 +380,13 @@
   },
   {
     "type": "function",
+    "name": "Empires__distributeFunds",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__pause",
     "inputs": [],
     "outputs": [],
@@ -377,6 +400,11 @@
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
       }
     ],
     "outputs": [],
@@ -422,7 +450,13 @@
     "type": "function",
     "name": "Empires__resetGame",
     "inputs": [],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
     "stateMutability": "nonpayable"
   },
   {
@@ -436,6 +470,11 @@
       },
       {
         "name": "_points",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "minSaleValue",
         "type": "uint256",
         "internalType": "uint256"
       }

@@ -312,7 +312,6 @@ contract OverrideSystemTest is PrimodiumTest {
       planetId = PlanetsSet.getPlanetIds()[i];
       assignPlanetToEmpire(planetId, empire);
       uint256 totalCost = LibPrice.getTotalCost(EOverride.PlaceMagnet, empire, turns);
-      uint256 pointsToStake = (P_MagnetConfig.getLockedPointsPercent() * Empire.getPointsIssued(empire)) / 10000;
 
       vm.prank(alice);
       initGas = gasleft();
