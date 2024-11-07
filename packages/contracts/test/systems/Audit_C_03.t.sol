@@ -9,6 +9,8 @@ import { RoutineThresholds } from "src/Types.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 
+import { console } from "forge-std/console.sol";
+
 contract AuditTest is PrimodiumTest {
   uint256 constant ROUND_TURNS = 500;
   uint256 constant TURN_LENGTH_BLOCKS = 3;
@@ -30,17 +32,71 @@ contract AuditTest is PrimodiumTest {
     vm.stopPrank();
   }
 
-  function test_magnetTurnPlanetsNotCleared() public {
+  // function test_magnetTurnPlanetsNotClearedFail() public {
+  //   // EEmpire.RED conquers all citadels
+  //   createShips(95);
+  //   skipTurns(EMPIRE_COUNT);
+  //   for (uint256 i = 0; i < EMPIRE_COUNT; i++) {
+  //     vm.roll(block.number + TURN_LENGTH_BLOCKS);
+  //     createPendingMove();
+  //     skipTurns(2 * EMPIRE_COUNT - 1);
+  //     createShips(95);
+  //   }
+
+  //   // Alice places a magnet that is meant to be removed after 1 full turn
+  //   placeMagnet(1, alice);
+  //   uint256 aliceMagnetDeletionTurn = Turn.getValue() + 1 * EMPIRE_COUNT;
+  //   bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), aliceMagnetDeletionTurn);
+  //   assert(magnetEmpireTurnPlanets.length == 1);
+
+  //   // Game ends by domination
+  //   vm.prank(alice);
+  //   world.Empires__withdrawEarnings();
+
+  //   // Game is reset, but MagnetTurnPlanets is not cleared
+  //   world.Empires__resetGame();
+  //   magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), aliceMagnetDeletionTurn);
+  //   assert(magnetEmpireTurnPlanets.length == 1);
+
+  //   // Game advances until aliceMagnetDeletionTurn - 1
+  //   skipTurns(aliceMagnetDeletionTurn - 2);
+
+  //   // Bob places a magnet for 10 full turns (10 * EMPIRE_COUNT)
+  //   placeMagnet(10, bob);
+  //   MagnetData memory magnetData = Magnet.get(EEmpire(1), planetId);
+  //   uint256 bobMagnetDeletionTurn = Turn.getValue() + 10 * EMPIRE_COUNT;
+  //   assert(magnetData.endTurn == bobMagnetDeletionTurn);
+
+  //   // One turn passes, reaching aliceMagnetDeletionTurn, and the magnet Bob placed for 10 turns is removed
+  //   skipTurns(1);
+  //   magnetData = Magnet.get(EEmpire(1), planetId);
+  //   assert(!magnetData.isMagnet);
+
+  //   // The data for Bob's magnet deletion is still present, so if Charlie places a magnet,
+  //   // the same issue will occur, and so on
+  //   magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), bobMagnetDeletionTurn);
+  //   assert(magnetEmpireTurnPlanets.length == 1);
+  // }
+
+  function test_magnetTurnPlanetsNotClearedPass() public {
     // EEmpire.RED conquers all citadels
+    console.log("create ships");
     createShips(95);
+    console.log("skip turns");
     skipTurns(EMPIRE_COUNT);
+    console.log("create pending moves");
     for (uint256 i = 0; i < EMPIRE_COUNT; i++) {
+      console.log("rolling: ", i);
       vm.roll(block.number + TURN_LENGTH_BLOCKS);
+      console.log("create pending move");
       createPendingMove();
+      console.log("skip turns");
       skipTurns(2 * EMPIRE_COUNT - 1);
+      console.log("create ships");
       createShips(95);
     }
 
+    console.log("Alice places magnet");
     // Alice places a magnet that is meant to be removed after 1 full turn
     placeMagnet(1, alice);
     uint256 aliceMagnetDeletionTurn = Turn.getValue() + 1 * EMPIRE_COUNT;
@@ -52,53 +108,12 @@ contract AuditTest is PrimodiumTest {
     world.Empires__withdrawEarnings();
 
     // Game is reset, but MagnetTurnPlanets is not cleared
-    world.Empires__resetGame();
-    magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), aliceMagnetDeletionTurn);
-    assert(magnetEmpireTurnPlanets.length == 1);
-
-    // Game advances until aliceMagnetDeletionTurn - 1
-    skipTurns(aliceMagnetDeletionTurn - 2);
-
-    // Bob places a magnet for 10 full turns (10 * EMPIRE_COUNT)
-    placeMagnet(10, bob);
-    MagnetData memory magnetData = Magnet.get(EEmpire(1), planetId);
-    uint256 bobMagnetDeletionTurn = Turn.getValue() + 10 * EMPIRE_COUNT;
-    assert(magnetData.endTurn == bobMagnetDeletionTurn);
-
-    // One turn passes, reaching aliceMagnetDeletionTurn, and the magnet Bob placed for 10 turns is removed
-    skipTurns(1);
-    magnetData = Magnet.get(EEmpire(1), planetId);
-    assert(!magnetData.isMagnet);
-
-    // The data for Bob's magnet deletion is still present, so if Charlie places a magnet,
-    // the same issue will occur, and so on
-    magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), bobMagnetDeletionTurn);
-    assert(magnetEmpireTurnPlanets.length == 1);
-  }
-
-  function test_magnetTurnPlanetsNotCleared_fixed() public {
-    // EEmpire.RED conquers all citadels
-    createShips(95);
-    skipTurns(EMPIRE_COUNT);
-    for (uint256 i = 0; i < EMPIRE_COUNT; i++) {
-      vm.roll(block.number + TURN_LENGTH_BLOCKS);
-      createPendingMove();
-      skipTurns(2 * EMPIRE_COUNT - 1);
-      createShips(95);
+    vm.startPrank(creator);
+    bool resetComplete = world.Empires__resetGame();
+    while (resetComplete == false) {
+      world.Empires__resetGame();
     }
 
-    // Alice places a magnet that is meant to be removed after 1 full turn
-    placeMagnet(1, alice);
-    uint256 aliceMagnetDeletionTurn = Turn.getValue() + 1 * EMPIRE_COUNT;
-    bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), aliceMagnetDeletionTurn);
-    assert(magnetEmpireTurnPlanets.length == 1);
-
-    // Game ends by domination
-    vm.prank(alice);
-    world.Empires__withdrawEarnings();
-
-    // Game is reset, but MagnetTurnPlanets is not cleared
-    world.Empires__resetGame();
     magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), aliceMagnetDeletionTurn);
     assert(magnetEmpireTurnPlanets.length == 0);
   }

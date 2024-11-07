@@ -66,8 +66,6 @@ contract LibMoveShipsTest is PrimodiumTest {
     bool moved = LibMoveShips.createPendingMove(planetId, targetPlanet);
     assertTrue(moved, "should have moved");
 
-    bytes32 destination = PendingMove.get(planetId).destinationPlanetId;
-
     LibMoveShips.executePendingMoves(planetId);
 
     assertEq(Planet.getShipCount(planetId), 0, "ship count should be 0");
