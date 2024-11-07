@@ -10,7 +10,7 @@ import { Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
 
 contract ResetSystem is System {
-  function resetGame(uint256 _gameStartBlock) public {
+  function resetGame(uint256 _gameStartBlock) public _onlyAdmin {
     require(_gameStartBlock > block.number, "[ResetSystem] Game must start in the future");
     IWorld world = IWorld(_world());
     world.Empires__clearLoop();
