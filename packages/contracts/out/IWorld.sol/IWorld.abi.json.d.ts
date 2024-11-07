@@ -484,6 +484,73 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__setGameConfigAndTurn",
+    "inputs": [
+      {
+        "name": "_gameConfig",
+        "type": "tuple",
+        "internalType": "struct P_GameConfigData",
+        "components": [
+          {
+            "name": "turnLengthBlocks",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "nextGameLengthTurns",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "goldGenRate",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "gameStartBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "gameOverBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "empireCount",
+            "type": "uint8",
+            "internalType": "uint8"
+          }
+        ]
+      },
+      {
+        "name": "_turn",
+        "type": "tuple",
+        "internalType": "struct TurnData",
+        "components": [
+          {
+            "name": "nextTurnBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "empire",
+            "type": "uint8",
+            "internalType": "enum EEmpire"
+          },
+          {
+            "name": "value",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__setRole",
     "inputs": [
       {
@@ -576,7 +643,13 @@ declare const abi: [
   {
     "type": "function",
     "name": "Empires__updateShieldEater",
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "shieldEaterNextPlanetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -620,6 +693,11 @@ declare const abi: [
             "internalType": "bytes32"
           }
         ]
+      },
+      {
+        "name": "shieldEaterNextPlanetId",
+        "type": "bytes32",
+        "internalType": "bytes32"
       }
     ],
     "outputs": [],

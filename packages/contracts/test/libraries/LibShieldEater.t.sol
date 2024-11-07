@@ -13,8 +13,11 @@ import { pseudorandom, coordToId } from "src/utils.sol";
 import { CoordData } from "src/Types.sol";
 
 contract LibShieldEaterTest is PrimodiumTest {
+  bytes32 shieldEaterNextPlanetId;
+
   function setUp() public override {
     super.setUp();
+    shieldEaterNextPlanetId = PlanetsSet.getPlanetIds()[2];
   }
 
   function testInitialize(uint256 fuzz) public {
@@ -49,7 +52,7 @@ contract LibShieldEaterTest is PrimodiumTest {
     LibShieldEater.initialize();
 
     // first update will set the destination node
-    LibShieldEater.update();
+    LibShieldEater.update(shieldEaterNextPlanetId);
 
     PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
     PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
@@ -57,7 +60,7 @@ contract LibShieldEaterTest is PrimodiumTest {
     uint256 loopcount = 0;
 
     while (destPlanetData.q != currPlanetData.q || destPlanetData.r != currPlanetData.r) {
-      LibShieldEater.update();
+      LibShieldEater.update(shieldEaterNextPlanetId);
       currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
       destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
       loopcount++;
@@ -226,7 +229,7 @@ contract LibShieldEaterTest is PrimodiumTest {
 
     assertTrue(
       postShieldCount == preShieldCount - ((preShieldCount * centerDamage) / 10000),
-      "LibShieldEater: incorrect shield damage to center."
+      "LibShieldEater: incorrect adjacent shield damage."
     );
 
     assertEq(ShieldEater.getCurrentCharge(), 0, "LibShieldEater: CurrentCharge not zero.");
@@ -242,7 +245,7 @@ contract LibShieldEaterTest is PrimodiumTest {
 
         assertTrue(
           postShieldCount == preShieldCount - ((preShieldCount * adjacentDamage) / 10000),
-          "LibShieldEater: incorrect shield damage to neighbor."
+          "LibShieldEater: incorrect adjacent shield damage."
         );
       }
     }

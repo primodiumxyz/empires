@@ -23,6 +23,8 @@ contract OverrideSystemTest is PrimodiumTest {
   uint256 pointUnit;
   uint8 EMPIRE_COUNT;
 
+  bytes32 shieldEaterNextPlanetId;
+
   function setUp() public override {
     super.setUp();
     uint256 i = 0;
@@ -36,6 +38,7 @@ contract OverrideSystemTest is PrimodiumTest {
     P_PointConfig.setPointRake(0);
     pointUnit = P_PointConfig.getPointUnit();
     EMPIRE_COUNT = P_GameConfig.getEmpireCount();
+    shieldEaterNextPlanetId = PlanetsSet.getPlanetIds()[2];
   }
 
   function testOverspend() public {
@@ -410,7 +413,7 @@ contract OverrideSystemTest is PrimodiumTest {
     LibShieldEater.initialize();
 
     for (uint256 i = 0; i < chargeTime; i++) {
-      LibShieldEater.update();
+      LibShieldEater.update(shieldEaterNextPlanetId);
     }
 
     planetId = ShieldEater.getCurrentPlanet();
