@@ -1,25 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { System } from "@latticexyz/world/src/System.sol";
+import { NamespaceOwner } from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
-import { EEmpire } from "codegen/common.sol";
+import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
+import { Role, Turn, P_GameConfig, P_GameConfigData } from "codegen/index.sol";
+import { EEmpire, ERole } from "codegen/common.sol";
 
-contract ResetSystem is System {
-  function resetGame() public {
+contract ResetSystem is EmpiresSystem {
+  function resetGame(uint256 _gameStartBlock) public _onlyAdmin {
+    require(_gameStartBlock > block.number, "[ResetSystem] Game must start in the future");
     IWorld world = IWorld(_world());
     world.Empires__clearLoop();
     P_GameConfigData memory config = P_GameConfig.get();
 
-    P_GameConfig.setGameOverBlock(block.number + config.nextGameLengthTurns * config.turnLengthBlocks);
-    P_GameConfig.setGameStartTimestamp(block.timestamp);
+    P_GameConfig.setGameStartBlock(_gameStartBlock);
+    P_GameConfig.setGameOverBlock(_gameStartBlock + config.nextGameLengthTurns * config.turnLengthBlocks);
     createPlanets(); // Planet and Empire tables are reset to default values
     LibShieldEater.initialize(); // ShieldEater relocated, charge reset, and destination set
     initPrice(); // Empire.setPointPrice and OverrideCost tables are reset to default values
-    Turn.set(block.number + config.turnLengthBlocks, EEmpire.Red, 1);
+    Turn.set(_gameStartBlock + config.turnLengthBlocks, EEmpire.Red, 1);
   }
 }

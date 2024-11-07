@@ -3,7 +3,7 @@ pragma solidity >=0.8.24;
 
 import { Turn, PendingMove, PendingMoveData, Empire, Planet, PlanetData, MoveRoutineLog, MoveRoutineLogData } from "codegen/index.sol";
 import { EEmpire, EMovement, EDirection, EOrigin } from "codegen/common.sol";
-import { pseudorandom, pseudorandomEntity, coordToId } from "src/utils.sol";
+import { pseudorandom, nextLogEntity, coordToId } from "src/utils.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
 import { ArrivedMap } from "adts/ArrivedMap.sol";
 
@@ -68,7 +68,7 @@ library LibMoveShips {
 
     // Log the move
     MoveRoutineLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       MoveRoutineLogData({
         turn: Turn.getValue(),
         originPlanetId: planetId,

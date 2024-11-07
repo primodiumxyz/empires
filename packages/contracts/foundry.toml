@@ -35,3 +35,8 @@ chain_id = 84532
 [profile.redstone-holesky]
 eth_rpc_url = "https://rpc.holesky.redstone.xyz"
 chain_id = 17001
+
+[invariant]
+runs = 4
+depth = 32768
+fail_on_revert = false

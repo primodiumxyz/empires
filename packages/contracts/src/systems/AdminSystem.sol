@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Ready, Role } from "codegen/index.sol";
+import { Ready, Role, P_GameConfig, P_GameConfigData, Turn, TurnData } from "codegen/index.sol";
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { ERole } from "codegen/common.sol";
 
@@ -18,6 +18,16 @@ contract AdminSystem is EmpiresSystem {
    */
   function unpause() public _onlyAdmin {
     Ready.set(true);
+  }
+
+  /**
+   * @dev Sets the game configuration and turn data.
+   * @param _gameConfig The game configuration data to be set.
+   * @param _turn The turn data to be set.
+   */
+  function setGameConfigAndTurn(P_GameConfigData memory _gameConfig, TurnData memory _turn) public _onlyAdmin {
+    P_GameConfig.set(_gameConfig);
+    Turn.set(_turn);
   }
 
   /**
