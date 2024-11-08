@@ -406,13 +406,14 @@ contract OverrideSystemTest is PrimodiumTest {
    * Shield Eater
    *************************************************************************/
 
-  // TODO: fix in PRI-1257
   function testDetonateShieldEaterCharged() public {
     uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 5;
 
     vm.startPrank(creator);
     LibShieldEater.initialize();
 
+    // set to large value to ensure it is charged
+    // generally, config threshold is lower (16-50), but wanted to leave room
     ShieldEater.setCurrentCharge(1000);
 
     planetId = ShieldEater.getCurrentPlanet();
