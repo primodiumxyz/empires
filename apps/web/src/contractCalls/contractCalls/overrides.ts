@@ -46,6 +46,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
 
   const chargeShield = async (
     planetId: Entity,
+    empire: number,
     overrideCount: bigint,
     payment: bigint,
     options?: Partial<TxQueueOptions>,
@@ -55,7 +56,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       () =>
         execute({
           functionName: "Empires__chargeShield",
-          args: [planetId as Hex, overrideCount],
+          args: [planetId as Hex, empire, overrideCount],
           options: { value: payment, gas: 546063n * 2n },
           txQueueOptions: {
             id: `${planetId}-add-shield`,

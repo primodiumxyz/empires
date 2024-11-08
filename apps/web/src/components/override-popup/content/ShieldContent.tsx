@@ -45,7 +45,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           <TransactionQueueMask id={`${entity}-add-shield`} className="relative">
             <Button
               onClick={async () => {
-                await chargeShield(entity, BigInt(inputValue), chargeShieldPriceWeiMax);
+                await chargeShield(entity, planetEmpire, BigInt(inputValue), chargeShieldPriceWeiMax);
                 setInputValue("1");
                 tables.SelectedPlanet.remove();
               }}
