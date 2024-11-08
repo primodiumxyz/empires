@@ -416,9 +416,9 @@ contract OverrideSystemTest is PrimodiumTest {
     vm.startPrank(creator);
     LibShieldEater.initialize();
 
-    for (uint256 i = 0; i < chargeTime; i++) {
-      LibShieldEater.update(shieldEaterNextPlanetId);
-    }
+    // set to large value to ensure it is charged
+    // generally, config threshold is lower (16-50), but wanted to leave room
+    ShieldEater.setCurrentCharge(1000);
 
     planetId = ShieldEater.getCurrentPlanet();
     bytes32 neighborId;
