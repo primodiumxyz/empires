@@ -40,7 +40,7 @@ export const ShipContent: React.FC<{ entity: Entity }> = ({ entity }) => {
           <TransactionQueueMask id={`${entity}-create-ship`} className="relative flex flex-row items-center">
             <Button
               onClick={async () => {
-                await createShip(entity, BigInt(inputValue), createShipPriceWeiMax);
+                await createShip(entity, planetEmpire, BigInt(inputValue), createShipPriceWeiMax);
                 setInputValue("1");
                 tables.SelectedPlanet.remove();
               }}
