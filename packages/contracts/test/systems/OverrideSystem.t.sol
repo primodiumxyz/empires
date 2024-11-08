@@ -51,10 +51,13 @@ contract OverrideSystemTest is PrimodiumTest {
 
   // TODO: fix PRI-1249
   function testUnderspend() public {
+    uint256 initBalance = alice.balance;
     vm.startPrank(alice);
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
+    EEmpire empireId = Planet.getEmpireId(planetId);
     vm.expectRevert("[OverrideSystem] Insufficient payment");
-    world.Empires__createShip{ value: cost - 1 }(planetId, Planet.getEmpireId(planetId), 1);
+    world.Empires__createShip{ value: cost - 1 }(planetId, empireId, 1);
+    assertEq(alice.balance, initBalance, "Alice should not have spent any wei");
   }
 
   function testExactSpend() public {
