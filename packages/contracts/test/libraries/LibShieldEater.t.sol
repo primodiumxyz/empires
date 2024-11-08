@@ -32,8 +32,6 @@ contract LibShieldEaterTest is PrimodiumTest {
     assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "LibShieldEater: planetId not contained in PlanetsSet");
   }
 
-  // TODO: fix in PRI-1256
-
   function testShieldEaterMoves() public {
     vm.startPrank(creator);
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
