@@ -49,6 +49,7 @@ contract OverrideSystemTest is PrimodiumTest {
     assertEq(alice.balance, initBalance - cost, "Alice should have been refunded the 1 wei");
   }
 
+  // TODO: fix PRI-1249
   function testUnderspend() public {
     vm.startPrank(alice);
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
