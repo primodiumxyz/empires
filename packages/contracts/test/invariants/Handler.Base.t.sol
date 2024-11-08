@@ -80,9 +80,10 @@ abstract contract HandlerBase is Test, TestPlus {
     if (block.number >= GAME_OVER_BLOCK) return;
 
     bytes32[] memory empirePlanets = _getEmpirePlanets(turn.empire);
+    bytes32 targetPlanet;
     RoutineThresholds[] memory routineThresholds = new RoutineThresholds[](empirePlanets.length);
     for (uint256 i = 0; i < empirePlanets.length; i++) {
-      bytes32 targetPlanet = _selectRandomPlanet(_random());
+      targetPlanet = _selectRandomPlanet(_random());
       do {
         targetPlanet = _selectRandomPlanet(_randomUnique());
       } while (targetPlanet == empirePlanets[i]);
@@ -98,7 +99,7 @@ abstract contract HandlerBase is Test, TestPlus {
     }
 
     vm.prank(CREATOR);
-    world.Empires__updateWorld(routineThresholds);
+    world.Empires__updateWorld(routineThresholds, targetPlanet); // requires a planet for shieldEater target, but doesn't matter which for this test
   }
 
   /* -------------------------------------------------------------------------- */

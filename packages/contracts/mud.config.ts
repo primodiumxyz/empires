@@ -18,6 +18,8 @@ export const worldInput = {
     UpdatePriceSubsystem: { openAccess: false },
     UpdateShieldEaterSubsystem: { openAccess: false },
     ResetClearLoopSubsystem: { openAccess: false },
+    ResetSystem: { openAccess: false },
+    PayoutSystem: { openAccess: false },
   },
 
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
@@ -33,6 +35,7 @@ export const worldInput = {
         gameStartBlock: "uint256",
         gameOverBlock: "uint256",
         empireCount: "uint8",
+        empiresCleared: "uint8",
       },
     },
 
@@ -103,6 +106,16 @@ export const worldInput = {
     WinningEmpire: {
       key: [],
       schema: { empire: "EEmpire" },
+    },
+
+    PayoutManager: {
+      key: [],
+      schema: { contractAddress: "address" },
+    },
+
+    RakeRecipient: {
+      key: [],
+      schema: { recipientAddress: "address" },
     },
 
     /* ----------------------------- Access Control ----------------------------- */
@@ -249,7 +262,7 @@ export const worldInput = {
     },
 
     /* ----------------------------- Arrived ---------------------------- */
-    
+
     Value_ArrivedMap: {
       key: ["planetId"],
       schema: { planetId: "bytes32", value: "uint256" },

@@ -5,18 +5,16 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
-import { P_GameConfig, WinningEmpire, Empire, Planet, Ready } from "codegen/index.sol";
+import { P_GameConfig, WinningEmpire, Empire } from "codegen/index.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
-import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 
 import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
-import { addressToId, pseudorandom } from "src/utils.sol";
+import { addressToId } from "src/utils.sol";
 import { EEmpire } from "codegen/common.sol";
 
 /**
@@ -24,102 +22,6 @@ import { EEmpire } from "codegen/common.sol";
  * @dev A contract that manages the rewards system for the Empires game.
  */
 contract RewardsSystem is EmpiresSystem {
-  /**
-   * @dev Modifier that restricts the execution of a function to when the game is over.
-   */
-  modifier _onlyGameOver() {
-    require(Ready.get(), "[RewardsSystem] Game is not ready");
-    EEmpire winningEmpire = WinningEmpire.get();
-    if (winningEmpire == EEmpire.NULL) {
-      winningEmpire = _checkTimeVictory();
-      if (winningEmpire == EEmpire.NULL) {
-        winningEmpire = _checkDominationVictory();
-      }
-      require(winningEmpire != EEmpire.NULL, "[RewardsSystem] Game is not over");
-      WinningEmpire.set(winningEmpire);
-      P_GameConfig.setGameOverBlock(block.number);
-    }
-    _;
-  }
-
-  /**
-   * @dev Checks if the game has been won by domination.
-   * @return winningEmpire The empire index that has won the game, or 0 if the game has not been won by domination.
-   */
-  function _checkDominationVictory() internal view returns (EEmpire) {
-    bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
-    if (citadelPlanets.length == 0) {
-      return EEmpire.NULL;
-    }
-    EEmpire winningEmpire = Planet.getEmpireId(citadelPlanets[0]);
-    if (winningEmpire == EEmpire.NULL) {
-      return EEmpire.NULL;
-    }
-
-    for (uint256 i = 0; i < citadelPlanets.length; i++) {
-      if (Planet.getEmpireId(citadelPlanets[i]) != winningEmpire) {
-        return EEmpire.NULL;
-      }
-    }
-
-    return winningEmpire;
-  }
-
-  /**
-   * @dev Checks if the game has ended by the match running out of time, and sets the winning empire.
-   * @notice First condition is number of owned citadel planets. Second condition is number of all owned planets. Third condition is number of points issued. Fourth condition is pseudorandom tiebreaker.
-   * @return winningEmpire The empire index that has won the game, or 0 if the game has not been won by time.
-   */
-  function _checkTimeVictory() internal view returns (EEmpire) {
-    uint256 endBlock = P_GameConfig.getGameOverBlock();
-    if (endBlock == 0 || block.number <= endBlock) {
-      return EEmpire.NULL;
-    }
-
-    bytes32[] memory citadelPlanets = CitadelPlanetsSet.getCitadelPlanetIds();
-    uint8 empireCount = P_GameConfig.getEmpireCount();
-    uint256[] memory citadelPlanetsPerEmpire = new uint256[](empireCount);
-    for (uint256 i = 0; i < citadelPlanets.length; i++) {
-      EEmpire empire = Planet.getEmpireId(citadelPlanets[i]);
-      if (empire == EEmpire.NULL) continue;
-
-      citadelPlanetsPerEmpire[uint8(empire) - 1]++;
-    }
-
-    EEmpire winningEmpire = EEmpire.NULL;
-    uint256 maxCitadelPlanets = 0;
-    uint256 pseudorandomWinner = 0; // used to handle ties, and not rerolling the winner prevents the Monty Hall problem
-    for (uint8 i = 1; i <= empireCount; i++) {
-      uint8 index = i - 1;
-      EEmpire empire = EEmpire(i);
-      uint256 currentPlanets = citadelPlanetsPerEmpire[index];
-      uint256 pseudorandomCurrent = pseudorandom(uint256(empire), 1e18) + 1;
-      if (currentPlanets > maxCitadelPlanets) { // most citadel planets
-        maxCitadelPlanets = currentPlanets;
-        winningEmpire = EEmpire(empire);
-      } else if (currentPlanets == maxCitadelPlanets) { // same number of citadel planets, most planets
-        if (EmpirePlanetsSet.size(empire) > EmpirePlanetsSet.size(winningEmpire)) {
-          winningEmpire = EEmpire(empire);
-        } else if (EmpirePlanetsSet.size(empire) == EmpirePlanetsSet.size(winningEmpire)) { // same number of citadel planets and planets, most points issued
-          if (Empire.getPointsIssued(empire) > Empire.getPointsIssued(winningEmpire)) {
-            winningEmpire = EEmpire(empire);
-          } else if (Empire.getPointsIssued(empire) == Empire.getPointsIssued(winningEmpire)) {
-            // pseudorandomly select winner
-            if (pseudorandomCurrent > pseudorandomWinner) {
-              winningEmpire = EEmpire(empire);
-            }
-          }
-        }
-      }
-
-      if (winningEmpire == empire) {
-        pseudorandomWinner = pseudorandomCurrent; // update pseudorandom winner to handle potential ties in future loops
-      }
-    }
-
-    return winningEmpire;
-  }
-
   /**
    * @dev Allows a player to withdraw their earnings.
    * This function can only be called when the game is over.

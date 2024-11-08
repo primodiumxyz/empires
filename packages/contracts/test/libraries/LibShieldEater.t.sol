@@ -20,14 +20,10 @@ contract LibShieldEaterTest is PrimodiumTest {
     shieldEaterNextPlanetId = PlanetsSet.getPlanetIds()[2];
   }
 
-  function testInitialize(uint256 fuzz) public {
+  function testInitialize() public {
     vm.startPrank(creator);
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     assertTrue(planetIds.length > 0, "LibShieldEater: planetIds.length is 0");
-
-    // set a random block.number
-    fuzz = bound(fuzz, 1000000, 1e36);
-    vm.roll(fuzz);
 
     // choose a starting planet
     LibShieldEater.initialize();
@@ -36,153 +32,63 @@ contract LibShieldEaterTest is PrimodiumTest {
     assertTrue(PlanetsSet.has(ShieldEater.getCurrentPlanet()), "LibShieldEater: planetId not contained in PlanetsSet");
   }
 
-  function testShieldEaterUpdate(uint256 fuzz) public {
+  function testShieldEaterMoves() public {
     vm.startPrank(creator);
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-
-    // set a random block.number
-    fuzz = bound(fuzz, 1000000, 1e36);
-    vm.roll(fuzz);
-
-    // populate shieldCount for all planets
-    for (uint256 i = 0; i < planetIds.length; i++) {
-      Planet.setShieldCount(planetIds[i], 1);
-    }
-
     LibShieldEater.initialize();
 
-    // first update will set the destination node
-    LibShieldEater.update(shieldEaterNextPlanetId);
-
-    PlanetData memory currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
-    PlanetData memory destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
-
-    uint256 loopcount = 0;
-
-    while (destPlanetData.q != currPlanetData.q || destPlanetData.r != currPlanetData.r) {
-      LibShieldEater.update(shieldEaterNextPlanetId);
-      currPlanetData = Planet.get(ShieldEater.getCurrentPlanet());
-      destPlanetData = Planet.get(ShieldEater.getDestinationPlanet());
-      loopcount++;
-
-      // if we've reached the destination, then the path has been cleared
-      // so only run these checks if we're still en route
-      if (ShieldEater.getCurrentPlanet() != ShieldEater.getDestinationPlanet()) {
-        // the current planet was already pushed to the path, so we should find it once, but not twice
-        bytes32[] memory path = ShieldEater.getPath();
-        uint256 foundCount = 0;
-        for (uint256 i = 0; i < path.length; i++) {
-          if (path[i] == ShieldEater.getCurrentPlanet()) {
-            foundCount++;
-          }
-        }
-        assertFalse(foundCount == 0, "LibShieldEater: ShieldEater did not log current plan into path.");
-        assertFalse(foundCount > 1, "LibShieldEater: ShieldEater walked over its own path.");
-      }
-
-      // and that it eats the correct number of shields along the way
-      assertTrue(ShieldEater.getCurrentCharge() == loopcount * 2, "LibShieldEater: CurrentCharge != loopcount");
+    bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
+    bytes32 nextPlanet = planetIds[0];
+    if (currentPlanet == nextPlanet) {
+      nextPlanet = planetIds[1];
     }
 
-    assertTrue(loopcount < planetIds.length, "LibShieldEater: loopcount exceeded planetIds.length");
-
-    assertEq(currPlanetData.q, destPlanetData.q, "LibShieldEater: currPlanetData.q != destPlanetData.q");
-    assertEq(currPlanetData.r, destPlanetData.r, "LibShieldEater: currPlanetData.r != destPlanetData.r");
-
-    assertTrue(ShieldEater.getRetargetPending(), "LibShieldEater: RetargetPending not true.");
-    assertTrue(ShieldEater.getPath().length == 0, "LibShieldEater: Path not empty.");
-    assertTrue(ShieldEater.getPathIndex() == 0, "LibShieldEater: PathIndex not zero.");
+    LibShieldEater.update(nextPlanet);
+    assertEq(ShieldEater.getCurrentPlanet(), nextPlanet, "LibShieldEater: ShieldEater did not move to next planet.");
   }
 
-  function testShieldEaterRetarget(uint256 fuzz) public {
+  function testShieldEaterStays() public {
     vm.startPrank(creator);
-    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    bytes32 newDestination;
-    uint256 maxShieldCount = 0;
-    uint256 i = 0;
+    LibShieldEater.initialize();
 
-    // set a random block.number
-    fuzz = bound(fuzz, 1000000, 1e36);
-    vm.roll(fuzz);
-
-    // populate shieldCount for all planets
-    for (i = 0; i < planetIds.length; i++) {
-      Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
-    }
-
-    // find planet with highest shields
-    for (i = 0; i < planetIds.length; i++) {
-      // skip if it's the current planet
-      if (planetIds[i] == ShieldEater.getCurrentPlanet()) {
-        continue;
-      }
-      if (Planet.getShieldCount(planetIds[i]) >= maxShieldCount) {
-        maxShieldCount = Planet.getShieldCount(planetIds[i]);
-        newDestination = planetIds[i];
-      }
-    }
-
-    // choose a next destination (which should be the planet with highest shields)
-    LibShieldEater.retarget();
-
-    console.log("ShieldEater.getDestinationPlanet():");
-    console.logBytes32(ShieldEater.getDestinationPlanet());
-
-    // check that it is a valid planetId
-    assertTrue(
-      PlanetsSet.has(ShieldEater.getDestinationPlanet()),
-      "LibShieldEater: planetId not contained in PlanetsSet"
-    );
+    bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
+    LibShieldEater.update(currentPlanet);
+    assertEq(ShieldEater.getCurrentPlanet(), currentPlanet, "LibShieldEater: ShieldEater moved to same planet.");
   }
 
-  function testShieldEaterRetargetSecondHighest(uint256 fuzz) public {
+  function testShieldEaterEats() public {
     vm.startPrank(creator);
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    uint256 i = 0;
+    LibShieldEater.initialize();
 
-    // set a random block.number
-    fuzz = bound(fuzz, 1000000, 1e36);
-    vm.roll(fuzz);
+    bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
+    uint256 shieldCount = 10;
+    Planet.setShieldCount(currentPlanet, shieldCount);
 
-    // populate shieldCount for all planets
-    for (i = 0; i < planetIds.length; i++) {
-      Planet.setShieldCount(planetIds[i], pseudorandom(i, 100));
+    LibShieldEater.update(planetIds[0]);
+
+    uint256 shieldDamage = P_ShieldEaterConfig.getVisitShieldDamage();
+    uint256 expectedCharge = 1;
+    if (shieldCount > shieldDamage) {
+      expectedCharge += shieldDamage;
+    } else {
+      expectedCharge += shieldCount;
     }
 
-    bytes32 highest;
-    bytes32 secondHighest;
+    assertEq(ShieldEater.getCurrentCharge(), expectedCharge, "LibShieldEater: ShieldEater did not eat shields.");
+  }
 
-    uint256 highShieldCount = 0;
+  function testShieldEaterFasts() public {
+    vm.startPrank(creator);
+    LibShieldEater.initialize();
 
-    // find planet with highest shields
-    for (i = 0; i < planetIds.length; i++) {
-      if (Planet.getShieldCount(planetIds[i]) >= highShieldCount) {
-        highShieldCount = Planet.getShieldCount(planetIds[i]);
-        highest = planetIds[i];
-      }
-    }
+    bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
+    uint256 shieldCount = 0;
+    Planet.setShieldCount(currentPlanet, shieldCount);
 
-    // place the SheidlEater on planet with highest shield count
-    ShieldEater.setCurrentPlanet(highest);
+    LibShieldEater.update(currentPlanet);
 
-    // find planet with second highest shields
-    highShieldCount = 0;
-    for (i = 0; i < planetIds.length; i++) {
-      // skip highest
-      if (planetIds[i] == highest) {
-        continue;
-      }
-      if (Planet.getShieldCount(planetIds[i]) >= highShieldCount) {
-        highShieldCount = Planet.getShieldCount(planetIds[i]);
-        secondHighest = planetIds[i];
-      }
-    }
-
-    // choose a next destination (which should be the planet with second highest shields)
-    LibShieldEater.retarget();
-
-    // destination should be second highest
-    assertEq(ShieldEater.getDestinationPlanet(), secondHighest, "LibShieldEater: destination not second highest.");
+    assertEq(ShieldEater.getCurrentCharge(), 0, "LibShieldEater: ShieldEater did not fast.");
   }
 
   function testShieldEaterDetonate(uint256 fuzz) public {
@@ -250,6 +156,4 @@ contract LibShieldEaterTest is PrimodiumTest {
       }
     }
   }
-
-  function testShieldEaterGetDirection() public {}
 }

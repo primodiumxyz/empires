@@ -3,7 +3,6 @@
   "version": "0.1.9",
   "description": "",
   "scripts": {
-    "clean": "rm -rf ./node_modules && rm -rf ./packages/assets/node_modules && rm -rf ./packages/contracts/node_modules && rm -rf ./packages/contracts/src/codegen && rm -rf ./packages/contracts/cache && rm -rf ./packages/contracts/out && rm -rf ./packages/core/node_modules && rm -rf ./packages/engine/node_modules && rm -rf ./packages/game/node_modules",
     "dev": "turbo dev dev:indexer dev:keeper --continue",
     "build": "turbo build",
     "clean": "rm -rf ./node_modules && rm -rf ./packages/assets/node_modules && rm -rf ./packages/contracts/node_modules && rm -rf ./packages/contracts/src/codegen && rm -rf ./packages/core/node_modules && rm -rf ./packages/engine/node_modules && rm -rf ./packages/game/node_modules",

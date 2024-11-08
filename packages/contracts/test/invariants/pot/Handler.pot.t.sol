@@ -81,7 +81,7 @@ contract HandlerPot is HandlerBase {
     );
 
     vm.prank(player);
-    world.Empires__createShip{ value: overrideCost }(planet, overrideCount);
+    world.Empires__createShip{ value: overrideCost }(planet, empire, overrideCount);
 
     _afterPurchaseIncrease(overrideCost);
   }
@@ -101,7 +101,7 @@ contract HandlerPot is HandlerBase {
     );
 
     vm.prank(player);
-    world.Empires__chargeShield{ value: overrideCost }(planet, overrideCount);
+    world.Empires__chargeShield{ value: overrideCost }(planet, empire, overrideCount);
 
     _afterPurchaseIncrease(overrideCost);
   }
@@ -121,7 +121,7 @@ contract HandlerPot is HandlerBase {
     if (AcidPlanetsSet.getAcidCycles(empire, planet) != 0) return;
 
     vm.prank(player);
-    world.Empires__placeAcid{ value: overrideCost }(planet);
+    world.Empires__placeAcid{ value: overrideCost }(planet, empire);
 
     _afterPurchaseIncrease(overrideCost);
   }

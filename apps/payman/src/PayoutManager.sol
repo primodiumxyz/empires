@@ -10,31 +10,27 @@ contract PayoutManager {
     address private owner;
     mapping(address winner => uint256 payout) public balances;
     mapping(uint256 roundNumber => Winner[]) private winners;
-    uint256 public lastRound;
+    uint256 public currentRound;
 
     constructor() {
         owner = msg.sender;
+        currentRound = 1;
     }
 
     function record(
         address[] memory _victors,
-        uint256[] memory _gains,
-        uint256 _roundNumber
+        uint256[] memory _gains
     ) public payable {
         require(msg.sender == owner, "[PAYMAN] Only owner can add winners");
         require(
             _victors.length == _gains.length,
             "[PAYMAN] Winners and balances length mismatch"
         );
-        require(
-            _roundNumber > lastRound,
-            "[PAYMAN] Round number must be greater than last round"
-        );
 
         uint256 allocated = 0;
 
         for (uint256 i = 0; i < _victors.length; i++) {
-            winners[_roundNumber].push(Winner(_victors[i], _gains[i]));
+            winners[currentRound].push(Winner(_victors[i], _gains[i]));
             balances[_victors[i]] = balances[_victors[i]] + _gains[i];
             allocated = allocated + _gains[i];
         }
@@ -43,7 +39,11 @@ contract PayoutManager {
             allocated == msg.value,
             "[PAYMAN] Incorrect balances allocation"
         );
-        lastRound = _roundNumber;
+    }
+
+    function incrementRound() external {
+        require(msg.sender == owner, "[PAYMAN] Only owner can increment round");
+        currentRound = currentRound + 1;
     }
 
     function withdraw() external {

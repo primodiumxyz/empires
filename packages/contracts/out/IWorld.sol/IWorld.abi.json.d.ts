@@ -27,6 +27,11 @@ declare const abi: [
         "internalType": "bytes32"
       },
       {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
+      },
+      {
         "name": "_overrideCount",
         "type": "uint256",
         "internalType": "uint256"
@@ -39,7 +44,13 @@ declare const abi: [
     "type": "function",
     "name": "Empires__clearLoop",
     "inputs": [],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "resetComplete",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
     "stateMutability": "nonpayable"
   },
   {
@@ -50,6 +61,11 @@ declare const abi: [
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
       },
       {
         "name": "_overrideCount",
@@ -364,6 +380,13 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__distributeFunds",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__pause",
     "inputs": [],
     "outputs": [],
@@ -377,6 +400,11 @@ declare const abi: [
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
       }
     ],
     "outputs": [],
@@ -428,7 +456,13 @@ declare const abi: [
         "internalType": "uint256"
       }
     ],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
     "stateMutability": "nonpayable"
   },
   {
@@ -442,6 +476,11 @@ declare const abi: [
       },
       {
         "name": "_points",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "minSaleValue",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -485,6 +524,11 @@ declare const abi: [
           },
           {
             "name": "empireCount",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "empiresCleared",
             "type": "uint8",
             "internalType": "uint8"
           }

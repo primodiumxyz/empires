@@ -6,7 +6,7 @@ import { LibPrice } from "libraries/LibPrice.sol";
 import { LibPoint } from "libraries/LibPoint.sol";
 import { addressToId } from "src/utils.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
-import { P_PointConfig, P_OverrideConfig, P_GameConfig } from "codegen/index.sol";
+import { Empire, P_PointConfig, P_OverrideConfig, P_GameConfig } from "codegen/index.sol";
 
 /**
  * @title OverrideSystem
@@ -36,7 +36,13 @@ library LibOverride {
     PlayersMap.setLoss(playerId, PlayersMap.get(playerId).loss + _spend);
 
     if (progressOverride) {
-      uint256 numPoints = _overrideCount * (empireCount - 1) * pointUnit * pointMultiplier;
+      uint8 enemiesCount;
+      for (uint8 i = 1; i <= empireCount; i++) {
+        if (EEmpire(i) != _empireImpacted && !Empire.getIsDefeated(EEmpire(i))) {
+          enemiesCount++;
+        }
+      }
+      uint256 numPoints = _overrideCount * enemiesCount * pointUnit * pointMultiplier;
       LibPoint.issuePoints(_empireImpacted, playerId, numPoints);
       LibPrice.pointPriceUp(_empireImpacted, numPoints);
     } else {

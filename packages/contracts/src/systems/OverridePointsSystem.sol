@@ -23,12 +23,18 @@ contract OverridePointsSystem is EmpiresSystem {
    * @param _empire The empire to sell points from.
    * @param _points The number of points to sell.
    */
-  function sellPoints(EEmpire _empire, uint256 _points) public _onlyNotGameOver {
+  function sellPoints(EEmpire _empire, uint256 _points, uint256 minSaleValue) public _onlyNotGameOver {
     bytes32 playerId = addressToId(_msgSender());
+    require(
+      _points <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
+      "[OverrideSystem] Player does not have enough points to remove"
+    );
+
     uint256 pointSaleValue = LibPrice.getPointSaleValue(_empire, _points);
 
     // require that the pot has enough ETH to send
     require(pointSaleValue <= Balances.get(EMPIRES_NAMESPACE_ID), "[OverrideSystem] Insufficient funds for point sale");
+    require(pointSaleValue >= minSaleValue, "[OverrideSystem] Sale value is below desired minimum");
 
     // remove points from player and empire's issued points count
     LibPoint.removePoints(_empire, playerId, _points);
@@ -37,9 +43,6 @@ contract OverridePointsSystem is EmpiresSystem {
     LibPrice.sellEmpirePointPriceDown(_empire, _points);
 
     PlayersMap.setGain(playerId, PlayersMap.get(playerId).gain + pointSaleValue);
-
-    // send eth to player
-    IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
 
     SellPointsOverrideLog.set(
       nextLogEntity(),
@@ -52,5 +55,8 @@ contract OverridePointsSystem is EmpiresSystem {
         timestamp: block.timestamp
       })
     );
+
+    // send eth to player
+    IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);
   }
 }
