@@ -406,6 +406,7 @@ contract OverrideSystemTest is PrimodiumTest {
    * Shield Eater
    *************************************************************************/
 
+  // TODO: fix in PRI-1257
   function testDetonateShieldEaterCharged() public {
     uint256 chargeTime = P_ShieldEaterConfig.getDetonationThreshold() * 5;
 
