@@ -213,13 +213,13 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const placeAcidRain = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const placeAcidRain = async (planetId: Entity, empire: number, payment: bigint, options?: Partial<TxQueueOptions>) => {
     const planetName = await core.utils.getPlanetName(planetId);
     return await withTransactionStatus(
       () =>
         execute({
           functionName: "Empires__placeAcid",
-          args: [planetId as Hex],
+          args: [planetId as Hex, empire],
           options: { value: payment, gas: 1_000_000n * 2n }, // TODO: get gas estimate
           txQueueOptions: {
             id: `${planetId}-place-acid`,
