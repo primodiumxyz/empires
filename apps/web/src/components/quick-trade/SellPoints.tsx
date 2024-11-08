@@ -39,8 +39,9 @@ export const SellPoints = () => {
   };
 
   const { price: pointsToWei, message } = usePointPrice(selectedEmpire, Number(amount));
+  const minSalePrice = (pointsToWei * 90n) / 100n;  // revert if receive less than 90% expected value
   const handleSubmit = () => {
-    calls.sellPoints(selectedEmpire, BigInt(Number(amount) * POINTS_UNIT), gameEndPot);
+    calls.sellPoints(selectedEmpire, BigInt(Number(amount) * POINTS_UNIT), minSalePrice, gameEndPot);
 
     setAmount("0");
   };
