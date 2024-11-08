@@ -2,7 +2,7 @@
 pragma solidity >=0.8.24;
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
-import { P_GameConfig, Planet, Turn, Magnet, MagnetData, TurnData, MagnetTurnPlanets } from "codegen/index.sol";
+import { P_GameConfig, Planet, Turn, Magnet, MagnetData, TurnData, MagnetTurnPlanets, WinningEmpire } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { RoutineThresholds } from "src/Types.sol";
@@ -82,23 +82,6 @@ contract AuditTest is PrimodiumTest {
   // }
 
   function test_magnetTurnPlanetsNotClearedPass() public {
-    // EEmpire.RED conquers all citadels
-    console.log("create ships");
-    createShips(95);
-    console.log("skip turns");
-    skipTurns(EMPIRE_COUNT);
-    console.log("create pending moves");
-    for (uint256 i = 0; i < EMPIRE_COUNT; i++) {
-      console.log("rolling: ", i);
-      vm.roll(block.number + TURN_LENGTH_BLOCKS);
-      console.log("create pending move");
-      createPendingMove();
-      console.log("skip turns");
-      skipTurns(2 * EMPIRE_COUNT - 1);
-      console.log("create ships");
-      createShips(95);
-    }
-
     console.log("Alice places magnet");
     // Alice places a magnet that is meant to be removed after 1 full turn
     placeMagnet(1, alice);
@@ -106,19 +89,26 @@ contract AuditTest is PrimodiumTest {
     bytes32[] memory magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), aliceMagnetDeletionTurn);
     assert(magnetEmpireTurnPlanets.length == 1);
 
-    // Game ends by domination
-    vm.prank(alice);
-    world.Empires__withdrawEarnings();
+    // Game ends
+    console.log("game ends");
+    vm.prank(creator);
+    WinningEmpire.set(EEmpire.Red);
 
     // Game is reset, but MagnetTurnPlanets is not cleared
+    uint loopcount = 1;
+    console.log("game reset:", loopcount);
     vm.startPrank(creator);
     bool resetComplete = world.Empires__resetGame(GAME_OVER_BLOCK + 100);
     while (resetComplete == false) {
-      world.Empires__resetGame(GAME_OVER_BLOCK + 100);
+      loopcount++;
+      console.log("game reset:", loopcount);
+      resetComplete = world.Empires__resetGame(GAME_OVER_BLOCK + 100);
     }
 
+    console.log("game reset complete");
+    console.log("magnetEmpireTurnPlanets");
     magnetEmpireTurnPlanets = MagnetTurnPlanets.get(EEmpire(1), aliceMagnetDeletionTurn);
-    assert(magnetEmpireTurnPlanets.length == 0);
+    assertEq(magnetEmpireTurnPlanets.length, 0, "[Audit_C_03]there are still magnet timers");
   }
 
   function skipTurns(uint256 turns) public {
