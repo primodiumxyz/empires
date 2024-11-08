@@ -11,6 +11,7 @@ import { withTransactionStatus } from "@/util/notify";
 export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) => {
   const createShip = async (
     planetId: Entity,
+    empire: number,
     overrideCount: bigint,
     payment: bigint,
     options?: Partial<TxQueueOptions>,
@@ -20,7 +21,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       () =>
         execute({
           functionName: "Empires__createShip",
-          args: [planetId as Hex, overrideCount],
+          args: [planetId as Hex, empire, overrideCount],
           options: { value: payment, gas: 552401n * 2n },
           txQueueOptions: {
             id: `${planetId}-create-ship`,
