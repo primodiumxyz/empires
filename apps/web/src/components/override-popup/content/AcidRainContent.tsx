@@ -41,7 +41,7 @@ export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
         <TransactionQueueMask id={`${entity}-place-acid`} className="relative flex items-center">
           <Button
             onClick={async () => {
-              await placeAcidRain(entity, placeAcidPriceWeiMax);
+              await placeAcidRain(entity, planetEmpire, placeAcidPriceWeiMax);
               tables.SelectedPlanet.remove();
             }}
             disabled={placeAcidDisabled}
@@ -60,7 +60,7 @@ export const AcidRainContent: React.FC<{ entity: Entity }> = ({ entity }) => {
       )}
       <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
         <Price wei={placeAcidPriceWei} />
-        <p className="opacity-70 text-[0.6rem]" >Max <Price wei={placeAcidPriceWeiMax}  /></p>
+        <p className="opacity-70 text-[0.6rem]" >Max <Price wei={placeAcidPriceWeiMax} /></p>
       </div>
 
     </div>
