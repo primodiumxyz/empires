@@ -35,6 +35,8 @@ contract AuditTest is PrimodiumTest {
     vm.stopPrank();
   }
 
+  // Preserved Auditor submitted code, but this test should fail now that it is fixed.
+
   // function test_magnetTurnPlanetsNotClearedFail() public {
   //   // EEmpire.RED conquers all citadels
   //   createShips(95);
