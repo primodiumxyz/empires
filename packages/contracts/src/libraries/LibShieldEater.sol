@@ -26,35 +26,101 @@ library LibShieldEater {
   }
 
   /**
+   * @dev Selects a destination for the Shield Eater, from the top 3 planets with the most shields.
+   * @notice This function is overly complicated due to contract size optimizations.
+   */
+  function retarget() internal {
+    bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
+    bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
+    bytes32 newDestination;
+    uint256 shieldCount;
+    uint256 maxShieldCount;
+
+    // find the top 3 planets with the most shields
+    for (uint256 i = 0; i < planetIds.length; i++) {
+      // skip if it's the current planet
+      if (planetIds[i] == currentPlanet) {
+        continue;
+      }
+      shieldCount = Planet.getShieldCount(planetIds[i]);
+      if (shieldCount >= maxShieldCount) {
+        newDestination = planetIds[i];
+        maxShieldCount = shieldCount;
+      }
+    }
+
+    //   // if there are no shields on the map, it tends to gravitate towards the bottom center.
+    //   // this will force it to wander around a bit more even if there's nothing to eat.
+    if (maxShieldCount == 0) {
+      uint256 randomIndex = pseudorandom(uint256(nextLogEntity()), planetIds.length);
+      ShieldEater.setDestinationPlanet(planetIds[randomIndex]);
+    } else {
+      ShieldEater.setDestinationPlanet(newDestination);
+    }
+
+    ShieldEater.setRetargetCount(ShieldEater.getRetargetCount() + 1);
+  }
+
+  /**
    * @dev Moves the Shield Eater to the next planet en route to the destination planet.
    */
-  function update(bytes32 shieldEaterNextPlanetId) internal {
-    if (ShieldEater.getCurrentPlanet() != shieldEaterNextPlanetId) {
-      ShieldEater.setCurrentPlanet(shieldEaterNextPlanetId);
+  function update() internal {
+    // on each call, we either find a new destination or move to the next planet in the path
+    // only one of these should happen per update call.
+
+    // if retarget pending, find a new destination
+    if (ShieldEater.getRetargetPending()) {
+      // how many times have we looped?  If we're stuck, clear the path and try again.
+      if (ShieldEater.getRetargetCount() >= P_ShieldEaterConfig.getRetargetMaxThreshold()) {
+        // we're stuck.  clear the path.
+        ShieldEater.setPathIndex(0);
+        bytes32[] memory emptyPath = new bytes32[](0);
+        ShieldEater.setPath(emptyPath);
+
+        // reset the retarget count
+        ShieldEater.setRetargetCount(0);
+      }
+
+      // find new destination
+      retarget();
+
+      // if we found a valid destination, don't retarget on next update call
+      if (ShieldEater.getDestinationPlanet() != ShieldEater.getCurrentPlanet()) {
+        ShieldEater.setRetargetPending(false);
+      }
+    } else {
+      bytes32 destinationPlanet = ShieldEater.getDestinationPlanet();
+      bytes32 currentPlanet = ShieldEater.getCurrentPlanet();
+
+      // figure out which way to go, move, and save where we've been
+      bytes32 planetId = getDirection(currentPlanet, destinationPlanet);
+      ShieldEater.setCurrentPlanet(planetId);
+      ShieldEater.pushPath(planetId);
+      ShieldEater.setPathIndex(ShieldEater.getPathIndex() + 1);
 
       // Eat a little shields if there are any
-      uint256 shieldCount = Planet.getShieldCount(shieldEaterNextPlanetId);
+      uint256 shieldCount = Planet.getShieldCount(planetId);
       uint256 shieldDamage = P_ShieldEaterConfig.getVisitShieldDamage();
       uint256 addCharge = 1;
       if (shieldCount > shieldDamage) {
-        Planet.setShieldCount(shieldEaterNextPlanetId, shieldCount - shieldDamage);
+        Planet.setShieldCount(planetId, shieldCount - shieldDamage);
         addCharge += shieldDamage;
         ShieldEaterDamageOverrideLog.set(
           nextLogEntity(),
           ShieldEaterDamageOverrideLogData({
-            planetId: shieldEaterNextPlanetId,
+            planetId: planetId,
             shieldsDestroyed: shieldDamage,
             damageType: EShieldEaterDamageType.Eat,
             timestamp: block.timestamp
           })
         );
       } else if (shieldCount > 0) {
-        Planet.setShieldCount(shieldEaterNextPlanetId, 0);
+        Planet.setShieldCount(planetId, 0);
         addCharge += shieldCount;
         ShieldEaterDamageOverrideLog.set(
           nextLogEntity(),
           ShieldEaterDamageOverrideLogData({
-            planetId: shieldEaterNextPlanetId,
+            planetId: planetId,
             shieldsDestroyed: shieldCount,
             damageType: EShieldEaterDamageType.Eat,
             timestamp: block.timestamp
@@ -63,6 +129,14 @@ library LibShieldEater {
       }
 
       ShieldEater.setCurrentCharge(ShieldEater.getCurrentCharge() + addCharge);
+
+      // we have arrived.  clear the destination so we'll find a new one next update.
+      if (planetId == destinationPlanet) {
+        ShieldEater.setPathIndex(0);
+        bytes32[] memory emptyPath = new bytes32[](0);
+        ShieldEater.setPath(emptyPath);
+        ShieldEater.setRetargetPending(true);
+      }
     }
   }
 
@@ -140,5 +214,63 @@ library LibShieldEater {
       // we appear to have no neighbors. return the current planet
       neighbor = planetId;
     }
+  }
+
+  function getDistance(bytes32 src, bytes32 dst) internal view returns (uint256) {
+    PlanetData memory srcPlanet = Planet.get(src);
+    PlanetData memory dstPlanet = Planet.get(dst);
+
+    int256 qDiff = (dstPlanet.q - srcPlanet.q);
+    qDiff *= qDiff;
+    int256 rDiff = (dstPlanet.r - srcPlanet.r);
+    rDiff *= rDiff;
+
+    return uint256(int256(qDiff + rDiff + 1));
+  }
+
+  function getDirection(bytes32 currentNode, bytes32 destinationNode) internal view returns (bytes32 pathNode) {
+    bytes32 nextNode;
+
+    uint256 distance = getDistance(currentNode, destinationNode);
+    uint256 minDistance = 65535;
+
+    uint256 pathDirection = 0;
+
+    // for each direction
+    for (uint256 i = 2; i < uint256(EDirection.LENGTH); i++) {
+      // get the neighbor
+      nextNode = getNeighbor(currentNode, EDirection(i));
+
+      // if neighbor is a planet
+      if (Planet.getIsPlanet(nextNode)) {
+        // have we visted this already?
+        if (onPath(nextNode)) {
+          continue;
+        }
+        // check distance
+        distance = getDistance(nextNode, destinationNode);
+
+        // if distance is less than next distance
+        if (distance <= minDistance) {
+          // save min distance
+          minDistance = distance;
+
+          // save min distance node
+          pathNode = nextNode;
+          pathDirection = i;
+        }
+      }
+    }
+  }
+
+  function onPath(bytes32 planetId) internal view returns (bool) {
+    bytes32[] memory path = ShieldEater.getPath();
+    uint256 pathIndex = ShieldEater.getPathIndex();
+    for (uint256 i = 0; i < pathIndex; i++) {
+      if (planetId == path[i]) {
+        return true;
+      }
+    }
+    return false;
   }
 }
