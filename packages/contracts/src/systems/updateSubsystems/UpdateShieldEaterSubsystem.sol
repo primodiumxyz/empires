@@ -5,7 +5,7 @@ import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 
 contract UpdateShieldEaterSubsystem is EmpiresSystem {
-  function updateShieldEater(bytes32 shieldEaterNextPlanetId) public {
-    LibShieldEater.update(shieldEaterNextPlanetId);
+  function updateShieldEater() public {
+    LibShieldEater.update();
   }
 }

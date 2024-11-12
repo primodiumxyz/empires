@@ -147,7 +147,7 @@ contract AuditTest is PrimodiumTest {
     });
 
     vm.prank(creator);
-    world.Empires__updateWorld(routineThresholds, moveTargetId);
+    world.Empires__updateWorld(routineThresholds);
   }
 
   function executePendingMove() public {
@@ -163,7 +163,7 @@ contract AuditTest is PrimodiumTest {
     });
 
     vm.prank(creator);
-    world.Empires__updateWorld(routineThresholds, moveTargetId);
+    world.Empires__updateWorld(routineThresholds);
   }
 
   function _getNotOwnedCitadel(EEmpire empire) public view returns (bytes32 planetId_) {
