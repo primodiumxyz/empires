@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+import { Vm } from "forge-std/Vm.sol";
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
@@ -19,13 +20,17 @@ import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 import { ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 contract PostDeploy is Script {
+  string constant PAYMAN_PATH = "./payman.json";
+
   function run(address worldAddress) external {
+    address payoutManagerAddress = getPaymanAddress();
+    console.log("[PAYMAN]", payoutManagerAddress);
+
     // Load data from environment variables (in .env)
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address payoutManagerAddress = vm.envAddress("PAYOUT_MANAGER_ADDRESS");
     address rakeRecipientAddress = vm.envAddress("RAKE_RECIPIENT_ADDRESS");
-    // Load the first match start block from the `FIRST_MATCH_START_BLOCK` environment variable (in .env)
     uint256 firstMatchStartBlock = vm.envUint("FIRST_MATCH_START_BLOCK");
+
     console.log("block.number", block.number);
     require(firstMatchStartBlock > block.number, "[PostDeploy] First match must start in the future");
 
@@ -78,5 +83,25 @@ contract PostDeploy is Script {
     // must be set after post deploy to avoid race condition
     Ready.set(true);
     vm.stopBroadcast();
+  }
+
+  function getPaymanAddress() internal view returns (address) {
+    address paymanAddress = address(0);
+    string memory paymanJson = vm.readFile(PAYMAN_PATH);
+    string memory chainIdString = string.concat(".", vm.toString(block.chainid));
+    bool chainIdExists = vm.keyExistsJson(paymanJson, chainIdString);
+    if (chainIdExists) {
+      string[] memory keys = vm.parseJsonKeys(paymanJson, chainIdString);
+      string memory addressKeyString = string.concat(chainIdString, string.concat(".", keys[0]));
+      bool addressExists = vm.keyExistsJson(paymanJson, addressKeyString);
+      if (addressExists) {
+        paymanAddress = vm.parseJsonAddress(paymanJson, addressKeyString);
+      } else {
+        console.log("[PAYMAN] address not found");
+      }
+    } else {
+      console.log("[PAYMAN] chainId not found");
+    }
+    return paymanAddress;
   }
 }
