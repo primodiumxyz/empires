@@ -6,11 +6,12 @@ import {console} from "forge-std/console.sol";
 import {PayoutManager} from "src/PayoutManager.sol";
 
 contract DeployPayoutManager is Script {
-    uint256 OWNER =
-        0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80; // anvil[0]
     string path = "../../packages/contracts/payman.json";
 
     function run() external returns (PayoutManager) {
+        uint256 OWNER = vm.envUint("ADMIN_PRIVATE_KEY");
+        console.log("admin pk retrieved from .env");
+
         vm.startBroadcast(OWNER);
         PayoutManager payman = new PayoutManager();
         vm.stopBroadcast();
@@ -29,6 +30,7 @@ contract DeployPayoutManager is Script {
             output
         );
         vm.writeJson(finalJson, path);
+        console.log("PayoutManager deployed at", address(payman));
         return payman;
     }
 }
