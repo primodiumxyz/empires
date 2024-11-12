@@ -127,7 +127,7 @@ export class KeeperService {
     return await execute({
       functionName: "Empires__updateWorld",
       // @ts-expect-error Wrong type
-      args: [routineThresholds, empirePlanets[0]],  // placeholder for shield eater pathing logic
+      args: [routineThresholds],
       options: {
         gas: 25000000n,
       },

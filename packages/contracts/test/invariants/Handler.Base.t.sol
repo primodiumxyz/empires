@@ -99,7 +99,7 @@ abstract contract HandlerBase is Test, TestPlus {
     }
 
     vm.prank(CREATOR);
-    world.Empires__updateWorld(routineThresholds, targetPlanet); // requires a planet for shieldEater target, but doesn't matter which for this test
+    world.Empires__updateWorld(routineThresholds); // requires a planet for shieldEater target, but doesn't matter which for this test
   }
 
   /* -------------------------------------------------------------------------- */

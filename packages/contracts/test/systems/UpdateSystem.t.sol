@@ -28,8 +28,6 @@ contract UpdateSystemTest is PrimodiumTest {
   RoutineThresholds[] allRoutineThresholds;
   RoutineThresholds routineThresholds;
 
-  bytes32 shieldEaterNextPlanetId;
-
   function setUp() public override {
     super.setUp();
     EMPIRE_COUNT = P_GameConfig.getEmpireCount();
@@ -62,25 +60,23 @@ contract UpdateSystemTest is PrimodiumTest {
       moveTargetId: targetPlanetId
     });
     allRoutineThresholds.push(routineThresholds);
-
-    shieldEaterNextPlanetId = PlanetsSet.getPlanetIds()[2];
   }
 
   function testUpdateExecuted() public {
-    world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+    world.Empires__updateWorld(allRoutineThresholds);
 
     vm.roll(block.number + turnLength - 1);
 
     vm.expectRevert("[UpdateSystem] Cannot update yet");
-    world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+    world.Empires__updateWorld(allRoutineThresholds);
 
     vm.roll(block.number + 1);
 
-    world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+    world.Empires__updateWorld(allRoutineThresholds);
   }
 
   function testUpdateNextTurnBlock() public {
-    world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+    world.Empires__updateWorld(allRoutineThresholds);
     assertEq(Turn.getNextTurnBlock(), block.number + turnLength);
   }
 
@@ -119,7 +115,7 @@ contract UpdateSystemTest is PrimodiumTest {
     OverrideCost.set(EEmpire.Green, EOverride.CreateShip, beginCreateShipCost);
 
     vm.roll(block.number + turnLength);
-    world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+    world.Empires__updateWorld(allRoutineThresholds);
 
     assertEq(Empire.getPointPrice(EEmpire.Red), beginPointPrice - pointCfg.pointGenRate);
     assertEq(Empire.getPointPrice(EEmpire.Blue), beginPointPrice - pointCfg.pointGenRate);
@@ -151,7 +147,7 @@ contract UpdateSystemTest is PrimodiumTest {
     while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
-      world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+      world.Empires__updateWorld(allRoutineThresholds);
     }
 
     // Verify magnet is removed
@@ -172,7 +168,7 @@ contract UpdateSystemTest is PrimodiumTest {
     while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
-      world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+      world.Empires__updateWorld(allRoutineThresholds);
     }
 
     // Verify magnet is removed
@@ -196,7 +192,7 @@ contract UpdateSystemTest is PrimodiumTest {
     while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
-      world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+      world.Empires__updateWorld(allRoutineThresholds);
     }
 
     // Verify all magnets are removed
@@ -219,7 +215,7 @@ contract UpdateSystemTest is PrimodiumTest {
     while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
-      world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+      world.Empires__updateWorld(allRoutineThresholds);
     }
 
     // Verify points
@@ -241,7 +237,7 @@ contract UpdateSystemTest is PrimodiumTest {
     while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
       assertTrue(Magnet.get(empire, planetId).isMagnet, "Magnet should be present");
-      world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+      world.Empires__updateWorld(allRoutineThresholds);
     }
 
     // Verify points
@@ -264,7 +260,7 @@ contract UpdateSystemTest is PrimodiumTest {
     // Simulate two turns passing
     while (block.number < endTurn) {
       vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
-      world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+      world.Empires__updateWorld(allRoutineThresholds);
     }
 
     // Verify first magnet is removed, second is not
@@ -294,7 +290,7 @@ contract UpdateSystemTest is PrimodiumTest {
 
     Turn.setEmpire(EEmpire.Red);
     vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
-    world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+    world.Empires__updateWorld(allRoutineThresholds);
     uint256 acidCyclesRedPlanetA = AcidPlanetsSet.getAcidCycles(EEmpire.Red, planetIds[0]);
     uint256 acidCyclesRedPlanetB = AcidPlanetsSet.getAcidCycles(EEmpire.Red, planetIds[1]);
     uint256 acidCyclesBlue = AcidPlanetsSet.getAcidCycles(EEmpire.Blue, planetIds[5]);
@@ -340,7 +336,7 @@ contract UpdateSystemTest is PrimodiumTest {
 
     Turn.setEmpire(EEmpire.Blue);
     vm.roll(block.number + P_GameConfig.getTurnLengthBlocks());
-    world.Empires__updateWorld(allRoutineThresholds, shieldEaterNextPlanetId);
+    world.Empires__updateWorld(allRoutineThresholds);
 
     assertEq(
       Planet.getShipCount(planetIds[0]),
