@@ -12,7 +12,7 @@ contract DeployPayoutManager is Script {
         PayoutManager payman;
 
         if (getPaymanAddress() == address(0)) {
-            uint256 OWNER = vm.envUint("ADMIN_PRIVATE_KEY");
+            uint256 OWNER = vm.envUint("PRIVATE_KEY");
 
             vm.startBroadcast(OWNER);
             console.log("Deploying PayoutManager...");
