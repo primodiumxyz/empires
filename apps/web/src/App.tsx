@@ -3,6 +3,8 @@ import { PrivyProvider } from "@privy-io/react-auth";
 import { ToastContainer } from "react-toastify";
 import { defineChain } from "viem";
 
+import { Routes, Route, Outlet, Link } from "react-router-dom";
+
 import "react-toastify/dist/ReactToastify.min.css";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
@@ -10,6 +12,7 @@ import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider, PlayerAccountProvider } from "@primodiumxyz/core/react";
 import { BackgroundNebula } from "@/components/BackgroundNebula";
 import Game from "@/components/game";
+import PayoutManager from "@/components/payman";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
 import { cn } from "@/util/client";
@@ -19,6 +22,18 @@ import { ampli } from "./ampli/index";
 const DEV = import.meta.env.PRI_DEV === "true";
 
 const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<GameWrapper />} />
+      <Route path="game" element={<GameWrapper />} />
+      <Route path="payman" element={<PaymanWrapper />} />
+      <Route path="*" element={<GameWrapper />} />
+    </Routes>
+  );
+};
+
+const GameWrapper = () => {
+
   // Amplitude Analytics
   useEffect(() => {
     if (DEV) {
@@ -96,6 +111,14 @@ const App = () => {
       <div id="modal-root" className={cn("pointer-events-auto fixed top-0 z-50 cursor-default font-pixel text-sm")} />
     </>
   );
-};
+}
+
+const PaymanWrapper = () => {
+
+  return (
+    <PayoutManager />
+  );
+}
+
 
 export default App;
