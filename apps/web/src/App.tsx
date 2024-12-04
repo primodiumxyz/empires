@@ -22,18 +22,6 @@ import { ampli } from "./ampli/index";
 const DEV = import.meta.env.PRI_DEV === "true";
 
 const App = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<GameWrapper />} />
-      <Route path="game" element={<GameWrapper />} />
-      <Route path="payman" element={<PaymanWrapper />} />
-      <Route path="*" element={<GameWrapper />} />
-    </Routes>
-  );
-};
-
-const GameWrapper = () => {
-
   // Amplitude Analytics
   useEffect(() => {
     if (DEV) {
@@ -89,7 +77,12 @@ const GameWrapper = () => {
               <BackgroundNebula />
 
               <PlayerAccountProvider allowBurner={!!DEV} defaultLogin={usingFoundry ? "burner" : "privy"}>
-                <Game />
+                <Routes>
+                  <Route path="/" element={<Game />} />
+                  <Route path="game" element={<Game />} />
+                  <Route path="payman" element={<PayoutManager />} />
+                  <Route path="*" element={<Game />} />
+                </Routes>
                 <ToastContainer
                   toastClassName={cn("font-pixel text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
                   progressClassName="bg-primary"
@@ -111,14 +104,8 @@ const GameWrapper = () => {
       <div id="modal-root" className={cn("pointer-events-auto fixed top-0 z-50 cursor-default font-pixel text-sm")} />
     </>
   );
-}
+};
 
-const PaymanWrapper = () => {
-
-  return (
-    <PayoutManager />
-  );
-}
 
 
 export default App;
