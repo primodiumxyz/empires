@@ -6,10 +6,7 @@ import {PayoutManager} from "src/PayoutManager.sol";
 import {DeployPayoutManager} from "script/DeployPayoutManager.s.sol";
 
 contract PayoutTest is Test {
-    // using PayoutManager for *;
-
     PayoutManager payman;
-    // address OWNER = makeAddr("OWNER");
     address OWNER;
     address ALICE = makeAddr("ALICE");
     address BOB = makeAddr("BOB");
