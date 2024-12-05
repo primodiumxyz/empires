@@ -9,7 +9,8 @@ contract PayoutTest is Test {
     // using PayoutManager for *;
 
     PayoutManager payman;
-    address OWNER = makeAddr("OWNER");
+    // address OWNER = makeAddr("OWNER");
+    address OWNER;
     address ALICE = makeAddr("ALICE");
     address BOB = makeAddr("BOB");
 
@@ -18,6 +19,8 @@ contract PayoutTest is Test {
     function setUp() public {
         DeployPayoutManager deploy = new DeployPayoutManager();
         payman = deploy.run();
+
+        OWNER = payman.getOwner();
 
         vm.deal(OWNER, STARTING_BALANCE);
         vm.deal(ALICE, STARTING_BALANCE);

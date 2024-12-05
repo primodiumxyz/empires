@@ -47,6 +47,7 @@ contract DeployPayoutManager is Script {
         if (!vm.isFile(PAYMAN_PATH)) {
             return paymanAddress;
         }
+
         string memory paymanJson = vm.readFile(PAYMAN_PATH);
         string memory chainIdString = string.concat(
             ".",
@@ -70,6 +71,17 @@ contract DeployPayoutManager is Script {
             }
         } else {
             console.log("[PAYMAN] chainId not found");
+        }
+
+        if (paymanAddress != address(0)) {
+            uint256 size;
+            assembly {
+                size := extcodesize(paymanAddress)
+            }
+            if (size == 0) {
+                console.log("[PAYMAN] No contract at address");
+                paymanAddress = address(0);
+            }
         }
         return paymanAddress;
     }
