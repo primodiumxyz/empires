@@ -178,7 +178,6 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "EEmpire",
-        origin: "EOrigin",
         pointsIssued: "uint256",
         pointPrice: "uint256", // todo: change to pointPrice
         isDefeated: "bool",

@@ -6,7 +6,7 @@ import { PendingMove, Planet, PlanetData, P_GameConfig } from "codegen/index.sol
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { ArrivedMap } from "adts/ArrivedMap.sol";
-import { EEmpire, EMovement, EOrigin, EDirection } from "codegen/common.sol";
+import { EEmpire, EMovement, EDirection } from "codegen/common.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { LibResolveCombat } from "libraries/LibResolveCombat.sol";
 import { coordToId } from "src/utils.sol";
@@ -85,7 +85,12 @@ contract LibMoveShipsTest is PrimodiumTest {
     vm.startPrank(creator);
 
     assertTrue(planet1 != planet2 && planet1 != planet3 && planet2 != planet3, "planets should be different");
-    assertTrue(Planet.getEmpireId(planet1) == EEmpire.Red && Planet.getEmpireId(planet2) == EEmpire.Red && Planet.getEmpireId(planet3) == EEmpire.Red, "planets should be owned by red");
+    assertTrue(
+      Planet.getEmpireId(planet1) == EEmpire.Red &&
+        Planet.getEmpireId(planet2) == EEmpire.Red &&
+        Planet.getEmpireId(planet3) == EEmpire.Red,
+      "planets should be owned by red"
+    );
 
     Planet.setShipCount(planet1, 10);
     Planet.setShipCount(planet2, 200);
@@ -101,7 +106,11 @@ contract LibMoveShipsTest is PrimodiumTest {
     LibMoveShips.executePendingMoves(planet2);
     assertEq(ArrivedMap.get(planet3), 200, "planet 3 should document 200 arrived ships");
     assertEq(ArrivedMap.get(planet2), 0, "arrived map for planet 2 was not reset");
-    assertEq(Planet.getShipCount(planet2), 10, "planet 2 should have 10 ships remaining from arrival of ships from planet 1");
+    assertEq(
+      Planet.getShipCount(planet2),
+      10,
+      "planet 2 should have 10 ships remaining from arrival of ships from planet 1"
+    );
     assertEq(Planet.getShipCount(planet3), 3200, "planet 3 should have 3200 ships");
   }
 
