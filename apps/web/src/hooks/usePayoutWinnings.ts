@@ -8,11 +8,14 @@ import { useCore } from "@primodiumxyz/core/react";
 export const usePayoutWinnings = (address?: Address, refreshMs: number = 2000) => {
     const {
         network: { publicClient },
+        tables,
     } = useCore();
+
     const [winnings, setWinnings] = useState<bigint | undefined>();
 
+    const paymanAddress = tables.PayoutManager.get()?.contractAddress;
     const paymanContract = getContract({
-        address: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+        address: paymanAddress as Address,
         abi: abi,
         client: { public: publicClient }
     })
