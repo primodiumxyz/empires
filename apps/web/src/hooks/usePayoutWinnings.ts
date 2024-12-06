@@ -1,24 +1,12 @@
 import { useEffect, useState } from "react";
-import { Address, getContract } from "viem";
+import { Address } from "viem";
 
-import { abi } from './abis/PayoutManager.json'
-
-import { useCore } from "@primodiumxyz/core/react";
+import { usePaymanContract } from "@/hooks/usePaymanContract";
 
 export const usePayoutWinnings = (address?: Address, refreshMs: number = 2000) => {
-    const {
-        network: { publicClient },
-        tables,
-    } = useCore();
 
     const [winnings, setWinnings] = useState<bigint | undefined>();
-
-    const paymanAddress = tables.PayoutManager.get()?.contractAddress;
-    const paymanContract = getContract({
-        address: paymanAddress as Address,
-        abi: abi,
-        client: { public: publicClient }
-    })
+    const paymanContract = usePaymanContract()
 
     useEffect(() => {
         if (!address) return;
@@ -34,7 +22,7 @@ export const usePayoutWinnings = (address?: Address, refreshMs: number = 2000) =
         }, refreshMs);
 
         return () => clearInterval(interval);
-    }, [address, publicClient, refreshMs]);
+    }, [address, refreshMs]);
 
     return { value: winnings, loading: winnings === undefined };
 };
