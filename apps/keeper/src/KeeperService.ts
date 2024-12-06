@@ -55,9 +55,11 @@ export class KeeperService {
     const { core, deployerAccount } = await this.setupCore(chain, worldAddress, initialBlockNumber);
 
     let updating = false;
+    let gameStarted = false;
     this.unsubscribe = core.tables.BlockNumber.watch({
       onChange: async ({ properties: { current } }) => {
         const ready = core.tables.Ready.get()?.value ?? false;
+        const startBlock = core.tables.P_GameConfig.get()?.gameStartBlock ?? 0n;
         const endBlock = core.tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
         const blocksLeft = endBlock - (current?.value ?? 0n);
         const gameOver = blocksLeft <= 0n;
@@ -65,6 +67,25 @@ export class KeeperService {
         if (!ready || gameOver) {
           console.info("SKIPPING: not ready or game over");
           return;
+        }
+
+        if (!gameStarted && ready && (current?.value ?? 0n) >= startBlock) {
+          console.info("*** Game starting");
+          gameStarted = true;
+        }
+
+        if (gameStarted && gameOver) {
+          console.info("*** Game ending");
+          updating = true;
+          console.info("** Distributing funds");
+          await this.distributeFunds(core, deployerAccount, () => {
+            console.log("** Funds distributed");
+            gameStarted = false;
+            console.log("** Resetting game");
+            await this.setupNextRound(core, deployerAccount, current?.value + 500 ?? 0n, () => {
+              updating = false;
+            });
+          });
         }
 
         const txQueueSize = core.tables.TransactionQueue.getSize();
@@ -128,6 +149,32 @@ export class KeeperService {
       functionName: "Empires__updateWorld",
       // @ts-expect-error Wrong type
       args: [routineThresholds],
+      options: {
+        gas: 25000000n,
+      },
+      onComplete,
+      core,
+      playerAccount: deployerAccount,
+    });
+  }
+
+  private async distributeFunds(core: Core, deployerAccount: LocalAccount, onComplete: () => void): Promise<TxReceipt> {
+    return await execute({
+      functionName: "Empires__distributeFunds",
+      args: [],
+      options: {
+        gas: 25000000n,
+      },
+      onComplete,
+      core,
+      playerAccount: deployerAccount,
+    });
+  }
+
+  private async setupNextRound(core: Core, deployerAccount: LocalAccount, nextStartBlock: BigInt, onComplete: () => void): Promise<TxReceipt> {
+    return await execute({
+      functionName: "Empires__resetGame",
+      args: [nextStartBlock],
       options: {
         gas: 25000000n,
       },
