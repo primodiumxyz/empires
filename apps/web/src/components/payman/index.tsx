@@ -1,5 +1,5 @@
 import { getContract } from 'viem'
-import { abi } from '../../../../payman/out/PayoutManager.sol/PayoutManager.json'
+import { abi } from '../../hooks/abis/PayoutManager.json'
 
 import { createPublicClient, createWalletClient, http, custom } from 'viem'
 import { anvil, baseSepolia } from 'viem/chains'
