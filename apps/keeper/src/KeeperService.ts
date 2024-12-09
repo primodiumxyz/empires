@@ -104,11 +104,8 @@ export class KeeperService {
           case KeeperState.GameRunning:
             if (gameOver) {
               console.info("\n*** Game ending\n");
-              // TODO: reset loop test.  remove, and go back to distro state routing
-              keeperState = KeeperState.ResettingGame;
-              keeperStateString = "Resetting Game";
-              // keeperState = KeeperState.DistributingFunds;
-              // keeperStateString = "Distributing Funds";
+              keeperState = KeeperState.DistributingFunds;
+              keeperStateString = "Distributing Funds";
               return;
             }
 
