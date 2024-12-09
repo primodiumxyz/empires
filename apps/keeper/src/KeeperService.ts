@@ -74,7 +74,7 @@ export class KeeperService {
         const endBlock = core.tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
         const blocksLeft = endBlock - (current?.value ?? 0n) - 1n;
         const gameOver = blocksLeft <= 0n;
-        const startNextRound = (current?.value ?? 0n) + 120n;
+        const startNextRound = (current?.value ?? 0n) + (core.tables.P_GameConfig.get()?.delayBetweenRounds ?? 120n);
 
 
         console.info(`STATUS[${current?.value ?? 0n}]: ${keeperStateString}`);
