@@ -665,6 +665,13 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__updateWinner",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__updateWorld",
     "inputs": [
       {

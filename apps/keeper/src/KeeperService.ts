@@ -17,6 +17,9 @@ export class KeeperService {
   private running: boolean = false;
   private unsubscribe: (() => void) | null = null;
 
+  /*//////////////////////////////////////////////////////////////
+      EXTERNAL COMMANDS
+  //////////////////////////////////////////////////////////////*/
   constructor(keeperPrivateKey: Hex) {
     this.keeperPrivateKey = keeperPrivateKey;
   }
@@ -51,19 +54,29 @@ export class KeeperService {
     return { running: this.running };
   }
 
+  /*//////////////////////////////////////////////////////////////
+      MAIN LOOP
+  //////////////////////////////////////////////////////////////*/
   private async run(chain: ChainConfig, worldAddress: Hex, initialBlockNumber: bigint): Promise<void> {
     const { core, deployerAccount } = await this.setupCore(chain, worldAddress, initialBlockNumber);
 
+    // state machine logic executes once per block
+    // breaking it out into discrete states makes sure previous state updates have completed.
+    // some debug comments have been retained for future reference.
     enum KeeperState {
       NotReady = 1,
       WaitingToStart,
       GameRunning,
+      GameOver,
+      SettingWinner,
       DistributingFunds,
       ResettingGame,
     }
 
     let keeperState = KeeperState.NotReady;
     let keeperStateString = "Not Ready";
+
+    // top level mutex for existing transactions in case they take more than one block
     let TxMutex = false;
     let resetting = false;
 
@@ -72,12 +85,13 @@ export class KeeperService {
         const ready = core.tables.Ready.get()?.value ?? false;
         const startBlock = core.tables.P_GameConfig.get()?.gameStartBlock ?? 0n;
         const endBlock = core.tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
-        const blocksLeft = endBlock - (current?.value ?? 0n) - 1n;
+        const blocksLeft = endBlock - (current?.value ?? 0n);
         const gameOver = blocksLeft <= 0n;
         const startNextRound = (current?.value ?? 0n) + (core.tables.P_GameConfig.get()?.delayBetweenRounds ?? 120n);
 
-
+        // high level state report to the console
         console.info(`STATUS[${current?.value ?? 0n}]: ${keeperStateString}`);
+
         const txQueueSize = core.tables.TransactionQueue.getSize();
         if (txQueueSize > 0 || TxMutex) {
           // console.info("SKIPPING: transaction in progress");
@@ -89,7 +103,7 @@ export class KeeperService {
           case KeeperState.NotReady:
             if (ready) {
               keeperState = KeeperState.WaitingToStart;
-              keeperStateString = "Waiting To Start";
+              keeperStateString = "Waiting for Start Block";
             }
             break;
 
@@ -104,8 +118,8 @@ export class KeeperService {
           case KeeperState.GameRunning:
             if (gameOver) {
               console.info("\n*** Game ending\n");
-              keeperState = KeeperState.DistributingFunds;
-              keeperStateString = "Distributing Funds";
+              keeperState = KeeperState.GameOver;
+              keeperStateString = "Game Over";
               return;
             }
 
@@ -121,8 +135,24 @@ export class KeeperService {
             });
             break;
 
+          case KeeperState.GameOver:
+            console.log("\n*** Game over\n");
+            keeperState = KeeperState.SettingWinner;
+            keeperStateString = "Setting Winner";
+            break;
+
+          case KeeperState.SettingWinner:
+            console.info("\n*** Setting winner\n");
+            TxMutex = true;
+            await this.updateWinner(core, deployerAccount, () => {
+              console.info("\n** Winner set\n");
+              keeperState = KeeperState.DistributingFunds;
+              keeperStateString = "Distributing Funds";
+              TxMutex = false;
+            });
+
           case KeeperState.DistributingFunds:
-            console.info("\n** Distributing funds\n");
+            console.info("\n*** Distributing funds\n");
             TxMutex = true;
             await this.distributeFunds(core, deployerAccount, () => {
               console.info("\n** Funds distributed\n");
@@ -133,9 +163,10 @@ export class KeeperService {
             break;
 
           case KeeperState.ResettingGame:
-            // resetGame needs to be called once for each Empire.
+            // resetGame needs to be called multiple times
             // the ready flag is set to false on the first call,
             // and set to true when the reset is completed.
+            // this is expected to take 7 blocks.
             if (!resetting) {
               // log the start the process
               console.info("\n** Resetting game\n");
@@ -162,6 +193,9 @@ export class KeeperService {
     });
   }
 
+  /*//////////////////////////////////////////////////////////////
+      SETUP AND SYNC
+  //////////////////////////////////////////////////////////////*/
   private async setupCore(
     chain: ChainConfig,
     worldAddress: Hex,
@@ -192,6 +226,10 @@ export class KeeperService {
     });
   }
 
+
+  /*//////////////////////////////////////////////////////////////
+      CONTRACT CALLS
+  //////////////////////////////////////////////////////////////*/
   private async updateWorld(core: Core, deployerAccount: LocalAccount, onComplete: () => void): Promise<TxReceipt> {
     const empireTurn = core.tables.Turn.get()?.empire;
     if (!empireTurn) throw new Error("Turn not found");
@@ -230,6 +268,19 @@ export class KeeperService {
       functionName: "Empires__resetGame",
       // @ts-expect-error Wrong type
       args: [nextStartBlock],
+      options: {
+        gas: 25000000n,
+      },
+      onComplete,
+      core,
+      playerAccount: deployerAccount,
+    });
+  }
+
+  private async updateWinner(core: Core, deployerAccount: LocalAccount, onComplete: () => void): Promise<TxReceipt> {
+    return await execute({
+      functionName: "Empires__updateWinner",
+      args: [],
       options: {
         gas: 25000000n,
       },
