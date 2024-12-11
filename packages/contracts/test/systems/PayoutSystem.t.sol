@@ -2,28 +2,35 @@
 pragma solidity >=0.8.24;
 
 import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
-import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
 
-import { addressToId } from "src/utils.sol";
-import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { RESOURCE_SYSTEM, RESOURCE_NAMESPACE } from "@latticexyz/world/src/worldResourceTypes.sol";
+import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
+
 import { P_GameConfig, WinningEmpire, Empire, P_PointConfig, Planet, OverrideCost } from "codegen/index.sol";
+import { PayoutManager as PayoutManagerTable, RakeRecipient } from "codegen/index.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
+
+import { PayoutSystem } from "systems/PayoutSystem.sol";
+
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
-import { LibPrice } from "libraries/LibPrice.sol";
-
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
-import { EEmpire, EOverride } from "codegen/common.sol";
 
-import { PayoutManager } from "../mocks/PayoutManager.sol";
+import { LibPrice } from "libraries/LibPrice.sol";
+
+import { addressToId } from "src/utils.sol";
+
+import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
+
+import { PayoutManager as PayoutManagerContract } from "../mocks/PayoutManager.sol";
 import { DeployPayoutManager } from "../../script/integration/DeployPayoutManager.s.sol";
 
-import { PayoutSystem } from "systems/PayoutSystem.sol";
-import { PayoutManager as PayoutManagerTable } from "codegen/index.sol";
-
 contract PayoutSystemTest is PrimodiumTest {
-  PayoutManager payman;
+  PayoutManagerContract payman;
 
   bytes32 planetId;
   uint256 turnLength = 100;
@@ -125,32 +132,53 @@ contract PayoutSystemTest is PrimodiumTest {
     // game started
     // players take some actions to generate points
 
-    buyAirdropGold(alice, EEmpire.Red, 1);
+    // buyAirdropGold(alice, EEmpire.Red, 1);
     buyAirdropGold(alice, EEmpire.Green, 2);
-    buyAirdropGold(alice, EEmpire.Blue, 2);
+    // buyAirdropGold(alice, EEmpire.Blue, 2);
 
-    buyAirdropGold(bob, EEmpire.Red, 1);
-    buyAirdropGold(bob, EEmpire.Green, 1);
-    buyAirdropGold(bob, EEmpire.Blue, 1);
+    // buyAirdropGold(bob, EEmpire.Red, 1);
+    // buyAirdropGold(bob, EEmpire.Green, 1);
+    // buyAirdropGold(bob, EEmpire.Blue, 1);
 
-    buyAirdropGold(eve, EEmpire.Green, 1);
+    // buyAirdropGold(eve, EEmpire.Green, 1);
 
     // end the game
-    uint256 endBlock = P_GameConfig.getGameOverBlock();
-    vm.roll(endBlock + 1);
+    // uint256 endBlock = P_GameConfig.getGameOverBlock();
+    // vm.roll(endBlock + 1);
 
     // set a winning empire
     WinningEmpire.set(EEmpire.Green);
 
-    // output results
-    uint256 pot = Balances.get(EMPIRES_NAMESPACE_ID);
-    console.log("pot", pot);
-    uint256 rake = Balances.get(ADMIN_NAMESPACE_ID);
-    console.log("rake", rake);
-    uint256 playerCount = PlayersMap.size();
-    console.log("player count", playerCount);
-
+    //world.Empires__testTransfer();
     world.Empires__distributeFunds();
+
+    // ResourceId payoutSystemId = WorldResourceIdLib.encode({
+    //   typeId: RESOURCE_SYSTEM,
+    //   namespace: WorldResourceIdInstance.getNamespace(EMPIRES_NAMESPACE_ID),
+    //   name: "PayoutSystem"
+    // });
+
+    // address payoutSystemAddress = Systems.getSystem(payoutSystemId);
+    // console.log("payoutSystemAddress", payoutSystemAddress);
+
+    // console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
+    // console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
+    // console.log("PayoutSystem address balance: %d", address(payoutSystemAddress).balance);
+    // // console.log("payman balance:", address(payman).balance);
+
+    // world.transferBalanceToAddress(ADMIN_NAMESPACE_ID, payoutSystemAddress, Balances.get(ADMIN_NAMESPACE_ID));
+
+    // console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
+    // console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
+    // console.log("PayoutSystem address balance: %d", address(payoutSystemAddress).balance);
+    // // console.log("payman balance:", address(payman).balance);
+
+    // world.transferBalanceToAddress(EMPIRES_NAMESPACE_ID, payoutSystemAddress, Balances.get(EMPIRES_NAMESPACE_ID));
+
+    // console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
+    // console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
+    // console.log("PayoutSystem address balance: %d", address(payoutSystemAddress).balance);
+    // // console.log("payman balance:", address(payman).balance);
   }
 
   function buyAirdropGold(address player, EEmpire empire, uint256 quantity) public {
@@ -164,4 +192,6 @@ contract PayoutSystemTest is PrimodiumTest {
     vm.stopPrank();
     vm.startPrank(creator);
   }
+
+  receive() external payable {}
 }

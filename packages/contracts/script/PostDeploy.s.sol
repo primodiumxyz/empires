@@ -14,10 +14,11 @@ import { Ready, Turn, P_GameConfig, P_GameConfigData, Role, PayoutManager, RakeR
 import { ERole } from "codegen/common.sol";
 
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
+import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
 import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
 import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
 import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
-import { ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
 
 contract PostDeploy is Script {
   string constant PAYMAN_PATH = "./payman.json";
@@ -80,6 +81,16 @@ contract PostDeploy is Script {
     if (adminAddress != keeperAddress) {
       Role.set(keeperAddress, ERole.CanUpdate);
     }
+
+    ResourceId payoutSystemId = WorldResourceIdLib.encode({
+      typeId: RESOURCE_SYSTEM,
+      namespace: WorldResourceIdInstance.getNamespace(EMPIRES_NAMESPACE_ID),
+      name: "PayoutSystem"
+    });
+
+    address payoutSystemAddress = Systems.getSystem(payoutSystemId);
+    world.grantAccess(ADMIN_NAMESPACE_ID, payoutSystemAddress);
+
     // must be set after post deploy to avoid race condition
     Ready.set(true);
     vm.stopBroadcast();

@@ -621,6 +621,13 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__testTransfer",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "Empires__unpause",
     "inputs": [],
     "outputs": [],

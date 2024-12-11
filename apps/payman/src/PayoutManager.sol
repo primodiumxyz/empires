@@ -7,7 +7,10 @@ contract PayoutManager {
         uint256 payout;
     }
 
+    event Received(address, uint256);
+
     address private owner;
+    address private payoutSystem;
     mapping(address winner => uint256 payout) public balances;
     mapping(uint256 roundNumber => Winner[]) private winners;
     uint256 public currentRound;
@@ -17,11 +20,15 @@ contract PayoutManager {
         currentRound = 1;
     }
 
+    modifier onlyAuthorized() {
+        // require((msg.sender == owner) || (msg.sender == payoutSystem), "[PAYMAN] Only authorized can manage payout system");
+        _;
+    }
+
     function record(
         address[] memory _victors,
         uint256[] memory _gains
-    ) public payable {
-        require(msg.sender == owner, "[PAYMAN] Only owner can add winners");
+    ) public payable onlyAuthorized {
         require(
             _victors.length == _gains.length,
             "[PAYMAN] Winners and balances length mismatch"
@@ -41,8 +48,7 @@ contract PayoutManager {
         );
     }
 
-    function incrementRound() external {
-        require(msg.sender == owner, "[PAYMAN] Only owner can increment round");
+    function incrementRound() external onlyAuthorized {
         currentRound = currentRound + 1;
     }
 
@@ -60,12 +66,21 @@ contract PayoutManager {
         return winners[_roundNumber];
     }
 
-    function changeOwner(address _newOwner) external {
-        require(msg.sender == owner, "[PAYMAN] Only owner can change owner");
+    function changeOwner(address _newOwner) external onlyAuthorized {
         owner = _newOwner;
     }
 
     function getOwner() external view returns (address) {
         return owner;
     }
+
+    function setPayoutManagerSystem(
+        address _payoutSystem
+    ) external onlyAuthorized {
+        payoutSystem = _payoutSystem;
+    }
+
+    // receive() external payable {
+    //     emit Received(msg.sender, msg.value);
+    // }
 }
