@@ -12,6 +12,8 @@ import { PointsMap } from "adts/PointsMap.sol";
 import { idToAddress } from "src/utils.sol";
 // import { P_GameConfig, WinningEmpire,  } from "codegen/index.sol";
 
+import { console } from "forge-std/console.sol";
+
 /**
  * @title PayoutSystem
  * @dev A contract that manages the distribute funds to the players of the Empires game.
@@ -42,13 +44,16 @@ contract PayoutSystem is EmpiresSystem {
 
     // record and send the rake
     // address is set and controlled by Primodium, so no reentrancy risk
-    (bool success, bytes memory data) = payoutManager.call{ value: rake[0] }(
+    bool success;
+    bytes memory data;
+
+    (success, data) = payoutManager.call{ value: rake[0] }(
       abi.encodeWithSignature("record(address[],uint256[])", rakeRecipient, rake)
     );
     require(success, "PayoutSystem: failed to record rake");
 
     // record and send the pot and winners
-    (success, data) = payoutManager.call{ value: pot }(
+    (success, data) = address(payoutManager).call{ value: pot }(
       abi.encodeWithSignature("record(address[],uint256[])", winners, payouts)
     );
     require(success, "PayoutSystem: failed to record winners");
@@ -62,9 +67,9 @@ contract PayoutSystem is EmpiresSystem {
    * @dev Finds the winners of the game and their payouts.
    * @return winners The addresses of the winners.
    * @return payouts The payouts of the winners.
-   * @dev seperate function to deal with stack too deep
+   * @dev separate function to deal with stack too deep
    */
-  function getWinners() internal view returns (address[] memory, uint256[] memory, uint256) {
+  function getWinners() public returns (address[] memory, uint256[] memory, uint256) {
     EEmpire winningEmpire = WinningEmpire.get();
     require(winningEmpire != EEmpire.NULL, "[PayoutSystem] No empire has won the game");
 
@@ -74,8 +79,8 @@ contract PayoutSystem is EmpiresSystem {
     }
 
     uint256 pot = (Balances.get(EMPIRES_NAMESPACE_ID));
-    uint256[] memory rake = new uint256[](1);
-    rake[0] = (Balances.get(ADMIN_NAMESPACE_ID));
+    // uint256[] memory rake = new uint256[](1);
+    // rake[0] = (Balances.get(ADMIN_NAMESPACE_ID));
 
     // get winners
     bytes32[] memory players = PlayersMap.keys();
@@ -106,5 +111,17 @@ contract PayoutSystem is EmpiresSystem {
     }
 
     return (winners, payouts, pot);
+  }
+
+  function getPaymanOwner() public returns (address) {
+    address payoutManager = PayoutManager.getContractAddress();
+    require(payoutManager != address(0), "PayoutSystem: payout manager not set");
+    address owner = address(0);
+    (bool success, bytes memory data) = payoutManager.call(abi.encodeWithSignature("getOwner()"));
+
+    require(success, "PayoutSystem: failed to get owner");
+    console.logBytes(data);
+    (owner) = abi.decode(data, (address));
+    return owner;
   }
 }

@@ -17,7 +17,7 @@ allow_paths = [
   "../../../mud/packages",
 ]
 extra_output_files = ["abi", "evm.bytecode"]
-fs_permissions = [{ access = "read", path = "./" }]
+fs_permissions = [{ access = "read-write", path = "./" }]
 
 [profile.caldera]
 eth_rpc_url = "https://primodium-bedrock.calderachain.xyz/replica-http"
