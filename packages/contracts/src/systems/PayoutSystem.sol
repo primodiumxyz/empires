@@ -161,4 +161,10 @@ contract PayoutSystem is EmpiresSystem {
     console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
     console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
   }
+
+  function registerWithPayman() internal {
+    payoutManager = PayoutManagerContract(PayoutManager.getContractAddress());
+    require(address(payoutManager) != address(0), "PayoutSystem: payout manager not set");
+    payoutManager.setPayoutManagerSystem(address(this));
+  }
 }
