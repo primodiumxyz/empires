@@ -387,19 +387,6 @@ declare const abi: [
   },
   {
     "type": "function",
-    "name": "Empires__getPaymanOwner",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "Empires__getWinners",
     "inputs": [],
     "outputs": [
@@ -419,7 +406,7 @@ declare const abi: [
         "internalType": "uint256"
       }
     ],
-    "stateMutability": "nonpayable"
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -616,13 +603,6 @@ declare const abi: [
         "internalType": "enum ERole"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "Empires__testTransfer",
-    "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
