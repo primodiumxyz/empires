@@ -1,6 +1,6 @@
 [profile.default]
 solc_version = "0.8.24"
-ffi = false
+ffi = true
 fuzz_runs = 256
 optimizer = true
 optimizer_runs = 10
@@ -17,7 +17,10 @@ allow_paths = [
   "../../../mud/packages",
 ]
 extra_output_files = ["abi", "evm.bytecode"]
-fs_permissions = [{ access = "read-write", path = "./" }]
+fs_permissions = [
+  { access = "read-write", path = "./" },
+  { access = "read-write", path = "../payman" },
+]
 
 [profile.caldera]
 eth_rpc_url = "https://primodium-bedrock.calderachain.xyz/replica-http"

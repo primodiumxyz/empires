@@ -22,7 +22,6 @@ import { PointsMap } from "adts/PointsMap.sol";
 import { idToAddress } from "src/utils.sol";
 
 import { PayoutManager as PayoutManagerContract } from "../../test/mocks/PayoutManager.sol";
-import { console } from "forge-std/console.sol";
 
 /**
  * @title PayoutSystem
@@ -56,9 +55,11 @@ contract PayoutSystem is EmpiresSystem {
 
     // record and send the rake
     // address is set and controlled by Primodium, so no reentrancy risk
-    bool success;
-    bytes memory data;
-    uint256 value = 0;
+
+    // this will fail because the payout system doesn't have the world funds
+    // for either the empires namespace, or the admin namespace.
+
+    // retrieve the funds to this contract
 
     ResourceId payoutSystemId = WorldResourceIdLib.encode({
       typeId: RESOURCE_SYSTEM,
@@ -67,25 +68,9 @@ contract PayoutSystem is EmpiresSystem {
     });
 
     address payoutSystemAddress = Systems.getSystem(payoutSystemId);
-    console.log("payoutSystemAddress", payoutSystemAddress);
-    console.log("address(this)", address(this));
-
-    console.log("world:", address(world));
-
-    // this will fail because the payout system doesn't have the world funds
-    // for either the empires namespace, or the admin namespace.
-
-    // retrieve the funds to this contract
-    console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
-    console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
-    console.log("PayoutSystem address balance: %d", address(payoutSystemAddress).balance);
 
     world.transferBalanceToNamespace(ADMIN_NAMESPACE_ID, EMPIRES_NAMESPACE_ID, Balances.get(ADMIN_NAMESPACE_ID));
     world.transferBalanceToAddress(EMPIRES_NAMESPACE_ID, payoutSystemAddress, Balances.get(EMPIRES_NAMESPACE_ID));
-
-    console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
-    console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
-    console.log("PayoutSystem address balance: %d", address(payoutSystemAddress).balance);
 
     payoutManager.record{ value: rake[0] }(rakeRecipient, rake);
     payoutManager.record{ value: pot }(winners, payouts);
@@ -98,7 +83,7 @@ contract PayoutSystem is EmpiresSystem {
    * @return payouts The payouts of the winners.
    * @dev separate function to deal with stack too deep
    */
-  function getWinners() public returns (address[] memory, uint256[] memory, uint256) {
+  function getWinners() public view returns (address[] memory, uint256[] memory, uint256) {
     EEmpire winningEmpire = WinningEmpire.get();
     require(winningEmpire != EEmpire.NULL, "[PayoutSystem] No empire has won the game");
 
@@ -138,33 +123,5 @@ contract PayoutSystem is EmpiresSystem {
     }
 
     return (winners, payouts, pot);
-  }
-
-  function getPaymanOwner() public returns (address) {
-    address payoutManagerAddress = PayoutManager.getContractAddress();
-    require(payoutManagerAddress != address(0), "PayoutSystem: payout manager not set");
-    address owner = address(0);
-    (bool success, bytes memory data) = payoutManagerAddress.call(abi.encodeWithSignature("getOwner()"));
-
-    require(success, "PayoutSystem: failed to get owner");
-    console.logBytes(data);
-    (owner) = abi.decode(data, (address));
-    return owner;
-  }
-
-  function testTransfer() public {
-    console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
-    console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
-    uint amount = Balances.get(ADMIN_NAMESPACE_ID);
-    world.transferBalanceToNamespace(ADMIN_NAMESPACE_ID, EMPIRES_NAMESPACE_ID, amount);
-
-    console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
-    console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
-  }
-
-  function registerWithPayman() internal {
-    payoutManager = PayoutManagerContract(PayoutManager.getContractAddress());
-    require(address(payoutManager) != address(0), "PayoutSystem: payout manager not set");
-    payoutManager.setPayoutManagerSystem(address(this));
   }
 }

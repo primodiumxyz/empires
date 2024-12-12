@@ -26,11 +26,11 @@ import { addressToId } from "src/utils.sol";
 
 import { console, PrimodiumTest } from "test/PrimodiumTest.t.sol";
 
-import { PayoutManager as PayoutManagerContract } from "../mocks/PayoutManager.sol";
-import { DeployPayoutManager } from "../../script/integration/DeployPayoutManager.s.sol";
+import { PayoutManager as PayoutManagerContract } from "payman/src/PayoutManager.sol";
 
 contract PayoutSystemTest is PrimodiumTest {
-  PayoutManagerContract payman;
+  PayoutManagerContract payoutManagerContract;
+  address payoutManagerAddress;
 
   bytes32 planetId;
   uint256 turnLength = 100;
@@ -42,8 +42,9 @@ contract PayoutSystemTest is PrimodiumTest {
 
   function setUp() public override {
     super.setUp();
-    DeployPayoutManager deploy = new DeployPayoutManager();
-    payman = deploy.run();
+
+    payoutManagerAddress = PayoutManagerTable.get();
+    payoutManagerContract = PayoutManagerContract(payoutManagerAddress);
 
     uint256 i = 0;
     do {
@@ -70,27 +71,14 @@ contract PayoutSystemTest is PrimodiumTest {
     world.registerFunctionSelector(systemId, "echoValue()");
   }
 
-  function testTest() public {
+  function testTest() public pure {
     assertTrue(true);
-  }
-
-  // payout manager actual address should match the one registered with the world
-  function testPayoutManagerAddresses() public {
-    address actual = address(payman);
-    address stored = PayoutManagerTable.get();
-    assertEq(actual, stored);
-  }
-
-  function testGetPaymanOwner() public {
-    address owner = world.Empires__getPaymanOwner();
-    console.log("owner", owner);
   }
 
   function testGetWinners() public {
     // game started
     // players take some actions to generate points
     uint256 totalCost = LibPrice.getTotalCost(EOverride.AirdropGold, EEmpire.Green, 1);
-    uint256 overrideCost = OverrideCost.get(EEmpire.Green, EOverride.AirdropGold);
 
     vm.startPrank(alice);
     world.Empires__airdropGold{ value: totalCost }(EEmpire.Green, 1);
@@ -130,68 +118,71 @@ contract PayoutSystemTest is PrimodiumTest {
 
   function testDistributeFunds() public {
     // game started
+    uint256 startblock = P_GameConfig.getGameStartBlock();
+    vm.roll(startblock + 1);
     // players take some actions to generate points
 
-    // buyAirdropGold(alice, EEmpire.Red, 1);
+    buyAirdropGold(alice, EEmpire.Red, 1);
     buyAirdropGold(alice, EEmpire.Green, 2);
-    // buyAirdropGold(alice, EEmpire.Blue, 2);
+    buyAirdropGold(alice, EEmpire.Blue, 2);
 
-    // buyAirdropGold(bob, EEmpire.Red, 1);
-    // buyAirdropGold(bob, EEmpire.Green, 1);
-    // buyAirdropGold(bob, EEmpire.Blue, 1);
+    buyAirdropGold(bob, EEmpire.Red, 1);
+    buyAirdropGold(bob, EEmpire.Green, 3);
+    buyAirdropGold(bob, EEmpire.Blue, 1);
 
-    // buyAirdropGold(eve, EEmpire.Green, 1);
+    buyAirdropGold(eve, EEmpire.Green, 1);
 
     // end the game
-    // uint256 endBlock = P_GameConfig.getGameOverBlock();
-    // vm.roll(endBlock + 1);
+    uint256 endBlock = P_GameConfig.getGameOverBlock();
+    vm.roll(endBlock + 1);
 
     // set a winning empire
     WinningEmpire.set(EEmpire.Green);
 
-    //world.Empires__testTransfer();
+    uint256 empireBalanceBefore = Balances.get(EMPIRES_NAMESPACE_ID);
+    uint256 adminBalanceBefore = Balances.get(ADMIN_NAMESPACE_ID);
+    uint256 payoutManagerBalanceBefore = address(payoutManagerContract).balance;
+    console.log("empireBalance", empireBalanceBefore);
+    console.log("adminBalance", adminBalanceBefore);
+    console.log("payoutManagerBalance", payoutManagerBalanceBefore);
+
     world.Empires__distributeFunds();
 
-    // ResourceId payoutSystemId = WorldResourceIdLib.encode({
-    //   typeId: RESOURCE_SYSTEM,
-    //   namespace: WorldResourceIdInstance.getNamespace(EMPIRES_NAMESPACE_ID),
-    //   name: "PayoutSystem"
-    // });
+    uint256 empireBalanceAfter = Balances.get(EMPIRES_NAMESPACE_ID);
+    uint256 adminBalanceAfter = Balances.get(ADMIN_NAMESPACE_ID);
+    uint256 payoutManagerBalanceAfter = address(payoutManagerContract).balance;
+    console.log("empireBalance", empireBalanceAfter);
+    console.log("adminBalance", adminBalanceAfter);
+    console.log("payoutManagerBalance", payoutManagerBalanceAfter);
 
-    // address payoutSystemAddress = Systems.getSystem(payoutSystemId);
-    // console.log("payoutSystemAddress", payoutSystemAddress);
+    assertEq(empireBalanceAfter, 0);
+    assertEq(adminBalanceAfter, 0);
+    assertEq(payoutManagerBalanceAfter, empireBalanceBefore + adminBalanceBefore);
 
-    // console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
-    // console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
-    // console.log("PayoutSystem address balance: %d", address(payoutSystemAddress).balance);
-    // // console.log("payman balance:", address(payman).balance);
+    // get winners
+    PayoutManagerContract.Winner[] memory winners = payoutManagerContract.winnersByRound(1);
+    console.log("winner count", winners.length);
 
-    // world.transferBalanceToAddress(ADMIN_NAMESPACE_ID, payoutSystemAddress, Balances.get(ADMIN_NAMESPACE_ID));
+    uint256 payoutSum = 0;
+    for (uint i = 0; i < winners.length; i++) {
+      console.log("winner", winners[i].winner);
+      console.log("payout", winners[i].payout);
+      payoutSum += winners[i].payout;
+    }
 
-    // console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
-    // console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
-    // console.log("PayoutSystem address balance: %d", address(payoutSystemAddress).balance);
-    // // console.log("payman balance:", address(payman).balance);
-
-    // world.transferBalanceToAddress(EMPIRES_NAMESPACE_ID, payoutSystemAddress, Balances.get(EMPIRES_NAMESPACE_ID));
-
-    // console.log("Empires balance: %d", Balances.get(EMPIRES_NAMESPACE_ID));
-    // console.log("Admin balance: %d", Balances.get(ADMIN_NAMESPACE_ID));
-    // console.log("PayoutSystem address balance: %d", address(payoutSystemAddress).balance);
-    // // console.log("payman balance:", address(payman).balance);
+    assertApproxEqRel(payoutSum, empireBalanceBefore + adminBalanceBefore, .001e18);
   }
 
   function buyAirdropGold(address player, EEmpire empire, uint256 quantity) public {
     vm.stopPrank();
 
     uint256 totalCost = LibPrice.getTotalCost(EOverride.AirdropGold, empire, quantity);
-    uint256 overrideCost = OverrideCost.get(empire, EOverride.AirdropGold);
 
     vm.startPrank(player);
     world.Empires__airdropGold{ value: totalCost }(empire, quantity);
     vm.stopPrank();
     vm.startPrank(creator);
-  }
+  } // retrieve the funds to this contract
 
   receive() external payable {}
 }
