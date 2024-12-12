@@ -19,7 +19,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
         goldGenRate: 1n,
         gameStartBlock: 0n, // currently handled by .env and PostDeploy
         gameOverBlock: 0n, // currently handled in PostDeploy
-        delayBetweenRounds: 120n,   // how many blocks between round end and next round start.
+        delayBetweenRounds: 60n,   // how many blocks between round end and next round start.
         empireCount: 6,
         empiresCleared: 0,
       },

@@ -64,17 +64,16 @@ export class KeeperService {
     // breaking it out into discrete states makes sure previous state updates have completed.
     // some debug comments have been retained for future reference.
     enum KeeperState {
-      NotReady = 1,
-      WaitingToStart,
-      GameRunning,
-      GameOver,
-      SettingWinner,
-      DistributingFunds,
-      ResettingGame,
+      "NotReady",
+      "WaitingToStart",
+      "GameRunning",
+      "GameOver",
+      "SettingWinner",
+      "DistributingFunds",
+      "ResettingGame"
     }
 
     let keeperState = KeeperState.NotReady;
-    let keeperStateString = "Not Ready";
 
     // top level mutex for existing transactions in case they take more than one block
     let TxMutex = false;
@@ -87,10 +86,10 @@ export class KeeperService {
         const endBlock = core.tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
         const blocksLeft = endBlock - (current?.value ?? 0n);
         const gameOver = blocksLeft <= 0n;
-        const startNextRound = (current?.value ?? 0n) + (core.tables.P_GameConfig.get()?.delayBetweenRounds ?? 120n);
+        const startNextRound = (current?.value ?? 0n) + (core.tables.P_GameConfig.get()?.delayBetweenRounds ?? 60n);
 
         // high level state report to the console
-        console.info(`STATUS[${current?.value ?? 0n}]: ${keeperStateString}`);
+        console.info(`STATUS[${current?.value ?? 0n}]: ${KeeperState[keeperState]}`);
 
         const txQueueSize = core.tables.TransactionQueue.getSize();
         if (txQueueSize > 0 || TxMutex) {
@@ -103,7 +102,6 @@ export class KeeperService {
           case KeeperState.NotReady:
             if (ready) {
               keeperState = KeeperState.WaitingToStart;
-              keeperStateString = "Waiting for Start Block";
             }
             break;
 
@@ -111,7 +109,6 @@ export class KeeperService {
             if (ready && (current?.value ?? 0n) >= startBlock) {
               console.info("\n*** Game starting\n");
               keeperState = KeeperState.GameRunning;
-              keeperStateString = "Game Running";
             }
             break;
 
@@ -119,7 +116,6 @@ export class KeeperService {
             if (gameOver) {
               console.info("\n*** Game ending\n");
               keeperState = KeeperState.GameOver;
-              keeperStateString = "Game Over";
               return;
             }
 
@@ -138,7 +134,6 @@ export class KeeperService {
           case KeeperState.GameOver:
             console.log("\n*** Game over\n");
             keeperState = KeeperState.SettingWinner;
-            keeperStateString = "Setting Winner";
             break;
 
           case KeeperState.SettingWinner:
@@ -147,7 +142,6 @@ export class KeeperService {
             await this.updateWinner(core, deployerAccount, () => {
               console.info("\n** Winner set\n");
               keeperState = KeeperState.DistributingFunds;
-              keeperStateString = "Distributing Funds";
               TxMutex = false;
             });
 
@@ -157,7 +151,6 @@ export class KeeperService {
             await this.distributeFunds(core, deployerAccount, () => {
               console.info("\n** Funds distributed\n");
               keeperState = KeeperState.ResettingGame;
-              keeperStateString = "Resetting Game";
               TxMutex = false;
             });
             break;
@@ -176,7 +169,6 @@ export class KeeperService {
               // if we're done, change state and exit.s
               if ((core.tables.Ready.get()?.value ?? false) == true) {
                 keeperState = KeeperState.WaitingToStart;
-                keeperStateString = "Waiting To Start";
                 resetting = false;
                 return;
               }
