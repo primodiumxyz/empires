@@ -21,7 +21,7 @@ contract LibPointTest is PrimodiumTest {
     pointUnit = P_PointConfig.getPointUnit();
   }
 
-  function testInitEmptyEmpireIssuedPoints() public {
+  function testInitEmptyEmpireIssuedPoints() public view {
     uint8 empireCount = P_GameConfig.getEmpireCount();
     for (uint8 i = 1; i <= empireCount; i++) {
       assertEq(Empire.getPointsIssued(EEmpire(i)), 0, "Empire points at game start should be 0");

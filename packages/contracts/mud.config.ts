@@ -34,6 +34,7 @@ export const worldInput = {
         goldGenRate: "uint256",
         gameStartBlock: "uint256",
         gameOverBlock: "uint256",
+        delayBetweenRounds: "uint256",
         empireCount: "uint8",
         empiresCleared: "uint8",
       },

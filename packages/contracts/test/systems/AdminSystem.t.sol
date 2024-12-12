@@ -84,7 +84,7 @@ contract AdminSystemTest is PrimodiumTest {
     world.Empires__setRole(user, ERole.NULL);
   }
 
-  function testInitialAdmin() public {
+  function testInitialAdmin() public view {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address adminAddress = vm.addr(deployerPrivateKey);
     assertTrue(Role.get(adminAddress) == ERole.Admin, "Deployer should be admin");

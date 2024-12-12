@@ -11,7 +11,7 @@ contract InitTest is PrimodiumTest {
     super.setUp();
   }
 
-  function testRedPlanetInit() public {
+  function testRedPlanetInit() public view {
     bytes32 redPlanetId = coordToId(101, -3);
     PlanetData memory planetData = Planet.get(redPlanetId);
     assertTrue(planetData.isPlanet);
@@ -21,7 +21,7 @@ contract InitTest is PrimodiumTest {
     assertEq(planetData.r, -3);
   }
 
-  function testNonOwnedPlanetInit() public {
+  function testNonOwnedPlanetInit() public view {
     bytes32 nonOwnedPlanetId = coordToId(98, 1);
     PlanetData memory planetData = Planet.get(nonOwnedPlanetId);
     assertTrue(planetData.isPlanet);

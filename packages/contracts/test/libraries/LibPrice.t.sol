@@ -25,7 +25,7 @@ contract LibPriceTest is PrimodiumTest {
     vm.stopPrank();
   }
 
-  function testStartGetMarginalOverrideCost() public {
+  function testStartGetMarginalOverrideCost() public view {
     assertEq(
       LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Red, 1),
       createShipConfig.startOverrideCost,
@@ -43,7 +43,7 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
-  function testGetTwoMarginalOverrideCost() public {
+  function testGetTwoMarginalOverrideCost() public view {
     assertEq(
       LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Red, 2),
       createShipConfig.startOverrideCost + (createShipConfig.startOverrideCost + createShipConfig.overrideCostIncrease),
@@ -61,7 +61,7 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
-  function testStartGetPointCost() public {
+  function testStartGetPointCost() public view {
     assertEq(
       LibPrice.getPointCost(EEmpire.Red, 1 * pointUnit),
       config.startPointPrice,
@@ -79,7 +79,7 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
-  function testGetTwoPointsCost() public {
+  function testGetTwoPointsCost() public view {
     assertEq(
       LibPrice.getPointCost(EEmpire.Red, 2 * pointUnit),
       config.startPointPrice + (config.pointPriceIncrease + config.startPointPrice),
@@ -101,8 +101,16 @@ contract LibPriceTest is PrimodiumTest {
     vm.startPrank(creator);
     Empire.setIsDefeated(EEmpire.Red, true);
     assertEq(LibPrice.getPointCost(EEmpire.Red, 1 * pointUnit), 0, "Red Empire point cost for 1 point should be 0");
-    assertEq(LibPrice.getPointCost(EEmpire.Red, 1000 * pointUnit), 0, "Red Empire point cost for 1000 points should be 0");
-    assertEq(LibPrice.getPointCost(EEmpire.Blue, 1 * pointUnit), config.startPointPrice, "Blue Empire point cost for 1 point should not be 0");
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Red, 1000 * pointUnit),
+      0,
+      "Red Empire point cost for 1000 points should be 0"
+    );
+    assertEq(
+      LibPrice.getPointCost(EEmpire.Blue, 1 * pointUnit),
+      config.startPointPrice,
+      "Blue Empire point cost for 1 point should not be 0"
+    );
   }
 
   function testGetRegressPointCostSingle() public {
@@ -110,15 +118,30 @@ contract LibPriceTest is PrimodiumTest {
     vm.startPrank(creator);
     P_OverrideConfig.setPointMultiplier(EOverride.DetonateShieldEater, 2);
     uint256 pointCost = (initPointPrice + (initPointPrice + config.pointPriceIncrease)) * (EMPIRE_COUNT - 1);
-    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Red, 1), pointCost, "Red Empire point cost for 2 points incorrect");
-    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Blue, 1), pointCost, "Blue Empire point cost for 2 points incorrect");
-    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Green, 1), pointCost, "Green Empire point cost for 2 points incorrect");
+    assertEq(
+      LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Red, 1),
+      pointCost,
+      "Red Empire point cost for 2 points incorrect"
+    );
+    assertEq(
+      LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Blue, 1),
+      pointCost,
+      "Blue Empire point cost for 2 points incorrect"
+    );
+    assertEq(
+      LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Green, 1),
+      pointCost,
+      "Green Empire point cost for 2 points incorrect"
+    );
   }
 
-  function testGetRegressPointCostMultiple() public {
+  function testGetRegressPointCostMultiple() public view {
     assertEq(
       LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Red, 2),
-      LibPrice.getPointCost(EEmpire.Red, 2 * pointUnit * P_OverrideConfig.getPointMultiplier(EOverride.DetonateShieldEater)) * (EMPIRE_COUNT - 1),
+      LibPrice.getPointCost(
+        EEmpire.Red,
+        2 * pointUnit * P_OverrideConfig.getPointMultiplier(EOverride.DetonateShieldEater)
+      ) * (EMPIRE_COUNT - 1),
       "Red Empire point cost for 2 bulk overrides incorrect"
     );
   }
@@ -130,40 +153,61 @@ contract LibPriceTest is PrimodiumTest {
     P_OverrideConfig.setPointMultiplier(EOverride.DetonateShieldEater, 2);
     uint256 pointCost = (initPointPrice + (initPointPrice + config.pointPriceIncrease)) * (EMPIRE_COUNT - 2); // Empire count minus 2 because Red is defeated and the impacted empire should not be included
     uint256 deadRegressPointCost = (initPointPrice + (initPointPrice + config.pointPriceIncrease)) * (EMPIRE_COUNT - 1); // this shouldn't happen in production but we'll test it just in case
-    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Red, 1), deadRegressPointCost, "Red Empire point cost for 2 points incorrect"); // this shouldn't happen in production but we'll test it just in case
-    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Blue, 1), pointCost, "Blue Empire point cost for 2 points incorrect");
-    assertEq(LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Green, 1),pointCost, "Green Empire point cost for 2 points incorrect");
+    assertEq(
+      LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Red, 1),
+      deadRegressPointCost,
+      "Red Empire point cost for 2 points incorrect"
+    ); // this shouldn't happen in production but we'll test it just in case
+    assertEq(
+      LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Blue, 1),
+      pointCost,
+      "Blue Empire point cost for 2 points incorrect"
+    );
+    assertEq(
+      LibPrice.getRegressPointCost(EOverride.DetonateShieldEater, EEmpire.Green, 1),
+      pointCost,
+      "Green Empire point cost for 2 points incorrect"
+    );
   }
 
-  function testGetProgressPointCostSingle() public {
+  function testGetProgressPointCostSingle() public view {
     uint256 initPointPrice = config.startPointPrice;
     assertEq(
       LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Red, 1),
-      (EMPIRE_COUNT - 1) * (initPointPrice + ((EMPIRE_COUNT - 2) * config.pointPriceIncrease) / 2) * P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
+      (EMPIRE_COUNT - 1) *
+        (initPointPrice + ((EMPIRE_COUNT - 2) * config.pointPriceIncrease) / 2) *
+        P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
       "Red Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
     assertEq(
       LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Blue, 1),
-      (EMPIRE_COUNT - 1) * (initPointPrice + ((EMPIRE_COUNT - 2) * config.pointPriceIncrease) / 2) * P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
+      (EMPIRE_COUNT - 1) *
+        (initPointPrice + ((EMPIRE_COUNT - 2) * config.pointPriceIncrease) / 2) *
+        P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
       "Blue Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
     assertEq(
       LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Green, 1),
-      (EMPIRE_COUNT - 1) * (initPointPrice + ((EMPIRE_COUNT - 2) * config.pointPriceIncrease) / 2) * P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
+      (EMPIRE_COUNT - 1) *
+        (initPointPrice + ((EMPIRE_COUNT - 2) * config.pointPriceIncrease) / 2) *
+        P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
       "Green Empire point cost for EMPIRE_COUNT - 1 points incorrect"
     );
   }
 
-  function testGetProgressPointCostMultiple() public {
+  function testGetProgressPointCostMultiple() public view {
     uint256 initPointPrice = config.startPointPrice;
     assertEq(
       LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Red, 2),
-      2 * (EMPIRE_COUNT - 1) * (initPointPrice + ((2 * EMPIRE_COUNT - 3) * config.pointPriceIncrease) / 2) * P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
+      2 *
+        (EMPIRE_COUNT - 1) *
+        (initPointPrice + ((2 * EMPIRE_COUNT - 3) * config.pointPriceIncrease) / 2) *
+        P_OverrideConfig.getPointMultiplier(EOverride.CreateShip),
       "Red Empire point cost for 2 bulk overrides incorrect"
     );
   }
 
-  function testGetTotalCostProgressSingle() public {
+  function testGetTotalCostProgressSingle() public view {
     assertEq(
       LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, 1),
       createShipConfig.startOverrideCost + LibPrice.getProgressPointCost(EOverride.CreateShip, EEmpire.Red, 1),
@@ -171,7 +215,7 @@ contract LibPriceTest is PrimodiumTest {
     );
   }
 
-  function testGetTotalCostProgressMultiple() public {
+  function testGetTotalCostProgressMultiple() public view {
     assertEq(
       LibPrice.getTotalCost(EOverride.CreateShip, EEmpire.Red, 2),
       LibPrice.getMarginalOverrideCost(EOverride.CreateShip, EEmpire.Red, 2) +
@@ -499,17 +543,17 @@ contract LibPriceTest is PrimodiumTest {
     );
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Blue, 1 * pointUnit),
-      (config.minPointPrice + 1) * (10000 - sellTax) / 10000,
+      ((config.minPointPrice + 1) * (10000 - sellTax)) / 10000,
       "Blue Empire point sale value incorrect"
     );
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Green, 1 * pointUnit),
-      (config.minPointPrice + config.pointPriceIncrease) * (10000 - sellTax) / 10000,
+      ((config.minPointPrice + config.pointPriceIncrease) * (10000 - sellTax)) / 10000,
       "Green Empire point sale value incorrect"
     );
     assertEq(
       LibPrice.getPointSaleValue(EEmpire.Green, 2 * pointUnit),
-      (config.minPointPrice * 2 + config.pointPriceIncrease) * (10000 - sellTax) / 10000,
+      ((config.minPointPrice * 2 + config.pointPriceIncrease) * (10000 - sellTax)) / 10000,
       "Green Empire multiple point sale value incorrect"
     );
   }
@@ -546,7 +590,11 @@ contract LibPriceTest is PrimodiumTest {
     LibPrice.sellEmpirePointPriceDown(EEmpire.Green, 1 * pointUnit);
 
     assertEq(Empire.getPointPrice(EEmpire.Red), config.minPointPrice, "Red Empire point price after sale incorrect");
-    assertEq(Empire.getPointPrice(EEmpire.Blue), config.minPointPrice + 1, "Blue Empire point price after sale incorrect");
+    assertEq(
+      Empire.getPointPrice(EEmpire.Blue),
+      config.minPointPrice + 1,
+      "Blue Empire point price after sale incorrect"
+    );
     assertEq(
       Empire.getPointPrice(EEmpire.Green),
       config.minPointPrice + config.pointPriceIncrease,

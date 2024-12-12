@@ -3,10 +3,10 @@ pragma solidity 0.8.24;
 
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
-import {PayoutManager} from "src/PayoutManager.sol";
+import {PayoutManager} from "payman/src/PayoutManager.sol";
 
 contract DeployPayoutManager is Script {
-    string PAYMAN_PATH = "../../packages/contracts/payman.json";
+    string PAYMAN_PATH = "../../contracts/payman.json";
 
     function run() external returns (PayoutManager) {
         PayoutManager payman;
@@ -47,6 +47,7 @@ contract DeployPayoutManager is Script {
         if (!vm.isFile(PAYMAN_PATH)) {
             return paymanAddress;
         }
+
         string memory paymanJson = vm.readFile(PAYMAN_PATH);
         string memory chainIdString = string.concat(
             ".",
@@ -70,6 +71,17 @@ contract DeployPayoutManager is Script {
             }
         } else {
             console.log("[PAYMAN] chainId not found");
+        }
+
+        if (paymanAddress != address(0)) {
+            uint256 size;
+            assembly {
+                size := extcodesize(paymanAddress)
+            }
+            if (size == 0) {
+                console.log("[PAYMAN] No contract at address");
+                paymanAddress = address(0);
+            }
         }
         return paymanAddress;
     }

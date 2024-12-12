@@ -387,6 +387,29 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__getWinners",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "Empires__pause",
     "inputs": [],
     "outputs": [],
@@ -523,6 +546,11 @@ declare const abi: [
             "internalType": "uint256"
           },
           {
+            "name": "delayBetweenRounds",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
             "name": "empireCount",
             "type": "uint8",
             "internalType": "uint8"
@@ -654,6 +682,13 @@ declare const abi: [
   {
     "type": "function",
     "name": "Empires__updateShieldEater",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__updateWinner",
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"

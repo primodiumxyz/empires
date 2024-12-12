@@ -13,7 +13,7 @@
     "build:prototype": "tsx ./ts/prototypes/commands/prototypegen.ts",
     "build:map": "tsx ./ts/map/commands/mapgen.ts",
     "clean:contracts": "rm -rf ./node_modules && rm -rf ./src/codegen",
-    "deploy:base-sepolia": "pnpm deploy:payman-base-sepolia && pnpm mud deploy --profile=base-sepolia",
+    "deploy:base-sepolia": "pnpm mud deploy --profile=base-sepolia",
     "deploy:caldera": "pnpm mud deploy --profile=caldera",
     "deploy:caldera-sepolia": "pnpm mud deploy --profile=caldera-sepolia",
     "deploy:local": "pnpm deploy:payman-local && pnpm mud deploy --skipBuild",

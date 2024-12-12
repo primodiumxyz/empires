@@ -3,6 +3,8 @@ import { PrivyProvider } from "@privy-io/react-auth";
 import { ToastContainer } from "react-toastify";
 import { defineChain } from "viem";
 
+import { Routes, Route, Outlet, Link } from "react-router-dom";
+
 import "react-toastify/dist/ReactToastify.min.css";
 
 import { InterfaceIcons } from "@primodiumxyz/assets";
@@ -10,6 +12,7 @@ import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider, PlayerAccountProvider } from "@primodiumxyz/core/react";
 import { BackgroundNebula } from "@/components/BackgroundNebula";
 import Game from "@/components/game";
+import PayoutManager from "@/components/payman";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
 import { cn } from "@/util/client";
@@ -71,10 +74,15 @@ const App = () => {
                 "star-background flex h-screen w-screen cursor-default items-center justify-center font-pixel text-sm",
               )}
             >
-              <BackgroundNebula />
+              {/* <BackgroundNebula /> */}
 
               <PlayerAccountProvider allowBurner={!!DEV} defaultLogin={usingFoundry ? "burner" : "privy"}>
-                <Game />
+                <Routes>
+                  <Route path="/" element={<Game />} />
+                  <Route path="game" element={<Game />} />
+                  <Route path="payman" element={<PayoutManager />} />
+                  <Route path="*" element={<Game />} />
+                </Routes>
                 <ToastContainer
                   toastClassName={cn("font-pixel text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
                   progressClassName="bg-primary"

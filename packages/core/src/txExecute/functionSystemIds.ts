@@ -20,8 +20,9 @@ export const functionSystemIds: {
   Empires__placeAcid: getSystemId("OverrideAcidSystem"),
 
   Empires__updateWorld: getSystemId("UpdateSystem"),
-
+  Empires__distributeFunds: getSystemId("PayoutSystem"),
   Empires__resetGame: getSystemId("ResetSystem"),
+  Empires__updateWinner: getSystemId("UpdateSystem"),
 
   Empires__withdrawEarnings: getSystemId("RewardsSystem"),
 

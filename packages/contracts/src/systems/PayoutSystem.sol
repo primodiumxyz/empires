@@ -1,27 +1,40 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Balances } from "@latticexyz/world/src/codegen/index.sol";
-import { IWorld } from "codegen/world/IWorld.sol";
-import { EmpiresSystem } from "systems/EmpiresSystem.sol";
+import { Balances } from "@latticexyz/world/src/codegen/tables/Balances.sol";
+import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
+
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { RESOURCE_SYSTEM, RESOURCE_NAMESPACE } from "@latticexyz/world/src/worldResourceTypes.sol";
+import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
+
+import { IWorld } from "codegen/world/IWorld.sol";
 import { WinningEmpire, Empire, PayoutManager, RakeRecipient } from "codegen/index.sol";
+// import { P_GameConfig, WinningEmpire,  } from "codegen/index.sol";
 import { EEmpire } from "codegen/common.sol";
+
+import { EmpiresSystem } from "systems/EmpiresSystem.sol";
+import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
+
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { PointsMap } from "adts/PointsMap.sol";
+
 import { idToAddress } from "src/utils.sol";
-// import { P_GameConfig, WinningEmpire,  } from "codegen/index.sol";
+
+import { PayoutManager as PayoutManagerContract } from "payman/src/PayoutManager.sol";
 
 /**
  * @title PayoutSystem
  * @dev A contract that manages the distribute funds to the players of the Empires game.
  */
 contract PayoutSystem is EmpiresSystem {
-  /**
-   * @dev Allows a user to withdraw their accumulated rake.
-   * todo This function should be restricted to the admin.
-   */
+  IWorld world;
+  PayoutManagerContract payoutManager;
+
+  receive() external payable {}
+
   function distributeFunds() public _onlyAdmin {
+    world = IWorld(_world());
     EEmpire winningEmpire = WinningEmpire.get();
     require(winningEmpire != EEmpire.NULL, "[PayoutSystem] No empire has won the game");
 
@@ -33,7 +46,7 @@ contract PayoutSystem is EmpiresSystem {
     uint256[] memory rake = new uint256[](1);
     rake[0] = (Balances.get(ADMIN_NAMESPACE_ID));
 
-    address payoutManager = PayoutManager.getContractAddress();
+    payoutManager = PayoutManagerContract(PayoutManager.getContractAddress());
     address[] memory rakeRecipient = new address[](1);
     rakeRecipient[0] = RakeRecipient.getRecipientAddress();
 
@@ -42,29 +55,27 @@ contract PayoutSystem is EmpiresSystem {
 
     // record and send the rake
     // address is set and controlled by Primodium, so no reentrancy risk
-    (bool success, bytes memory data) = payoutManager.call{ value: rake[0] }(
-      abi.encodeWithSignature("record(address[],uint256[])", rakeRecipient, rake)
-    );
-    require(success, "PayoutSystem: failed to record rake");
 
-    // record and send the pot and winners
-    (success, data) = payoutManager.call{ value: pot }(
-      abi.encodeWithSignature("record(address[],uint256[])", winners, payouts)
-    );
-    require(success, "PayoutSystem: failed to record winners");
+    // this will fail because the payout system doesn't have the world funds
+    // for either the empires namespace, or the admin namespace.
 
-    // increment round
-    (success, data) = payoutManager.call(abi.encodeWithSignature("incrementRound()"));
-    require(success, "PayoutSystem: failed to increment round");
+    // retrieve the funds to this contract
+
+    world.transferBalanceToNamespace(ADMIN_NAMESPACE_ID, EMPIRES_NAMESPACE_ID, Balances.get(ADMIN_NAMESPACE_ID));
+    world.transferBalanceToAddress(EMPIRES_NAMESPACE_ID, address(this), Balances.get(EMPIRES_NAMESPACE_ID));
+
+    payoutManager.record{ value: rake[0] }(rakeRecipient, rake);
+    payoutManager.record{ value: pot }(winners, payouts);
+    payoutManager.incrementRound();
   }
 
   /**
    * @dev Finds the winners of the game and their payouts.
    * @return winners The addresses of the winners.
    * @return payouts The payouts of the winners.
-   * @dev seperate function to deal with stack too deep
+   * @dev separate function to deal with stack too deep
    */
-  function getWinners() internal view returns (address[] memory, uint256[] memory, uint256) {
+  function getWinners() public view returns (address[] memory, uint256[] memory, uint256) {
     EEmpire winningEmpire = WinningEmpire.get();
     require(winningEmpire != EEmpire.NULL, "[PayoutSystem] No empire has won the game");
 
@@ -74,8 +85,6 @@ contract PayoutSystem is EmpiresSystem {
     }
 
     uint256 pot = (Balances.get(EMPIRES_NAMESPACE_ID));
-    uint256[] memory rake = new uint256[](1);
-    rake[0] = (Balances.get(ADMIN_NAMESPACE_ID));
 
     // get winners
     bytes32[] memory players = PlayersMap.keys();

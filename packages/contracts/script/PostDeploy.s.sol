@@ -10,29 +10,62 @@ import { createPrototypes } from "codegen/Prototypes.sol";
 import { createPlanets } from "codegen/scripts/CreatePlanets.sol";
 import { LibShieldEater } from "libraries/LibShieldEater.sol";
 import { initPrice } from "libraries/InitPrice.sol";
-import { Ready, Turn, P_GameConfig, P_GameConfigData, Role, PayoutManager, RakeRecipient } from "codegen/index.sol";
+import { Ready, Turn, P_GameConfig, P_GameConfigData, Role, PayoutManager as PayoutManagerTable, RakeRecipient } from "codegen/index.sol";
 import { ERole } from "codegen/common.sol";
 
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
+import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
 import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
 import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
+import { PayoutSystem } from "systems/PayoutSystem.sol";
 import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
-import { ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+
+import { PayoutManager as PayoutManagerContract } from "payman/src/PayoutManager.sol";
 
 contract PostDeploy is Script {
   string constant PAYMAN_PATH = "./payman.json";
+  PayoutManagerContract payoutManagerContract;
 
   function run(address worldAddress) external {
-    address payoutManagerAddress = getPaymanAddress();
-    console.log("[PAYMAN]", payoutManagerAddress);
+    /*//////////////////////////////////////////////////////////////
+                            ENV VARIABLES
+    //////////////////////////////////////////////////////////////*/
 
-    // Load data from environment variables (in .env)
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address rakeRecipientAddress = vm.envAddress("RAKE_RECIPIENT_ADDRESS");
-    uint256 firstMatchStartBlock = vm.envUint("FIRST_MATCH_START_BLOCK");
+    uint256 matchInterval = vm.envUint("MATCH_INTERVAL") + block.number;
+
+    /*//////////////////////////////////////////////////////////////
+                            PAYOUT MANAGER
+    //////////////////////////////////////////////////////////////*/
+    address payoutManagerAddress = getPaymanAddress();
+
+    if (payoutManagerAddress == address(0)) {
+      vm.startBroadcast(deployerPrivateKey);
+      console.log("Deploying PayoutManager...");
+      payoutManagerContract = new PayoutManagerContract();
+      vm.stopBroadcast();
+
+      payoutManagerAddress = address(payoutManagerContract);
+      string memory obj1 = "top";
+      string memory obj2 = "item";
+      string memory output = vm.serializeAddress(obj2, "ADDRESS", payoutManagerAddress);
+
+      string memory finalJson = vm.serializeString(obj1, vm.toString(block.chainid), output);
+      vm.writeJson(finalJson, PAYMAN_PATH);
+    } else {
+      console.log("Existing PayoutManager found");
+      payoutManagerContract = PayoutManagerContract(payoutManagerAddress);
+    }
+    console.log("[PAYMAN]", payoutManagerAddress);
+
+    /*//////////////////////////////////////////////////////////////
+                            EMPIRES
+    //////////////////////////////////////////////////////////////*/
 
     console.log("block.number", block.number);
-    require(firstMatchStartBlock > block.number, "[PostDeploy] First match must start in the future");
+    require(matchInterval > block.number, "[PostDeploy] First match must start in the future");
 
     IWorld world = IWorld(worldAddress);
     console.log("world address:", worldAddress);
@@ -46,20 +79,20 @@ contract PostDeploy is Script {
     console.log("Prototypes created");
 
     require(payoutManagerAddress != address(0), "PayoutManager address not set");
-    PayoutManager.setContractAddress(payoutManagerAddress);
+    PayoutManagerTable.setContractAddress(payoutManagerAddress);
 
     require(rakeRecipientAddress != address(0), "RakeRecipient address not set");
     RakeRecipient.setRecipientAddress(rakeRecipientAddress);
 
     P_GameConfigData memory config = P_GameConfig.get();
 
-    P_GameConfig.setGameStartBlock(firstMatchStartBlock);
-    P_GameConfig.setGameOverBlock(firstMatchStartBlock + config.nextGameLengthTurns * config.turnLengthBlocks);
+    P_GameConfig.setGameStartBlock(matchInterval);
+    P_GameConfig.setGameOverBlock(matchInterval + config.nextGameLengthTurns * config.turnLengthBlocks);
 
     createPlanets();
     LibShieldEater.initialize();
     initPrice();
-    Turn.setNextTurnBlock(firstMatchStartBlock + config.turnLengthBlocks);
+    Turn.setNextTurnBlock(matchInterval + config.turnLengthBlocks);
 
     // register the admin namespace that stores raked eth
     world.registerNamespace(ADMIN_NAMESPACE_ID);
@@ -80,13 +113,29 @@ contract PostDeploy is Script {
     if (adminAddress != keeperAddress) {
       Role.set(keeperAddress, ERole.CanUpdate);
     }
+
+    ResourceId payoutSystemId = WorldResourceIdLib.encode({
+      typeId: RESOURCE_SYSTEM,
+      namespace: WorldResourceIdInstance.getNamespace(EMPIRES_NAMESPACE_ID),
+      name: "PayoutSystem"
+    });
+
+    address payoutSystemAddress = Systems.getSystem(payoutSystemId);
+    world.grantAccess(ADMIN_NAMESPACE_ID, payoutSystemAddress);
+
+    payoutManagerContract.setPayoutSystem(payoutSystemAddress);
+
     // must be set after post deploy to avoid race condition
     Ready.set(true);
     vm.stopBroadcast();
   }
 
-  function getPaymanAddress() internal view returns (address) {
+  function getPaymanAddress() internal returns (address) {
     address paymanAddress = address(0);
+    if (!vm.isFile(PAYMAN_PATH)) {
+      return paymanAddress;
+    }
+
     string memory paymanJson = vm.readFile(PAYMAN_PATH);
     string memory chainIdString = string.concat(".", vm.toString(block.chainid));
     bool chainIdExists = vm.keyExistsJson(paymanJson, chainIdString);
@@ -101,6 +150,13 @@ contract PostDeploy is Script {
       }
     } else {
       console.log("[PAYMAN] chainId not found");
+    }
+
+    if (paymanAddress != address(0)) {
+      if (paymanAddress.code.length == 0) {
+        console.log("[PAYMAN] No contract at address");
+        paymanAddress = address(0);
+      }
     }
     return paymanAddress;
   }

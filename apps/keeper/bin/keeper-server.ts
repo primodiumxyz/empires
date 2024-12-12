@@ -14,7 +14,7 @@ const env = parseEnv();
 // @see https://fastify.dev/docs/latest/
 const server = fastify({
   maxParamLength: 5000,
-  logger: true,
+  logger: false,
 });
 
 await server.register(import("@fastify/compress"));
