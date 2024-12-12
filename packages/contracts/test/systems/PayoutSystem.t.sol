@@ -64,15 +64,9 @@ contract PayoutSystemTest is PrimodiumTest {
       i++;
     } while (Planet.getEmpireId(planetIdBlue) != EEmpire.Blue);
 
-    // OWNER = payman.getOwner();
-
     vm.startPrank(creator);
     world.registerSystem(systemId, system, true);
     world.registerFunctionSelector(systemId, "echoValue()");
-  }
-
-  function testTest() public pure {
-    assertTrue(true);
   }
 
   function testGetWinners() public {

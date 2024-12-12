@@ -26,10 +26,10 @@
         },
         {
             "type": "function",
-            "name": "changeOwner",
+            "name": "changeAdmin",
             "inputs": [
                 {
-                    "name": "_newOwner",
+                    "name": "_newAdmin",
                     "type": "address",
                     "internalType": "address"
                 }
@@ -52,7 +52,7 @@
         },
         {
             "type": "function",
-            "name": "getOwner",
+            "name": "getPayoutAdmin",
             "inputs": [],
             "outputs": [
                 {
@@ -65,7 +65,7 @@
         },
         {
             "type": "function",
-            "name": "getPayoutSystemAddress",
+            "name": "getPayoutSystem",
             "inputs": [],
             "outputs": [
                 {
@@ -103,7 +103,7 @@
         },
         {
             "type": "function",
-            "name": "registerPayoutSystem",
+            "name": "setPayoutSystem",
             "inputs": [
                 {
                     "name": "_payoutSystem",

@@ -34,7 +34,7 @@ contract PostDeploy is Script {
 
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address rakeRecipientAddress = vm.envAddress("RAKE_RECIPIENT_ADDRESS");
-    uint256 firstMatchStartBlock = vm.envUint("FIRST_MATCH_START_BLOCK_OFFSET") + block.number;
+    uint256 matchInterval = vm.envUint("MATCH_INTERVAL") + block.number;
 
     /*//////////////////////////////////////////////////////////////
                             PAYOUT MANAGER
@@ -65,7 +65,7 @@ contract PostDeploy is Script {
     //////////////////////////////////////////////////////////////*/
 
     console.log("block.number", block.number);
-    require(firstMatchStartBlock > block.number, "[PostDeploy] First match must start in the future");
+    require(matchInterval > block.number, "[PostDeploy] First match must start in the future");
 
     IWorld world = IWorld(worldAddress);
     console.log("world address:", worldAddress);
@@ -86,13 +86,13 @@ contract PostDeploy is Script {
 
     P_GameConfigData memory config = P_GameConfig.get();
 
-    P_GameConfig.setGameStartBlock(firstMatchStartBlock);
-    P_GameConfig.setGameOverBlock(firstMatchStartBlock + config.nextGameLengthTurns * config.turnLengthBlocks);
+    P_GameConfig.setGameStartBlock(matchInterval);
+    P_GameConfig.setGameOverBlock(matchInterval + config.nextGameLengthTurns * config.turnLengthBlocks);
 
     createPlanets();
     LibShieldEater.initialize();
     initPrice();
-    Turn.setNextTurnBlock(firstMatchStartBlock + config.turnLengthBlocks);
+    Turn.setNextTurnBlock(matchInterval + config.turnLengthBlocks);
 
     // register the admin namespace that stores raked eth
     world.registerNamespace(ADMIN_NAMESPACE_ID);

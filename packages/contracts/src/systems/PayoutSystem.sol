@@ -21,7 +21,7 @@ import { PointsMap } from "adts/PointsMap.sol";
 
 import { idToAddress } from "src/utils.sol";
 
-import { PayoutManager as PayoutManagerContract } from "../../test/mocks/PayoutManager.sol";
+import { PayoutManager as PayoutManagerContract } from "payman/src/PayoutManager.sol";
 
 /**
  * @title PayoutSystem
@@ -61,16 +61,8 @@ contract PayoutSystem is EmpiresSystem {
 
     // retrieve the funds to this contract
 
-    ResourceId payoutSystemId = WorldResourceIdLib.encode({
-      typeId: RESOURCE_SYSTEM,
-      namespace: WorldResourceIdInstance.getNamespace(EMPIRES_NAMESPACE_ID),
-      name: "PayoutSystem"
-    });
-
-    address payoutSystemAddress = Systems.getSystem(payoutSystemId);
-
     world.transferBalanceToNamespace(ADMIN_NAMESPACE_ID, EMPIRES_NAMESPACE_ID, Balances.get(ADMIN_NAMESPACE_ID));
-    world.transferBalanceToAddress(EMPIRES_NAMESPACE_ID, payoutSystemAddress, Balances.get(EMPIRES_NAMESPACE_ID));
+    world.transferBalanceToAddress(EMPIRES_NAMESPACE_ID, address(this), Balances.get(EMPIRES_NAMESPACE_ID));
 
     payoutManager.record{ value: rake[0] }(rakeRecipient, rake);
     payoutManager.record{ value: pot }(winners, payouts);

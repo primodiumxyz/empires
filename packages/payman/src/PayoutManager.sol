@@ -21,7 +21,7 @@ contract PayoutManager {
     /*//////////////////////////////////////////////////////////////
                             VARIABLES
     //////////////////////////////////////////////////////////////*/
-    address private owner;
+    address private admin;
     address private payoutSystem;
     mapping(uint256 roundNumber => Winner[]) private winners;
 
@@ -32,7 +32,7 @@ contract PayoutManager {
                             CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
     constructor() {
-        owner = msg.sender;
+        admin = msg.sender;
         currentRound = 1;
     }
 
@@ -41,7 +41,7 @@ contract PayoutManager {
     //////////////////////////////////////////////////////////////*/
     modifier onlyAuthorized() {
         require(
-            (msg.sender == owner) || (msg.sender == payoutSystem),
+            (msg.sender == admin) || (msg.sender == payoutSystem),
             "[PAYMAN] Only authorized can manage payout system"
         );
         _;
@@ -91,12 +91,12 @@ contract PayoutManager {
     /*//////////////////////////////////////////////////////////////
                             ADMIN LOGIC
     //////////////////////////////////////////////////////////////*/
-    function getOwner() external view returns (address) {
-        return owner;
+    function getPayoutAdmin() external view returns (address) {
+        return admin;
     }
 
-    function changeOwner(address _newOwner) external onlyAuthorized {
-        owner = _newOwner;
+    function changeAdmin(address _newAdmin) external onlyAuthorized {
+        admin = _newAdmin;
     }
 
     function getPayoutSystem() external view returns (address) {
