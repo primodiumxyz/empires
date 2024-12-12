@@ -49,6 +49,7 @@ const PayoutManager = () => {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
             <h1 className="text-4xl">Payout Manager</h1>
+            <h2 className="text-xl"><a href={`https://sepolia.basescan.org/address/${paymanAddress}`}>{paymanAddress}</a></h2>
             <br />
             <h2 className="text-2xl">Player Address: {playerAddress}</h2>
             <h2 className="text-2xl">Claimable Winnings: {playerWinningsFloat} ETH</h2>

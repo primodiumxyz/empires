@@ -65,6 +65,19 @@
         },
         {
             "type": "function",
+            "name": "getPayoutSystemAddress",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
             "name": "incrementRound",
             "inputs": [],
             "outputs": [],
@@ -87,6 +100,19 @@
             ],
             "outputs": [],
             "stateMutability": "payable"
+        },
+        {
+            "type": "function",
+            "name": "registerPayoutSystem",
+            "inputs": [
+                {
+                    "name": "_payoutSystem",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
         },
         {
             "type": "function",

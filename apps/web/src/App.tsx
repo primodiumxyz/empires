@@ -74,7 +74,7 @@ const App = () => {
                 "star-background flex h-screen w-screen cursor-default items-center justify-center font-pixel text-sm",
               )}
             >
-              <BackgroundNebula />
+              {/* <BackgroundNebula /> */}
 
               <PlayerAccountProvider allowBurner={!!DEV} defaultLogin={usingFoundry ? "burner" : "privy"}>
                 <Routes>
