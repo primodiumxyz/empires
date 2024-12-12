@@ -30,7 +30,7 @@ contract PayoutTest is Test {
         uint256[] memory balances = new uint256[](1);
         balances[0] = 100;
         vm.prank(ALICE);
-        vm.expectRevert("[PAYMAN] Only owner can add winners");
+        vm.expectRevert("[PAYMAN] Only authorized can manage payout system");
         payman.record(victors, balances);
     }
 
