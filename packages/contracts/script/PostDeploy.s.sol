@@ -16,7 +16,6 @@ import { ERole } from "codegen/common.sol";
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
 import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
 import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
-import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
 import { PayoutSystem } from "systems/PayoutSystem.sol";
 import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
@@ -96,15 +95,6 @@ contract PostDeploy is Script {
 
     // register the admin namespace that stores raked eth
     world.registerNamespace(ADMIN_NAMESPACE_ID);
-
-    ResourceId withdrawSystemId = WorldResourceIdLib.encode({
-      typeId: RESOURCE_SYSTEM,
-      namespace: WorldResourceIdInstance.getNamespace(ADMIN_NAMESPACE_ID),
-      name: "WithdrawRakeSyst"
-    });
-    WithdrawRakeSystem withdrawSystem = new WithdrawRakeSystem();
-    world.registerSystem(withdrawSystemId, withdrawSystem, true);
-    world.registerFunctionSelector(withdrawSystemId, "withdrawRake()");
 
     address adminAddress = vm.addr(deployerPrivateKey);
     Role.set(adminAddress, ERole.Admin);

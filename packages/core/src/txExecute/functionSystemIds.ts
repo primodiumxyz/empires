@@ -24,8 +24,6 @@ export const functionSystemIds: {
   Empires__resetGame: getSystemId("ResetSystem"),
   Empires__updateWinner: getSystemId("UpdateSystem"),
 
-  Empires__withdrawEarnings: getSystemId("RewardsSystem"),
-
   Empires__placeMagnet: getSystemId("OverrideMagnetsSystem"),
 
   /* ----------------------------------- Dev ---------------------------------- */
@@ -37,5 +35,4 @@ export const functionSystemIds: {
   Empires__setRole: getSystemId("AdminSystem"),
   Empires__removeRole: getSystemId("AdminSystem"),
   Empires__setGameConfigAndTurn: getSystemId("AdminSystem"),
-  Admin__withdrawRake: getSystemId("WithdrawRakeSystem", "Admin"),
 };
