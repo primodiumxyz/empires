@@ -17,7 +17,7 @@ contract EmpiresSystem is System {
     require(Ready.get(), "[EmpiresSystem] Game not ready");
     require(WinningEmpire.get() == EEmpire.NULL, "[EmpiresSystem] Game over");
     require(block.number >= P_GameConfig.getGameStartBlock(), "[EmpiresSystem] Game not started");
-    require(_checkDominationVictory() == EEmpire.NULL, "[RewardsSystem] Game over");
+    require(_checkDominationVictory() == EEmpire.NULL, "[EmpiresSystem] Game over");
     uint256 endBlock = P_GameConfig.getGameOverBlock();
     require(endBlock == 0 || block.number < endBlock, "[EmpiresSystem] Game over");
 
@@ -78,7 +78,7 @@ contract EmpiresSystem is System {
       if (winningEmpire == EEmpire.NULL) {
         winningEmpire = _checkDominationVictory();
       }
-      require(winningEmpire != EEmpire.NULL, "[RewardsSystem] Game is not over");
+      require(winningEmpire != EEmpire.NULL, "[EmpiresSystem] Game is not over");
       WinningEmpire.set(winningEmpire);
     }
     _;

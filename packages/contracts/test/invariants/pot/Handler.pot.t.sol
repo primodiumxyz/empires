@@ -238,67 +238,6 @@ contract HandlerPot is HandlerBase {
     );
   }
 
-  /// @dev Withdraw earnings after the game ended
-  /// Note: see `RewardsSystem`
-  /// - This function should decrease the pot by the price of the points the player could withdraw
-  function withdrawEarnings(uint256 playerSeed) public payable {
-    if (shouldSkip(block.number >= GAME_OVER_BLOCK && WinningEmpire.get() != EEmpire.NULL)) return;
-    address player = _selectRandomOrCreatePlayer(playerSeed);
-    bytes32 playerId = addressToId(player);
-    EEmpire winningEmpire = WinningEmpire.get();
-    uint256 playerPoints = PointsMap.getValue(winningEmpire, playerId);
-    uint256 playerLockedPoints = PointsMap.getLockedPoints(winningEmpire, playerId);
-
-    uint256 pointsIssuedByEmpire = Empire.getPointsIssued(winningEmpire);
-    uint256 potBalanceBefore = Balances.get(EMPIRES_NAMESPACE_ID);
-    uint256 rakeBalanceBefore = Balances.get(ADMIN_NAMESPACE_ID);
-    uint256 playerBalanceBefore = player.balance;
-
-    uint256 playerPot = pointsIssuedByEmpire > 0
-      ? (potBalanceBefore * (playerPoints - playerLockedPoints)) / pointsIssuedByEmpire
-      : 0;
-
-    // requirements for the withdrawal to be (supposed to be) successful:
-    // - an empire has won the game
-    bool requirementsFulfilled = winningEmpire != EEmpire.NULL &&
-      // - the empire has issued enough points
-      pointsIssuedByEmpire > 0;
-    // - player has enough points for this empire
-    playerPoints > 0 &&
-      // - the pot has enough native tokens to send
-      playerPot <= _mirrorPot;
-
-    // don't proceed if we don't allow unexpected inputs and the requirements are not met
-    if (shouldSkip(!requirementsFulfilled)) return;
-    vm.prank(player);
-    bool success = _withdrawEarnings();
-
-    // expected outcomes:
-    // - the pot was decreased by the expected amount of native tokens
-    bool outcomesAchieved = Balances.get(EMPIRES_NAMESPACE_ID) == potBalanceBefore - playerPot &&
-      // - the rake didn't decrease
-      Balances.get(ADMIN_NAMESPACE_ID) == rakeBalanceBefore &&
-      // - the player was sent the exact amount of native tokens
-      player.balance == playerBalanceBefore + playerPot &&
-      // - the points map was updated correctly
-      PointsMap.getValue(winningEmpire, playerId) == 0;
-
-    // a decrease in the pot implies that all requirements were met and that the outcomes should all be achieved
-    assert_implies(
-      Balances.get(EMPIRES_NAMESPACE_ID) < potBalanceBefore,
-      success && requirementsFulfilled && outcomesAchieved
-    );
-    // decrease the mirrored pot only if the sale happened under expected circumstances
-    if (success && requirementsFulfilled && outcomesAchieved) _afterSaleDecrease(playerPot);
-
-    if (success) _log_withdrawEarningsCount++;
-  }
-
-  /// @dev Call `Empires__withdrawEarnings` and return the success status
-  function _withdrawEarnings() private returns (bool success) {
-    (success, ) = address(world).call(abi.encodeWithSignature("Empires__withdrawEarnings()"));
-  }
-
   /* -------------------------------------------------------------------------- */
   /*                                   HELPERS                                  */
   /* -------------------------------------------------------------------------- */
