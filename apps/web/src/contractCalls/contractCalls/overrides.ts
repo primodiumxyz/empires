@@ -11,6 +11,7 @@ import { withTransactionStatus } from "@/util/notify";
 export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) => {
   const createShip = async (
     planetId: Entity,
+    empire: number,
     overrideCount: bigint,
     payment: bigint,
     options?: Partial<TxQueueOptions>,
@@ -20,7 +21,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       () =>
         execute({
           functionName: "Empires__createShip",
-          args: [planetId as Hex, overrideCount],
+          args: [planetId as Hex, empire, overrideCount],
           options: { value: payment, gas: 552401n * 2n },
           txQueueOptions: {
             id: `${planetId}-create-ship`,
@@ -46,6 +47,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
 
   const chargeShield = async (
     planetId: Entity,
+    empire: number,
     overrideCount: bigint,
     payment: bigint,
     options?: Partial<TxQueueOptions>,
@@ -55,7 +57,7 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
       () =>
         execute({
           functionName: "Empires__chargeShield",
-          args: [planetId as Hex, overrideCount],
+          args: [planetId as Hex, empire, overrideCount],
           options: { value: payment, gas: 546063n * 2n },
           txQueueOptions: {
             id: `${planetId}-add-shield`,
@@ -79,13 +81,16 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const sellPoints = async (empire: number, amount: bigint, options?: Partial<TxQueueOptions>) => {
+  const sellPoints = async (empire: number, amount: bigint, minSalePrice: bigint, endPot: bigint, options?: Partial<TxQueueOptions>) => {
+    const { price: expectedValue } = core.utils.getPointPrice(empire, amount);
+    if (expectedValue > endPot) throw new Error("Pot is not enough to cover sale");
+
     return await withTransactionStatus(
       () =>
         execute({
           functionName: "Empires__sellPoints",
-          args: [empire, amount],
-          options: { gas: 151271n * 2n },
+          args: [empire, amount, minSalePrice],
+          options: { gas: 200000n * 2n },
           txQueueOptions: {
             id: "sell-points",
             ...options,
@@ -137,9 +142,9 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
           },
         }),
       {
-        loading: `Airdropping gold to ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
-        success: `Airdropped gold to ${EmpireEnumToConfig[empire as EEmpire].name} empire for ${formatEther(pointsReceived)} points`,
-        error: "Failed to airdrop gold",
+        loading: `Airdropping iridium to ${EmpireEnumToConfig[empire as EEmpire].name} empire`,
+        success: `Airdropped iridium to ${EmpireEnumToConfig[empire as EEmpire].name} empire for ${formatEther(pointsReceived)} points`,
+        error: "Failed to airdrop iridium",
       },
     );
   };
@@ -210,13 +215,13 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const placeAcidRain = async (planetId: Entity, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const placeAcidRain = async (planetId: Entity, empire: number, payment: bigint, options?: Partial<TxQueueOptions>) => {
     const planetName = await core.utils.getPlanetName(planetId);
     return await withTransactionStatus(
       () =>
         execute({
           functionName: "Empires__placeAcid",
-          args: [planetId as Hex],
+          args: [planetId as Hex, empire],
           options: { value: payment, gas: 1_000_000n * 2n }, // TODO: get gas estimate
           txQueueOptions: {
             id: `${planetId}-place-acid`,

@@ -45,39 +45,39 @@ export const Buttons: React.FC<{ selectedPlanet: Entity; empire: number }> = ({ 
       </p>
       <div className="relative z-10 translate-y-5">
         <OverrideButton
-          index={0}
-          icon="Fleet"
-          axialCoord={{ q: -1, r: 0 }}
-          tooltip="Ships"
-          price={createShipPriceWei}
-        />
-        <OverrideButton
-          index={1}
-          icon="Defense"
-          axialCoord={{ q: 0, r: 0 }}
-          tooltip="Shields"
-          price={createShieldPriceWei}
-        />
-        <OverrideButton
-          index={2}
-          icon="Magnet"
-          axialCoord={{ q: 1, r: 0 }}
-          tooltip="Magnets"
-          price={createMagnetPriceWei}
-        />
-        <OverrideButton
           index={3}
           icon="ShieldEater"
           axialCoord={{ q: -1, r: -1 }}
           tooltip="Shield Eater"
-          price={createShieldEaterPriceWei}
+          price={createShieldEaterPriceWei.expected}
         />
         <OverrideButton
           index={4}
           icon="AcidRain"
           axialCoord={{ q: 2, r: -1 }}
           tooltip="Acid Rain"
-          price={createAcidRainPriceWei}
+          price={createAcidRainPriceWei.expected}
+        />
+        <OverrideButton
+          index={0}
+          icon="Fleet"
+          axialCoord={{ q: -1, r: 0 }}
+          tooltip="Ships"
+          price={createShipPriceWei.expected}
+        />
+        <OverrideButton
+          index={1}
+          icon="Defense"
+          axialCoord={{ q: 0, r: 0 }}
+          tooltip="Shields"
+          price={createShieldPriceWei.expected}
+        />
+        <OverrideButton
+          index={2}
+          icon="Magnet"
+          axialCoord={{ q: 1, r: 0 }}
+          tooltip="Magnets"
+          price={createMagnetPriceWei.expected}
         />
       </div>
     </div>
@@ -102,20 +102,20 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
     >
       <Buttons selectedPlanet={selectedPlanet} empire={planet.empireId} />
       <Card noDecor className="relative w-96 flex-row items-center justify-center bg-slate-900">
-        <Tabs.Pane index={0} className="w-full items-center gap-4">
+        <Tabs.Pane index={0} className="w-full items-center gap-4 overflow-visible">
           <Header title={"Ships"} description={"Attack other planets"} planetName={planetName} />
           <ShipContent entity={selectedPlanet} />
         </Tabs.Pane>
-        <Tabs.Pane index={1} className="w-full items-center gap-4">
+        <Tabs.Pane index={1} className="w-full items-center gap-4 overflow-visible">
           <Header title={"Shields"} description={"Defend planet when under attack"} planetName={planetName} />
           <ShieldContent entity={selectedPlanet} />
         </Tabs.Pane>
-        <Tabs.Pane index={2} className="w-full items-center gap-4">
+        <Tabs.Pane index={2} className="w-full items-center gap-4 overflow-visible">
           <Header title={"Magnets"} description={"Attracts ships owned by the same empire"} planetName={planetName} />
           <MagnetContent entity={selectedPlanet} />
         </Tabs.Pane>
 
-        <Tabs.Pane index={3} className="w-full items-center gap-4">
+        <Tabs.Pane index={3} className="w-full items-center gap-4 overflow-visible">
           <Header
             title={"Shield Eater"}
             description={"Destroy shields on this planet and surrounding planets"}
@@ -124,7 +124,7 @@ export const OverridePane: React.FC<{ entity: Entity; className?: string }> = ({
           <ShieldEaterContent entity={selectedPlanet} />
         </Tabs.Pane>
 
-        <Tabs.Pane index={4} className="w-full items-center gap-4">
+        <Tabs.Pane index={4} className="w-full items-center gap-4 overflow-visible">
           <Header title={"Acid Rain"} description={"Acid Rain decays ships by 20% each turn"} planetName={planetName} />
           <AcidRainContent entity={selectedPlanet} />
         </Tabs.Pane>

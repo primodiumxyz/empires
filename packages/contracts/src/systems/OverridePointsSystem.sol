@@ -8,8 +8,9 @@ import { LibPoint } from "libraries/LibPoint.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
-import { addressToId } from "src/utils.sol";
+import { addressToId, nextLogEntity } from "src/utils.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
+import { SellPointsOverrideLog, SellPointsOverrideLogData, Turn } from "codegen/index.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 
 /**
@@ -22,7 +23,7 @@ contract OverridePointsSystem is EmpiresSystem {
    * @param _empire The empire to sell points from.
    * @param _points The number of points to sell.
    */
-  function sellPoints(EEmpire _empire, uint256 _points) public {
+  function sellPoints(EEmpire _empire, uint256 _points, uint256 minSaleValue) public _onlyNotGameOver {
     bytes32 playerId = addressToId(_msgSender());
     require(
       _points <= PointsMap.getValue(_empire, playerId) - PointsMap.getLockedPoints(_empire, playerId),
@@ -33,14 +34,27 @@ contract OverridePointsSystem is EmpiresSystem {
 
     // require that the pot has enough ETH to send
     require(pointSaleValue <= Balances.get(EMPIRES_NAMESPACE_ID), "[OverrideSystem] Insufficient funds for point sale");
-
-    // set the new empire point cost
-    LibPrice.sellEmpirePointCostDown(_empire, _points);
+    require(pointSaleValue >= minSaleValue, "[OverrideSystem] Sale value is below desired minimum");
 
     // remove points from player and empire's issued points count
     LibPoint.removePoints(_empire, playerId, _points);
 
+    // set the new empire point price
+    LibPrice.sellEmpirePointPriceDown(_empire, _points);
+
     PlayersMap.setGain(playerId, PlayersMap.get(playerId).gain + pointSaleValue);
+
+    SellPointsOverrideLog.set(
+      nextLogEntity(),
+      SellPointsOverrideLogData({
+        playerId: playerId,
+        turn: Turn.getValue(),
+        empireId: _empire,
+        ethReceived: pointSaleValue,
+        overrideCount: _points,
+        timestamp: block.timestamp
+      })
+    );
 
     // send eth to player
     IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), pointSaleValue);

@@ -10,8 +10,8 @@ import { LibOverride } from "libraries/LibOverride.sol";
 import { LibMagnet } from "libraries/LibMagnet.sol";
 import { PointsMap } from "adts/PointsMap.sol";
 import { PlayersMap } from "adts/PlayersMap.sol";
-import { EMPIRES_NAMESPACE_ID } from "src/constants.sol";
-import { addressToId, pseudorandomEntity } from "src/utils.sol";
+import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
+import { addressToId, nextLogEntity } from "src/utils.sol";
 import { IWorld } from "codegen/world/IWorld.sol";
 import { Balances } from "@latticexyz/world/src/codegen/index.sol";
 
@@ -25,22 +25,21 @@ contract OverrideShipSystem is EmpiresSystem {
    * @param _planetId The ID of the planet.
    * @param _overrideCount The number of overrides to purchase.
    */
-  function createShip(bytes32 _planetId, uint256 _overrideCount) public payable _onlyNotGameOver _takeRake {
-    bytes32 playerId = addressToId(_msgSender());
-    // increase ships
+  function createShip(bytes32 _planetId, EEmpire _empireId, uint256 _overrideCount) public payable _onlyNotGameOver {
     PlanetData memory planetData = Planet.get(_planetId);
     require(planetData.isPlanet, "[OverrideSystem] Planet not found");
     require(planetData.empireId != EEmpire.NULL, "[OverrideSystem] Planet is not owned");
+    require(planetData.empireId == _empireId, "[OverrideSystem] Wrong empire owns the planet");
     uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, planetData.empireId, _overrideCount);
+    require(_msgValue() >= cost, "[OverrideSystem] Insufficient payment");
+    bytes32 playerId = addressToId(_msgSender());
 
-    _refundOverspend(cost);
-
-    LibOverride._purchaseOverride(playerId, EOverride.CreateShip, planetData.empireId, _overrideCount, _msgValue());
+    LibOverride._purchaseOverride(playerId, EOverride.CreateShip, planetData.empireId, _overrideCount, cost);
 
     Planet.setShipCount(_planetId, planetData.shipCount + _overrideCount);
 
     CreateShipOverrideLog.set(
-      pseudorandomEntity(),
+      nextLogEntity(),
       CreateShipOverrideLogData({
         playerId: playerId,
         turn: Turn.getValue(),
@@ -50,19 +49,8 @@ contract OverrideShipSystem is EmpiresSystem {
         timestamp: block.timestamp
       })
     );
-  }
 
-  /**
-   * @dev Handles overspending by the user when making a payment.
-   * @param _cost The expected cost of the transaction.
-   * @notice This function ensures that the user has sent enough ETH to cover the cost.
-   * If the user sends more than the required amount, the excess is refunded.
-   */
-  function _refundOverspend(uint256 _cost) private {
-    uint256 msgValue = _msgValue();
-    require(msgValue >= _cost, "[OverrideSystem] Incorrect payment");
-    if (msgValue > _cost) {
-      IWorld(_world()).transferBalanceToAddress(EMPIRES_NAMESPACE_ID, _msgSender(), msgValue - _cost);
-    }
+    _refundOverspend(cost);
+    _takeRake(cost);
   }
 }

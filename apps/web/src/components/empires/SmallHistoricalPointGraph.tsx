@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { curveMonotoneX } from "@visx/curve";
 import { LinearGradient } from "@visx/gradient";
-import appleStock from "@visx/mock-data/lib/mocks/appleStock";
 import { scaleLinear, scaleTime } from "@visx/scale";
 import { AreaClosed } from "@visx/shape";
 import { extent, max } from "@visx/vendor/d3-array";
@@ -11,12 +10,11 @@ import { formatNumber } from "@primodiumxyz/core";
 import { useCore } from "@primodiumxyz/core/react";
 import { cn } from "@/util/client";
 
-const stock = appleStock.slice(800);
 export const accentColor = "rgba(0,255, 0, .75)";
 export const accentColorDark = "rgba(0,255, 0, .25)";
 // accessors
-const getDate = (d: HistoricalPointCost) => new Date(d.timestamp * 1000);
-const getPointValue = (d: HistoricalPointCost) => d.cost;
+const getDate = (d: HistoricalPointPrice) => new Date(d.timestamp * 1000);
+const getPointValue = (d: HistoricalPointPrice) => d.price;
 
 export type SmallHistoricalPointPriceProps = {
   width: number;
@@ -26,9 +24,9 @@ export type SmallHistoricalPointPriceProps = {
   windowSize?: number;
 };
 
-type HistoricalPointCost = {
+type HistoricalPointPrice = {
   timestamp: number;
-  cost: number;
+  price: number;
 };
 
 export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps> = ({
@@ -40,15 +38,15 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
 }) => {
   const { tables } = useCore();
 
-  const historicalPriceEntities = tables.HistoricalPointCost.useAll();
+  const historicalPriceEntities = tables.HistoricalPointPrice.useAll();
   const gameStartTimestamp = tables.P_GameConfig.use()?.gameStartTimestamp ?? 0n;
 
   const historicalPriceData = useMemo(() => {
     // get data
     let data = historicalPriceEntities
       .map((entity) => ({
-        ...tables.HistoricalPointCost.getEntityKeys(entity), // empire, timestamp
-        cost: tables.HistoricalPointCost.get(entity)?.cost ?? BigInt(0),
+        ...tables.HistoricalPointPrice.getEntityKeys(entity), // empire, timestamp
+        price: tables.HistoricalPointPrice.get(entity)?.price ?? BigInt(0),
       }))
       .filter((d) => d.timestamp >= gameStartTimestamp)
       .filter((d) => d.empire === empire);
@@ -67,31 +65,31 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
     // prepare for filling missing data (no cost for a timestamp means it stays the same as the previous one)
     const timestampMap = new Map<number, { [key: number]: bigint }>();
 
-    // grab costs for each timestamp
+    // grab prices for each timestamp
     Object.entries(groupedData).forEach(([key, items]) => {
       const timestamp = Number(key);
       timestampMap.set(timestamp, {});
       items.forEach((item) => {
-        timestampMap.get(timestamp)![item.empire] = item.cost;
+        timestampMap.get(timestamp)![item.empire] = item.price;
       });
     });
 
     // fill costs for missing timestamps
-    let previousCost = 0n;
-    timestampMap.forEach((costs) => {
-      if (costs[empire] === undefined) {
-        costs[empire] = previousCost;
+    let previousPrice = 0n;
+    timestampMap.forEach((prices) => {
+      if (prices[empire] === undefined) {
+        prices[empire] = previousPrice;
       } else {
-        previousCost = costs[empire];
+        previousPrice = prices[empire];
       }
     });
 
     // create the flattened data
-    const filledData: HistoricalPointCost[] = [];
-    timestampMap.forEach((costs, timestamp) => {
+    const filledData: HistoricalPointPrice[] = [];
+    timestampMap.forEach((prices, timestamp) => {
       filledData.push({
         timestamp,
-        cost: Number(costs[empire]),
+        price: Number(prices[empire]),
       });
     });
 
@@ -101,8 +99,8 @@ export const SmallHistoricalPointGraph: React.FC<SmallHistoricalPointPriceProps>
 
   const [colorFrom, colorTo, percentChange] = useMemo(() => {
     if (historicalPriceData.length < 2) return ["rgba(0,255, 0, .75)", "rgba(0,255, 0, .25)", 0];
-    const diff = historicalPriceData[historicalPriceData.length - 1].cost - historicalPriceData[0].cost;
-    const percentChange = (diff / historicalPriceData[0].cost) * 100;
+    const diff = historicalPriceData[historicalPriceData.length - 1].price - historicalPriceData[0].price;
+    const percentChange = (diff / historicalPriceData[0].price) * 100;
 
     if (diff >= 0) return ["rgba(0,255, 0, .75)", "rgba(0,255, 0, .25)", percentChange];
     return ["rgba(255, 0, 0, .75)", "rgba(255, 0, 0, .25)", percentChange];

@@ -103,10 +103,10 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function testGeneratePointsAndOverrides() public {
     P_PointConfigData memory pointCfg = P_PointConfig.get();
-    uint256 beginPointCost = pointCfg.minPointCost + pointCfg.pointGenRate;
-    Empire.setPointCost(EEmpire.Red, beginPointCost);
-    Empire.setPointCost(EEmpire.Blue, beginPointCost);
-    Empire.setPointCost(EEmpire.Green, beginPointCost);
+    uint256 beginPointPrice = pointCfg.minPointPrice + pointCfg.pointGenRate;
+    Empire.setPointPrice(EEmpire.Red, beginPointPrice);
+    Empire.setPointPrice(EEmpire.Blue, beginPointPrice);
+    Empire.setPointPrice(EEmpire.Green, beginPointPrice);
 
     P_OverrideConfigData memory createShipCfg = P_OverrideConfig.get(EOverride.CreateShip);
     uint256 beginCreateShipCost = createShipCfg.minOverrideCost + createShipCfg.overrideGenRate;
@@ -117,9 +117,9 @@ contract UpdateSystemTest is PrimodiumTest {
     vm.roll(block.number + turnLength);
     world.Empires__updateWorld(allRoutineThresholds);
 
-    assertEq(Empire.getPointCost(EEmpire.Red), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Empire.getPointCost(EEmpire.Blue), beginPointCost - pointCfg.pointGenRate);
-    assertEq(Empire.getPointCost(EEmpire.Green), beginPointCost - pointCfg.pointGenRate);
+    assertEq(Empire.getPointPrice(EEmpire.Red), beginPointPrice - pointCfg.pointGenRate);
+    assertEq(Empire.getPointPrice(EEmpire.Blue), beginPointPrice - pointCfg.pointGenRate);
+    assertEq(Empire.getPointPrice(EEmpire.Green), beginPointPrice - pointCfg.pointGenRate);
 
     assertEq(OverrideCost.get(EEmpire.Red, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
     assertEq(OverrideCost.get(EEmpire.Blue, EOverride.CreateShip), beginCreateShipCost - createShipCfg.overrideGenRate);
@@ -268,7 +268,7 @@ contract UpdateSystemTest is PrimodiumTest {
     assertTrue(Magnet.get(empire, emptyPlanetId).isMagnet, "Second magnet should not be removed yet");
   }
 
-  function testAcidUpdate() public {    
+  function testAcidUpdate() public {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
     uint256 acidDuration = 3;
     vm.startPrank(creator);
@@ -307,14 +307,16 @@ contract UpdateSystemTest is PrimodiumTest {
 
   function testUpdateAcidConquerChangeEmpire() public {
     bytes32[] memory planetIds = PlanetsSet.getPlanetIds();
-    allRoutineThresholds.push(RoutineThresholds({
-      planetId: planetIds[1],
-      accumulateGold: 2000,
-      buyShields: 4000,
-      buyShips: 6000,
-      moveShips: 10000,
-      moveTargetId: planetIds[0]
-    }));
+    allRoutineThresholds.push(
+      RoutineThresholds({
+        planetId: planetIds[1],
+        accumulateGold: 2000,
+        buyShields: 4000,
+        buyShips: 6000,
+        moveShips: 10000,
+        moveTargetId: planetIds[0]
+      })
+    );
     uint256 acidDuration = 3;
     vm.startPrank(creator);
     P_AcidConfig.setAcidDuration(acidDuration);

@@ -20,6 +20,7 @@ import { Username } from "@/components/shared/Username";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
+import { Navigator } from "@/components/core/Navigator";
 
 export const Leaderboard = () => {
   return (
@@ -207,12 +208,19 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
   }, [playerData]);
 
   return (
-    <div className="flex h-full w-full flex-col gap-2">
-      {playerRank && playerRank.rank == 1 && <EmpireImagePicker empireId={empireId} />}
-      <div className="pointer-events-auto relative flex h-full w-full flex-col overflow-y-hidden pr-4 text-xs">
-        <Button onClick={handleRefresh} className="absolute right-0 top-0" size="xs" shape="square">
+      <Navigator initialScreen="main" className = "relative flex flex-row gap-2 h-full w-full">
+
+      <Navigator.Screen className="pointer-events-auto relative flex h-full w-full flex-col overflow-y-hidden pr-4 text-xs" title="main" >
+        <div className = "self-end flex flex-row gap-2">
+     {playerRank && playerRank.rank == 1 && 
+          <Navigator.NavButton to="image" variant="secondary" size="xs">
+            Update Banner 
+          </Navigator.NavButton> 
+      }
+        <Button onClick={handleRefresh} size="xs" shape="square">
           <ArrowPathIcon className="w-4" />
         </Button>
+        </div>
         {playerData.length > 0 ? (
           <>
             <div
@@ -245,13 +253,18 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
                   );
                 }}
               />
+         
             </div>
           </>
         ) : (
           <div className="flex h-full w-full items-center justify-center">No players hold this empire</div>
         )}
-      </div>
-    </div>
+        </Navigator.Screen>
+        <Navigator.Screen title="image" className = "flex flex-col justify-between items-center gap-2 h-full w-full">
+          <EmpireImagePicker empireId={empireId} />
+          <Navigator.BackButton className="w-28">Back</Navigator.BackButton> 
+</Navigator.Screen>
+</Navigator>
   );
 };
 
@@ -285,5 +298,7 @@ const EmpireImagePicker: React.FC<{ empireId: EEmpire }> = ({ empireId }) => {
     }
   };
 
-  return <ImageUploader onSubmit={handleImageSubmit} title="Set Empire Image (Top Point Holder Privilege)" />;
+  return (
+      <ImageUploader onSubmit={handleImageSubmit} title="Update Empire Banner" className = "h-full"/>
+  );
 };

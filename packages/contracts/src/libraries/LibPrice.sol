@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Empire, HistoricalPointCost, P_PointConfig, P_PointConfigData, P_GameConfig, P_OverrideConfig, P_OverrideConfigData, OverrideCost } from "codegen/index.sol";
+import { Empire, HistoricalPointPrice, P_PointConfig, P_PointConfigData, P_GameConfig, P_OverrideConfig, P_OverrideConfigData, OverrideCost } from "codegen/index.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 
 /**
@@ -40,9 +40,27 @@ library LibPrice {
    * @param _overrideCount The number of overrides to be purchased.
    * @return pointCost The cost of all points related to the override.
    */
-  function getProgressPointCost(EOverride _overrideType, EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+  function getProgressPointCost(
+    EOverride _overrideType,
+    EEmpire _empireImpacted,
+    uint256 _overrideCount
+  ) internal view returns (uint256) {
     uint8 empireCount = P_GameConfig.getEmpireCount();
-    return getPointCost(_empireImpacted, _overrideCount * (empireCount - 1) * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType));
+    uint8 enemiesCount;
+    for (uint8 i = 1; i <= empireCount; i++) {
+      if (EEmpire(i) != _empireImpacted && !Empire.getIsDefeated(EEmpire(i))) {
+        enemiesCount++;
+      }
+    }
+
+    return
+      getPointCost(
+        _empireImpacted,
+        _overrideCount *
+          enemiesCount *
+          P_PointConfig.getPointUnit() *
+          P_OverrideConfig.getPointMultiplier(_overrideType)
+      );
   }
 
   /**
@@ -52,14 +70,21 @@ library LibPrice {
    * @param _overrideCount The number of overrides to be purchased.
    * @return pointCost The cost of all points related to the override.
    */
-  function getRegressPointCost(EOverride _overrideType, EEmpire _empireImpacted, uint256 _overrideCount) internal view returns (uint256) {
+  function getRegressPointCost(
+    EOverride _overrideType,
+    EEmpire _empireImpacted,
+    uint256 _overrideCount
+  ) internal view returns (uint256) {
     uint256 pointCost;
     uint8 empireCount = P_GameConfig.getEmpireCount();
     for (uint8 i = 1; i <= empireCount; i++) {
-      if (EEmpire(i) == _empireImpacted) {
+      if (EEmpire(i) == _empireImpacted || Empire.getIsDefeated(EEmpire(i))) {
         continue;
       }
-      pointCost += getPointCost(EEmpire(i), _overrideCount * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType));
+      pointCost += getPointCost(
+        EEmpire(i),
+        _overrideCount * P_PointConfig.getPointUnit() * P_OverrideConfig.getPointMultiplier(_overrideType)
+      );
     }
     return pointCost;
   }
@@ -74,13 +99,16 @@ library LibPrice {
     uint256 pointUnit = P_PointConfig.getPointUnit();
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+    if (Empire.getIsDefeated(_empire)) {
+      return 0; // needed for regressive override cases
+    }
 
-    uint256 initPointCost = Empire.getPointCost(_empire);
-    uint256 pointCostIncrease = P_PointConfig.getPointCostIncrease();
+    uint256 initPointPrice = Empire.getPointPrice(_empire);
+    uint256 pointPriceIncrease = P_PointConfig.getPointPriceIncrease();
     uint256 wholePoints = _points / pointUnit;
 
     uint256 triangleSumOBO = ((wholePoints - 1) * wholePoints) / 2;
-    uint256 pointCost = initPointCost * wholePoints + pointCostIncrease * triangleSumOBO;
+    uint256 pointCost = initPointPrice * wholePoints + pointPriceIncrease * triangleSumOBO;
     return pointCost;
   }
 
@@ -108,19 +136,22 @@ library LibPrice {
   }
 
   /**
-   * @dev Increases the cost of points for a specific empire.
-   * @param _empire The empire to increase the point cost for.
-   * @param _points The number of point units to increase the cost by.
+   * @dev Increases the price of points for a specific empire.
+   * @param _empire The empire to increase the point price for.
+   * @param _points The number of point units to increase the price by.
    */
-  function pointCostUp(EEmpire _empire, uint256 _points) internal {
+  function pointPriceUp(EEmpire _empire, uint256 _points) internal {
     uint256 pointUnit = P_PointConfig.getPointUnit();
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
+    if (Empire.getIsDefeated(_empire)) {
+      return; // needed for regressive override cases
+    }
     uint256 wholePoints = _points / pointUnit;
 
-    uint256 newPointCost = Empire.getPointCost(_empire) + P_PointConfig.getPointCostIncrease() * wholePoints;
-    Empire.setPointCost(_empire, newPointCost);
-    HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
+    uint256 newPointPrice = Empire.getPointPrice(_empire) + P_PointConfig.getPointPriceIncrease() * wholePoints;
+    Empire.setPointPrice(_empire, newPointPrice);
+    HistoricalPointPrice.set(_empire, block.timestamp, newPointPrice);
   }
 
   /**
@@ -138,19 +169,19 @@ library LibPrice {
   }
 
   /**
-   * @dev Decreases the cost of points for a specific empire.
-   * @param _empire The empire to decrease the point cost for.
+   * @dev Decreases the price of points for a specific empire.
+   * @param _empire The empire to decrease the point price for.
    */
-  function turnEmpirePointCostDown(EEmpire _empire) internal {
+  function turnEmpirePointPriceDown(EEmpire _empire) internal {
     P_PointConfigData memory config = P_PointConfig.get();
-    uint256 newPointCost = Empire.getPointCost(_empire);
-    if (newPointCost >= config.minPointCost + config.pointGenRate) {
-      newPointCost -= config.pointGenRate;
+    uint256 newPointPrice = Empire.getPointPrice(_empire);
+    if (newPointPrice >= config.minPointPrice + config.pointGenRate) {
+      newPointPrice -= config.pointGenRate;
     } else {
-      newPointCost = config.minPointCost;
+      newPointPrice = config.minPointPrice;
     }
-    Empire.setPointCost(_empire, newPointCost);
-    HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
+    Empire.setPointPrice(_empire, newPointPrice);
+    HistoricalPointPrice.set(_empire, block.timestamp, newPointPrice);
   }
 
   /**
@@ -172,7 +203,7 @@ library LibPrice {
 
   /**
    * @dev Calculates the value of selling a specific number of points from a specific empire.
-   * @notice The value of the points sold is calculated based on the current point cost and the point sell tax. Reverts if exceeding the minimum point cost.
+   * @notice The value of the points sold is calculated based on the current point price and the point sell tax. Reverts if exceeding the minimum point price.
    * @param _empire The empire to sell points from.
    * @param _points The number of points to sell.
    * @return pointSaleValue The value of the points to be sold.
@@ -184,40 +215,41 @@ library LibPrice {
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
     uint256 wholePoints = _points / pointUnit;
-    uint256 currentPointCost = Empire.getPointCost(_empire);
-    uint256 pointCostDecrease = config.pointCostIncrease;
+    uint256 currentPointPrice = Empire.getPointPrice(_empire);
+    uint256 pointPriceDecrease = config.pointPriceIncrease;
 
     require(
-      currentPointCost >= config.minPointCost + pointCostDecrease * wholePoints,
+      currentPointPrice >= config.minPointPrice + pointPriceDecrease * wholePoints,
       "[LibPrice] Selling points beyond minimum price"
     );
 
     uint256 triangleSum = (wholePoints * (wholePoints + 1)) / 2;
-    uint256 totalSaleValue = (currentPointCost - config.pointSellTax) * wholePoints - pointCostDecrease * triangleSum;
+    uint256 totalSaleValue = ((currentPointPrice * wholePoints - pointPriceDecrease * triangleSum) *
+      (10000 - config.pointSellTax)) / 10000;
 
     return totalSaleValue;
   }
 
   /**
-   * @dev Decreases an empire's point cost by a specific number of point units.
-   * @param _empire The empire for which the point cost is being decreased.
-   * @param _points The number of point units to decrease the cost by.
-   * @notice If the resulting point cost after the decrease is less than the minimum point cost, the function reverts with an error message.
+   * @dev Decreases an empire's point price by a specific number of point units.
+   * @param _empire The empire for which the point price is being decreased.
+   * @param _points The number of point units to decrease the price by.
+   * @notice If the resulting point price after the decrease is less than the minimum point price, the function reverts with an error message.
    */
-  function sellEmpirePointCostDown(EEmpire _empire, uint256 _points) internal {
+  function sellEmpirePointPriceDown(EEmpire _empire, uint256 _points) internal {
     P_PointConfigData memory config = P_PointConfig.get();
     uint256 pointUnit = config.pointUnit;
     require(_points > 0, "[LibPrice] Points must be greater than 0");
     require(_points % pointUnit == 0, "[LibPrice] Points must be a multiple of the point unit (1e18)");
     uint256 wholePoints = _points / pointUnit;
 
-    uint256 currentPointCost = Empire.getPointCost(_empire);
-    uint256 pointCostDecrease = config.pointCostIncrease;
+    uint256 currentPointPrice = Empire.getPointPrice(_empire);
+    uint256 pointPriceDecrease = config.pointPriceIncrease;
 
-    if (currentPointCost >= config.minPointCost + pointCostDecrease * wholePoints) {
-      uint256 newPointCost = currentPointCost - pointCostDecrease * wholePoints;
-      Empire.setPointCost(_empire, newPointCost);
-      HistoricalPointCost.set(_empire, block.timestamp, newPointCost);
+    if (currentPointPrice >= config.minPointPrice + pointPriceDecrease * wholePoints) {
+      uint256 newPointPrice = currentPointPrice - pointPriceDecrease * wholePoints;
+      Empire.setPointPrice(_empire, newPointPrice);
+      HistoricalPointPrice.set(_empire, block.timestamp, newPointPrice);
     } else {
       revert("[LibPrice] Selling points beyond minimum price");
     }

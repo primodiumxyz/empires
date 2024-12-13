@@ -73,10 +73,11 @@ contract PrimodiumTest is MudTest {
     vm.startPrank(prankster);
   }
 
-  function assertEq(EEmpire a, EEmpire b) internal {
+  function assertEq(EEmpire a, EEmpire b) internal pure {
     assertEq(uint8(a), uint8(b));
   }
-  function assertEq(EEmpire a, EEmpire b, string memory message) internal {
+
+  function assertEq(EEmpire a, EEmpire b, string memory message) internal pure {
     assertEq(uint8(a), uint8(b), message);
   }
 

@@ -18,6 +18,8 @@ export const worldInput = {
     UpdatePriceSubsystem: { openAccess: false },
     UpdateShieldEaterSubsystem: { openAccess: false },
     ResetClearLoopSubsystem: { openAccess: false },
+    ResetSystem: { openAccess: false },
+    PayoutSystem: { openAccess: false },
   },
 
   // using as any here for now because of a type issue and also because the enums are not being recognized in our codebase rn
@@ -28,10 +30,13 @@ export const worldInput = {
       key: [],
       schema: {
         turnLengthBlocks: "uint256",
+        nextGameLengthTurns: "uint256",
         goldGenRate: "uint256",
+        gameStartBlock: "uint256",
         gameOverBlock: "uint256",
-        gameStartTimestamp: "uint256",
+        delayBetweenRounds: "uint256",
         empireCount: "uint8",
+        empiresCleared: "uint8",
       },
     },
 
@@ -51,11 +56,11 @@ export const worldInput = {
       schema: {
         pointUnit: "uint256",
         pointRake: "uint256", // times 10_000
-        pointSellTax: "uint256",
-        minPointCost: "uint256",
-        startPointCost: "uint256",
+        pointSellTax: "uint256", // times 10_000
+        minPointPrice: "uint256",
+        startPointPrice: "uint256",
         pointGenRate: "uint256",
-        pointCostIncrease: "uint256",
+        pointPriceIncrease: "uint256",
       },
     },
 
@@ -102,6 +107,16 @@ export const worldInput = {
     WinningEmpire: {
       key: [],
       schema: { empire: "EEmpire" },
+    },
+
+    PayoutManager: {
+      key: [],
+      schema: { contractAddress: "address" },
+    },
+
+    RakeRecipient: {
+      key: [],
+      schema: { recipientAddress: "address" },
     },
 
     /* ----------------------------- Access Control ----------------------------- */
@@ -164,9 +179,9 @@ export const worldInput = {
       key: ["id"],
       schema: {
         id: "EEmpire",
-        origin: "EOrigin",
         pointsIssued: "uint256",
-        pointCost: "uint256",
+        pointPrice: "uint256", // todo: change to pointPrice
+        isDefeated: "bool",
       },
     },
 
@@ -236,6 +251,7 @@ export const worldInput = {
     },
 
     /* -------------------------------- Movement -------------------------------- */
+
     PendingMove: {
       key: ["planetId"],
       schema: {
@@ -243,6 +259,21 @@ export const worldInput = {
         empireId: "EEmpire",
         destinationPlanetId: "bytes32",
       },
+    },
+
+    /* ----------------------------- Arrived ---------------------------- */
+
+    Value_ArrivedMap: {
+      key: ["planetId"],
+      schema: { planetId: "bytes32", value: "uint256" },
+    },
+    Meta_ArrivedMap: {
+      key: ["planetId"],
+      schema: { planetId: "bytes32", stored: "bool", index: "uint256" },
+    },
+    Keys_ArrivedMap: {
+      key: [],
+      schema: { itemKeys: "bytes32[]" },
     },
 
     /* ----------------------------- Magnet ---------------------------- */
@@ -304,6 +335,7 @@ export const worldInput = {
         destinationPlanetId: "bytes32",
         shipCount: "uint256",
         timestamp: "uint256",
+        conquered: "bool",
       },
       type: "offchainTable",
     },
@@ -447,6 +479,20 @@ export const worldInput = {
       type: "offchainTable",
     },
 
+    SellPointsOverrideLog: {
+      key: ["id"],
+      schema: {
+        id: "bytes32",
+        playerId: "bytes32",
+        turn: "uint256",
+        empireId: "EEmpire",
+        ethReceived: "uint256",
+        overrideCount: "uint256",
+        timestamp: "uint256",
+      },
+      type: "offchainTable",
+    },
+
     // Override impact logs
     AcidDamageOverrideLog: {
       key: ["id"],
@@ -454,6 +500,7 @@ export const worldInput = {
         id: "bytes32",
         planetId: "bytes32",
         shipsDestroyed: "uint256",
+        timestamp: "uint256",
       },
     },
 
@@ -464,17 +511,18 @@ export const worldInput = {
         planetId: "bytes32",
         shieldsDestroyed: "uint256",
         damageType: "EShieldEaterDamageType",
+        timestamp: "uint256",
       },
     },
 
     /* ----------------------------- Historical data ---------------------------- */
 
-    HistoricalPointCost: {
+    HistoricalPointPrice: {
       key: ["empire", "timestamp"],
       schema: {
         empire: "EEmpire",
         timestamp: "uint256",
-        cost: "uint256", // the cost of each point for this empire in wei
+        price: "uint256", // the price of each point for this empire in wei
       },
       type: "offchainTable",
     },

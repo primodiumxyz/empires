@@ -1,21 +1,25 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ServerIcon } from "@heroicons/react/24/solid";
 
-import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 import { AutoSizer } from "@/components/core/AutoSizer";
+import { Badge } from "@/components/core/Badge";
 import { Button } from "@/components/core/Button";
 import { Dropdown } from "@/components/core/Dropdown";
 import { Modal } from "@/components/core/Modal";
 import { TextInput } from "@/components/core/TextInput";
-import { setupCheatcodes } from "@/config/setupCheatcodes";
-import { useContractCalls } from "@/hooks/useContractCalls";
-import { useDripAccount } from "@/hooks/useDripAccount";
-import { useGame } from "@/hooks/useGame";
+import { useCheatcodes } from "@/hooks/useCheatcodes";
+import { usePlayerAccount } from "@/hooks/usePlayerAccount";
 import { CheatcodeInputs, CheatcodeInputsBase, Cheatcode as CheatcodeType, formatValue } from "@/util/cheatcodes";
 import { cn } from "@/util/client";
 import { withTransactionStatus } from "@/util/notify";
 
 import "@/index.css";
+
+const LabelToVariant = {
+  dev: "glass",
+  admin: "error",
+  bearer: "success",
+} as const;
 
 /* -------------------------------------------------------------------------- */
 /*                                 CHEATCODES                                 */
@@ -27,11 +31,8 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const core = useCore();
-  const game = useGame();
+  const cheatcodes = useCheatcodes();
   const { playerAccount } = usePlayerAccount();
-  const contractCalls = useContractCalls();
-  const requestDrip = useDripAccount();
 
   useEffect(() => {
     const closeCheatcodes = (e: MouseEvent) => {
@@ -45,16 +46,14 @@ export const Cheatcodes = ({ className }: { className?: string }) => {
     return () => document.removeEventListener("click", closeCheatcodes);
   }, [open]);
 
-  if (!playerAccount) return null;
-  const cheatcodes = setupCheatcodes({ core, game, playerAccount, contractCalls, requestDrip });
-
+  if (!cheatcodes || !playerAccount) return null;
   return (
     <div className={className}>
       <Modal title="Cheatcodes">
         <Modal.Button variant="warning">
           <ServerIcon className="size-6" /> CHEATCODES
         </Modal.Button>
-        <Modal.Content className={cn("w-1/2", activeTab == undefined && "h-screen")}>
+        <Modal.Content className={cn("w-1/2 min-w-[500px]", activeTab == undefined && "h-screen")}>
           {activeTab !== undefined && (
             <Button
               variant="primary"
@@ -103,11 +102,13 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
   const {
     title,
     caption,
+    label,
     inputs,
     execute: _execute,
     loading: getLoadingMsg,
     success: getSuccessMsg,
     error: getErrorMsg,
+    disabled = false,
     bg = "bg-gray-500/10",
   } = cheatcode;
   const [inputValues, setInputValues] = useState<CheatcodeInputs<T>>({} as CheatcodeInputs<T>);
@@ -141,13 +142,18 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
         className={cn(
           "h-14 cursor-pointer rounded-box bg-neutral px-4 py-2 transition-colors hover:bg-primary",
           activeTab === undefined && bg,
+          disabled && "cursor-not-allowed opacity-50",
         )}
-        onClick={() => setActiveTab(activeTab === index ? undefined : index)}
+        onClick={() => !disabled && setActiveTab(activeTab === index ? undefined : index)}
+        aria-disabled={disabled}
       >
-        <h2 className="text-sm font-semibold text-gray-300">
-          {index + 1}. {title}
-        </h2>
-        <p className="whitespace-nowrap text-xs text-gray-400">{caption}</p>
+        <div className="flex items-center justify-between gap-1">
+          <h2 className="text-sm font-semibold text-gray-300">
+            {index + 1}. {title}
+          </h2>
+          {label && <Badge variant={LabelToVariant[label]}>{label}</Badge>}
+        </div>
+        <div className="whitespace-nowrap text-xs text-gray-400">{caption}</div>
       </div>
       <div
         className={cn("hidden gap-2 bg-neutral px-4 py-2 md:grid-cols-2 xl:grid-cols-4", activeTab === index && "grid")}
@@ -169,7 +175,9 @@ const Cheatcode = <T extends CheatcodeInputsBase>({
 
           return (
             <div key={inputKey} className="flex flex-col gap-1 text-sm">
-              <label className="text-gray-300">{label}</label>
+              <span id={inputKey} className="text-gray-300">
+                {label}
+              </span>
               {options ? (
                 <>
                   <TextInput

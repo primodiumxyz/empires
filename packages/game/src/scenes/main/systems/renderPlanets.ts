@@ -1,3 +1,4 @@
+import { EEmpire } from "@primodiumxyz/contracts";
 import { convertAxialToCartesian, Core } from "@primodiumxyz/core";
 import { Entity, namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { Planet } from "@game/lib/objects/Planet";
@@ -27,7 +28,13 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
     });
 
     planetObj
-      .onClick(() => {
+      .onClick((pointer: Phaser.Input.Pointer) => {
+        // TODO: vv this is madness, fix this cleanly (click on trading view chart propagating to below)
+        if (
+          (pointer.event.srcElement as HTMLElement)?.parentElement?.parentElement?.parentElement?.parentElement
+            ?.parentElement?.className === "tv-lightweight-charts"
+        )
+          return;
         if (tables.SelectedPlanet.get()?.value === entity) {
           tables.SelectedPlanet.remove();
           return;
@@ -89,6 +96,26 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       .play();
   }
 
+  const highlightNextTurnPlanets = (empireTurn: EEmpire) => {
+    const empireCount = tables.P_GameConfig.get()?.empireCount ?? 1;
+    const prevEmpireTurn = (empireTurn - 1 === 0 ? empireCount : empireTurn - 1) as EEmpire;
+
+    const empireTurnPlanets = tables.Planet.getAllWith({ empireId: empireTurn });
+    const prevEmpireTurnPlanets = tables.Planet.getAllWith({ empireId: prevEmpireTurn });
+
+    empireTurnPlanets.forEach((planetId) => {
+      const planet = scene.objects.planet.get(planetId);
+      if (!planet) return;
+      planet.highlightHex(true);
+    });
+
+    prevEmpireTurnPlanets.forEach((planetId) => {
+      const planet = scene.objects.planet.get(planetId);
+      if (!planet) return;
+      planet.highlightHex(false);
+    });
+  };
+
   tables.HoveredPlanet.watch({
     world: systemsWorld,
     onChange: ({ properties: { current, prev } }) => {
@@ -109,8 +136,16 @@ export const renderPlanets = (scene: PrimodiumScene, core: Core) => {
       if (planet) {
         planet.setShieldCount(current?.shieldCount ?? 0n);
         planet.setShipCount(current?.shipCount ?? 0n);
-        planet.setGoldCount(current?.goldCount ?? 0n);
+        planet.setIridiumCount(current?.goldCount ?? 0n);
       }
+    },
+  });
+
+  tables.Turn.watch({
+    world: systemsWorld,
+    onChange: ({ properties: { current } }) => {
+      if (!current) return;
+      highlightNextTurnPlanets(current.empire);
     },
   });
 

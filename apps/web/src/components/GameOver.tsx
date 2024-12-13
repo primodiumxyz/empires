@@ -42,6 +42,10 @@ export const GameOver = ({ className }: { className?: string }) => {
 };
 
 const PlayerPot = ({ entity }: { entity: Entity }) => {
+  const handleClick = () => {
+    window.open('/payman', '_blank', 'rel=noreferrer');
+  };
+
   const { empire } = useWinningEmpire();
   const { tables } = useCore();
   const { pot } = usePot();
@@ -58,7 +62,7 @@ const PlayerPot = ({ entity }: { entity: Entity }) => {
         <p>
           You earned <Price wei={playerPot} />!
         </p>
-        <Button variant="primary" size="sm" className="col-span-2 mt-1 w-full" onClick={calls.withdrawEarnings}>
+        <Button variant="primary" size="sm" className="col-span-2 mt-1 w-full" onClick={handleClick}>
           Withdraw
         </Button>
       </>

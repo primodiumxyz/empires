@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import { TxReceipt } from "@primodiumxyz/core";
 
 type Primitive = string | number | bigint | boolean;
@@ -17,13 +19,15 @@ export type CheatcodeInputs<T extends CheatcodeInputsBase> = {
 };
 
 export type Cheatcode<T extends CheatcodeInputsBase = CheatcodeInputsBase> = {
-  title: string;
-  caption: string;
+  title: string | ReactNode;
+  caption: string | ReactNode;
+  label?: "dev" | "admin" | "bearer";
   inputs: T;
   execute: (args: CheatcodeInputs<T>) => Promise<TxReceipt | { success: boolean; error?: string }>;
   loading?: (args: CheatcodeInputs<T>) => string;
   success?: (args: CheatcodeInputs<T>) => string;
   error?: (args: CheatcodeInputs<T>) => string;
+  disabled?: boolean;
   bg?: string;
 };
 

@@ -14,6 +14,7 @@ import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useEmpires } from "@/hooks/useEmpires";
 import { usePointPrice } from "@/hooks/usePointPrice";
+import { usePot } from "@/hooks/usePot";
 import { DEFAULT_EMPIRE } from "@/util/lookups";
 
 export const SellPoints = () => {
@@ -23,6 +24,7 @@ export const SellPoints = () => {
   const empires = useEmpires();
   const { playerAccount, login } = usePlayerAccount();
   const calls = useContractCalls();
+  const { gameEndPot } = usePot();
 
   const playerPoints = playerAccount
     ? tables.Value_PointsMap.getWithKeys({ empireId: selectedEmpire, playerId: playerAccount.entity })?.value ?? 0n
@@ -37,8 +39,9 @@ export const SellPoints = () => {
   };
 
   const { price: pointsToWei, message } = usePointPrice(selectedEmpire, Number(amount));
+  const minSalePrice = (pointsToWei * 90n) / 100n;  // revert if receive less than 90% expected value
   const handleSubmit = () => {
-    calls.sellPoints(selectedEmpire, BigInt(Number(amount) * POINTS_UNIT));
+    calls.sellPoints(selectedEmpire, BigInt(Number(amount) * POINTS_UNIT), minSalePrice, gameEndPot);
 
     setAmount("0");
   };

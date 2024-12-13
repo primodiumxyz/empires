@@ -45,18 +45,18 @@ const EmpirePoints = ({ empire, playerId }: { empire: EEmpire; playerId: Entity 
   const pctTimes10000 = empirePoints > 0 ? (playerPoints * 10000n) / empirePoints : 0n;
   const pct = Number(pctTimes10000) / 100;
 
-  const { price: pointCostWei } = usePointPrice(empire, Number(formatEther(playerPoints)));
+  const { price: pointPriceWei } = usePointPrice(empire, Number(formatEther(playerPoints)));
   if (playerPoints === 0n) {
     return null;
   }
 
   return (
-    <div className={cn("flex h-10 w-full items-center justify-between gap-5 border-none py-1 lg:h-14")}>
-      <EmpireLogo empireId={empire} size="lg" className = "h-10 lg:h-12" />
+    <div className={cn("flex h-10 w-full items-center justify-between gap-5 border-none py-1 mb-0 lg:h-14 sm:mb-1")}>
+      <EmpireLogo empireId={empire} size="lg" className = "h-10 w-auto lg:h-12" />
       <div className="pointer-events-auto flex flex-col justify-end text-right">
         <p className="text-base">{formatEther(playerPoints)} pts</p>
         <div className="hidden lg:block">
-          <Price wei={pointCostWei} />
+          <Price wei={pointPriceWei} />
           {pct > 0 && <p className="text-xs opacity-70">({formatNumber(pct)}%)</p>}
         </div>
       </div>

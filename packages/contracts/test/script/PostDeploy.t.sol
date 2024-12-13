@@ -11,7 +11,7 @@ contract PostDeployTest is PrimodiumTest {
   function setUp() public override {
     super.setUp();
   }
-  function testRegisterAdminNamespace() public {
+  function testRegisterAdminNamespace() public view {
     // Expect the caller to be the namespace owner
     assertEq(NamespaceOwner.get(ADMIN_NAMESPACE_ID), creator, "caller should be namespace owner");
 

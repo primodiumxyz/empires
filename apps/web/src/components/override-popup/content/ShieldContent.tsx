@@ -7,38 +7,45 @@ import { Button } from "@/components/core/Button";
 import { NumberInput } from "@/components/core/NumberInput";
 import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
-import useWinningEmpire from "@/hooks/useWinningEmpire";
+import { useTimeLeft } from "@/hooks/useTimeLeft";
 
 export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
   const { chargeShield } = useContractCalls();
-  const { gameOver } = useWinningEmpire();
+  const { gameActive } = useTimeLeft();
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? EEmpire.NULL;
   const [inputValue, setInputValue] = useState("1");
-  const chargeShieldPriceWei = useOverrideCost(EOverride.ChargeShield, planetEmpire, BigInt(inputValue));
+  const { expected: chargeShieldPriceWei, max: chargeShieldPriceWeiMax } = useOverrideCost(
+    EOverride.ChargeShield,
+    planetEmpire,
+    BigInt(inputValue),
+  );
   const chargeShieldPointsReceived = useOverridePointsReceived(
     EOverride.ChargeShield,
     planetEmpire,
     BigInt(inputValue),
   );
 
-  const supportDisabled = gameOver || Number(planetEmpire) === 0;
+  const supportDisabled = !gameActive || Number(planetEmpire) === 0;
   const { playerAccount, login } = usePlayerAccount();
 
   return (
     <div className="flex w-full flex-col items-center gap-2">
-      <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-1">
+        <PointsReceived points={chargeShieldPointsReceived} inline />
+        <NumberInput min={1} max={Infinity} count={inputValue} onChange={setInputValue} />
+
         {!!playerAccount && (
-          <TransactionQueueMask id={`${entity}-add-shield`}>
+          <TransactionQueueMask id={`${entity}-add-shield`} className="relative">
             <Button
               onClick={async () => {
-                await chargeShield(entity, BigInt(inputValue), chargeShieldPriceWei);
+                await chargeShield(entity, planetEmpire, BigInt(inputValue), chargeShieldPriceWeiMax);
                 setInputValue("1");
                 tables.SelectedPlanet.remove();
               }}
@@ -48,6 +55,7 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             >
               ADD SHIELDS
             </Button>
+            <SlippageSettings className="absolute left-[105%] top-1/2 -translate-y-1/2" disabled={supportDisabled} />
           </TransactionQueueMask>
         )}
         {!playerAccount && (
@@ -55,11 +63,13 @@ export const ShieldContent: React.FC<{ entity: Entity }> = ({ entity }) => {
             LOGIN TO ADD SHIELDS
           </Button>
         )}
-        <p className="-mt-1 w-fit rounded-box rounded-t-none bg-secondary/25 p-1 text-center text-xs opacity-75">
+        <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
           <Price wei={chargeShieldPriceWei} />
-        </p>
+          <p className="text-[0.6rem] opacity-70">
+            Max <Price wei={chargeShieldPriceWeiMax} />
+          </p>
+        </div>
       </div>
-      <PointsReceived points={chargeShieldPointsReceived} inline />
     </div>
   );
 };

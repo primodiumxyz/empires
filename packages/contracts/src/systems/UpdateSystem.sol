@@ -39,4 +39,10 @@ contract UpdateSystem is EmpiresSystem {
     world.Empires__updatePrice();
     _updateTurn();
   }
+
+  /**
+   * @dev Modifiers execute winner update logic.  Just calling the function implicitly updates winner.
+   * @notice No, I don't like this, but it's what was already wrote.
+   */
+  function updateWinner() public _onlyGameOver _onlyAdminOrCanUpdate {}
 }

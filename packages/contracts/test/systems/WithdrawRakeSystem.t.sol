@@ -17,11 +17,15 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EEmpire, EOverride } from "codegen/common.sol";
 import { LibPrice } from "libraries/LibPrice.sol";
 import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
+import { Role } from "codegen/index.sol";
+import { ERole } from "codegen/common.sol";
 
 contract WithdrawRakeSystemTest is PrimodiumTest {
   bytes32 planetId;
   uint256 turnLength = 100;
   uint256 value = 100 ether;
+  uint256 cost;
+  ResourceId rakeSystemId;
 
   function setUp() public override {
     super.setUp();
@@ -35,24 +39,42 @@ contract WithdrawRakeSystemTest is PrimodiumTest {
 
     world.registerSystem(systemId, system, true);
     world.registerFunctionSelector(systemId, "echoValue()");
-  }
 
-  function testWithdrawRake() public {
     P_PointConfig.setPointRake(5000);
     switchPrank(alice);
-    uint256 cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
-    world.Empires__createShip{ value: cost }(planetId, 1);
-    assertEq(Balances.get(ADMIN_NAMESPACE_ID), cost / 2, "rake value correct");
+    cost = LibPrice.getTotalCost(EOverride.CreateShip, Planet.getEmpireId(planetId), 1);
+    world.Empires__createShip{ value: cost }(planetId, Planet.getEmpireId(planetId), 1);
 
-    ResourceId systemId = WorldResourceIdLib.encode({
+    rakeSystemId = WorldResourceIdLib.encode({
       typeId: RESOURCE_SYSTEM,
       namespace: WorldResourceIdInstance.getNamespace(ADMIN_NAMESPACE_ID),
       name: "WithdrawRakeSyst"
     });
+  }
+
+  function testWithdrawRakeNonAdmin() public {
+    vm.expectRevert("[EmpiresSystem] Only admin");
+    world.call(rakeSystemId, abi.encodeCall(WithdrawRakeSystem.withdrawRake, ()));
+  }
+
+  function testWithdrawRake() public {
+    assertEq(Balances.get(ADMIN_NAMESPACE_ID), cost / 2, "rake value correct");
     vm.deal(alice, 0);
-    world.call(systemId, abi.encodeCall(WithdrawRakeSystem.withdrawRake, ()));
+
+    switchPrank(creator);
+    Role.set(alice, ERole.Admin);
+    switchPrank(alice);
+    world.call(rakeSystemId, abi.encodeCall(WithdrawRakeSystem.withdrawRake, ()));
 
     assertEq(alice.balance, cost / 2, "alice balance");
+    assertEq(Balances.get(ADMIN_NAMESPACE_ID), 0, "admin balance");
+  }
+
+  function testWithdrawRakeCreator() public {
+    switchPrank(creator);
+    uint256 initialBalance = creator.balance;
+    world.call(rakeSystemId, abi.encodeCall(WithdrawRakeSystem.withdrawRake, ()));
+    assertEq(creator.balance, initialBalance + cost / 2, "creator balance");
     assertEq(Balances.get(ADMIN_NAMESPACE_ID), 0, "admin balance");
   }
 }

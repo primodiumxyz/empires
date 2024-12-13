@@ -19,12 +19,36 @@ export const getInitialQuery = ({
   return {
     address: worldAddress,
     queries: [
+      // Config
       ...configTableQueries,
-      { tableId: tables.Planet.tableId },
-      { tableId: tables.Turn.tableId },
-      { tableId: tables.Value_PlayersMap.tableId },
       { tableId: tables.FunctionSelectors.tableId },
       { tableId: tables.FunctionSignatures.tableId },
+      { tableId: tables.Role.tableId },
+      { tableId: tables.Ready.tableId },
+      // Base
+      { tableId: tables.Planet.tableId },
+      { tableId: tables.Empire.tableId },
+      { tableId: tables.Turn.tableId },
+      { tableId: tables.WinningEmpire.tableId },
+      // Overrides
+      { tableId: tables.OverrideCost.tableId },
+      { tableId: tables.ShieldEater.tableId },
+      { tableId: tables.Magnet.tableId },
+      { tableId: tables.MagnetTurnPlanets.tableId },
+      { tableId: tables.Value_AcidPlanetsSet.tableId },
+      // Points
+      { tableId: tables.Value_PlayersMap.tableId },
+      { tableId: tables.Value_PointsMap.tableId },
+      { tableId: tables.HistoricalPointPrice.tableId },
+      // Routines
+      { tableId: tables.PendingMove.tableId },
+      // Metadata
+      { tableId: tables.Keys_EmpirePlanetsSet.tableId },
+      { tableId: tables.Keys_PlanetsSet.tableId },
+      { tableId: tables.Keys_PointsMap.tableId },
+      { tableId: tables.Keys_CitadelPlanetsSet.tableId },
+      { tableId: tables.Meta_EmpirePlanetsSet.tableId },
+      { tableId: tables.Meta_PointsMap.tableId },
     ],
   };
 };

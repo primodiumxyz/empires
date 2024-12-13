@@ -5,6 +5,7 @@ import { EmpiresSystem } from "systems/EmpiresSystem.sol";
 import { LibMoveShips } from "libraries/LibMoveShips.sol";
 import { LibRoutine } from "libraries/LibRoutine.sol";
 import { Planet, P_GameConfig } from "codegen/index.sol";
+import { ArrivedMap } from "adts/ArrivedMap.sol";
 import { RoutineThresholds } from "src/Types.sol";
 
 contract UpdateEmpiresSubsystem is EmpiresSystem {
@@ -20,5 +21,8 @@ contract UpdateEmpiresSubsystem is EmpiresSystem {
           P_GameConfig.getEmpireCount()
       );
     }
+
+    // clear temporary arrived table
+    ArrivedMap.clear();
   }
 }

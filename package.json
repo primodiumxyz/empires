@@ -3,10 +3,12 @@
   "version": "0.1.9",
   "description": "",
   "scripts": {
-    "dev": "turbo dev dev:indexer --continue",
+    "dev": "turbo dev dev:indexer dev:keeper --continue",
     "build": "turbo build",
+    "clean": "rm -rf ./node_modules && rm -rf ./packages/assets/node_modules && rm -rf ./packages/contracts/node_modules && rm -rf ./packages/contracts/src/codegen && rm -rf ./packages/core/node_modules && rm -rf ./packages/engine/node_modules && rm -rf ./packages/game/node_modules",
     "clean:indexer": "pnpm clean-local-docker-indexer",
     "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
+    "dev:keeper": "cd apps/keeper && pnpm start",
     "build:contracts": "turbo --filter @primodiumxyz/contracts build",
     "build:webapp": "turbo --filter @primodiumxyz/webapp build"
   },

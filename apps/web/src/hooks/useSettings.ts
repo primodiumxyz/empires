@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { EViewMode } from "@primodiumxyz/core";
+import { CHART_TICK_INTERVALS } from "@primodiumxyz/core";
 import {
   createLocalBoolTable,
   createLocalNumberTable,
@@ -16,32 +16,6 @@ const settingsWorld = createWorld();
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- Font ---------------------------------- */
-const FontStyle = createLocalTable(
-  settingsWorld,
-  {
-    family: Type.String,
-    size: Type.String,
-  },
-  {
-    id: "FontStyle",
-    persist: true,
-  },
-);
-
-export const fontStyleOptions = {
-  family: ["pixel", "mono"],
-  size: ["sm", "md"],
-} as const;
-
-FontStyle.set({
-  family: fontStyleOptions.family[0],
-  size: fontStyleOptions.size[0],
-});
-
-const ShowBlockchainUnits = createLocalBoolTable(settingsWorld, {
-  id: "ShowBlockchainUnits",
-  persist: true,
-});
 
 const Dripped = createLocalBoolTable(settingsWorld, {
   id: "Dripped",
@@ -53,63 +27,43 @@ const MusicPlaying = createLocalBoolTable(settingsWorld, {
   persist: true,
 });
 
-ShowBlockchainUnits.set({ value: false });
-
 const SelectedTab = createLocalNumberTable(settingsWorld, {
   id: "SelectedTab",
   persist: true,
   version: "1",
 });
 
-const ViewMode = createLocalNumberTable(settingsWorld, { id: "ViewMode", persist: true, version: "1" });
+const ShowIntro = createLocalBoolTable(settingsWorld, { id: "ShowIntro", persist: true });
 
 const OpenRoutineProbabilities = createLocalBoolTable(settingsWorld, { id: "OpenRoutineProbabilities", persist: true });
 
-if (!ViewMode.get()?.value) {
-  ViewMode.set({ value: EViewMode.Dashboard });
-}
+const ChartConfig = createLocalTable(
+  settingsWorld,
+  { tickInterval: Type.Number },
+  { id: "ChartConfig", persist: true, version: "1" },
+);
 
-const ShowBanner = createLocalBoolTable(settingsWorld, { id: "ShowBanner", persist: true });
-if (!ShowBanner.get()?.value) {
-  ShowBanner.set({ value: true });
-}
+// Display routine logs in the action log
+const ShowRoutineLogs = createLocalBoolTable(settingsWorld, { id: "ShowRoutineLogs", persist: true });
 /* -------------------------------------------------------------------------- */
 /*                                  SETTINGS                                  */
 /* -------------------------------------------------------------------------- */
 
+export type Settings = ReturnType<typeof useSettings>;
 export const useSettings = () => {
-  // font
-  const fontStyle = FontStyle.use();
-  const setFontStyleFamily = (family: (typeof fontStyleOptions.family)[number]) => FontStyle.update({ family });
-  const setFontStyleSize = (size: (typeof fontStyleOptions.size)[number]) => FontStyle.update({ size });
-
   useEffect(() => {
     return () => {
       settingsWorld.dispose();
     };
   }, []);
 
-  const enabled = ShowBlockchainUnits.use()?.value ?? false;
-  const showBanner = ShowBanner.use()?.value ?? false;
   return {
-    fontStyle: {
-      family: fontStyle?.family ?? fontStyleOptions.family[0],
-      size: fontStyle?.size ?? fontStyleOptions.size[0],
-      setFamily: setFontStyleFamily,
-      setSize: setFontStyleSize,
-    },
-    showBlockchainUnits: {
-      enabled,
-      setEnabled: (enabled: boolean) => ShowBlockchainUnits.update({ value: enabled }),
-    },
-    showBanner: {
-      enabled: showBanner,
-      setEnabled: (enabled: boolean) => ShowBanner.update({ value: enabled }),
-    },
     Dripped,
     MusicPlaying,
     SelectedTab,
-    ViewMode,
+    ChartConfig,
     OpenRoutineProbabilities,
+    ShowRoutineLogs,
+    ShowIntro,
   };
 };

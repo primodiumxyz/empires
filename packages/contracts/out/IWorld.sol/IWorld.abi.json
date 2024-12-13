@@ -27,6 +27,11 @@
         "internalType": "bytes32"
       },
       {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
+      },
+      {
         "name": "_overrideCount",
         "type": "uint256",
         "internalType": "uint256"
@@ -39,7 +44,13 @@
     "type": "function",
     "name": "Empires__clearLoop",
     "inputs": [],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "resetComplete",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
     "stateMutability": "nonpayable"
   },
   {
@@ -50,6 +61,11 @@
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
       },
       {
         "name": "_overrideCount",
@@ -364,6 +380,36 @@
   },
   {
     "type": "function",
+    "name": "Empires__distributeFunds",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__getWinners",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "Empires__pause",
     "inputs": [],
     "outputs": [],
@@ -377,6 +423,11 @@
         "name": "_planetId",
         "type": "bytes32",
         "internalType": "bytes32"
+      },
+      {
+        "name": "_empireId",
+        "type": "uint8",
+        "internalType": "enum EEmpire"
       }
     ],
     "outputs": [],
@@ -421,8 +472,20 @@
   {
     "type": "function",
     "name": "Empires__resetGame",
-    "inputs": [],
-    "outputs": [],
+    "inputs": [
+      {
+        "name": "_gameStartBlock",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
     "stateMutability": "nonpayable"
   },
   {
@@ -438,6 +501,88 @@
         "name": "_points",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "minSaleValue",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__setGameConfigAndTurn",
+    "inputs": [
+      {
+        "name": "_gameConfig",
+        "type": "tuple",
+        "internalType": "struct P_GameConfigData",
+        "components": [
+          {
+            "name": "turnLengthBlocks",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "nextGameLengthTurns",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "goldGenRate",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "gameStartBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "gameOverBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "delayBetweenRounds",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "empireCount",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "empiresCleared",
+            "type": "uint8",
+            "internalType": "uint8"
+          }
+        ]
+      },
+      {
+        "name": "_turn",
+        "type": "tuple",
+        "internalType": "struct TurnData",
+        "components": [
+          {
+            "name": "nextTurnBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "empire",
+            "type": "uint8",
+            "internalType": "enum EEmpire"
+          },
+          {
+            "name": "value",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
       }
     ],
     "outputs": [],
@@ -537,6 +682,13 @@
   {
     "type": "function",
     "name": "Empires__updateShieldEater",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Empires__updateWinner",
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"

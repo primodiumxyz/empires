@@ -21,7 +21,7 @@ contract LibPointTest is PrimodiumTest {
     pointUnit = P_PointConfig.getPointUnit();
   }
 
-  function testInitEmptyEmpireIssuedPoints() public {
+  function testInitEmptyEmpireIssuedPoints() public view {
     uint8 empireCount = P_GameConfig.getEmpireCount();
     for (uint8 i = 1; i <= empireCount; i++) {
       assertEq(Empire.getPointsIssued(EEmpire(i)), 0, "Empire points at game start should be 0");
@@ -76,6 +76,14 @@ contract LibPointTest is PrimodiumTest {
     assertEq(PointsMap.getValue(EEmpire.Red, bobId), 0, "Bob's Red Empire points should be 0");
     assertEq(PointsMap.getValue(EEmpire.Blue, bobId), 0, "Bob's Blue Empire points should be 0");
     assertEq(PointsMap.getValue(EEmpire.Green, bobId), 7 * pointUnit, "Bob's Green Empire points should be 7");
+  }
+
+  function testIssuePointsDefeatedEmpire() public {
+    vm.startPrank(creator);
+    Empire.setIsDefeated(EEmpire.Red, true);
+    LibPoint.issuePoints(EEmpire.Red, aliceId, 100 * pointUnit);
+    assertEq(Empire.getPointsIssued(EEmpire.Red), 0, "Red Empire points issued should be 0");
+    assertEq(PointsMap.getValue(EEmpire.Red, aliceId), 0, "Alice's Red Empire points should be 0");
   }
 
   function testRemovePoints() public {

@@ -19,8 +19,9 @@ export const renderPendingMoves = (scene: PrimodiumScene, core: Core, { enqueue 
 
       if (!planet) return;
 
+      const visible = !!scene.tables.GameState.get()?.visible;
       enqueue(() => {
-        planet.setPendingMove(current.destinationPlanetId as Entity);
+        planet.setPendingMove(current.destinationPlanetId as Entity, visible);
       }, 100);
     },
     onUpdate: ({ entity, properties: { current } }) => {
@@ -30,8 +31,9 @@ export const renderPendingMoves = (scene: PrimodiumScene, core: Core, { enqueue 
 
       if (!planet) return;
 
+      const visible = !!scene.tables.GameState.get()?.visible;
       enqueue(() => {
-        planet.setPendingMove(current.destinationPlanetId as Entity);
+        planet.setPendingMove(current.destinationPlanetId as Entity, visible);
       }, 100);
     },
     onExit: ({ entity }) => {

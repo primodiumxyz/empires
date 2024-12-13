@@ -66,16 +66,16 @@ import { PlanetsSet } from "adts/PlanetsSet.sol";
 import { EmpirePlanetsSet } from "adts/EmpirePlanetsSet.sol";
 import { CitadelPlanetsSet } from "adts/CitadelPlanetsSet.sol";
 import { Planet, PlanetData, Empire } from "codegen/index.sol";
-import { EEmpire, EOrigin, EOverride } from "codegen/common.sol";
+import { EEmpire, EOverride } from "codegen/common.sol";
 import { coordToId } from "src/utils.sol";
 
 function createPlanets() {
 
   bytes32 planetId;
 
-  Empire.set(EEmpire.Red, EOrigin.North, 0, 0);
-  Empire.set(EEmpire.Blue, EOrigin.North, 0, 0);
-  Empire.set(EEmpire.Green, EOrigin.North, 0, 0);
+  Empire.set(EEmpire.Red, 0, 0, false);
+  Empire.set(EEmpire.Blue, 0, 0, false);
+  Empire.set(EEmpire.Green, 0, 0, false);
   PlanetData memory planetData = PlanetData({
     q: 0,
     r: 0,

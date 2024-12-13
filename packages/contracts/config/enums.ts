@@ -12,12 +12,6 @@ export enum EEmpire {
   LENGTH,
 }
 
-export enum EOrigin {
-  North = 1,
-  Southeast,
-  Southwest,
-  LENGTH,
-}
 export enum EDirection {
   None = 1,
   East,
@@ -69,7 +63,6 @@ export enum ERole {
 
 export const MUDEnums = {
   EEmpire: enumToArray(EEmpire, { skipNull: true }),
-  EOrigin: enumToArray(EOrigin),
   EDirection: enumToArray(EDirection),
   EMovement: enumToArray(EMovement),
   ERoutine: enumToArray(ERoutine),
