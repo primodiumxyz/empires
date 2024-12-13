@@ -62,7 +62,7 @@ const baseSepolia: ChainConfig = {
   rpcUrls: {
     default: {
       // this gets exposed in the client anyway, so it's easier to put it here directly for the keeper as well
-      http: ["https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"],
+      http: ["https://base-sepolia.g.alchemy.com/v2/dndQwsapq393_Ws-KBNM0nUCvUoWD2iC"],
     },
     public: {
       http: ["https://sepolia.base.org"],
