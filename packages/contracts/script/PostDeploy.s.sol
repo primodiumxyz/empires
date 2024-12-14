@@ -16,7 +16,6 @@ import { ERole } from "codegen/common.sol";
 import { StandardDelegationsModule } from "@latticexyz/world-modules/src/modules/std-delegations/StandardDelegationsModule.sol";
 import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
 import { ResourceId, WorldResourceIdLib, WorldResourceIdInstance } from "@latticexyz/world/src/WorldResourceId.sol";
-import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
 import { PayoutSystem } from "systems/PayoutSystem.sol";
 import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 import { EMPIRES_NAMESPACE_ID, ADMIN_NAMESPACE_ID } from "src/constants.sol";
@@ -34,7 +33,7 @@ contract PostDeploy is Script {
 
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address rakeRecipientAddress = vm.envAddress("RAKE_RECIPIENT_ADDRESS");
-    uint256 matchInterval = vm.envUint("MATCH_INTERVAL") + block.number;
+    uint256 firstRound = vm.envUint("FIRST_ROUND_DELAY_BLOCKS") + block.number;
 
     /*//////////////////////////////////////////////////////////////
                             PAYOUT MANAGER
@@ -65,7 +64,7 @@ contract PostDeploy is Script {
     //////////////////////////////////////////////////////////////*/
 
     console.log("block.number", block.number);
-    require(matchInterval > block.number, "[PostDeploy] First match must start in the future");
+    require(firstRound > block.number, "[PostDeploy] First match must start in the future");
 
     IWorld world = IWorld(worldAddress);
     console.log("world address:", worldAddress);
@@ -86,25 +85,16 @@ contract PostDeploy is Script {
 
     P_GameConfigData memory config = P_GameConfig.get();
 
-    P_GameConfig.setGameStartBlock(matchInterval);
-    P_GameConfig.setGameOverBlock(matchInterval + config.nextGameLengthTurns * config.turnLengthBlocks);
+    P_GameConfig.setGameStartBlock(firstRound);
+    P_GameConfig.setGameOverBlock(firstRound + config.nextGameLengthTurns * config.turnLengthBlocks);
 
     createPlanets();
     LibShieldEater.initialize();
     initPrice();
-    Turn.setNextTurnBlock(matchInterval + config.turnLengthBlocks);
+    Turn.setNextTurnBlock(firstRound + config.turnLengthBlocks);
 
     // register the admin namespace that stores raked eth
     world.registerNamespace(ADMIN_NAMESPACE_ID);
-
-    ResourceId withdrawSystemId = WorldResourceIdLib.encode({
-      typeId: RESOURCE_SYSTEM,
-      namespace: WorldResourceIdInstance.getNamespace(ADMIN_NAMESPACE_ID),
-      name: "WithdrawRakeSyst"
-    });
-    WithdrawRakeSystem withdrawSystem = new WithdrawRakeSystem();
-    world.registerSystem(withdrawSystemId, withdrawSystem, true);
-    world.registerFunctionSelector(withdrawSystemId, "withdrawRake()");
 
     address adminAddress = vm.addr(deployerPrivateKey);
     Role.set(adminAddress, ERole.Admin);

@@ -14,7 +14,6 @@ import { WinningEmpire, Empire, PayoutManager, RakeRecipient } from "codegen/ind
 import { EEmpire } from "codegen/common.sol";
 
 import { EmpiresSystem } from "systems/EmpiresSystem.sol";
-import { WithdrawRakeSystem } from "systems/WithdrawRakeSystem.sol";
 
 import { PlayersMap } from "adts/PlayersMap.sol";
 import { PointsMap } from "adts/PointsMap.sol";
