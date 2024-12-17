@@ -12,14 +12,14 @@ const PayoutManager = () => {
     const refreshMs: number = 2000
 
     const {
-        network: { publicClient },
+        // network: { publicClient },
         tables,
     } = useCore();
 
     const [winnings, setWinnings] = useState<bigint | undefined>();
 
     const playerAddress = usePlayerAccount().playerAccount?.address;
-    // const publicClient = usePlayerAccount().playerAccount?.publicClient ?? null;
+    const publicClient = usePlayerAccount().playerAccount?.publicClient ?? null;
     const walletClient = usePlayerAccount().playerAccount?.walletClient ?? null;
 
     console.log(walletClient?.chain.rpcUrls)
@@ -30,6 +30,7 @@ const PayoutManager = () => {
     const playerWinningsFloat = parseFloat(formatEther(playerWinnings)).toFixed(2);
 
     const fetchWinnings = async () => {
+        if (!publicClient) { console.log("no publicClient"); return; }
         const bal = await publicClient.readContract({
             account: playerAddress,
             address: paymanAddress,
@@ -42,10 +43,12 @@ const PayoutManager = () => {
     };
 
     const submitWithdrawal = async () => {
-        if (!playerAddress) return;
-        if (!paymanAddress) return;
-        if (!walletClient) return;
+        if (!playerAddress) { console.log("no playerAddress"); return; }
+        if (!paymanAddress) { console.log("no paymanAddress"); return; }
+        if (!publicClient) { console.log("no publicClient"); return; }
+        if (!walletClient) { console.log("no walletClient"); return; }
 
+        console.log('building withdrawal simulated');
         const { request } = await publicClient.simulateContract({
             account: playerAddress,
             address: paymanAddress,
@@ -60,8 +63,8 @@ const PayoutManager = () => {
     }
 
     useEffect(() => {
-        if (!playerAddress) return;
-        if (!paymanAddress) return;
+        if (!playerAddress) { console.log("no playerAddress"); return; }
+        if (!paymanAddress) { console.log("no paymanAddress"); return; }
 
         fetchWinnings();
         const interval = setInterval(async () => {
