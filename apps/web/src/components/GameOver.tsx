@@ -5,7 +5,6 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { Card, GlassCard } from "@/components/core/Card";
 import { Price } from "@/components/shared/Price";
-import { useContractCalls } from "@/hooks/useContractCalls";
 import { usePot } from "@/hooks/usePot";
 import useWinningEmpire from "@/hooks/useWinningEmpire";
 import { cn } from "@/util/client";
@@ -49,7 +48,6 @@ const PlayerPot = ({ entity }: { entity: Entity }) => {
   const { empire } = useWinningEmpire();
   const { tables } = useCore();
   const { pot } = usePot();
-  const calls = useContractCalls();
   const playerEmpirePoints =
     tables.Value_PointsMap.useWithKeys({ empireId: empire ?? 0, playerId: entity })?.value ?? 0n;
 

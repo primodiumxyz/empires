@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.24;
 
-import {console} from "forge-std/console.sol";
-
 /**
  * @title  PayoutManager (c) Primodium 2024
  * @author Kethic <kethic@primodium.com> @kethcode

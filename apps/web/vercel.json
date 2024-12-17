@@ -1,0 +1,16 @@
+{
+    "routes": [
+        {
+            "src": "/",
+            "dest": "/"
+        },
+        {
+            "src": "/game",
+            "dest": "/"
+        },
+        {
+            "src": "/payman",
+            "dest": "/payman"
+        }
+    ]
+}
