@@ -1,16 +1,8 @@
 {
-    "routes": [
+    "rewrites": [
         {
-            "src": "/",
-            "dest": "/"
-        },
-        {
-            "src": "/game",
-            "dest": "/"
-        },
-        {
-            "src": "/payman",
-            "dest": "/payman"
+            "source": "/(.*)",
+            "destination": "/"
         }
     ]
 }
