@@ -67,7 +67,6 @@ const PayoutManager = () => {
         if (!playerAddress) { console.log("no playerAddress"); return; }
         if (!paymanAddress) { console.log("no paymanAddress"); return; }
 
-        fetchWinnings();
         const interval = setInterval(async () => {
             if (!mutex) {
                 setMutex(true);
