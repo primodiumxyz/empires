@@ -17,6 +17,7 @@ const PayoutManager = () => {
     } = useCore();
 
     const [winnings, setWinnings] = useState<bigint | undefined>();
+    const [mutex, setMutex] = useState<boolean>(false);
 
     const playerAddress = usePlayerAccount().playerAccount?.address;
     const publicClient = usePlayerAccount().playerAccount?.publicClient ?? null;
@@ -68,7 +69,11 @@ const PayoutManager = () => {
 
         fetchWinnings();
         const interval = setInterval(async () => {
-            fetchWinnings();
+            if (!mutex) {
+                setMutex(true);
+                await fetchWinnings();
+                setMutex(false);
+            }
         }, refreshMs);
 
         return () => clearInterval(interval);
