@@ -29,7 +29,7 @@ export default defineConfig({
       external: [/^contracts:.*/],
       output: {
         manualChunks: {
-          react: ["react", "react-dom"],
+          react: ["react", "react-dom", "react-router-dom"],
           // mud: ["@latticexyz/common", "@latticexyz/world"],
           // core: ["@primodiumxyz/core"],
           // phaser: ["phaser"],
