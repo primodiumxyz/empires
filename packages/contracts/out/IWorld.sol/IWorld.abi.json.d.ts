@@ -740,13 +740,6 @@ declare const abi: [
   },
   {
     "type": "function",
-    "name": "Empires__withdrawEarnings",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "batchCall",
     "inputs": [
       {
