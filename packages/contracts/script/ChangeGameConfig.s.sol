@@ -30,6 +30,7 @@ contract ChangeGameConfig is Script {
     StoreSwitch.setStoreAddress(worldAddress);
 
     console.log("Current block:", block.number);
+    console.log("Current chainId:", block.chainid);
 
     // get existing config
     // P_GameConfig: {
