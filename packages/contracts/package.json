@@ -13,6 +13,7 @@
     "build:prototype": "tsx ./ts/prototypes/commands/prototypegen.ts",
     "build:map": "tsx ./ts/map/commands/mapgen.ts",
     "clean:contracts": "rm -rf ./node_modules && rm -rf ./src/codegen",
+    "deploy:base": "pnpm mud deploy --profile=base",
     "deploy:base-sepolia": "pnpm mud deploy --profile=base-sepolia",
     "deploy:caldera": "pnpm mud deploy --profile=caldera",
     "deploy:caldera-sepolia": "pnpm mud deploy --profile=caldera-sepolia",
@@ -27,9 +28,9 @@
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test": "forge build && mud test --skipBuild --forgeOptions='--nmt invariant_'",
     "test:invariants": "forge build && mud test --skipBuild --forgeOptions='--mt invariant_'",
-    "changeGameConfigAnvil": "forge script script/ChangeGameConfig.s.sol — RPC-url http://127.0.0.1:8545 --broadcast --slow",
-    "changeGameConfigBaseSepolia": "forge script script/ChangeGameConfig.s.sol — RPC-url $SEPOLIA_BASE_RPC_URL --broadcast --slow",
-    "changeGameConfigBase": "forge script script/ChangeGameConfig.s.sol — RPC-url $BASE_RPC_URL --broadcast --slow"
+    "changeGameConfig:anvil": "forge script script/ChangeGameConfig.s.sol — RPC-url http://127.0.0.1:8545 --broadcast --slow",
+    "changeGameConfig:base-sepolia": "forge script script/ChangeGameConfig.s.sol — RPC-url $SEPOLIA_BASE_RPC_URL --broadcast --slow",
+    "changeGameConfig:base": "forge script script/ChangeGameConfig.s.sol — RPC-url $BASE_RPC_URL --broadcast --slow"
   },
   "dependencies": {
     "@latticexyz/cli": "2.0.9",
