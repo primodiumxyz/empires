@@ -30,8 +30,13 @@ chain_id = 12523
 eth_rpc_url = "https://primodium-sepolia.rpc.caldera.xyz/http"
 chain_id = 10017
 
+[profile.base]
+eth_rpc_url = "https://base-mainnet.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"
+# eth_rpc_url = "https://mainnet.base.org"
+chain_id = 8453
+
 [profile.base-sepolia]
-eth_rpc_url = "https://base-sepolia.g.alchemy.com/v2/dndQwsapq393_Ws-KBNM0nUCvUoWD2iC"
+eth_rpc_url = "https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"
 # eth_rpc_url = "https://sepolia.base.org"
 chain_id = 84532
 
