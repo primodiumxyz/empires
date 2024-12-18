@@ -97,6 +97,10 @@ export class KeeperService {
           return;
         }
 
+        if (!ready) {
+          keeperState = KeeperState.NotReady;
+        }
+
         switch (keeperState) {
 
           case KeeperState.NotReady:
