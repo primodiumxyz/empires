@@ -26,7 +26,8 @@
     "prettier": "prettier --write './**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test": "forge build && mud test --skipBuild --forgeOptions='--nmt invariant_'",
-    "test:invariants": "forge build && mud test --skipBuild --forgeOptions='--mt invariant_'"
+    "test:invariants": "forge build && mud test --skipBuild --forgeOptions='--mt invariant_'",
+    "changeGameConfig": "forge script script/ChangeGameConfig.s.sol — RPC-url $SEPOLIA_BASE_RPC_URL --broadcast --slow"
   },
   "dependencies": {
     "@latticexyz/cli": "2.0.9",
