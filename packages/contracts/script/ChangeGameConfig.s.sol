@@ -58,10 +58,10 @@ contract ChangeGameConfig is Script {
     console.log("gameOverBlock:", gameOverBlock);
     console.log("delayBetweenRounds:", delayBetweenRounds);
 
-    /*//////////////////////////////////////////////////////////////
-                          Change Settings
-    //////////////////////////////////////////////////////////////*/
-    // update config variables here
+    // /*//////////////////////////////////////////////////////////////
+    //                       Change Settings
+    // //////////////////////////////////////////////////////////////*/
+    // // update config variables here
 
     turnLengthBlocks = 150; // 2 second blocks, 5 minute turn
     nextGameLengthTurns = 240; // 20 hours
@@ -83,14 +83,13 @@ contract ChangeGameConfig is Script {
     P_GameConfig.setGameOverBlock(gameOverBlock);
     P_GameConfig.setDelayBetweenRounds(delayBetweenRounds);
 
-    console.log("\n*** Resetting Game");
-
     // reset game
-    world.Empires__resetGame(gameStartBlock);
-    while (Ready.get() == false) {
-      console.log("Waiting for Ready");
-      world.Empires__resetGame(gameStartBlock);
+    console.log("\n*** Resetting Game");
+    // this function returns false until it's complete
+    while (world.Empires__resetGame(gameStartBlock)) {
+      console.log("Resetting game...");
     }
+    Ready.set(true);
 
     vm.stopBroadcast();
   }
