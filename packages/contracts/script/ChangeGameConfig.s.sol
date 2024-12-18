@@ -50,6 +50,13 @@ contract ChangeGameConfig is Script {
     uint gameOverBlock = config.gameOverBlock;
     uint delayBetweenRounds = config.delayBetweenRounds;
 
+    console.log("\n*** Current config:");
+    console.log("turnLengthBlocks:", turnLengthBlocks);
+    console.log("nextGameLengthTurns:", nextGameLengthTurns);
+    console.log("gameStartBlock:", gameStartBlock);
+    console.log("gameOverBlock:", gameOverBlock);
+    console.log("delayBetweenRounds:", delayBetweenRounds);
+
     /*//////////////////////////////////////////////////////////////
                           Change Settings
     //////////////////////////////////////////////////////////////*/
@@ -61,12 +68,21 @@ contract ChangeGameConfig is Script {
     gameOverBlock = gameStartBlock + (turnLengthBlocks * nextGameLengthTurns); // 20 hours after start
     delayBetweenRounds = 3600; // 2 hours between rounds (7200 seconds in 2 hours, 2 second blocks)
 
+    console.log("\n*** New config:");
+    console.log("turnLengthBlocks:", turnLengthBlocks);
+    console.log("nextGameLengthTurns:", nextGameLengthTurns);
+    console.log("gameStartBlock:", gameStartBlock);
+    console.log("gameOverBlock:", gameOverBlock);
+    console.log("delayBetweenRounds:", delayBetweenRounds);
+
     // write the changes
     P_GameConfig.setTurnLengthBlocks(turnLengthBlocks);
     P_GameConfig.setNextGameLengthTurns(nextGameLengthTurns);
     P_GameConfig.setGameStartBlock(gameStartBlock);
     P_GameConfig.setGameOverBlock(gameOverBlock);
     P_GameConfig.setDelayBetweenRounds(delayBetweenRounds);
+
+    console.log("\n*** Resetting Game");
 
     // reset game
     world.Empires__resetGame(gameStartBlock);
