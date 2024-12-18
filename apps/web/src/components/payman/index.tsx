@@ -1,50 +1,82 @@
-import { getContract } from 'viem'
-import { abi } from '../../hooks/abis/PayoutManager.json'
-
-import { createPublicClient, createWalletClient, http, custom } from 'viem'
-import { anvil, baseSepolia } from 'viem/chains'
 
 import { Address } from "viem";
 import { formatEther } from 'viem'
 
-import { usePayoutWinnings } from "@/hooks/usePayoutWinnings";
+import { useEffect, useState } from "react";
+
 import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
 
+import { abi } from '../../hooks/abis/PayoutManager.json'
+
 const PayoutManager = () => {
-
-    const publicClient = createPublicClient({
-        chain: anvil,
-        transport: http()
-    })
-
-    const walletClient = createWalletClient({
-        chain: anvil,
-        transport: custom(window.ethereum!)
-    })
+    const refreshMs: number = 2000
 
     const {
+        // network: { publicClient },
         tables,
     } = useCore();
 
-    const paymanAddress = tables.PayoutManager.get()?.contractAddress as Address;
-
-    const paymanContract = getContract({
-        address: paymanAddress,
-        abi: abi,
-        client: { public: publicClient, wallet: walletClient }
-    })
+    const [winnings, setWinnings] = useState<bigint | undefined>();
+    const [mutex, setMutex] = useState<boolean>(false);
 
     const playerAddress = usePlayerAccount().playerAccount?.address;
-    console.log(playerAddress);
+    const publicClient = usePlayerAccount().playerAccount?.publicClient ?? null;
+    const walletClient = usePlayerAccount().playerAccount?.walletClient ?? null;
 
-    const playerWinnings = usePayoutWinnings(playerAddress).value ?? 0n;
+    console.log(walletClient?.chain.rpcUrls)
+
+    const paymanAddress = tables.PayoutManager.get()?.contractAddress as Address;
+
+    const playerWinnings = winnings ?? 0n;
     const playerWinningsFloat = parseFloat(formatEther(playerWinnings)).toFixed(2);
 
+    const fetchWinnings = async () => {
+        if (!publicClient) { console.log("no publicClient"); return; }
+        const bal = await publicClient.readContract({
+            account: playerAddress,
+            address: paymanAddress,
+            abi: abi,
+            functionName: 'balances',
+            args: [playerAddress]
+        })
+
+        setWinnings(BigInt(bal as string));
+    };
+
     const submitWithdrawal = async () => {
+        if (!playerAddress) { console.log("no playerAddress"); return; }
+        if (!paymanAddress) { console.log("no paymanAddress"); return; }
+        if (!publicClient) { console.log("no publicClient"); return; }
+        if (!walletClient) { console.log("no walletClient"); return; }
+
+        console.log('building withdrawal simulated');
+        const { request } = await publicClient.simulateContract({
+            account: playerAddress,
+            address: paymanAddress,
+            abi: abi,
+            functionName: 'withdraw',
+        })
+        console.log('withdrawal simulated');
+
+        const hash = await walletClient.writeContract(request)
         console.log('withdrawal submitted');
-        await paymanContract.write.withdraw();
 
     }
+
+    useEffect(() => {
+        if (!playerAddress) { console.log("no playerAddress"); return; }
+        if (!paymanAddress) { console.log("no paymanAddress"); return; }
+
+        const interval = setInterval(async () => {
+            if (!mutex) {
+                setMutex(true);
+                await fetchWinnings();
+                setMutex(false);
+            }
+        }, refreshMs);
+
+        return () => clearInterval(interval);
+    }, [playerAddress, paymanAddress, refreshMs]);
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">

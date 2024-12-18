@@ -120,7 +120,8 @@ export class KeeperService {
             }
 
             const nextTurnBlock = core.tables.Turn.get()?.nextTurnBlock ?? 0n;
-            if ((current?.value ?? 0n) < nextTurnBlock) {
+            // +2 to deal with block.number synchronization issues across RPCs on live chain causing reverts and missed turns
+            if ((current?.value ?? 0n) < nextTurnBlock + 2n) {
               // console.info(`SKIPPING: current block ${current?.value} next turn block ${nextTurnBlock}`);
               return;
             }

@@ -14,12 +14,12 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 900n, // 30 minute turns, 2 second blocks on sepBase
-        nextGameLengthTurns: 336n, // 7 day games, 30 minute turns
+        turnLengthBlocks: 15n,      // 2 second blocks on base and baseSep, 24 second turn 
+        nextGameLengthTurns: 30n,   // numbers of turns, a round = turnBlockLength * nextGameLengthTurns
         goldGenRate: 1n,
         gameStartBlock: 0n, // currently handled by .env and PostDeploy
         gameOverBlock: 0n, // currently handled in PostDeploy
-        delayBetweenRounds: 43200n,   // 24h between rounds (in blocks at 2 sec blocktime)
+        delayBetweenRounds: 120n, // blocks between rounds
         empireCount: 6,
         empiresCleared: 0,
       },
