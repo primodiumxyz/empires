@@ -62,7 +62,7 @@ const baseSepolia: ChainConfig = {
   rpcUrls: {
     default: {
       // this gets exposed in the client anyway, so it's easier to put it here directly for the keeper as well
-      http: ["https://base-sepolia.g.alchemy.com/v2/dndQwsapq393_Ws-KBNM0nUCvUoWD2iC"],
+      http: ["https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"],
     },
     public: {
       http: ["https://sepolia.base.org"],
@@ -79,11 +79,36 @@ const baseSepolia: ChainConfig = {
   },
 };
 
+const base: ChainConfig = {
+  name: "Base",
+  id: 8453,
+  nativeCurrency: { decimals: 18, name: "Ether", symbol: "ETH" },
+  rpcUrls: {
+    default: {
+      // this gets exposed in the client anyway, so it's easier to put it here directly for the keeper as well
+      http: ["https://base-mainnet.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"],
+    },
+    public: {
+      http: ["https://mainnet.base.org"],
+    },
+  },
+  faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",   // TODO: update this
+  indexerUrl: "https://empires-base-sepolia-indexer.primodium.ai", // TODO: update this
+  keeperUrl: "https://keeper.primodium.ai/trpc",
+  blockExplorers: {
+    default: {
+      name: "BaseScan",
+      url: "https://basescan.org/",
+    },
+  },
+};
+
 export type ChainConfig = MUDChain & { indexerUrl?: string; keeperUrl?: string };
 
 export const chainConfigs = {
   caldera,
   calderaSepolia,
+  base,
   baseSepolia,
   dev,
   garnet: garnet as ChainConfig,
