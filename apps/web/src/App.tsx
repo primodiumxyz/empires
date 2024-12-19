@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
+import { Link, Outlet, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { defineChain } from "viem";
-
-import { Routes, Route, Outlet, Link } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.min.css";
 
@@ -51,7 +50,7 @@ const App = () => {
   return (
     <>
       <PrivyProvider
-        appId="clxvzvzrw063qh5c30om9h9x5"
+        appId={import.meta.env.PRI_PRIVY_PROJECT_ID}
         config={{
           // Customize Privy's appearance in your app
           appearance: {
