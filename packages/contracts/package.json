@@ -29,7 +29,7 @@
     "test": "forge build && mud test --skipBuild --forgeOptions='--nmt invariant_'",
     "test:invariants": "forge build && mud test --skipBuild --forgeOptions='--mt invariant_'",
     "changeGameConfig:anvil": "forge script script/ChangeGameConfig.s.sol --rpc-url http://127.0.0.1:8545 --chain-id 31337 --broadcast --slow",
-    "changeGameConfig:base-sepolia": "forge script script/ChangeGameConfig.s.sol --rpc-url https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx --chain-id 84532 --broadcast --slow -vvvv",
+    "changeGameConfig:base-sepolia": "forge script script/ChangeGameConfig.s.sol --rpc-url https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx --chain-id 84532 --broadcast --slow -vv",
     "changeGameConfig:base": "forge script script/ChangeGameConfig.s.sol --rpc-url https://base-mainnet.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx --chain-id 8453 --broadcast"
   },
   "dependencies": {

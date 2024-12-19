@@ -65,9 +65,33 @@ contract ChangeGameConfig is Script {
 
     turnLengthBlocks = 150; // 2 second blocks, 5 minute turn
     nextGameLengthTurns = 240; // 20 hours
-    gameStartBlock = block.number + 150; // start 5 minutes after script runs
+    gameStartBlock = block.number + 300; // start 5 minutes after script runs
     gameOverBlock = gameStartBlock + (turnLengthBlocks * nextGameLengthTurns); // 20 hours after start
     delayBetweenRounds = 3600; // 2 hours between rounds (7200 seconds in 2 hours, 2 second blocks)
+
+    // write the changes
+    P_GameConfig.setTurnLengthBlocks(turnLengthBlocks);
+    P_GameConfig.setNextGameLengthTurns(nextGameLengthTurns);
+    // P_GameConfig.setGameStartBlock(gameStartBlock);    // handled by resetGame
+    // P_GameConfig.setGameOverBlock(gameOverBlock);      // handled by resetGame
+    P_GameConfig.setDelayBetweenRounds(delayBetweenRounds);
+
+    // reset game
+    console.log("\n*** Resetting Game");
+    // this function returns false until it's complete
+    bool resetComplete = world.Empires__resetGame(gameStartBlock);
+    while (!resetComplete) {
+      console.log("Resetting game...");
+      resetComplete = world.Empires__resetGame(gameStartBlock);
+    }
+
+    P_GameConfigData memory newConfig = P_GameConfig.get();
+
+    turnLengthBlocks = newConfig.turnLengthBlocks;
+    nextGameLengthTurns = newConfig.nextGameLengthTurns;
+    gameStartBlock = newConfig.gameStartBlock;
+    gameOverBlock = newConfig.gameOverBlock;
+    delayBetweenRounds = newConfig.delayBetweenRounds;
 
     console.log("\n*** New config:");
     console.log("turnLengthBlocks:", turnLengthBlocks);
@@ -75,21 +99,6 @@ contract ChangeGameConfig is Script {
     console.log("gameStartBlock:", gameStartBlock);
     console.log("gameOverBlock:", gameOverBlock);
     console.log("delayBetweenRounds:", delayBetweenRounds);
-
-    // write the changes
-    P_GameConfig.setTurnLengthBlocks(turnLengthBlocks);
-    P_GameConfig.setNextGameLengthTurns(nextGameLengthTurns);
-    P_GameConfig.setGameStartBlock(gameStartBlock);
-    P_GameConfig.setGameOverBlock(gameOverBlock);
-    P_GameConfig.setDelayBetweenRounds(delayBetweenRounds);
-
-    // reset game
-    console.log("\n*** Resetting Game");
-    // this function returns false until it's complete
-    while (world.Empires__resetGame(gameStartBlock)) {
-      console.log("Resetting game...");
-    }
-    Ready.set(true);
 
     vm.stopBroadcast();
   }
