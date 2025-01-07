@@ -1,6 +1,6 @@
 {
   "name": "primodium-empires",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "",
   "scripts": {
     "dev": "turbo dev dev:indexer dev:keeper --continue",
