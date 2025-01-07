@@ -14,7 +14,7 @@ export const prototypeConfig: PrototypesConfig<(typeof worldInput)["tables"]> = 
     keys: [],
     tables: {
       P_GameConfig: {
-        turnLengthBlocks: 15n,      // 2 second blocks on base and baseSep, 20 second turn 
+        turnLengthBlocks: 15n,      // 2 second blocks on base and baseSep, 30 second turn 
         nextGameLengthTurns: 120n,   // numbers of turns, a round = turnBlockLength * nextGameLengthTurns (1 hour)
         goldGenRate: 1n,
         gameStartBlock: 0n, // currently handled by .env and PostDeploy

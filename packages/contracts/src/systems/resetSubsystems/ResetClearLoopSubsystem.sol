@@ -19,7 +19,7 @@ contract ResetClearLoopSubsystem is EmpiresSystem {
     // get the number of empires; currently around 6
     uint8 empireCount = P_GameConfig.getEmpireCount();
 
-    // get houw many empires have been reset
+    // get how many empires have been reset
     uint8 empiresCleared = P_GameConfig.getEmpiresCleared();
 
     // we're going to reset the next one.  this should always be <= empireCount

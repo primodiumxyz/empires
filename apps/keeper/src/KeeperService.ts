@@ -97,7 +97,7 @@ export class KeeperService {
           return;
         }
 
-        if (!ready) {
+        if (!ready && !resetting) {
           keeperState = KeeperState.NotReady;
         }
 
@@ -123,9 +123,13 @@ export class KeeperService {
               return;
             }
 
+            const currentBlock = current?.value ?? 0n;
             const nextTurnBlock = core.tables.Turn.get()?.nextTurnBlock ?? 0n;
-            // +2 to deal with block.number synchronization issues across RPCs on live chain causing reverts and missed turns
-            if ((current?.value ?? 0n) <= nextTurnBlock) {
+            // something went wrong; return
+            if ((currentBlock == 0n) || (nextTurnBlock == 0n)) {
+              return;
+            }
+            if (currentBlock < (nextTurnBlock + 3n)) {
               // console.info(`SKIPPING: current block ${current?.value} next turn block ${nextTurnBlock}`);
               return;
             }

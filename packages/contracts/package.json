@@ -1,6 +1,6 @@
 {
   "name": "@primodiumxyz/contracts",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "license": "MIT",
   "type": "module",
@@ -17,7 +17,7 @@
     "deploy:base-sepolia": "pnpm mud deploy --profile=base-sepolia",
     "deploy:caldera": "pnpm mud deploy --profile=caldera",
     "deploy:caldera-sepolia": "pnpm mud deploy --profile=caldera-sepolia",
-    "deploy:local": "pnpm mud deploy --skipBuild",
+    "deploy:local": "pnpm mud deploy",
     "deploy:redstone-holesky": "pnpm mud deploy --profile=redstone-holesky",
     "deploy:payman-local": "forge script ../../apps/payman/script/DeployPayoutManager.s.sol --root ../../apps/payman --rpc-url http://127.0.0.1:8545 — broadcast — verify",
     "deploy:payman-base-sepolia": "forge script ../../apps/payman/script/DeployPayoutManager.s.sol --root ../../apps/payman --rpc-url $SEPOLIA_BASE_RPC_URL — broadcast — verify",

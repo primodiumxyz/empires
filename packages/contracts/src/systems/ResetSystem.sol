@@ -15,8 +15,8 @@ contract ResetSystem is EmpiresSystem {
   function resetGame(uint256 _gameStartBlock) public _onlyAdminOrCanUpdate returns (bool) {
     require(_gameStartBlock > block.number, "[ResetSystem] Game must start in the future");
     if (Ready.get() == true) {
-      Ready.set(false);
       P_GameConfig.setEmpiresCleared(0);
+      Ready.set(false);
     }
 
     IWorld world = IWorld(_world());
