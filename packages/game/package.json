@@ -1,0 +1,33 @@
+{
+  "name": "@primodiumxyz/game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "imports": {
+    "@": {
+      "default": "./src"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@primodiumxyz/assets": "workspace:*",
+    "@primodiumxyz/contracts": "workspace:*",
+    "@primodiumxyz/core": "workspace:*",
+    "@primodiumxyz/engine": "workspace:*",
+    "@primodiumxyz/reactive-tables": "^3.6.1",
+    "lodash": "^4.17.21",
+    "phaser3-rex-plugins": "^1.80.6",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/lodash": "^4.17.7",
+    "@types/react": "^18.3.3",
+    "prettier": "^3.3.2"
+  }
+}

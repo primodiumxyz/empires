@@ -4,6 +4,7 @@ const dev: ChainConfig = {
   ...mudFoundry,
   //COMMENT OUT INDEXER URL TO USE ONLY RPC
   indexerUrl: "http://localhost:3001",
+  keeperUrl: "http://localhost:3002/trpc",
 };
 
 const caldera: ChainConfig = {
@@ -22,6 +23,7 @@ const caldera: ChainConfig = {
   },
   faucetUrl: "https://caldera-faucet.primodium.ai/trpc",
   indexerUrl: "https://caldera-mud2-indexer.primodium.ai/trpc",
+  keeperUrl: "https://keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
       name: "Blockscout",
@@ -43,7 +45,8 @@ const calderaSepolia: ChainConfig = {
     },
   },
   faucetUrl: "https://caldera-sepolia-faucet.primodium.ai/trpc",
-  indexerUrl: "https://indexer-v11.primodium.ai",
+  indexerUrl: "https://empires-indexer.primodium.ai",
+  keeperUrl: "https://keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
       name: "Blockscout",
@@ -52,11 +55,61 @@ const calderaSepolia: ChainConfig = {
   },
 };
 
-export type ChainConfig = MUDChain & { indexerUrl?: string };
+const baseSepolia: ChainConfig = {
+  name: "Base Sepolia",
+  id: 84532,
+  nativeCurrency: { decimals: 18, name: "Ether", symbol: "ETH" },
+  rpcUrls: {
+    default: {
+      // this gets exposed in the client anyway, so it's easier to put it here directly for the keeper as well
+      http: ["https://base-sepolia.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"],
+    },
+    public: {
+      http: ["https://sepolia.base.org"],
+    },
+  },
+  faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",
+  indexerUrl: "https://empires-base-sepolia-indexer.primodium.ai",
+  keeperUrl: "https://keeper.primodium.ai/trpc",
+  blockExplorers: {
+    default: {
+      name: "BaseScan",
+      url: "https://sepolia.basescan.org/",
+    },
+  },
+};
+
+const base: ChainConfig = {
+  name: "Base",
+  id: 8453,
+  nativeCurrency: { decimals: 18, name: "Ether", symbol: "ETH" },
+  rpcUrls: {
+    default: {
+      // this gets exposed in the client anyway, so it's easier to put it here directly for the keeper as well
+      http: ["https://base-mainnet.g.alchemy.com/v2/kXmXpqsmAXqJpHyIH7YYcmK5tHaakTNx"],
+    },
+    public: {
+      http: ["https://mainnet.base.org"],
+    },
+  },
+  faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",   // TODO: update this
+  indexerUrl: "https://empires-base-sepolia-indexer.primodium.ai", // TODO: update this
+  keeperUrl: "https://keeper.primodium.ai/trpc",
+  blockExplorers: {
+    default: {
+      name: "BaseScan",
+      url: "https://basescan.org/",
+    },
+  },
+};
+
+export type ChainConfig = MUDChain & { indexerUrl?: string; keeperUrl?: string };
 
 export const chainConfigs = {
   caldera,
   calderaSepolia,
+  base,
+  baseSepolia,
   dev,
   garnet: garnet as ChainConfig,
   redstone: redstone as ChainConfig,

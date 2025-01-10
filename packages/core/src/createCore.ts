@@ -14,7 +14,7 @@ import { createUtils } from "@core/utils/core/createUtils";
 export function createCore(config: CoreConfig): Core {
   const networkResult = createNetwork(config);
   const tables = createTables(networkResult);
-  const utils = createUtils(tables);
+  const utils = createUtils(tables, config);
   const sync = createSync(config, networkResult, tables);
 
   const core = {
@@ -25,10 +25,17 @@ export function createCore(config: CoreConfig): Core {
     sync,
   };
 
-  if (config?.runSystems && !config.runSync) throw new Error("Cannot run systems without running sync");
-  if (config?.runSync) {
+  if (config.runSystems && !config.runSync) throw new Error("Cannot run systems without running sync");
+  if (config.runSync) {
+    console.log("Running initial sync");
     runInitialSync(core).then(() => {
-      if (config?.runSystems) runCoreSystems(core);
+      if (config.runSystems) {
+        console.log("Running core systems");
+        runCoreSystems(core);
+      }
+
+      console.log("Syncing action logs");
+      sync.syncActionLogs();
     });
   }
 

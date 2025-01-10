@@ -1,7 +1,7 @@
+import { SyncSourceType, SyncStep } from "@core/lib/types";
 import { useEffect, useState } from "react";
 
 import { defaultEntity, Entity } from "@primodiumxyz/reactive-tables";
-import { SyncSourceType, SyncStep } from "@core/lib/types";
 
 import { useCore } from "./useCore";
 

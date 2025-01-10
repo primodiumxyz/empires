@@ -3,13 +3,15 @@ import { Address } from "viem";
 
 import { useCore } from "@primodiumxyz/core/react";
 
-export const useBalance = (address: Address, refreshMs: number = 2000) => {
+export const useBalance = (address?: Address, refreshMs: number = 2000) => {
   const {
     network: { publicClient },
   } = useCore();
   const [balance, setBalance] = useState<bigint | undefined>();
 
   useEffect(() => {
+    if (!address) return;
+
     const fetchBalance = async () => {
       const bal = await publicClient.getBalance({ address });
       setBalance(bal);

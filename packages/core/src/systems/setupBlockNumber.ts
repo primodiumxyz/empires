@@ -1,5 +1,6 @@
-import { namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { Core } from "@core/lib/types";
+
+import { namespaceWorld } from "@primodiumxyz/reactive-tables";
 
 export const setupBlockNumber = (core: Core) => {
   const {

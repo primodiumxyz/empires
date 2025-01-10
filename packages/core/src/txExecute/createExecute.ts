@@ -1,6 +1,6 @@
-import { ContractFunctionName, TransactionReceipt } from "viem";
+import { ContractFunctionName } from "viem";
 
-import { AccountClient, Core, WorldAbiType } from "@core/lib/types";
+import { Core, ExternalAccount, LocalAccount, TxReceipt, WorldAbiType } from "@core/lib/types";
 import { TxQueueOptions } from "@core/tables/types";
 import { SystemCall } from "@core/txExecute/encodeSystemCall";
 import { ExecuteCallOptions, execute as rawExecute } from "@core/txExecute/execute";
@@ -13,20 +13,20 @@ import { executeBatch as rawExecuteBatch } from "@core/txExecute/executeBatch";
 export type ExecuteFunctions = {
   execute: <functionName extends ContractFunctionName<WorldAbiType>>(
     options: ExecuteCallOptions<WorldAbiType, functionName>,
-  ) => Promise<boolean>;
+  ) => Promise<TxReceipt>;
   executeBatch: <functionName extends ContractFunctionName<WorldAbiType>>(options: {
     systemCalls: readonly Omit<SystemCall<WorldAbiType, functionName>, "abi" | "systemId">[];
 
     txQueueOptions?: TxQueueOptions;
-    onComplete?: (receipt: TransactionReceipt | undefined) => void;
-  }) => Promise<boolean>;
+    onComplete?: (receipt: TxReceipt) => void;
+  }) => Promise<TxReceipt>;
 };
 
-export function createExecute(core: Core, account: AccountClient): ExecuteFunctions {
+export function createExecute(core: Core, account: LocalAccount | ExternalAccount | null): ExecuteFunctions {
   async function execute<functionName extends ContractFunctionName<WorldAbiType>>(
     callOptions: ExecuteCallOptions<WorldAbiType, functionName>,
   ) {
-    return rawExecute({ core, accountClient: account, ...callOptions });
+    return rawExecute({ core, playerAccount: account, ...callOptions });
   }
 
   async function executeBatch<functionName extends ContractFunctionName<WorldAbiType>>({
@@ -37,11 +37,11 @@ export function createExecute(core: Core, account: AccountClient): ExecuteFuncti
     systemCalls: readonly Omit<SystemCall<WorldAbiType, functionName>, "abi" | "systemId">[];
     withSession?: boolean;
     txQueueOptions?: TxQueueOptions;
-    onComplete?: (receipt: TransactionReceipt | undefined) => void;
+    onComplete?: (receipt: TxReceipt) => void;
   }) {
     return rawExecuteBatch({
       core,
-      accountClient: account,
+      playerAccount: account,
       systemCalls,
       txQueueOptions,
       onComplete,

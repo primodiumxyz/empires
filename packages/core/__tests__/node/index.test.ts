@@ -1,6 +1,5 @@
-import { describe, expect, test } from "vitest";
-
 import { createExternalAccount } from "@core/account";
+import { describe, expect, test } from "vitest";
 
 import { commonTests, createTestConfig } from "../lib/common";
 

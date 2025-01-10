@@ -9,7 +9,7 @@ export const setupDoubleCounter = (core: Core) => {
 
   const systemWorld = namespaceWorld(world, "coreSystems");
 
-  tables.Counter.watch({
+  tables.DoubleCounter.watch({
     world: systemWorld,
     onChange: (update) => {
       const value = update?.properties.current?.value ?? 0;

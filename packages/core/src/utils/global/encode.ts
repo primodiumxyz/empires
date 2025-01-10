@@ -10,7 +10,7 @@ import { encodeEntity } from "@primodiumxyz/reactive-tables/utils";
  * @param namespace - The namespace of the system.
  * @returns The system ID.
  */
-export const getSystemId = (name: string, namespace = "Pri_11"): Hex => {
+export const getSystemId = (name: string, namespace = "Empires"): Hex => {
   return resourceToHex({
     type: "system",
     name,

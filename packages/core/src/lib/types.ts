@@ -9,12 +9,13 @@ import {
   GetContractReturnType,
   Hex,
   PublicClient,
+  TransactionReceipt,
   WalletClient,
 } from "viem";
-import mudConfig from "@primodiumxyz/contracts/mud.config";
-import type IWorldAbi from "@primodiumxyz/contracts/out/IWorld.sol/IWorld.abi.json.d.ts";
 
+import { IWorldAbiType, mudConfig } from "@primodiumxyz/contracts";
 import { AllTableDefs, ContractTables, Entity, World, WrapperResult } from "@primodiumxyz/reactive-tables";
+import type AdminAbi from "@core/lib/AdminAbi.abi.json";
 import { ChainConfig } from "@core/network/config/chainConfigs";
 import { otherTableDefs } from "@core/network/otherTableDefs";
 import { Recs } from "@core/recs/setupRecs";
@@ -133,7 +134,7 @@ export type Clock = {
  * World Abi. Combination of IWorld abi and CallWithSignature abi.
  */
 
-export type WorldAbiType = typeof IWorldAbi & typeof CallWithSignatureAbi;
+export type WorldAbiType = typeof IWorldAbiType & typeof CallWithSignatureAbi & typeof AdminAbi;
 
 type _Account<
   IsLocalAccount extends boolean = false,
@@ -162,12 +163,6 @@ type _Account<
 export type ExternalAccount = _Account<false>;
 export type LocalAccount = _Account<true>;
 
-export interface AccountClient {
-  playerAccount: ExternalAccount | LocalAccount;
-  setPlayerAccount: (options: { playerAddress?: Address; playerPrivateKey?: Hex }) => void;
-  requestDrip: (address: Address) => void;
-}
-
 export enum SyncSourceType {
   Indexer,
   RPC,
@@ -179,3 +174,28 @@ export enum SyncStep {
   Complete,
   Live,
 }
+
+export type CartesionCoord = {
+  x: number;
+  y: number;
+};
+
+export type AxialCoord = {
+  q: number;
+  r: number;
+};
+
+export type AxialCoordBigInt = {
+  q: bigint;
+  r: bigint;
+};
+
+export type TxReceipt =
+  | (TransactionReceipt & {
+      success: boolean;
+      error?: string;
+    })
+  | {
+      success: false;
+      error: string;
+    };

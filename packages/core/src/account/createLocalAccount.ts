@@ -1,15 +1,14 @@
 import { ContractWrite, createBurnerAccount, transportObserver } from "@latticexyz/common";
 import { transactionQueue, writeObserver } from "@latticexyz/common/actions";
-import { Subject } from "rxjs";
-import { createPublicClient, createWalletClient, fallback, getContract, Hex, http } from "viem";
-import { generatePrivateKey } from "viem/accounts";
-
 import { STORAGE_PREFIX } from "@core/lib/constants";
 import { CoreConfig, LocalAccount } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { normalizeAddress } from "@core/utils/global/common";
 import { addressToEntity } from "@core/utils/global/encode";
 import { storage } from "@core/utils/global/storage";
+import { Subject } from "rxjs";
+import { createPublicClient, createWalletClient, fallback, getContract, Hex, http } from "viem";
+import { generatePrivateKey } from "viem/accounts";
 
 /**
  *
@@ -39,7 +38,7 @@ export function createLocalAccount(coreConfig: CoreConfig, privateKey?: Hex, sav
   localWalletClient.extend(transactionQueue()).extend(writeObserver({ onWrite: (write) => write$.next(write) }));
 
   const localWorldContract = getContract({
-    address: coreConfig.worldAddress,
+    address: coreConfig.worldAddress as Hex,
     abi: WorldAbi,
     client: {
       public: publicClient,

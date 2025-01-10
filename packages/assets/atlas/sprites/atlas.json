@@ -1,0 +1,5794 @@
+{
+    "meta": {
+        "app": "",
+        "version": "1.0.0"
+    },
+    "textures": [
+        {
+            "image": "atlas.png?timestamp=1725611127590",
+            "format": "RGBA8888",
+            "size": {
+                "w": 2383,
+                "h": 2432
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "sprites/background/nebula.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 768,
+                        "h": 619
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 768,
+                        "h": 619
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 768,
+                        "h": 619
+                    }
+                },
+                {
+                    "filename": "sprites/background/star.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 256,
+                        "h": 256
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 256,
+                        "h": 256
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 619,
+                        "w": 256,
+                        "h": 256
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 256,
+                        "y": 619,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 482,
+                        "y": 619,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 231,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 875,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 226,
+                        "y": 875,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 452,
+                        "y": 850,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 678,
+                        "y": 850,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 994,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 994,
+                        "y": 231,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 994,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 904,
+                        "y": 693,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1106,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/detonate/ShieldEater_Detonate_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 226,
+                        "y": 1106,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 452,
+                        "y": 1081,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 678,
+                        "y": 1081,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 904,
+                        "y": 924,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1220,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1220,
+                        "y": 231,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1220,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1130,
+                        "y": 693,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1130,
+                        "y": 924,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1337,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 226,
+                        "y": 1337,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 452,
+                        "y": 1312,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 678,
+                        "y": 1312,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 904,
+                        "y": 1155,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/enter/ShieldEater_Enter_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1130,
+                        "y": 1155,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 231,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1446,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1356,
+                        "y": 693,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1356,
+                        "y": 924,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1356,
+                        "y": 1155,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_15.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1568,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 226,
+                        "y": 1568,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 452,
+                        "y": 1543,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 678,
+                        "y": 1543,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 904,
+                        "y": 1386,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1130,
+                        "y": 1386,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1356,
+                        "y": 1386,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1672,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1672,
+                        "y": 231,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1672,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1582,
+                        "y": 693,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1582,
+                        "y": 924,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1582,
+                        "y": 1155,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1582,
+                        "y": 1386,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 1799,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 226,
+                        "y": 1799,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 452,
+                        "y": 1774,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 678,
+                        "y": 1774,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/Overheat_Border_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 904,
+                        "y": 1617,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1098,
+                        "y": 1617,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1292,
+                        "y": 1617,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1486,
+                        "y": 1617,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1680,
+                        "y": 1617,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1898,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/blue/Overheat_Border_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1898,
+                        "y": 210,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1898,
+                        "y": 420,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1898,
+                        "y": 630,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1874,
+                        "y": 840,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1874,
+                        "y": 1050,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1874,
+                        "y": 1260,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/green/Overheat_Border_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1874,
+                        "y": 1470,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 1874,
+                        "y": 1680,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 2030,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 194,
+                        "y": 2030,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 388,
+                        "y": 2030,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 582,
+                        "y": 2005,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/overheat-border/red/Overheat_Border_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 194,
+                        "h": 210
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 194,
+                        "h": 210
+                    },
+                    "frame": {
+                        "x": 776,
+                        "y": 2005,
+                        "w": 194,
+                        "h": 210
+                    }
+                },
+                {
+                    "filename": "sprites/hex/frame/hex_blueframe.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 970,
+                        "y": 1890,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/frame/hex_goldframe.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 1142,
+                        "y": 1890,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_blue.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 1314,
+                        "y": 1890,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_green.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 1486,
+                        "y": 1890,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_grey.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 1658,
+                        "y": 1827,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_pink.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 1658,
+                        "y": 2015,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_purple.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 1830,
+                        "y": 1890,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_red.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 2092,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/hex_yellow.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 172,
+                        "h": 188
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 172,
+                        "h": 188
+                    },
+                    "frame": {
+                        "x": 2092,
+                        "y": 188,
+                        "w": 172,
+                        "h": 188
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 693,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 840,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 955,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 1070,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 1185,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 1300,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 1415,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 1530,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 1645,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 1760,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 2068,
+                        "y": 1875,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/enter/large/AcidRain_Enter_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 2092,
+                        "y": 376,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/enter/large/AcidRain_Enter_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 2092,
+                        "y": 486,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/enter/large/AcidRain_Enter_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 2092,
+                        "y": 596,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/enter/large/AcidRain_Enter_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 2092,
+                        "y": 706,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/enter/large/AcidRain_Enter_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 970,
+                        "y": 2078,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/enter/medium/AcidRain_Enter_Medium_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1830,
+                        "y": 2078,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/enter/small/AcidRain_Enter_Small_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1130,
+                        "y": 2078,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/exit/AcidRain_Fade_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1990,
+                        "y": 2078,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/exit/AcidRain_Fade_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1290,
+                        "y": 2078,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/exit/AcidRain_Fade_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1450,
+                        "y": 2078,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/exit/AcidRain_Fade_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 2240,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/large/AcidRain_Large_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 160,
+                        "y": 2240,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/large/AcidRain_Large_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 320,
+                        "y": 2240,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/large/AcidRain_Large_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 480,
+                        "y": 2240,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/medium/AcidRain_Medium_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 640,
+                        "y": 2215,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/medium/AcidRain_Medium_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 800,
+                        "y": 2215,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/medium/AcidRain_Medium_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 960,
+                        "y": 2215,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/small/AcidRain_Small_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1120,
+                        "y": 2203,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/small/AcidRain_Small_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1280,
+                        "y": 2203,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/small/AcidRain_Small_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1440,
+                        "y": 2203,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/small/AcidRain_Small_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1600,
+                        "y": 2203,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/icons/acid_rain.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 1760,
+                        "y": 2203,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/icons/shield_eater.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 143,
+                        "h": 124
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 143,
+                        "h": 124
+                    },
+                    "frame": {
+                        "x": 1920,
+                        "y": 2188,
+                        "w": 143,
+                        "h": 124
+                    }
+                },
+                {
+                    "filename": "sprites/planet/treasure/Planets_Iridium_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 122,
+                        "h": 80
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 122,
+                        "h": 80
+                    },
+                    "frame": {
+                        "x": 2002,
+                        "y": 1990,
+                        "w": 122,
+                        "h": 80
+                    }
+                },
+                {
+                    "filename": "sprites/planet/treasure/Planets_Iridium_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 122,
+                        "h": 80
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 122,
+                        "h": 80
+                    },
+                    "frame": {
+                        "x": 2124,
+                        "y": 1990,
+                        "w": 122,
+                        "h": 80
+                    }
+                },
+                {
+                    "filename": "sprites/planet/treasure/Planets_Iridium_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 122,
+                        "h": 80
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 122,
+                        "h": 80
+                    },
+                    "frame": {
+                        "x": 2063,
+                        "y": 2188,
+                        "w": 122,
+                        "h": 80
+                    }
+                },
+                {
+                    "filename": "sprites/planet/treasure/Planets_Iridium_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 122,
+                        "h": 80
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 122,
+                        "h": 80
+                    },
+                    "frame": {
+                        "x": 2063,
+                        "y": 2268,
+                        "w": 122,
+                        "h": 80
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/crack/Cracks_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 119,
+                        "h": 93
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 119,
+                        "h": 93
+                    },
+                    "frame": {
+                        "x": 2264,
+                        "y": 0,
+                        "w": 119,
+                        "h": 93
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/crack/Cracks_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 119,
+                        "h": 93
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 119,
+                        "h": 93
+                    },
+                    "frame": {
+                        "x": 2264,
+                        "y": 93,
+                        "w": 119,
+                        "h": 93
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/crack/Cracks_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 119,
+                        "h": 93
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 119,
+                        "h": 93
+                    },
+                    "frame": {
+                        "x": 2264,
+                        "y": 186,
+                        "w": 119,
+                        "h": 93
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_blue.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 2150,
+                        "y": 2070,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_green.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 1808,
+                        "y": 693,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_grey.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 2264,
+                        "y": 279,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_red.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 76,
+                        "h": 114
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 76,
+                        "h": 114
+                    },
+                    "frame": {
+                        "x": 2185,
+                        "y": 2184,
+                        "w": 76,
+                        "h": 114
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/Citadel_Asteroid_Belt.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 113,
+                        "h": 79
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 113,
+                        "h": 79
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 393,
+                        "w": 113,
+                        "h": 79
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 904,
+                        "y": 1827,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 1015,
+                        "y": 1827,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 1126,
+                        "y": 1827,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 1237,
+                        "y": 1827,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 1348,
+                        "y": 1827,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 1459,
+                        "y": 1827,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 472,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 528,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 584,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 640,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 696,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 752,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 808,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 864,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 920,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 976,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1032,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1088,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1144,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1200,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1256,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1312,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1368,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1424,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1480,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1536,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1592,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1648,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1704,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1760,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1816,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1872,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1928,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1984,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 2040,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 2096,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_underglow.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 96
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 96
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 2152,
+                        "w": 96,
+                        "h": 96
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 2248,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 83,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 166,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 249,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 332,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_pink.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 74,
+                        "h": 74
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 74,
+                        "h": 74
+                    },
+                    "frame": {
+                        "x": 2185,
+                        "y": 2298,
+                        "w": 74,
+                        "h": 74
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_purple.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 74,
+                        "h": 74
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 74,
+                        "h": 74
+                    },
+                    "frame": {
+                        "x": 415,
+                        "y": 2350,
+                        "w": 74,
+                        "h": 74
+                    }
+                },
+                {
+                    "filename": "sprites/planet/planet_yellow.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 74,
+                        "h": 74
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 74,
+                        "h": 74
+                    },
+                    "frame": {
+                        "x": 489,
+                        "y": 2350,
+                        "w": 74,
+                        "h": 74
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 653,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 808,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 761,
+                        "y": 808,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/icons/crown.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 48,
+                        "h": 29
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 48,
+                        "h": 29
+                    },
+                    "frame": {
+                        "x": 1610,
+                        "y": 2078,
+                        "w": 48,
+                        "h": 29
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 814,
+                        "y": 808,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 841,
+                        "y": 808,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 868,
+                        "y": 808,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 2226,
+                        "y": 2070,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 2226,
+                        "y": 2111,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 2344,
+                        "y": 2248,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 2344,
+                        "y": 2289,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/blue/Magnet_Blue_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 2340,
+                        "y": 279,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 2340,
+                        "y": 320,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1830,
+                        "y": 1827,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 563,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 590,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 617,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 640,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 644,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/green/Magnet_Green_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 667,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 671,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 694,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 698,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 721,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 725,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 748,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 752,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/pink/Magnet_Pink8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 775,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/purple/Magnet_Purple1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 779,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/purple/Magnet_Purple2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 802,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/purple/Magnet_Purple3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 806,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/purple/Magnet_Purple4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 829,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/purple/Magnet_Purple5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 833,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/purple/Magnet_Purple6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 856,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/purple/Magnet_Purple7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 860,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/purple/Magnet_Purple8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 883,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 887,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 910,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 914,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 937,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 941,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 964,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 968,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/red/Magnet_Red_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 991,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/yellow/Magnet_Yellow1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 995,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/yellow/Magnet_Yellow2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1018,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/yellow/Magnet_Yellow3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1022,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/yellow/Magnet_Yellow4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1045,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/yellow/Magnet_Yellow5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1049,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/yellow/Magnet_Yellow6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1072,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/yellow/Magnet_Yellow7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1076,
+                        "y": 2372,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/magnet/yellow/Magnet_Yellow8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 27,
+                        "h": 41
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 27,
+                        "h": 41
+                    },
+                    "frame": {
+                        "x": 1099,
+                        "y": 2325,
+                        "w": 27,
+                        "h": 41
+                    }
+                },
+                {
+                    "filename": "sprites/icons/attack.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 2226,
+                        "y": 2152,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/gold.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 2340,
+                        "y": 361,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/iridium.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1808,
+                        "y": 807,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/shard.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1840,
+                        "y": 807,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/shield.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1610,
+                        "y": 2107,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/icons/ship.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 32,
+                        "h": 32
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 32,
+                        "h": 32
+                    },
+                    "frame": {
+                        "x": 1610,
+                        "y": 2139,
+                        "w": 32,
+                        "h": 32
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/large/AcidRain_Large_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 320,
+                        "y": 2240,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/acid-rain/idle/medium/AcidRain_Medium_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 160,
+                        "h": 110
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 160,
+                        "h": 110
+                    },
+                    "frame": {
+                        "x": 800,
+                        "y": 2215,
+                        "w": 160,
+                        "h": 110
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/citadel/crown/Citadel_Crown_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 53,
+                        "h": 34
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 53,
+                        "h": 34
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 619,
+                        "w": 53,
+                        "h": 34
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 693,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 693,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 693,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/hex/holo/Holo_Rough_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 179,
+                        "h": 115
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 179,
+                        "h": 115
+                    },
+                    "frame": {
+                        "x": 708,
+                        "y": 693,
+                        "w": 179,
+                        "h": 115
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/blue/Pending_Blue_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 904,
+                        "y": 1827,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/green/Pending_Green_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 472,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/pink/Pending_Pink_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 808,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/purple/Pending_Purple_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1144,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/red/Pending_Red_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1480,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/pending-arrows/yellow/Pending_Yellow_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 111,
+                        "h": 56
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 111,
+                        "h": 56
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 1816,
+                        "w": 111,
+                        "h": 56
+                    }
+                },
+                {
+                    "filename": "sprites/planet/treasure/Planets_Iridium_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 122,
+                        "h": 80
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 122,
+                        "h": 80
+                    },
+                    "frame": {
+                        "x": 2002,
+                        "y": 1990,
+                        "w": 122,
+                        "h": 80
+                    }
+                },
+                {
+                    "filename": "sprites/planet/treasure/Planets_Iridium_5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 122,
+                        "h": 80
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 122,
+                        "h": 80
+                    },
+                    "frame": {
+                        "x": 2124,
+                        "y": 1990,
+                        "w": 122,
+                        "h": 80
+                    }
+                },
+                {
+                    "filename": "sprites/planet/treasure/Planets_Iridium_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 122,
+                        "h": 80
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 122,
+                        "h": 80
+                    },
+                    "frame": {
+                        "x": 2063,
+                        "y": 2188,
+                        "w": 122,
+                        "h": 80
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/crack/Cracks_3.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 119,
+                        "h": 93
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 119,
+                        "h": 93
+                    },
+                    "frame": {
+                        "x": 2264,
+                        "y": 186,
+                        "w": 119,
+                        "h": 93
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/exit/ShieldEater_Leave_0.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1220,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1672,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1672,
+                        "y": 462,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1582,
+                        "y": 924,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_13.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1582,
+                        "y": 924,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_14.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1582,
+                        "y": 924,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/idle/ShieldEater_Idle_4.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 226,
+                        "h": 231
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 226,
+                        "h": 231
+                    },
+                    "frame": {
+                        "x": 1582,
+                        "y": 1155,
+                        "w": 226,
+                        "h": 231
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 2261,
+                        "y": 2248,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_2.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 83,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 166,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 249,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 332,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                },
+                {
+                    "filename": "sprites/shield-eater/target/Shield_Target_7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 83,
+                        "h": 82
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 83,
+                        "h": 82
+                    },
+                    "frame": {
+                        "x": 332,
+                        "y": 2350,
+                        "w": 83,
+                        "h": 82
+                    }
+                }
+            ]
+        }
+    ]
+}

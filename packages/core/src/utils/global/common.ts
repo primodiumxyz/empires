@@ -1,5 +1,6 @@
 import { getAddress, Hex, isAddress, pad, size, trim } from "viem";
 
+import { Coord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
 
 /**
@@ -103,3 +104,25 @@ export function clampBigInt(value: bigint, min: bigint, max: bigint) {
 export const lerp = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
   return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 };
+
+/**
+ * Calculate the angle between two points
+ * @returns both radians and degrees
+ */
+export function calculateAngleBetweenPoints(point1: Coord, point2: Coord) {
+  const dy = point2.y - point1.y;
+  const dx = point2.x - point1.x;
+  const radian = Math.atan2(dy, dx);
+  let degree = radian * (180 / Math.PI);
+  if (degree < 0) degree = 360 + degree;
+  return { radian, degree };
+}
+
+export function calculateMidpoint(point1: Coord, point2: Coord) {
+  return { x: (point1.x + point2.x) / 2, y: (point1.y + point2.y) / 2 };
+}
+
+export async function sleep(duration: number) {
+  //sleep duration
+  await new Promise((resolve) => setTimeout(resolve, duration));
+}

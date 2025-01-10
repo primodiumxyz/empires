@@ -1,17 +1,13 @@
 import { useMemo } from "react";
 
-import { useAccountClient, useCore } from "@primodiumxyz/core/react";
-import { createContractCalls } from "@/config/contractCalls/createContractCalls";
-import { useDripAccount } from "@/hooks/useDripAccount";
-import { useTxExecute } from "@/hooks/useTxExecute";
+import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
+import { createContractCalls } from "@/contractCalls/createContractCalls";
 
 export const useContractCalls = () => {
   const core = useCore();
-  const accountClient = useAccountClient();
-  const execute = useTxExecute();
-  const requestDrip = useDripAccount();
+  const { playerAccount } = usePlayerAccount();
 
   return useMemo(() => {
-    return createContractCalls(core, accountClient, execute, requestDrip);
-  }, [core, accountClient, execute, requestDrip]);
+    return createContractCalls(core, playerAccount);
+  }, [core, playerAccount]);
 };

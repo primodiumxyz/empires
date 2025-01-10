@@ -1,33 +1,24 @@
 {
-  "name": "primodium-base",
-  "version": "1.0.0",
+  "name": "primodium-empires",
+  "version": "0.1.10",
   "description": "",
-  "keywords": [],
-  "license": "ISC",
-  "author": "",
-  "type": "module",
   "scripts": {
+    "dev": "turbo dev dev:indexer dev:keeper --continue",
     "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "pnpm eslint --cache --fix .",
-    "prepare": "husky && husky install",
-    "sort-package-json": "npx sort-package-json package.json 'packages/*/package.json' 'apps/*/package.json'",
-    "test": "turbo test"
+    "clean": "rm -rf ./node_modules && rm -rf ./packages/assets/node_modules && rm -rf ./packages/contracts/node_modules && rm -rf ./packages/contracts/src/codegen && rm -rf ./packages/core/node_modules && rm -rf ./packages/engine/node_modules && rm -rf ./packages/game/node_modules",
+    "clean:indexer": "pnpm clean-local-docker-indexer",
+    "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
+    "dev:keeper": "cd apps/keeper && pnpm start",
+    "build:contracts": "turbo --filter @primodiumxyz/contracts build",
+    "build:webapp": "turbo --filter @primodiumxyz/webapp build"
   },
-  "lint-staged": {
-    "*.{ts,tsx,css,md,mdx,sol}": "prettier --write",
-    "package.json": "pnpm sort-package-json"
-  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@eslint/js": "^9.6.0",
-    "@types/eslint__js": "^8.42.3",
-    "eslint": "^9.6.0",
-    "husky": ">=6",
-    "lint-staged": ">=10",
-    "prettier": "^3.3.2",
+    "@primodiumxyz/pg-indexer-reader": "^0.6.9",
     "turbo": "^2.0.4",
-    "typescript": "^5.5.3",
-    "typescript-eslint": "^7.16.0"
+    "typescript": "^5.5.3"
   },
   "packageManager": "pnpm@8.15.8",
   "engines": {

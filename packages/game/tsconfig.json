@@ -1,0 +1,13 @@
+{
+  "extends": "../../.tsconfigs/bundler/dom/library-monorepo.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "paths": {
+      "@game/*": ["./src/*"],
+      "@client/*": ["../../apps/web/src/*"]
+    }
+  },
+  "references": [{ "path": "../../apps/web" }],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,7 +1,6 @@
-import { useContext } from "react";
-
 import { Core } from "@core/lib/types";
 import { CoreContext } from "@core/react/hooks/providers/CoreProvider";
+import { useContext } from "react";
 
 /**
  * Provides access to the CoreContext.

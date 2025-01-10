@@ -7,14 +7,14 @@
   "author": "",
   "type": "module",
   "exports": {
-    ".": "./src/index.js",
-    "./react": "./src/react/index.js"
+    ".": "./src/index.ts",
+    "./react": "./src/react/index.ts"
   },
   "files": [
     "src"
   ],
   "scripts": {
-    "test": "vitest --run"
+    "test": "vitest"
   },
   "dependencies": {
     "@latticexyz/block-logs-stream": "2.0.9",
@@ -23,7 +23,8 @@
     "@latticexyz/store": "2.0.9",
     "@latticexyz/world-modules": "2.0.9",
     "@primodiumxyz/contracts": "workspace:*",
-    "@primodiumxyz/reactive-tables": "^3.5.0",
+    "@primodiumxyz/engine": "workspace:*",
+    "@primodiumxyz/reactive-tables": "^3.6.1",
     "@primodiumxyz/sync-stack": "^0.6.9",
     "abitype": "^1.0.2",
     "dayjs": "^1.11.10",

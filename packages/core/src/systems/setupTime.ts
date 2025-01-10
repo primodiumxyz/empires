@@ -1,6 +1,7 @@
+import { Core } from "@core/lib/types";
+
 import { namespaceWorld } from "@primodiumxyz/reactive-tables";
 import { systems } from "@primodiumxyz/reactive-tables/utils";
-import { Core } from "@core/lib/types";
 
 const { defineRxSystem } = systems;
 

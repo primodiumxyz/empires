@@ -1,6 +1,5 @@
-import React, { createContext, ReactNode } from "react";
-
 import { Core } from "@core/lib/types";
+import React, { createContext, ReactNode } from "react";
 
 export const CoreContext = createContext<Core | null>(null);
 

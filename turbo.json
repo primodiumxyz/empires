@@ -1,10 +1,20 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["packages/contracts/worlds.json"],
   "tasks": {
-    "build": {
-      "outputs": ["dist/**"]
+    "//#dev:indexer": {
+      "cache": false,
+      "persistent": true
     },
-    "test": {},
+    "//#dev:keeper": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "outputs": ["dist/**", "out/**", "src/codegen/**"],
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "../assets/maps/**"]
+    },
     "check-types": {
       "dependsOn": ["^check-types"]
     },
@@ -12,5 +22,6 @@
       "persistent": true,
       "cache": false
     }
-  }
+  },
+  "ui": "tui"
 }

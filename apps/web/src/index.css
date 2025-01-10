@@ -1,3 +1,7 @@
+@import "@fontsource/space-mono";
+@import "@fontsource/space-mono/700.css";
+@import "@fontsource/silkscreen/400.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -38,6 +42,21 @@
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
+  }
+
+  .star-background {
+    background-image: url("/img/backgrounds/star.png");
+    background-repeat: repeat;
+    background-size: 256px;
+  }
+
+  .pixel-border {
+    border-image: url("/img/ui/frame3.png") 8; /* The number 16 corresponds to the slice value */
+    border-image-width: 16px;
+    border-image-outset: 0px;
+    border-image-repeat: round; /* or stretch or space */
+    image-rendering: pixelated; /* Ensures the 'nearest neighbor' scaling */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0);
   }
 
   .container {
@@ -157,4 +176,45 @@
     display: inline-block;
     animation: marquee2 20s linear infinite;
   }
+
+  /* override default behavior */
+  .cursor-pointer {
+    cursor:
+      url("/img/cursors/pointer.png") 12 0,
+      auto !important;
+  }
+}
+
+.floating-text {
+  animation: float 5s ease-out forwards;
+}
+
+@keyframes float {
+  0% {
+    transform: translateX(90%);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(90%, -10px);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(90%, -30px);
+  }
+}
+
+@keyframes moveAlongAngle {
+  0%,
+  100% {
+    transform: translate(0, -50%) rotate(var(--rotation));
+  }
+  50% {
+    transform: translate(calc(cos(var(--rotation)) * 10px), calc(sin(var(--rotation)) * 10px - 50%))
+      rotate(var(--rotation));
+  }
+}
+
+.animate-move-along-angle {
+  animation: moveAlongAngle 2s ease-in-out infinite;
 }

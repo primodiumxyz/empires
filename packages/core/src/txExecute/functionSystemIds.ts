@@ -11,6 +11,28 @@ export const functionSystemIds: {
   registerDelegation: getSystemId("Registration", "CORE"),
   unregisterDelegation: getSystemId("Registration", "CORE"),
 
-  Primodium_Base__increment: getSystemId("IncrementSystem", "Primodium_Base"),
-  Primodium_Base__devSetField: getSystemId("DevSystem", "Primodium_Base"),
+  /* -------------------------------- Gameplay -------------------------------- */
+  Empires__createShip: getSystemId("OverrideShipSystem"),
+  Empires__chargeShield: getSystemId("OverrideShieldSystem"),
+  Empires__sellPoints: getSystemId("OverridePointsSystem"),
+  Empires__airdropGold: getSystemId("OverrideAirdropSystem"),
+  Empires__detonateShieldEater: getSystemId("OverrideShieldEaterSystem"),
+  Empires__placeAcid: getSystemId("OverrideAcidSystem"),
+
+  Empires__updateWorld: getSystemId("UpdateSystem"),
+  Empires__distributeFunds: getSystemId("PayoutSystem"),
+  Empires__resetGame: getSystemId("ResetSystem"),
+  Empires__updateWinner: getSystemId("UpdateSystem"),
+
+  Empires__placeMagnet: getSystemId("OverrideMagnetsSystem"),
+
+  /* ----------------------------------- Dev ---------------------------------- */
+  Empires__devSetField: getSystemId("DevSystem"),
+  Empires__devDeleteRecord: getSystemId("DevSystem"),
+
+  Empires__pause: getSystemId("AdminSystem"),
+  Empires__unpause: getSystemId("AdminSystem"),
+  Empires__setRole: getSystemId("AdminSystem"),
+  Empires__removeRole: getSystemId("AdminSystem"),
+  Empires__setGameConfigAndTurn: getSystemId("AdminSystem"),
 };

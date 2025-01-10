@@ -1,12 +1,11 @@
-import { Address, Hex, TransactionReceipt } from "viem";
+import { Address } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { beforeAll, describe, expect, test } from "vitest";
-import { worldInput } from "@primodiumxyz/contracts/mud.config";
-import worldsJson from "@primodiumxyz/contracts/worlds.json";
+import { describe, expect, test } from "vitest";
 
+import { worldInput, worldsJson } from "@primodiumxyz/contracts";
 import { createLocalAccount } from "@core/account/createLocalAccount";
 import { createCore } from "@core/createCore";
-import { Core, CoreConfig, SyncStep } from "@core/index";
+import { CoreConfig } from "@core/index";
 import { chainConfigs } from "@core/network/config/chainConfigs";
 import { otherTableDefs } from "@core/network/otherTableDefs";
 
@@ -42,7 +41,7 @@ export const commonTests = () => {
   describe("common", () => {
     /* ----------------------------- Test Skip Flags ---------------------------- */
 
-    const { coreConfig, privateKey, address, isAnvilRunning } = createTestConfig();
+    const { coreConfig, privateKey, address } = createTestConfig();
 
     test("core contains mud tables", () => {
       const core = createCore(coreConfig);
@@ -55,12 +54,6 @@ export const commonTests = () => {
       }
     });
 
-    test("core contains random utility", () => {
-      const core = createCore(coreConfig);
-
-      expect(core.utils).toEqual({});
-    });
-
     test("core contains identical config", () => {
       const core = createCore(coreConfig);
 
@@ -71,57 +64,6 @@ export const commonTests = () => {
       test("create local account", async () => {
         const account = createLocalAccount(coreConfig, privateKey);
         expect(account.address).toEqual(address);
-      });
-    });
-
-    describe.skipIf(!isAnvilRunning)("live game tests", () => {
-      let core: Core;
-
-      beforeAll(async () => {
-        core = createCore(coreConfig);
-        await waitUntilSynced();
-      });
-
-      const waitUntilSynced = async () => {
-        let syncStatus = core.tables.SyncStatus.get()?.step ?? SyncStep.Syncing;
-
-        while (syncStatus !== SyncStep.Live) {
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          syncStatus = core.tables.SyncStatus.get()?.step ?? SyncStep.Syncing;
-        }
-      };
-
-      const waitUntilTxExecution = async (txHash: Hex) => {
-        const publicClient = core.network.publicClient;
-
-        const pollForReceipt = async (): Promise<TransactionReceipt> => {
-          console.log("polling for receipt");
-          try {
-            let receipt = await publicClient.getTransactionReceipt({ hash: txHash });
-            console.log({ receipt });
-            while (receipt === undefined) {
-              await new Promise((resolve) => setTimeout(resolve, 400));
-              receipt = await publicClient.getTransactionReceipt({ hash: txHash });
-            }
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            return receipt;
-          } catch (error) {
-            await new Promise((resolve) => setTimeout(resolve, 400));
-            return pollForReceipt();
-          }
-        };
-
-        return pollForReceipt();
-      };
-
-      test("update counter", async () => {
-        const account = createLocalAccount(coreConfig, privateKey);
-
-        const txHash = await account.worldContract.write.Primodium_Base__increment();
-        await waitUntilTxExecution(txHash);
-
-        const counter = core.tables.Counter.get()?.value ?? 0n;
-        expect(counter).toEqual(1n);
       });
     });
   });

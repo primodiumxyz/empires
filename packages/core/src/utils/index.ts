@@ -10,3 +10,4 @@ export * from "./global/number";
 export * from "./global/score";
 export * from "./global/storage";
 export * from "./global/vector";
+export * from "./global/coord";
