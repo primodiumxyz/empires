@@ -92,9 +92,9 @@ const base: ChainConfig = {
       http: ["https://mainnet.base.org"],
     },
   },
-  faucetUrl: "https://base-sepolia-faucet.primodium.ai/trpc",   // TODO: update this
-  indexerUrl: "https://empires-base-sepolia-indexer.primodium.ai", // TODO: update this
-  keeperUrl: "https://keeper.primodium.ai/trpc",
+  faucetUrl: "https://base-faucet.primodium.ai/trpc",
+  indexerUrl: "https://empires-indexer.primodium.ai",
+  keeperUrl: "https://empires-keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
       name: "BaseScan",
