@@ -15,6 +15,7 @@ import { Hex } from "viem";
 
 const chainId: string = "8453"  // base
 const worldAddress: Hex = (worldsJson[chainId as keyof typeof worldsJson].address) as Hex;
+const initialBlockNumber: bigint = BigInt(worldsJson[chainId as keyof typeof worldsJson].blockNumber);
 const env = parseEnv();
 
 // @see https://fastify.dev/docs/latest/
@@ -53,7 +54,7 @@ const chain = Object.values(chainConfigs).find((chain) => chain.id === Number(ch
 if (!chain) {
   throw new Error(`Invalid chain ID: ${chainId}`);
 }
-keeperService.start(chain, worldAddress);
+keeperService.start(chain, worldAddress, initialBlockNumber);
 
 await server.listen({ host: env.KEEPER_HOST, port: env.KEEPER_PORT });
 console.log(`chainId: ${chainId}`);

@@ -37,7 +37,7 @@ export function createAppRouter() {
             message: "Invalid world address",
           });
 
-        const success = await ctx.keeperService.start(chain, worldAddress, BigInt(initialBlockNumber) ?? 0n);
+        const success = await ctx.keeperService.start(chain, worldAddress, BigInt(initialBlockNumber));
         if (!success) {
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
