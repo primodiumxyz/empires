@@ -24,12 +24,12 @@ export class KeeperService {
     this.keeperPrivateKey = keeperPrivateKey;
   }
 
-  async start(chain: ChainConfig, worldAddress: Hex, initialBlockNumber: bigint): Promise<boolean> {
+  async start(chain: ChainConfig, worldAddress: Hex): Promise<boolean> {
     if (this.running) return await this.stop();
 
     try {
       this.running = true;
-      this.run(chain, worldAddress, initialBlockNumber);
+      this.run(chain, worldAddress);
       return true;
     } catch (error) {
       console.error("Failed to start keeper:", error);
@@ -57,8 +57,8 @@ export class KeeperService {
   /*//////////////////////////////////////////////////////////////
       MAIN LOOP
   //////////////////////////////////////////////////////////////*/
-  private async run(chain: ChainConfig, worldAddress: Hex, initialBlockNumber: bigint): Promise<void> {
-    const { core, deployerAccount } = await this.setupCore(chain, worldAddress, initialBlockNumber);
+  private async run(chain: ChainConfig, worldAddress: Hex): Promise<void> {
+    const { core, deployerAccount } = await this.setupCore(chain, worldAddress);
 
     // state machine logic executes once per block
     // breaking it out into discrete states makes sure previous state updates have completed.
@@ -70,7 +70,8 @@ export class KeeperService {
       "GameOver",
       "SettingWinner",
       "DistributingFunds",
-      "ResettingGame"
+      "ResettingGame",
+      "RoundEnded",
     }
 
     let keeperState = KeeperState.NotReady;
@@ -159,7 +160,7 @@ export class KeeperService {
             TxMutex = true;
             await this.distributeFunds(core, deployerAccount, () => {
               console.info("\n** Funds distributed\n");
-              keeperState = KeeperState.ResettingGame;
+              keeperState = KeeperState.RoundEnded;
               TxMutex = false;
             });
             break;
@@ -189,6 +190,9 @@ export class KeeperService {
               TxMutex = false;
             });
             break;
+
+          case KeeperState.RoundEnded:
+            break;
         }
       },
     });
@@ -200,12 +204,10 @@ export class KeeperService {
   private async setupCore(
     chain: ChainConfig,
     worldAddress: Hex,
-    initialBlockNumber: bigint,
   ): Promise<{ core: Core; deployerAccount: LocalAccount }> {
     const core = createCore({
       chain,
       worldAddress: worldAddress,
-      initialBlockNumber: initialBlockNumber,
       runSync: true,
       runSystems: true,
     });
