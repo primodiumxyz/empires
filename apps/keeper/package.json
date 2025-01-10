@@ -26,6 +26,7 @@
     "@fastify/compress": "^6.5.0",
     "@fastify/cors": "^8.3.0",
     "@primodiumxyz/core": "workspace:*",
+    "@primodiumxyz/contracts": "workspace:*",
     "@trpc/client": "10.34.0",
     "@trpc/server": "10.34.0",
     "debug": "^4.3.4",

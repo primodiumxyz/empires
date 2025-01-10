@@ -9,6 +9,13 @@ import { parseEnv } from "@bin/parseEnv";
 import { AppRouter, createAppRouter } from "@/createAppRouter";
 import { KeeperService } from "@/KeeperService";
 
+import { chainConfigs } from "@core/index";
+import { worldsJson } from "@primodiumxyz/contracts";
+import { Hex } from "viem";
+
+// const chainId: string = "8453"
+const chainId: string = "31337"
+const worldAddress: Hex = (worldsJson[chainId as keyof typeof worldsJson].address) as Hex;
 const env = parseEnv();
 
 // @see https://fastify.dev/docs/latest/
@@ -43,5 +50,13 @@ server.register(fastifyTRPCPlugin<AppRouter>, {
   },
 });
 
+const chain = Object.values(chainConfigs).find((chain) => chain.id === Number(chainId));
+if (!chain) {
+  throw new Error(`Invalid chain ID: ${chainId}`);
+}
+keeperService.start(chain, worldAddress);
+
 await server.listen({ host: env.KEEPER_HOST, port: env.KEEPER_PORT });
+console.log(`chainId: ${chainId}`);
+console.log(`worldAddress: ${worldAddress}`);
 console.log(`keeper server listening on http://${env.KEEPER_HOST}:${env.KEEPER_PORT}`);
