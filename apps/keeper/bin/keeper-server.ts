@@ -13,8 +13,7 @@ import { chainConfigs } from "@core/index";
 import { worldsJson } from "@primodiumxyz/contracts";
 import { Hex } from "viem";
 
-// const chainId: string = "8453"
-const chainId: string = "31337"
+const chainId: string = "8453"  // base
 const worldAddress: Hex = (worldsJson[chainId as keyof typeof worldsJson].address) as Hex;
 const env = parseEnv();
 
