@@ -61,7 +61,7 @@ export const _Account = ({ address, className }: { address: Address; className?:
       ) : (
         <Price wei={balance} className="text-sm text-accent" />
       )}
-      {DEV && balance < minEth && <Button onClick={() => requestDrip(address, true)}>Rebuy</Button>}
+      {/* {DEV && balance < minEth && <Button onClick={() => requestDrip(address, true)}>Rebuy</Button>} */}
     </div>
   );
 };
