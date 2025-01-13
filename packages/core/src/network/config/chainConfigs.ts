@@ -93,7 +93,7 @@ const base: ChainConfig = {
     },
   },
   faucetUrl: "https://base-faucet.primodium.ai/trpc",
-  indexerUrl: "https://empires-indexer.primodium.ai",
+  indexerUrl: "",
   keeperUrl: "https://empires-keeper.primodium.ai/trpc",
   blockExplorers: {
     default: {
