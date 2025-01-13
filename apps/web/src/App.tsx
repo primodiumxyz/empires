@@ -9,8 +9,9 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider, PlayerAccountProvider } from "@primodiumxyz/core/react";
-import { BackgroundNebula } from "@/components/BackgroundNebula";
+import Features from "@/components/features";
 import Game from "@/components/game";
+import Guide from "@/components/guide";
 import PayoutManager from "@/components/payman";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
@@ -81,6 +82,8 @@ const App = () => {
                   <Route path="game" element={<Game />} />
                   <Route path="payman" element={<PayoutManager />} />
                   <Route path="*" element={<Game />} />
+                  <Route path="features" element={<Features />} />
+                  <Route path="guide" element={<Guide />} />
                 </Routes>
                 <ToastContainer
                   toastClassName={cn("font-pixel text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
