@@ -247,7 +247,7 @@ export class KeeperService {
       // @ts-expect-error Wrong type
       args: [routineThresholds],
       options: {
-        gas: 25000000n,
+        gas: 28000000n,
       },
       onComplete,
       core,
@@ -274,7 +274,7 @@ export class KeeperService {
       // @ts-expect-error Wrong type
       args: [nextStartBlock],
       options: {
-        gas: 25000000n,
+        gas: 28000000n,
       },
       onComplete,
       core,
