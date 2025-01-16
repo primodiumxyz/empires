@@ -313,6 +313,13 @@ declare const abi: [
   },
   {
     "type": "function",
+    "name": "Empires__tick",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "Empires__unpause",
     "inputs": [],
     "outputs": [],
