@@ -13,11 +13,11 @@ export const Pot: React.FC<PotProps> = ({ className }) => {
   const { pot } = usePot();
   const { gameOver } = useWinningEmpire();
 
-  if (pot <= 0n || gameOver) {
+  if (pot === 0n || gameOver) {
     return (
       <div className={cn(className)}>
         <h2 className="ml-1 font-semibold opacity-70">Pot</h2>
-        ---
+        <h3 className={cn("text-xl text-accent")}> ---</h3>
       </div>
     );
   }
