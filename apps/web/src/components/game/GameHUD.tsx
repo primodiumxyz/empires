@@ -12,6 +12,7 @@ import { Join } from "@/components/core/Join";
 import { Dashboard } from "@/components/dashboard";
 import { Empires } from "@/components/empires/Empires";
 import { GameOver } from "@/components/GameOver";
+import { GuideButton } from "@/components/guide-button";
 import { Intro } from "@/components/Introduction";
 import { Leaderboard } from "@/components/leaderboard/Leaderboard";
 import { MusicPlayer } from "@/components/MusicPlayer";
@@ -106,6 +107,7 @@ export const GameHUD = () => {
           <div className="pointer-events-auto flex w-full items-center gap-2 lg:ml-2">
             <MusicPlayer />
             <Settings />
+            <GuideButton />
           </div>
         </HUD.BottomLeft>
 

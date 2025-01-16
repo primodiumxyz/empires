@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
-import { Link, Outlet, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { defineChain } from "viem";
 
