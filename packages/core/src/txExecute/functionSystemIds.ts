@@ -23,6 +23,7 @@ export const functionSystemIds: {
   Empires__distributeFunds: getSystemId("PayoutSystem"),
   Empires__resetGame: getSystemId("ResetSystem"),
   Empires__updateWinner: getSystemId("UpdateSystem"),
+  Empires__tick: getSystemId("TickSystem"),
 
   Empires__placeMagnet: getSystemId("OverrideMagnetsSystem"),
 

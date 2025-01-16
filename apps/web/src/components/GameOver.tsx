@@ -54,16 +54,14 @@ const PlayerPot = ({ entity }: { entity: Entity }) => {
   const empirePoints = tables.Empire.useWithKeys({ id: empire ?? 0 })?.pointsIssued ?? 0n;
   const playerPot = empirePoints ? (pot * playerEmpirePoints) / empirePoints : 0n;
 
-  if (playerPot > 0n)
-    return (
-      <>
-        <p>
-          You earned <Price wei={playerPot} />!
-        </p>
-        <Button variant="primary" size="sm" className="col-span-2 mt-1 w-full" onClick={handleClick}>
-          Withdraw
-        </Button>
-      </>
-    );
-  if (playerPot === 0n) return <p className="col-span-2 text-xs opacity-50">You have no earnings to withdraw.</p>;
+  return (
+    <>
+      <p>
+        You earned <Price wei={playerPot} />!
+      </p>
+      <Button variant="primary" size="sm" className="col-span-2 mt-1 w-full" onClick={handleClick}>
+        Payout Manager
+      </Button>
+    </>
+  );
 };
