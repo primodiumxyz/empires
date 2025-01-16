@@ -25,7 +25,9 @@ const PayoutManager = () => {
 
     console.log(walletClient?.chain.rpcUrls)
 
-    const paymanAddress = tables.PayoutManager.get()?.contractAddress as Address;
+    //const paymanAddress = tables.PayoutManager.get()?.contractAddress as Address;
+    const paymanAddress = "0xEFCB144B5b1E7BA06e70f902C56B052C71B402CB" as Address;
+    console.log(paymanAddress);
 
     const playerWinnings = winnings ?? 0n;
     const playerWinningsFloat = parseFloat(formatEther(playerWinnings)).toFixed(2);
@@ -81,7 +83,7 @@ const PayoutManager = () => {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
             <h1 className="text-4xl">Payout Manager</h1>
-            <h2 className="text-xl"><a href={`https://sepolia.basescan.org/address/${paymanAddress}`}>{paymanAddress}</a></h2>
+            <h2 className="text-xl"><a href={`https://basescan.org/address/${paymanAddress}`}>{paymanAddress}</a></h2>
             <br />
             <h2 className="text-2xl">Player Address: {playerAddress}</h2>
             <h2 className="text-2xl">Claimable Winnings: {playerWinningsFloat} ETH</h2>
