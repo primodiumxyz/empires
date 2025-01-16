@@ -76,7 +76,7 @@ export class KeeperService {
 
     let keeperState = KeeperState.NotReady;
 
-    const TICK_INTERVAL_BLOCKS = 5; // 5 blocks is 10 seconds on base
+    const TICK_INTERVAL_BLOCKS = 10; // 5 blocks is 10 seconds on base
 
     // top level mutex for existing transactions in case they take more than one block
     let TxMutex = false;
@@ -91,7 +91,6 @@ export class KeeperService {
         const endBlock = core.tables.P_GameConfig.get()?.gameOverBlock ?? 0n;
         const blocksLeft = endBlock - (current?.value ?? 0n);
         const gameOver = blocksLeft <= 0n;
-        const startNextRound = (current?.value ?? 0n) + (core.tables.P_GameConfig.get()?.delayBetweenRounds ?? 60n);
 
         // high level state report to the console
         console.info(`STATUS[${current?.value ?? 0n}]: ${KeeperState[keeperState]}`);
@@ -128,18 +127,6 @@ export class KeeperService {
               return;
             }
 
-            if (tickCountdown > 0) {
-              tickCountdown--;
-            }
-            else {
-              tickCountdown = TICK_INTERVAL_BLOCKS;
-              TxMutex = true;
-              await this.tick(core, deployerAccount, () => {
-                TxMutex = false;
-              });
-            }
-
-
             const currentBlock = current?.value ?? 0n;
             const nextTurnBlock = core.tables.Turn.get()?.nextTurnBlock ?? 0n;
             // something went wrong; return
@@ -148,6 +135,16 @@ export class KeeperService {
             }
             if (currentBlock < (nextTurnBlock + 3n)) {
               // console.info(`SKIPPING: current block ${current?.value} next turn block ${nextTurnBlock}`);
+              if (tickCountdown > 0) {
+                tickCountdown--;
+              }
+              else {
+                tickCountdown = TICK_INTERVAL_BLOCKS;
+                TxMutex = true;
+                await this.tick(core, deployerAccount, () => {
+                  TxMutex = false;
+                });
+              }
               return;
             }
 
@@ -177,32 +174,6 @@ export class KeeperService {
             await this.distributeFunds(core, deployerAccount, () => {
               console.info("\n** Funds distributed\n");
               keeperState = KeeperState.RoundEnded;
-              TxMutex = false;
-            });
-            break;
-
-          case KeeperState.ResettingGame:
-            // resetGame needs to be called multiple times
-            // the ready flag is set to false on the first call,
-            // and set to true when the reset is completed.
-            // this is expected to take 7 blocks.
-            if (!resetting) {
-              // log the start the process
-              console.info("\n** Resetting game\n");
-              resetting = true;
-            }
-            else {
-              // if we're done, change state and exit.s
-              if ((core.tables.Ready.get()?.value ?? false) == true) {
-                keeperState = KeeperState.WaitingToStart;
-                resetting = false;
-                return;
-              }
-            }
-
-            // execute a reset step
-            TxMutex = true;
-            await this.setupNextRound(core, deployerAccount, startNextRound, () => {
               TxMutex = false;
             });
             break;
@@ -277,20 +248,6 @@ export class KeeperService {
       args: [],
       options: {
         gas: 25000000n,
-      },
-      onComplete,
-      core,
-      playerAccount: deployerAccount,
-    });
-  }
-
-  private async setupNextRound(core: Core, deployerAccount: LocalAccount, nextStartBlock: bigint, onComplete: () => void): Promise<TxReceipt> {
-    return await execute({
-      functionName: "Empires__resetGame",
-      // @ts-expect-error Wrong type
-      args: [nextStartBlock],
-      options: {
-        gas: 28000000n,
       },
       onComplete,
       core,
