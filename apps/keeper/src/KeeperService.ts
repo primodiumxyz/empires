@@ -76,13 +76,15 @@ export class KeeperService {
 
     let keeperState = KeeperState.NotReady;
 
-    const TICK_INTERVAL_BLOCKS = 10; // 5 blocks is 10 seconds on base
+    const TICK_INTERVAL_BLOCKS = 10; // 10 blocks is 20 seconds on base
+    const MUTEX_MAX_OVERHOLD = 10n; // 10 blocks is 20 seconds on base
 
     // top level mutex for existing transactions in case they take more than one block
     let TxMutex = false;
     let resetting = false;
 
     let tickCountdown = TICK_INTERVAL_BLOCKS;
+    let mutexBlockingCount = 0n;
 
     this.unsubscribe = core.tables.BlockNumber.watch({
       onChange: async ({ properties: { current } }) => {
@@ -92,12 +94,19 @@ export class KeeperService {
         const blocksLeft = endBlock - (current?.value ?? 0n);
         const gameOver = blocksLeft <= 0n;
 
+        const turnLengthBlocks = core.tables.P_GameConfig.get()?.turnLengthBlocks ?? 0n;
+
         // high level state report to the console
         console.info(`STATUS[${current?.value ?? 0n}]: ${KeeperState[keeperState]}`);
 
         const txQueueSize = core.tables.TransactionQueue.getSize();
         if (txQueueSize > 0 || TxMutex) {
           // console.info("SKIPPING: transaction in progress");
+          mutexBlockingCount++;
+          if (mutexBlockingCount > turnLengthBlocks + MUTEX_MAX_OVERHOLD) {
+            // console.error("SKIPPING:clearing mutex");
+            mutexBlockingCount = 0n;
+          }
           return;
         }
 
