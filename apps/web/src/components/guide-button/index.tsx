@@ -6,7 +6,7 @@ export function GuideButton() {
   const navigate = useNavigate();
 
   return (
-    <Button size="md" variant="accent" onClick={() => navigate("guide")}>
+    <Button size="sm" variant="accent" onClick={() => navigate("guide")}>
       Game Guide
     </Button>
   );
