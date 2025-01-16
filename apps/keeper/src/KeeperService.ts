@@ -76,9 +76,13 @@ export class KeeperService {
 
     let keeperState = KeeperState.NotReady;
 
+    const TICK_INTERVAL_BLOCKS = 5; // 5 blocks is 10 seconds on base
+
     // top level mutex for existing transactions in case they take more than one block
     let TxMutex = false;
     let resetting = false;
+
+    let tickCountdown = TICK_INTERVAL_BLOCKS;
 
     this.unsubscribe = core.tables.BlockNumber.watch({
       onChange: async ({ properties: { current } }) => {
@@ -123,6 +127,18 @@ export class KeeperService {
               keeperState = KeeperState.GameOver;
               return;
             }
+
+            if (tickCountdown > 0) {
+              tickCountdown--;
+            }
+            else {
+              tickCountdown = TICK_INTERVAL_BLOCKS;
+              TxMutex = true;
+              await this.tick(core, deployerAccount, () => {
+                TxMutex = false;
+              });
+            }
+
 
             const currentBlock = current?.value ?? 0n;
             const nextTurnBlock = core.tables.Turn.get()?.nextTurnBlock ?? 0n;
@@ -288,6 +304,20 @@ export class KeeperService {
       args: [],
       options: {
         gas: 25000000n,
+      },
+      onComplete,
+      core,
+      playerAccount: deployerAccount,
+    });
+  }
+
+  private async tick(core: Core, deployerAccount: LocalAccount, onComplete: () => void): Promise<TxReceipt> {
+    return await execute({
+      functionName: "Empires__tick",
+      args: [],
+      options: {
+        gas: 1000000n,
+        value: 1n,
       },
       onComplete,
       core,
