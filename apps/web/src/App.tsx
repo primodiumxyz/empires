@@ -9,10 +9,11 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { InterfaceIcons } from "@primodiumxyz/assets";
 import { Core as CoreType, createCore } from "@primodiumxyz/core";
 import { CoreProvider, PlayerAccountProvider } from "@primodiumxyz/core/react";
-import Features from "@/components/features";
 import Game from "@/components/game";
-import Guide from "@/components/guide";
 import PayoutManager from "@/components/payman";
+import Features from "@/components/redirects/features";
+import Guide from "@/components/redirects/guide";
+import Terms from "@/components/redirects/terms";
 import { getCoreConfig } from "@/config/getCoreConfig";
 import { EthPriceProvider } from "@/hooks/providers/EthPriceProvider";
 import { cn } from "@/util/client";
@@ -84,6 +85,7 @@ const App = () => {
                   <Route path="*" element={<Game />} />
                   <Route path="features" element={<Features />} />
                   <Route path="guide" element={<Guide />} />
+                  <Route path="terms" element={<Terms />} />
                 </Routes>
                 <ToastContainer
                   toastClassName={cn("font-pixel text-xs border text-base-100 bg-neutral border-neutral rounded-box")}
