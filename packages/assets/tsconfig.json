@@ -8,5 +8,5 @@
   },
   "include": ["**/*.tsx", "**/*.ts"],
   "exclude": ["node_modules", "dist"],
-  "references": [{"path": "../engine"}]
+  "references": [{ "path": "../engine" }]
 }

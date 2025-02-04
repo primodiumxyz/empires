@@ -1,10 +1,5 @@
 {
-  "resources": [
-    "audio/atlas.ogg",
-    "audio/atlas.m4a",
-    "audio/atlas.mp3",
-    "audio/atlas.ac3"
-  ],
+  "resources": ["audio/atlas.ogg", "audio/atlas.m4a", "audio/atlas.mp3", "audio/atlas.ac3"],
   "spritemap": {
     "Bleep_01": {
       "start": 0,
