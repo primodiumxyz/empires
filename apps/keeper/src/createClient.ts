@@ -3,9 +3,7 @@ import { createTRPCProxyClient, CreateTRPCProxyClient, httpBatchLink } from "@tr
 import type { AppRouter } from "./createAppRouter";
 
 type CreateClientOptions = {
-  /**
-   * tRPC endpoint URL like `https://keeper.dev.linfra.xyz/trpc`.
-   */
+  /** TRPC endpoint URL like `https://keeper.dev.linfra.xyz/trpc`. */
   url: string;
   token: string;
 };

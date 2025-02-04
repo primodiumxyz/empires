@@ -1,7 +1,7 @@
-import createDebug from 'debug';
+import createDebug from "debug";
 
-export const debug = createDebug('primodium:keeper');
-export const error = createDebug('primodium:keeper');
+export const debug = createDebug("primodiumxyz:keeper");
+export const error = createDebug("primodiumxyz:keeper");
 
 // Pipe debug output to stdout instead of stderr
 debug.log = console.debug.bind(console);
