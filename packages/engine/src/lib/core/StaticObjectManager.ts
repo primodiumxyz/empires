@@ -1,6 +1,7 @@
 import { CoordMap } from "@engine/lib/util/coordMap";
 import { pixelToChunkCoord } from "@engine/lib/util/coords";
 import { Coord } from "@engine/lib/types";
+
 import { ChunkManager } from "./ChunkManager";
 import { createCamera } from "./createCamera";
 

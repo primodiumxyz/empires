@@ -24,6 +24,7 @@
     "^@engine/lib/core/(.*)$",
     "^@engine/lib/util/(.*)$",
     "^@engine/(.*)$",
+    "",
     "^[./]"
   ]
 }

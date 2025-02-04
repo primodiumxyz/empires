@@ -1,6 +1,6 @@
 import { createGame } from "@engine/lib/core/createGame";
 import { createScene } from "@engine/lib/core/createScene";
-import { GameObjectClasses } from "./util/constants";
+import { GameObjectClasses } from "@engine/lib/util/constants";
 
 export type Game = Awaited<ReturnType<typeof createGame>>;
 export type Scene = Awaited<ReturnType<typeof createScene>>;
