@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { Address, formatEther } from "viem";
 
 import { useCore, usePlayerAccount } from "@primodiumxyz/core/react";
-
-import { abi } from "../../hooks/abis/PayoutManager.json";
+import { abi } from "@/hooks/abis/PayoutManager.json";
 
 const PayoutManager = () => {
   const refreshMs: number = 2000;
@@ -98,7 +97,7 @@ const PayoutManager = () => {
   }, [playerAddress, paymanAddress, refreshMs]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex h-screen flex-col items-center justify-center">
       <h1 className="text-4xl">Payout Manager</h1>
       <h2 className="text-xl">
         <a href={`https://basescan.org/address/${paymanAddress}`}>{paymanAddress}</a>
