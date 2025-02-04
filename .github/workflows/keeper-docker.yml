@@ -1,10 +1,9 @@
-name: Build Indexer Docker Image
+name: Build Keeper Docker Image
 
 on:
   push:
     branches:
       - main
-      - release/*
   workflow_call:
 
 # Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.

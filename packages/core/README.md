@@ -1,6 +1,6 @@
 # Primodium Core
 
-Primodium Core exposes core functionality to [Primodium](primodium.com), a blockchain-based video game. This includes:
+Primodium Core exposes core functionality to [Primodium: Empires](empires.primodium.com). This includes:
 
 - The Core object, which contains
   - Tables, allowing user to access and update functionality. [See here](https://github.com/primodiumxyz/reactive-tables) for more details.
@@ -9,6 +9,8 @@ Primodium Core exposes core functionality to [Primodium](primodium.com), a block
   - Sync, a suite of tools for fetching data from an indexer
 - Hooks, which expose a set of hooks for React-based use cases
 - Constants and Mappings, used throughout the core package for type safety and developer experience.
+
+This package is available as a [npm package](https://www.npmjs.com/package/@primodiumxyz/core).
 
 ## Getting Started
 
@@ -27,12 +29,14 @@ You can find details about Primodium and ways to develop on top at [developer.pr
 pnpm install @primodiumxyz/core
 ```
 
+Or if you're using the whole monorepo, install by following the [README](../../README.md) in the root of the monorepo.
+
 ## Usage
 
 ### Node
 
 ```js
-import { chainConfigs, createCore } from "@primodiumxyz/core";
+import { createCore, chainConfigs } from "@primodiumxyz/core";
 
 const coreConfig = {
   chain: chainConfigs.dev,
@@ -51,7 +55,7 @@ const time = core.components.Time.get()?.value;
 
 ```js
 import { createCore, chainConfigs } from "@primodiumxyz/core";
-import { CoreProvider, AccountClientProvider, useCore, usePlayerAccount } from "@primodiumxyz/core/react";
+import { CoreProvider, AccountClientProvider, useCore, useAccountClient } from "@primodiumxyz/core/react";
 
 const App = () => {
   const core = createCore(coreConfig);
@@ -60,7 +64,7 @@ const App = () => {
   // AccountClientProvider must be defined within the core context
   return (
     <CoreProvider {...core}>
-      <AccountClientProvider playerPrivateKey={privateKey}>
+      <AccountClientProvider playerPrivateKey={privateKey} sessionPrivateKey={privateKey}>
         <Content />
       </AccountClientProvider>
     </CoreProvider>
@@ -69,11 +73,11 @@ const App = () => {
 
 const Content = () => {
   const core = useCore();
-  const account = usePlayerAccount();
+  const account = useAccountClient();
 
   return (
     <div>
-      {playerAccount.address}
+      {account.playerAccount.address}
     </div>
   )
 }

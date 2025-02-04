@@ -1,19 +1,14 @@
 {
   "name": "@primodiumxyz/game",
   "version": "1.0.0",
-  "description": "",
+  "description": "Phaser game objects, scenes and api for Primodium: Empires.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/primodiumxyz/primodium-empires",
+    "directory": "packages/game"
+  },
+  "license": "MIT",
   "main": "src/index.ts",
-  "imports": {
-    "@": {
-      "default": "./src"
-    }
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@primodiumxyz/assets": "workspace:*",
     "@primodiumxyz/contracts": "workspace:*",

@@ -1,12 +1,18 @@
 {
   "name": "@primodiumxyz/webapp",
-  "private": true,
   "version": "0.0.1",
+  "description": "Web client for the Primodium game in React.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/primodiumxyz/primodium-empires",
+    "directory": "apps/web"
+  },
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "preview": "vite preview",
     "test": "vitest"
   },
@@ -27,13 +33,11 @@
     "@privy-io/react-auth": "^1.72.0",
     "@visx/curve": "^3.3.0",
     "@visx/gradient": "^3.3.0",
-    "@visx/responsive": "^3.10.2",
     "@visx/scale": "^3.5.0",
     "@visx/shape": "^3.5.0",
     "@visx/vendor": "^3.5.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "d3": "^7.9.0",
     "framer-motion": "^11.2.14",
     "lightweight-charts": "^4.2.0",
     "react": "^18.3.1",
@@ -48,7 +52,6 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
-    "@types/d3": "^7.4.3",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-scroll-to-bottom": "^4.2.5",
