@@ -13,12 +13,11 @@ import {
 } from "@game/lib/mappings";
 import { AcidRain } from "@game/lib/objects/AcidRain";
 import { IconLabel } from "@game/lib/objects/IconLabel";
+import { IPrimodiumGameObject } from "@game/lib/objects/interfaces";
 import { Magnet } from "@game/lib/objects/Magnet";
 import { ShieldEater } from "@game/lib/objects/ShieldEater";
 import { isValidClick, isValidHover } from "@game/lib/utils/inputGuards";
 import { PrimodiumScene } from "@game/types";
-
-import { IPrimodiumGameObject } from "./interfaces";
 
 export class Planet extends Phaser.GameObjects.Zone implements IPrimodiumGameObject {
   readonly id: Entity;
