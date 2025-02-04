@@ -1,6 +1,4 @@
-import { SyncSourceType, SyncStep } from "@core/lib/types";
-
-import { Core } from "../lib/types";
+import { Core, SyncSourceType, SyncStep } from "@core/lib/types";
 
 /**
  * Runs default initial sync process. Syncs to indexer. If indexer is not available, syncs to RPC.

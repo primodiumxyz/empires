@@ -3,9 +3,8 @@ import { ERoutine } from "@primodiumxyz/contracts/config/enums";
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tables } from "@core/lib";
+import { calculateRoutinePcts, calculateRoutineThresholds } from "@core/utils/global/calculateRoutineThresholds";
 import { directions, getDirection, getNeighbor, hexDistance } from "@core/utils/global/coord";
-
-import { calculateRoutinePcts, calculateRoutineThresholds } from "../global/calculateRoutineThresholds";
 
 export const createNpcUtils = (tables: Tables) => {
   const getRoutineProbabilities = (planetId: Entity) => {
