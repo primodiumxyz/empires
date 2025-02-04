@@ -9,10 +9,7 @@ export function makeIterable<T>(iterator: Iterator<T>): IterableIterator<T> {
   return iterable;
 }
 
-export function concatIterators<T>(
-  first: Iterator<T>,
-  second?: Iterator<T>
-): IterableIterator<T> {
+export function concatIterators<T>(first: Iterator<T>, second?: Iterator<T>): IterableIterator<T> {
   if (!second) return makeIterable(first);
   return makeIterable({
     next() {
@@ -23,10 +20,7 @@ export function concatIterators<T>(
   });
 }
 
-export function mergeIterators<A, B>(
-  iteratorA: Iterator<A>,
-  iteratorB: Iterator<B>
-): IterableIterator<[A, B]> {
+export function mergeIterators<A, B>(iteratorA: Iterator<A>, iteratorB: Iterator<B>): IterableIterator<[A, B]> {
   const iterator: Iterator<[A, B]> = {
     next() {
       const nextA = iteratorA.next();
@@ -38,10 +32,7 @@ export function mergeIterators<A, B>(
   return makeIterable(iterator);
 }
 
-export function transformIterator<A, B>(
-  iterator: Iterator<A>,
-  transform: (value: A) => B
-): IterableIterator<B> {
+export function transformIterator<A, B>(iterator: Iterator<A>, transform: (value: A) => B): IterableIterator<B> {
   return makeIterable({
     next() {
       const { done, value } = iterator.next();
@@ -52,6 +43,7 @@ export function transformIterator<A, B>(
 
 /**
  * Turns an array into an iterator. NOTE: an iterator can only be iterated once.
+ *
  * @param array Array to be turned into an iterator
  * @returns Iterator to iterate through the array
  */

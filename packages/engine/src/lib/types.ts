@@ -1,6 +1,6 @@
-import { GameObjectClasses } from "./util/constants";
 import { createGame } from "@engine/lib/core/createGame";
 import { createScene } from "@engine/lib/core/createScene";
+import { GameObjectClasses } from "./util/constants";
 
 export type Game = Awaited<ReturnType<typeof createGame>>;
 export type Scene = Awaited<ReturnType<typeof createScene>>;
@@ -39,10 +39,7 @@ export type PackConfig = {
   }>;
 };
 
-export type Key =
-  | keyof typeof Phaser.Input.Keyboard.KeyCodes
-  | "POINTER_LEFT"
-  | "POINTER_RIGHT";
+export type Key = keyof typeof Phaser.Input.Keyboard.KeyCodes | "POINTER_LEFT" | "POINTER_RIGHT";
 
 export type GameConfig = Phaser.Types.Core.GameConfig & {
   key: string;
@@ -85,9 +82,7 @@ export interface TileAnimation {
 }
 
 export type GameObjectTypes = typeof GameObjectClasses;
-export type GameObject<Type extends keyof GameObjectTypes> = InstanceType<
-  GameObjectTypes[Type]
->;
+export type GameObject<Type extends keyof GameObjectTypes> = InstanceType<GameObjectTypes[Type]>;
 
 /**
  * @id: Unique id of the component to handle updating the same component
@@ -107,7 +102,7 @@ export type GameObjectComponent<Type extends keyof GameObjectTypes> = {
 export type GameObjectFunction<Type extends keyof GameObjectTypes> = (
   gameObject: GameObject<Type>,
   time: number,
-  delta: number
+  delta: number,
 ) => Promise<void> | void;
 
 export type Area = {

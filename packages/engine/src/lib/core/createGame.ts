@@ -1,8 +1,8 @@
 import { createSceneManager } from "@engine/lib/core/createSceneManager";
-import { GameConfig } from "@engine/lib/types";
 import createPhaserScene from "@engine/lib/util/createPhaserScene";
-import { getSceneLoadPromise } from "@engine/lib/util/getSceneLoadPromise";
 import { deferred } from "@engine/lib/util/deferred";
+import { getSceneLoadPromise } from "@engine/lib/util/getSceneLoadPromise";
+import { GameConfig } from "@engine/lib/types";
 
 export const createGame = async (config: GameConfig) => {
   //Initialize Phaser Game
@@ -29,11 +29,7 @@ export const createGame = async (config: GameConfig) => {
 
       // Audio Sprites
       config.assetPack.audioSprite?.forEach((audioSprite) => {
-        scene.load.audioSprite(
-          audioSprite.key,
-          audioSprite.jsonURL,
-          audioSprite.urls
-        );
+        scene.load.audioSprite(audioSprite.key, audioSprite.jsonURL, audioSprite.urls);
       });
 
       // Tilemaps
@@ -43,11 +39,7 @@ export const createGame = async (config: GameConfig) => {
 
       // Bitmap Fonts
       config.assetPack.bitmapFont?.forEach((bitmapFont) => {
-        scene.load.bitmapFont(
-          bitmapFont.key,
-          bitmapFont.textureURL,
-          bitmapFont.fontDataURL
-        );
+        scene.load.bitmapFont(bitmapFont.key, bitmapFont.textureURL, bitmapFont.fontDataURL);
       });
     },
   });

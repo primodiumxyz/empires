@@ -1,22 +1,18 @@
-import { SceneConfig } from "@engine/lib/types";
-import { createTilemap } from "@engine/lib/core/createTilemap";
 import { createCamera } from "@engine/lib/core/createCamera";
 import createInput from "@engine/lib/core/createInput";
+import { createTilemap } from "@engine/lib/core/createTilemap";
 import { StaticObjectManager } from "@engine/lib/core/StaticObjectManager";
-import { generateFrames } from "@engine/lib/util/generateFrames";
 import { createPhaserScene } from "@engine/lib/util/createPhaserScene";
+import { generateFrames } from "@engine/lib/util/generateFrames";
 import { resizePhaserGame } from "@engine/lib/util/resizePhaserGame";
+import { SceneConfig } from "@engine/lib/types";
 
 type PhaserAudio =
   | Phaser.Sound.HTML5AudioSoundManager
   | Phaser.Sound.WebAudioSoundManager
   | Phaser.Sound.NoAudioSoundManager;
 
-export const createScene = async (
-  phaserGame: Phaser.Game,
-  config: SceneConfig,
-  autoStart = true
-) => {
+export const createScene = async (phaserGame: Phaser.Game, config: SceneConfig, autoStart = true) => {
   const {
     camera: { minZoom, maxZoom, pinchSpeed, wheelSpeed, defaultZoom },
     tilemap: { defaultKey, tileWidth, tileHeight, config: tilemapConfig },
@@ -44,13 +40,7 @@ export const createScene = async (
 
   const objects = new StaticObjectManager(camera, cullingChunkSize);
 
-  const tiled = createTilemap(
-    scene,
-    tileWidth,
-    tileHeight,
-    defaultKey,
-    tilemapConfig
-  );
+  const tiled = createTilemap(scene, tileWidth, tileHeight, defaultKey, tilemapConfig);
 
   //create sprite animations
   if (animations) {
@@ -74,14 +64,10 @@ export const createScene = async (
   /* -------------------------- Create Audio Channels ------------------------- */
   /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
   //@ts-ignore
-  const music = Phaser.Sound.SoundManagerCreator.create(
-    phaserGame
-  ) as PhaserAudio;
+  const music = Phaser.Sound.SoundManagerCreator.create(phaserGame) as PhaserAudio;
   /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
   //@ts-ignore
-  const sfx = Phaser.Sound.SoundManagerCreator.create(
-    phaserGame
-  ) as PhaserAudio;
+  const sfx = Phaser.Sound.SoundManagerCreator.create(phaserGame) as PhaserAudio;
   /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
   //@ts-ignore
   const ui = Phaser.Sound.SoundManagerCreator.create(phaserGame) as PhaserAudio;

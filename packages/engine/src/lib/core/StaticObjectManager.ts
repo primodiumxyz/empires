@@ -1,8 +1,8 @@
-import { ChunkManager } from "./ChunkManager";
-import { createCamera } from "./createCamera";
-import { Coord } from "@engine/lib/types";
 import { CoordMap } from "@engine/lib/util/coordMap";
 import { pixelToChunkCoord } from "@engine/lib/util/coords";
+import { Coord } from "@engine/lib/types";
+import { ChunkManager } from "./ChunkManager";
+import { createCamera } from "./createCamera";
 
 type Spawnable = {
   readonly id: string;
@@ -37,7 +37,7 @@ export class StaticObjectManager {
       camera,
       chunkSize,
       (coord) => this.onEnterChunk(coord),
-      (coord) => this.onExitChunk(coord)
+      (coord) => this.onExitChunk(coord),
     );
   }
 
@@ -52,10 +52,7 @@ export class StaticObjectManager {
         return;
       }
 
-      const chunkCoord = pixelToChunkCoord(
-        { x: object.x, y: object.y },
-        this.chunkSize
-      );
+      const chunkCoord = pixelToChunkCoord({ x: object.x, y: object.y }, this.chunkSize);
 
       const objects = this.coordMap.get(chunkCoord) ?? [];
 
@@ -79,10 +76,7 @@ export class StaticObjectManager {
     const object = this.objMap.get(id);
     if (!object) return;
 
-    const oldChunkCoord = pixelToChunkCoord(
-      { x: object.x, y: object.y },
-      this.chunkSize
-    );
+    const oldChunkCoord = pixelToChunkCoord({ x: object.x, y: object.y }, this.chunkSize);
     const newChunkCoord = pixelToChunkCoord(coord, this.chunkSize);
     if (oldChunkCoord === newChunkCoord) return;
 
@@ -152,10 +146,7 @@ export class StaticObjectManager {
     const object = this.objMap.get(id);
     if (!object) return;
 
-    const chunkCoord = pixelToChunkCoord(
-      { x: object.x, y: object.y },
-      this.chunkSize
-    );
+    const chunkCoord = pixelToChunkCoord({ x: object.x, y: object.y }, this.chunkSize);
     const objects = this.coordMap.get(chunkCoord) ?? [];
 
     const index = objects.indexOf(object);
@@ -201,9 +192,7 @@ export class StaticObjectManager {
         object.spawn();
       }
       object.setActive(true).setVisible(true);
-      this.onObjectEnterChunkCallbacks.forEach((callback) =>
-        callback(object.id)
-      );
+      this.onObjectEnterChunkCallbacks.forEach((callback) => callback(object.id));
     });
 
     // BOUNDING BOXES

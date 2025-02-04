@@ -1,20 +1,14 @@
 import { BehaviorSubject, share } from "rxjs";
+
 import { CameraConfig } from "@engine/lib/types";
 
-export function createCamera(
-  phaserCamera: Phaser.Cameras.Scene2D.Camera,
-  options: CameraConfig
-) {
+export function createCamera(phaserCamera: Phaser.Cameras.Scene2D.Camera, options: CameraConfig) {
   let controlsDisabled = false;
 
-  const worldView$ = new BehaviorSubject<
-    Phaser.Cameras.Scene2D.Camera["worldView"]
-  >(phaserCamera.worldView).pipe(share()) as BehaviorSubject<
-    Phaser.Cameras.Scene2D.Camera["worldView"]
-  >;
-  const zoom$ = new BehaviorSubject<number>(phaserCamera.zoom).pipe(
-    share()
-  ) as BehaviorSubject<number>;
+  const worldView$ = new BehaviorSubject<Phaser.Cameras.Scene2D.Camera["worldView"]>(phaserCamera.worldView).pipe(
+    share(),
+  ) as BehaviorSubject<Phaser.Cameras.Scene2D.Camera["worldView"]>;
+  const zoom$ = new BehaviorSubject<number>(phaserCamera.zoom).pipe(share()) as BehaviorSubject<number>;
 
   const onResize = () => {
     requestAnimationFrame(() => worldView$.next(phaserCamera.worldView));
