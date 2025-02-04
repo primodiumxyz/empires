@@ -1,7 +1,7 @@
-import { entityToAddress } from "@core/utils/global/common";
 import { Hex } from "viem";
 
 import { Entity } from "@primodiumxyz/reactive-tables";
+import { entityToAddress } from "@core/utils/global/common";
 
 export type LinkedAddressResult = {
   address: Hex | null;
@@ -10,6 +10,7 @@ export type LinkedAddressResult = {
 
 /**
  * Retrieves the ENS name associated with the given player entity.
+ *
  * @param accountLinkUrl - The URL for the account link.
  * @param playerEntity - The player entity.
  * @param hard - Whether to force a hard retrieval.
@@ -39,6 +40,7 @@ export const getEnsName = async (
 
 /**
  * Removes a linked address from the address map.
+ *
  * @param address - The address to remove.
  */
 export const removeLinkedAddress = (address: Hex) => {

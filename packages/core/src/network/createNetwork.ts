@@ -12,7 +12,7 @@ import { setupSyncTables } from "@core/tables/syncTables";
 /**
  * Creates network object
  *
- * @param config configuration of core object {@link CoreConfig}
+ * @param config Configuration of core object {@link CoreConfig}
  * @returns: {@link CreateNetworkResult}
  */
 export function createNetwork(config: CoreConfig): CreateNetworkResult {

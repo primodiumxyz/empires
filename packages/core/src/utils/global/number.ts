@@ -1,5 +1,6 @@
 /**
  * Converts a bigint or number to a number within the safe range of JavaScript.
+ *
  * @param value - The value to convert.
  * @returns The converted number.
  */
@@ -13,6 +14,7 @@ export function bigintToNumber(value: bigint | number): number {
 
 /**
  * Adjusts the decimals of a number.
+ *
  * @param num - The number to adjust.
  * @param toFixed - The number of fixed decimal places.
  * @returns The adjusted number.
@@ -30,6 +32,7 @@ export function adjustDecimals(num: string, toFixed: number): string {
 
 /**
  * Gets the decimal representation of a number.
+ *
  * @param num - The number.
  * @param max - The maximum number of decimal places.
  * @returns The decimal representation.
@@ -49,6 +52,7 @@ type FormatOptions = {
 
 /**
  * Returns the maximum of a list of bigints.
+ *
  * @param values - An array of bigints (or undefined)
  * @returns The maximum bigint.
  */
@@ -62,6 +66,7 @@ export const bigintMax = (...values: (bigint | undefined)[]): bigint | undefined
 
 /**
  * Returns the minimum of a list of bigints.
+ *
  * @param values - An array of bigints or undefined.
  * @returns The minimum bigint or undefined if no valid bigints are provided.
  */
@@ -85,6 +90,7 @@ const shorten = (n: number, digits: number): string => {
 
 /**
  * Formats a number.
+ *
  * @param num - The number to format.
  * @param options - The formatting options.
  * @returns The formatted number.
@@ -112,6 +118,7 @@ export function formatNumber(num: number | bigint, options?: FormatOptions): str
 
 /**
  * Formats time.
+ *
  * @param rawSeconds - The raw time in seconds.
  * @returns The formatted time.
  */
@@ -132,6 +139,7 @@ export function formatTime(rawSeconds: number | bigint, short?: boolean): string
 
 /**
  * Formats time in a short format.
+ *
  * @param rawSeconds - The raw time in seconds.
  * @returns The formatted time.
  */
@@ -147,6 +155,7 @@ function formatTimeShort(rawSeconds: number | bigint): string {
 
 /**
  * Formats time ago.
+ *
  * @param time - The time.
  * @returns The formatted time ago string.
  */

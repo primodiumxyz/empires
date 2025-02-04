@@ -3,8 +3,9 @@ import { AxialCoord, CartesionCoord } from "@core/lib";
 
 /**
  * Converts axial coords to cartesian assuming pointy top hexagon.
+ *
  * @param {AxialCoord} axialCoord - Q and R coords in axial coordinate system.
- * @param {number} size - size of hexagonal tile.
+ * @param {number} size - Size of hexagonal tile.
  * @returns {CartesionCoord} Cartesian Coordinates x and y.
  */
 export function convertAxialToCartesian(axialCoord: AxialCoord, size: number): CartesionCoord {

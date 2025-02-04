@@ -7,6 +7,7 @@ const log20 = (x: number) => Math.log(x) / Math.log(20);
 
 /**
  * Converts a rank to a score.
+ *
  * @param rank - The rank.
  * @returns The score.
  */

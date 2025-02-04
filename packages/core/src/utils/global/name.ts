@@ -4,6 +4,7 @@ import { entityToAddress } from "@core/utils/global/common";
 
 /**
  * Formats a raw name by inserting spaces and handling camelCase.
+ *
  * @param rawName - The raw name to format.
  * @returns The formatted name.
  */

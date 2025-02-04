@@ -1,19 +1,19 @@
 import { ContractWrite, createBurnerAccount, transportObserver } from "@latticexyz/common";
 import { transactionQueue, writeObserver } from "@latticexyz/common/actions";
+import { Subject } from "rxjs";
+import { createPublicClient, createWalletClient, fallback, getContract, Hex, http } from "viem";
+import { generatePrivateKey } from "viem/accounts";
+
 import { STORAGE_PREFIX } from "@core/lib/constants";
 import { CoreConfig, LocalAccount } from "@core/lib/types";
 import { WorldAbi } from "@core/lib/WorldAbi";
 import { normalizeAddress } from "@core/utils/global/common";
 import { addressToEntity } from "@core/utils/global/encode";
 import { storage } from "@core/utils/global/storage";
-import { Subject } from "rxjs";
-import { createPublicClient, createWalletClient, fallback, getContract, Hex, http } from "viem";
-import { generatePrivateKey } from "viem/accounts";
 
 /**
- *
- * @param coreConfig configuration of core object
- * @param privateKey private key of the local account. If not provided, a new private key will be generated
+ * @param coreConfig Configuration of core object
+ * @param privateKey Private key of the local account. If not provided, a new private key will be generated
  * @param saveToStorage (browser only) whether to save the private key to local storage (default: true)
  * @returns: {@link LocalAccount}
  */

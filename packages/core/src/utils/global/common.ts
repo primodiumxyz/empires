@@ -3,9 +3,7 @@ import { getAddress, Hex, isAddress, pad, size, trim } from "viem";
 import { Coord } from "@primodiumxyz/engine";
 import { Entity } from "@primodiumxyz/reactive-tables";
 
-/**
- * Check if two sets have common elements
- */
+/** Check if two sets have common elements */
 export function hasCommonElement<T>(setA: Set<T>, setB: Set<T>): boolean {
   for (const element of setA) {
     if (setB.has(element)) {
@@ -15,9 +13,7 @@ export function hasCommonElement<T>(setA: Set<T>, setB: Set<T>): boolean {
   return false; // No common elements found
 }
 
-/**
- * Get the index clamped to the range [0, length)
- */
+/** Get the index clamped to the range [0, length) */
 export function clampedIndex(index: number, length: number): number {
   if (index < 0) {
     return 0;
@@ -32,9 +28,7 @@ export const getRandomRange = (min: number, max: number) => {
   return Math.random() * (max - min) + min;
 };
 
-/**
- * Converts a number to a roman numeral
- */
+/** Converts a number to a roman numeral */
 export function toRomanNumeral(number: number) {
   const romanNumerals = [
     { value: 1000, symbol: "M" },
@@ -107,7 +101,8 @@ export const lerp = (value: number, inMin: number, inMax: number, outMin: number
 
 /**
  * Calculate the angle between two points
- * @returns both radians and degrees
+ *
+ * @returns Both radians and degrees
  */
 export function calculateAngleBetweenPoints(point1: Coord, point2: Coord) {
   const dy = point2.y - point1.y;

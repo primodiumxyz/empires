@@ -6,6 +6,7 @@ import { encodeEntity } from "@primodiumxyz/reactive-tables/utils";
 
 /**
  * Generates a system ID based on name and namespace.
+ *
  * @param name - The name of the system.
  * @param namespace - The namespace of the system.
  * @returns The system ID.
@@ -20,6 +21,7 @@ export const getSystemId = (name: string, namespace = "Empires"): Hex => {
 
 /**
  * Converts an address to an entity.
+ *
  * @param address - The address to convert.
  * @returns The converted entity.
  */
@@ -29,6 +31,7 @@ export const addressToEntity = (address: Hex): Entity => {
 
 /**
  * Converts input to a 32-byte hex string.
+ *
  * @param input - The input value.
  * @returns The 32-byte hex string.
  */
@@ -38,6 +41,7 @@ export const toHex32 = (input: string | number | bigint | boolean): Hex => {
 
 /**
  * Encodes a number entity.
+ *
  * @param key - The key of the entity.
  * @param entity - The value of the entity.
  * @returns The encoded entity.
@@ -48,6 +52,7 @@ export function encodeNumberEntity(key: number, entity: string): Entity {
 
 /**
  * Encodes a key entity.
+ *
  * @param key - The key of the entity.
  * @param entity - The value of the entity.
  * @returns The encoded entity.
@@ -58,6 +63,7 @@ export function encodeKeyEntity(key: string, entity: string): Entity {
 
 /**
  * Hashes entities.
+ *
  * @param args - The entities to hash.
  * @returns The hashed entity.
  */
@@ -68,6 +74,7 @@ export function hashEntities(...args: (Entity | string | number)[]): Entity {
 
 /**
  * Hashes a key entity.
+ *
  * @param key - The key of the entity.
  * @param entity - The value of the entity.
  * @returns The hashed entity.
@@ -86,6 +93,7 @@ export function hashKeyEntity(key: Hex, entity: Entity): Entity {
 
 /**
  * Converts an entity to a hex key tuple.
+ *
  * @param entity - The entity to convert.
  * @returns The hex key tuple.
  */

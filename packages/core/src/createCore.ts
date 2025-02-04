@@ -7,7 +7,6 @@ import { createTables } from "@core/tables/createTables";
 import { createUtils } from "@core/utils/core/createUtils";
 
 /**
- *
  * @param config {@link CoreConfig}
  * @returns: {@link Core}
  */

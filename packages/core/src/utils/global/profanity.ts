@@ -8,6 +8,7 @@ const matcher = new RegExpMatcher({
 
 /**
  * Checks if the given text contains profanity.
+ *
  * @param text - The text to check.
  * @returns True if the text contains profanity, otherwise false.
  */
@@ -17,6 +18,7 @@ export const isProfane = (text: string): boolean => {
 
 /**
  * Censors profanity in the given text.
+ *
  * @param text - The text to censor.
  * @returns The censored text.
  */
