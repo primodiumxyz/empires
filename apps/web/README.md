@@ -16,7 +16,7 @@ pnpm dev
 pnpm dev:web
 ```
 
-Then navigate to [http://localhost:3000](http://localhost:3000) in your browser.
+Then navigate to [http://localhost:3000](http://localhost:3000) in your browser. To see cheatcodes, navigate to [http://localhost:3000/game?showCheatcodes=true](http://localhost:3000/game?showCheatcodes=true). In production, only namespace admins can use cheatcodes.
 
 ## Organization
 
