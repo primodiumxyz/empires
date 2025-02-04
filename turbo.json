@@ -2,11 +2,23 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["packages/contracts/worlds.json"],
   "tasks": {
+    "//#deploy:local": {
+      "cache": false,
+      "persistent": true
+    },
     "//#dev:indexer": {
       "cache": false,
       "persistent": true
     },
     "//#dev:keeper": {
+      "cache": false,
+      "persistent": true
+    },
+    "//#dev:node": {
+      "cache": false,
+      "persistent": true
+    },
+    "//#dev:web": {
       "cache": false,
       "persistent": true
     },
@@ -17,10 +29,6 @@
     },
     "check-types": {
       "dependsOn": ["^check-types"]
-    },
-    "dev": {
-      "persistent": true,
-      "cache": false
     }
   },
   "ui": "tui"

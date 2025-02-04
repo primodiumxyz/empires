@@ -57,7 +57,7 @@ And some special global interactions, which are:
 
 There are a few CLI tools to install to be compatible with the entire monorepo.
 
-- [node](https://nodejs.org/en/download/) v18.x - Tested with node v18.20.6.
+- [node](https://nodejs.org/en/download/) v20.x - Tested with node v20.18.2.
   - You can use [nvm](https://github.com/nvm-sh/nvm) to install and manage multiple versions of node.
 - [pnpm](https://pnpm.io/installation) v8.x - Tested with pnpm v8.15.9.
 - [Foundry](https://book.getfoundry.sh/getting-started/installation) - This will get installer during the "prepare" script.
@@ -117,6 +117,12 @@ pnpm dev
 ```
 
 This will run a series of scripts each in a separate window, including the client, the development chain (on which contracts get deployed) and the local postgres indexer.
+
+After running the command, you can deploy the contracts with the following command:
+
+```bash
+pnpm deploy:local
+```
 
 > NOTE: When running the indexer locally, docker network and volumes properly clear only on rerun of `pnpm dev:indexer`. If you would like to manually free these resources run `pnpm clean:indexer`.
 

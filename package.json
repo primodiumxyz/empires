@@ -21,15 +21,14 @@
     "deploy:local": "turbo --filter @primodiumxyz/contracts deploy:local",
     "deploy:payman:base-sepolia": "turbo --filter @primodiumxyz/contracts deploy:payman-base-sepolia",
     "deploy:payman:local": "turbo --filter @primodiumxyz/contracts deploy:payman-local",
-    "dev": "turbo dev dev:indexer dev:keeper  --continue",
-    "dev:contracts": "turbo dev:node deploy:local --continue",
+    "dev": "turbo dev:node dev:indexer dev:keeper dev:web",
     "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
-    "dev:keeper": "turbo --filter @primodiumxyz/keeper dev",
-    "dev:node": "turbo --filter @primodiumxyz/contracts devnode",
-    "dev:web": "turbo --filter @primodiumxyz/webapp dev",
-    "export:assets": "turbo --filter @primodiumxyz/assets export",
-    "export:audio": "turbo --filter @primodiumxyz/assets export-audio",
-    "export:sprites": "turbo --filter @primodiumxyz/assets export-sprites",
+    "dev:keeper": "pnpm --filter @primodiumxyz/keeper start",
+    "dev:node": "pnpm --filter @primodiumxyz/contracts devnode",
+    "dev:web": "pnpm --filter @primodiumxyz/webapp dev",
+    "export:assets": "pnpm --filter @primodiumxyz/assets export",
+    "export:audio": "pnpm --filter @primodiumxyz/assets export-audio",
+    "export:sprites": "pnpm --filter @primodiumxyz/assets export-sprites",
     "foundry:up": "curl -L https://foundry.paradigm.xyz | bash && bash $HOME/.foundry/bin/foundryup",
     "mud:up": "pnpm mud set-version --tag main && pnpm install",
     "prepare": "husky install && (forge --version || pnpm foundry:up)",
@@ -51,7 +50,8 @@
     "typescript": "^5.5.2"
   },
   "engines": {
-    "node": "18.x",
+    "node": "20.x",
     "pnpm": "8.x"
-  }
+  },
+  "packageManager": "pnpm@8.15.9"
 }
