@@ -56,13 +56,13 @@ importers:
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.3.0
-        version: 4.3.0(prettier@3.3.2)
+        version: 4.3.0(prettier@3.4.2)
       '@types/debug':
         specifier: ^4.1.7
         version: 4.1.12
       prettier:
-        specifier: ^3.3.2
-        version: 3.3.2
+        specifier: ^3.3.3
+        version: 3.4.2
       tsx:
         specifier: ^3.12.6
         version: 3.14.0
@@ -110,7 +110,7 @@ importers:
         version: link:../keeper
       '@primodiumxyz/reactive-tables':
         specifier: ^3.6.1
-        version: 3.6.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        version: 3.6.1(prettier@3.4.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@privy-io/react-auth':
         specifier: ^1.72.0
         version: 1.73.0(@babel/core@7.25.2)(@types/react@18.3.3)(react-dom@18.3.1)(react-is@18.3.1)(react@18.3.1)(typescript@5.5.2)
@@ -177,7 +177,7 @@ importers:
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.3.0
-        version: 4.3.0(prettier@3.3.2)
+        version: 4.3.0(prettier@3.4.2)
       '@types/d3':
         specifier: ^7.4.3
         version: 7.4.3
@@ -221,11 +221,11 @@ importers:
         specifier: ^8.4.38
         version: 8.4.39
       prettier:
-        specifier: ^3.3.2
-        version: 3.3.2
+        specifier: ^3.3.3
+        version: 3.4.2
       prettier-plugin-tailwindcss:
         specifier: ^0.6.5
-        version: 0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.0)(prettier@3.3.2)
+        version: 0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.0)(prettier@3.4.2)
       tailwindcss:
         specifier: ^3.4.4
         version: 3.4.4
@@ -255,7 +255,7 @@ importers:
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.3.0
-        version: 4.3.0(prettier@3.3.2)
+        version: 4.3.0(prettier@3.4.2)
       '@mapeditor/tiled-api':
         specifier: ^1.8.2
         version: 1.10.1
@@ -302,8 +302,8 @@ importers:
         specifier: ^0.6.1
         version: 0.6.1
       prettier:
-        specifier: ^3.3.2
-        version: 3.3.2
+        specifier: ^3.3.3
+        version: 3.4.2
       ts-node:
         specifier: ^10.8.2
         version: 10.9.2(@types/node@18.19.39)(typescript@5.5.3)
@@ -366,11 +366,11 @@ importers:
         specifier: https://github.com/foundry-rs/forge-std.git#1eea5bae12ae557d589f9f0f0edae2faa47cb262
         version: github.com/foundry-rs/forge-std/1eea5bae12ae557d589f9f0f0edae2faa47cb262
       prettier:
-        specifier: ^2.6.2
-        version: 2.8.8
+        specifier: ^3.3.3
+        version: 3.4.2
       prettier-plugin-solidity:
         specifier: ^1.0.0-beta.19
-        version: 1.3.1(prettier@2.8.8)
+        version: 1.3.1(prettier@3.4.2)
       solhint:
         specifier: ^3.3.7
         version: 3.6.2(typescript@5.6.2)
@@ -412,7 +412,7 @@ importers:
         version: link:../engine
       '@primodiumxyz/reactive-tables':
         specifier: ^3.6.1
-        version: 3.6.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
+        version: 3.6.1(prettier@3.4.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8)
       '@primodiumxyz/sync-stack':
         specifier: ^0.6.9
         version: 0.6.9(typescript@5.5.2)
@@ -440,7 +440,7 @@ importers:
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.3.0
-        version: 4.3.0(prettier@3.3.2)
+        version: 4.3.0(prettier@3.4.2)
       '@testing-library/jest-dom':
         specifier: ^6.4.5
         version: 6.4.6(vitest@0.32.4)
@@ -466,8 +466,8 @@ importers:
         specifier: ^24.1.0
         version: 24.1.0
       prettier:
-        specifier: ^3.3.2
-        version: 3.3.2
+        specifier: ^3.3.3
+        version: 3.4.2
       tsup:
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.5.2)
@@ -519,7 +519,7 @@ importers:
         version: link:../engine
       '@primodiumxyz/reactive-tables':
         specifier: ^3.6.1
-        version: 3.6.1(prettier@3.3.2)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8)
+        version: 3.6.1(prettier@3.4.2)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -532,7 +532,7 @@ importers:
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.3.0
-        version: 4.3.0(prettier@3.3.2)
+        version: 4.3.0(prettier@3.4.2)
       '@types/lodash':
         specifier: ^4.17.7
         version: 4.17.7
@@ -540,8 +540,8 @@ importers:
         specifier: ^18.3.3
         version: 18.3.3
       prettier:
-        specifier: ^3.3.2
-        version: 3.3.2
+        specifier: ^3.3.3
+        version: 3.4.2
 
   packages/payman:
     dependencies:
@@ -2531,7 +2531,7 @@ packages:
     deprecated: Use @eslint/object-schema instead
     dev: true
 
-  /@ianvs/prettier-plugin-sort-imports@4.3.0(prettier@3.3.2):
+  /@ianvs/prettier-plugin-sort-imports@4.3.0(prettier@3.4.2):
     resolution: {integrity: sha512-OOMtUcO4J3LoL63dOKAe7bn+lSRRPeit2DqNHpx+wvBp3Grejo2PMaK4Mp1mwy8pnat64ccSgk/lBZbsAdLErw==}
     peerDependencies:
       '@vue/compiler-sfc': 2.7.x || 3.x
@@ -2545,7 +2545,7 @@ packages:
       '@babel/parser': 7.25.3
       '@babel/traverse': 7.25.3
       '@babel/types': 7.25.2
-      prettier: 3.3.2
+      prettier: 3.4.2
       semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
@@ -3802,7 +3802,7 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@primodiumxyz/reactive-tables@3.6.1(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
+  /@primodiumxyz/reactive-tables@3.6.1(prettier@3.4.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.2)(zod@3.23.8):
     resolution: {integrity: sha512-3m/915uNA8shvUUnwFQXg2gokoOL3c/fVHOnwVjQZoP0j96roZD6S0PYI3qZEJXzUpE0vegykQUVXWUv2CQA6A==}
     engines: {node: 20.x, pnpm: 8.x}
     dependencies:
@@ -3814,7 +3814,7 @@ packages:
       fast-deep-equal: 3.1.3
       mobx: 6.13.2
       rxjs: 7.5.5
-      tinybase: 4.8.17(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)
+      tinybase: 4.8.17(prettier@3.4.2)(react-dom@18.3.1)(react@18.3.1)
       viem: 2.9.20(typescript@5.5.2)(zod@3.23.8)
     transitivePeerDependencies:
       - '@automerge/automerge-repo'
@@ -3840,7 +3840,7 @@ packages:
       - zod
     dev: false
 
-  /@primodiumxyz/reactive-tables@3.6.1(prettier@3.3.2)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8):
+  /@primodiumxyz/reactive-tables@3.6.1(prettier@3.4.2)(react@18.3.1)(typescript@5.5.3)(zod@3.23.8):
     resolution: {integrity: sha512-3m/915uNA8shvUUnwFQXg2gokoOL3c/fVHOnwVjQZoP0j96roZD6S0PYI3qZEJXzUpE0vegykQUVXWUv2CQA6A==}
     engines: {node: 20.x, pnpm: 8.x}
     dependencies:
@@ -3852,7 +3852,7 @@ packages:
       fast-deep-equal: 3.1.3
       mobx: 6.13.2
       rxjs: 7.5.5
-      tinybase: 4.8.17(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1)
+      tinybase: 4.8.17(prettier@3.4.2)(react-dom@18.3.1)(react@18.3.1)
       viem: 2.9.20(typescript@5.5.3)(zod@3.23.8)
     transitivePeerDependencies:
       - '@automerge/automerge-repo'
@@ -10849,18 +10849,6 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-plugin-solidity@1.3.1(prettier@2.8.8):
-    resolution: {integrity: sha512-MN4OP5I2gHAzHZG1wcuJl0FsLS3c4Cc5494bbg+6oQWBPuEamjwDvmGfFMZ6NFzsh3Efd9UUxeT7ImgjNH4ozA==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      prettier: '>=2.3.0'
-    dependencies:
-      '@solidity-parser/parser': 0.17.0
-      prettier: 2.8.8
-      semver: 7.6.2
-      solidity-comments-extractor: 0.0.8
-    dev: true
-
   /prettier-plugin-solidity@1.3.1(prettier@3.2.5):
     resolution: {integrity: sha512-MN4OP5I2gHAzHZG1wcuJl0FsLS3c4Cc5494bbg+6oQWBPuEamjwDvmGfFMZ6NFzsh3Efd9UUxeT7ImgjNH4ozA==}
     engines: {node: '>=16'}
@@ -10872,7 +10860,19 @@ packages:
       semver: 7.6.2
       solidity-comments-extractor: 0.0.8
 
-  /prettier-plugin-tailwindcss@0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.0)(prettier@3.3.2):
+  /prettier-plugin-solidity@1.3.1(prettier@3.4.2):
+    resolution: {integrity: sha512-MN4OP5I2gHAzHZG1wcuJl0FsLS3c4Cc5494bbg+6oQWBPuEamjwDvmGfFMZ6NFzsh3Efd9UUxeT7ImgjNH4ozA==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      prettier: '>=2.3.0'
+    dependencies:
+      '@solidity-parser/parser': 0.17.0
+      prettier: 3.4.2
+      semver: 7.6.2
+      solidity-comments-extractor: 0.0.8
+    dev: true
+
+  /prettier-plugin-tailwindcss@0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.0)(prettier@3.4.2):
     resolution: {integrity: sha512-axfeOArc/RiGHjOIy9HytehlC0ZLeMaqY09mm8YCkMzznKiDkwFzOpBvtuhuv3xG5qB73+Mj7OCe2j/L1ryfuQ==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
@@ -10924,8 +10924,8 @@ packages:
       prettier-plugin-svelte:
         optional: true
     dependencies:
-      '@ianvs/prettier-plugin-sort-imports': 4.3.0(prettier@3.3.2)
-      prettier: 3.3.2
+      '@ianvs/prettier-plugin-sort-imports': 4.3.0(prettier@3.4.2)
+      prettier: 3.4.2
     dev: true
 
   /prettier@2.8.8:
@@ -10939,8 +10939,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  /prettier@3.3.2:
-    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
+  /prettier@3.4.2:
+    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -12126,7 +12126,7 @@ packages:
       proxying-agent: 2.4.0
     dev: true
 
-  /tinybase@4.8.17(prettier@3.3.2)(react-dom@18.3.1)(react@18.3.1):
+  /tinybase@4.8.17(prettier@3.4.2)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-vbEAY5oL0ME+m88oqoFlFnekfCZkGiypVsVTk/F5jy1x9GilGMC2GpKWnm4g01HO/4CG9OmicPgDUWhUlQEwBA==}
     hasBin: true
     peerDependencies:
@@ -12174,7 +12174,7 @@ packages:
       yjs:
         optional: true
     dependencies:
-      prettier: 3.3.2
+      prettier: 3.4.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false

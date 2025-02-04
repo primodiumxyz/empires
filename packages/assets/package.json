@@ -30,7 +30,7 @@
     "free-tex-packer-core": "^0.3.4",
     "glob": "^8.0.3",
     "optimist": "^0.6.1",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "ts-node": "^10.8.2",
     "typescript": "^5.5.3",
     "vite": "^3.2.3",
