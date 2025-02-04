@@ -41,27 +41,29 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onSubmit, title, classNam
   };
 
   return (
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2 h-full justify-center items-center">
-        {title && <h1 className="text-xs font-bold uppercase">{title}</h1>}
-       
-          {previewUrl && <img src={previewUrl} alt="Preview" className="aspect-square h-32 w-32" />}
-          {!previewUrl && <div className="aspect-square h-32 w-32 bg-primary/20"></div>}
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 h-full justify-center items-center">
+      {title && <h1 className="text-xs font-bold uppercase">{title}</h1>}
 
-        <p className="text-center text-xs opacity-50">Choose an image (must be smaller than 64kb). Square images work best.</p>
- <div className="flex items-center justify-center">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="w-full text-xs flex flex-col file:mr-4 file:rounded-md file:rounded-sm file:border-0 file:bg-blue-50 file:bg-secondary file:py-2 file:text-sm file:font-semibold file:text-white hover:file:cursor-pointer hover:file:opacity-70"
-          />
-        </div>
+      {previewUrl && <img src={previewUrl} alt="Preview" className="aspect-square h-32 w-32" />}
+      {!previewUrl && <div className="aspect-square h-32 w-32 bg-primary/20"></div>}
 
-        <Button type="submit" disabled={!selectedFile} size="md" variant="primary" className="w-full mt-2">
-          {!loading && "Update Image"}
-          {loading && <ArrowPathIcon className="size-4 animate-spin" />}
-        </Button>
-      </form>
+      <p className="text-center text-xs opacity-50">
+        Choose an image (must be smaller than 64kb). Square images work best.
+      </p>
+      <div className="flex items-center justify-center">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="w-full text-xs flex flex-col file:mr-4 file:rounded-md file:rounded-sm file:border-0 file:bg-blue-50 file:bg-secondary file:py-2 file:text-sm file:font-semibold file:text-white hover:file:cursor-pointer hover:file:opacity-70"
+        />
+      </div>
+
+      <Button type="submit" disabled={!selectedFile} size="md" variant="primary" className="w-full mt-2">
+        {!loading && "Update Image"}
+        {loading && <ArrowPathIcon className="size-4 animate-spin" />}
+      </Button>
+    </form>
   );
 };
 

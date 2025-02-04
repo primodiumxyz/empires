@@ -28,17 +28,16 @@ type HistoricalPointPrice = {
 
 /**
  * `getHistoricalPriceData` - get historical price data from a set of price data entities (all empires)
- * `formatCandlestickData` - get formatted data for candlesticks (the selected empire)
- * `initialHistoricalPriceData` - base historical data on mount
- * `initialCandlestickData` - base candlestick data on mount
- * `chartContainerRef` - reference to the chart container
- * `seriesRefs` - references to the series
+ * `formatCandlestickData` - get formatted data for candlesticks (the selected empire) `initialHistoricalPriceData` -
+ * base historical data on mount `initialCandlestickData` - base candlestick data on mount `chartContainerRef` -
+ * reference to the chart container `seriesRefs` - references to the series
  *
  * 1. Get base historical data on mount (& candlestick data if an empire is selected)
  * 2. Setup live updates to the chart (on new entities)
- *   - we're doing that to prevent rerendering the chart on every update (which would reset zoom, pan, etc.)
- *   - meaning that on each update, we need to recalculate the whole data to get average top/bottom values
- *   - and save the data received for the next updates
+ *
+ * - We're doing that to prevent rerendering the chart on every update (which would reset zoom, pan, etc.)
+ * - Meaning that on each update, we need to recalculate the whole data to get average top/bottom values
+ * - And save the data received for the next updates
  */
 export const HistoricalPointGraph: React.FC<{
   empire: EEmpire;

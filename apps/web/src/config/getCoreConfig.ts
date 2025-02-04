@@ -22,7 +22,7 @@ export const getCoreConfig = (): CoreConfig => {
   }
   const initialBlockNumber = params.has("initialBlockNumber")
     ? Number(params.get("initialBlockNumber"))
-    : world?.blockNumber ?? 0;
+    : (world?.blockNumber ?? 0);
 
   const config: CoreConfig = {
     chain,

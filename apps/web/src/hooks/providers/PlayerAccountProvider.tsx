@@ -32,8 +32,8 @@ const localKey = "primodium_local_pkey";
  *
  * @param children - The child components to be wrapped by the account client context.
  * @param options - The options for the account provider.
- * @throws Will throw an error if neither playerAddress nor playerPrivateKey is provided.
  * @returns The account client provider.
+ * @throws Will throw an error if neither playerAddress nor playerPrivateKey is provided.
  */
 export function PlayerAccountProvider({ children, ...options }: PlayerAccountProviderProps) {
   if (options.defaultLogin === "burner" && !options.allowBurner) {

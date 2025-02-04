@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 import daisyui from "daisyui";
 import tailwindAnimate from "tailwindcss-animate";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

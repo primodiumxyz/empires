@@ -42,7 +42,7 @@ export const GameOver = ({ className }: { className?: string }) => {
 
 const PlayerPot = ({ entity }: { entity: Entity }) => {
   const handleClick = () => {
-    window.open('/payman', '_blank', 'rel=noreferrer');
+    window.open("/payman", "_blank", "rel=noreferrer");
   };
 
   const { empire } = useWinningEmpire();

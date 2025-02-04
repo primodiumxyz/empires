@@ -22,7 +22,9 @@ export const usePointPrice = (empire: EEmpire, points: number): { price: bigint;
 
     const triangleSum = (pointsBigInt * (pointsBigInt + 1n)) / 2n;
     const totalSaleValue =
-      (currentPointPrice * pointsBigInt - pointPriceIncrease * triangleSum) * (10000n - (config?.pointSellTax ?? 0n)) / 10000n;
+      ((currentPointPrice * pointsBigInt - pointPriceIncrease * triangleSum) *
+        (10000n - (config?.pointSellTax ?? 0n))) /
+      10000n;
 
     return { price: totalSaleValue, message: "" };
   }, [empire, currentPointPrice, config, points]);

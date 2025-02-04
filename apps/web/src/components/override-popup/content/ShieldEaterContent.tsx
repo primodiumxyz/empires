@@ -6,12 +6,12 @@ import { Entity } from "@primodiumxyz/reactive-tables";
 import { Button } from "@/components/core/Button";
 import { PointsReceived } from "@/components/shared/PointsReceived";
 import { Price } from "@/components/shared/Price";
+import { SlippageSettings } from "@/components/shared/SlippageSettings";
 import { TransactionQueueMask } from "@/components/shared/TransactionQueueMask";
 import { useContractCalls } from "@/hooks/useContractCalls";
 import { useOverrideCost } from "@/hooks/useOverrideCost";
 import { useOverridePointsReceived } from "@/hooks/useOverridePointsReceived";
 import { useShieldEater } from "@/hooks/useShieldEater";
-import { SlippageSettings } from "@/components/shared/SlippageSettings";
 
 export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => {
   const { tables } = useCore();
@@ -22,7 +22,11 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
   const planet = tables.Planet.use(entity);
   const planetEmpire = planet?.empireId ?? (0 as EEmpire);
 
-  const {expected: detonatePriceWei, max: detonatePriceWeiMax} = useOverrideCost(EOverride.DetonateShieldEater, planetEmpire, 1n);
+  const { expected: detonatePriceWei, max: detonatePriceWeiMax } = useOverrideCost(
+    EOverride.DetonateShieldEater,
+    planetEmpire,
+    1n,
+  );
   const detonateDisabled = currentPlanet !== entity || !!cooldownShields;
   const detonatePointsReceived = useOverridePointsReceived(EOverride.DetonateShieldEater, planetEmpire, 1n);
 
@@ -59,7 +63,9 @@ export const ShieldEaterContent: React.FC<{ entity: Entity }> = ({ entity }) => 
       )}
       <div className="w-fit rounded-box rounded-t-none bg-secondary/25 px-1 text-center text-xs opacity-75">
         <Price wei={detonatePriceWei} />
-        <p className="opacity-70 text-[0.6rem]" >Max <Price wei={detonatePriceWeiMax}  /></p>
+        <p className="opacity-70 text-[0.6rem]">
+          Max <Price wei={detonatePriceWeiMax} />
+        </p>
       </div>
       {currentPlanet === entity && <PointsReceived points={detonatePointsReceived} inline explicit allowNullEmpire />}
     </div>
