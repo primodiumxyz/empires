@@ -6,9 +6,18 @@
   "arrowParens": "always",
   "htmlWhitespaceSensitivity": "css",
   "semi": true,
+  "singleQuote": false,
   "useTabs": false,
   "quoteProps": "as-needed",
   "requirePragma": false,
+
+  "importOrderBuiltinModulesToTop": true,
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true,
+  "importOrderMergeDuplicateImports": true,
+  "importOrderCombineTypeAndValueImports": true,
+  "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-jsdoc"],
   "importOrder": [
     "^@latticexyz/(.*)$",
     "<THIRD_PARTY_MODULES>",
@@ -18,12 +27,5 @@
     "^@core/(.*)$",
     "",
     "^[./]"
-  ],
-  "importOrderSeparation": false,
-  "importOrderSortSpecifiers": true,
-  "importOrderBuiltinModulesToTop": true,
-  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
-  "importOrderMergeDuplicateImports": true,
-  "importOrderCombineTypeAndValueImports": true,
-  "plugins": ["@ianvs/prettier-plugin-sort-imports"]
+  ]
 }

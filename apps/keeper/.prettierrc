@@ -10,12 +10,13 @@
   "useTabs": false,
   "quoteProps": "as-needed",
   "requirePragma": false,
-  "importOrder": ["<THIRD_PARTY_MODULES>", "", "^@primodiumxyz/(.*)$", "^@bin/(.*)$", "^@/(.*)$", "", "^[./]"],
-  "importOrderSeparation": false,
-  "importOrderSortSpecifiers": true,
+
   "importOrderBuiltinModulesToTop": true,
   "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true,
   "importOrderMergeDuplicateImports": true,
   "importOrderCombineTypeAndValueImports": true,
-  "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"]
+  "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-jsdoc"],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "", "^@primodiumxyz/(.*)$", "^@bin/(.*)$", "^@/(.*)$", "", "^[./]"]
 }
