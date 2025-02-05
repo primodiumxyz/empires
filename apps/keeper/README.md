@@ -63,11 +63,9 @@ curl -X POST 'http://localhost:3002/trpc/start' \
 -H 'Authorization: Bearer <keeper_bearer_token>' \
 -H 'Content-Type: application/json' \
 -d '{
-  "json": {
-    "chainId": "<chain_id>",
-    "worldAddress": "<world_address>",
-    "initialBlockNumber": "<initial_block_number>"
-  }
+  "chainId": "<chain_id>",
+  "worldAddress": "<world_address>",
+  "initialBlockNumber": "<initial_block_number>"
 }'
 ```
 
