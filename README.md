@@ -208,3 +208,7 @@ If you wish to contribute to the package, please open an issue first to make sur
 ## License
 
 This project is licensed under the MIT License - see [LICENSE](./LICENSE) for details.
+
+While the codebase is published under the MIT license, all sprites and artwork remain the intellectual property of Primodium Inc. Commercial use of these assets is strictly prohibited unless explicit written permission is granted.
+
+Furthermore, at the artist’s request, the sprites and artwork may not be used for training any machine learning models.

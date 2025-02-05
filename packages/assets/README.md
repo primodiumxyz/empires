@@ -46,6 +46,6 @@ Borrowed from, [MUD Phaser Template](https://github.com/latticexyz/mud/tree/086b
 
 ## Usage
 
-All the assets in this directory are available, free of charge, to anyone who wants to use them **for non-commercial purposes**.
+While the codebase is published under the MIT license, all sprites and artwork remain the intellectual property of Primodium Inc. Commercial use of these assets is strictly prohibited unless explicit written permission is granted.
 
-If you want to use them for commercial purposes, you will need the express permission of the Primodium team to do so.
+Furthermore, at the artist’s request, the sprites and artwork may not be used for training any machine learning models.
