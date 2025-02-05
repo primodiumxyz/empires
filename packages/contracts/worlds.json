@@ -8,11 +8,10 @@
     "blockNumber": 11334340
   },
   "31337": {
-    "address": "0x3b33f3b05e6b2562da61669ad99f4f2af08905e7",
-    "blockNumber": 80
+    "address": "0x3da4f36edf729ae549cb339c73cccc4fc0ef30a9"
   },
   "84532": {
-    "address": "0xb05ba109a7876db346ab2b7e82a3a5dc1392b1b8",
-    "blockNumber": 20260730
+    "address": "0x5a97dac12691d4dd944411d06d2b148ca52f651e",
+    "blockNumber": 21493409
   }
 }
