@@ -1,6 +1,9 @@
 FROM node:20-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+# Update corepack to the latest version to avoid the signature keys issue
+# https://github.com/pnpm/pnpm/issues/9029#issuecomment-2629817478
+RUN npm install -g corepack@latest
 RUN corepack enable
 WORKDIR /app
 
