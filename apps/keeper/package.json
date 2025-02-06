@@ -1,21 +1,17 @@
 {
   "name": "@primodiumxyz/keeper",
   "version": "0.0.1",
-  "description": "Keeper API for Primodium games",
+  "description": "A minimal TypeScript server that updates the world whenever the condition to do so is met.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/primodiumxyz/keeper.git",
-    "directory": "."
+    "url": "https://github.com/primodiumxyz/primodium-empires",
+    "directory": "apps/keeper"
   },
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
-  "types": "src/index.ts",
-  "files": [
-    "src"
-  ],
   "scripts": {
     "lint": "eslint .",
     "start": "tsx bin/keeper-server",

@@ -1,28 +1,57 @@
 {
   "name": "primodium-empires",
   "version": "0.1.10",
-  "description": "",
+  "description": "A fully onchain, turn-based, prediction market game.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/primodiumxyz/primodium-empires"
+  },
+  "license": "MIT",
   "scripts": {
-    "dev": "turbo dev dev:indexer dev:keeper --continue",
     "build": "turbo build",
-    "clean": "rm -rf ./node_modules && rm -rf ./packages/assets/node_modules && rm -rf ./packages/contracts/node_modules && rm -rf ./packages/contracts/src/codegen && rm -rf ./packages/core/node_modules && rm -rf ./packages/engine/node_modules && rm -rf ./packages/game/node_modules",
-    "clean:indexer": "pnpm clean-local-docker-indexer",
-    "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
-    "dev:keeper": "cd apps/keeper && pnpm start",
     "build:contracts": "turbo --filter @primodiumxyz/contracts build",
-    "build:webapp": "turbo --filter @primodiumxyz/webapp build"
+    "changeGameConfig:base": "pnpm --filter @primodiumxyz/contracts changeGameConfig:base",
+    "changeGameConfig:base-sepolia": "pnpm --filter @primodiumxyz/contracts changeGameConfig:base-sepolia",
+    "changeGameConfig:local": "pnpm --filter @primodiumxyz/contracts changeGameConfig:local",
+    "clean:indexer": "pnpm clean-local-docker-indexer",
+    "deploy:base": "pnpm --filter @primodiumxyz/contracts deploy:base",
+    "deploy:base-sepolia": "pnpm --filter @primodiumxyz/contracts deploy:base-sepolia",
+    "deploy:caldera": "pnpm --filter @primodiumxyz/contracts deploy:caldera",
+    "deploy:caldera-sepolia": "pnpm --filter @primodiumxyz/contracts deploy:caldera-sepolia",
+    "deploy:local": "pnpm --filter @primodiumxyz/contracts deploy:local",
+    "deploy:payman:base-sepolia": "pnpm --filter @primodiumxyz/contracts deploy:payman-base-sepolia",
+    "deploy:payman:local": "pnpm --filter @primodiumxyz/contracts deploy:payman-local",
+    "dev": "turbo dev:node dev:indexer dev:keeper dev:web",
+    "dev:indexer": "pnpm clean-local-docker-indexer && pnpm local-docker-indexer",
+    "dev:keeper": "pnpm --filter @primodiumxyz/keeper start",
+    "dev:node": "pnpm --filter @primodiumxyz/contracts devnode",
+    "dev:web": "pnpm --filter @primodiumxyz/webapp dev",
+    "export:assets": "pnpm --filter @primodiumxyz/assets export",
+    "export:audio": "pnpm --filter @primodiumxyz/assets export-audio",
+    "export:sprites": "pnpm --filter @primodiumxyz/assets export-sprites",
+    "foundry:up": "curl -L https://foundry.paradigm.xyz | bash && bash $HOME/.foundry/bin/foundryup",
+    "mud:up": "pnpm mud set-version --tag main && pnpm install",
+    "prepare": "husky install && (forge --version || pnpm foundry:up)",
+    "sort-package-json": "npx sort-package-json package.json 'apps/*/package.json packages/*/package.json'",
+    "test": "pnpm recursive run test",
+    "upgrade:mud": "pnpm mud set-version --tag=next"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --cache --fix",
+    "*.{ts,tsx,css,md,mdx,sol}": "prettier --write",
+    "package.json": "pnpm sort-package-json"
+  },
   "devDependencies": {
-    "@primodiumxyz/pg-indexer-reader": "^0.6.9",
+    "@primodiumxyz/pg-indexer-reader": "^0.6.14",
+    "eslint": "8.29.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "turbo": "^2.0.4",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.2"
   },
-  "packageManager": "pnpm@8.15.8",
   "engines": {
-    "node": "18.x",
+    "node": "20.x",
     "pnpm": "8.x"
-  }
+  },
+  "packageManager": "pnpm@8.15.9"
 }

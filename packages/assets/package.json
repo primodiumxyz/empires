@@ -1,6 +1,12 @@
 {
   "name": "@primodiumxyz/assets",
   "version": "1.0.0",
+  "description": "All assets used by Primodium: Empires.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/primodiumxyz/primodium-empires",
+    "directory": "packages/assets"
+  },
   "license": "MIT",
   "type": "module",
   "files": [
@@ -16,25 +22,18 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
     "@primodiumxyz/engine": "workspace:*",
-    "@mapeditor/tiled-api": "^1.8.2",
-    "@types/ejs": "^3.1.1",
     "@types/ffmpeg": "^1.0.7",
-    "@types/glob": "^7.2.0",
     "@types/node": "^18.17.14",
     "@types/optimist": "^0.0.33",
     "audiosprite": "^0.7.2",
     "chalk": "^5.3.0",
-    "ejs": "^3.1.8",
-    "ethers": "^5.7.0",
     "free-tex-packer-cli": "^0.3.0",
     "free-tex-packer-core": "^0.3.4",
-    "glob": "^8.0.3",
     "optimist": "^0.6.1",
     "prettier": "^3.3.3",
     "prettier-plugin-jsdoc": "^1.3.2",
     "ts-node": "^10.8.2",
-    "typescript": "^5.5.3",
-    "vite": "^3.2.3",
-    "xml-js": "^1.6.11"
+    "typescript": "^5.5.2",
+    "vite": "^3.2.3"
   }
 }

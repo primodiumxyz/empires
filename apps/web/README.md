@@ -1,30 +1,49 @@
-# React + TypeScript + Vite
+# Empires: Webapp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The React client for the Primodium: Empires game.
 
-Currently, two official plugins are available:
+This client imports all necessary packages from the rest of this monorepo to be able to render the Phaser game, with a React UI on top of it, interact with the contracts, and sync the state with the indexer database (or RPC updates).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Setup
 
-## Retreating the ESLint configuration
+Follow the [README](../../README.md) in the root of the monorepo to install the necessary dependencies and configure the environment.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Running the game
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: ["./tsconfig.json", "./tsconfig.node.json"],
-    tsconfigRootDir: __dirname,
-  },
-};
+```bash
+pnpm dev
+# or from root, provided that the backend is running
+pnpm dev:web
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Then navigate to [http://localhost:3000](http://localhost:3000) in your browser. To see cheatcodes, navigate to [http://localhost:3000/game?showCheatcodes=true](http://localhost:3000/game?showCheatcodes=true). In production, only namespace admins can use cheatcodes.
+
+## Organization
+
+This package uses [the core package](../../core) for all the logic, [the engine package](../../engine) for the Phaser scene management (api, creating scenes, rendering chunks), [the game package](../../game) for Phaser, and [the assets package](../../assets) for the assets.
+
+It is dedicated to the various UI components, hooks, and utilities.
+
+```ml
+dist - "Compiled files for distribution"
+src - "Source files"
+├── ampli - "Amplitude analytics setup"
+├── components - "All of the UI components"
+│   ├── cheatcodes - "Dev cheatcodes for testing game functionality"
+│   ├── core - "Main template components"
+│   ├── dashboard - "Components related to the dashboard"
+│   ├── empires - "Empire-specific components"
+│   ├── game - "Components related to the game HUD"
+│   ├── leaderboard - "Components related to the leaderboard"
+│   ├── override-popup - "Components related to the override popup"
+│   ├── paymant - "Components related to the payment manager screen"
+│   ├── quick-trade - "Components related to the quick trade functionality"
+│   ├── redirects - "Extradiegetic components (terms of service, guides)"
+│   ├── settings - "Components related to the settings screen"
+│   └── shared - "Components shared across various screens"
+├── config - "Core and Wagmi config"
+├── contractCalls - "Calls to interact with the contracts"
+├── hooks - "Various hooks"
+├── screens - "React screens"
+└── util - "Utility functions and cheatcodes"
+```
