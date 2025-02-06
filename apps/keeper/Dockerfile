@@ -1,9 +1,6 @@
 FROM node:20-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-# Update corepack to the latest version to avoid the signature keys issue
-# https://github.com/pnpm/pnpm/issues/9029#issuecomment-2629817478
-RUN npm install -g corepack@latest
 RUN corepack enable
 WORKDIR /app
 
@@ -19,7 +16,7 @@ COPY apps/keeper ./apps/keeper
 COPY packages ./packages
 
 # Install dependencies
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Set working directory to the keeper app
 WORKDIR /app/apps/keeper
