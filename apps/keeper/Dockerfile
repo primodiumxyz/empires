@@ -5,6 +5,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 # https://github.com/pnpm/pnpm/issues/9029#issuecomment-2629817478
 RUN npm install -g corepack@latest
 RUN corepack enable
+# Make sure curl is available
+RUN apt-get update && apt-get install -y curl
 WORKDIR /app
 
 # Copy root package.json, pnpm-workspace.yaml, and pnpm-lock.yaml
