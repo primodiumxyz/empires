@@ -1,6 +1,6 @@
-import { Coord } from "@engine/lib/types";
-import { BoundingBox } from "@engine/lib/core/StaticObjectManager";
 import type { createCamera } from "@engine/lib/core/createCamera";
+import { BoundingBox } from "@engine/lib/core/StaticObjectManager";
+import { Coord } from "@engine/lib/types";
 
 const MARGIN = 5;
 export class ChunkManager {
@@ -17,7 +17,7 @@ export class ChunkManager {
     camera: ReturnType<typeof createCamera>,
     chunkSize: number,
     onEnterChunk: (chunkCoord: Coord) => void,
-    onExitChunk: (chunkCoord: Coord) => void
+    onExitChunk: (chunkCoord: Coord) => void,
   ) {
     this.camera = camera;
     this.chunkSize = chunkSize;
@@ -41,10 +41,7 @@ export class ChunkManager {
   }
 
   isVisibleBoundingBox(boundingBox: BoundingBox): boolean {
-    return Phaser.Geom.Intersects.RectangleToRectangle(
-      boundingBox,
-      this.visibleArea
-    );
+    return Phaser.Geom.Intersects.RectangleToRectangle(boundingBox, this.visibleArea);
   }
 
   dispose(): void {
@@ -61,8 +58,7 @@ export class ChunkManager {
   }
 
   private update(): void {
-    const { chunks: currentVisibleChunks, area: currentVisibleArea } =
-      this.getVisible();
+    const { chunks: currentVisibleChunks, area: currentVisibleArea } = this.getVisible();
 
     // Find chunks that have just become visible
     currentVisibleChunks.forEach((chunkKey) => {
@@ -90,12 +86,8 @@ export class ChunkManager {
 
     const startX = Math.floor(cam.worldView.x / this.chunkSize) - MARGIN;
     const startY = Math.floor(cam.worldView.y / this.chunkSize) - MARGIN;
-    const endX =
-      Math.ceil((cam.worldView.x + cam.worldView.width) / this.chunkSize) +
-      MARGIN;
-    const endY =
-      Math.ceil((cam.worldView.y + cam.worldView.height) / this.chunkSize) +
-      MARGIN;
+    const endX = Math.ceil((cam.worldView.x + cam.worldView.width) / this.chunkSize) + MARGIN;
+    const endY = Math.ceil((cam.worldView.y + cam.worldView.height) / this.chunkSize) + MARGIN;
 
     for (let x = startX; x < endX; x++) {
       for (let y = startY; y < endY; y++) {
@@ -107,7 +99,7 @@ export class ChunkManager {
       startX * this.chunkSize,
       startY * this.chunkSize,
       (endX - startX) * this.chunkSize,
-      (endY - startY) * this.chunkSize
+      (endY - startY) * this.chunkSize,
     );
 
     return { chunks, area };

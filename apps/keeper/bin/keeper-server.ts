@@ -2,19 +2,18 @@
 
 import "dotenv/config";
 
+import { chainConfigs } from "@core/index";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import fastify from "fastify";
+import { Hex } from "viem";
 
+import { worldsJson } from "@primodiumxyz/contracts";
 import { parseEnv } from "@bin/parseEnv";
 import { AppRouter, createAppRouter } from "@/createAppRouter";
 import { KeeperService } from "@/KeeperService";
 
-import { chainConfigs } from "@core/index";
-import { worldsJson } from "@primodiumxyz/contracts";
-import { Hex } from "viem";
-
-const chainId: string = "8453"  // base
-const worldAddress: Hex = (worldsJson[chainId as keyof typeof worldsJson].address) as Hex;
+const chainId: string = "8453"; // base
+const worldAddress: Hex = worldsJson[chainId as keyof typeof worldsJson].address as Hex;
 const initialBlockNumber: bigint = BigInt(worldsJson[chainId as keyof typeof worldsJson].blockNumber);
 const env = parseEnv();
 

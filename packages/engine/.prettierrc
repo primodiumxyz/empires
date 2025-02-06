@@ -19,12 +19,11 @@
   "importOrderCombineTypeAndValueImports": true,
   "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-jsdoc"],
   "importOrder": [
-    "^@latticexyz/(.*)$",
     "<THIRD_PARTY_MODULES>",
-    "contracts/(.*)$",
     "",
-    "^@primodiumxyz/(.*)$",
-    "^@core/(.*)$",
+    "^@engine/lib/core/(.*)$",
+    "^@engine/lib/util/(.*)$",
+    "^@engine/(.*)$",
     "",
     "^[./]"
   ]

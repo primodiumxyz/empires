@@ -1,15 +1,12 @@
-import { deferred } from "@engine/lib/util/deferred";
 import { createScene as _createScene } from "@engine/lib/core/createScene";
+import { deferred } from "@engine/lib/util/deferred";
 
 export type Scene = Awaited<ReturnType<typeof _createScene>>;
 
 export const createSceneManager = (phaserGame: Phaser.Game) => {
   const scenes = new Map<string, Scene>();
 
-  const createScene = async (
-    config: Parameters<typeof _createScene>[1],
-    autoStart = true
-  ) => {
+  const createScene = async (config: Parameters<typeof _createScene>[1], autoStart = true) => {
     const scene = await _createScene(phaserGame, config, autoStart);
     scenes.set(config.key, scene);
 
@@ -35,7 +32,7 @@ export const createSceneManager = (phaserGame: Phaser.Game) => {
     duration = 1000,
     onTransitionStart?: (originScene: Scene, targetScene: Scene) => void,
     onTransitionComplete?: (originScene: Scene, targetScene: Scene) => void,
-    sleep = true
+    sleep = true,
   ) => {
     const [resolve, , promise] = deferred();
     const originScene = scenes.get(key);
@@ -51,11 +48,7 @@ export const createSceneManager = (phaserGame: Phaser.Game) => {
       return;
     }
 
-    if (
-      !originScene.phaserScene.scene.isActive() ||
-      targetScene.phaserScene.scene.isActive()
-    )
-      return;
+    if (!originScene.phaserScene.scene.isActive() || targetScene.phaserScene.scene.isActive()) return;
 
     onTransitionStart?.(originScene, targetScene);
 
@@ -67,10 +60,7 @@ export const createSceneManager = (phaserGame: Phaser.Game) => {
       allowInput: false,
     });
 
-    targetScene.phaserScene.events.once(
-      Phaser.Scenes.Events.TRANSITION_COMPLETE,
-      resolve
-    );
+    targetScene.phaserScene.events.once(Phaser.Scenes.Events.TRANSITION_COMPLETE, resolve);
 
     await promise;
 

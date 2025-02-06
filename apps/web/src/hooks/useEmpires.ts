@@ -23,10 +23,10 @@ export const useEmpires = () => {
   return useMemo(() => {
     return allEmpires.slice(0, empireCount).reduce((acc, empire) => {
       const empirePoints = playerAccount
-        ? tables.Value_PointsMap.getWithKeys({ empireId: empire, playerId: playerAccount.entity })?.value ?? 0n
+        ? (tables.Value_PointsMap.getWithKeys({ empireId: empire, playerId: playerAccount.entity })?.value ?? 0n)
         : 0n;
       const playerPoints = playerAccount
-        ? tables.Value_PointsMap.getWithKeys({ empireId: empire, playerId: playerAccount.entity })?.value ?? 0n
+        ? (tables.Value_PointsMap.getWithKeys({ empireId: empire, playerId: playerAccount.entity })?.value ?? 0n)
         : 0n;
       const pointPrice = utils.getPointPrice(empire, Number(formatEther(playerPoints))).price;
 

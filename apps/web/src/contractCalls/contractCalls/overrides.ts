@@ -81,7 +81,13 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const sellPoints = async (empire: number, amount: bigint, minSalePrice: bigint, endPot: bigint, options?: Partial<TxQueueOptions>) => {
+  const sellPoints = async (
+    empire: number,
+    amount: bigint,
+    minSalePrice: bigint,
+    endPot: bigint,
+    options?: Partial<TxQueueOptions>,
+  ) => {
     const { price: expectedValue } = core.utils.getPointPrice(empire, amount);
     if (expectedValue > endPot) throw new Error("Pot is not enough to cover sale");
 
@@ -215,7 +221,12 @@ export const createOverrideCalls = (core: Core, { execute }: ExecuteFunctions) =
     );
   };
 
-  const placeAcidRain = async (planetId: Entity, empire: number, payment: bigint, options?: Partial<TxQueueOptions>) => {
+  const placeAcidRain = async (
+    planetId: Entity,
+    empire: number,
+    payment: bigint,
+    options?: Partial<TxQueueOptions>,
+  ) => {
     const planetName = await core.utils.getPlanetName(planetId);
     return await withTransactionStatus(
       () =>

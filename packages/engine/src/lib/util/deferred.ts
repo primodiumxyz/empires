@@ -1,5 +1,6 @@
 /**
  * A convenient way to create a promise with resolve and reject functions.
+ *
  * @returns Tuple with resolve function, reject function and promise.
  */
 export function deferred<T>(): [(t: T) => void, (t: Error) => void, Promise<T>] {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 
@@ -68,7 +68,7 @@ export const Popout = ({
   popoutContent,
   children,
   direction,
-  visible= false,
+  visible = false,
   setVisible = (v: boolean) => {},
   containerClassName,
   enabled = true,
@@ -94,10 +94,7 @@ export const Popout = ({
   if (!popoutContent || !enabled) return children;
 
   return (
-    <div
-      ref={popoutRef}
-      className={cn("relative", containerClassName)}
-    >
+    <div ref={popoutRef} className={cn("relative", containerClassName)}>
       {visible && (
         <AnimatePresence>
           <motion.div

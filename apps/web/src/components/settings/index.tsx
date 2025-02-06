@@ -7,7 +7,7 @@ import { AudioSettings } from "@/components/settings/AudioSettings";
 
 export const Settings = () => (
   <Modal title="Settings">
-    <Modal.Button variant="ghost" size="xs" shape="square" >
+    <Modal.Button variant="ghost" size="xs" shape="square">
       <Cog6ToothIcon className="size-6 hover:rotate-45 transition-all duration-300" />
     </Modal.Button>
 

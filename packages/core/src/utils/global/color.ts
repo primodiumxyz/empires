@@ -1,6 +1,7 @@
 /**
  * Convert hex color to RGB
- * @returns rgb string
+ *
+ * @returns Rgb string
  */
 export function hslToHex(h: number, s: number, l: number): string {
   let r, g, b;

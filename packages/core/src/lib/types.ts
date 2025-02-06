@@ -24,13 +24,9 @@ import setupCoreTables from "@core/tables/coreTables";
 import { SyncTables } from "@core/tables/syncTables";
 import { createUtils } from "@core/utils";
 
-/**
- * Core configuration
- */
+/** Core configuration */
 export type CoreConfig = {
-  /**
-   * Chain configuration. Default configurations can be found in the {@link chainConfigs object chainConfigs} object
-   */
+  /** Chain configuration. Default configurations can be found in the {@link chainConfigs object chainConfigs} object */
   chain: ChainConfig;
   worldAddress: Address;
   initialBlockNumber?: bigint;
@@ -41,16 +37,14 @@ export type CoreConfig = {
    * If using anvil, this value is 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
    */
   devPrivateKey?: Hex;
-  /**
-   * Used to fetch player ens names
-   */
+  /** Used to fetch player ens names */
   accountLinkUrl?: string;
 
   /**
    * Run the default initial sync? (default: false)
    *
-   * If using RPC, will hydrate full game state.
-   * If using indexer, default sync only fetches prototype data and player data (if playerAddress is set)
+   * If using RPC, will hydrate full game state. If using indexer, default sync only fetches prototype data and player
+   * data (if playerAddress is set)
    */
   runSync?: boolean;
   /**
@@ -62,8 +56,8 @@ export type CoreConfig = {
   /**
    * Enable dev tools (default: false)
    *
-   * If enabled, this will mount dev tools from Reactive Tables into the app, effectively showing a button
-   * in the bottom right corner of the screen that opens the dev tools UI.
+   * If enabled, this will mount dev tools from Reactive Tables into the app, effectively showing a button in the bottom
+   * right corner of the screen that opens the dev tools UI.
    */
   devTools?: boolean;
 };
@@ -76,11 +70,12 @@ type MudConfig = typeof mudConfig;
  * @property {MudConfig} mudConfig - Configuration for MUD.
  * @property {PublicClient<FallbackTransport, ChainConfig, undefined>} publicClient - The public client.
  * @property {Clock} clock - The clock instance.
- * @property {WrapperResult<MudConfig, typeof otherTableDefs>} - The wrapper result containing all tables and their definitions and the storage adapter.
+ * @property {WrapperResult<MudConfig, typeof otherTableDefs>} - The wrapper result containing all tables and their
+ *   definitions and the storage adapter.
  *
- * Contains contract table metadata.
+ *   Contains contract table metadata.
  *
- * See [mud.config.ts](https://github.com/primodiumxyz/contracts/blob/main/mud.config.ts#L85-L97) for more details.
+ *   See [mud.config.ts](https://github.com/primodiumxyz/contracts/blob/main/mud.config.ts#L85-L97) for more details.
  */
 
 export type CreateNetworkResult = Omit<Recs<MudConfig, typeof otherTableDefs>, "tables"> & {
@@ -102,8 +97,10 @@ export type Sync = ReturnType<typeof createSync>;
 
 /**
  * Core object
+ *
  * @typedef {Object} Core
- * @property {CoreConfig} config - Chain configuration. Default configurations can be found in the {@link chainConfigs object chainConfigs} object
+ * @property {CoreConfig} config - Chain configuration. Default configurations can be found in the
+ *   {@link chainConfigs object chainConfigs} object
  * @property {CreateNetworkResult} network - Network configuration
  * @property {Tables} tables - Tables contain data and methods to interact with game state. See [reactive tables](
  * @property {Utils} utils - Utility functions
@@ -111,12 +108,13 @@ export type Sync = ReturnType<typeof createSync>;
  */
 
 export type Core = {
-  /**
-   * Chain configuration. Default configurations can be found in the {@link chainConfigs object chainConfigs} object
-   */
+  /** Chain configuration. Default configurations can be found in the {@link chainConfigs object chainConfigs} object */
   config: CoreConfig;
   network: CreateNetworkResult;
-  /** Tables contain data and methods to interact with game state. See [reactive tables](https://github.com/primodiumxyz/reactive-tables) */
+  /**
+   * Tables contain data and methods to interact with game state. See [reactive
+   * tables](https://github.com/primodiumxyz/reactive-tables)
+   */
   tables: Tables;
   utils: Utils;
   sync: Sync;
@@ -130,9 +128,7 @@ export type Clock = {
   update: (time: number) => void;
 };
 
-/**
- * World Abi. Combination of IWorld abi and CallWithSignature abi.
- */
+/** World Abi. Combination of IWorld abi and CallWithSignature abi. */
 
 export type WorldAbiType = typeof IWorldAbiType & typeof CallWithSignatureAbi & typeof AdminAbi;
 

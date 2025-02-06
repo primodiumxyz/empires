@@ -27,7 +27,7 @@ export const SellPoints = () => {
   const { gameEndPot } = usePot();
 
   const playerPoints = playerAccount
-    ? tables.Value_PointsMap.getWithKeys({ empireId: selectedEmpire, playerId: playerAccount.entity })?.value ?? 0n
+    ? (tables.Value_PointsMap.getWithKeys({ empireId: selectedEmpire, playerId: playerAccount.entity })?.value ?? 0n)
     : 0n;
 
   const handleInputChange = (_value: string) => {
@@ -39,7 +39,7 @@ export const SellPoints = () => {
   };
 
   const { price: pointsToWei, message } = usePointPrice(selectedEmpire, Number(amount));
-  const minSalePrice = (pointsToWei * 90n) / 100n;  // revert if receive less than 90% expected value
+  const minSalePrice = (pointsToWei * 90n) / 100n; // revert if receive less than 90% expected value
   const handleSubmit = () => {
     calls.sellPoints(selectedEmpire, BigInt(Number(amount) * POINTS_UNIT), minSalePrice, gameEndPot);
 

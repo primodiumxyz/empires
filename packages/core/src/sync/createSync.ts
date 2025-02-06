@@ -12,20 +12,21 @@ import { bigintMax } from "@core/utils";
 /**
  * Creates sync object. Includes methods to sync data from RPC and Indexer
  *
- * @param config core configuration {@link CoreConfig}
- * @param network network object created in {@link createNetwork} {@link CreateNetworkResult}
- * @param tables tables generated for core object
- * @returns {@link SyncType Sync}
- *
  * @remarks
- * Usual sync flow with indexer is as follows:
- * 1. Start live sync that will
- *   a. if we're syncing, record logs as they are coming in (because the indexer won't return them)
- *   b. if sync is over, just process them as they are coming in (actual live sync)
- * 2. Sync from indexer (from initial block to latest safe block)
- * 3. Sync blocks from the latest safe block (last block recorded by indexer) to the latest "unsafe" block (from app launch, when we started recording logs)
- * 4. Sync pending blocks (logs that came in during indexer & rpc sync)
- * 5. Continue live sync (won't store logs anymore, just process them as they are coming in)
+ *   Usual sync flow with indexer is as follows:
+ *
+ *   1. Start live sync that will a. if we're syncing, record logs as they are coming in (because the indexer won't return
+ *        them) b. if sync is over, just process them as they are coming in (actual live sync)
+ *   2. Sync from indexer (from initial block to latest safe block)
+ *   3. Sync blocks from the latest safe block (last block recorded by indexer) to the latest "unsafe" block (from app
+ *        launch, when we started recording logs)
+ *   4. Sync pending blocks (logs that came in during indexer & rpc sync)
+ *   5. Continue live sync (won't store logs anymore, just process them as they are coming in)
+ *
+ * @param config Core configuration {@link CoreConfig}
+ * @param network Network object created in {@link createNetwork} {@link CreateNetworkResult}
+ * @param tables Tables generated for core object
+ * @returns {@link SyncType Sync}
  */
 export function createSync(config: CoreConfig, network: CreateNetworkResult, tables: Tables) {
   const { tableDefs, world, publicClient, storageAdapter } = network;

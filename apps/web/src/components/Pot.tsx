@@ -1,8 +1,7 @@
 import { Price } from "@/components/shared/Price";
 import { usePot } from "@/hooks/usePot";
-import { cn } from "@/util/client";
-
 import useWinningEmpire from "@/hooks/useWinningEmpire";
+import { cn } from "@/util/client";
 
 interface PotProps {
   className?: string;
@@ -20,8 +19,7 @@ export const Pot: React.FC<PotProps> = ({ className }) => {
         <h3 className={cn("text-xl text-accent")}> ---</h3>
       </div>
     );
-  }
-  else {
+  } else {
     return (
       <div className={cn(className)}>
         <h2 className="ml-1 font-semibold opacity-70">Pot</h2>
@@ -29,5 +27,4 @@ export const Pot: React.FC<PotProps> = ({ className }) => {
       </div>
     );
   }
-
 };

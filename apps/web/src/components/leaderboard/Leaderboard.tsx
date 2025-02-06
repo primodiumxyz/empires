@@ -12,6 +12,7 @@ import { AutoSizer } from "@/components/core/AutoSizer";
 import { Button } from "@/components/core/Button";
 import { Join } from "@/components/core/Join";
 import { Modal } from "@/components/core/Modal";
+import { Navigator } from "@/components/core/Navigator";
 import { Tabs } from "@/components/core/Tabs";
 import ImageUploader from "@/components/leaderboard/ImageUploader";
 import { EmpireLogo } from "@/components/shared/EmpireLogo";
@@ -20,7 +21,6 @@ import { Username } from "@/components/shared/Username";
 import { useEmpires } from "@/hooks/useEmpires";
 import { useGame } from "@/hooks/useGame";
 import { cn } from "@/util/client";
-import { Navigator } from "@/components/core/Navigator";
 
 export const Leaderboard = () => {
   return (
@@ -208,18 +208,20 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
   }, [playerData]);
 
   return (
-      <Navigator initialScreen="main" className = "relative flex flex-row gap-2 h-full w-full">
-
-      <Navigator.Screen className="pointer-events-auto relative flex h-full w-full flex-col overflow-y-hidden pr-4 text-xs" title="main" >
-        <div className = "self-end flex flex-row gap-2">
-     {playerRank && playerRank.rank == 1 && 
-          <Navigator.NavButton to="image" variant="secondary" size="xs">
-            Update Banner 
-          </Navigator.NavButton> 
-      }
-        <Button onClick={handleRefresh} size="xs" shape="square">
-          <ArrowPathIcon className="w-4" />
-        </Button>
+    <Navigator initialScreen="main" className="relative flex flex-row gap-2 h-full w-full">
+      <Navigator.Screen
+        className="pointer-events-auto relative flex h-full w-full flex-col overflow-y-hidden pr-4 text-xs"
+        title="main"
+      >
+        <div className="self-end flex flex-row gap-2">
+          {playerRank && playerRank.rank == 1 && (
+            <Navigator.NavButton to="image" variant="secondary" size="xs">
+              Update Banner
+            </Navigator.NavButton>
+          )}
+          <Button onClick={handleRefresh} size="xs" shape="square">
+            <ArrowPathIcon className="w-4" />
+          </Button>
         </div>
         {playerData.length > 0 ? (
           <>
@@ -253,18 +255,17 @@ const EmpireLeaderboard = ({ empireId }: { empireId: EEmpire }) => {
                   );
                 }}
               />
-         
             </div>
           </>
         ) : (
           <div className="flex h-full w-full items-center justify-center">No players hold this empire</div>
         )}
-        </Navigator.Screen>
-        <Navigator.Screen title="image" className = "flex flex-col justify-between items-center gap-2 h-full w-full">
-          <EmpireImagePicker empireId={empireId} />
-          <Navigator.BackButton className="w-28">Back</Navigator.BackButton> 
-</Navigator.Screen>
-</Navigator>
+      </Navigator.Screen>
+      <Navigator.Screen title="image" className="flex flex-col justify-between items-center gap-2 h-full w-full">
+        <EmpireImagePicker empireId={empireId} />
+        <Navigator.BackButton className="w-28">Back</Navigator.BackButton>
+      </Navigator.Screen>
+    </Navigator>
   );
 };
 
@@ -298,7 +299,5 @@ const EmpireImagePicker: React.FC<{ empireId: EEmpire }> = ({ empireId }) => {
     }
   };
 
-  return (
-      <ImageUploader onSubmit={handleImageSubmit} title="Update Empire Banner" className = "h-full"/>
-  );
+  return <ImageUploader onSubmit={handleImageSubmit} title="Update Empire Banner" className="h-full" />;
 };

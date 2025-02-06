@@ -1,17 +1,9 @@
 // MODIFIED FROM LATTICEXYZ/PHASERX
 // https://github.com/latticexyz/mud/blob/main/packages/phaserx/src/createInput.ts
 
-import {
-  Observable,
-  bufferCount,
-  filter,
-  fromEvent,
-  map,
-  merge,
-  tap,
-  throttleTime,
-} from "rxjs";
 import Phaser from "phaser";
+import { bufferCount, filter, fromEvent, map, merge, Observable, tap, throttleTime } from "rxjs";
+
 import { Key } from "@engine/lib/types";
 
 const enabled = {
@@ -52,17 +44,12 @@ export function createInput(inputPlugin: Phaser.Input.InputPlugin) {
 
   // const keyboard$ = new Subject<Phaser.Input.Keyboard.Key>();
 
-  const pointermove$ = fromEvent(
-    inputPlugin.scene.scale.canvas,
-    "mousemove"
-  ).pipe(
+  const pointermove$ = fromEvent(inputPlugin.scene.scale.canvas, "mousemove").pipe(
     filter(() => enabled.current() && inputPlugin.scene.scene.isActive()),
     map(() => {
-      inputPlugin.manager.activePointer.updateWorldPoint(
-        inputPlugin.scene.cameras.main
-      );
+      inputPlugin.manager.activePointer.updateWorldPoint(inputPlugin.scene.cameras.main);
       return inputPlugin.manager?.activePointer;
-    })
+    }),
     // filter(({ pointer }) => pointer?.downElement?.nodeName === "CANVAS"),
     // filterNullish()
   );
@@ -75,7 +62,7 @@ export function createInput(inputPlugin: Phaser.Input.InputPlugin) {
     map((event) => ({
       pointer: inputPlugin.manager?.activePointer,
       event: event as MouseEvent,
-    }))
+    })),
   );
 
   const pointerup$: Observable<{
@@ -86,16 +73,16 @@ export function createInput(inputPlugin: Phaser.Input.InputPlugin) {
     map((event) => ({
       pointer: inputPlugin.manager?.activePointer,
       event: event as MouseEvent,
-    }))
+    })),
   );
 
   // Click stream
   const click$ = merge(pointerdown$, pointerup$).pipe(
     filter(() => enabled.current() && inputPlugin.scene.scene.isActive()),
-    map<
-      { pointer: Phaser.Input.Pointer; event: MouseEvent },
-      [boolean, number]
-    >(({ event }) => [event.type === "pointerdown", Date.now()]), // Map events to whether the left button is down and the current timestamp
+    map<{ pointer: Phaser.Input.Pointer; event: MouseEvent }, [boolean, number]>(({ event }) => [
+      event.type === "pointerdown",
+      Date.now(),
+    ]), // Map events to whether the left button is down and the current timestamp
     bufferCount(2, 1), // Store the last two timestamps
     filter(([prev, now]) => prev[0] && !now[0] && now[1] - prev[1] < 150), // Only care if button was pressed before and is not anymore and it happened within 500ms
     map((): [Phaser.Input.Pointer, Phaser.GameObjects.GameObject[]] => {
@@ -103,7 +90,7 @@ export function createInput(inputPlugin: Phaser.Input.InputPlugin) {
       const hitTestResults = inputPlugin.hitTestPointer(pointer);
       return [pointer, hitTestResults];
     }), // Return the current pointer
-    filter(([pointer]) => pointer?.downElement?.nodeName === "CANVAS")
+    filter(([pointer]) => pointer?.downElement?.nodeName === "CANVAS"),
   );
 
   // Double click stream
@@ -121,22 +108,15 @@ export function createInput(inputPlugin: Phaser.Input.InputPlugin) {
     map(() => inputPlugin.manager?.activePointer),
     filter((pointer) => pointer?.downElement?.nodeName === "CANVAS"),
     tap(() => {
-      inputPlugin.manager.activePointer.updateWorldPoint(
-        inputPlugin.scene.cameras.main
-      );
-    })
+      inputPlugin.manager.activePointer.updateWorldPoint(inputPlugin.scene.cameras.main);
+    }),
   );
 
   // Right click stream
   const rightClick$ = merge(pointerdown$, pointerup$).pipe(
-    filter(
-      ({ pointer }) =>
-        enabled.current() &&
-        pointer.rightButtonDown() &&
-        inputPlugin.scene.scene.isActive()
-    ),
+    filter(({ pointer }) => enabled.current() && pointer.rightButtonDown() && inputPlugin.scene.scene.isActive()),
     map(() => inputPlugin.manager?.activePointer), // Return the current pointer
-    filter((pointer) => pointer?.downElement?.nodeName === "CANVAS")
+    filter((pointer) => pointer?.downElement?.nodeName === "CANVAS"),
   );
 
   // const pressedKeys = new BehaviorSubject<Set<Key>>(new Set<Key>());

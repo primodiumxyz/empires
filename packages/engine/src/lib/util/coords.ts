@@ -1,11 +1,4 @@
-import {
-  Area,
-  ChunkCoord,
-  Coord,
-  PixelCoord,
-  TileCoord,
-  WorldCoord,
-} from "@engine/lib/types";
+import { Area, ChunkCoord, Coord, PixelCoord, TileCoord, WorldCoord } from "@engine/lib/types";
 
 export const ZERO_VECTOR: Coord = { x: 0, y: 0 };
 
@@ -31,39 +24,25 @@ export function addCoords(a: Coord, b: Coord) {
   };
 }
 
-export function pixelToChunkCoord(
-  pixelCoord: PixelCoord,
-  chunkSize: number
-): ChunkCoord {
+export function pixelToChunkCoord(pixelCoord: PixelCoord, chunkSize: number): ChunkCoord {
   return {
     x: Math.floor(pixelCoord.x / chunkSize),
     y: Math.floor(pixelCoord.y / chunkSize),
   };
 }
 
-export function chunkToPixelCoord(
-  chunkCoord: ChunkCoord,
-  chunkSize: number
-): PixelCoord {
+export function chunkToPixelCoord(chunkCoord: ChunkCoord, chunkSize: number): PixelCoord {
   return { x: chunkCoord.x * chunkSize, y: chunkCoord.y * chunkSize };
 }
 
-export function pixelCoordToTileCoord(
-  pixelCoord: PixelCoord,
-  tileWidth: number,
-  tileHeight: number
-): TileCoord {
+export function pixelCoordToTileCoord(pixelCoord: PixelCoord, tileWidth: number, tileHeight: number): TileCoord {
   return {
     x: Math.floor(pixelCoord.x / tileWidth),
     y: Math.floor(pixelCoord.y / tileHeight),
   };
 }
 
-export function tileCoordToPixelCoord(
-  tileCoord: WorldCoord,
-  tileWidth: number,
-  tileHeight: number
-): PixelCoord {
+export function tileCoordToPixelCoord(tileCoord: WorldCoord, tileWidth: number, tileHeight: number): PixelCoord {
   return {
     x: tileCoord.x * tileWidth,
     y: tileCoord.y * tileHeight,
@@ -74,7 +53,7 @@ export function tileCoordToChunkCoord(
   tileCoord: WorldCoord,
   tileWidth: number,
   tileHeight: number,
-  chunkSize: number
+  chunkSize: number,
 ): ChunkCoord {
   const pixelCoord = tileCoordToPixelCoord(tileCoord, tileWidth, tileHeight);
   return pixelToChunkCoord(pixelCoord, chunkSize);
@@ -84,7 +63,7 @@ export function chunkCoordToTileCoord(
   chunkCoord: ChunkCoord,
   tileWidth: number,
   tileHeight: number,
-  chunkSize: number
+  chunkSize: number,
 ): WorldCoord {
   const pixelCoord = chunkToPixelCoord(chunkCoord, chunkSize);
   return pixelCoordToTileCoord(pixelCoord, tileWidth, tileHeight);

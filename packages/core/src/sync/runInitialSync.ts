@@ -1,12 +1,10 @@
-import { SyncSourceType, SyncStep } from "@core/lib/types";
-
-import { Core } from "../lib/types";
+import { Core, SyncSourceType, SyncStep } from "@core/lib/types";
 
 /**
  * Runs default initial sync process. Syncs to indexer. If indexer is not available, syncs to RPC.
  *
  * @param core {@link Core}
- * @param playerAddress player address (optional). If included, will fetch player data on initial sync
+ * @param playerAddress Player address (optional). If included, will fetch player data on initial sync
  */
 export const runInitialSync = async (core: Core) => {
   const {

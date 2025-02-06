@@ -1,13 +1,10 @@
-import { Coord } from "@engine/lib/types";
 import { transformIterator } from "@engine/lib/util/iterable";
+import { Coord } from "@engine/lib/types";
 
 const LOWER_HALF_MASK = 2 ** 16 - 1;
 const MAX_SUPPORTED = 2 ** 15 - 1;
 
-export function subtract(
-  from: CoordMap<boolean>,
-  subtract: CoordMap<boolean>
-): CoordMap<boolean> {
+export function subtract(from: CoordMap<boolean>, subtract: CoordMap<boolean>): CoordMap<boolean> {
   const result = new CoordMap<boolean>();
 
   for (const coord of from.coords()) {
@@ -45,10 +42,7 @@ export class CoordMap<T> {
     this.defaultValue = props?.defaultValue;
   }
 
-  static from<T>(coordMapLike: {
-    map: Map<number, T>;
-    defaultValue?: T;
-  }): CoordMap<T> {
+  static from<T>(coordMapLike: { map: Map<number, T>; defaultValue?: T }): CoordMap<T> {
     const coordMap = new CoordMap<T>();
     coordMap.map = coordMapLike.map;
     coordMap.defaultValue = coordMapLike.defaultValue;

@@ -5,8 +5,8 @@ import { World } from "@primodiumxyz/reactive-tables";
 import { Clock } from "@core/lib";
 
 /**
- * Create a clock optimistically keeping track of the current chain time.
- * The optimisitic chain time should be synced to the actual chain time in regular intervals using the `update` function.
+ * Create a clock optimistically keeping track of the current chain time. The optimisitic chain time should be synced to
+ * the actual chain time in regular intervals using the `update` function.
  *
  * @param config
  * @returns: {@link Clock}

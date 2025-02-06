@@ -14,9 +14,9 @@
     "exporter": "Phaser3",
     "removeFileExtension": false,
     "prependFolderName": true,
-    "packer" : "OptimalPacker",
+    "packer": "OptimalPacker",
     "appInfo": {
-      "version" : "v0.11",
+      "version": "v0.11",
       "url": "https://www.primodium.com"
     }
   }

@@ -115,7 +115,6 @@ export class KeeperService {
         }
 
         switch (keeperState) {
-
           case KeeperState.NotReady:
             if (ready) {
               keeperState = KeeperState.WaitingToStart;
@@ -139,15 +138,14 @@ export class KeeperService {
             const currentBlock = current?.value ?? 0n;
             const nextTurnBlock = core.tables.Turn.get()?.nextTurnBlock ?? 0n;
             // something went wrong; return
-            if ((currentBlock == 0n) || (nextTurnBlock == 0n)) {
+            if (currentBlock == 0n || nextTurnBlock == 0n) {
               return;
             }
-            if (currentBlock < (nextTurnBlock + 3n)) {
+            if (currentBlock < nextTurnBlock + 3n) {
               // console.info(`SKIPPING: current block ${current?.value} next turn block ${nextTurnBlock}`);
               if (tickCountdown > 0) {
                 tickCountdown--;
-              }
-              else {
+              } else {
                 tickCountdown = TICK_INTERVAL_BLOCKS;
                 TxMutex = true;
                 await this.tick(core, deployerAccount, () => {
@@ -226,7 +224,6 @@ export class KeeperService {
       });
     });
   }
-
 
   /*//////////////////////////////////////////////////////////////
       CONTRACT CALLS

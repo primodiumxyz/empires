@@ -70,6 +70,7 @@ export const createPlanetNameUtils = (tables: Tables, config: CoreConfig) => {
   ];
   /**
    * Converts an entity to a planet name.
+   *
    * @param entity - The entity to convert.
    * @returns The planet name.
    */

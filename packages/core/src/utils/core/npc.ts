@@ -3,9 +3,8 @@ import { ERoutine } from "@primodiumxyz/contracts/config/enums";
 import { EDirection, EEmpire } from "@primodiumxyz/contracts";
 import { Entity } from "@primodiumxyz/reactive-tables";
 import { Tables } from "@core/lib";
+import { calculateRoutinePcts, calculateRoutineThresholds } from "@core/utils/global/calculateRoutineThresholds";
 import { directions, getDirection, getNeighbor, hexDistance } from "@core/utils/global/coord";
-
-import { calculateRoutinePcts, calculateRoutineThresholds } from "../global/calculateRoutineThresholds";
 
 export const createNpcUtils = (tables: Tables) => {
   const getRoutineProbabilities = (planetId: Entity) => {
@@ -60,10 +59,9 @@ export const createNpcUtils = (tables: Tables) => {
    * Calculates the vulnerability of a planet based on pending moves towards it.
    *
    * @param planetId - The ID of the planet to evaluate.
-   * @returns A number representing the planet's vulnerability:
-   *          -1 - No pending moves towards the planet (least vulnerable).
-   *           0 - Pending moves exist, but none are stronger than the planet.
-   *           1 - At least one pending move is stronger than the planet (most vulnerable).
+   * @returns A number representing the planet's vulnerability: -1 - No pending moves towards the planet (least
+   *   vulnerable). 0 - Pending moves exist, but none are stronger than the planet. 1 - At least one pending move is
+   *   stronger than the planet (most vulnerable).
    */
   const getVulnerability = (planetId: Entity): number => {
     const planetData = tables.Planet.get(planetId);
@@ -93,11 +91,11 @@ export const createNpcUtils = (tables: Tables) => {
 
   /**
    * Calculates the strength of a planet relative to its neighbors.
+   *
    * @param planetId - The ID of the planet to evaluate.
-   * @returns A number representing the planet's strength:
-   *          -1 - The planet is weaker than at least one enemy neighbor.
-   *           0 - The planet is equal in strength to at least one enemy neighbor.
-   *           1 - The planet is stronger than all enemy neighbors or has no neighbors.
+   * @returns A number representing the planet's strength: -1 - The planet is weaker than at least one enemy neighbor. 0
+   *   - The planet is equal in strength to at least one enemy neighbor. 1 - The planet is stronger than all enemy
+   *   neighbors or has no neighbors.
    */
   const getPlanetStrength = (planetId: Entity): number => {
     const planetData = tables.Planet.get(planetId);
@@ -132,11 +130,8 @@ export const createNpcUtils = (tables: Tables) => {
    * Calculates the relative strength of an empire based on the given planet's empire.
    *
    * @param planetId - The ID of the planet to evaluate.
-   * @returns A number representing the empire's strength:
-   *          -1 - The empire is in last place.
-   *           0 - The empire is in second place.
-   *           1 - The empire is tied for first place.
-   *           2 - The empire is leading.
+   * @returns A number representing the empire's strength: -1 - The empire is in last place. 0 - The empire is in second
+   *   place. 1 - The empire is tied for first place. 2 - The empire is leading.
    */
   const getEmpireStrength = (planetId: Entity): number => {
     const planetData = tables.Planet.get(planetId);
@@ -199,7 +194,8 @@ export const createNpcUtils = (tables: Tables) => {
    * Determines the best move target for a given planet based on neighboring planets and priorities.
    *
    * @param {Entity} planetId - The ID of the planet for which to find the move target.
-   * @returns {{ target: Entity | undefined; multiplier: number }} An object containing the best target planet and a multiplier value.
+   * @returns {{ target: Entity | undefined; multiplier: number }} An object containing the best target planet and a
+   *   multiplier value.
    */
   const getMoveTarget = (planetId: Entity): { target: Entity | undefined; multiplier: number } => {
     const planetData = tables.Planet.get(planetId);
@@ -279,16 +275,17 @@ export const createNpcUtils = (tables: Tables) => {
    * @param {Entity} planetId - The ID of the planet to find neighbors for.
    * @returns {Entity[]} An array of Entity IDs representing the neighboring planets.
    *
-   * This function performs the following steps:
-   * 1. Retrieves the data for the given planet.
-   * 2. Gets all planets from the game state.
-   * 3. Checks all six directions (East, Southeast, Southwest, West, Northwest, Northeast) for neighbors.
-   * 4. For each direction, calculates the coordinates of the potential neighbor.
-   * 5. Finds the planet (if any) at those coordinates.
-   * 6. Returns an array of all found neighboring planet IDs.
+   *   This function performs the following steps:
    *
-   * Note: This function should be moved to a more general utils file in the future,
-   * as it's not specific to NPC behavior and could be useful in other contexts.
+   *   1. Retrieves the data for the given planet.
+   *   2. Gets all planets from the game state.
+   *   3. Checks all six directions (East, Southeast, Southwest, West, Northwest, Northeast) for neighbors.
+   *   4. For each direction, calculates the coordinates of the potential neighbor.
+   *   5. Finds the planet (if any) at those coordinates.
+   *   6. Returns an array of all found neighboring planet IDs.
+   *
+   *   Note: This function should be moved to a more general utils file in the future, as it's not specific to NPC
+   *   behavior and could be useful in other contexts.
    */
   const getAllNeighbors = (planetId: Entity): { entity: Entity; direction: EDirection }[] => {
     const planetData = tables.Planet.get(planetId);

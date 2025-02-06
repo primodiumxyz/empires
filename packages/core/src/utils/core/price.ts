@@ -24,12 +24,12 @@ export function createPriceUtils(tables: Tables) {
   }
 
   /**
-   * @dev Calculates the cost of purchasing multiple points related to a progressive action that aids an empire.
    * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the action.
    * @param _overrideCount The number of actions.
    * @param nextTurn Whether to calculate the cost for the next turn.
-   * @return pointCost The cost of all points related to the action.
+   * @returns PointCost The cost of all points related to the action.
+   * @dev Calculates the cost of purchasing multiple points related to a progressive action that aids an empire.
    */
   function getProgressPointCost(
     _overrideType: EOverride,
@@ -45,12 +45,12 @@ export function createPriceUtils(tables: Tables) {
   }
 
   /**
-   * @dev Calculates the cost of purchasing points related to a regressive action. Points are purchased for all empires except the impacted empire.
    * @param _overrideType The type of override.
    * @param _empireImpacted The empire impacted by the action.
    * @param _overrideCount The number of actions.
    * @param nextTurn Whether to calculate the cost for the next turn.
-   * @return pointCost The cost of all points related to the action.
+   * @returns PointCost The cost of all points related to the action.
+   * @dev Calculates the cost of purchasing points related to a regressive action. Points are purchased for all empires except the impacted empire.
    */
   function getRegressPointCost(
     _overrideType: EOverride,
@@ -76,11 +76,11 @@ export function createPriceUtils(tables: Tables) {
   }
 
   /**
-   * @dev Calculates the cost of a specific number of points for a specific empire.
    * @param _empire The empire to purchase points from.
    * @param _points The number of points.
    * @param nextTurn Whether to calculate the cost for the next turn.
-   * @return pointCost The cost of the points from the specific empire.
+   * @returns PointCost The cost of the points from the specific empire.
+   * @dev Calculates the cost of a specific number of points for a specific empire.
    */
   function getPointCost(_empire: EEmpire, _points: bigint, nextTurn = false): bigint {
     if (nextTurn) return getNextTurnPointCost(_empire, _points);
@@ -124,12 +124,12 @@ export function createPriceUtils(tables: Tables) {
   }
 
   /**
-   * @dev Calculates the marginal cost of a specific number of actions for a specific empire.
    * @param _empire The empire being impacted.
    * @param _overrideType The type of action.
    * @param _overrideCount The number of actions.
    * @param nextTurn Whether to calculate the cost for the next turn.
-   * @return overrideCost The marginal cost of the actions that impact a specific empire.
+   * @returns OverrideCost The marginal cost of the actions that impact a specific empire.
+   * @dev Calculates the marginal cost of a specific number of actions for a specific empire.
    */
   function getMarginalOverrideCost(
     _overrideType: EOverride,
@@ -216,8 +216,8 @@ export function createPriceUtils(tables: Tables) {
   };
 
   /**
-   * @dev Calculates the sum of maximum value to collect from selling points across all empires.
    * @returns The total maximum sell value.
+   * @dev Calculates the sum of maximum value to collect from selling points across all empires.
    * @notice This is useful for calculating the guaranteed pot value with currentPot - totalMaxSellValue
    */
   function getTotalMaxSellValue(): bigint {

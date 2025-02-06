@@ -1,9 +1,5 @@
 import { ContractWrite, transportObserver } from "@latticexyz/common";
 import { transactionQueue, writeObserver } from "@latticexyz/common/actions";
-import { CoreConfig, ExternalAccount } from "@core/lib/types";
-import { WorldAbi } from "@core/lib/WorldAbi";
-import { normalizeAddress } from "@core/utils/global/common";
-import { addressToEntity } from "@core/utils/global/encode";
 import { Subject } from "rxjs";
 import {
   Account,
@@ -19,10 +15,14 @@ import {
 } from "viem";
 import { toAccount } from "viem/accounts";
 
+import { CoreConfig, ExternalAccount } from "@core/lib/types";
+import { WorldAbi } from "@core/lib/WorldAbi";
+import { normalizeAddress } from "@core/utils/global/common";
+import { addressToEntity } from "@core/utils/global/encode";
+
 /**
- *
- * @param coreConfig configuration of core object
- * @param address address of the account
+ * @param coreConfig Configuration of core object
+ * @param address Address of the account
  * @returns: {@link ExternalAccount}
  */
 export function createExternalAccount(

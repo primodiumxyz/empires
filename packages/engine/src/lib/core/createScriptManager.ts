@@ -1,5 +1,7 @@
 /**
- * Creates an updater that runs a list of functions on each update call. Functions can be added and removed from the list.
+ * Creates an updater that runs a list of functions on each update call. Functions can be added and removed from the
+ * list.
+ *
  * @returns {Object} An object with `add`, `remove`, and `update` methods.
  */
 export const createScriptManager = (scene: Phaser.Scene) => {
